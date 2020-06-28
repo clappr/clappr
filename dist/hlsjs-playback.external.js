@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@clappr/core'), require('hls.js')) :
-  typeof define === 'function' && define.amd ? define(['exports', '@clappr/core', 'hls.js'], factory) :
-  (global = global || self, factory(global.HlsjsPlayback = {}, global.Clappr, global.Hls));
-}(this, (function (exports, core, HLSJS) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@clappr/core'), require('hls.js')) :
+  typeof define === 'function' && define.amd ? define(['@clappr/core', 'hls.js'], factory) :
+  (global = global || self, global.HlsjsPlayback = factory(global.Clappr, global.Hls));
+}(this, (function (core, HLSJS) { 'use strict';
 
   HLSJS = HLSJS && Object.prototype.hasOwnProperty.call(HLSJS, 'default') ? HLSJS['default'] : HLSJS;
 
@@ -325,11 +325,6 @@
         return this._extrapolatedWindowNumSegments * this._segmentTargetDuration;
       }
     }], [{
-      key: "version",
-      get: function get() {
-        return VERSION;
-      }
-    }, {
       key: "HLSJS",
       get: function get() {
         return HLSJS;
@@ -981,8 +976,6 @@
     return !!(HLSJS.isSupported() && isHls);
   };
 
-  exports.default = HlsjsPlayback;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
+  return HlsjsPlayback;
 
 })));

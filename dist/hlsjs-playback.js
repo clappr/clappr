@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@clappr/core')) :
-  typeof define === 'function' && define.amd ? define(['exports', '@clappr/core'], factory) :
-  (global = global || self, factory(global.HlsjsPlayback = {}, global.Clappr));
-}(this, (function (exports, core) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@clappr/core')) :
+  typeof define === 'function' && define.amd ? define(['@clappr/core'], factory) :
+  (global = global || self, global.HlsjsPlayback = factory(global.Clappr));
+}(this, (function (core) { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -21369,11 +21369,6 @@
         return this._extrapolatedWindowNumSegments * this._segmentTargetDuration;
       }
     }], [{
-      key: "version",
-      get: function get() {
-        return VERSION;
-      }
-    }, {
       key: "HLSJS",
       get: function get() {
         return HLSJS;
@@ -22025,8 +22020,6 @@
     return !!(HLSJS.isSupported() && isHls);
   };
 
-  exports.default = HlsjsPlayback;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
+  return HlsjsPlayback;
 
 })));

@@ -21365,11 +21365,6 @@ var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
       return this._extrapolatedWindowNumSegments * this._segmentTargetDuration;
     }
   }], [{
-    key: "version",
-    get: function get() {
-      return VERSION;
-    }
-  }, {
     key: "HLSJS",
     get: function get() {
       return HLSJS;
