@@ -54,6 +54,8 @@
   }
 
   function _typeof(obj) {
+    "@babel/helpers - typeof";
+
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function (obj) {
         return typeof obj;
@@ -269,6 +271,121 @@
 
         return undefined;
       }
+    });
+  } // polyfills for smart TVs
+
+
+  if (!Object.entries) {
+    Object.entries = function (obj) {
+      var ownProps = Object.keys(obj),
+          i = ownProps.length,
+          resArray = new Array(i); // preallocate the Array
+
+      while (i--) {
+        resArray[i] = [ownProps[i], obj[ownProps[i]]];
+      }
+
+      return resArray;
+    };
+  }
+
+  if (!Object.values) {
+    Object.values = function (obj) {
+      var ownProps = Object.keys(obj),
+          i = ownProps.length,
+          resArray = new Array(i); // preallocate the Array
+
+      while (i--) {
+        resArray[i] = obj[ownProps[i]];
+      }
+
+      return resArray;
+    };
+  }
+  /**
+   * Object.assign
+   * This polyfill doesn't support symbol properties, since ES5 doesn't have symbols anyway
+   *
+   * Original source : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+   */
+
+
+  if (typeof Object.assign != 'function') {
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, 'assign', {
+      // length of function is 2.
+      value: function assign(target, varArgs) {
+
+        if (target == null) {
+          // TypeError if undefined or null
+          throw new TypeError('Cannot convert undefined or null to object');
+        }
+
+        var to = Object(target);
+
+        for (var index = 1; index < arguments.length; index++) {
+          var nextSource = arguments[index];
+
+          if (nextSource != null) {
+            // Skip over if undefined or null
+            for (var nextKey in nextSource) {
+              // Avoid bugs when hasOwnProperty is shadowed
+              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                to[nextKey] = nextSource[nextKey];
+              }
+            }
+          }
+        }
+
+        return to;
+      },
+      writable: true,
+      configurable: true
+    });
+  } // https://tc39.github.io/ecma262/#sec-array.prototype.findindex
+
+
+  if (!Array.prototype.findIndex) {
+    Object.defineProperty(Array.prototype, 'findIndex', {
+      value: function value(predicate) {
+        // 1. Let O be ? ToObject(this value).
+        if (this == null) {
+          throw new TypeError('"this" is null or not defined');
+        }
+
+        var o = Object(this); // 2. Let len be ? ToLength(? Get(O, "length")).
+
+        var len = o.length >>> 0; // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+
+        if (typeof predicate !== 'function') {
+          throw new TypeError('predicate must be a function');
+        } // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+
+
+        var thisArg = arguments[1]; // 5. Let k be 0.
+
+        var k = 0; // 6. Repeat, while k < len
+
+        while (k < len) {
+          // a. Let Pk be ! ToString(k).
+          // b. Let kValue be ? Get(O, Pk).
+          // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+          // d. If testResult is true, return k.
+          var kValue = o[k];
+
+          if (predicate.call(thisArg, kValue, k, o)) {
+            return k;
+          } // e. Increase k by 1.
+
+
+          k++;
+        } // 7. Return -1.
+
+
+        return -1;
+      },
+      configurable: true,
+      writable: true
     });
   }
 
@@ -2751,9 +2868,7 @@
     return obj;
   }
   function extend(parent, properties) {
-    var Surrogate =
-    /*#__PURE__*/
-    function (_parent) {
+    var Surrogate = /*#__PURE__*/function (_parent) {
       _inherits(Surrogate, _parent);
 
       function Surrogate() {
@@ -2815,9 +2930,7 @@
       return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
     }
   };
-  var Config =
-  /*#__PURE__*/
-  function () {
+  var Config = /*#__PURE__*/function () {
     function Config() {
       _classCallCheck(this, Config);
     }
@@ -2868,9 +2981,7 @@
 
     return Config;
   }();
-  var QueryString =
-  /*#__PURE__*/
-  function () {
+  var QueryString = /*#__PURE__*/function () {
     function QueryString() {
       _classCallCheck(this, QueryString);
     }
@@ -3022,9 +3133,7 @@
   } // Simple element factory with video recycle feature.
 
   var videoStack = [];
-  var DomRecycler =
-  /*#__PURE__*/
-  function () {
+  var DomRecycler = /*#__PURE__*/function () {
     function DomRecycler() {
       _classCallCheck(this, DomRecycler);
     }
@@ -3057,9 +3166,7 @@
   DomRecycler.options = {
     recycleVideo: false
   };
-  var DoubleEventHandler =
-  /*#__PURE__*/
-  function () {
+  var DoubleEventHandler = /*#__PURE__*/function () {
     function DoubleEventHandler() {
       var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
 
@@ -3126,9 +3233,7 @@
   var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
   var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
 
-  var Log =
-  /*#__PURE__*/
-  function () {
+  var Log = /*#__PURE__*/function () {
     function Log() {
       var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
       var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
@@ -3317,9 +3422,7 @@
    */
 
 
-  var Events =
-  /*#__PURE__*/
-  function () {
+  var Events = /*#__PURE__*/function () {
     function Events() {
       _classCallCheck(this, Events);
     }
@@ -4200,9 +4303,7 @@
    * @module base
    */
 
-  var BaseObject =
-  /*#__PURE__*/
-  function (_Events) {
+  var BaseObject = /*#__PURE__*/function (_Events) {
     _inherits(BaseObject, _Events);
 
     _createClass(BaseObject, [{
@@ -4255,9 +4356,7 @@
    * @module base
    */
 
-  var UIObject =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var UIObject = /*#__PURE__*/function (_BaseObject) {
     _inherits(UIObject, _BaseObject);
 
     _createClass(UIObject, [{
@@ -4496,9 +4595,7 @@
    * @module components
    */
 
-  var PlayerError =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var PlayerError = /*#__PURE__*/function (_BaseObject) {
     _inherits(PlayerError, _BaseObject);
 
     _createClass(PlayerError, [{
@@ -4595,9 +4692,7 @@
     }
   };
 
-  var UICorePlugin =
-  /*#__PURE__*/
-  function (_UIObject) {
+  var UICorePlugin = /*#__PURE__*/function (_UIObject) {
     _inherits(UICorePlugin, _UIObject);
 
     _createClass(UICorePlugin, [{
@@ -4703,9 +4798,7 @@
    * @module base
    */
 
-  var Container =
-  /*#__PURE__*/
-  function (_UIObject) {
+  var Container = /*#__PURE__*/function (_UIObject) {
     _inherits(Container, _UIObject);
 
     _createClass(Container, [{
@@ -5335,9 +5428,7 @@
    * @module base
    */
 
-  var Playback =
-  /*#__PURE__*/
-  function (_UIObject) {
+  var Playback = /*#__PURE__*/function (_UIObject) {
     _inherits(Playback, _UIObject);
 
     _createClass(Playback, [{
@@ -5718,9 +5809,7 @@
 
   Playback.type = 'playback';
 
-  var ContainerFactory =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
     _inherits(ContainerFactory, _BaseObject);
 
     _createClass(ContainerFactory, [{
@@ -5808,7 +5897,7 @@
     return ContainerFactory;
   }(BaseObject);
 
-  var css$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n          transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
+  var css$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
   styleInject(css$1);
 
   /**
@@ -5819,9 +5908,7 @@
    * @module components
    */
 
-  var Core =
-  /*#__PURE__*/
-  function (_UIObject) {
+  var Core = /*#__PURE__*/function (_UIObject) {
     _inherits(Core, _UIObject);
 
     _createClass(Core, [{
@@ -6298,9 +6385,7 @@
    * @module components
    */
 
-  var CoreFactory =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var CoreFactory = /*#__PURE__*/function (_BaseObject) {
     _inherits(CoreFactory, _BaseObject);
 
     _createClass(CoreFactory, [{
@@ -6376,1876 +6461,62 @@
     return CoreFactory;
   }(BaseObject);
 
-  var global$1 = (typeof global !== "undefined" ? global :
-              typeof self !== "undefined" ? self :
-              typeof window !== "undefined" ? window : {});
+  var VERSION_REGEX = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/;
 
-  // shim for using process in browser
-  // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
+  var Version = /*#__PURE__*/function () {
+    _createClass(Version, null, [{
+      key: "parse",
+      value: function parse() {
+        var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+        var matches = str.match(VERSION_REGEX) || [];
 
-  function defaultSetTimout() {
-      throw new Error('setTimeout has not been defined');
-  }
-  function defaultClearTimeout () {
-      throw new Error('clearTimeout has not been defined');
-  }
-  var cachedSetTimeout = defaultSetTimout;
-  var cachedClearTimeout = defaultClearTimeout;
-  if (typeof global$1.setTimeout === 'function') {
-      cachedSetTimeout = setTimeout;
-  }
-  if (typeof global$1.clearTimeout === 'function') {
-      cachedClearTimeout = clearTimeout;
-  }
+        var _matches = _slicedToArray(matches, 4),
+            major = _matches[1],
+            minor = _matches[2],
+            patch = _matches[3];
 
-  function runTimeout(fun) {
-      if (cachedSetTimeout === setTimeout) {
-          //normal enviroments in sane situations
-          return setTimeout(fun, 0);
+        if (typeof major === 'undefined') return null;
+        return new Version(major, minor, patch);
       }
-      // if setTimeout wasn't available but was latter defined
-      if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-          cachedSetTimeout = setTimeout;
-          return setTimeout(fun, 0);
+    }]);
+
+    function Version(major, minor, patch) {
+      _classCallCheck(this, Version);
+
+      this.major = parseInt(major || 0, 10);
+      this.minor = parseInt(minor || 0, 10);
+      this.patch = parseInt(patch || 0, 10);
+    }
+
+    _createClass(Version, [{
+      key: "compare",
+      value: function compare(other) {
+        var diff = this.major - other.major;
+        diff = diff || this.minor - other.minor;
+        diff = diff || this.patch - other.patch;
+        return diff;
       }
-      try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
-          return cachedSetTimeout(fun, 0);
-      } catch(e){
-          try {
-              // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-              return cachedSetTimeout.call(null, fun, 0);
-          } catch(e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-              return cachedSetTimeout.call(this, fun, 0);
-          }
+    }, {
+      key: "inc",
+      value: function inc() {
+        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'patch';
+        typeof this[type] !== 'undefined' && (this[type] += 1);
+        return this;
       }
-
-
-  }
-  function runClearTimeout(marker) {
-      if (cachedClearTimeout === clearTimeout) {
-          //normal enviroments in sane situations
-          return clearTimeout(marker);
+    }, {
+      key: "satisfies",
+      value: function satisfies(min, max) {
+        return this.compare(min) >= 0 && (!max || this.compare(max) < 0);
       }
-      // if clearTimeout wasn't available but was latter defined
-      if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-          cachedClearTimeout = clearTimeout;
-          return clearTimeout(marker);
+    }, {
+      key: "toString",
+      value: function toString() {
+        return "".concat(this.major, ".").concat(this.minor, ".").concat(this.patch);
       }
-      try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
-          return cachedClearTimeout(marker);
-      } catch (e){
-          try {
-              // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-              return cachedClearTimeout.call(null, marker);
-          } catch (e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-              // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-              return cachedClearTimeout.call(this, marker);
-          }
-      }
+    }]);
 
-
-
-  }
-  var queue = [];
-  var draining = false;
-  var currentQueue;
-  var queueIndex = -1;
-
-  function cleanUpNextTick() {
-      if (!draining || !currentQueue) {
-          return;
-      }
-      draining = false;
-      if (currentQueue.length) {
-          queue = currentQueue.concat(queue);
-      } else {
-          queueIndex = -1;
-      }
-      if (queue.length) {
-          drainQueue();
-      }
-  }
-
-  function drainQueue() {
-      if (draining) {
-          return;
-      }
-      var timeout = runTimeout(cleanUpNextTick);
-      draining = true;
-
-      var len = queue.length;
-      while(len) {
-          currentQueue = queue;
-          queue = [];
-          while (++queueIndex < len) {
-              if (currentQueue) {
-                  currentQueue[queueIndex].run();
-              }
-          }
-          queueIndex = -1;
-          len = queue.length;
-      }
-      currentQueue = null;
-      draining = false;
-      runClearTimeout(timeout);
-  }
-  function nextTick(fun) {
-      var args = new Array(arguments.length - 1);
-      if (arguments.length > 1) {
-          for (var i = 1; i < arguments.length; i++) {
-              args[i - 1] = arguments[i];
-          }
-      }
-      queue.push(new Item(fun, args));
-      if (queue.length === 1 && !draining) {
-          runTimeout(drainQueue);
-      }
-  }
-  // v8 likes predictible objects
-  function Item(fun, array) {
-      this.fun = fun;
-      this.array = array;
-  }
-  Item.prototype.run = function () {
-      this.fun.apply(null, this.array);
-  };
-  var title = 'browser';
-  var platform = 'browser';
-  var browser = true;
-  var env = {};
-  var argv = [];
-  var version = ''; // empty string to avoid regexp issues
-  var versions = {};
-  var release = {};
-  var config = {};
-
-  function noop() {}
-
-  var on = noop;
-  var addListener = noop;
-  var once = noop;
-  var off = noop;
-  var removeListener = noop;
-  var removeAllListeners = noop;
-  var emit = noop;
-
-  function binding(name) {
-      throw new Error('process.binding is not supported');
-  }
-
-  function cwd () { return '/' }
-  function chdir (dir) {
-      throw new Error('process.chdir is not supported');
-  }function umask() { return 0; }
-
-  // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
-  var performance$1 = global$1.performance || {};
-  var performanceNow =
-    performance$1.now        ||
-    performance$1.mozNow     ||
-    performance$1.msNow      ||
-    performance$1.oNow       ||
-    performance$1.webkitNow  ||
-    function(){ return (new Date()).getTime() };
-
-  // generate timestamp or delta
-  // see http://nodejs.org/api/process.html#process_process_hrtime
-  function hrtime(previousTimestamp){
-    var clocktime = performanceNow.call(performance$1)*1e-3;
-    var seconds = Math.floor(clocktime);
-    var nanoseconds = Math.floor((clocktime%1)*1e9);
-    if (previousTimestamp) {
-      seconds = seconds - previousTimestamp[0];
-      nanoseconds = nanoseconds - previousTimestamp[1];
-      if (nanoseconds<0) {
-        seconds--;
-        nanoseconds += 1e9;
-      }
-    }
-    return [seconds,nanoseconds]
-  }
-
-  var startTime = new Date();
-  function uptime() {
-    var currentTime = new Date();
-    var dif = currentTime - startTime;
-    return dif / 1000;
-  }
-
-  var process = {
-    nextTick: nextTick,
-    title: title,
-    browser: browser,
-    env: env,
-    argv: argv,
-    version: version,
-    versions: versions,
-    on: on,
-    addListener: addListener,
-    once: once,
-    off: off,
-    removeListener: removeListener,
-    removeAllListeners: removeAllListeners,
-    emit: emit,
-    binding: binding,
-    cwd: cwd,
-    chdir: chdir,
-    umask: umask,
-    hrtime: hrtime,
-    platform: platform,
-    release: release,
-    config: config,
-    uptime: uptime
-  };
-
-  function createCommonjsModule(fn, module) {
-  	return module = { exports: {} }, fn(module, module.exports), module.exports;
-  }
-
-  var semver = createCommonjsModule(function (module, exports) {
-  exports = module.exports = SemVer;
-
-  var debug;
-  /* istanbul ignore next */
-  if (typeof process === 'object' &&
-      process.env &&
-      process.env.NODE_DEBUG &&
-      /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
-    debug = function () {
-      var args = Array.prototype.slice.call(arguments, 0);
-      args.unshift('SEMVER');
-      console.log.apply(console, args);
-    };
-  } else {
-    debug = function () {};
-  }
-
-  // Note: this is the semver.org version of the spec that it implements
-  // Not necessarily the package version of this code.
-  exports.SEMVER_SPEC_VERSION = '2.0.0';
-
-  var MAX_LENGTH = 256;
-  var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
-    /* istanbul ignore next */ 9007199254740991;
-
-  // Max safe segment length for coercion.
-  var MAX_SAFE_COMPONENT_LENGTH = 16;
-
-  // The actual regexps go on exports.re
-  var re = exports.re = [];
-  var src = exports.src = [];
-  var t = exports.tokens = {};
-  var R = 0;
-
-  function tok (n) {
-    t[n] = R++;
-  }
-
-  // The following Regular Expressions can be used for tokenizing,
-  // validating, and parsing SemVer version strings.
-
-  // ## Numeric Identifier
-  // A single `0`, or a non-zero digit followed by zero or more digits.
-
-  tok('NUMERICIDENTIFIER');
-  src[t.NUMERICIDENTIFIER] = '0|[1-9]\\d*';
-  tok('NUMERICIDENTIFIERLOOSE');
-  src[t.NUMERICIDENTIFIERLOOSE] = '[0-9]+';
-
-  // ## Non-numeric Identifier
-  // Zero or more digits, followed by a letter or hyphen, and then zero or
-  // more letters, digits, or hyphens.
-
-  tok('NONNUMERICIDENTIFIER');
-  src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*';
-
-  // ## Main Version
-  // Three dot-separated numeric identifiers.
-
-  tok('MAINVERSION');
-  src[t.MAINVERSION] = '(' + src[t.NUMERICIDENTIFIER] + ')\\.' +
-                     '(' + src[t.NUMERICIDENTIFIER] + ')\\.' +
-                     '(' + src[t.NUMERICIDENTIFIER] + ')';
-
-  tok('MAINVERSIONLOOSE');
-  src[t.MAINVERSIONLOOSE] = '(' + src[t.NUMERICIDENTIFIERLOOSE] + ')\\.' +
-                          '(' + src[t.NUMERICIDENTIFIERLOOSE] + ')\\.' +
-                          '(' + src[t.NUMERICIDENTIFIERLOOSE] + ')';
-
-  // ## Pre-release Version Identifier
-  // A numeric identifier, or a non-numeric identifier.
-
-  tok('PRERELEASEIDENTIFIER');
-  src[t.PRERELEASEIDENTIFIER] = '(?:' + src[t.NUMERICIDENTIFIER] +
-                              '|' + src[t.NONNUMERICIDENTIFIER] + ')';
-
-  tok('PRERELEASEIDENTIFIERLOOSE');
-  src[t.PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[t.NUMERICIDENTIFIERLOOSE] +
-                                   '|' + src[t.NONNUMERICIDENTIFIER] + ')';
-
-  // ## Pre-release Version
-  // Hyphen, followed by one or more dot-separated pre-release version
-  // identifiers.
-
-  tok('PRERELEASE');
-  src[t.PRERELEASE] = '(?:-(' + src[t.PRERELEASEIDENTIFIER] +
-                    '(?:\\.' + src[t.PRERELEASEIDENTIFIER] + ')*))';
-
-  tok('PRERELEASELOOSE');
-  src[t.PRERELEASELOOSE] = '(?:-?(' + src[t.PRERELEASEIDENTIFIERLOOSE] +
-                         '(?:\\.' + src[t.PRERELEASEIDENTIFIERLOOSE] + ')*))';
-
-  // ## Build Metadata Identifier
-  // Any combination of digits, letters, or hyphens.
-
-  tok('BUILDIDENTIFIER');
-  src[t.BUILDIDENTIFIER] = '[0-9A-Za-z-]+';
-
-  // ## Build Metadata
-  // Plus sign, followed by one or more period-separated build metadata
-  // identifiers.
-
-  tok('BUILD');
-  src[t.BUILD] = '(?:\\+(' + src[t.BUILDIDENTIFIER] +
-               '(?:\\.' + src[t.BUILDIDENTIFIER] + ')*))';
-
-  // ## Full Version String
-  // A main version, followed optionally by a pre-release version and
-  // build metadata.
-
-  // Note that the only major, minor, patch, and pre-release sections of
-  // the version string are capturing groups.  The build metadata is not a
-  // capturing group, because it should not ever be used in version
-  // comparison.
-
-  tok('FULL');
-  tok('FULLPLAIN');
-  src[t.FULLPLAIN] = 'v?' + src[t.MAINVERSION] +
-                    src[t.PRERELEASE] + '?' +
-                    src[t.BUILD] + '?';
-
-  src[t.FULL] = '^' + src[t.FULLPLAIN] + '$';
-
-  // like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-  // also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-  // common in the npm registry.
-  tok('LOOSEPLAIN');
-  src[t.LOOSEPLAIN] = '[v=\\s]*' + src[t.MAINVERSIONLOOSE] +
-                    src[t.PRERELEASELOOSE] + '?' +
-                    src[t.BUILD] + '?';
-
-  tok('LOOSE');
-  src[t.LOOSE] = '^' + src[t.LOOSEPLAIN] + '$';
-
-  tok('GTLT');
-  src[t.GTLT] = '((?:<|>)?=?)';
-
-  // Something like "2.*" or "1.2.x".
-  // Note that "x.x" is a valid xRange identifer, meaning "any version"
-  // Only the first item is strictly required.
-  tok('XRANGEIDENTIFIERLOOSE');
-  src[t.XRANGEIDENTIFIERLOOSE] = src[t.NUMERICIDENTIFIERLOOSE] + '|x|X|\\*';
-  tok('XRANGEIDENTIFIER');
-  src[t.XRANGEIDENTIFIER] = src[t.NUMERICIDENTIFIER] + '|x|X|\\*';
-
-  tok('XRANGEPLAIN');
-  src[t.XRANGEPLAIN] = '[v=\\s]*(' + src[t.XRANGEIDENTIFIER] + ')' +
-                     '(?:\\.(' + src[t.XRANGEIDENTIFIER] + ')' +
-                     '(?:\\.(' + src[t.XRANGEIDENTIFIER] + ')' +
-                     '(?:' + src[t.PRERELEASE] + ')?' +
-                     src[t.BUILD] + '?' +
-                     ')?)?';
-
-  tok('XRANGEPLAINLOOSE');
-  src[t.XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[t.XRANGEIDENTIFIERLOOSE] + ')' +
-                          '(?:\\.(' + src[t.XRANGEIDENTIFIERLOOSE] + ')' +
-                          '(?:\\.(' + src[t.XRANGEIDENTIFIERLOOSE] + ')' +
-                          '(?:' + src[t.PRERELEASELOOSE] + ')?' +
-                          src[t.BUILD] + '?' +
-                          ')?)?';
-
-  tok('XRANGE');
-  src[t.XRANGE] = '^' + src[t.GTLT] + '\\s*' + src[t.XRANGEPLAIN] + '$';
-  tok('XRANGELOOSE');
-  src[t.XRANGELOOSE] = '^' + src[t.GTLT] + '\\s*' + src[t.XRANGEPLAINLOOSE] + '$';
-
-  // Coercion.
-  // Extract anything that could conceivably be a part of a valid semver
-  tok('COERCE');
-  src[t.COERCE] = '(^|[^\\d])' +
-                '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
-                '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
-                '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
-                '(?:$|[^\\d])';
-  tok('COERCERTL');
-  re[t.COERCERTL] = new RegExp(src[t.COERCE], 'g');
-
-  // Tilde ranges.
-  // Meaning is "reasonably at or greater than"
-  tok('LONETILDE');
-  src[t.LONETILDE] = '(?:~>?)';
-
-  tok('TILDETRIM');
-  src[t.TILDETRIM] = '(\\s*)' + src[t.LONETILDE] + '\\s+';
-  re[t.TILDETRIM] = new RegExp(src[t.TILDETRIM], 'g');
-  var tildeTrimReplace = '$1~';
-
-  tok('TILDE');
-  src[t.TILDE] = '^' + src[t.LONETILDE] + src[t.XRANGEPLAIN] + '$';
-  tok('TILDELOOSE');
-  src[t.TILDELOOSE] = '^' + src[t.LONETILDE] + src[t.XRANGEPLAINLOOSE] + '$';
-
-  // Caret ranges.
-  // Meaning is "at least and backwards compatible with"
-  tok('LONECARET');
-  src[t.LONECARET] = '(?:\\^)';
-
-  tok('CARETTRIM');
-  src[t.CARETTRIM] = '(\\s*)' + src[t.LONECARET] + '\\s+';
-  re[t.CARETTRIM] = new RegExp(src[t.CARETTRIM], 'g');
-  var caretTrimReplace = '$1^';
-
-  tok('CARET');
-  src[t.CARET] = '^' + src[t.LONECARET] + src[t.XRANGEPLAIN] + '$';
-  tok('CARETLOOSE');
-  src[t.CARETLOOSE] = '^' + src[t.LONECARET] + src[t.XRANGEPLAINLOOSE] + '$';
-
-  // A simple gt/lt/eq thing, or just "" to indicate "any version"
-  tok('COMPARATORLOOSE');
-  src[t.COMPARATORLOOSE] = '^' + src[t.GTLT] + '\\s*(' + src[t.LOOSEPLAIN] + ')$|^$';
-  tok('COMPARATOR');
-  src[t.COMPARATOR] = '^' + src[t.GTLT] + '\\s*(' + src[t.FULLPLAIN] + ')$|^$';
-
-  // An expression to strip any whitespace between the gtlt and the thing
-  // it modifies, so that `> 1.2.3` ==> `>1.2.3`
-  tok('COMPARATORTRIM');
-  src[t.COMPARATORTRIM] = '(\\s*)' + src[t.GTLT] +
-                        '\\s*(' + src[t.LOOSEPLAIN] + '|' + src[t.XRANGEPLAIN] + ')';
-
-  // this one has to use the /g flag
-  re[t.COMPARATORTRIM] = new RegExp(src[t.COMPARATORTRIM], 'g');
-  var comparatorTrimReplace = '$1$2$3';
-
-  // Something like `1.2.3 - 1.2.4`
-  // Note that these all use the loose form, because they'll be
-  // checked against either the strict or loose comparator form
-  // later.
-  tok('HYPHENRANGE');
-  src[t.HYPHENRANGE] = '^\\s*(' + src[t.XRANGEPLAIN] + ')' +
-                     '\\s+-\\s+' +
-                     '(' + src[t.XRANGEPLAIN] + ')' +
-                     '\\s*$';
-
-  tok('HYPHENRANGELOOSE');
-  src[t.HYPHENRANGELOOSE] = '^\\s*(' + src[t.XRANGEPLAINLOOSE] + ')' +
-                          '\\s+-\\s+' +
-                          '(' + src[t.XRANGEPLAINLOOSE] + ')' +
-                          '\\s*$';
-
-  // Star ranges basically just allow anything at all.
-  tok('STAR');
-  src[t.STAR] = '(<|>)?=?\\s*\\*';
-
-  // Compile to actual regexp objects.
-  // All are flag-free, unless they were created above with a flag.
-  for (var i = 0; i < R; i++) {
-    debug(i, src[i]);
-    if (!re[i]) {
-      re[i] = new RegExp(src[i]);
-    }
-  }
-
-  exports.parse = parse;
-  function parse (version, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      };
-    }
-
-    if (version instanceof SemVer) {
-      return version
-    }
-
-    if (typeof version !== 'string') {
-      return null
-    }
-
-    if (version.length > MAX_LENGTH) {
-      return null
-    }
-
-    var r = options.loose ? re[t.LOOSE] : re[t.FULL];
-    if (!r.test(version)) {
-      return null
-    }
-
-    try {
-      return new SemVer(version, options)
-    } catch (er) {
-      return null
-    }
-  }
-
-  exports.valid = valid;
-  function valid (version, options) {
-    var v = parse(version, options);
-    return v ? v.version : null
-  }
-
-  exports.clean = clean;
-  function clean (version, options) {
-    var s = parse(version.trim().replace(/^[=v]+/, ''), options);
-    return s ? s.version : null
-  }
-
-  exports.SemVer = SemVer;
-
-  function SemVer (version, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      };
-    }
-    if (version instanceof SemVer) {
-      if (version.loose === options.loose) {
-        return version
-      } else {
-        version = version.version;
-      }
-    } else if (typeof version !== 'string') {
-      throw new TypeError('Invalid Version: ' + version)
-    }
-
-    if (version.length > MAX_LENGTH) {
-      throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
-    }
-
-    if (!(this instanceof SemVer)) {
-      return new SemVer(version, options)
-    }
-
-    debug('SemVer', version, options);
-    this.options = options;
-    this.loose = !!options.loose;
-
-    var m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL]);
-
-    if (!m) {
-      throw new TypeError('Invalid Version: ' + version)
-    }
-
-    this.raw = version;
-
-    // these are actually numbers
-    this.major = +m[1];
-    this.minor = +m[2];
-    this.patch = +m[3];
-
-    if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-      throw new TypeError('Invalid major version')
-    }
-
-    if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-      throw new TypeError('Invalid minor version')
-    }
-
-    if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-      throw new TypeError('Invalid patch version')
-    }
-
-    // numberify any prerelease numeric ids
-    if (!m[4]) {
-      this.prerelease = [];
-    } else {
-      this.prerelease = m[4].split('.').map(function (id) {
-        if (/^[0-9]+$/.test(id)) {
-          var num = +id;
-          if (num >= 0 && num < MAX_SAFE_INTEGER) {
-            return num
-          }
-        }
-        return id
-      });
-    }
-
-    this.build = m[5] ? m[5].split('.') : [];
-    this.format();
-  }
-
-  SemVer.prototype.format = function () {
-    this.version = this.major + '.' + this.minor + '.' + this.patch;
-    if (this.prerelease.length) {
-      this.version += '-' + this.prerelease.join('.');
-    }
-    return this.version
-  };
-
-  SemVer.prototype.toString = function () {
-    return this.version
-  };
-
-  SemVer.prototype.compare = function (other) {
-    debug('SemVer.compare', this.version, this.options, other);
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-
-    return this.compareMain(other) || this.comparePre(other)
-  };
-
-  SemVer.prototype.compareMain = function (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-
-    return compareIdentifiers(this.major, other.major) ||
-           compareIdentifiers(this.minor, other.minor) ||
-           compareIdentifiers(this.patch, other.patch)
-  };
-
-  SemVer.prototype.comparePre = function (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-
-    // NOT having a prerelease is > having one
-    if (this.prerelease.length && !other.prerelease.length) {
-      return -1
-    } else if (!this.prerelease.length && other.prerelease.length) {
-      return 1
-    } else if (!this.prerelease.length && !other.prerelease.length) {
-      return 0
-    }
-
-    var i = 0;
-    do {
-      var a = this.prerelease[i];
-      var b = other.prerelease[i];
-      debug('prerelease compare', i, a, b);
-      if (a === undefined && b === undefined) {
-        return 0
-      } else if (b === undefined) {
-        return 1
-      } else if (a === undefined) {
-        return -1
-      } else if (a === b) {
-        continue
-      } else {
-        return compareIdentifiers(a, b)
-      }
-    } while (++i)
-  };
-
-  SemVer.prototype.compareBuild = function (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-
-    var i = 0;
-    do {
-      var a = this.build[i];
-      var b = other.build[i];
-      debug('prerelease compare', i, a, b);
-      if (a === undefined && b === undefined) {
-        return 0
-      } else if (b === undefined) {
-        return 1
-      } else if (a === undefined) {
-        return -1
-      } else if (a === b) {
-        continue
-      } else {
-        return compareIdentifiers(a, b)
-      }
-    } while (++i)
-  };
-
-  // preminor will bump the version up to the next minor release, and immediately
-  // down to pre-release. premajor and prepatch work the same way.
-  SemVer.prototype.inc = function (release, identifier) {
-    switch (release) {
-      case 'premajor':
-        this.prerelease.length = 0;
-        this.patch = 0;
-        this.minor = 0;
-        this.major++;
-        this.inc('pre', identifier);
-        break
-      case 'preminor':
-        this.prerelease.length = 0;
-        this.patch = 0;
-        this.minor++;
-        this.inc('pre', identifier);
-        break
-      case 'prepatch':
-        // If this is already a prerelease, it will bump to the next version
-        // drop any prereleases that might already exist, since they are not
-        // relevant at this point.
-        this.prerelease.length = 0;
-        this.inc('patch', identifier);
-        this.inc('pre', identifier);
-        break
-      // If the input is a non-prerelease version, this acts the same as
-      // prepatch.
-      case 'prerelease':
-        if (this.prerelease.length === 0) {
-          this.inc('patch', identifier);
-        }
-        this.inc('pre', identifier);
-        break
-
-      case 'major':
-        // If this is a pre-major version, bump up to the same major version.
-        // Otherwise increment major.
-        // 1.0.0-5 bumps to 1.0.0
-        // 1.1.0 bumps to 2.0.0
-        if (this.minor !== 0 ||
-            this.patch !== 0 ||
-            this.prerelease.length === 0) {
-          this.major++;
-        }
-        this.minor = 0;
-        this.patch = 0;
-        this.prerelease = [];
-        break
-      case 'minor':
-        // If this is a pre-minor version, bump up to the same minor version.
-        // Otherwise increment minor.
-        // 1.2.0-5 bumps to 1.2.0
-        // 1.2.1 bumps to 1.3.0
-        if (this.patch !== 0 || this.prerelease.length === 0) {
-          this.minor++;
-        }
-        this.patch = 0;
-        this.prerelease = [];
-        break
-      case 'patch':
-        // If this is not a pre-release version, it will increment the patch.
-        // If it is a pre-release it will bump up to the same patch version.
-        // 1.2.0-5 patches to 1.2.0
-        // 1.2.0 patches to 1.2.1
-        if (this.prerelease.length === 0) {
-          this.patch++;
-        }
-        this.prerelease = [];
-        break
-      // This probably shouldn't be used publicly.
-      // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
-      case 'pre':
-        if (this.prerelease.length === 0) {
-          this.prerelease = [0];
-        } else {
-          var i = this.prerelease.length;
-          while (--i >= 0) {
-            if (typeof this.prerelease[i] === 'number') {
-              this.prerelease[i]++;
-              i = -2;
-            }
-          }
-          if (i === -1) {
-            // didn't increment anything
-            this.prerelease.push(0);
-          }
-        }
-        if (identifier) {
-          // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
-          // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-          if (this.prerelease[0] === identifier) {
-            if (isNaN(this.prerelease[1])) {
-              this.prerelease = [identifier, 0];
-            }
-          } else {
-            this.prerelease = [identifier, 0];
-          }
-        }
-        break
-
-      default:
-        throw new Error('invalid increment argument: ' + release)
-    }
-    this.format();
-    this.raw = this.version;
-    return this
-  };
-
-  exports.inc = inc;
-  function inc (version, release, loose, identifier) {
-    if (typeof (loose) === 'string') {
-      identifier = loose;
-      loose = undefined;
-    }
-
-    try {
-      return new SemVer(version, loose).inc(release, identifier).version
-    } catch (er) {
-      return null
-    }
-  }
-
-  exports.diff = diff;
-  function diff (version1, version2) {
-    if (eq(version1, version2)) {
-      return null
-    } else {
-      var v1 = parse(version1);
-      var v2 = parse(version2);
-      var prefix = '';
-      if (v1.prerelease.length || v2.prerelease.length) {
-        prefix = 'pre';
-        var defaultResult = 'prerelease';
-      }
-      for (var key in v1) {
-        if (key === 'major' || key === 'minor' || key === 'patch') {
-          if (v1[key] !== v2[key]) {
-            return prefix + key
-          }
-        }
-      }
-      return defaultResult // may be undefined
-    }
-  }
-
-  exports.compareIdentifiers = compareIdentifiers;
-
-  var numeric = /^[0-9]+$/;
-  function compareIdentifiers (a, b) {
-    var anum = numeric.test(a);
-    var bnum = numeric.test(b);
-
-    if (anum && bnum) {
-      a = +a;
-      b = +b;
-    }
-
-    return a === b ? 0
-      : (anum && !bnum) ? -1
-      : (bnum && !anum) ? 1
-      : a < b ? -1
-      : 1
-  }
-
-  exports.rcompareIdentifiers = rcompareIdentifiers;
-  function rcompareIdentifiers (a, b) {
-    return compareIdentifiers(b, a)
-  }
-
-  exports.major = major;
-  function major (a, loose) {
-    return new SemVer(a, loose).major
-  }
-
-  exports.minor = minor;
-  function minor (a, loose) {
-    return new SemVer(a, loose).minor
-  }
-
-  exports.patch = patch;
-  function patch (a, loose) {
-    return new SemVer(a, loose).patch
-  }
-
-  exports.compare = compare;
-  function compare (a, b, loose) {
-    return new SemVer(a, loose).compare(new SemVer(b, loose))
-  }
-
-  exports.compareLoose = compareLoose;
-  function compareLoose (a, b) {
-    return compare(a, b, true)
-  }
-
-  exports.compareBuild = compareBuild;
-  function compareBuild (a, b, loose) {
-    var versionA = new SemVer(a, loose);
-    var versionB = new SemVer(b, loose);
-    return versionA.compare(versionB) || versionA.compareBuild(versionB)
-  }
-
-  exports.rcompare = rcompare;
-  function rcompare (a, b, loose) {
-    return compare(b, a, loose)
-  }
-
-  exports.sort = sort;
-  function sort (list, loose) {
-    return list.sort(function (a, b) {
-      return exports.compareBuild(a, b, loose)
-    })
-  }
-
-  exports.rsort = rsort;
-  function rsort (list, loose) {
-    return list.sort(function (a, b) {
-      return exports.compareBuild(b, a, loose)
-    })
-  }
-
-  exports.gt = gt;
-  function gt (a, b, loose) {
-    return compare(a, b, loose) > 0
-  }
-
-  exports.lt = lt;
-  function lt (a, b, loose) {
-    return compare(a, b, loose) < 0
-  }
-
-  exports.eq = eq;
-  function eq (a, b, loose) {
-    return compare(a, b, loose) === 0
-  }
-
-  exports.neq = neq;
-  function neq (a, b, loose) {
-    return compare(a, b, loose) !== 0
-  }
-
-  exports.gte = gte;
-  function gte (a, b, loose) {
-    return compare(a, b, loose) >= 0
-  }
-
-  exports.lte = lte;
-  function lte (a, b, loose) {
-    return compare(a, b, loose) <= 0
-  }
-
-  exports.cmp = cmp;
-  function cmp (a, op, b, loose) {
-    switch (op) {
-      case '===':
-        if (typeof a === 'object')
-          a = a.version;
-        if (typeof b === 'object')
-          b = b.version;
-        return a === b
-
-      case '!==':
-        if (typeof a === 'object')
-          a = a.version;
-        if (typeof b === 'object')
-          b = b.version;
-        return a !== b
-
-      case '':
-      case '=':
-      case '==':
-        return eq(a, b, loose)
-
-      case '!=':
-        return neq(a, b, loose)
-
-      case '>':
-        return gt(a, b, loose)
-
-      case '>=':
-        return gte(a, b, loose)
-
-      case '<':
-        return lt(a, b, loose)
-
-      case '<=':
-        return lte(a, b, loose)
-
-      default:
-        throw new TypeError('Invalid operator: ' + op)
-    }
-  }
-
-  exports.Comparator = Comparator;
-  function Comparator (comp, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      };
-    }
-
-    if (comp instanceof Comparator) {
-      if (comp.loose === !!options.loose) {
-        return comp
-      } else {
-        comp = comp.value;
-      }
-    }
-
-    if (!(this instanceof Comparator)) {
-      return new Comparator(comp, options)
-    }
-
-    debug('comparator', comp, options);
-    this.options = options;
-    this.loose = !!options.loose;
-    this.parse(comp);
-
-    if (this.semver === ANY) {
-      this.value = '';
-    } else {
-      this.value = this.operator + this.semver.version;
-    }
-
-    debug('comp', this);
-  }
-
-  var ANY = {};
-  Comparator.prototype.parse = function (comp) {
-    var r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR];
-    var m = comp.match(r);
-
-    if (!m) {
-      throw new TypeError('Invalid comparator: ' + comp)
-    }
-
-    this.operator = m[1] !== undefined ? m[1] : '';
-    if (this.operator === '=') {
-      this.operator = '';
-    }
-
-    // if it literally is just '>' or '' then allow anything.
-    if (!m[2]) {
-      this.semver = ANY;
-    } else {
-      this.semver = new SemVer(m[2], this.options.loose);
-    }
-  };
-
-  Comparator.prototype.toString = function () {
-    return this.value
-  };
-
-  Comparator.prototype.test = function (version) {
-    debug('Comparator.test', version, this.options.loose);
-
-    if (this.semver === ANY || version === ANY) {
-      return true
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new SemVer(version, this.options);
-      } catch (er) {
-        return false
-      }
-    }
-
-    return cmp(version, this.operator, this.semver, this.options)
-  };
-
-  Comparator.prototype.intersects = function (comp, options) {
-    if (!(comp instanceof Comparator)) {
-      throw new TypeError('a Comparator is required')
-    }
-
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      };
-    }
-
-    var rangeTmp;
-
-    if (this.operator === '') {
-      if (this.value === '') {
-        return true
-      }
-      rangeTmp = new Range(comp.value, options);
-      return satisfies(this.value, rangeTmp, options)
-    } else if (comp.operator === '') {
-      if (comp.value === '') {
-        return true
-      }
-      rangeTmp = new Range(this.value, options);
-      return satisfies(comp.semver, rangeTmp, options)
-    }
-
-    var sameDirectionIncreasing =
-      (this.operator === '>=' || this.operator === '>') &&
-      (comp.operator === '>=' || comp.operator === '>');
-    var sameDirectionDecreasing =
-      (this.operator === '<=' || this.operator === '<') &&
-      (comp.operator === '<=' || comp.operator === '<');
-    var sameSemVer = this.semver.version === comp.semver.version;
-    var differentDirectionsInclusive =
-      (this.operator === '>=' || this.operator === '<=') &&
-      (comp.operator === '>=' || comp.operator === '<=');
-    var oppositeDirectionsLessThan =
-      cmp(this.semver, '<', comp.semver, options) &&
-      ((this.operator === '>=' || this.operator === '>') &&
-      (comp.operator === '<=' || comp.operator === '<'));
-    var oppositeDirectionsGreaterThan =
-      cmp(this.semver, '>', comp.semver, options) &&
-      ((this.operator === '<=' || this.operator === '<') &&
-      (comp.operator === '>=' || comp.operator === '>'));
-
-    return sameDirectionIncreasing || sameDirectionDecreasing ||
-      (sameSemVer && differentDirectionsInclusive) ||
-      oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
-  };
-
-  exports.Range = Range;
-  function Range (range, options) {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      };
-    }
-
-    if (range instanceof Range) {
-      if (range.loose === !!options.loose &&
-          range.includePrerelease === !!options.includePrerelease) {
-        return range
-      } else {
-        return new Range(range.raw, options)
-      }
-    }
-
-    if (range instanceof Comparator) {
-      return new Range(range.value, options)
-    }
-
-    if (!(this instanceof Range)) {
-      return new Range(range, options)
-    }
-
-    this.options = options;
-    this.loose = !!options.loose;
-    this.includePrerelease = !!options.includePrerelease;
-
-    // First, split based on boolean or ||
-    this.raw = range;
-    this.set = range.split(/\s*\|\|\s*/).map(function (range) {
-      return this.parseRange(range.trim())
-    }, this).filter(function (c) {
-      // throw out any that are not relevant for whatever reason
-      return c.length
-    });
-
-    if (!this.set.length) {
-      throw new TypeError('Invalid SemVer Range: ' + range)
-    }
-
-    this.format();
-  }
-
-  Range.prototype.format = function () {
-    this.range = this.set.map(function (comps) {
-      return comps.join(' ').trim()
-    }).join('||').trim();
-    return this.range
-  };
-
-  Range.prototype.toString = function () {
-    return this.range
-  };
-
-  Range.prototype.parseRange = function (range) {
-    var loose = this.options.loose;
-    range = range.trim();
-    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-    var hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE];
-    range = range.replace(hr, hyphenReplace);
-    debug('hyphen replace', range);
-    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace);
-    debug('comparator trim', range, re[t.COMPARATORTRIM]);
-
-    // `~ 1.2.3` => `~1.2.3`
-    range = range.replace(re[t.TILDETRIM], tildeTrimReplace);
-
-    // `^ 1.2.3` => `^1.2.3`
-    range = range.replace(re[t.CARETTRIM], caretTrimReplace);
-
-    // normalize spaces
-    range = range.split(/\s+/).join(' ');
-
-    // At this point, the range is completely trimmed and
-    // ready to be split into comparators.
-
-    var compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR];
-    var set = range.split(' ').map(function (comp) {
-      return parseComparator(comp, this.options)
-    }, this).join(' ').split(/\s+/);
-    if (this.options.loose) {
-      // in loose mode, throw out any that are not valid comparators
-      set = set.filter(function (comp) {
-        return !!comp.match(compRe)
-      });
-    }
-    set = set.map(function (comp) {
-      return new Comparator(comp, this.options)
-    }, this);
-
-    return set
-  };
-
-  Range.prototype.intersects = function (range, options) {
-    if (!(range instanceof Range)) {
-      throw new TypeError('a Range is required')
-    }
-
-    return this.set.some(function (thisComparators) {
-      return (
-        isSatisfiable(thisComparators, options) &&
-        range.set.some(function (rangeComparators) {
-          return (
-            isSatisfiable(rangeComparators, options) &&
-            thisComparators.every(function (thisComparator) {
-              return rangeComparators.every(function (rangeComparator) {
-                return thisComparator.intersects(rangeComparator, options)
-              })
-            })
-          )
-        })
-      )
-    })
-  };
-
-  // take a set of comparators and determine whether there
-  // exists a version which can satisfy it
-  function isSatisfiable (comparators, options) {
-    var result = true;
-    var remainingComparators = comparators.slice();
-    var testComparator = remainingComparators.pop();
-
-    while (result && remainingComparators.length) {
-      result = remainingComparators.every(function (otherComparator) {
-        return testComparator.intersects(otherComparator, options)
-      });
-
-      testComparator = remainingComparators.pop();
-    }
-
-    return result
-  }
-
-  // Mostly just for testing and legacy API reasons
-  exports.toComparators = toComparators;
-  function toComparators (range, options) {
-    return new Range(range, options).set.map(function (comp) {
-      return comp.map(function (c) {
-        return c.value
-      }).join(' ').trim().split(' ')
-    })
-  }
-
-  // comprised of xranges, tildes, stars, and gtlt's at this point.
-  // already replaced the hyphen ranges
-  // turn into a set of JUST comparators.
-  function parseComparator (comp, options) {
-    debug('comp', comp, options);
-    comp = replaceCarets(comp, options);
-    debug('caret', comp);
-    comp = replaceTildes(comp, options);
-    debug('tildes', comp);
-    comp = replaceXRanges(comp, options);
-    debug('xrange', comp);
-    comp = replaceStars(comp, options);
-    debug('stars', comp);
-    return comp
-  }
-
-  function isX (id) {
-    return !id || id.toLowerCase() === 'x' || id === '*'
-  }
-
-  // ~, ~> --> * (any, kinda silly)
-  // ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
-  // ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
-  // ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
-  // ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
-  // ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
-  function replaceTildes (comp, options) {
-    return comp.trim().split(/\s+/).map(function (comp) {
-      return replaceTilde(comp, options)
-    }).join(' ')
-  }
-
-  function replaceTilde (comp, options) {
-    var r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE];
-    return comp.replace(r, function (_, M, m, p, pr) {
-      debug('tilde', comp, _, M, m, p, pr);
-      var ret;
-
-      if (isX(M)) {
-        ret = '';
-      } else if (isX(m)) {
-        ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
-      } else if (isX(p)) {
-        // ~1.2 == >=1.2.0 <1.3.0
-        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
-      } else if (pr) {
-        debug('replaceTilde pr', pr);
-        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-              ' <' + M + '.' + (+m + 1) + '.0';
-      } else {
-        // ~1.2.3 == >=1.2.3 <1.3.0
-        ret = '>=' + M + '.' + m + '.' + p +
-              ' <' + M + '.' + (+m + 1) + '.0';
-      }
-
-      debug('tilde return', ret);
-      return ret
-    })
-  }
-
-  // ^ --> * (any, kinda silly)
-  // ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
-  // ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
-  // ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
-  // ^1.2.3 --> >=1.2.3 <2.0.0
-  // ^1.2.0 --> >=1.2.0 <2.0.0
-  function replaceCarets (comp, options) {
-    return comp.trim().split(/\s+/).map(function (comp) {
-      return replaceCaret(comp, options)
-    }).join(' ')
-  }
-
-  function replaceCaret (comp, options) {
-    debug('caret', comp, options);
-    var r = options.loose ? re[t.CARETLOOSE] : re[t.CARET];
-    return comp.replace(r, function (_, M, m, p, pr) {
-      debug('caret', comp, _, M, m, p, pr);
-      var ret;
-
-      if (isX(M)) {
-        ret = '';
-      } else if (isX(m)) {
-        ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
-      } else if (isX(p)) {
-        if (M === '0') {
-          ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
-        } else {
-          ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0';
-        }
-      } else if (pr) {
-        debug('replaceCaret pr', pr);
-        if (M === '0') {
-          if (m === '0') {
-            ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                  ' <' + M + '.' + m + '.' + (+p + 1);
-          } else {
-            ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                  ' <' + M + '.' + (+m + 1) + '.0';
-          }
-        } else {
-          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                ' <' + (+M + 1) + '.0.0';
-        }
-      } else {
-        debug('no pr');
-        if (M === '0') {
-          if (m === '0') {
-            ret = '>=' + M + '.' + m + '.' + p +
-                  ' <' + M + '.' + m + '.' + (+p + 1);
-          } else {
-            ret = '>=' + M + '.' + m + '.' + p +
-                  ' <' + M + '.' + (+m + 1) + '.0';
-          }
-        } else {
-          ret = '>=' + M + '.' + m + '.' + p +
-                ' <' + (+M + 1) + '.0.0';
-        }
-      }
-
-      debug('caret return', ret);
-      return ret
-    })
-  }
-
-  function replaceXRanges (comp, options) {
-    debug('replaceXRanges', comp, options);
-    return comp.split(/\s+/).map(function (comp) {
-      return replaceXRange(comp, options)
-    }).join(' ')
-  }
-
-  function replaceXRange (comp, options) {
-    comp = comp.trim();
-    var r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE];
-    return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
-      debug('xRange', comp, ret, gtlt, M, m, p, pr);
-      var xM = isX(M);
-      var xm = xM || isX(m);
-      var xp = xm || isX(p);
-      var anyX = xp;
-
-      if (gtlt === '=' && anyX) {
-        gtlt = '';
-      }
-
-      // if we're including prereleases in the match, then we need
-      // to fix this to -0, the lowest possible prerelease value
-      pr = options.includePrerelease ? '-0' : '';
-
-      if (xM) {
-        if (gtlt === '>' || gtlt === '<') {
-          // nothing is allowed
-          ret = '<0.0.0-0';
-        } else {
-          // nothing is forbidden
-          ret = '*';
-        }
-      } else if (gtlt && anyX) {
-        // we know patch is an x, because we have any x at all.
-        // replace X with 0
-        if (xm) {
-          m = 0;
-        }
-        p = 0;
-
-        if (gtlt === '>') {
-          // >1 => >=2.0.0
-          // >1.2 => >=1.3.0
-          // >1.2.3 => >= 1.2.4
-          gtlt = '>=';
-          if (xm) {
-            M = +M + 1;
-            m = 0;
-            p = 0;
-          } else {
-            m = +m + 1;
-            p = 0;
-          }
-        } else if (gtlt === '<=') {
-          // <=0.7.x is actually <0.8.0, since any 0.7.x should
-          // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-          gtlt = '<';
-          if (xm) {
-            M = +M + 1;
-          } else {
-            m = +m + 1;
-          }
-        }
-
-        ret = gtlt + M + '.' + m + '.' + p + pr;
-      } else if (xm) {
-        ret = '>=' + M + '.0.0' + pr + ' <' + (+M + 1) + '.0.0' + pr;
-      } else if (xp) {
-        ret = '>=' + M + '.' + m + '.0' + pr +
-          ' <' + M + '.' + (+m + 1) + '.0' + pr;
-      }
-
-      debug('xRange return', ret);
-
-      return ret
-    })
-  }
-
-  // Because * is AND-ed with everything else in the comparator,
-  // and '' means "any version", just remove the *s entirely.
-  function replaceStars (comp, options) {
-    debug('replaceStars', comp, options);
-    // Looseness is ignored here.  star is always as loose as it gets!
-    return comp.trim().replace(re[t.STAR], '')
-  }
-
-  // This function is passed to string.replace(re[t.HYPHENRANGE])
-  // M, m, patch, prerelease, build
-  // 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-  // 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
-  // 1.2 - 3.4 => >=1.2.0 <3.5.0
-  function hyphenReplace ($0,
-    from, fM, fm, fp, fpr, fb,
-    to, tM, tm, tp, tpr, tb) {
-    if (isX(fM)) {
-      from = '';
-    } else if (isX(fm)) {
-      from = '>=' + fM + '.0.0';
-    } else if (isX(fp)) {
-      from = '>=' + fM + '.' + fm + '.0';
-    } else {
-      from = '>=' + from;
-    }
-
-    if (isX(tM)) {
-      to = '';
-    } else if (isX(tm)) {
-      to = '<' + (+tM + 1) + '.0.0';
-    } else if (isX(tp)) {
-      to = '<' + tM + '.' + (+tm + 1) + '.0';
-    } else if (tpr) {
-      to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr;
-    } else {
-      to = '<=' + to;
-    }
-
-    return (from + ' ' + to).trim()
-  }
-
-  // if ANY of the sets match ALL of its comparators, then pass
-  Range.prototype.test = function (version) {
-    if (!version) {
-      return false
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new SemVer(version, this.options);
-      } catch (er) {
-        return false
-      }
-    }
-
-    for (var i = 0; i < this.set.length; i++) {
-      if (testSet(this.set[i], version, this.options)) {
-        return true
-      }
-    }
-    return false
-  };
-
-  function testSet (set, version, options) {
-    for (var i = 0; i < set.length; i++) {
-      if (!set[i].test(version)) {
-        return false
-      }
-    }
-
-    if (version.prerelease.length && !options.includePrerelease) {
-      // Find the set of versions that are allowed to have prereleases
-      // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-      // That should allow `1.2.3-pr.2` to pass.
-      // However, `1.2.4-alpha.notready` should NOT be allowed,
-      // even though it's within the range set by the comparators.
-      for (i = 0; i < set.length; i++) {
-        debug(set[i].semver);
-        if (set[i].semver === ANY) {
-          continue
-        }
-
-        if (set[i].semver.prerelease.length > 0) {
-          var allowed = set[i].semver;
-          if (allowed.major === version.major &&
-              allowed.minor === version.minor &&
-              allowed.patch === version.patch) {
-            return true
-          }
-        }
-      }
-
-      // Version has a -pre, but it's not one of the ones we like.
-      return false
-    }
-
-    return true
-  }
-
-  exports.satisfies = satisfies;
-  function satisfies (version, range, options) {
-    try {
-      range = new Range(range, options);
-    } catch (er) {
-      return false
-    }
-    return range.test(version)
-  }
-
-  exports.maxSatisfying = maxSatisfying;
-  function maxSatisfying (versions, range, options) {
-    var max = null;
-    var maxSV = null;
-    try {
-      var rangeObj = new Range(range, options);
-    } catch (er) {
-      return null
-    }
-    versions.forEach(function (v) {
-      if (rangeObj.test(v)) {
-        // satisfies(v, range, options)
-        if (!max || maxSV.compare(v) === -1) {
-          // compare(max, v, true)
-          max = v;
-          maxSV = new SemVer(max, options);
-        }
-      }
-    });
-    return max
-  }
-
-  exports.minSatisfying = minSatisfying;
-  function minSatisfying (versions, range, options) {
-    var min = null;
-    var minSV = null;
-    try {
-      var rangeObj = new Range(range, options);
-    } catch (er) {
-      return null
-    }
-    versions.forEach(function (v) {
-      if (rangeObj.test(v)) {
-        // satisfies(v, range, options)
-        if (!min || minSV.compare(v) === 1) {
-          // compare(min, v, true)
-          min = v;
-          minSV = new SemVer(min, options);
-        }
-      }
-    });
-    return min
-  }
-
-  exports.minVersion = minVersion;
-  function minVersion (range, loose) {
-    range = new Range(range, loose);
-
-    var minver = new SemVer('0.0.0');
-    if (range.test(minver)) {
-      return minver
-    }
-
-    minver = new SemVer('0.0.0-0');
-    if (range.test(minver)) {
-      return minver
-    }
-
-    minver = null;
-    for (var i = 0; i < range.set.length; ++i) {
-      var comparators = range.set[i];
-
-      comparators.forEach(function (comparator) {
-        // Clone to avoid manipulating the comparator's semver object.
-        var compver = new SemVer(comparator.semver.version);
-        switch (comparator.operator) {
-          case '>':
-            if (compver.prerelease.length === 0) {
-              compver.patch++;
-            } else {
-              compver.prerelease.push(0);
-            }
-            compver.raw = compver.format();
-            /* fallthrough */
-          case '':
-          case '>=':
-            if (!minver || gt(minver, compver)) {
-              minver = compver;
-            }
-            break
-          case '<':
-          case '<=':
-            /* Ignore maximum versions */
-            break
-          /* istanbul ignore next */
-          default:
-            throw new Error('Unexpected operation: ' + comparator.operator)
-        }
-      });
-    }
-
-    if (minver && range.test(minver)) {
-      return minver
-    }
-
-    return null
-  }
-
-  exports.validRange = validRange;
-  function validRange (range, options) {
-    try {
-      // Return '*' instead of '' so that truthiness works.
-      // This will throw if it's invalid anyway
-      return new Range(range, options).range || '*'
-    } catch (er) {
-      return null
-    }
-  }
-
-  // Determine if version is less than all the versions possible in the range
-  exports.ltr = ltr;
-  function ltr (version, range, options) {
-    return outside(version, range, '<', options)
-  }
-
-  // Determine if version is greater than all the versions possible in the range.
-  exports.gtr = gtr;
-  function gtr (version, range, options) {
-    return outside(version, range, '>', options)
-  }
-
-  exports.outside = outside;
-  function outside (version, range, hilo, options) {
-    version = new SemVer(version, options);
-    range = new Range(range, options);
-
-    var gtfn, ltefn, ltfn, comp, ecomp;
-    switch (hilo) {
-      case '>':
-        gtfn = gt;
-        ltefn = lte;
-        ltfn = lt;
-        comp = '>';
-        ecomp = '>=';
-        break
-      case '<':
-        gtfn = lt;
-        ltefn = gte;
-        ltfn = gt;
-        comp = '<';
-        ecomp = '<=';
-        break
-      default:
-        throw new TypeError('Must provide a hilo val of "<" or ">"')
-    }
-
-    // If it satisifes the range it is not outside
-    if (satisfies(version, range, options)) {
-      return false
-    }
-
-    // From now on, variable terms are as if we're in "gtr" mode.
-    // but note that everything is flipped for the "ltr" function.
-
-    for (var i = 0; i < range.set.length; ++i) {
-      var comparators = range.set[i];
-
-      var high = null;
-      var low = null;
-
-      comparators.forEach(function (comparator) {
-        if (comparator.semver === ANY) {
-          comparator = new Comparator('>=0.0.0');
-        }
-        high = high || comparator;
-        low = low || comparator;
-        if (gtfn(comparator.semver, high.semver, options)) {
-          high = comparator;
-        } else if (ltfn(comparator.semver, low.semver, options)) {
-          low = comparator;
-        }
-      });
-
-      // If the edge version comparator has a operator then our version
-      // isn't outside it
-      if (high.operator === comp || high.operator === ecomp) {
-        return false
-      }
-
-      // If the lowest version comparator has an operator and our version
-      // is less than it then it isn't higher than the range
-      if ((!low.operator || low.operator === comp) &&
-          ltefn(version, low.semver)) {
-        return false
-      } else if (low.operator === ecomp && ltfn(version, low.semver)) {
-        return false
-      }
-    }
-    return true
-  }
-
-  exports.prerelease = prerelease;
-  function prerelease (version, options) {
-    var parsed = parse(version, options);
-    return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
-  }
-
-  exports.intersects = intersects;
-  function intersects (r1, r2, options) {
-    r1 = new Range(r1, options);
-    r2 = new Range(r2, options);
-    return r1.intersects(r2)
-  }
-
-  exports.coerce = coerce;
-  function coerce (version, options) {
-    if (version instanceof SemVer) {
-      return version
-    }
-
-    if (typeof version === 'number') {
-      version = String(version);
-    }
-
-    if (typeof version !== 'string') {
-      return null
-    }
-
-    options = options || {};
-
-    var match = null;
-    if (!options.rtl) {
-      match = version.match(re[t.COERCE]);
-    } else {
-      // Find the right-most coercible string that does not share
-      // a terminus with a more left-ward coercible string.
-      // Eg, '1.2.3.4' wants to coerce '2.3.4', not '3.4' or '4'
-      //
-      // Walk through the string checking with a /g regexp
-      // Manually set the index so as to pick up overlapping matches.
-      // Stop when we get a match that ends at the string end, since no
-      // coercible string can be more right-ward without the same terminus.
-      var next;
-      while ((next = re[t.COERCERTL].exec(version)) &&
-        (!match || match.index + match[0].length !== version.length)
-      ) {
-        if (!match ||
-            next.index + next[0].length !== match.index + match[0].length) {
-          match = next;
-        }
-        re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length;
-      }
-      // leave it in a clean state
-      re[t.COERCERTL].lastIndex = -1;
-    }
-
-    if (match === null) {
-      return null
-    }
-
-    return parse(match[2] +
-      '.' + (match[3] || '0') +
-      '.' + (match[4] || '0'), options)
-  }
-  });
-  var semver_1 = semver.SEMVER_SPEC_VERSION;
-  var semver_2 = semver.re;
-  var semver_3 = semver.src;
-  var semver_4 = semver.tokens;
-  var semver_5 = semver.parse;
-  var semver_6 = semver.valid;
-  var semver_7 = semver.clean;
-  var semver_8 = semver.SemVer;
-  var semver_9 = semver.inc;
-  var semver_10 = semver.diff;
-  var semver_11 = semver.compareIdentifiers;
-  var semver_12 = semver.rcompareIdentifiers;
-  var semver_13 = semver.major;
-  var semver_14 = semver.minor;
-  var semver_15 = semver.patch;
-  var semver_16 = semver.compare;
-  var semver_17 = semver.compareLoose;
-  var semver_18 = semver.compareBuild;
-  var semver_19 = semver.rcompare;
-  var semver_20 = semver.sort;
-  var semver_21 = semver.rsort;
-  var semver_22 = semver.gt;
-  var semver_23 = semver.lt;
-  var semver_24 = semver.eq;
-  var semver_25 = semver.neq;
-  var semver_26 = semver.gte;
-  var semver_27 = semver.lte;
-  var semver_28 = semver.cmp;
-  var semver_29 = semver.Comparator;
-  var semver_30 = semver.Range;
-  var semver_31 = semver.toComparators;
-  var semver_32 = semver.satisfies;
-  var semver_33 = semver.maxSatisfying;
-  var semver_34 = semver.minSatisfying;
-  var semver_35 = semver.minVersion;
-  var semver_36 = semver.validRange;
-  var semver_37 = semver.ltr;
-  var semver_38 = semver.gtr;
-  var semver_39 = semver.outside;
-  var semver_40 = semver.prerelease;
-  var semver_41 = semver.intersects;
-  var semver_42 = semver.coerce;
+    return Version;
+  }();
 
   var filterPluginsByType = function filterPluginsByType(plugins, type) {
     if (!plugins || !type) return {};
@@ -8276,10 +6547,8 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.8";
-    return (
-      /*#__PURE__*/
-      function () {
+    var currentVersion = "0.4.11";
+    return (/*#__PURE__*/function () {
         _createClass(Loader, null, [{
           key: "checkVersionSupport",
           value: function checkVersionSupport(entry) {
@@ -8292,11 +6561,11 @@
               return false;
             }
 
-            var maxVersion = supportedVersion.max || semver.parse(supportedVersion.min).inc('minor');
-            var versionRange = ">=".concat(supportedVersion.min, " <").concat(maxVersion);
+            var maxVersion = supportedVersion.max ? Version.parse(supportedVersion.max) : Version.parse(supportedVersion.min).inc('minor');
+            var minVersion = Version.parse(supportedVersion.min);
 
-            if (!semver.satisfies(currentVersion, versionRange)) {
-              Log.warn('Loader', "unsupported plugin (".concat(currentVersion, " does not match required range ").concat(versionRange, "): ").concat(name));
+            if (!Version.parse(currentVersion).satisfies(minVersion, maxVersion)) {
+              Log.warn('Loader', "unsupported plugin ".concat(name, ": Clappr version ").concat(currentVersion, " does not match required range [").concat(minVersion, ",").concat(maxVersion, ")"));
               return false;
             }
 
@@ -8535,9 +6804,7 @@
    * ```
    */
 
-  var Player =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var Player = /*#__PURE__*/function (_BaseObject) {
     _inherits(Player, _BaseObject);
 
     _createClass(Player, [{
@@ -9206,9 +7473,7 @@
    * @module base
    */
 
-  var ContainerPlugin =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var ContainerPlugin = /*#__PURE__*/function (_BaseObject) {
     _inherits(ContainerPlugin, _BaseObject);
 
     _createClass(ContainerPlugin, [{
@@ -9268,9 +7533,7 @@
 
   ContainerPlugin.type = 'container';
 
-  var CorePlugin =
-  /*#__PURE__*/
-  function (_BaseObject) {
+  var CorePlugin = /*#__PURE__*/function (_BaseObject) {
     _inherits(CorePlugin, _BaseObject);
 
     _createClass(CorePlugin, [{
@@ -9343,9 +7606,7 @@
    * @module base
    */
 
-  var UIContainerPlugin =
-  /*#__PURE__*/
-  function (_UIObject) {
+  var UIContainerPlugin = /*#__PURE__*/function (_UIObject) {
     _inherits(UIContainerPlugin, _UIObject);
 
     _createClass(UIContainerPlugin, [{
@@ -9399,6 +7660,154 @@
   };
 
   UIContainerPlugin.type = 'container';
+
+  var global$1 = (typeof global !== "undefined" ? global :
+              typeof self !== "undefined" ? self :
+              typeof window !== "undefined" ? window : {});
+
+  // shim for using process in browser
+  // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
+
+  function defaultSetTimout() {
+      throw new Error('setTimeout has not been defined');
+  }
+  function defaultClearTimeout () {
+      throw new Error('clearTimeout has not been defined');
+  }
+  var cachedSetTimeout = defaultSetTimout;
+  var cachedClearTimeout = defaultClearTimeout;
+  if (typeof global$1.setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+  }
+  if (typeof global$1.clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+  }
+
+  function runTimeout(fun) {
+      if (cachedSetTimeout === setTimeout) {
+          //normal enviroments in sane situations
+          return setTimeout(fun, 0);
+      }
+      // if setTimeout wasn't available but was latter defined
+      if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+          cachedSetTimeout = setTimeout;
+          return setTimeout(fun, 0);
+      }
+      try {
+          // when when somebody has screwed with setTimeout but no I.E. maddness
+          return cachedSetTimeout(fun, 0);
+      } catch(e){
+          try {
+              // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+              return cachedSetTimeout.call(null, fun, 0);
+          } catch(e){
+              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+              return cachedSetTimeout.call(this, fun, 0);
+          }
+      }
+
+
+  }
+  function runClearTimeout(marker) {
+      if (cachedClearTimeout === clearTimeout) {
+          //normal enviroments in sane situations
+          return clearTimeout(marker);
+      }
+      // if clearTimeout wasn't available but was latter defined
+      if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+          cachedClearTimeout = clearTimeout;
+          return clearTimeout(marker);
+      }
+      try {
+          // when when somebody has screwed with setTimeout but no I.E. maddness
+          return cachedClearTimeout(marker);
+      } catch (e){
+          try {
+              // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+              return cachedClearTimeout.call(null, marker);
+          } catch (e){
+              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+              // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+              return cachedClearTimeout.call(this, marker);
+          }
+      }
+
+
+
+  }
+  var queue = [];
+  var draining = false;
+  var currentQueue;
+  var queueIndex = -1;
+
+  function cleanUpNextTick() {
+      if (!draining || !currentQueue) {
+          return;
+      }
+      draining = false;
+      if (currentQueue.length) {
+          queue = currentQueue.concat(queue);
+      } else {
+          queueIndex = -1;
+      }
+      if (queue.length) {
+          drainQueue();
+      }
+  }
+
+  function drainQueue() {
+      if (draining) {
+          return;
+      }
+      var timeout = runTimeout(cleanUpNextTick);
+      draining = true;
+
+      var len = queue.length;
+      while(len) {
+          currentQueue = queue;
+          queue = [];
+          while (++queueIndex < len) {
+              if (currentQueue) {
+                  currentQueue[queueIndex].run();
+              }
+          }
+          queueIndex = -1;
+          len = queue.length;
+      }
+      currentQueue = null;
+      draining = false;
+      runClearTimeout(timeout);
+  }
+  function nextTick(fun) {
+      var args = new Array(arguments.length - 1);
+      if (arguments.length > 1) {
+          for (var i = 1; i < arguments.length; i++) {
+              args[i - 1] = arguments[i];
+          }
+      }
+      queue.push(new Item(fun, args));
+      if (queue.length === 1 && !draining) {
+          runTimeout(drainQueue);
+      }
+  }
+  // v8 likes predictible objects
+  function Item(fun, array) {
+      this.fun = fun;
+      this.array = array;
+  }
+  Item.prototype.run = function () {
+      this.fun.apply(null, this.array);
+  };
+
+  // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
+  var performance$1 = global$1.performance || {};
+  var performanceNow =
+    performance$1.now        ||
+    performance$1.mozNow     ||
+    performance$1.msNow      ||
+    performance$1.oNow       ||
+    performance$1.webkitNow  ||
+    function(){ return (new Date()).getTime() };
 
   /* eslint-disable no-var */
   // Simple JavaScript Templating
@@ -9524,9 +7933,7 @@
     message: 'unknown'
   }; // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 
-  var HTML5Video =
-  /*#__PURE__*/
-  function (_Playback) {
+  var HTML5Video = /*#__PURE__*/function (_Playback) {
     _inherits(HTML5Video, _Playback);
 
     _createClass(HTML5Video, [{
@@ -9538,7 +7945,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.11"
         };
       }
     }, {
@@ -10261,9 +8668,7 @@
     return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) || HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType);
   };
 
-  var HTML5Audio =
-  /*#__PURE__*/
-  function (_HTML5Video) {
+  var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
     _inherits(HTML5Audio, _HTML5Video);
 
     function HTML5Audio() {
@@ -10293,7 +8698,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.11"
         };
       }
     }, {
@@ -10324,9 +8729,7 @@
   var css$3 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
   styleInject(css$3);
 
-  var HTMLImg =
-  /*#__PURE__*/
-  function (_Playback) {
+  var HTMLImg = /*#__PURE__*/function (_Playback) {
     _inherits(HTMLImg, _Playback);
 
     _createClass(HTMLImg, [{
@@ -10343,7 +8746,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.11"
         };
       }
     }, {
@@ -10409,12 +8812,10 @@
 
   var noOpHTML = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%></p><p>\n</p>";
 
-  var css$4 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
+  var css$4 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
   styleInject(css$4);
 
-  var NoOp =
-  /*#__PURE__*/
-  function (_Playback) {
+  var NoOp = /*#__PURE__*/function (_Playback) {
     _inherits(NoOp, _Playback);
 
     _createClass(NoOp, [{
@@ -10426,7 +8827,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.11"
         };
       }
     }, {
@@ -10570,9 +8971,7 @@
    * @module plugins
    */
 
-  var Strings =
-  /*#__PURE__*/
-  function (_CorePlugin) {
+  var Strings = /*#__PURE__*/function (_CorePlugin) {
     _inherits(Strings, _CorePlugin);
 
     _createClass(Strings, [{
@@ -10584,7 +8983,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.11"
         };
       }
     }]);
@@ -10697,10 +9096,55 @@
     return Strings;
   }(CorePlugin);
 
+  var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
+    _inherits(SourcesPlugin, _CorePlugin);
+
+    function SourcesPlugin() {
+      _classCallCheck(this, SourcesPlugin);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(SourcesPlugin).apply(this, arguments));
+    }
+
+    _createClass(SourcesPlugin, [{
+      key: "bindEvents",
+      value: function bindEvents() {
+        this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated);
+      }
+    }, {
+      key: "onContainersCreated",
+      value: function onContainersCreated() {
+        var firstValidSource = this.core.containers.filter(function (container) {
+          return container.playback.name !== 'no_op';
+        })[0] || this.core.containers[0];
+
+        if (firstValidSource) {
+          this.core.containers.forEach(function (container) {
+            if (container !== firstValidSource) container.destroy();
+          });
+        }
+      }
+    }, {
+      key: "name",
+      get: function get() {
+        return 'sources';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.11"
+        };
+      }
+    }]);
+
+    return SourcesPlugin;
+  }(CorePlugin);
+
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version$1 = "0.4.8"; // Built-in Plugins/Playbacks
+  var version = "0.4.11"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
+  Loader.registerPlugin(SourcesPlugin);
   Loader.registerPlayback(NoOp);
   Loader.registerPlayback(HTMLImg);
   Loader.registerPlayback(HTML5Audio);
@@ -10726,7 +9170,7 @@
     HTMLImg: HTMLImg,
     Log: Log,
     Styler: Styler,
-    version: version$1,
+    version: version,
     template: tmpl,
     $: zepto
   };
@@ -10830,9 +9274,7 @@
     return _get$1(target, property, receiver || target);
   }
 
-  var ClickToPausePlugin =
-  /*#__PURE__*/
-  function (_ContainerPlugin) {
+  var ClickToPausePlugin = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(ClickToPausePlugin, _ContainerPlugin);
 
     _createClass$1(ClickToPausePlugin, [{
@@ -10844,7 +9286,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }]);
@@ -10916,9 +9358,7 @@
   var css$5 = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
   styleInject$1(css$5);
 
-  var ClosedCaptions =
-  /*#__PURE__*/
-  function (_UICorePlugin) {
+  var ClosedCaptions = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ClosedCaptions, _UICorePlugin);
 
     _createClass$1(ClosedCaptions, [{
@@ -10930,7 +9370,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -10974,10 +9414,28 @@
     _createClass$1(ClosedCaptions, [{
       key: "bindEvents",
       value: function bindEvents() {
-        this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
-        this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.render);
-        this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hideContextMenu);
-        this.container = this.core.getCurrentContainer();
+        this.bindCoreEvents();
+        this.bindContainerEvents();
+      }
+    }, {
+      key: "bindCoreEvents",
+      value: function bindCoreEvents() {
+        var _this2 = this;
+
+        if (this.core.mediaControl.settings) {
+          this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
+          this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.render);
+          this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hideContextMenu);
+        } else {
+          setTimeout(function () {
+            return _this2.bindCoreEvents();
+          }, 100);
+        }
+      }
+    }, {
+      key: "bindContainerEvents",
+      value: function bindContainerEvents() {
+        this.container = this.core.activeContainer;
 
         if (this.container) {
           this.listenTo(this.container, Events.CONTAINER_SUBTITLE_AVAILABLE, this.onSubtitleAvailable);
@@ -11083,12 +9541,10 @@
 
   var dvrHTML = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
-  var css$1$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    -webkit-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
+  var css$1$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
   styleInject$1(css$1$1);
 
-  var DVRControls =
-  /*#__PURE__*/
-  function (_UICorePlugin) {
+  var DVRControls = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(DVRControls, _UICorePlugin);
 
     _createClass$1(DVRControls, [{
@@ -11105,7 +9561,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -11140,13 +9596,30 @@
     _createClass$1(DVRControls, [{
       key: "bindEvents",
       value: function bindEvents() {
-        this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-        this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
-        this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.render);
+        this.bindCoreEvents();
+        this.bindContainerEvents();
+      }
+    }, {
+      key: "bindCoreEvents",
+      value: function bindCoreEvents() {
+        var _this2 = this;
 
-        if (this.core.getCurrentContainer()) {
-          this.listenToOnce(this.core.getCurrentContainer(), Events.CONTAINER_TIMEUPDATE, this.render);
-          this.listenTo(this.core.getCurrentContainer(), Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
+        if (this.core.mediaControl.settings) {
+          this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+          this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
+          this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.render);
+        } else {
+          setTimeout(function () {
+            return _this2.bindCoreEvents();
+          }, 100);
+        }
+      }
+    }, {
+      key: "bindContainerEvents",
+      value: function bindContainerEvents() {
+        if (this.core.activeContainer) {
+          this.listenToOnce(this.core.activeContainer, Events.CONTAINER_TIMEUPDATE, this.render);
+          this.listenTo(this.core.activeContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
         }
       }
     }, {
@@ -11180,7 +9653,7 @@
     }, {
       key: "settingsUpdate",
       value: function settingsUpdate() {
-        var _this2 = this;
+        var _this3 = this;
 
         this.stopListening();
         this.core.mediaControl.$el.removeClass('live');
@@ -11188,7 +9661,7 @@
         if (this.shouldRender()) {
           this.render();
           this.$el.click(function () {
-            return _this2.click();
+            return _this3.click();
           });
         }
 
@@ -11220,9 +9693,7 @@
     return DVRControls;
   }(UICorePlugin);
 
-  var EndVideo =
-  /*#__PURE__*/
-  function (_CorePlugin) {
+  var EndVideo = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(EndVideo, _CorePlugin);
 
     function EndVideo() {
@@ -11263,7 +9734,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }]);
@@ -11275,12 +9746,10 @@
 
   var templateHtml = "<div class=\"player-error-screen__content\" data-error-screen>\n  <% if (icon) { %>\n  <div class=\"player-error-screen__icon\" data-error-screen><%= icon %></div>\n  <% } %>\n  <div class=\"player-error-screen__title\" data-error-screen><%= title %></div>\n  <div class=\"player-error-screen__message\" data-error-screen><%= message %></div>\n  <div class=\"player-error-screen__code\" data-error-screen>Error code: <%= code %></div>\n  <div class=\"player-error-screen__reload\" data-error-screen><%= reloadIcon %></div>\n</div>\n";
 
-  var css$2$1 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n          flex-direction: column;\n  -webkit-box-pack: center;\n          justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0; }\n";
+  var css$2$1 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex;\n  flex-direction: column;\n  justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0; }\n";
   styleInject$1(css$2$1);
 
-  var ErrorScreen =
-  /*#__PURE__*/
-  function (_UICorePlugin) {
+  var ErrorScreen = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ErrorScreen, _UICorePlugin);
 
     _createClass$1(ErrorScreen, [{
@@ -11292,7 +9761,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -11409,9 +9878,7 @@
 
   var oldIcon = zepto('link[rel="shortcut icon"]');
 
-  var Favicon =
-  /*#__PURE__*/
-  function (_CorePlugin) {
+  var Favicon = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(Favicon, _CorePlugin);
 
     _createClass$1(Favicon, [{
@@ -11423,7 +9890,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -11538,9 +10005,7 @@
     return Favicon;
   }(CorePlugin);
 
-  var GoogleAnalytics =
-  /*#__PURE__*/
-  function (_ContainerPlugin) {
+  var GoogleAnalytics = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(GoogleAnalytics, _ContainerPlugin);
 
     _createClass$1(GoogleAnalytics, [{
@@ -11552,7 +10017,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }]);
@@ -12216,7 +10681,7 @@
     Kibo: Kibo
   };
 
-  var css$3$1 = ".media-control-notransition {\n  -webkit-transition: none !important;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.9)));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n                transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width .2s ease-out;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n                  transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform .2s ease-out;\n          transition: -webkit-transform .2s ease-out;\n          transition: transform .2s ease-out;\n          transition: transform .2s ease-out, -webkit-transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n                    transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
+  var css$3$1 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
   styleInject$1(css$3$1);
 
   var mediaControlHTML = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
@@ -12239,9 +10704,7 @@
       extend$1 = Utils.extend,
       removeArrayItem$1 = Utils.removeArrayItem;
 
-  var MediaControl =
-  /*#__PURE__*/
-  function (_UICorePlugin) {
+  var MediaControl = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(MediaControl, _UICorePlugin);
 
     _createClass$1(MediaControl, [{
@@ -12253,7 +10716,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -13107,12 +11570,10 @@
 
   var posterHTML = "<div class=\"play-wrapper\" data-poster></div>\n";
 
-  var css$4$1 = ".player-poster[data-poster] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n          align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    -webkit-transition: opacity 0.1s ease;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
+  var css$4$1 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
   styleInject$1(css$4$1);
 
-  var PosterPlugin =
-  /*#__PURE__*/
-  function (_UIContainerPlugin) {
+  var PosterPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(PosterPlugin, _UIContainerPlugin);
 
     _createClass$1(PosterPlugin, [{
@@ -13124,7 +11585,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -13317,14 +11778,12 @@
 
   var seekTimeHTML = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
-  var css$5$1 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
+  var css$5$1 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
   styleInject$1(css$5$1);
 
   var formatTime$1$1 = Utils.formatTime;
 
-  var SeekTime =
-  /*#__PURE__*/
-  function (_UICorePlugin) {
+  var SeekTime = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(SeekTime, _UICorePlugin);
 
     _createClass$1(SeekTime, [{
@@ -13336,7 +11795,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -13538,60 +11997,12 @@
     return SeekTime;
   }(UICorePlugin);
 
-  var SourcesPlugin =
-  /*#__PURE__*/
-  function (_CorePlugin) {
-    _inherits$1(SourcesPlugin, _CorePlugin);
-
-    function SourcesPlugin() {
-      _classCallCheck$1(this, SourcesPlugin);
-
-      return _possibleConstructorReturn$1(this, _getPrototypeOf$1(SourcesPlugin).apply(this, arguments));
-    }
-
-    _createClass$1(SourcesPlugin, [{
-      key: "bindEvents",
-      value: function bindEvents() {
-        this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated);
-      }
-    }, {
-      key: "onContainersCreated",
-      value: function onContainersCreated() {
-        var firstValidSource = this.core.containers.filter(function (container) {
-          return container.playback.name !== 'no_op';
-        })[0] || this.core.containers[0];
-
-        if (firstValidSource) {
-          this.core.containers.forEach(function (container) {
-            if (container !== firstValidSource) container.destroy();
-          });
-        }
-      }
-    }, {
-      key: "name",
-      get: function get() {
-        return 'sources';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.5"
-        };
-      }
-    }]);
-
-    return SourcesPlugin;
-  }(CorePlugin);
-
   var spinnerHTML = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
-  var css$6 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n            transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n            transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n";
+  var css$6 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
   styleInject$1(css$6);
 
-  var SpinnerThreeBouncePlugin =
-  /*#__PURE__*/
-  function (_UIContainerPlugin) {
+  var SpinnerThreeBouncePlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(SpinnerThreeBouncePlugin, _UIContainerPlugin);
 
     _createClass$1(SpinnerThreeBouncePlugin, [{
@@ -13603,7 +12014,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -13688,9 +12099,7 @@
     return SpinnerThreeBouncePlugin;
   }(UIContainerPlugin);
 
-  var StatsPlugin =
-  /*#__PURE__*/
-  function (_ContainerPlugin) {
+  var StatsPlugin = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(StatsPlugin, _ContainerPlugin);
 
     _createClass$1(StatsPlugin, [{
@@ -13702,7 +12111,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }]);
@@ -13828,9 +12237,7 @@
   var css$7 = ".clappr-watermark[data-watermark] {\n  position: absolute;\n  min-width: 70px;\n  max-width: 200px;\n  width: 12%;\n  text-align: center;\n  z-index: 10; }\n\n.clappr-watermark[data-watermark] a {\n  outline: none;\n  cursor: pointer; }\n\n.clappr-watermark[data-watermark] img {\n  max-width: 100%; }\n\n.clappr-watermark[data-watermark-bottom-left] {\n  bottom: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-bottom-right] {\n  bottom: 10px;\n  right: 42px; }\n\n.clappr-watermark[data-watermark-top-left] {\n  top: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-top-right] {\n  top: 10px;\n  right: 37px; }\n";
   styleInject$1(css$7);
 
-  var WaterMarkPlugin =
-  /*#__PURE__*/
-  function (_UIContainerPlugin) {
+  var WaterMarkPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(WaterMarkPlugin, _UIContainerPlugin);
 
     _createClass$1(WaterMarkPlugin, [{
@@ -13842,7 +12249,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.9"
         };
       }
     }, {
@@ -13922,13 +12329,16 @@
     MediaControl: MediaControl,
     Poster: PosterPlugin,
     SeekTime: SeekTime,
-    Sources: SourcesPlugin,
     SpinnerThreeBounce: SpinnerThreeBouncePlugin,
     Stats: StatsPlugin,
     WaterMark: WaterMarkPlugin
   };
 
+<<<<<<< HEAD
   var version$2 = "0.3.13";
+=======
+  var version$1 = "0.3.12";
+>>>>>>> chore(package): use  latest @clappr/hlsjs-playback (0.4.1)
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
@@ -13946,7 +12356,6 @@
       MediaControl$1 = Plugins.MediaControl,
       Poster = Plugins.Poster,
       SeekTime$1 = Plugins.SeekTime,
-      Sources = Plugins.Sources,
       SpinnerThreeBounce = Plugins.SpinnerThreeBounce,
       Stats = Plugins.Stats,
       WaterMark = Plugins.WaterMark;
@@ -13961,14 +12370,226 @@
     MediaControl: MediaControl$1,
     Poster: Poster,
     SeekTime: SeekTime$1,
-    Sources: Sources,
     SpinnerThreeBounce: SpinnerThreeBounce,
     Stats: Stats,
     WaterMark: WaterMark,
     Vendor: index,
     Plugins: Plugins,
-    version: version$2
+    version: version$1
   });
+
+  function _classCallCheck$2(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties$2(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass$2(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties$2(Constructor, staticProps);
+    return Constructor;
+  }
+
+  function _defineProperty$1(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function ownKeys$1(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2$1(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys$1(Object(source), true).forEach(function (key) {
+          _defineProperty$1(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys$1(Object(source)).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
+  }
+
+  function _inherits$2(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) _setPrototypeOf$2(subClass, superClass);
+  }
+
+  function _getPrototypeOf$2(o) {
+    _getPrototypeOf$2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf$2(o);
+  }
+
+  function _setPrototypeOf$2(o, p) {
+    _setPrototypeOf$2 = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf$2(o, p);
+  }
+
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _assertThisInitialized$2(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return self;
+  }
+
+  function _possibleConstructorReturn$2(self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
+
+    return _assertThisInitialized$2(self);
+  }
+
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf$2(Derived),
+          result;
+
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf$2(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn$2(this, result);
+    };
+  }
+
+  function _superPropBase$2(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf$2(object);
+      if (object === null) break;
+    }
+
+    return object;
+  }
+
+  function _get$2(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get$2 = Reflect.get;
+    } else {
+      _get$2 = function _get(target, property, receiver) {
+        var base = _superPropBase$2(target, property);
+
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+
+    return _get$2(target, property, receiver || target);
+  }
+
+  function _toConsumableArray$1(arr) {
+    return _arrayWithoutHoles$1(arr) || _iterableToArray$1(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread$1();
+  }
+
+  function _arrayWithoutHoles$1(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  }
+
+  function _iterableToArray$1(iter) {
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _nonIterableSpread$1() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
 
   var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -13976,11 +12597,21 @@
   	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
   }
 
-  function createCommonjsModule$1(fn, module) {
-  	return module = { exports: {} }, fn(module, module.exports), module.exports;
+  function createCommonjsModule(fn, basedir, module) {
+  	return module = {
+  	  path: basedir,
+  	  exports: {},
+  	  require: function (path, base) {
+        return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+      }
+  	}, fn(module, module.exports), module.exports;
   }
 
-  var hls = createCommonjsModule$1(function (module, exports) {
+  function commonjsRequire () {
+  	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+  }
+
+  var hls = createCommonjsModule(function (module, exports) {
   typeof window !== "undefined" &&
   (function webpackUniversalModuleDefinition(root, factory) {
   	module.exports = factory();
@@ -35004,8 +33635,9 @@
 
   });
 
-  var HLSJS = unwrapExports(hls);
+  var HLSJS = /*@__PURE__*/unwrapExports(hls);
 
+<<<<<<< HEAD
   // Copyright 2014 Globo.com Player authors. All rights reserved.
 
   const { now: now$1, assign: assign$1, listContainsIgnoreCase: listContainsIgnoreCase$1 } = Utils;
@@ -35018,632 +33650,763 @@
     get name() { return 'hls' }
 
     get supportedVersion() { return { min: "0.4.8" } }
+=======
+  var now$1 = Utils.now,
+      assign$1 = Utils.assign,
+      listContainsIgnoreCase$1 = Utils.listContainsIgnoreCase;
+  var AUTO = -1;
+>>>>>>> chore(package): use  latest @clappr/hlsjs-playback (0.4.1)
 
-    get levels() { return this._levels || [] }
+  var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
+    _inherits$2(HlsjsPlayback, _HTML5Video);
 
-    get currentLevel() {
-      if (this._currentLevel === null || this._currentLevel === undefined)
-        return AUTO
-      else
-        return this._currentLevel //0 is a valid level ID
+    var _super = _createSuper(HlsjsPlayback);
 
-    }
+    _createClass$2(HlsjsPlayback, [{
+      key: "name",
+      get: function get() {
+        return 'hls';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.11"
+        };
+      }
+    }, {
+      key: "levels",
+      get: function get() {
+        return this._levels || [];
+      }
+    }, {
+      key: "currentLevel",
+      get: function get() {
+        if (this._currentLevel === null || this._currentLevel === undefined) return AUTO;else return this._currentLevel; //0 is a valid level ID
+      },
+      set: function set(id) {
+        this._currentLevel = id;
+        this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START);
+        if (this.options.playback.hlsUseNextLevel) this._hls.nextLevel = this._currentLevel;else this._hls.currentLevel = this._currentLevel;
+      }
+    }, {
+      key: "isReady",
+      get: function get() {
+        return this._isReadyState;
+      }
+    }, {
+      key: "_startTime",
+      get: function get() {
+        if (this._playbackType === Playback.LIVE && this._playlistType !== 'EVENT') return this._extrapolatedStartTime;
+        return this._playableRegionStartTime;
+      }
+    }, {
+      key: "_now",
+      get: function get() {
+        return now$1();
+      } // the time in the video element which should represent the start of the sliding window
+      // extrapolated to increase in real time (instead of jumping as the early segments are removed)
 
-    get isReady() {
-      return this._isReadyState
-    }
+    }, {
+      key: "_extrapolatedStartTime",
+      get: function get() {
+        if (!this._localStartTimeCorrelation) return this._playableRegionStartTime;
+        var corr = this._localStartTimeCorrelation;
+        var timePassed = this._now - corr.local;
+        var extrapolatedWindowStartTime = (corr.remote + timePassed) / 1000; // cap at the end of the extrapolated window duration
 
-    set currentLevel(id) {
-      this._currentLevel = id;
-      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START);
-      if (this.options.playback.hlsUseNextLevel)
-        this._hls.nextLevel = this._currentLevel;
-      else
-        this._hls.currentLevel = this._currentLevel;
-    }
+        return Math.min(extrapolatedWindowStartTime, this._playableRegionStartTime + this._extrapolatedWindowDuration);
+      } // the time in the video element which should represent the end of the content
+      // extrapolated to increase in real time (instead of jumping as segments are added)
 
-    get _startTime() {
-      if (this._playbackType === Playback.LIVE && this._playlistType !== 'EVENT')
-        return this._extrapolatedStartTime
+    }, {
+      key: "_extrapolatedEndTime",
+      get: function get() {
+        var actualEndTime = this._playableRegionStartTime + this._playableRegionDuration;
+        if (!this._localEndTimeCorrelation) return actualEndTime;
+        var corr = this._localEndTimeCorrelation;
+        var timePassed = this._now - corr.local;
+        var extrapolatedEndTime = (corr.remote + timePassed) / 1000;
+        return Math.max(actualEndTime - this._extrapolatedWindowDuration, Math.min(extrapolatedEndTime, actualEndTime));
+      }
+    }, {
+      key: "_duration",
+      get: function get() {
+        return this._extrapolatedEndTime - this._startTime;
+      } // Returns the duration (seconds) of the window that the extrapolated start time is allowed
+      // to move in before being capped.
+      // The extrapolated start time should never reach the cap at the end of the window as the
+      // window should slide as chunks are removed from the start.
+      // This also applies to the extrapolated end time in the same way.
+      //
+      // If chunks aren't being removed for some reason that the start time will reach and remain fixed at
+      // playableRegionStartTime + extrapolatedWindowDuration
+      //
+      //                                <-- window duration -->
+      // I.e   playableRegionStartTime |-----------------------|
+      //                               | -->   .       .       .
+      //                               .   --> | -->   .       .
+      //                               .       .   --> | -->   .
+      //                               .       .       .   --> |
+      //                               .       .       .       .
+      //                                 extrapolatedStartTime
 
-      return this._playableRegionStartTime
-    }
+    }, {
+      key: "_extrapolatedWindowDuration",
+      get: function get() {
+        if (this._segmentTargetDuration === null) return 0;
+        return this._extrapolatedWindowNumSegments * this._segmentTargetDuration;
+      }
+    }], [{
+      key: "HLSJS",
+      get: function get() {
+        return HLSJS;
+      }
+    }]);
 
-    get _now() {
-      return now$1()
-    }
+    function HlsjsPlayback() {
+      var _this;
 
-    // the time in the video element which should represent the start of the sliding window
-    // extrapolated to increase in real time (instead of jumping as the early segments are removed)
-    get _extrapolatedStartTime() {
-      if (!this._localStartTimeCorrelation)
-        return this._playableRegionStartTime
+      _classCallCheck$2(this, HlsjsPlayback);
 
-      let corr = this._localStartTimeCorrelation;
-      let timePassed = this._now - corr.local;
-      let extrapolatedWindowStartTime = (corr.remote + timePassed) / 1000;
-      // cap at the end of the extrapolated window duration
-      return Math.min(extrapolatedWindowStartTime, this._playableRegionStartTime + this._extrapolatedWindowDuration)
-    }
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
 
-    // the time in the video element which should represent the end of the content
-    // extrapolated to increase in real time (instead of jumping as segments are added)
-    get _extrapolatedEndTime() {
-      let actualEndTime = this._playableRegionStartTime + this._playableRegionDuration;
-      if (!this._localEndTimeCorrelation)
-        return actualEndTime
+      _this = _super.call.apply(_super, [this].concat(args)); // backwards compatibility (TODO: remove on 0.3.0)
 
-      let corr = this._localEndTimeCorrelation;
-      let timePassed = this._now - corr.local;
-      let extrapolatedEndTime = (corr.remote + timePassed) / 1000;
-      return Math.max(actualEndTime - this._extrapolatedWindowDuration, Math.min(extrapolatedEndTime, actualEndTime))
-    }
-
-    get _duration() {
-      return this._extrapolatedEndTime - this._startTime
-    }
-
-    // Returns the duration (seconds) of the window that the extrapolated start time is allowed
-    // to move in before being capped.
-    // The extrapolated start time should never reach the cap at the end of the window as the
-    // window should slide as chunks are removed from the start.
-    // This also applies to the extrapolated end time in the same way.
-    //
-    // If chunks aren't being removed for some reason that the start time will reach and remain fixed at
-    // playableRegionStartTime + extrapolatedWindowDuration
-    //
-    //                                <-- window duration -->
-    // I.e   playableRegionStartTime |-----------------------|
-    //                               | -->   .       .       .
-    //                               .   --> | -->   .       .
-    //                               .       .   --> | -->   .
-    //                               .       .       .   --> |
-    //                               .       .       .       .
-    //                                 extrapolatedStartTime
-    get _extrapolatedWindowDuration() {
-      if (this._segmentTargetDuration === null)
-        return 0
-
-      return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
-    }
-
-    static get HLSJS() {
-      return HLSJS
-    }
-
-    constructor(...args) {
-      super(...args);
-      // backwards compatibility (TODO: remove on 0.3.0)
-      this.options.playback = { ...this.options, ...this.options.playback };
-      this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize;
-      // The size of the start time extrapolation window measured as a multiple of segments.
+      _this.options.playback = _objectSpread2$1(_objectSpread2$1({}, _this.options), _this.options.playback);
+      _this._minDvrSize = typeof _this.options.hlsMinimumDvrSize === 'undefined' ? 60 : _this.options.hlsMinimumDvrSize; // The size of the start time extrapolation window measured as a multiple of segments.
       // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
       // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
       // added/removed every 5.
-      this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments;
 
-      this._playbackType = Playback.VOD;
-      this._lastTimeUpdate = { current: 0, total: 0 };
-      this._lastDuration = null;
-      // for hls streams which have dvr with a sliding window,
+      _this._extrapolatedWindowNumSegments = !_this.options.playback || typeof _this.options.playback.extrapolatedWindowNumSegments === 'undefined' ? 2 : _this.options.playback.extrapolatedWindowNumSegments;
+      _this._playbackType = Playback.VOD;
+      _this._lastTimeUpdate = {
+        current: 0,
+        total: 0
+      };
+      _this._lastDuration = null; // for hls streams which have dvr with a sliding window,
       // the content at the start of the playlist is removed as new
       // content is appended at the end.
       // this means the actual playable start time will increase as the
       // start content is deleted
       // For streams with dvr where the entire recording is kept from the
       // beginning this should stay as 0
-      this._playableRegionStartTime = 0;
-      // {local, remote} remote is the time in the video element that should represent 0
+
+      _this._playableRegionStartTime = 0; // {local, remote} remote is the time in the video element that should represent 0
       //                 local is the system time when the 'remote' measurment took place
-      this._localStartTimeCorrelation = null;
-      // {local, remote} remote is the time in the video element that should represents the end
+
+      _this._localStartTimeCorrelation = null; // {local, remote} remote is the time in the video element that should represents the end
       //                 local is the system time when the 'remote' measurment took place
-      this._localEndTimeCorrelation = null;
-      // if content is removed from the beginning then this empty area should
+
+      _this._localEndTimeCorrelation = null; // if content is removed from the beginning then this empty area should
       // be ignored. "playableRegionDuration" excludes the empty area
-      this._playableRegionDuration = 0;
-      // #EXT-X-PROGRAM-DATE-TIME
-      this._programDateTime = 0;
-      // true when the actual duration is longer than hlsjs's live sync point
+
+      _this._playableRegionDuration = 0; // #EXT-X-PROGRAM-DATE-TIME
+
+      _this._programDateTime = 0; // true when the actual duration is longer than hlsjs's live sync point
       // when this is false playableRegionDuration will be the actual duration
       // when this is true playableRegionDuration will exclude the time after the sync point
-      this._durationExcludesAfterLiveSyncPoint = false;
-      // #EXT-X-TARGETDURATION
-      this._segmentTargetDuration = null;
-      // #EXT-X-PLAYLIST-TYPE
-      this._playlistType = null;
-      this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16;
+
+      _this._durationExcludesAfterLiveSyncPoint = false; // #EXT-X-TARGETDURATION
+
+      _this._segmentTargetDuration = null; // #EXT-X-PLAYLIST-TYPE
+
+      _this._playlistType = null;
+      _this._recoverAttemptsRemaining = _this.options.hlsRecoverAttempts || 16;
+      return _this;
     }
 
-    _setup() {
-      this._ccIsSetup = false;
-      this._ccTracksUpdated = false;
-      this._hls = new HLSJS(assign$1({}, this.options.playback.hlsjsConfig));
-      this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src));
-      this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data));
-      this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data));
-      this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitch(evt, data));
-      this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data));
-      this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data));
-      this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data));
-      this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true);
-      this._hls.attachMedia(this.el);
-    }
+    _createClass$2(HlsjsPlayback, [{
+      key: "_setup",
+      value: function _setup() {
+        var _this2 = this;
 
-    render() {
-      this._ready();
-      return super.render()
-    }
+        this._ccIsSetup = false;
+        this._ccTracksUpdated = false;
+        this._hls = new HLSJS(assign$1({}, this.options.playback.hlsjsConfig));
 
-    _ready() {
-      this._isReadyState = true;
-      this.trigger(Events.PLAYBACK_READY, this.name);
-    }
+        this._hls.once(HLSJS.Events.MEDIA_ATTACHED, function () {
+          return _this2._hls.loadSource(_this2.options.src);
+        });
 
-    _recover(evt, data, error) {
-      if (!this._recoveredDecodingError) {
-        this._recoveredDecodingError = true;
-        this._hls.recoverMediaError();
-      } else if (!this._recoveredAudioCodecError) {
-        this._recoveredAudioCodecError = true;
-        this._hls.swapAudioCodec();
-        this._hls.recoverMediaError();
-      } else {
-        Log.error('hlsjs: failed to recover', { evt, data });
-        error.level = PlayerError.Levels.FATAL;
-        const formattedError = this.createError(error);
-        this.trigger(Events.PLAYBACK_ERROR, formattedError);
-        this.stop();
+        this._hls.on(HLSJS.Events.LEVEL_LOADED, function (evt, data) {
+          return _this2._updatePlaybackType(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.LEVEL_UPDATED, function (evt, data) {
+          return _this2._onLevelUpdated(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.LEVEL_SWITCHING, function (evt, data) {
+          return _this2._onLevelSwitch(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.FRAG_LOADED, function (evt, data) {
+          return _this2._onFragmentLoaded(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.ERROR, function (evt, data) {
+          return _this2._onHLSJSError(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, function (evt, data) {
+          return _this2._onSubtitleLoaded(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, function () {
+          return _this2._ccTracksUpdated = true;
+        });
+
+        this._hls.attachMedia(this.el);
       }
-    }
+    }, {
+      key: "render",
+      value: function render() {
+        this._ready();
 
-    // override
-    _setupSrc(srcUrl) { // eslint-disable-line no-unused-vars
-      // this playback manages the src on the video element itself
-    }
-
-    _startTimeUpdateTimer() {
-      if (this._timeUpdateTimer) return
-
-      this._timeUpdateTimer = setInterval(() => {
-        this._onDurationChange();
-        this._onTimeUpdate();
-      }, 100);
-    }
-
-    _stopTimeUpdateTimer() {
-      if (!this._timeUpdateTimer) return
-
-      clearInterval(this._timeUpdateTimer);
-      this._timeUpdateTimer = null;
-    }
-
-    getProgramDateTime() {
-      return this._programDateTime
-    }
-    // the duration on the video element itself should not be used
-    // as this does not necesarily represent the duration of the stream
-    // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
-    getDuration() {
-      return this._duration
-    }
-
-    getCurrentTime() {
-      // e.g. can be < 0 if user pauses near the start
-      // eventually they will then be kicked to the end by hlsjs if they run out of buffer
-      // before the official start time
-      return Math.max(0, this.el.currentTime - this._startTime)
-    }
-
-    // the time that "0" now represents relative to when playback started
-    // for a stream with a sliding window this will increase as content is
-    // removed from the beginning
-    getStartTimeOffset() {
-      return this._startTime
-    }
-
-    seekPercentage(percentage) {
-      let seekTo = this._duration;
-      if (percentage > 0)
-        seekTo = this._duration * (percentage / 100);
-
-      this.seek(seekTo);
-    }
-
-    seek(time) {
-      if (time < 0) {
-        Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
-        time = this.getDuration();
+        return _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "render", this).call(this);
       }
-      // assume live if time within 3 seconds of end of stream
-      this.dvrEnabled && this._updateDvr(time < this.getDuration()-3);
-      time += this._startTime;
-      super.seek(time);
-    }
+    }, {
+      key: "_ready",
+      value: function _ready() {
+        this._isReadyState = true;
+        this.trigger(Events.PLAYBACK_READY, this.name);
+      }
+    }, {
+      key: "_recover",
+      value: function _recover(evt, data, error) {
+        if (!this._recoveredDecodingError) {
+          this._recoveredDecodingError = true;
 
-    seekToLivePoint() {
-      this.seek(this.getDuration());
-    }
+          this._hls.recoverMediaError();
+        } else if (!this._recoveredAudioCodecError) {
+          this._recoveredAudioCodecError = true;
 
-    _updateDvr(status) {
-      this.trigger(Events.PLAYBACK_DVR, status);
-      this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status });
-    }
+          this._hls.swapAudioCodec();
 
-    _updateSettings() {
-      if (this._playbackType === Playback.VOD)
-        this.settings.left = ['playpause', 'position', 'duration'];
-      else if (this.dvrEnabled)
-        this.settings.left = ['playpause'];
-      else
-        this.settings.left = ['playstop'];
+          this._hls.recoverMediaError();
+        } else {
+          Log.error('hlsjs: failed to recover', {
+            evt: evt,
+            data: data
+          });
+          error.level = PlayerError.Levels.FATAL;
+          var formattedError = this.createError(error);
+          this.trigger(Events.PLAYBACK_ERROR, formattedError);
+          this.stop();
+        }
+      } // override
 
-      this.settings.seekEnabled = this.isSeekEnabled();
-      this.trigger(Events.PLAYBACK_SETTINGSUPDATE);
-    }
+    }, {
+      key: "_setupSrc",
+      value: function _setupSrc(srcUrl) {// eslint-disable-line no-unused-vars
+        // this playback manages the src on the video element itself
+      }
+    }, {
+      key: "_startTimeUpdateTimer",
+      value: function _startTimeUpdateTimer() {
+        var _this3 = this;
 
-    _onHLSJSError(evt, data) {
-      const error = {
-        code: `${data.type}_${data.details}`,
-        description: `${this.name} error: type: ${data.type}, details: ${data.details}`,
-        raw: data,
-      };
-      let formattedError;
-      if (data.response) error.description += `, response: ${JSON.stringify(data.response)}`;
-      // only report/handle errors if they are fatal
-      // hlsjs should automatically handle non fatal errors
-      if (data.fatal) {
-        if (this._recoverAttemptsRemaining > 0) {
-          this._recoverAttemptsRemaining -= 1;
-          switch (data.type) {
-          case HLSJS.ErrorTypes.NETWORK_ERROR:
-            switch (data.details) {
-            // The following network errors cannot be recovered with HLS.startLoad()
-            // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
-            // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138
-            case HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR:
-            case HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
-            case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
-            case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
-            case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
-              Log.error('hlsjs: unrecoverable network fatal error.', { evt, data });
-              formattedError = this.createError(error);
-              this.trigger(Events.PLAYBACK_ERROR, formattedError);
-              this.stop();
-              break
-            default:
-              Log.warn('hlsjs: trying to recover from network error.', { evt, data });
-              error.level = PlayerError.Levels.WARN;
-              this._hls.startLoad();
-              break
+        if (this._timeUpdateTimer) return;
+        this._timeUpdateTimer = setInterval(function () {
+          _this3._onDurationChange();
+
+          _this3._onTimeUpdate();
+        }, 100);
+      }
+    }, {
+      key: "_stopTimeUpdateTimer",
+      value: function _stopTimeUpdateTimer() {
+        if (!this._timeUpdateTimer) return;
+        clearInterval(this._timeUpdateTimer);
+        this._timeUpdateTimer = null;
+      }
+    }, {
+      key: "getProgramDateTime",
+      value: function getProgramDateTime() {
+        return this._programDateTime;
+      } // the duration on the video element itself should not be used
+      // as this does not necesarily represent the duration of the stream
+      // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+
+    }, {
+      key: "getDuration",
+      value: function getDuration() {
+        return this._duration;
+      }
+    }, {
+      key: "getCurrentTime",
+      value: function getCurrentTime() {
+        // e.g. can be < 0 if user pauses near the start
+        // eventually they will then be kicked to the end by hlsjs if they run out of buffer
+        // before the official start time
+        return Math.max(0, this.el.currentTime - this._startTime);
+      } // the time that "0" now represents relative to when playback started
+      // for a stream with a sliding window this will increase as content is
+      // removed from the beginning
+
+    }, {
+      key: "getStartTimeOffset",
+      value: function getStartTimeOffset() {
+        return this._startTime;
+      }
+    }, {
+      key: "seekPercentage",
+      value: function seekPercentage(percentage) {
+        var seekTo = this._duration;
+        if (percentage > 0) seekTo = this._duration * (percentage / 100);
+        this.seek(seekTo);
+      }
+    }, {
+      key: "seek",
+      value: function seek(time) {
+        if (time < 0) {
+          Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
+          time = this.getDuration();
+        } // assume live if time within 3 seconds of end of stream
+
+
+        this.dvrEnabled && this._updateDvr(time < this.getDuration() - 3);
+        time += this._startTime;
+
+        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "seek", this).call(this, time);
+      }
+    }, {
+      key: "seekToLivePoint",
+      value: function seekToLivePoint() {
+        this.seek(this.getDuration());
+      }
+    }, {
+      key: "_updateDvr",
+      value: function _updateDvr(status) {
+        this.trigger(Events.PLAYBACK_DVR, status);
+        this.trigger(Events.PLAYBACK_STATS_ADD, {
+          'dvr': status
+        });
+      }
+    }, {
+      key: "_updateSettings",
+      value: function _updateSettings() {
+        if (this._playbackType === Playback.VOD) this.settings.left = ['playpause', 'position', 'duration'];else if (this.dvrEnabled) this.settings.left = ['playpause'];else this.settings.left = ['playstop'];
+        this.settings.seekEnabled = this.isSeekEnabled();
+        this.trigger(Events.PLAYBACK_SETTINGSUPDATE);
+      }
+    }, {
+      key: "_onHLSJSError",
+      value: function _onHLSJSError(evt, data) {
+        var error = {
+          code: "".concat(data.type, "_").concat(data.details),
+          description: "".concat(this.name, " error: type: ").concat(data.type, ", details: ").concat(data.details),
+          raw: data
+        };
+        var formattedError;
+        if (data.response) error.description += ", response: ".concat(JSON.stringify(data.response)); // only report/handle errors if they are fatal
+        // hlsjs should automatically handle non fatal errors
+
+        if (data.fatal) {
+          if (this._recoverAttemptsRemaining > 0) {
+            this._recoverAttemptsRemaining -= 1;
+
+            switch (data.type) {
+              case HLSJS.ErrorTypes.NETWORK_ERROR:
+                switch (data.details) {
+                  // The following network errors cannot be recovered with HLS.startLoad()
+                  // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
+                  // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138
+                  case HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR:
+                  case HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
+                  case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
+                  case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
+                  case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
+                    Log.error('hlsjs: unrecoverable network fatal error.', {
+                      evt: evt,
+                      data: data
+                    });
+                    formattedError = this.createError(error);
+                    this.trigger(Events.PLAYBACK_ERROR, formattedError);
+                    this.stop();
+                    break;
+
+                  default:
+                    Log.warn('hlsjs: trying to recover from network error.', {
+                      evt: evt,
+                      data: data
+                    });
+                    error.level = PlayerError.Levels.WARN;
+
+                    this._hls.startLoad();
+
+                    break;
+                }
+
+                break;
+
+              case HLSJS.ErrorTypes.MEDIA_ERROR:
+                Log.warn('hlsjs: trying to recover from media error.', {
+                  evt: evt,
+                  data: data
+                });
+                error.level = PlayerError.Levels.WARN;
+
+                this._recover(evt, data, error);
+
+                break;
+
+              default:
+                Log.error('hlsjs: could not recover from error.', {
+                  evt: evt,
+                  data: data
+                });
+                formattedError = this.createError(error);
+                this.trigger(Events.PLAYBACK_ERROR, formattedError);
+                this.stop();
+                break;
             }
-            break
-          case HLSJS.ErrorTypes.MEDIA_ERROR:
-            Log.warn('hlsjs: trying to recover from media error.', { evt, data });
-            error.level = PlayerError.Levels.WARN;
-            this._recover(evt, data, error);
-            break
-          default:
-            Log.error('hlsjs: could not recover from error.', { evt, data });
+          } else {
+            Log.error('hlsjs: could not recover from error after maximum number of attempts.', {
+              evt: evt,
+              data: data
+            });
             formattedError = this.createError(error);
             this.trigger(Events.PLAYBACK_ERROR, formattedError);
             this.stop();
-            break
           }
         } else {
-          Log.error('hlsjs: could not recover from error after maximum number of attempts.', { evt, data });
-          formattedError = this.createError(error);
-          this.trigger(Events.PLAYBACK_ERROR, formattedError);
-          this.stop();
+          // Transforms HLSJS.ErrorDetails.KEY_LOAD_ERROR non-fatal error to
+          // playback fatal error if triggerFatalErrorOnResourceDenied playback
+          // option is set. HLSJS.ErrorTypes.KEY_SYSTEM_ERROR are fatal errors
+          // and therefore already handled.
+          if (this.options.playback.triggerFatalErrorOnResourceDenied && this._keyIsDenied(data)) {
+            Log.error('hlsjs: could not load decrypt key.', {
+              evt: evt,
+              data: data
+            });
+            formattedError = this.createError(error);
+            this.trigger(Events.PLAYBACK_ERROR, formattedError);
+            this.stop();
+            return;
+          }
+
+          error.level = PlayerError.Levels.WARN;
+          Log.warn('hlsjs: non-fatal error occurred', {
+            evt: evt,
+            data: data
+          });
         }
-      } else {
-        // Transforms HLSJS.ErrorDetails.KEY_LOAD_ERROR non-fatal error to
-        // playback fatal error if triggerFatalErrorOnResourceDenied playback
-        // option is set. HLSJS.ErrorTypes.KEY_SYSTEM_ERROR are fatal errors
-        // and therefore already handled.
-        if (this.options.playback.triggerFatalErrorOnResourceDenied && this._keyIsDenied(data)) {
-          Log.error('hlsjs: could not load decrypt key.', { evt, data });
-          formattedError = this.createError(error);
-          this.trigger(Events.PLAYBACK_ERROR, formattedError);
-          this.stop();
-          return
+      }
+    }, {
+      key: "_keyIsDenied",
+      value: function _keyIsDenied(data) {
+        return data.type === HLSJS.ErrorTypes.NETWORK_ERROR && data.details === HLSJS.ErrorDetails.KEY_LOAD_ERROR && data.response && data.response.code >= 400;
+      }
+    }, {
+      key: "_onTimeUpdate",
+      value: function _onTimeUpdate() {
+        var update = {
+          current: this.getCurrentTime(),
+          total: this.getDuration(),
+          firstFragDateTime: this.getProgramDateTime()
+        };
+        var isSame = this._lastTimeUpdate && update.current === this._lastTimeUpdate.current && update.total === this._lastTimeUpdate.total;
+        if (isSame) return;
+        this._lastTimeUpdate = update;
+        this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name);
+      }
+    }, {
+      key: "_onDurationChange",
+      value: function _onDurationChange() {
+        var duration = this.getDuration();
+        if (this._lastDuration === duration) return;
+        this._lastDuration = duration;
+
+        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "_onDurationChange", this).call(this);
+      }
+    }, {
+      key: "_onProgress",
+      value: function _onProgress() {
+        if (!this.el.buffered.length) return;
+        var buffered = [];
+        var bufferedPos = 0;
+
+        for (var i = 0; i < this.el.buffered.length; i++) {
+          buffered = [].concat(_toConsumableArray$1(buffered), [{
+            // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
+            start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
+            end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
+          }]);
+          if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) bufferedPos = i;
         }
 
-        error.level = PlayerError.Levels.WARN;
-        Log.warn('hlsjs: non-fatal error occurred', { evt, data });
+        var progress = {
+          start: buffered[bufferedPos].start,
+          current: buffered[bufferedPos].end,
+          total: this.getDuration()
+        };
+        this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered);
       }
-    }
+    }, {
+      key: "play",
+      value: function play() {
+        if (!this._hls) this._setup();
 
-    _keyIsDenied(data) {
-      return data.type === HLSJS.ErrorTypes.NETWORK_ERROR
-        && data.details === HLSJS.ErrorDetails.KEY_LOAD_ERROR
-        && data.response
-        && data.response.code >= 400
-    }
+        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "play", this).call(this);
 
-    _onTimeUpdate() {
-      let update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() };
-      let isSame = this._lastTimeUpdate && (
-        update.current === this._lastTimeUpdate.current &&
-        update.total === this._lastTimeUpdate.total);
-      if (isSame)
-        return
-
-      this._lastTimeUpdate = update;
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name);
-    }
-
-    _onDurationChange() {
-      let duration = this.getDuration();
-      if (this._lastDuration === duration)
-        return
-
-      this._lastDuration = duration;
-      super._onDurationChange();
-    }
-
-    _onProgress() {
-      if (!this.el.buffered.length)
-        return
-
-      let buffered = [];
-      let bufferedPos = 0;
-      for (let i = 0; i < this.el.buffered.length; i++) {
-        buffered = [...buffered, {
-          // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
-          start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
-          end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
-        }];
-        if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end)
-          bufferedPos = i;
-
+        this._startTimeUpdateTimer();
       }
-      const progress = {
-        start: buffered[bufferedPos].start,
-        current: buffered[bufferedPos].end,
-        total: this.getDuration()
-      };
-      this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered);
-    }
+    }, {
+      key: "pause",
+      value: function pause() {
+        if (!this._hls) return;
 
-    play() {
-      if (!this._hls)
-        this._setup();
+        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "pause", this).call(this);
 
-      super.play();
-      this._startTimeUpdateTimer();
-    }
-
-    pause() {
-      if (!this._hls)
-        return
-
-      super.pause();
-      if (this.dvrEnabled)
-        this._updateDvr(true);
-
-    }
-
-    stop() {
-      this._stopTimeUpdateTimer();
-      if (this._hls) {
-        super.stop();
-        this._hls.destroy();
-        delete this._hls;
+        if (this.dvrEnabled) this._updateDvr(true);
       }
-    }
+    }, {
+      key: "stop",
+      value: function stop() {
+        this._stopTimeUpdateTimer();
 
-    destroy() {
-      this._stopTimeUpdateTimer();
-      if (this._hls) {
-        this._hls.destroy();
-        delete this._hls;
+        if (this._hls) {
+          _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "stop", this).call(this);
+
+          this._hls.destroy();
+
+          delete this._hls;
+        }
       }
-      super.destroy();
-    }
+    }, {
+      key: "destroy",
+      value: function destroy() {
+        this._stopTimeUpdateTimer();
 
-    _updatePlaybackType(evt, data) {
-      this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD;
-      this._onLevelUpdated(evt, data);
+        if (this._hls) {
+          this._hls.destroy();
 
-      // Live stream subtitle tracks detection hack (may not immediately available)
-      if (this._ccTracksUpdated && this._playbackType === Playback.LIVE && this.hasClosedCaptionsTracks)
-        this._onSubtitleLoaded();
+          delete this._hls;
+        }
 
-    }
-
-    _fillLevels() {
-      this._levels = this._hls.levels.map((level, index) => {
-        return { id: index, level: level, label: `${level.bitrate/1000}Kbps` }
-      });
-      this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels);
-    }
-
-    _onLevelUpdated(evt, data) {
-      this._segmentTargetDuration = data.details.targetduration;
-      this._playlistType = data.details.type || null;
-
-      let startTimeChanged = false;
-      let durationChanged = false;
-      let fragments = data.details.fragments;
-      let previousPlayableRegionStartTime = this._playableRegionStartTime;
-      let previousPlayableRegionDuration = this._playableRegionDuration;
-
-      if (fragments.length === 0)
-        return
-
-
-      // #EXT-X-PROGRAM-DATE-TIME
-      if (fragments[0].rawProgramDateTime)
-        this._programDateTime = fragments[0].rawProgramDateTime;
-
-
-      if (this._playableRegionStartTime !== fragments[0].start) {
-        startTimeChanged = true;
-        this._playableRegionStartTime = fragments[0].start;
+        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "destroy", this).call(this);
       }
+    }, {
+      key: "_updatePlaybackType",
+      value: function _updatePlaybackType(evt, data) {
+        this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD;
 
-      if (startTimeChanged) {
-        if (!this._localStartTimeCorrelation) {
-          // set the correlation to map to middle of the extrapolation window
-          this._localStartTimeCorrelation = {
-            local: this._now,
-            remote: (fragments[0].start + (this._extrapolatedWindowDuration/2)) * 1000
+        this._onLevelUpdated(evt, data); // Live stream subtitle tracks detection hack (may not immediately available)
+
+
+        if (this._ccTracksUpdated && this._playbackType === Playback.LIVE && this.hasClosedCaptionsTracks) this._onSubtitleLoaded();
+      }
+    }, {
+      key: "_fillLevels",
+      value: function _fillLevels() {
+        this._levels = this._hls.levels.map(function (level, index) {
+          return {
+            id: index,
+            level: level,
+            label: "".concat(level.bitrate / 1000, "Kbps")
           };
-        } else {
-          // check if the correlation still works
-          let corr = this._localStartTimeCorrelation;
-          let timePassed = this._now - corr.local;
-          // this should point to a time within the extrapolation window
-          let startTime = (corr.remote + timePassed) / 1000;
-          if (startTime < fragments[0].start) {
-            // our start time is now earlier than the first chunk
-            // (maybe the chunk was removed early)
-            // reset correlation so that it sits at the beginning of the first available chunk
+        });
+        this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels);
+      }
+    }, {
+      key: "_onLevelUpdated",
+      value: function _onLevelUpdated(evt, data) {
+        this._segmentTargetDuration = data.details.targetduration;
+        this._playlistType = data.details.type || null;
+        var startTimeChanged = false;
+        var durationChanged = false;
+        var fragments = data.details.fragments;
+        var previousPlayableRegionStartTime = this._playableRegionStartTime;
+        var previousPlayableRegionDuration = this._playableRegionDuration;
+        if (fragments.length === 0) return; // #EXT-X-PROGRAM-DATE-TIME
+
+        if (fragments[0].rawProgramDateTime) this._programDateTime = fragments[0].rawProgramDateTime;
+
+        if (this._playableRegionStartTime !== fragments[0].start) {
+          startTimeChanged = true;
+          this._playableRegionStartTime = fragments[0].start;
+        }
+
+        if (startTimeChanged) {
+          if (!this._localStartTimeCorrelation) {
+            // set the correlation to map to middle of the extrapolation window
             this._localStartTimeCorrelation = {
               local: this._now,
-              remote: fragments[0].start * 1000
+              remote: (fragments[0].start + this._extrapolatedWindowDuration / 2) * 1000
             };
-          } else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
-            // start time was past the end of the old extrapolation window (so would have been capped)
-            // see if now that time would be inside the window, and if it would be set the correlation
-            // so that it resumes from the time it was at at the end of the old window
-            // update the correlation so that the time starts counting again from the value it's on now
-            this._localStartTimeCorrelation = {
-              local: this._now,
-              remote: Math.max(fragments[0].start, previousPlayableRegionStartTime + this._extrapolatedWindowDuration) * 1000
-            };
+          } else {
+            // check if the correlation still works
+            var corr = this._localStartTimeCorrelation;
+            var timePassed = this._now - corr.local; // this should point to a time within the extrapolation window
+
+            var startTime = (corr.remote + timePassed) / 1000;
+
+            if (startTime < fragments[0].start) {
+              // our start time is now earlier than the first chunk
+              // (maybe the chunk was removed early)
+              // reset correlation so that it sits at the beginning of the first available chunk
+              this._localStartTimeCorrelation = {
+                local: this._now,
+                remote: fragments[0].start * 1000
+              };
+            } else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
+              // start time was past the end of the old extrapolation window (so would have been capped)
+              // see if now that time would be inside the window, and if it would be set the correlation
+              // so that it resumes from the time it was at at the end of the old window
+              // update the correlation so that the time starts counting again from the value it's on now
+              this._localStartTimeCorrelation = {
+                local: this._now,
+                remote: Math.max(fragments[0].start, previousPlayableRegionStartTime + this._extrapolatedWindowDuration) * 1000
+              };
+            }
           }
         }
-      }
 
-      let newDuration = data.details.totalduration;
-      // if it's a live stream then shorten the duration to remove access
-      // to the area after hlsjs's live sync point
-      // seeks to areas after this point sometimes have issues
-      if (this._playbackType === Playback.LIVE) {
-        let fragmentTargetDuration = data.details.targetduration;
-        let hlsjsConfig = this.options.playback.hlsjsConfig || {};
-        let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount;
-        let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount;
-        if (hiddenAreaDuration <= newDuration) {
-          newDuration -= hiddenAreaDuration;
-          this._durationExcludesAfterLiveSyncPoint = true;
-        } else { this._durationExcludesAfterLiveSyncPoint = false; }
+        var newDuration = data.details.totalduration; // if it's a live stream then shorten the duration to remove access
+        // to the area after hlsjs's live sync point
+        // seeks to areas after this point sometimes have issues
 
-      }
+        if (this._playbackType === Playback.LIVE) {
+          var fragmentTargetDuration = data.details.targetduration;
+          var hlsjsConfig = this.options.playback.hlsjsConfig || {};
+          var liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount;
+          var hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount;
 
-      if (newDuration !== this._playableRegionDuration) {
-        durationChanged = true;
-        this._playableRegionDuration = newDuration;
-      }
+          if (hiddenAreaDuration <= newDuration) {
+            newDuration -= hiddenAreaDuration;
+            this._durationExcludesAfterLiveSyncPoint = true;
+          } else {
+            this._durationExcludesAfterLiveSyncPoint = false;
+          }
+        }
 
-      // Note the end time is not the playableRegionDuration
-      // The end time will always increase even if content is removed from the beginning
-      let endTime = fragments[0].start + newDuration;
-      let previousEndTime = previousPlayableRegionStartTime + previousPlayableRegionDuration;
-      let endTimeChanged = endTime !== previousEndTime;
-      if (endTimeChanged) {
-        if (!this._localEndTimeCorrelation) {
-          // set the correlation to map to the end
-          this._localEndTimeCorrelation = {
-            local: this._now,
-            remote: endTime * 1000
-          };
-        } else {
-          // check if the correlation still works
-          let corr = this._localEndTimeCorrelation;
-          let timePassed = this._now - corr.local;
-          // this should point to a time within the extrapolation window from the end
-          let extrapolatedEndTime = (corr.remote + timePassed) / 1000;
-          if (extrapolatedEndTime > endTime) {
+        if (newDuration !== this._playableRegionDuration) {
+          durationChanged = true;
+          this._playableRegionDuration = newDuration;
+        } // Note the end time is not the playableRegionDuration
+        // The end time will always increase even if content is removed from the beginning
+
+
+        var endTime = fragments[0].start + newDuration;
+        var previousEndTime = previousPlayableRegionStartTime + previousPlayableRegionDuration;
+        var endTimeChanged = endTime !== previousEndTime;
+
+        if (endTimeChanged) {
+          if (!this._localEndTimeCorrelation) {
+            // set the correlation to map to the end
             this._localEndTimeCorrelation = {
               local: this._now,
               remote: endTime * 1000
             };
-          } else if (extrapolatedEndTime < endTime - this._extrapolatedWindowDuration) {
-            // our extrapolated end time is now earlier than the extrapolation window from the actual end time
-            // (maybe a chunk became available early)
-            // reset correlation so that it sits at the beginning of the extrapolation window from the end time
-            this._localEndTimeCorrelation = {
-              local: this._now,
-              remote: (endTime - this._extrapolatedWindowDuration) * 1000
-            };
-          } else if (extrapolatedEndTime > previousEndTime) {
-            // end time was past the old end time (so would have been capped)
-            // set the correlation so that it resumes from the time it was at at the end of the old window
-            this._localEndTimeCorrelation = {
-              local: this._now,
-              remote: previousEndTime * 1000
-            };
+          } else {
+            // check if the correlation still works
+            var _corr = this._localEndTimeCorrelation;
+
+            var _timePassed = this._now - _corr.local; // this should point to a time within the extrapolation window from the end
+
+
+            var extrapolatedEndTime = (_corr.remote + _timePassed) / 1000;
+
+            if (extrapolatedEndTime > endTime) {
+              this._localEndTimeCorrelation = {
+                local: this._now,
+                remote: endTime * 1000
+              };
+            } else if (extrapolatedEndTime < endTime - this._extrapolatedWindowDuration) {
+              // our extrapolated end time is now earlier than the extrapolation window from the actual end time
+              // (maybe a chunk became available early)
+              // reset correlation so that it sits at the beginning of the extrapolation window from the end time
+              this._localEndTimeCorrelation = {
+                local: this._now,
+                remote: (endTime - this._extrapolatedWindowDuration) * 1000
+              };
+            } else if (extrapolatedEndTime > previousEndTime) {
+              // end time was past the old end time (so would have been capped)
+              // set the correlation so that it resumes from the time it was at at the end of the old window
+              this._localEndTimeCorrelation = {
+                local: this._now,
+                remote: previousEndTime * 1000
+              };
+            }
           }
+        } // now that the values have been updated call any methods that use on them so they get the updated values
+        // immediately
+
+
+        durationChanged && this._onDurationChange();
+        startTimeChanged && this._onProgress();
+      }
+    }, {
+      key: "_onFragmentLoaded",
+      value: function _onFragmentLoaded(evt, data) {
+        this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data);
+      }
+    }, {
+      key: "_onSubtitleLoaded",
+      value: function _onSubtitleLoaded() {
+        // This event may be triggered multiple times
+        // Setup CC only once (disable CC by default)
+        if (!this._ccIsSetup) {
+          this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE);
+          var trackId = this._playbackType === Playback.LIVE ? -1 : this.closedCaptionsTrackId;
+          this.closedCaptionsTrackId = trackId;
+          this._ccIsSetup = true;
         }
       }
+    }, {
+      key: "_onLevelSwitch",
+      value: function _onLevelSwitch(evt, data) {
+        if (!this.levels.length) this._fillLevels();
+        this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END);
+        this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data);
+        var currentLevel = this._hls.levels[data.level];
 
-      // now that the values have been updated call any methods that use on them so they get the updated values
-      // immediately
-      durationChanged && this._onDurationChange();
-      startTimeChanged && this._onProgress();
-    }
-
-    _onFragmentLoaded(evt, data) {
-      this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data);
-    }
-
-    _onSubtitleLoaded() {
-      // This event may be triggered multiple times
-      // Setup CC only once (disable CC by default)
-      if (!this._ccIsSetup) {
-        this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE);
-        const trackId = this._playbackType === Playback.LIVE ? -1 : this.closedCaptionsTrackId;
-        this.closedCaptionsTrackId = trackId;
-        this._ccIsSetup = true;
+        if (currentLevel) {
+          // TODO should highDefinition be private and maybe have a read only accessor if it's used somewhere
+          this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
+          this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
+          this.trigger(Events.PLAYBACK_BITRATE, {
+            height: currentLevel.height,
+            width: currentLevel.width,
+            bandwidth: currentLevel.bitrate,
+            bitrate: currentLevel.bitrate,
+            level: data.level
+          });
+        }
       }
-    }
-
-    _onLevelSwitch(evt, data) {
-      if (!this.levels.length)
-        this._fillLevels();
-
-      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END);
-      this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data);
-      let currentLevel = this._hls.levels[data.level];
-      if (currentLevel) {
-        // TODO should highDefinition be private and maybe have a read only accessor if it's used somewhere
-        this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
-        this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
-        this.trigger(Events.PLAYBACK_BITRATE, {
-          height: currentLevel.height,
-          width: currentLevel.width,
-          bandwidth: currentLevel.bitrate,
-          bitrate: currentLevel.bitrate,
-          level: data.level
-        });
+    }, {
+      key: "getPlaybackType",
+      value: function getPlaybackType() {
+        return this._playbackType;
       }
-    }
+    }, {
+      key: "isSeekEnabled",
+      value: function isSeekEnabled() {
+        return this._playbackType === Playback.VOD || this.dvrEnabled;
+      }
+    }, {
+      key: "dvrEnabled",
+      get: function get() {
+        // enabled when:
+        // - the duration does not include content after hlsjs's live sync point
+        // - the playable region duration is longer than the configured duration to enable dvr after
+        // - the playback type is LIVE.
+        return this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE;
+      }
+    }]);
 
-    get dvrEnabled() {
-      // enabled when:
-      // - the duration does not include content after hlsjs's live sync point
-      // - the playable region duration is longer than the configured duration to enable dvr after
-      // - the playback type is LIVE.
-      return (this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE)
-    }
+    return HlsjsPlayback;
+  }(HTML5Video);
 
-    getPlaybackType() {
-      return this._playbackType
-    }
-
-    isSeekEnabled() {
-      return (this._playbackType === Playback.VOD || this.dvrEnabled)
-    }
-  }
-
-  HlsjsPlayback.canPlay = function(resource, mimeType) {
-    const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-    const isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') || listContainsIgnoreCase$1(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']));
-
-    return !!(HLSJS.isSupported() && isHls)
+  HlsjsPlayback.canPlay = function (resource, mimeType) {
+    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
+    var isHls = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8' || listContainsIgnoreCase$1(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']);
+    return !!(HLSJS.isSupported() && isHls);
   };
 
   BaseExports.Loader.registerPlayback(HlsjsPlayback);

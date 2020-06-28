@@ -722,10 +722,10 @@
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.11.tgz#720543833d64c34d611c515f0243f47c7960dab1"
   integrity sha512-b9LxiYQs+H/61FM2mRXFkxvxL9sHV+cGNKIJGI77ZVZCYH1o0ZvmFbcOgAJbHkeJUPwMFq4FMPWCC8ZX57VhVw==
 
-"@clappr/hlsjs-playback@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-0.4.0.tgz#42cb6b1187ca3edd5b428714011e646f2292b7d7"
-  integrity sha512-zeJkkAyEHlxUjKy4SY3JCZGEf68m3fIwv/KXrFw7pXjGUALZxdhG5fNk78aWlcRLB78vuXiA1qmjXcjVZFUmBQ==
+"@clappr/hlsjs-playback@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-0.4.1.tgz#a8f1ce771e1eef888f5f450951b4662aa75a0ae5"
+  integrity sha512-wM/CtYtLtLddTTLvNTpCrJypiow8DMEHSTxEUtTXnOLNG+XihNFqFfRGjj24kzxkNobw6dGiLADsvhrQ8gxGbQ==
 
 "@clappr/plugins@^0.4.7":
   version "0.4.7"
@@ -1919,11 +1919,6 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
-eventemitter3@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
-  integrity sha512-ivIvhpq/Y0uSjcHDcOIccjmYjGLcP09MFGE7ysAwkAvkXfpZlC985pH2/ui64DKazbTW/4kN3yqozUxlXzI6cA==
-
 expand-brackets@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-2.1.4.tgz#b77735e315ce30f6b6eff0f83b04151a22449622"
@@ -2281,14 +2276,6 @@ hex-color-regex@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
-
-hls.js@^0.13.2:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.13.2.tgz#3e7dd28e3787c69c6aba42b64b11eb2c3c8c29f1"
-  integrity sha512-sIg2t4uGpWQLzuK1Iid9614WOKqxj4OYg+EbFbhhTDCsxpENBN+Du3yBFnoi+a83DuOOHdiQd1ydnti9loSGXw==
-  dependencies:
-    eventemitter3 "3.1.0"
-    url-toolkit "^2.1.6"
 
 hsl-regex@^1.0.0:
   version "1.0.0"
@@ -4617,11 +4604,6 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
-
-url-toolkit@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.1.6.tgz#6d03246499e519aad224c44044a4ae20544154f2"
-  integrity sha512-UaZ2+50am4HwrV2crR/JAf63Q4VvPYphe63WGeoJxeu8gmOm0qxPt+KsukfakPNrX9aymGNEkkaoICwn+OuvBw==
 
 use@^3.1.0:
   version "3.1.1"
