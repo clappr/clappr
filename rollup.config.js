@@ -100,7 +100,7 @@ const moduleBundle = {
 }
 
 rollupConfig = [mainBundle, mainBundleWithoutHLS, moduleBundle]
-serveLocal && (rollupConfig = [mainBundle])
+serveLocal && (rollupConfig = [mainBundle, mainBundleWithoutHLS])
 minimize && rollupConfig.push(mainBundleMinified, mainBundleWithoutHLSMinified)
 
 export default rollupConfig
