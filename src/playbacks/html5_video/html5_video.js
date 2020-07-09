@@ -124,7 +124,6 @@ export default class HTML5Video extends Playback {
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
     this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
-    debugger
     this._minDvrSize = this.isValidMinimumDVRSizeConfig ? this.minimumDVRSizeConfig : 60
 
     const playbackConfig = this.options.playback
