@@ -103,8 +103,12 @@ export default class HTML5Video extends Playback {
     return this.getDuration() >= this._minDvrSize && this.isLive
   }
 
-  get hasMinimumDVRConfig() {
-    return this.options.playback && this.options.playback.minimumDvrSize && typeof (this.options.playback.minimumDvrSize) !== 'undefined'
+  get minimumDVRSizeConfig() {
+    return this.options.playback && this.options.playback.minimumDvrSize
+  }
+
+  get isValidMinimumDVRSizeConfig() {
+    return typeof (this.minimumDVRSizeConfig) !== 'undefined' && typeof (this.minimumDVRSizeConfig) === 'number'
   }
 
   constructor(...args) {
@@ -120,7 +124,8 @@ export default class HTML5Video extends Playback {
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
     this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
-    this._minDvrSize = this.hasMinimumDVRConfig ? this.options.playback.minimumDvrSize : 60
+    debugger
+    this._minDvrSize = this.isValidMinimumDVRSizeConfig ? this.minimumDVRSizeConfig : 60
 
     const playbackConfig = this.options.playback
     const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)

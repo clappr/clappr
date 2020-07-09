@@ -553,6 +553,26 @@ describe('HTML5Video playback', function() {
     expect(html5Video.dvrEnabled).toEqual(true)
   })
 
+  test('isValidMinimumDVRSizeConfig getter guarantee a valid minimum DVR size', () => {
+    let html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: null } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: 'test' } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: '10' } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: 0 } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeTruthy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: 10 } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeTruthy()
+  })
+
   describe('seek', () => {
     test('use duration when occurs seek with negative values', () => {
       const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
