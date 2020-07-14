@@ -20,7 +20,7 @@ You can use it from JSDelivr:
 
 or as an npm package:
 
-`yarn add clappr-context-menu-plugin`
+`yarn add @clappr/hlsjs-playback`
 
 Then just add `HlsjsPlayback` into the list of plugins of your player instance:
 
