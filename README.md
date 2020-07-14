@@ -16,7 +16,7 @@ A [Clappr](https://github.com/clappr/clappr) playback to play HTTP Live Streamin
 
 You can use it from JSDelivr:
 
-`https://cdn.jsdelivr.net/npm/clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js`
+`https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js`
 
 or as an npm package:
 
