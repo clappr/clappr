@@ -32,7 +32,6 @@ const babelPluginOptions = { babelHelpers: 'bundled', exclude: 'node_modules/**'
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
 const visualizePluginOptions = { open: true }
-const terserPluginOptions = { include: [/^.+\.min\.js$/] }
 
 const plugins = [
   jsonReader(),
@@ -45,25 +44,35 @@ const plugins = [
   html(),
   postcss(postcssOptions),
   size(),
-  filesize()
+  filesize(),
+  dev && serve(servePluginOptions),
+  dev && livereload(livereloadPluginOptions),
+  analyzeBundle && visualize(visualizePluginOptions)
 ]
 
-dev && plugins.push(serve(servePluginOptions), livereload(livereloadPluginOptions))
-analyzeBundle && plugins.push(visualize(visualizePluginOptions))
-
-const rollupConfig = [
-  {
+const mainBundle = {
   input: 'src/main.js',
-    output: {
+  output: [
+    {
       exports: 'named',
       name: 'Clappr',
       file: pkg.main,
       format: 'umd',
       sourcemap: true,
     },
+    minimize && {
+      exports: 'named',
+      name: 'Clappr',
+      file: 'dist/clappr-core.min.js',
+      format: 'iife',
+      sourcemap: true,
+      plugins: terser(),
+    }
+  ],
   plugins,
-  },
-  {
+}
+
+const esmBundle = {
   input: 'src/main.js',
   output: {
     exports: 'named',
@@ -73,25 +82,5 @@ const rollupConfig = [
   },
   plugins,
 }
-]
 
-minimize && rollupConfig.push(
-  {
-    input: 'src/main.js',
-    output: [
-      {
-        exports: 'named',
-        name: 'Clappr',
-        file: 'dist/clappr-core.min.js',
-        format: 'umd',
-        sourcemap: true,
-      },
-    ],
-    plugins: [
-      ...plugins,
-      terser(terserPluginOptions),
-    ],
-  }
-)
-
-export default rollupConfig
+export default [mainBundle, esmBundle]
