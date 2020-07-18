@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 import Version from '../../utils/version'
 import Log from '../log'
-import pkg from '../../../package.json'
 
 const filterPluginsByType = (plugins, type) => {
   if (!plugins || !type) return {}
@@ -27,7 +26,7 @@ export default (() => {
     playbacks: []
   }
 
-  const currentVersion = pkg.version
+  const currentVersion = VERSION
 
   return class Loader {
 
