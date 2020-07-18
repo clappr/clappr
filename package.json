@@ -52,7 +52,7 @@
     "html-loader": "^1.1.0",
     "jest": "^26.1.0",
     "jest-directory-named-resolver": "^0.3.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "rollup": "^2.22.0",
     "rollup-plugin-filesize": "^9.0.2",
     "rollup-plugin-html": "^0.2.1",
