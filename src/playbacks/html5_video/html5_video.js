@@ -158,7 +158,7 @@ export default class HTML5Video extends Playback {
       error && Log.warn(this.name, 'autoplay error.', { result, error })
 
       // https://github.com/clappr/clappr/issues/1076
-      result && process.nextTick(() => !this._destroyed && this.play())
+      result && setTimeout(() => !this._destroyed && this.play(), 0)
     })
   }
 
