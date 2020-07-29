@@ -240,9 +240,21 @@ player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function
 See all existing events on Clappr [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
 
 #### plugins
-An array used to pass external plugins instances to Clappr. You can pass plugins of any category in this array.
+An object used to config external plugins instances and plugins behaviors to Clappr.
 
-Example:
+```javascript
+{
+  plugins: {
+    core: [CorePlugin],
+    container: [ContainerPlugin],
+    playback: [Playbacks],
+    disableExternalPluginsLoadPrecedence: false,
+    disableExternalPlaybacksLoadPrecedence: false,
+  }
+}
+```
+
+Example of external plugins config:
 
 ```html
 // Playback
@@ -254,9 +266,30 @@ Example:
 
 ```javascript
 {
+  plugins: {
+    container: [ClapprStats],
+    playback: [HlsjsPlayback],
+  }
+}
+```
+
+You can pass plugins of any category in on flat array too. Example:
+
+```javascript
+{
   plugins: [ClapprStats, HlsjsPlayback]
 }
 ```
+
+#### plugins.disableExternalPluginsLoadPrecedence
+> Default Value: `false`
+
+Force external plugins to be loaded after default Clappr plugins.
+
+#### plugins.disableExternalPlaybacksLoadPrecedence
+> Default Value: `false`
+
+Force external playbacks to be loaded after default Clappr playbacks.
 
 #### height
 > Default Value: `360px`
