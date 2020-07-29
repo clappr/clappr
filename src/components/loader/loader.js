@@ -203,17 +203,23 @@ export default (() => {
       plugins = this.groupPluginsByType(plugins)
       if (plugins.playback) {
         const playbacks = plugins.playback.filter((playback) => (Loader.checkVersionSupport(playback), true))
-        this.playbackPlugins = this.removeDups(playbacks.concat(this.playbackPlugins))
+        this.playbackPlugins = plugins.disableExternalPlaybacksLoadPrecedence
+          ? this.removeDups(this.playbackPlugins.concat(playbacks))
+          : this.removeDups(playbacks.concat(this.playbackPlugins))
       }
 
       if (plugins.container) {
         const containerPlugins = plugins.container.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
-        this.containerPlugins = this.removeDups(containerPlugins.concat(this.containerPlugins))
+        this.containerPlugins = plugins.disableExternalPluginsLoadPrecedence
+          ? this.removeDups(this.containerPlugins.concat(containerPlugins))
+          : this.removeDups(containerPlugins.concat(this.containerPlugins))
       }
 
       if (plugins.core) {
         const corePlugins = plugins.core.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
-        this.corePlugins = this.removeDups(corePlugins.concat(this.corePlugins))
+        this.corePlugins = plugins.disableExternalPluginsLoadPrecedence
+          ? this.removeDups(this.corePlugins.concat(corePlugins))
+          : this.removeDups(corePlugins.concat(this.corePlugins))
       }
     }
 
