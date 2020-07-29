@@ -178,8 +178,10 @@ export default (() => {
       return plugins
     }
 
-    removeDups(list) {
+    removeDups(list, useReversePrecedence = false) {
       const groupUp = (plugins, plugin) => {
+        if (plugins[plugin.prototype.name] && useReversePrecedence) return plugins
+
         plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name]
         plugins[plugin.prototype.name] = plugin
         return plugins
@@ -204,21 +206,21 @@ export default (() => {
       if (plugins.playback) {
         const playbacks = plugins.playback.filter((playback) => (Loader.checkVersionSupport(playback), true))
         this.playbackPlugins = plugins.disableExternalPlaybacksLoadPrecedence
-          ? this.removeDups(this.playbackPlugins.concat(playbacks))
+          ? this.removeDups(this.playbackPlugins.concat(playbacks), true)
           : this.removeDups(playbacks.concat(this.playbackPlugins))
       }
 
       if (plugins.container) {
         const containerPlugins = plugins.container.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
         this.containerPlugins = plugins.disableExternalPluginsLoadPrecedence
-          ? this.removeDups(this.containerPlugins.concat(containerPlugins))
+          ? this.removeDups(this.containerPlugins.concat(containerPlugins), true)
           : this.removeDups(containerPlugins.concat(this.containerPlugins))
       }
 
       if (plugins.core) {
         const corePlugins = plugins.core.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
         this.corePlugins = plugins.disableExternalPluginsLoadPrecedence
-          ? this.removeDups(this.corePlugins.concat(corePlugins))
+          ? this.removeDups(this.corePlugins.concat(corePlugins), true)
           : this.removeDups(corePlugins.concat(this.corePlugins))
       }
     }

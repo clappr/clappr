@@ -283,6 +283,46 @@ describe('Loader', function() {
       })
     })
 
+    test('respected even when disableExternalPluginsLoadPrecedence is configured', () => {
+      const defaultContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
+      const defaultCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
+
+      Loader.registerPlugin(defaultContainerPlugin)
+      Loader.registerPlugin(defaultCorePlugin)
+
+      const loader = new Loader()
+
+      const externalContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
+      const externalCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
+
+      loader.addExternalPlugins({ disableExternalPluginsLoadPrecedence: true, core: [externalCorePlugin], container: [externalContainerPlugin] })
+
+      expect(loader.containerPlugins.length).toEqual(1)
+      expect(loader.containerPlugins[0].prototype.name).toEqual(externalContainerPlugin.prototype.name)
+
+      expect(loader.corePlugins.length).toEqual(1)
+      expect(loader.corePlugins[0].prototype.name).toEqual(externalCorePlugin.prototype.name)
+
+      Loader.unregisterPlugin(defaultContainerPlugin.prototype.name)
+      Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
+    })
+
+    test('respected even when disableExternalPlaybacksLoadPrecedence is configured', () => {
+      const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
+
+      Loader.registerPlayback(defaultPlaybackPlugin)
+
+      const loader = new Loader()
+
+      const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
+
+      loader.addExternalPlugins({ disableExternalPlaybacksLoadPrecedence: true, playback: [externalPlaybackPlugin] })
+
+      expect(loader.playbackPlugins.length).toEqual(1)
+      expect(loader.playbackPlugins[0].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+
+      Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
+    })
   })
 
   describe('validateExternalPluginsType function', () => {
