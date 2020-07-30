@@ -284,12 +284,12 @@ You can pass plugins of any category in on flat array too. Example:
 #### plugins.externalPluginsLoadPrecedence
 > Default Value: `true`
 
-Force external plugins to be loaded after default Clappr plugins.
+Force external plugins to be loaded before default Clappr plugins.
 
 #### plugins.externalPlaybacksLoadPrecedence
 > Default Value: `true`
 
-Force external playbacks to be loaded after default Clappr playbacks.
+Force external playbacks to be loaded before default Clappr playbacks.
 
 #### height
 > Default Value: `360px`
