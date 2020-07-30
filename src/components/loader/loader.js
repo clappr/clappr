@@ -202,26 +202,34 @@ export default (() => {
      * @param {Object} plugins the config object with all plugins
      */
     addExternalPlugins(plugins) {
+      const externalPluginsPrecedence = typeof plugins.externalPluginsLoadPrecedence === 'boolean'
+        ? plugins.externalPluginsLoadPrecedence
+        : true
+      const externalPlaybacksPrecedence = typeof plugins.externalPlaybacksLoadPrecedence === 'boolean'
+        ? plugins.externalPluginsLoadPrecedence
+        : true
+
       plugins = this.groupPluginsByType(plugins)
+
       if (plugins.playback) {
         const playbacks = plugins.playback.filter((playback) => (Loader.checkVersionSupport(playback), true))
-        this.playbackPlugins = plugins.disableExternalPlaybacksLoadPrecedence
-          ? this.removeDups(this.playbackPlugins.concat(playbacks), true)
-          : this.removeDups(playbacks.concat(this.playbackPlugins))
+        this.playbackPlugins = externalPlaybacksPrecedence
+          ? this.removeDups(playbacks.concat(this.playbackPlugins))
+          : this.removeDups(this.playbackPlugins.concat(playbacks), true)
       }
 
       if (plugins.container) {
         const containerPlugins = plugins.container.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
-        this.containerPlugins = plugins.disableExternalPluginsLoadPrecedence
-          ? this.removeDups(this.containerPlugins.concat(containerPlugins), true)
-          : this.removeDups(containerPlugins.concat(this.containerPlugins))
+        this.containerPlugins = externalPluginsPrecedence
+          ? this.removeDups(containerPlugins.concat(this.containerPlugins))
+          : this.removeDups(this.containerPlugins.concat(containerPlugins), true)
       }
 
       if (plugins.core) {
         const corePlugins = plugins.core.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
-        this.corePlugins = plugins.disableExternalPluginsLoadPrecedence
-          ? this.removeDups(this.corePlugins.concat(corePlugins), true)
-          : this.removeDups(corePlugins.concat(this.corePlugins))
+        this.corePlugins = externalPluginsPrecedence
+          ? this.removeDups(corePlugins.concat(this.corePlugins))
+          : this.removeDups(this.corePlugins.concat(corePlugins), true)
       }
     }
 

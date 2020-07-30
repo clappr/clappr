@@ -152,7 +152,7 @@ describe('Loader', function() {
       expect(loader.corePlugins.length).toEqual(nativeCorePluginsCount + 1)
     })
 
-    test('supports load externals before default plugins for disableExternalPluginsLoadPrecedence option not configured', () => {
+    test('supports load externals before default plugins for externalPluginsLoadPrecedence option not configured', () => {
       const defaultContainerPlugin = ContainerPlugin.extend({ name: 'default_container_plugin' })
       const defaultCorePlugin = CorePlugin.extend({ name: 'default_core_plugin' })
 
@@ -176,7 +176,7 @@ describe('Loader', function() {
       Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
     })
 
-    test('supports load externals before default playbacks for disableExternalPlaybacksLoadPrecedence option not configured', () => {
+    test('supports load externals before default playbacks for externalPlaybacksLoadPrecedence option not configured', () => {
       const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'default_playback_plugin' })
 
       Loader.registerPlayback(defaultPlaybackPlugin)
@@ -193,7 +193,7 @@ describe('Loader', function() {
       Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
     })
 
-    test('supports load externals after default plugins for disableExternalPluginsLoadPrecedence option configured', () => {
+    test('supports load externals after default plugins for externalPluginsLoadPrecedence option configured with false value', () => {
       const defaultContainerPlugin = ContainerPlugin.extend({ name: 'default_container_plugin' })
       const defaultCorePlugin = CorePlugin.extend({ name: 'default_core_plugin' })
 
@@ -205,7 +205,7 @@ describe('Loader', function() {
       const externalContainerPlugin = ContainerPlugin.extend({ name: 'external_container_plugin' })
       const externalCorePlugin = CorePlugin.extend({ name: 'external_core_plugin' })
 
-      loader.addExternalPlugins({ disableExternalPluginsLoadPrecedence: true, core: [externalCorePlugin], container: [externalContainerPlugin] })
+      loader.addExternalPlugins({ externalPluginsLoadPrecedence: false, core: [externalCorePlugin], container: [externalContainerPlugin] })
 
       expect(loader.containerPlugins[0].prototype.name).toEqual('default_container_plugin')
       expect(loader.containerPlugins[1].prototype.name).toEqual('external_container_plugin')
@@ -217,7 +217,7 @@ describe('Loader', function() {
       Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
     })
 
-    test('supports load externals after default playbacks for disableExternalPlaybacksLoadPrecedence option configured', () => {
+    test('supports load externals after default playbacks for externalPlaybacksLoadPrecedence option configured with false value', () => {
       const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'default_playback_plugin' })
 
       Loader.registerPlayback(defaultPlaybackPlugin)
@@ -226,7 +226,7 @@ describe('Loader', function() {
 
       const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'external_playback_plugin' })
 
-      loader.addExternalPlugins({ disableExternalPlaybacksLoadPrecedence: true, playback: [externalPlaybackPlugin] })
+      loader.addExternalPlugins({ externalPlaybacksLoadPrecedence: false, playback: [externalPlaybackPlugin] })
 
       expect(loader.playbackPlugins[0].prototype.name).toEqual(defaultPlaybackPlugin.prototype.name)
       expect(loader.playbackPlugins[1].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
@@ -283,7 +283,7 @@ describe('Loader', function() {
       })
     })
 
-    test('respected even when disableExternalPluginsLoadPrecedence is configured', () => {
+    test('respected even when externalPluginsLoadPrecedence is configured with false value', () => {
       const defaultContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
       const defaultCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
 
@@ -295,7 +295,7 @@ describe('Loader', function() {
       const externalContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
       const externalCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
 
-      loader.addExternalPlugins({ disableExternalPluginsLoadPrecedence: true, core: [externalCorePlugin], container: [externalContainerPlugin] })
+      loader.addExternalPlugins({ externalPluginsLoadPrecedence: false, core: [externalCorePlugin], container: [externalContainerPlugin] })
 
       expect(loader.containerPlugins.length).toEqual(1)
       expect(loader.containerPlugins[0].prototype.name).toEqual(externalContainerPlugin.prototype.name)
@@ -307,7 +307,7 @@ describe('Loader', function() {
       Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
     })
 
-    test('respected even when disableExternalPlaybacksLoadPrecedence is configured', () => {
+    test('respected even when externalPlaybacksLoadPrecedence is configured with false value', () => {
       const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
 
       Loader.registerPlayback(defaultPlaybackPlugin)
@@ -316,7 +316,7 @@ describe('Loader', function() {
 
       const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
 
-      loader.addExternalPlugins({ disableExternalPlaybacksLoadPrecedence: true, playback: [externalPlaybackPlugin] })
+      loader.addExternalPlugins({ externalPlaybacksLoadPrecedence: false, playback: [externalPlaybackPlugin] })
 
       expect(loader.playbackPlugins.length).toEqual(1)
       expect(loader.playbackPlugins[0].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
