@@ -25,12 +25,15 @@
   }
 
   * {
-    max-width: none;
     box-sizing: inherit;
-    float: none;
   }
 
-  div {
+  > * {
+    float: none;
+    max-width: none;
+  }
+
+  > div {
     display: block;
   }
 
