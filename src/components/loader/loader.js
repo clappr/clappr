@@ -202,32 +202,32 @@ export default (() => {
      * @param {Object} plugins the config object with all plugins
      */
     addExternalPlugins(plugins) {
-      const externalPluginsPrecedence = typeof plugins.externalPluginsLoadPrecedence === 'boolean'
-        ? plugins.externalPluginsLoadPrecedence
+      const loadExternalPluginsFirst = typeof plugins.loadExternalPluginsFirst === 'boolean'
+        ? plugins.loadExternalPluginsFirst
         : true
-      const externalPlaybacksPrecedence = typeof plugins.externalPlaybacksLoadPrecedence === 'boolean'
-        ? plugins.externalPluginsLoadPrecedence
+      const loadExternalPlaybacksFirst = typeof plugins.loadExternalPlaybacksFirst === 'boolean'
+        ? plugins.loadExternalPlaybacksFirst
         : true
 
       plugins = this.groupPluginsByType(plugins)
 
       if (plugins.playback) {
         const playbacks = plugins.playback.filter((playback) => (Loader.checkVersionSupport(playback), true))
-        this.playbackPlugins = externalPlaybacksPrecedence
+        this.playbackPlugins = loadExternalPlaybacksFirst
           ? this.removeDups(playbacks.concat(this.playbackPlugins))
           : this.removeDups(this.playbackPlugins.concat(playbacks), true)
       }
 
       if (plugins.container) {
         const containerPlugins = plugins.container.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
-        this.containerPlugins = externalPluginsPrecedence
+        this.containerPlugins = loadExternalPluginsFirst
           ? this.removeDups(containerPlugins.concat(this.containerPlugins))
           : this.removeDups(this.containerPlugins.concat(containerPlugins), true)
       }
 
       if (plugins.core) {
         const corePlugins = plugins.core.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
-        this.corePlugins = externalPluginsPrecedence
+        this.corePlugins = loadExternalPluginsFirst
           ? this.removeDups(corePlugins.concat(this.corePlugins))
           : this.removeDups(this.corePlugins.concat(corePlugins), true)
       }

@@ -248,8 +248,8 @@ An object used to config external plugins instances and plugins behaviors to Cla
     core: [CorePlugin],
     container: [ContainerPlugin],
     playback: [Playbacks],
-    externalPluginsLoadPrecedence: true,
-    externalPlaybacksLoadPrecedence: true,
+    loadExternalPluginsFirst: true,
+    loadExternalPlaybacksFirst: true,
   }
 }
 ```
@@ -281,12 +281,12 @@ You can pass plugins of any category in on flat array too. Example:
 }
 ```
 
-#### plugins.externalPluginsLoadPrecedence
+#### plugins.loadExternalPluginsFirst
 > Default Value: `true`
 
 Force external plugins to be loaded before default Clappr plugins.
 
-#### plugins.externalPlaybacksLoadPrecedence
+#### plugins.loadExternalPlaybacksFirst
 > Default Value: `true`
 
 Force external playbacks to be loaded before default Clappr playbacks.
