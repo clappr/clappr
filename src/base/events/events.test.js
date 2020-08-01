@@ -1,5 +1,5 @@
 import Events from './events'
-import Log from '../../components/log'
+import Log from '@/components/log'
 
 describe('Events', function() {
   beforeEach(() => {
@@ -8,7 +8,42 @@ describe('Events', function() {
     Events.Custom = {}
   })
 
-  it('subcribes to a given event', () => {
+  it('on method needs one event name to register one listener', () => {
+    this.events.on()
+
+    expect(this.events._events).toBeUndefined()
+  })
+
+  it('listenTo method needs one event name to register one listener', () => {
+    this.events.listenTo(this.events)
+
+    expect(this.events._events).toBeUndefined()
+  })
+  it('listenToOnce method needs one event name to register one listener', () => {
+    this.events.listenToOnce(this.events)
+
+    expect(this.events._events).toBeUndefined()
+  })
+
+  it('once method needs one event name to register one listener', () => {
+    this.events.once()
+
+    expect(this.events._events).toBeUndefined()
+  })
+
+  it('off method needs one event name to unregister one listener', () => {
+    this.events.off()
+
+    expect(this.events._events).toBeUndefined()
+  })
+
+  it('stopListening method needs one event name to unregister one listener', () => {
+    this.events.stopListening()
+
+    expect(this.events._events).toBeUndefined()
+  })
+
+  it('subscribes to a given event', () => {
     this.events.on('clappr.any.event', this.callback)
     expect(this.callback).not.toHaveBeenCalled()
 
@@ -45,12 +80,25 @@ describe('Events', function() {
     expect(context.counter).toEqual(10)
   })
 
-  it('can unsub an event', () => {
+  it('can unsubscribe an event', () => {
     this.events.on('clappr.any.event', this.callback)
     expect(this.callback).not.toHaveBeenCalled()
-    this.events.off('clappr.any.event')
 
+    this.events.off()
     this.events.trigger('clappr.any.event')
+
+    expect(this.callback).not.toHaveBeenCalled()
+
+    this.events.on('clappr.any.event', this.callback)
+    this.events.off('clappr.any.event')
+    this.events.trigger('clappr.any.event')
+
+    expect(this.callback).not.toHaveBeenCalled()
+
+    this.events.on('clappr.any.event', this.callback)
+    this.events.off(null, this.callback)
+    this.events.trigger('clappr.any.event')
+
     expect(this.callback).not.toHaveBeenCalled()
   })
 
@@ -59,8 +107,20 @@ describe('Events', function() {
     expect(this.callback).not.toHaveBeenCalled()
 
     this.events.trigger('clappr.any.event')
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(2)
+    this.events.trigger('clappr.any.event', 1)
+    this.events.trigger('clappr.any.event', 1, 2)
+    this.events.trigger('clappr.any.event', 1, 2, 3)
+    this.events.trigger('clappr.any.event', 1, 2, 3, 4)
+    expect(this.callback).toHaveBeenCalledTimes(5)
+  })
+
+  it('can trigger dictionary { event: callback }', () => {
+    this.events.listenTo(this.events, 'clappr.any.event', this.callback)
+
+    expect(this.callback).not.toHaveBeenCalled()
+
+    this.events.trigger({ 'clappr.any.event': this.callback })
+    expect(this.callback).toHaveBeenCalledTimes(1)
   })
 
   it('restricts to trigger only once', () => {
@@ -82,6 +142,59 @@ describe('Events', function() {
 
     this.events.trigger('clappr.any.event')
     expect(this.callback).toHaveBeenCalledTimes(2)
+  })
+
+  it('permits to stop listen all events from one reference', () => {
+    const myEvents = new Events()
+
+    this.events.on('clappr.any.event', this.callback)
+    myEvents.listenTo(this.events, 'clappr.any.event', this.callback)
+
+    expect(this.callback).not.toHaveBeenCalled()
+
+    this.events.trigger('clappr.any.event')
+    expect(this.callback).toHaveBeenCalledTimes(2)
+
+    myEvents.stopListening()
+    myEvents.trigger('clappr.any.event')
+
+    expect(this.callback).toHaveBeenCalledTimes(2)
+  })
+
+  it('permits to listen events as dictionary { event: callback } in other objects', () => {
+    const myEvents = new Events()
+
+    myEvents.listenTo(this.events, { 'clappr.any.event': this.callback })
+
+    expect(this.callback).not.toHaveBeenCalled()
+
+    this.events.trigger('clappr.any.event')
+    expect(this.callback).toHaveBeenCalledTimes(1)
+  })
+
+  it('permits to stop listen events from one dictionary { event: callback }', () => {
+    const myEvents = new Events()
+
+    myEvents.listenTo(this.events, 'clappr.any.event', this.callback)
+
+    expect(this.callback).not.toHaveBeenCalled()
+
+    this.events.trigger('clappr.any.event')
+    expect(this.callback).toHaveBeenCalledTimes(1)
+
+    myEvents.stopListening(this.events, { 'clappr.any.event': this.callback })
+    myEvents.trigger('clappr.any.event')
+
+    expect(this.callback).toHaveBeenCalledTimes(1)
+  })
+
+  it('don\'t allow to bind the element itself as callback when the listen events in other objects', () => {
+    const myEvents = new Events()
+
+    myEvents.listenTo(this.events, 'clappr.any.event')
+    myEvents.trigger('clappr.any.event')
+
+    expect(myEvents._events).toBeUndefined()
   })
 
   it('permits to listen once events in other objects', () => {
@@ -179,6 +292,14 @@ describe('Events', function() {
   it('list all available custom events', () => {
     let eventName = 'PLUGIN_CUSTOM_EVENT'
     let events
+
+    Events.Custom = null
+    Events.register('')
+
+    Events.Custom = null
+    events = Events.listAvailableCustomEvents()
+
+    expect(events.length).toEqual(0)
 
     Events.register(eventName)
     events = Events.listAvailableCustomEvents()
