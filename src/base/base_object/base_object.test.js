@@ -1,6 +1,6 @@
 import BaseObject from './base_object'
 
-describe('BaseObject', function() {
+describe('BaseObject', () => {
   test('has unique id', () => {
     const baseObject = new BaseObject()
     const baseObject2 = new BaseObject()
