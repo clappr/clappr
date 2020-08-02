@@ -30,6 +30,18 @@ describe('Container Plugin', () => {
     expect(plugin.enabled).toBeFalsy()
   })
 
+  test('can be enabled after your creation', () => {
+    const plugin = new ContainerPlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+
+    plugin.enable()
+
+    expect(plugin.enabled).toBeTruthy()
+  })
+
   test('stops listening when disable an enabled plugin', () => {
     const plugin = new ContainerPlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
