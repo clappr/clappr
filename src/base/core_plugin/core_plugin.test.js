@@ -88,4 +88,10 @@ describe('Core Plugin', () => {
 
     expect(spy).not.toHaveBeenCalled()
   })
+
+  test('can be created via extends method', () => {
+    const plugin = CorePlugin.extend({ name: 'test_plugin' })
+
+    expect(plugin.prototype instanceof CorePlugin).toBeTruthy()
+  })
 })
