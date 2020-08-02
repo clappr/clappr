@@ -1,6 +1,6 @@
-import BaseObject from '../base_object'
-import ErrorMixin from '../error_mixin'
-import { extend } from '../../utils'
+import BaseObject from '@/base/base_object'
+import ErrorMixin from '@/base/error_mixin'
+import { extend } from '@/utils'
 
 /**
  * The base class for a container plugin
