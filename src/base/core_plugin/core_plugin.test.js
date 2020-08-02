@@ -2,7 +2,7 @@ import CorePlugin from './core_plugin'
 
 describe('Core Plugin', () => {
   describe('#constructor', () => {
-    test('enables', () => {
+    test('enables the plugin', () => {
       const plugin = new CorePlugin({})
 
       expect(plugin.enabled).toBeTruthy()
@@ -22,7 +22,7 @@ describe('Core Plugin', () => {
     })
   })
 
-  test('disables', () => {
+  test('can be disabled after your creation', () => {
     const plugin = new CorePlugin({})
 
     plugin.disable()
@@ -39,7 +39,7 @@ describe('Core Plugin', () => {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  test('doesnt stops listening when disable a disabled plugin', () => {
+  test('doesn\'t stops listening when disable a disabled plugin', () => {
     const plugin = new CorePlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
 
