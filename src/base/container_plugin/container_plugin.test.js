@@ -1,8 +1,8 @@
 import ContainerPlugin from './container_plugin'
 
-describe('Container Plugin', function() {
+describe('Container Plugin', () => {
   describe('#constructor', () => {
-    test('enables', function() {
+    test('enables the plugin', () => {
       const plugin = new ContainerPlugin({})
 
       expect(plugin.enabled).toBeTruthy()
