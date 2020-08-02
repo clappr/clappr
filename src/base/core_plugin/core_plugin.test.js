@@ -1,5 +1,6 @@
 import CorePlugin from './core_plugin'
 import ErrorMixin from '@/base/error_mixin'
+import Player from '@/components/player'
 
 describe('Core Plugin', () => {
   describe('#constructor', () => {
@@ -93,5 +94,28 @@ describe('Core Plugin', () => {
     const plugin = CorePlugin.extend({ name: 'test_plugin' })
 
     expect(plugin.prototype instanceof CorePlugin).toBeTruthy()
+  })
+
+  test('exposes interfaces for player scope', () => {
+    const pluginInterface = () => 'This is awesome!'
+
+    const Plugin = class MyPlugin extends CorePlugin {
+      getExternalInterface() {
+        return { pluginInterface }
+      }
+    }
+
+    const plugin = new Plugin({})
+    const player = new Player({})
+
+    player._coreFactory.setupExternalInterface(plugin)
+
+    expect(player.pluginInterface()).toEqual('This is awesome!')
+  })
+
+  test('has a default value for getExternalInterface method', () => {
+    const plugin = new CorePlugin({})
+
+    expect(plugin.getExternalInterface()).toEqual({})
   })
 })
