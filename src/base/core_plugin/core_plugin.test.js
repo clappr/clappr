@@ -1,4 +1,5 @@
 import CorePlugin from './core_plugin'
+import ErrorMixin from '@/base/error_mixin'
 
 describe('Core Plugin', () => {
   describe('#constructor', () => {
@@ -40,6 +41,13 @@ describe('Core Plugin', () => {
     plugin.enable()
 
     expect(plugin.enabled).toBeTruthy()
+  })
+
+  test('receives createdError method from ErrorMixin', () => {
+    const plugin = new CorePlugin({})
+
+    expect(plugin.createError).not.toBeUndefined()
+    expect(plugin.createError).toEqual(ErrorMixin.createError)
   })
 
   test('stops listening when disable an enabled plugin', () => {
