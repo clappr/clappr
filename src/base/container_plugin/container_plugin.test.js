@@ -22,7 +22,7 @@ describe('Container Plugin', () => {
     })
   })
 
-  test('disables', () => {
+  test('can be disabled after your creation', () => {
     const plugin = new ContainerPlugin({})
 
     plugin.disable()
@@ -39,7 +39,7 @@ describe('Container Plugin', () => {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  test('doesnt stops listening when disable a disabled plugin', () => {
+  test('doesn\'t stops listening when disable a disabled plugin', () => {
     const plugin = new ContainerPlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
 
