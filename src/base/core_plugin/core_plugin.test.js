@@ -1,8 +1,8 @@
 import CorePlugin from './core_plugin'
 
-describe('Core Plugin', function() {
+describe('Core Plugin', () => {
   describe('#constructor', () => {
-    test('enables', function() {
+    test('enables', () => {
       const plugin = new CorePlugin({})
 
       expect(plugin.enabled).toBeTruthy()
