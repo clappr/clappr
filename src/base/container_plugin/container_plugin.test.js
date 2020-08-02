@@ -1,4 +1,5 @@
 import ContainerPlugin from './container_plugin'
+import ErrorMixin from '@/base/error_mixin'
 
 describe('Container Plugin', () => {
   describe('#constructor', () => {
@@ -40,6 +41,13 @@ describe('Container Plugin', () => {
     plugin.enable()
 
     expect(plugin.enabled).toBeTruthy()
+  })
+
+  test('receives createdError method from ErrorMixin', () => {
+    const plugin = new ContainerPlugin({})
+
+    expect(plugin.createError).not.toBeUndefined()
+    expect(plugin.createError).toEqual(ErrorMixin.createError)
   })
 
   test('stops listening when disable an enabled plugin', () => {
