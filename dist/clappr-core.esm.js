@@ -1,5 +1,3 @@
-
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.head.appendChild(r) })(window.document);
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -69,6 +67,19 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -83,6 +94,25 @@ function _possibleConstructorReturn(self, call) {
   }
 
   return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
 }
 
 function _superPropBase(object, property) {
@@ -116,19 +146,15 @@ function _get(target, property, receiver) {
 }
 
 function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
 
 function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
 
 function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 
 function _arrayWithHoles(arr) {
@@ -136,14 +162,11 @@ function _arrayWithHoles(arr) {
 }
 
 function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
-  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
-    return;
-  }
-
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
   var _arr = [];
   var _n = true;
   var _d = false;
@@ -169,12 +192,86 @@ function _iterableToArrayLimit(arr, i) {
   return _arr;
 }
 
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
 function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _createForOfIteratorHelper(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+
+      var F = function () {};
+
+      return {
+        s: F,
+        n: function () {
+          if (i >= o.length) return {
+            done: true
+          };
+          return {
+            done: false,
+            value: o[i++]
+          };
+        },
+        e: function (e) {
+          throw e;
+        },
+        f: F
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  var normalCompletion = true,
+      didErr = false,
+      err;
+  return {
+    s: function () {
+      it = o[Symbol.iterator]();
+    },
+    n: function () {
+      var step = it.next();
+      normalCompletion = step.done;
+      return step;
+    },
+    e: function (e) {
+      didErr = true;
+      err = e;
+    },
+    f: function () {
+      try {
+        if (!normalCompletion && it.return != null) it.return();
+      } finally {
+        if (didErr) throw err;
+      }
+    }
+  };
 }
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -1155,7 +1252,7 @@ var Zepto = function () {
     },
     scrollTop: function (value) {
       if (!this.length) return;
-      var hasScrollTop = 'scrollTop' in this[0];
+      var hasScrollTop = ('scrollTop' in this[0]);
       if (value === undefined$1) return hasScrollTop ? this[0].scrollTop : this[0].pageYOffset;
       return this.each(hasScrollTop ? function () {
         this.scrollTop = value;
@@ -1165,7 +1262,7 @@ var Zepto = function () {
     },
     scrollLeft: function (value) {
       if (!this.length) return;
-      var hasScrollLeft = 'scrollLeft' in this[0];
+      var hasScrollLeft = ('scrollLeft' in this[0]);
       if (value === undefined$1) return hasScrollLeft ? this[0].scrollLeft : this[0].pageXOffset;
       return this.each(hasScrollLeft ? function () {
         this.scrollLeft = value;
@@ -1922,7 +2019,7 @@ window.$ === undefined && (window.$ = Zepto);
   },
       handlers = {},
       specialEvents = {},
-      focusinSupported = 'onfocusin' in window,
+      focusinSupported = ('onfocusin' in window),
       focus = {
     focus: 'focusin',
     blur: 'focusout'
@@ -2625,12 +2722,11 @@ var getBrowserData = function getBrowserData() {
   var browserObject = {};
   var userAgent = Browser.userAgent.toLowerCase(); // Check browser type
 
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
+  var _iterator = _createForOfIteratorHelper(BROWSER_DATA),
+      _step;
 
   try {
-    for (var _iterator = BROWSER_DATA[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var browser = _step.value;
       var browserRegExp = new RegExp(browser.identifier.toLowerCase());
       var browserRegExpResult = browserRegExp.exec(userAgent);
@@ -2651,18 +2747,9 @@ var getBrowserData = function getBrowserData() {
       }
     }
   } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
+    _iterator.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-        _iterator["return"]();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
+    _iterator.f();
   }
 
   return browserObject;
@@ -2682,12 +2769,11 @@ var getOsData = function getOsData() {
   var osObject = {};
   var userAgent = Browser.userAgent.toLowerCase(); // Check browser type
 
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
+  var _iterator2 = _createForOfIteratorHelper(OS_DATA),
+      _step2;
 
   try {
-    for (var _iterator2 = OS_DATA[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var os = _step2.value;
       var osRegExp = new RegExp(os.identifier.toLowerCase());
       var osRegExpResult = osRegExp.exec(userAgent);
@@ -2710,18 +2796,9 @@ var getOsData = function getOsData() {
       }
     }
   } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
+    _iterator2.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-        _iterator2["return"]();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
+    _iterator2.f();
   }
 
   return osObject;
@@ -2818,9 +2895,9 @@ function extend(parent, properties) {
   var Surrogate = /*#__PURE__*/function (_parent) {
     _inherits(Surrogate, _parent);
 
-    function Surrogate() {
-      var _getPrototypeOf2;
+    var _super = _createSuper(Surrogate);
 
+    function Surrogate() {
       var _this;
 
       _classCallCheck(this, Surrogate);
@@ -2829,7 +2906,7 @@ function extend(parent, properties) {
         args[_key] = arguments[_key];
       }
 
-      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Surrogate)).call.apply(_getPrototypeOf2, [this].concat(args)));
+      _this = _super.call.apply(_super, [this].concat(args));
       if (properties.initialize) properties.initialize.apply(_assertThisInitialized(_this), args);
       return _this;
     }
@@ -4253,6 +4330,8 @@ Events.MEDIACONTROL_OPTIONS_CHANGE = 'mediacontrol:options:change';
 var BaseObject = /*#__PURE__*/function (_Events) {
   _inherits(BaseObject, _Events);
 
+  var _super = _createSuper(BaseObject);
+
   _createClass(BaseObject, [{
     key: "options",
 
@@ -4278,7 +4357,7 @@ var BaseObject = /*#__PURE__*/function (_Events) {
 
     _classCallCheck(this, BaseObject);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BaseObject).call(this, options));
+    _this = _super.call(this, options);
     _this._options = options;
     _this.uniqueId = uniqueId('o');
     return _this;
@@ -4305,6 +4384,8 @@ var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
 var UIObject = /*#__PURE__*/function (_BaseObject) {
   _inherits(UIObject, _BaseObject);
+
+  var _super = _createSuper(UIObject);
 
   _createClass(UIObject, [{
     key: "tagName",
@@ -4404,7 +4485,7 @@ var UIObject = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, UIObject);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(UIObject).call(this, options));
+    _this = _super.call(this, options);
     _this.cid = uniqueId('c');
 
     _this._ensureElement();
@@ -4545,6 +4626,8 @@ var UIObject = /*#__PURE__*/function (_BaseObject) {
 var PlayerError = /*#__PURE__*/function (_BaseObject) {
   _inherits(PlayerError, _BaseObject);
 
+  var _super = _createSuper(PlayerError);
+
   _createClass(PlayerError, [{
     key: "name",
     get: function get() {
@@ -4574,7 +4657,7 @@ var PlayerError = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, PlayerError);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayerError).call(this, options));
+    _this = _super.call(this, options);
     _this.core = core;
     return _this;
   }
@@ -4642,6 +4725,8 @@ var ErrorMixin = {
 var UICorePlugin = /*#__PURE__*/function (_UIObject) {
   _inherits(UICorePlugin, _UIObject);
 
+  var _super = _createSuper(UICorePlugin);
+
   _createClass(UICorePlugin, [{
     key: "playerError",
     get: function get() {
@@ -4654,7 +4739,7 @@ var UICorePlugin = /*#__PURE__*/function (_UIObject) {
 
     _classCallCheck(this, UICorePlugin);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(UICorePlugin).call(this, core.options));
+    _this = _super.call(this, core.options);
     _this.core = core;
     _this.enabled = true;
 
@@ -4733,8 +4818,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
-styleInject(css);
+var css_248z = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
+styleInject(css_248z);
 
 /**
  * An abstraction to represent a container for a given playback
@@ -4747,6 +4832,8 @@ styleInject(css);
 
 var Container = /*#__PURE__*/function (_UIObject) {
   _inherits(Container, _UIObject);
+
+  var _super = _createSuper(Container);
 
   _createClass(Container, [{
     key: "name",
@@ -4871,7 +4958,7 @@ var Container = /*#__PURE__*/function (_UIObject) {
 
     _classCallCheck(this, Container);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Container).call(this, options));
+    _this = _super.call(this, options);
     _this._i18n = i18n;
     _this.currentTime = 0;
     _this.volume = 100;
@@ -5378,6 +5465,8 @@ Object.assign(Container.prototype, ErrorMixin);
 var Playback = /*#__PURE__*/function (_UIObject) {
   _inherits(Playback, _UIObject);
 
+  var _super = _createSuper(Playback);
+
   _createClass(Playback, [{
     key: "isAudioOnly",
 
@@ -5442,7 +5531,7 @@ var Playback = /*#__PURE__*/function (_UIObject) {
 
     _classCallCheck(this, Playback);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Playback).call(this, options));
+    _this = _super.call(this, options);
     _this.settings = {};
     _this._i18n = i18n;
     _this.playerError = playerError;
@@ -5759,6 +5848,8 @@ Playback.type = 'playback';
 var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
   _inherits(ContainerFactory, _BaseObject);
 
+  var _super = _createSuper(ContainerFactory);
+
   _createClass(ContainerFactory, [{
     key: "options",
     get: function get() {
@@ -5774,7 +5865,7 @@ var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, ContainerFactory);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ContainerFactory).call(this, options));
+    _this = _super.call(this, options);
     _this._i18n = i18n;
     _this.loader = loader;
     _this.playerError = playerError;
@@ -5844,8 +5935,8 @@ var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
   return ContainerFactory;
 }(BaseObject);
 
-var css$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
-styleInject(css$1);
+var css_248z$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
+styleInject(css_248z$1);
 
 /**
  * The Core is responsible to manage Containers and the player state.
@@ -5857,6 +5948,8 @@ styleInject(css$1);
 
 var Core = /*#__PURE__*/function (_UIObject) {
   _inherits(Core, _UIObject);
+
+  var _super = _createSuper(Core);
 
   _createClass(Core, [{
     key: "events",
@@ -5959,7 +6052,7 @@ var Core = /*#__PURE__*/function (_UIObject) {
 
     _classCallCheck(this, Core);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Core).call(this, options));
+    _this = _super.call(this, options);
     _this.playerError = new PlayerError(options, _assertThisInitialized(_this));
 
     _this.configureDomRecycler();
@@ -6335,6 +6428,8 @@ Object.assign(Core.prototype, ErrorMixin);
 var CoreFactory = /*#__PURE__*/function (_BaseObject) {
   _inherits(CoreFactory, _BaseObject);
 
+  var _super = _createSuper(CoreFactory);
+
   _createClass(CoreFactory, [{
     key: "loader",
     get: function get() {
@@ -6353,7 +6448,7 @@ var CoreFactory = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, CoreFactory);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CoreFactory).call(this));
+    _this = _super.call(this);
     _this.player = player;
     _this._options = player.options;
     return _this;
@@ -6465,124 +6560,6 @@ var Version = /*#__PURE__*/function () {
   return Version;
 }();
 
-var name = "@clappr/core";
-var version = "0.4.11";
-var description = "Core components of the extensible media player for the web";
-var main = "./dist/clappr-core.js";
-var module = "./dist/clappr-core.esm.js";
-var scripts = {
-	"bundle-check": "ANALYZE_BUNDLE=true rollup --config",
-	release: "MINIMIZE=true rollup --config",
-	build: "rollup --config",
-	watch: "rollup --config --watch",
-	test: "jest /src --coverage",
-	"test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
-	"test:watch": "NODE_ENV=test karma start --no-single-run --watch",
-	lint: "eslint *.js src/",
-	"lint:fix": "npm run lint -- --fix",
-	start: "DEV=true rollup --config --watch",
-	commitzen: "git-cz"
-};
-var files = [
-	"/dist",
-	"/src"
-];
-var publishConfig = {
-	access: "public"
-};
-var repository = {
-	type: "git",
-	url: "git@github.com:clappr/clappr-core.git"
-};
-var author = "Globo.com";
-var license = "BSD-3-Clause";
-var bugs = {
-	url: "https://github.com/clappr/clappr-core/issues"
-};
-var homepage = "https://github.com/clappr/clappr-core";
-var devDependencies = {
-	"@babel/core": "^7.8.6",
-	"@babel/plugin-proposal-object-rest-spread": "^7.8.3",
-	"@babel/preset-env": "^7.8.6",
-	"@rollup/plugin-alias": "^3.0.1",
-	"@rollup/plugin-commonjs": "^11.0.2",
-	"@rollup/plugin-json": "^4.0.3",
-	"@rollup/plugin-node-resolve": "^7.1.1",
-	"@rollup/plugin-replace": "^2.3.1",
-	autoprefixer: "^9.7.4",
-	"babel-jest": "^25.1.0",
-	"clappr-zepto": "0.0.7",
-	coveralls: "^3.0.9",
-	"cz-conventional-changelog": "^3.1.0",
-	eslint: "^6.8.0",
-	"html-loader": "^0.5.5",
-	jest: "^25.1.0",
-	"jest-directory-named-resolver": "^0.3.0",
-	"node-sass": "^4.13.1",
-	rollup: "^1.32.0",
-	"rollup-plugin-babel": "^4.3.3",
-	"rollup-plugin-filesize": "^6.2.1",
-	"rollup-plugin-html": "^0.2.1",
-	"rollup-plugin-livereload": "^1.0.4",
-	"rollup-plugin-named-directory": "^1.0.0",
-	"rollup-plugin-node-builtins": "^2.1.2",
-	"rollup-plugin-node-globals": "^1.4.0",
-	"rollup-plugin-postcss": "^2.1.1",
-	"rollup-plugin-serve": "^1.0.1",
-	"rollup-plugin-sizes": "^1.0.1",
-	"rollup-plugin-terser": "^5.2.0",
-	"rollup-plugin-visualizer": "^3.3.1"
-};
-var config = {
-	commitizen: {
-		path: "./node_modules/cz-conventional-changelog"
-	}
-};
-var nyc = {
-	exclude: [
-		"**/*.test.js",
-		"**/*.spec.js",
-		"node_modules"
-	]
-};
-var jest = {
-	verbose: true,
-	resolver: "jest-directory-named-resolver",
-	transform: {
-		"^.+\\.js$": "babel-jest",
-		"^.+\\.html$": "<rootDir>/src/__mocks__/htmlMock.js"
-	},
-	moduleNameMapper: {
-		"^@/(.*)$": "<rootDir>/src/$1",
-		"^clappr-zepto$": "clappr-zepto/zepto.js",
-		"\\.(scss)$": "<rootDir>/src/__mocks__/styleMock.js"
-	},
-	collectCoverageFrom: [
-		"src/*.js",
-		"src/**/*.js",
-		"src/**/**/*.js"
-	]
-};
-var pkg = {
-	name: name,
-	version: version,
-	description: description,
-	main: main,
-	module: module,
-	scripts: scripts,
-	files: files,
-	publishConfig: publishConfig,
-	repository: repository,
-	author: author,
-	license: license,
-	bugs: bugs,
-	homepage: homepage,
-	devDependencies: devDependencies,
-	config: config,
-	nyc: nyc,
-	jest: jest
-};
-
 var filterPluginsByType = function filterPluginsByType(plugins, type) {
   if (!plugins || !type) return {};
   return Object.entries(plugins).filter(function (_ref) {
@@ -6612,235 +6589,239 @@ var Loader = (function () {
     plugins: {},
     playbacks: []
   };
-  var currentVersion = pkg.version;
-  return (/*#__PURE__*/function () {
-      _createClass(Loader, null, [{
-        key: "checkVersionSupport",
-        value: function checkVersionSupport(entry) {
-          var _entry$prototype = entry.prototype,
-              supportedVersion = _entry$prototype.supportedVersion,
-              name = _entry$prototype.name;
+  var currentVersion = "0.4.12";
+  return /*#__PURE__*/function () {
+    _createClass(Loader, null, [{
+      key: "checkVersionSupport",
+      value: function checkVersionSupport(entry) {
+        var _entry$prototype = entry.prototype,
+            supportedVersion = _entry$prototype.supportedVersion,
+            name = _entry$prototype.name;
 
-          if (!supportedVersion || !supportedVersion.min) {
-            Log.warn('Loader', "missing version information for ".concat(name));
-            return false;
-          }
-
-          var maxVersion = supportedVersion.max ? Version.parse(supportedVersion.max) : Version.parse(supportedVersion.min).inc('minor');
-          var minVersion = Version.parse(supportedVersion.min);
-
-          if (!Version.parse(currentVersion).satisfies(minVersion, maxVersion)) {
-            Log.warn('Loader', "unsupported plugin ".concat(name, ": Clappr version ").concat(currentVersion, " does not match required range [").concat(minVersion, ",").concat(maxVersion, ")"));
-            return false;
-          }
-
-          return true;
+        if (!supportedVersion || !supportedVersion.min) {
+          Log.warn('Loader', "missing version information for ".concat(name));
+          return false;
         }
-      }, {
-        key: "registerPlugin",
-        value: function registerPlugin(pluginEntry) {
-          if (!pluginEntry || !pluginEntry.prototype.name) {
-            Log.warn('Loader', "missing information to register plugin: ".concat(pluginEntry));
-            return false;
-          }
 
-          Loader.checkVersionSupport(pluginEntry);
-          var pluginRegistry = registry.plugins;
-          if (!pluginRegistry) return false;
-          var previousEntry = pluginRegistry[pluginEntry.prototype.name];
-          if (previousEntry) Log.warn('Loader', "overriding plugin entry: ".concat(pluginEntry.prototype.name, " - ").concat(previousEntry));
-          pluginRegistry[pluginEntry.prototype.name] = pluginEntry;
-          return true;
-        }
-      }, {
-        key: "registerPlayback",
-        value: function registerPlayback(playbackEntry) {
-          if (!playbackEntry || !playbackEntry.prototype.name) return false;
-          Loader.checkVersionSupport(playbackEntry);
-          var playbacks = registry.playbacks;
-          var previousEntryIdx = playbacks.findIndex(function (entry) {
-            return entry.name === playbackEntry.prototype.name;
-          });
+        var maxVersion = supportedVersion.max ? Version.parse(supportedVersion.max) : Version.parse(supportedVersion.min).inc('minor');
+        var minVersion = Version.parse(supportedVersion.min);
 
-          if (previousEntryIdx >= 0) {
-            var previousEntry = playbacks[previousEntryIdx];
-            playbacks.splice(previousEntryIdx, 1);
-            Log.warn('Loader', "overriding playback entry: ".concat(previousEntry.name, " - ").concat(previousEntry));
-          }
+        if (!Version.parse(currentVersion).satisfies(minVersion, maxVersion)) {
+          Log.warn('Loader', "unsupported plugin ".concat(name, ": Clappr version ").concat(currentVersion, " does not match required range [").concat(minVersion, ",").concat(maxVersion, ")"));
+          return false;
+        }
 
-          registry.playbacks = [playbackEntry].concat(_toConsumableArray(playbacks));
-          return true;
+        return true;
+      }
+    }, {
+      key: "registerPlugin",
+      value: function registerPlugin(pluginEntry) {
+        if (!pluginEntry || !pluginEntry.prototype.name) {
+          Log.warn('Loader', "missing information to register plugin: ".concat(pluginEntry));
+          return false;
         }
-      }, {
-        key: "unregisterPlugin",
-        value: function unregisterPlugin(name) {
-          if (!name) return false;
-          var plugins = registry.plugins;
-          var plugin = plugins[name];
-          if (!plugin) return false;
-          delete plugins[name];
-          return true;
-        }
-      }, {
-        key: "unregisterPlayback",
-        value: function unregisterPlayback(name) {
-          if (!name) return false;
-          var playbacks = registry.playbacks;
-          var index = playbacks.findIndex(function (entry) {
-            return entry.prototype.name === name;
-          });
-          if (index < 0) return false;
-          playbacks.splice(index, 1);
-          registry.playbacks = playbacks;
-          return true;
-        }
-      }, {
-        key: "clearPlugins",
-        value: function clearPlugins() {
-          registry.plugins = {};
-        }
-      }, {
-        key: "clearPlaybacks",
-        value: function clearPlaybacks() {
-          registry.playbacks = [];
-        }
-        /**
-         * builds the loader
-         * @method constructor
-         * @param {Object} externalPlugins the external plugins
-         * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
-         */
 
-      }, {
-        key: "registeredPlaybacks",
-        get: function get() {
-          return _toConsumableArray(registry.playbacks);
+        Loader.checkVersionSupport(pluginEntry);
+        var pluginRegistry = registry.plugins;
+        if (!pluginRegistry) return false;
+        var previousEntry = pluginRegistry[pluginEntry.prototype.name];
+        if (previousEntry) Log.warn('Loader', "overriding plugin entry: ".concat(pluginEntry.prototype.name, " - ").concat(previousEntry));
+        pluginRegistry[pluginEntry.prototype.name] = pluginEntry;
+        return true;
+      }
+    }, {
+      key: "registerPlayback",
+      value: function registerPlayback(playbackEntry) {
+        if (!playbackEntry || !playbackEntry.prototype.name) return false;
+        Loader.checkVersionSupport(playbackEntry);
+        var playbacks = registry.playbacks;
+        var previousEntryIdx = playbacks.findIndex(function (entry) {
+          return entry.name === playbackEntry.prototype.name;
+        });
+
+        if (previousEntryIdx >= 0) {
+          var previousEntry = playbacks[previousEntryIdx];
+          playbacks.splice(previousEntryIdx, 1);
+          Log.warn('Loader', "overriding playback entry: ".concat(previousEntry.name, " - ").concat(previousEntry));
         }
-      }, {
-        key: "registeredPlugins",
-        get: function get() {
-          var plugins = registry.plugins;
-          var core = filterPluginsByType(plugins, 'core');
-          var container = filterPluginsByType(plugins, 'container');
-          return {
-            core: core,
-            container: container
-          };
-        }
-      }]);
 
-      function Loader() {
-        var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-        var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
-        _classCallCheck(this, Loader);
-
-        this.playerId = playerId;
-        this.playbackPlugins = _toConsumableArray(registry.playbacks);
-        var _Loader$registeredPlu = Loader.registeredPlugins,
-            core = _Loader$registeredPlu.core,
-            container = _Loader$registeredPlu.container;
-        this.containerPlugins = Object.values(container);
-        this.corePlugins = Object.values(core);
-        if (!Array.isArray(externalPlugins)) this.validateExternalPluginsType(externalPlugins);
-        this.addExternalPlugins(externalPlugins);
+        registry.playbacks = [playbackEntry].concat(_toConsumableArray(playbacks));
+        return true;
+      }
+    }, {
+      key: "unregisterPlugin",
+      value: function unregisterPlugin(name) {
+        if (!name) return false;
+        var plugins = registry.plugins;
+        var plugin = plugins[name];
+        if (!plugin) return false;
+        delete plugins[name];
+        return true;
+      }
+    }, {
+      key: "unregisterPlayback",
+      value: function unregisterPlayback(name) {
+        if (!name) return false;
+        var playbacks = registry.playbacks;
+        var index = playbacks.findIndex(function (entry) {
+          return entry.prototype.name === name;
+        });
+        if (index < 0) return false;
+        playbacks.splice(index, 1);
+        registry.playbacks = playbacks;
+        return true;
+      }
+    }, {
+      key: "clearPlugins",
+      value: function clearPlugins() {
+        registry.plugins = {};
+      }
+    }, {
+      key: "clearPlaybacks",
+      value: function clearPlaybacks() {
+        registry.playbacks = [];
       }
       /**
-       * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
-       * @method addExternalPlugins
-       * @private
-       * @param {Object} an config object or an array of plugins
-       * @return {Object} plugins the config object with the plugins separated by type
+       * builds the loader
+       * @method constructor
+       * @param {Object} externalPlugins the external plugins
+       * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
        */
 
+    }, {
+      key: "registeredPlaybacks",
+      get: function get() {
+        return _toConsumableArray(registry.playbacks);
+      }
+    }, {
+      key: "registeredPlugins",
+      get: function get() {
+        var plugins = registry.plugins;
+        var core = filterPluginsByType(plugins, 'core');
+        var container = filterPluginsByType(plugins, 'container');
+        return {
+          core: core,
+          container: container
+        };
+      }
+    }]);
 
-      _createClass(Loader, [{
-        key: "groupPluginsByType",
-        value: function groupPluginsByType(plugins) {
-          if (Array.isArray(plugins)) {
-            plugins = plugins.reduce(function (memo, plugin) {
-              memo[plugin.type] || (memo[plugin.type] = []);
-              memo[plugin.type].push(plugin);
-              return memo;
-            }, {});
-          }
+    function Loader() {
+      var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
+      _classCallCheck(this, Loader);
+
+      this.playerId = playerId;
+      this.playbackPlugins = _toConsumableArray(registry.playbacks);
+      var _Loader$registeredPlu = Loader.registeredPlugins,
+          core = _Loader$registeredPlu.core,
+          container = _Loader$registeredPlu.container;
+      this.containerPlugins = Object.values(container);
+      this.corePlugins = Object.values(core);
+      if (!Array.isArray(externalPlugins)) this.validateExternalPluginsType(externalPlugins);
+      this.addExternalPlugins(externalPlugins);
+    }
+    /**
+     * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
+     * @method addExternalPlugins
+     * @private
+     * @param {Object} an config object or an array of plugins
+     * @return {Object} plugins the config object with the plugins separated by type
+     */
+
+
+    _createClass(Loader, [{
+      key: "groupPluginsByType",
+      value: function groupPluginsByType(plugins) {
+        if (Array.isArray(plugins)) {
+          plugins = plugins.reduce(function (memo, plugin) {
+            memo[plugin.type] || (memo[plugin.type] = []);
+            memo[plugin.type].push(plugin);
+            return memo;
+          }, {});
+        }
+
+        return plugins;
+      }
+    }, {
+      key: "removeDups",
+      value: function removeDups(list) {
+        var useReversePrecedence = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+        var groupUp = function groupUp(plugins, plugin) {
+          if (plugins[plugin.prototype.name] && useReversePrecedence) return plugins;
+          plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
+          plugins[plugin.prototype.name] = plugin;
           return plugins;
+        };
+
+        var pluginsMap = list.reduceRight(groupUp, Object.create(null));
+        var plugins = [];
+
+        for (var key in pluginsMap) {
+          plugins.unshift(pluginsMap[key]);
         }
-      }, {
-        key: "removeDups",
-        value: function removeDups(list) {
-          var groupUp = function groupUp(plugins, plugin) {
-            plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
-            plugins[plugin.prototype.name] = plugin;
-            return plugins;
-          };
 
-          var pluginsMap = list.reduceRight(groupUp, Object.create(null));
-          var plugins = [];
+        return plugins;
+      }
+      /**
+       * adds all the external plugins that were passed through `options.plugins`
+       * @method addExternalPlugins
+       * @private
+       * @param {Object} plugins the config object with all plugins
+       */
 
-          for (var key in pluginsMap) {
-            plugins.unshift(pluginsMap[key]);
-          }
+    }, {
+      key: "addExternalPlugins",
+      value: function addExternalPlugins(plugins) {
+        var loadExternalPluginsFirst = typeof plugins.loadExternalPluginsFirst === 'boolean' ? plugins.loadExternalPluginsFirst : true;
+        var loadExternalPlaybacksFirst = typeof plugins.loadExternalPlaybacksFirst === 'boolean' ? plugins.loadExternalPlaybacksFirst : true;
+        plugins = this.groupPluginsByType(plugins);
 
-          return plugins;
-        }
-        /**
-         * adds all the external plugins that were passed through `options.plugins`
-         * @method addExternalPlugins
-         * @private
-         * @param {Object} plugins the config object with all plugins
-         */
-
-      }, {
-        key: "addExternalPlugins",
-        value: function addExternalPlugins(plugins) {
-          plugins = this.groupPluginsByType(plugins);
-
-          if (plugins.playback) {
-            var playbacks = plugins.playback.filter(function (playback) {
-              return Loader.checkVersionSupport(playback), true;
-            });
-            this.playbackPlugins = this.removeDups(playbacks.concat(this.playbackPlugins));
-          }
-
-          if (plugins.container) {
-            var containerPlugins = plugins.container.filter(function (plugin) {
-              return Loader.checkVersionSupport(plugin), true;
-            });
-            this.containerPlugins = this.removeDups(containerPlugins.concat(this.containerPlugins));
-          }
-
-          if (plugins.core) {
-            var corePlugins = plugins.core.filter(function (plugin) {
-              return Loader.checkVersionSupport(plugin), true;
-            });
-            this.corePlugins = this.removeDups(corePlugins.concat(this.corePlugins));
-          }
-        }
-        /**
-         * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
-         * @method validateExternalPluginsType
-         * @private
-         * @param {Object} plugins the config object with all plugins
-         */
-
-      }, {
-        key: "validateExternalPluginsType",
-        value: function validateExternalPluginsType(plugins) {
-          var plugintypes = ['playback', 'container', 'core'];
-          plugintypes.forEach(function (type) {
-            (plugins[type] || []).forEach(function (el) {
-              var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
-              if (el.type !== type) throw new ReferenceError(errorMessage);
-            });
+        if (plugins.playback) {
+          var playbacks = plugins.playback.filter(function (playback) {
+            return Loader.checkVersionSupport(playback), true;
           });
+          this.playbackPlugins = loadExternalPlaybacksFirst ? this.removeDups(playbacks.concat(this.playbackPlugins)) : this.removeDups(this.playbackPlugins.concat(playbacks), true);
         }
-      }]);
 
-      return Loader;
-    }()
-  );
+        if (plugins.container) {
+          var containerPlugins = plugins.container.filter(function (plugin) {
+            return Loader.checkVersionSupport(plugin), true;
+          });
+          this.containerPlugins = loadExternalPluginsFirst ? this.removeDups(containerPlugins.concat(this.containerPlugins)) : this.removeDups(this.containerPlugins.concat(containerPlugins), true);
+        }
+
+        if (plugins.core) {
+          var corePlugins = plugins.core.filter(function (plugin) {
+            return Loader.checkVersionSupport(plugin), true;
+          });
+          this.corePlugins = loadExternalPluginsFirst ? this.removeDups(corePlugins.concat(this.corePlugins)) : this.removeDups(this.corePlugins.concat(corePlugins), true);
+        }
+      }
+      /**
+       * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
+       * @method validateExternalPluginsType
+       * @private
+       * @param {Object} plugins the config object with all plugins
+       */
+
+    }, {
+      key: "validateExternalPluginsType",
+      value: function validateExternalPluginsType(plugins) {
+        var plugintypes = ['playback', 'container', 'core'];
+        plugintypes.forEach(function (type) {
+          (plugins[type] || []).forEach(function (el) {
+            var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
+            if (el.type !== type) throw new ReferenceError(errorMessage);
+          });
+        });
+      }
+    }]);
+
+    return Loader;
+  }();
 })();
 
 var baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '');
@@ -6871,6 +6852,8 @@ var baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '');
 
 var Player = /*#__PURE__*/function (_BaseObject) {
   _inherits(Player, _BaseObject);
+
+  var _super = _createSuper(Player);
 
   _createClass(Player, [{
     key: "loader",
@@ -7074,7 +7057,7 @@ var Player = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, Player);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, options));
+    _this = _super.call(this, options);
     var playbackDefaultOptions = {
       recycleVideo: true
     };
@@ -7541,6 +7524,8 @@ Object.assign(Player.prototype, ErrorMixin);
 var ContainerPlugin = /*#__PURE__*/function (_BaseObject) {
   _inherits(ContainerPlugin, _BaseObject);
 
+  var _super = _createSuper(ContainerPlugin);
+
   _createClass(ContainerPlugin, [{
     key: "playerError",
     get: function get() {
@@ -7553,7 +7538,7 @@ var ContainerPlugin = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, ContainerPlugin);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ContainerPlugin).call(this, container.options));
+    _this = _super.call(this, container.options);
     _this.container = container;
     _this.enabled = true;
 
@@ -7601,6 +7586,8 @@ ContainerPlugin.type = 'container';
 var CorePlugin = /*#__PURE__*/function (_BaseObject) {
   _inherits(CorePlugin, _BaseObject);
 
+  var _super = _createSuper(CorePlugin);
+
   _createClass(CorePlugin, [{
     key: "playerError",
     get: function get() {
@@ -7613,7 +7600,7 @@ var CorePlugin = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, CorePlugin);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CorePlugin).call(this, core.options));
+    _this = _super.call(this, core.options);
     _this.core = core;
     _this.enabled = true;
 
@@ -7674,6 +7661,8 @@ CorePlugin.type = 'core';
 var UIContainerPlugin = /*#__PURE__*/function (_UIObject) {
   _inherits(UIContainerPlugin, _UIObject);
 
+  var _super = _createSuper(UIContainerPlugin);
+
   _createClass(UIContainerPlugin, [{
     key: "playerError",
     get: function get() {
@@ -7686,7 +7675,7 @@ var UIContainerPlugin = /*#__PURE__*/function (_UIObject) {
 
     _classCallCheck(this, UIContainerPlugin);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(UIContainerPlugin).call(this, container.options));
+    _this = _super.call(this, container.options);
     _this.container = container;
     _this.enabled = true;
 
@@ -7725,154 +7714,6 @@ UIContainerPlugin.extend = function (properties) {
 };
 
 UIContainerPlugin.type = 'container';
-
-var global$1 = (typeof global !== "undefined" ? global :
-            typeof self !== "undefined" ? self :
-            typeof window !== "undefined" ? window : {});
-
-// shim for using process in browser
-// based off https://github.com/defunctzombie/node-process/blob/master/browser.js
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-var cachedSetTimeout = defaultSetTimout;
-var cachedClearTimeout = defaultClearTimeout;
-if (typeof global$1.setTimeout === 'function') {
-    cachedSetTimeout = setTimeout;
-}
-if (typeof global$1.clearTimeout === 'function') {
-    cachedClearTimeout = clearTimeout;
-}
-
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-function nextTick(fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-}
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-
-// from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
-var performance$1 = global$1.performance || {};
-var performanceNow =
-  performance$1.now        ||
-  performance$1.mozNow     ||
-  performance$1.msNow      ||
-  performance$1.oNow       ||
-  performance$1.webkitNow  ||
-  function(){ return (new Date()).getTime() };
 
 /* eslint-disable no-var */
 // Simple JavaScript Templating
@@ -7969,8 +7810,8 @@ tmpl.settings = settings;
 
 var tracksHTML = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\">\n<% }; %>\n";
 
-var css$2 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
-styleInject(css$2);
+var css_248z$2 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
+styleInject(css_248z$2);
 
 var MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
@@ -8001,6 +7842,8 @@ var UNKNOWN_ERROR = {
 var HTML5Video = /*#__PURE__*/function (_Playback) {
   _inherits(HTML5Video, _Playback);
 
+  var _super = _createSuper(HTML5Video);
+
   _createClass(HTML5Video, [{
     key: "name",
     get: function get() {
@@ -8010,7 +7853,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.11"
+        min: "0.4.12"
       };
     }
   }, {
@@ -8082,8 +7925,6 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
   }]);
 
   function HTML5Video() {
-    var _getPrototypeOf2;
-
     var _this;
 
     _classCallCheck(this, HTML5Video);
@@ -8092,7 +7933,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
       args[_key] = arguments[_key];
     }
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(HTML5Video)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = _super.call.apply(_super, [this].concat(args));
     _this._destroyed = false;
     _this._loadStarted = false;
     _this._isBuffering = false;
@@ -8160,9 +8001,9 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
           error: error
         }); // https://github.com/clappr/clappr/issues/1076
 
-        result && nextTick(function () {
+        result && setTimeout(function () {
           return !_this2._destroyed && _this2.play();
-        });
+        }, 0);
       });
     } // See Playback.canAutoPlay()
 
@@ -8736,10 +8577,12 @@ HTML5Video.canPlay = function (resourceUrl, mimeType) {
 var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
   _inherits(HTML5Audio, _HTML5Video);
 
+  var _super = _createSuper(HTML5Audio);
+
   function HTML5Audio() {
     _classCallCheck(this, HTML5Audio);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(HTML5Audio).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(HTML5Audio, [{
@@ -8763,7 +8606,7 @@ var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.11"
+        min: "0.4.12"
       };
     }
   }, {
@@ -8791,11 +8634,13 @@ HTML5Audio.canPlay = function (resourceUrl, mimeType) {
   return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType);
 };
 
-var css$3 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
-styleInject(css$3);
+var css_248z$3 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
+styleInject(css_248z$3);
 
 var HTMLImg = /*#__PURE__*/function (_Playback) {
   _inherits(HTMLImg, _Playback);
+
+  var _super = _createSuper(HTMLImg);
 
   _createClass(HTMLImg, [{
     key: "getPlaybackType",
@@ -8811,7 +8656,7 @@ var HTMLImg = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.11"
+        min: "0.4.12"
       };
     }
   }, {
@@ -8842,7 +8687,7 @@ var HTMLImg = /*#__PURE__*/function (_Playback) {
 
     _classCallCheck(this, HTMLImg);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(HTMLImg).call(this, params));
+    _this = _super.call(this, params);
     _this.el.src = params.src;
     return _this;
   }
@@ -8877,11 +8722,13 @@ HTMLImg.canPlay = function (resource) {
 
 var noOpHTML = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%></p><p>\n</p>";
 
-var css$4 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
-styleInject(css$4);
+var css_248z$4 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
+styleInject(css_248z$4);
 
 var NoOp = /*#__PURE__*/function (_Playback) {
   _inherits(NoOp, _Playback);
+
+  var _super = _createSuper(NoOp);
 
   _createClass(NoOp, [{
     key: "name",
@@ -8892,7 +8739,7 @@ var NoOp = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.11"
+        min: "0.4.12"
       };
     }
   }, {
@@ -8910,8 +8757,6 @@ var NoOp = /*#__PURE__*/function (_Playback) {
   }]);
 
   function NoOp() {
-    var _getPrototypeOf2;
-
     var _this;
 
     _classCallCheck(this, NoOp);
@@ -8920,7 +8765,7 @@ var NoOp = /*#__PURE__*/function (_Playback) {
       args[_key] = arguments[_key];
     }
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(NoOp)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = _super.call.apply(_super, [this].concat(args));
     _this._noiseFrameNum = -1;
     return _this;
   }
@@ -9039,6 +8884,8 @@ var Styler = {
 var Strings = /*#__PURE__*/function (_CorePlugin) {
   _inherits(Strings, _CorePlugin);
 
+  var _super = _createSuper(Strings);
+
   _createClass(Strings, [{
     key: "name",
     get: function get() {
@@ -9048,7 +8895,7 @@ var Strings = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.11"
+        min: "0.4.12"
       };
     }
   }]);
@@ -9058,7 +8905,7 @@ var Strings = /*#__PURE__*/function (_CorePlugin) {
 
     _classCallCheck(this, Strings);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Strings).call(this, core));
+    _this = _super.call(this, core);
 
     _this._initializeMessages();
 
@@ -9164,10 +9011,12 @@ var Strings = /*#__PURE__*/function (_CorePlugin) {
 var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
   _inherits(SourcesPlugin, _CorePlugin);
 
+  var _super = _createSuper(SourcesPlugin);
+
   function SourcesPlugin() {
     _classCallCheck(this, SourcesPlugin);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(SourcesPlugin).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(SourcesPlugin, [{
@@ -9197,7 +9046,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.11"
+        min: "0.4.12"
       };
     }
   }]);
@@ -9206,7 +9055,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
 }(CorePlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version$1 = pkg.version; // Built-in Plugins/Playbacks
+var version = "0.4.12"; // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings);
 Loader.registerPlugin(SourcesPlugin);
@@ -9214,7 +9063,7 @@ Loader.registerPlayback(NoOp);
 Loader.registerPlayback(HTMLImg);
 Loader.registerPlayback(HTML5Audio);
 Loader.registerPlayback(HTML5Video);
-var main$1 = {
+var main = {
   Player: Player,
   Events: Events,
   Browser: Browser,
@@ -9235,10 +9084,10 @@ var main$1 = {
   HTMLImg: HTMLImg,
   Log: Log,
   Styler: Styler,
-  version: version$1,
+  version: version,
   template: tmpl,
   $: zepto
 };
 
-export default main$1;
-export { zepto as $, BaseObject, Browser, Container, ContainerPlugin, Core, CorePlugin, Events, HTML5Audio, HTML5Video, HTMLImg, Loader, Log, Playback, Player, PlayerError, Styler, UIContainerPlugin, UICorePlugin, UIObject, Utils, tmpl as template, version$1 as version };
+export default main;
+export { zepto as $, BaseObject, Browser, Container, ContainerPlugin, Core, CorePlugin, Events, HTML5Audio, HTML5Video, HTMLImg, Loader, Log, Playback, Player, PlayerError, Styler, UIContainerPlugin, UICorePlugin, UIObject, Utils, tmpl as template, version };
