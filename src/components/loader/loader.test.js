@@ -152,6 +152,88 @@ describe('Loader', function() {
       expect(loader.corePlugins.length).toEqual(nativeCorePluginsCount + 1)
     })
 
+    test('supports load externals before default plugins for loadExternalPluginsFirst option not configured', () => {
+      const defaultContainerPlugin = ContainerPlugin.extend({ name: 'default_container_plugin' })
+      const defaultCorePlugin = CorePlugin.extend({ name: 'default_core_plugin' })
+
+      Loader.registerPlugin(defaultContainerPlugin)
+      Loader.registerPlugin(defaultCorePlugin)
+
+      const loader = new Loader()
+
+      const externalContainerPlugin = ContainerPlugin.extend({ name: 'external_container_plugin' })
+      const externalCorePlugin = CorePlugin.extend({ name: 'external_core_plugin' })
+
+      loader.addExternalPlugins({ core: [externalCorePlugin], container: [externalContainerPlugin] })
+
+      expect(loader.containerPlugins[0].prototype.name).toEqual(externalContainerPlugin.prototype.name)
+      expect(loader.containerPlugins[1].prototype.name).toEqual(defaultContainerPlugin.prototype.name)
+
+      expect(loader.corePlugins[0].prototype.name).toEqual(externalCorePlugin.prototype.name)
+      expect(loader.corePlugins[1].prototype.name).toEqual(defaultCorePlugin.prototype.name)
+
+      Loader.unregisterPlugin(defaultContainerPlugin.prototype.name)
+      Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
+    })
+
+    test('supports load externals before default playbacks for loadExternalPlaybacksFirst option not configured', () => {
+      const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'default_playback_plugin' })
+
+      Loader.registerPlayback(defaultPlaybackPlugin)
+
+      const loader = new Loader()
+
+      const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'external_playback_plugin' })
+
+      loader.addExternalPlugins({ playback: [externalPlaybackPlugin] })
+
+      expect(loader.playbackPlugins[0].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+      expect(loader.playbackPlugins[1].prototype.name).toEqual(defaultPlaybackPlugin.prototype.name)
+
+      Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
+    })
+
+    test('supports load externals after default plugins for loadExternalPluginsFirst option configured with false value', () => {
+      const defaultContainerPlugin = ContainerPlugin.extend({ name: 'default_container_plugin' })
+      const defaultCorePlugin = CorePlugin.extend({ name: 'default_core_plugin' })
+
+      Loader.registerPlugin(defaultContainerPlugin)
+      Loader.registerPlugin(defaultCorePlugin)
+
+      const loader = new Loader()
+
+      const externalContainerPlugin = ContainerPlugin.extend({ name: 'external_container_plugin' })
+      const externalCorePlugin = CorePlugin.extend({ name: 'external_core_plugin' })
+
+      loader.addExternalPlugins({ loadExternalPluginsFirst: false, core: [externalCorePlugin], container: [externalContainerPlugin] })
+
+      expect(loader.containerPlugins[0].prototype.name).toEqual('default_container_plugin')
+      expect(loader.containerPlugins[1].prototype.name).toEqual('external_container_plugin')
+
+      expect(loader.corePlugins[0].prototype.name).toEqual('default_core_plugin')
+      expect(loader.corePlugins[1].prototype.name).toEqual('external_core_plugin')
+
+      Loader.unregisterPlugin(defaultContainerPlugin.prototype.name)
+      Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
+    })
+
+    test('supports load externals after default playbacks for loadExternalPlaybacksFirst option configured with false value', () => {
+      const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'default_playback_plugin' })
+
+      Loader.registerPlayback(defaultPlaybackPlugin)
+
+      const loader = new Loader()
+
+      const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'external_playback_plugin' })
+
+      loader.addExternalPlugins({ loadExternalPlaybacksFirst: false, playback: [externalPlaybackPlugin] })
+
+      expect(loader.playbackPlugins[0].prototype.name).toEqual(defaultPlaybackPlugin.prototype.name)
+      expect(loader.playbackPlugins[1].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+
+      Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
+    })
+
     describe('overriding plugins', () => {
       beforeEach(() => {
         loader.containerPlugins = [
@@ -201,6 +283,46 @@ describe('Loader', function() {
       })
     })
 
+    test('respected even when loadExternalPluginsFirst is configured with false value', () => {
+      const defaultContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
+      const defaultCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
+
+      Loader.registerPlugin(defaultContainerPlugin)
+      Loader.registerPlugin(defaultCorePlugin)
+
+      const loader = new Loader()
+
+      const externalContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
+      const externalCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
+
+      loader.addExternalPlugins({ loadExternalPluginsFirst: false, core: [externalCorePlugin], container: [externalContainerPlugin] })
+
+      expect(loader.containerPlugins.length).toEqual(1)
+      expect(loader.containerPlugins[0].prototype.name).toEqual(externalContainerPlugin.prototype.name)
+
+      expect(loader.corePlugins.length).toEqual(1)
+      expect(loader.corePlugins[0].prototype.name).toEqual(externalCorePlugin.prototype.name)
+
+      Loader.unregisterPlugin(defaultContainerPlugin.prototype.name)
+      Loader.unregisterPlugin(defaultCorePlugin.prototype.name)
+    })
+
+    test('respected even when loadExternalPlaybacksFirst is configured with false value', () => {
+      const defaultPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
+
+      Loader.registerPlayback(defaultPlaybackPlugin)
+
+      const loader = new Loader()
+
+      const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
+
+      loader.addExternalPlugins({ loadExternalPlaybacksFirst: false, playback: [externalPlaybackPlugin] })
+
+      expect(loader.playbackPlugins.length).toEqual(1)
+      expect(loader.playbackPlugins[0].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+
+      Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
+    })
   })
 
   describe('validateExternalPluginsType function', () => {
