@@ -1,17 +1,15 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "commonjs": true,
-        "es6": true,
+        "es6": true
     },
     "globals": {
         "_gaq": false,
         "process": false,
         "ActiveXObject": false,
         "VERSION": false,
-        // Build globals
         "__dirname": false,
-        // Test globals
         "after": false,
         "afterEach": false,
         "assert": false,
@@ -25,12 +23,12 @@ module.exports = {
         "jest": false,
         "test": false,
         "module": false,
-        "require": false,
+        "require": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2018,
+        "ecmaVersion": 2018
     },
     "rules": {
         "indent": [
@@ -57,8 +55,7 @@ module.exports = {
         "keyword-spacing": "error",
         "space-before-blocks": "error",
         "arrow-spacing": "error",
-        // part of Node Style-guide but ignored
         "max-len": 0,
-        "max-statements": 0,
+        "max-statements": 0
     }
-};
+}
