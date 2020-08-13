@@ -79,12 +79,14 @@ describe('HTML5Video playback', function() {
   test('can check autoplay availability', done => {
     // FIXME: find a way to set disableCanAutoPlay to true only if Travis run
     const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true, disableCanAutoPlay: true })
-
-    playback.canAutoPlay(function(result, error) {
+    const callback = jest.fn((result, error) => {
       expect(result).toBeTruthy()
       expect(error).toBeNull()
+      expect(callback).toHaveBeenCalledTimes(1)
       done()
     })
+
+    playback.canAutoPlay(callback)
   })
 
   test('can be consented', done => {
