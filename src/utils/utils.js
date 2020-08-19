@@ -8,6 +8,19 @@ import Media from '../base/media'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
 
+const idsCounter = {}
+const videoStack = []
+
+export const requestAnimationFrame = (window.requestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  function(fn) { window.setTimeout(fn, 1000/60) }).bind(window)
+
+export const cancelAnimationFrame = (window.cancelAnimationFrame ||
+ window.mozCancelAnimationFrame ||
+ window.webkitCancelAnimationFrame ||
+ window.clearTimeout).bind(window)
+
 export function assign(obj, source) {
   if (source) {
     for (const prop in source) {
@@ -32,8 +45,7 @@ export function extend(parent, properties) {
 }
 
 export function formatTime(time, paddedHours) {
-  if (!isFinite(time))
-    return '--:--'
+  if (!isFinite(time)) return '--:--'
 
   time = time * 1000
   time = parseInt(time/1000)
@@ -191,8 +203,6 @@ export function seekStringToSeconds(paramName = 't') {
   return seconds
 }
 
-const idsCounter = {}
-
 export function uniqueId(prefix) {
   idsCounter[prefix] || (idsCounter[prefix] = 0)
   const id = ++idsCounter[prefix]
@@ -207,16 +217,6 @@ export function currentScriptUrl() {
   const scripts = document.getElementsByTagName('script')
   return scripts.length ? scripts[scripts.length - 1].src : ''
 }
-
-export const requestAnimationFrame = (window.requestAnimationFrame ||
-                            window.mozRequestAnimationFrame ||
-                            window.webkitRequestAnimationFrame ||
-                            function(fn) { window.setTimeout(fn, 1000/60) }).bind(window)
-
-export const cancelAnimationFrame = (window.cancelAnimationFrame ||
-                           window.mozCancelAnimationFrame ||
-                           window.webkitCancelAnimationFrame ||
-                           window.clearTimeout).bind(window)
 
 export function getBrowserLanguage() {
   return window.navigator && window.navigator.language
@@ -286,8 +286,6 @@ export function canAutoPlayMedia(cb, options) {
 }
 
 // Simple element factory with video recycle feature.
-const videoStack = []
-
 export class DomRecycler {
   static configure(options) {
     this.options = $.extend(this.options, options)
