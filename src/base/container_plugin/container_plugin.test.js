@@ -1,8 +1,9 @@
 import ContainerPlugin from './container_plugin'
+import ErrorMixin from '@/base/error_mixin'
 
-describe('Container Plugin', function() {
+describe('Container Plugin', () => {
   describe('#constructor', () => {
-    test('enables', function() {
+    test('enables the plugin', () => {
       const plugin = new ContainerPlugin({})
 
       expect(plugin.enabled).toBeTruthy()
@@ -22,12 +23,31 @@ describe('Container Plugin', function() {
     })
   })
 
-  test('disables', () => {
+  test('can be disabled after your creation', () => {
     const plugin = new ContainerPlugin({})
 
     plugin.disable()
 
     expect(plugin.enabled).toBeFalsy()
+  })
+
+  test('can be enabled after your creation', () => {
+    const plugin = new ContainerPlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+
+    plugin.enable()
+
+    expect(plugin.enabled).toBeTruthy()
+  })
+
+  test('receives createdError method from ErrorMixin', () => {
+    const plugin = new ContainerPlugin({})
+
+    expect(plugin.createError).not.toBeUndefined()
+    expect(plugin.createError).toEqual(ErrorMixin.createError)
   })
 
   test('stops listening when disable an enabled plugin', () => {
@@ -39,7 +59,7 @@ describe('Container Plugin', function() {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  test('doesnt stops listening when disable a disabled plugin', () => {
+  test('doesn\'t stops listening when disable a disabled plugin', () => {
     const plugin = new ContainerPlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
 
@@ -67,5 +87,11 @@ describe('Container Plugin', function() {
     plugin.enable()
 
     expect(spy).not.toHaveBeenCalled()
+  })
+
+  test('can be created via extends method', () => {
+    const plugin = ContainerPlugin.extend({ name: 'test_plugin' })
+
+    expect(plugin.prototype instanceof ContainerPlugin).toBeTruthy()
   })
 })
