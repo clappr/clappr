@@ -1,5 +1,5 @@
-import Log from '../../components/log'
-import PlayerError from '../../components/error'
+import Log from '@/components/log'
+import PlayerError from '@/components/error'
 
 const ErrorMixin = {
   /**
@@ -34,10 +34,9 @@ const ErrorMixin = {
       errorData.UI = defaultUI
     }
 
-    if (this.playerError)
-      this.playerError.createError(errorData)
-    else
-      Log.warn(origin, 'PlayerError is not defined. Error: ', errorData)
+    this.playerError
+      ? this.playerError.createError(errorData)
+      : Log.warn(origin, 'PlayerError is not defined. Error: ', errorData)
 
     return errorData
   }
