@@ -95,6 +95,22 @@ export default class HTML5Video extends Playback {
     return this._isBuffering
   }
 
+  get isLive() {
+    return this.getPlaybackType() === Playback.LIVE
+  }
+
+  get dvrEnabled() {
+    return this.getDuration() >= this._minDvrSize && this.isLive
+  }
+
+  get minimumDVRSizeConfig() {
+    return this.options.playback && this.options.playback.minimumDvrSize
+  }
+
+  get isValidMinimumDVRSizeConfig() {
+    return typeof (this.minimumDVRSizeConfig) !== 'undefined' && typeof (this.minimumDVRSizeConfig) === 'number'
+  }
+
   constructor(...args) {
     super(...args)
     this._destroyed = false
@@ -108,6 +124,7 @@ export default class HTML5Video extends Playback {
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
     this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
+    this._minDvrSize = this.isValidMinimumDVRSizeConfig ? this.minimumDVRSizeConfig : 60
 
     const playbackConfig = this.options.playback
     const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
@@ -283,6 +300,7 @@ export default class HTML5Video extends Playback {
 
   pause() {
     this.el.pause()
+    this.dvrEnabled && this._updateDvr(true)
   }
 
   stop() {
@@ -464,7 +482,20 @@ export default class HTML5Video extends Playback {
     DomRecycler.garbage(this.el)
   }
 
+  _updateDvr(status) {
+    this.trigger(Events.PLAYBACK_DVR, status)
+    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
+  }
+
   seek(time) {
+    if (time < 0) {
+      Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
+      time = this.getDuration()
+    }
+    // assume live if time within 3 seconds of end of stream
+    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
+    time += this.el.seekable.start(0)
+
     this.el.currentTime = time
   }
 
@@ -485,15 +516,19 @@ export default class HTML5Video extends Playback {
   }
 
   getDuration() {
+    if (this.isLive) {
+      try {
+        return this.el.seekable.end(0) - this.el.seekable.start(0)
+      } catch (e) {
+        setTimeout(() => this._updateSettings(), 1000)
+      }
+    }
     return this.el.duration
   }
 
   _onTimeUpdate() {
-    if (this.getPlaybackType() === Playback.LIVE)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name)
-    else
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.el.duration }, this.name)
-
+    const duration = this.isLive ? this.getDuration() : this.el.duration
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: duration }, this.name)
   }
 
   _onProgress() {

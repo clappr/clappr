@@ -359,6 +359,7 @@ playback: {
   controls: true,
   crossOrigin: 'use-credentials',
   playInline: true,
+  minimumDvrSize: null,
   externalTracks: [],
   hlsjsConfig: {},
   shakaConfiguration: {},
@@ -393,6 +394,9 @@ See more about the video tag crossOrigin attribute [here](https://developer.mozi
 > Default value: `true`
 
 Enable or Disable the [HTML5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) playInline attribute.
+
+#### minimumDvrSize
+Use to set the minimum value to active DVR for live media. This option is only used for HTML5Playback at this moment.
 
 #### externalTracks
 An array of tracks. Each track must have the attributes `src`, `lang` and `label`. The attribute `kind` on track object is optional because of the default value `subtitles`.

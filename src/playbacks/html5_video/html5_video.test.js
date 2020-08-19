@@ -315,6 +315,17 @@ describe('HTML5Video playback', function() {
       expect(html5Video.options.playback.somePlaybackOption).toBeTruthy()
       expect(html5Video.options.playback.nonPlaybackOption).toBeFalsy()
     })
+
+    it('respect minimumDvrSize precedence over _minDvrSize default value', () => {
+      const options = { src: 'http://example.com/video.m3u8' }
+      let html5Video = new HTML5Video(options)
+
+      expect(html5Video._minDvrSize).toEqual(60)
+
+      html5Video = new HTML5Video({ ...options, playback: { minimumDvrSize: 10 } })
+
+      expect(html5Video._minDvrSize).toEqual(10)
+    })
   })
 
   describe('video element', () => {
@@ -411,5 +422,189 @@ describe('HTML5Video playback', function() {
     playback.configure({ loop: true })
 
     expect(playback.el.loop).toEqual(true)
+  })
+
+  describe('getDuration', () => {
+    test('return distinct duration references for different playback types', () => {
+      let start = [0]
+      let end = [30]
+      let html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      })
+      jest.spyOn(html5Video, 'getDuration')
+
+      html5Video.getDuration()
+      expect(html5Video.getDuration).toHaveReturnedWith(10)
+
+
+      html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      })
+      jest.spyOn(html5Video, 'getDuration')
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+
+      html5Video.getDuration()
+      expect(html5Video.getDuration).toHaveReturnedWith(30)
+    })
+
+    test('retry to get duration for live medias when occurs transient unavailability', () => {
+      jest.useFakeTimers()
+      let start = []
+      let end = []
+      let html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      html5Video.setElement({ get seekable() { return undefined } })
+
+      jest.spyOn(html5Video, 'getDuration')
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      jest.spyOn(html5Video, '_updateSettings')
+
+      html5Video.getDuration()
+      start = [0]
+      end = [20]
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      })
+
+      jest.advanceTimersByTime(1000)
+      expect(html5Video._updateSettings).toHaveBeenCalled()
+      jest.clearAllTimers()
+
+      expect(html5Video.getDuration).toHaveReturnedWith(20)
+    })
+  })
+
+  describe('_onTimeUpdate', () => {
+    test('return el.duration for VoD on PLAYBACK_TIMEUPDATE event', () => {
+      const callback = jest.fn()
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
+      html5Video.setElement({
+        get duration() { return 10 },
+        /* eslint-disable */
+        get seekable() {
+          return {
+            start: (i) => start[i],
+            end: (i) => end[i],
+            get length() { return start.length }
+          }
+        }
+        /* eslint-disable */
+      })
+      html5Video.on(Events.PLAYBACK_TIMEUPDATE, callback)
+      html5Video._onTimeUpdate()
+
+      expect(callback).toHaveBeenCalledWith({ current: undefined, total: 10 }, 'html5_video')
+    })
+
+    test('return getDuration() for Live on PLAYBACK_TIMEUPDATE event', () => {
+      let start = [0]
+      let end = [50]
+      const callback = jest.fn()
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() {
+          return {
+            start: (i) => start[i],
+            end: (i) => end[i],
+            get length() { return start.length }
+          }
+        }
+      })
+
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+
+      html5Video.on(Events.PLAYBACK_TIMEUPDATE, callback)
+      html5Video._onTimeUpdate()
+
+      expect(callback).toHaveBeenCalledWith({ current: undefined, total: 50 }, 'html5_video')
+    })
+  })
+
+  test('_updateDvr triggers DVR events with current status', () => {
+    const DVR_STATUS = 'enabled'
+    const callback1 = jest.fn()
+    const callback2 = jest.fn()
+    const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+
+    html5Video.on(Events.PLAYBACK_DVR, callback1)
+    html5Video.on(Events.PLAYBACK_STATS_ADD, callback2)
+
+    html5Video._updateDvr(DVR_STATUS)
+
+    expect(callback1).toHaveBeenCalledWith(DVR_STATUS)
+    expect(callback2).toHaveBeenCalledWith({ dvr: DVR_STATUS })
+  })
+
+  test('dvrEnabled getter return current DVR status', () => {
+    const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+    jest.spyOn(html5Video, 'dvrEnabled', 'get')
+
+    expect(html5Video.dvrEnabled).toEqual(false)
+
+    jest.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
+    jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+
+    expect(html5Video.dvrEnabled).toEqual(true)
+  })
+
+  test('isValidMinimumDVRSizeConfig getter guarantee a valid minimum DVR size', () => {
+    let html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: null } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: 'test' } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: '10' } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeFalsy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: 0 } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeTruthy()
+
+    html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8', playback: { minimumDvrSize: 10 } })
+    expect(html5Video.isValidMinimumDVRSizeConfig).toBeTruthy()
+  })
+
+  describe('seek', () => {
+    test('use duration when occurs seek with negative values', () => {
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      jest.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
+      html5Video.seek(-1)
+
+      expect(html5Video.el.currentTime).toEqual(5000)
+    })
+
+    test('always use a margin for video currentTime to check DVR status', () => {
+      const start = [0]
+      const end = [100]
+
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      jest.spyOn(html5Video, '_updateDvr')
+      html5Video.setElement({
+        get seekable() {
+          return {
+            start: (i) => start[i],
+            end: (i) => end[i],
+            get length() { return start.length }
+          }
+        }
+      })
+      html5Video.seek(html5Video.el.seekable.end(0))
+
+      expect(html5Video._updateDvr).toHaveBeenCalledWith(false)
+
+      html5Video.seek(96)
+
+      expect(html5Video._updateDvr).toHaveBeenCalledWith(true)
+    })
   })
 })
