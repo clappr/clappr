@@ -140,6 +140,13 @@ describe('Playback', function() {
     expect(spy).toHaveBeenCalledWith(true, null)
   })
 
+  test('can checks if auto play is available', () => {
+    jest.spyOn(this.basePlayback, 'play')
+    this.basePlayback.attemptAutoPlay()
+
+    expect(this.basePlayback.play).toHaveBeenCalledTimes(1)
+  })
+
   test('destroys by removing element from DOM', () => {
     const spy = jest.fn()
     this.basePlayback.$el = { remove: spy, off: () => {} }
