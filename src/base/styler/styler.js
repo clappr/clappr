@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import $ from 'clappr-zepto'
-import template from './template'
+import template from '../template'
 
 const Styler = {
   getStyleFor: function(style, options={ baseUrl: '' }) {
