@@ -36,6 +36,31 @@ describe('UI Container Plugin', () => {
     expect(plugin.enabled).toBeTruthy()
   })
 
+  test('can be enabled after your creation', () => {
+    const plugin = new UIContainerPlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+
+    plugin.enable()
+
+    expect(plugin.enabled).toBeTruthy()
+  })
+
+  test('ignores enable call if the plugin is already enabled', () => {
+    const plugin = new UIContainerPlugin({})
+    const spy = jest.spyOn(plugin, 'bindEvents')
+
+    expect(plugin.enabled).toBeTruthy()
+
+    plugin.enable()
+    plugin.enable()
+
+    expect(spy).not.toHaveBeenCalled()
+    expect(plugin.enabled).toBeTruthy()
+  })
+
   test('disables the plugin', () => {
     const plugin = new UIContainerPlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
