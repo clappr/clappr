@@ -14,8 +14,8 @@ describe('UI Core Plugin', () => {
       const Plugin = class MyPlugin extends UICorePlugin {
         bindEvents() {
           bind = true
-  }
-    }
+        }
+      }
 
       new Plugin({})
 
@@ -23,9 +23,10 @@ describe('UI Core Plugin', () => {
     })
   })
 
-    expect(plugin.core).toEqual(42)
-    expect(plugin.enabled).toBeTruthy()
-    expect(callCount).toEqual(2)
+  test('has a default value for getExternalInterface method', () => {
+    const plugin = new UICorePlugin({})
+
+    expect(plugin.getExternalInterface()).toEqual({})
   })
 
   test('enables the plugin', () => {
