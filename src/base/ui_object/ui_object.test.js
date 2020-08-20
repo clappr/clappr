@@ -52,6 +52,19 @@ describe('UIObject', () => {
     expect(myButton.el.className).toEqual('my-button')
   })
 
+  test('creates an element with only id/className attributes', () => {
+    class MyButton extends UIObject {
+      constructor(options) { super(options) }
+      get id() { return 'id-example' }
+      get className() { return 'class__example' }
+    }
+
+    const myButton = new MyButton()
+
+    expect(myButton.el.id).toEqual('id-example')
+    expect(myButton.el.className).toEqual('class__example')
+  })
+
   test('binds events of an element to methods', () => {
     class MyButton extends UIObject {
       constructor(options) {
@@ -69,6 +82,56 @@ describe('UIObject', () => {
     myButton.$el.trigger('click')
 
     expect(myButton.myId).toEqual(42)
+  })
+
+  test('can bind events dynamically', () => {
+    class MyButton extends UIObject {
+      constructor(options) {
+        super(options)
+        this.myId = 0
+      }
+      myClick() { this.myId = 42 }
+    }
+
+    const myButton = new MyButton()
+
+    myButton.delegateEvents({ 'click': 'myClick' })
+
+    expect(myButton.myId).toEqual(0)
+
+    myButton.$el.trigger('click')
+
+    expect(myButton.myId).toEqual(42)
+  })
+
+  test('binds events of an element with specific selectors to methods', () => {
+    class MyButton extends UIObject { myClick() {} }
+    const myButton = new MyButton()
+    jest.spyOn(myButton, 'myClick')
+
+    myButton.$el.append($('<div class="class__example" data-example="example"></div>'))
+    const $specificSelector = myButton.$('.class__example[data-example]')
+
+    myButton.delegateEvents({ 'click .class__example[data-example]': 'myClick' })
+
+    myButton.$el.trigger('click')
+    $specificSelector.trigger('click')
+
+    expect(myButton.myClick).toHaveBeenCalledTimes(1)
+  })
+
+  test('only bind events whit correct dictionary { event: callback } input', () => {
+    class MyButton extends UIObject { myClick() {} }
+    const myButton = new MyButton()
+    jest.spyOn(myButton, 'myClick')
+
+    myButton.delegateEvents({ 'click': null })
+    myButton.delegateEvents({ 'click': 'test' })
+    myButton.delegateEvents({ 'click': 'myClick' })
+
+    myButton.$el.trigger('click')
+
+    expect(myButton.myClick).toHaveBeenCalledTimes(1)
   })
 
   test('selects elements within the component', () => {
