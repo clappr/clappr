@@ -9,7 +9,7 @@
     "release": "MINIMIZE=true rollup --config",
     "build": "rollup --config",
     "watch": "rollup --config --watch",
-    "test": "jest /src --coverage",
+    "test": "jest /src --coverage --silent",
     "test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
     "test:watch": "NODE_ENV=test karma start --no-single-run --watch",
     "lint": "eslint *.js src/",
