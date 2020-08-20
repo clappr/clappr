@@ -98,4 +98,10 @@ describe('UI Container Plugin', () => {
     expect(plugin.createError).not.toBeUndefined()
     expect(plugin.createError).toEqual(ErrorMixin.createError)
   })
+
+  test('can be created via extends method', () => {
+    const plugin = UIContainerPlugin.extend({ name: 'test_plugin' })
+
+    expect(plugin.prototype instanceof UIContainerPlugin).toBeTruthy()
+  })
 })
