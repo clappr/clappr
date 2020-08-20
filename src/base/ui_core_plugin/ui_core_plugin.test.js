@@ -79,6 +79,14 @@ describe('UI Core Plugin', () => {
     expect(plugin.enabled).toBeFalsy()
   })
 
+  test('can be disabled after your creation', () => {
+    const plugin = new UICorePlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+  })
+
   test('destroys the plugin', () => {
     const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'destroy')
