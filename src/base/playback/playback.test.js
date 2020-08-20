@@ -156,6 +156,14 @@ describe('Playback', function() {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
+  test('can be configured after your creation', () => {
+    const newOptions = { test: 'test' }
+
+    this.basePlayback.configure(newOptions)
+
+    expect(this.basePlayback.options).toEqual({ ...this.basePlayback.options, ...newOptions })
+  })
+
   describe('error', () => {
     beforeEach(() => {
       this.core = new Core({})
