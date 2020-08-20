@@ -2,9 +2,99 @@ import Playback from './playback'
 import Core from '@/components/core'
 import PlayerError from '@/components/error'
 
+const getProperty = (obj, prop) => {
+  return Object.getOwnPropertyDescriptor(Object.getPrototypeOf(obj), prop)
+}
+
+const isGetterProperty = (obj, prop) => {
+  return getProperty(obj, prop).get
+}
+
+const isSetterProperty = (obj, prop) => {
+  return getProperty(obj, prop).set
+}
+
 describe('Playback', function() {
   beforeEach(() => {
     this.basePlayback = new Playback({})
+  })
+
+  describe('have a getter', () => {
+    test('called isAudioOnly', () => {
+      expect(isGetterProperty(this.basePlayback, 'isAudioOnly')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'isAudioOnly')).toBeFalsy()
+    })
+    test('called isAdaptive', () => {
+      expect(isGetterProperty(this.basePlayback, 'isAdaptive')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'isAdaptive')).toBeFalsy()
+    })
+    test('called ended', () => {
+      expect(isGetterProperty(this.basePlayback, 'ended')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'ended')).toBeFalsy()
+    })
+    test('called i18n', () => {
+      expect(isGetterProperty(this.basePlayback, 'i18n')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'i18n')).toBeFalsy()
+    })
+    test('called buffering', () => {
+      expect(isGetterProperty(this.basePlayback, 'buffering')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'buffering')).toBeFalsy()
+    })
+    test('called isReady', () => {
+      expect(isGetterProperty(this.basePlayback, 'isReady')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'isReady')).toBeFalsy()
+    })
+    test('called hasClosedCaptionsTracks', () => {
+      expect(isGetterProperty(this.basePlayback, 'hasClosedCaptionsTracks')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'hasClosedCaptionsTracks')).toBeFalsy()
+    })
+    test('called closedCaptionsTracks', () => {
+      expect(isGetterProperty(this.basePlayback, 'closedCaptionsTracks')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'closedCaptionsTracks')).toBeFalsy()
+    })
+    test('called closedCaptionsTrackId and a setter too', () => {
+      expect(isGetterProperty(this.basePlayback, 'closedCaptionsTrackId')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'closedCaptionsTrackId')).toBeTruthy()
+    })
+  })
+
+  test('isAudioOnly getter returns default value', () => {
+    expect(this.basePlayback.isAudioOnly).toBeFalsy()
+  })
+
+  test('isAdaptive getter returns default value', () => {
+    expect(this.basePlayback.isAdaptive).toBeFalsy()
+  })
+
+  test('ended getter returns default value', () => {
+    expect(this.basePlayback.ended).toBeFalsy()
+  })
+
+  test('buffering getter returns default value', () => {
+    expect(this.basePlayback.buffering).toBeFalsy()
+  })
+
+  test('isReady getter returns default value', () => {
+    expect(this.basePlayback.isReady).toBeFalsy()
+  })
+
+  test('closedCaptionsTracks getter returns default value', () => {
+    expect(this.basePlayback.closedCaptionsTracks).toEqual([])
+  })
+
+  test('hasClosedCaptionsTracks getter returns default value', () => {
+    expect(this.basePlayback.hasClosedCaptionsTracks).toBeFalsy()
+  })
+
+  test('closedCaptionsTrackId getter returns default value', () => {
+    expect(this.basePlayback.closedCaptionsTrackId).toEqual(-1)
+  })
+
+  test('i18n getter returns default value', () => {
+    const i18n = { t: (key) => key }
+    const playback = new Playback({}, i18n)
+
+    expect(playback.i18n).toEqual(i18n)
   })
 
   test('has default duration', () => {
