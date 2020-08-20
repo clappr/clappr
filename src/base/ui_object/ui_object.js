@@ -154,7 +154,7 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   delegateEvents(events) {
-    if (!(events || (events = this.events))) return this
+    if (!events) events = this.events
     this.undelegateEvents()
     for (const key in events) {
       let method = events[key]
