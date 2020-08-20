@@ -1,24 +1,34 @@
 import UICorePlugin from './ui_core_plugin'
 
-describe('UI Core Plugin', function() {
-  class MyPlugin extends UICorePlugin {
-    render() { }
+describe('UI Core Plugin', () => {
+  describe('#constructor', () => {
+    test('enables the plugin', () => {
+      const plugin = new UICorePlugin({})
+
+      expect(plugin.enabled).toBeTruthy()
+    })
+
+    test('binds all events', () => {
+      let bind = false
+      const Plugin = class MyPlugin extends UICorePlugin {
+        bindEvents() {
+          bind = true
   }
-  test('constructs', () => {
-    let callCount = 0
-    class MyPlugin extends UICorePlugin {
-      bindEvents() { callCount += 1 }
-      render() { callCount += 1 }
     }
-    const plugin = new MyPlugin(42)
+
+      new Plugin({})
+
+      expect(bind).toBeTruthy()
+    })
+  })
 
     expect(plugin.core).toEqual(42)
     expect(plugin.enabled).toBeTruthy()
     expect(callCount).toEqual(2)
   })
 
-  test('enables', () => {
-    const plugin = new MyPlugin({})
+  test('enables the plugin', () => {
+    const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'bindEvents')
     const show = jest.fn()
     plugin.$el = { show: show }
@@ -31,8 +41,8 @@ describe('UI Core Plugin', function() {
     expect(plugin.enabled).toBeTruthy()
   })
 
-  test('disables', () => {
-    const plugin = new MyPlugin({})
+  test('disables the plugin', () => {
+    const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
     const hide = jest.fn()
     plugin.$el = { hide: hide }
@@ -44,8 +54,8 @@ describe('UI Core Plugin', function() {
     expect(plugin.enabled).toBeFalsy()
   })
 
-  test('destroys', () => {
-    const plugin = new MyPlugin({})
+  test('destroys the plugin', () => {
+    const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'destroy')
 
     plugin.destroy()
