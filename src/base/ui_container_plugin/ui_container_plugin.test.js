@@ -74,6 +74,14 @@ describe('UI Container Plugin', () => {
     expect(plugin.enabled).toBeFalsy()
   })
 
+  test('can be disabled after your creation', () => {
+    const plugin = new UIContainerPlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+  })
+
   test('destroys the plugin', () => {
     const plugin = new UIContainerPlugin({})
     const spy = jest.spyOn(plugin, 'destroy')
