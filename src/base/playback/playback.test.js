@@ -164,6 +164,12 @@ describe('Playback', function() {
     expect(this.basePlayback.options).toEqual({ ...this.basePlayback.options, ...newOptions })
   })
 
+  test('can be created via extends method', () => {
+    const plugin = Playback.extend({ name: 'test_plugin' })
+
+    expect(plugin.prototype instanceof Playback).toBeTruthy()
+  })
+
   describe('error', () => {
     beforeEach(() => {
       this.core = new Core({})
