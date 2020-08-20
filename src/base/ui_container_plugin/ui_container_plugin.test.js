@@ -1,4 +1,5 @@
 import UIContainerPlugin from './ui_container_plugin'
+import ErrorMixin from '@/base/error_mixin'
 
 describe('UI Container Plugin', () => {
   describe('#constructor', () => {
@@ -89,5 +90,12 @@ describe('UI Container Plugin', () => {
     plugin.destroy()
 
     expect(spy).toHaveBeenCalledTimes(1)
+  })
+
+  test('receives createdError method from ErrorMixin', () => {
+    const plugin = new UIContainerPlugin({})
+
+    expect(plugin.createError).not.toBeUndefined()
+    expect(plugin.createError).toEqual(ErrorMixin.createError)
   })
 })
