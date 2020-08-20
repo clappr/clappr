@@ -10,6 +10,7 @@
     "build": "rollup --config",
     "watch": "rollup --config --watch",
     "test": "jest /src --coverage --silent",
+    "test:coverage": "open coverage/lcov-report/index.html",
     "test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
     "test:watch": "NODE_ENV=test karma start --no-single-run --watch",
     "lint": "eslint *.js src/",
