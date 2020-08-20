@@ -86,6 +86,20 @@ describe('UIObject', () => {
     expect(myButton.$('#special-id')[0]).toEqual(insideComponent)
   })
 
+  test('uses the existent element if _ensureElement method is called after one component is created', () => {
+    class MyButton extends UIObject { get tagName() { return 'button' } }
+    const myButton = new MyButton()
+    const component = $('<button></button>')
+
+    expect(myButton.el).toEqual(component[0])
+    expect(myButton.$el).toEqual(component)
+
+    myButton._ensureElement()
+
+    expect(myButton.el).toEqual(component[0])
+    expect(myButton.$el).toEqual(component)
+  })
+
   test('removes it from DOM', () => {
     class FullscreenButton extends UIObject {
       constructor(options) {
