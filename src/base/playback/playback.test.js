@@ -133,6 +133,13 @@ describe('Playback', function() {
     this.basePlayback.consent(callback)
   })
 
+  test('consider auto play is available as default', () => {
+    const spy = jest.fn()
+    this.basePlayback.canAutoPlay(spy)
+
+    expect(spy).toHaveBeenCalledWith(true, null)
+  })
+
   test('destroys by removing element from DOM', () => {
     const spy = jest.fn()
     this.basePlayback.$el = { remove: spy, off: () => {} }
