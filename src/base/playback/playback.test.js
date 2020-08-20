@@ -101,7 +101,15 @@ describe('Playback', function() {
     expect(this.basePlayback.getDuration()).toEqual(0)
   })
 
-  test('is not playing', () => {
+  test('has default getStartTimeOffset', () => {
+    expect(this.basePlayback.getStartTimeOffset()).toEqual(0)
+  })
+
+  test('has static method to check if playback implementation can play one source', () => {
+    expect(Playback.canPlay()).toBeFalsy()
+  })
+
+  test('is not playing by default', () => {
     expect(this.basePlayback.isPlaying()).toBeFalsy()
   })
 
