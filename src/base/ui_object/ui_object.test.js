@@ -7,6 +7,12 @@ describe('UIObject', () => {
     expect(uiObject.tagName).toEqual('div')
   })
 
+  test('render method returns the component itself by default', () => {
+    const uiObject = new UIObject()
+
+    expect(uiObject.render()).toEqual(uiObject)
+  })
+
   test('can be any tag', () => {
     class MyButton extends UIObject { get tagName() { return 'button' } }
     const myButton = new MyButton()
