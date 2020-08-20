@@ -22,7 +22,7 @@ describe('UI Container Plugin', () => {
     })
   })
 
-  test('enables', () => {
+  test('enables the plugin', () => {
     const plugin = new UIContainerPlugin({})
     const spy = jest.spyOn(plugin, 'bindEvents')
     const show = jest.fn()
@@ -36,7 +36,7 @@ describe('UI Container Plugin', () => {
     expect(plugin.enabled).toBeTruthy()
   })
 
-  test('disables', () => {
+  test('disables the plugin', () => {
     const plugin = new UIContainerPlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
     const hide = jest.fn()
@@ -49,7 +49,7 @@ describe('UI Container Plugin', () => {
     expect(plugin.enabled).toBeFalsy()
   })
 
-  test('destroys', () => {
+  test('destroys the plugin', () => {
     const plugin = new UIContainerPlugin({})
     const spy = jest.spyOn(plugin, 'destroy')
 
