@@ -72,10 +72,7 @@ export default class Playback extends UIObject {
    * @method consent
    * @param {Function} callback function called when playback is consented
    */
-  consent(cb) {
-    if (typeof cb === 'function')
-      cb()
-  }
+  consent(cb) { typeof cb === 'function' && cb() }
 
   /**
    * plays the playback.
