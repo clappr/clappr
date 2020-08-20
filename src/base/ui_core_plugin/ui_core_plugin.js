@@ -1,6 +1,6 @@
-import { extend } from '../../utils'
-import UIObject from '../ui_object'
-import ErrorMixin from '../error_mixin'
+import { extend } from '@/utils'
+import UIObject from '@/base/ui_object'
+import ErrorMixin from '@/base/error_mixin'
 
 export default class UICorePlugin extends UIObject {
   get playerError() { return this.core.playerError }
