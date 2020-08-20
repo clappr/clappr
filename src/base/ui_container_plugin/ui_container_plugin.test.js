@@ -1,8 +1,8 @@
 import UIContainerPlugin from './ui_container_plugin'
 
-describe('UI Container Plugin', function() {
+describe('UI Container Plugin', () => {
   describe('#constructor', () => {
-    test('enables', function() {
+    test('enables the plugin', () => {
       const plugin = new UIContainerPlugin({})
 
       expect(plugin.enabled).toBeTruthy()
