@@ -113,7 +113,7 @@ describe('Playback', function() {
     expect(this.basePlayback.isPlaying()).toBeFalsy()
   })
 
-  test('is not ready', () => {
+  test('is not ready by default', () => {
     expect(this.basePlayback.isReady).toBeFalsy()
   })
 
@@ -121,7 +121,7 @@ describe('Playback', function() {
     expect(this.basePlayback.getPlaybackType()).toEqual(Playback.NO_OP)
   })
 
-  test('is not on highdefintion', () => {
+  test('is not on high definition by default', () => {
     expect(this.basePlayback.isHighDefinitionInUse()).toBeFalsy()
   })
 
