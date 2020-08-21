@@ -1,4 +1,5 @@
 import Log from './log'
+import mockConsole from 'jest-mock-console'
 
 describe('Log', () => {
   test('is created with default level', () => {
@@ -58,6 +59,9 @@ describe('Log', () => {
   })
 
   describe('prints log', function() {
+    beforeEach(() => { this.restoreConsole = mockConsole() })
+    afterEach(() => this.restoreConsole())
+
     test('indicating level and class with the message', () => {
       const logger = new Log()
       logger.log('class test', Log.LEVEL_ERROR, 'test message.')
@@ -72,9 +76,36 @@ describe('Log', () => {
       expect(console.log).toHaveBeenCalledWith('%c[error]', 'color: #ff0000;font-weight: bold; font-size: 13px;', 'test message.')
     })
 
+    test('on debug level without passing the level attribute', () => {
+      const logger = new Log(Log.LEVEL_DEBUG)
+      logger.debug('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[debug][class test]', 'color: #0000ff;font-weight: bold; font-size: 13px;', 'test message.')
   })
 
-  describe('don\'t print log', function() {
+    test('on info level without passing the level attribute', () => {
+      const logger = new Log(Log.LEVEL_INFO)
+      logger.info('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[info][class test]', 'color: #006600;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+    test('on warn level without passing the level attribute', () => {
+      const logger = new Log(Log.LEVEL_WARN)
+      logger.warn('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[warn][class test]', 'color: #ff8000;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+    test('on error level without passing the level attribute', () => {
+      const logger = new Log(Log.LEVEL_ERROR)
+      logger.error('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[error][class test]', 'color: #ff0000;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+  })
+
+  describe('don\'t print log', () => {
     test('without the level attribute', () => {
       const logger = new Log()
       logger.log('test message.', '', '')
