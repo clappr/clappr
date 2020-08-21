@@ -120,4 +120,19 @@ describe('Log', () => {
       expect(console.log).not.toHaveBeenCalled()
     })
   })
+
+  describe('have a static method', function() {
+    test('to get one Log instance', () => {
+      const logger = Log.getInstance()
+
+      expect(logger instanceof Log).toBeTruthy()
+
+      logger.testReference = true
+
+      let anotherLogger = Log.getInstance()
+
+      expect(anotherLogger).toEqual(logger)
+      expect(anotherLogger.testReference).toBeTruthy()
+    })
+  })
 })
