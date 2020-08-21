@@ -134,5 +134,15 @@ describe('Log', () => {
       expect(anotherLogger).toEqual(logger)
       expect(anotherLogger.testReference).toBeTruthy()
     })
+
+    test('to set one Log level', () => {
+      const logger = Log.getInstance()
+
+      expect(logger.level).toEqual(Log.LEVEL_INFO)
+
+      Log.setLevel(Log.LEVEL_WARN)
+
+      expect(logger.level).toEqual(Log.LEVEL_WARN)
+    })
   })
 })
