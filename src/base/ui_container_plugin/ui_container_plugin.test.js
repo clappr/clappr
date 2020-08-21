@@ -2,7 +2,7 @@ import UIContainerPlugin from './ui_container_plugin'
 import ErrorMixin from '@/base/error_mixin'
 
 describe('UI Container Plugin', () => {
-  describe('#constructor', () => {
+  describe('constructor', () => {
     test('enables the plugin', () => {
       const plugin = new UIContainerPlugin({})
 
