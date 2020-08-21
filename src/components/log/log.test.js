@@ -32,4 +32,28 @@ describe('Log', () => {
 
     expect(logger.level).toEqual(Log.LEVEL_WARN)
   })
+
+  test('can change from current level to offLevel', () => {
+    const logger = new Log()
+
+    expect(logger.level).toEqual(Log.LEVEL_INFO)
+
+    logger.onOff()
+
+    expect(logger.level).toEqual(Log.LEVEL_ERROR)
+  })
+
+  test('can change from offLevel to current level', () => {
+    const logger = new Log()
+
+    expect(logger.level).toEqual(Log.LEVEL_INFO)
+
+    logger.onOff()
+
+    expect(logger.level).toEqual(Log.LEVEL_ERROR)
+
+    logger.onOff()
+
+    expect(logger.level).toEqual(Log.LEVEL_INFO)
+  })
 })
