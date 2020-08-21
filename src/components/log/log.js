@@ -18,6 +18,11 @@ const COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
+
+  get level() { return this._level }
+
+  set level(newLevel) {  this._level = newLevel }
+
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
     this.BLACKLIST = [
       'timeupdate',
@@ -45,10 +50,6 @@ export default class Log {
     }
     // handle instances where console.log is unavailable
     window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)  
-  }
-
-  level(newLevel) {
-    this.level = newLevel
   }
 
   log(klass, level, message) {
