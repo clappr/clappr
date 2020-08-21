@@ -19,7 +19,14 @@ const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
-    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress']
+    this.BLACKLIST = [
+      'timeupdate',
+      'playback:timeupdate',
+      'playback:progress',
+      'container:hover',
+      'container:timeupdate',
+      'container:progress'
+    ]
     this.level = level
     this.offLevel = offLevel
   }
@@ -30,14 +37,14 @@ export default class Log {
   error(klass) { this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1)) }
 
   onOff() {
-    if (this.level === this.offLevel) { this.level = this.previousLevel } else {
+    if (this.level === this.offLevel) {
+      this.level = this.previousLevel
+    } else {
       this.previousLevel = this.level
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    if (window.console && window.console.log)
-      window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
-
+    window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)  
   }
 
   level(newLevel) {
@@ -57,9 +64,7 @@ export default class Log {
     if (klass)
       klassDescription = '[' + klass + ']'
 
-    if (window.console && window.console.log)
-      window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
-
+    window.console && window.console.log && window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
   }
 }
 
