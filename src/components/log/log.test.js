@@ -56,4 +56,37 @@ describe('Log', () => {
 
     expect(logger.level).toEqual(Log.LEVEL_INFO)
   })
+
+  describe('prints log', function() {
+    test('indicating level and class with the message', () => {
+      const logger = new Log()
+      logger.log('class test', Log.LEVEL_ERROR, 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[error][class test]', 'color: #ff0000;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+    test('without the class attribute', () => {
+      const logger = new Log()
+      logger.log('test message.', Log.LEVEL_ERROR, '')
+
+      expect(console.log).toHaveBeenCalledWith('%c[error]', 'color: #ff0000;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+  })
+
+  describe('don\'t print log', function() {
+    test('without the level attribute', () => {
+      const logger = new Log()
+      logger.log('test message.', '', '')
+
+      expect(console.log).not.toHaveBeenCalled()
+    })
+
+    test('if the message is registered on the block list', () => {
+      const logger = new Log()
+      logger.log('class test', Log.LEVEL_ERROR, ['timeupdate'])
+
+      expect(console.log).not.toHaveBeenCalled()
+    })
+  })
 })
