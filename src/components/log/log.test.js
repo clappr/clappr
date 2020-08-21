@@ -81,7 +81,7 @@ describe('Log', () => {
       logger.debug('class test', 'test message.')
 
       expect(console.log).toHaveBeenCalledWith('%c[debug][class test]', 'color: #0000ff;font-weight: bold; font-size: 13px;', 'test message.')
-  })
+    })
 
     test('on info level without passing the level attribute', () => {
       const logger = new Log(Log.LEVEL_INFO)
@@ -122,6 +122,9 @@ describe('Log', () => {
   })
 
   describe('have a static method', function() {
+    beforeEach(() => { this.restoreConsole = mockConsole() })
+    afterEach(() => this.restoreConsole())
+
     test('to get one Log instance', () => {
       const logger = Log.getInstance()
 
@@ -143,6 +146,31 @@ describe('Log', () => {
       Log.setLevel(Log.LEVEL_WARN)
 
       expect(logger.level).toEqual(Log.LEVEL_WARN)
+    })
+
+    test('to print messages on Log debug level', () => {
+      Log.setLevel(Log.LEVEL_DEBUG)
+      Log.debug('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[debug][class test]', 'color: #0000ff;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+    test('to print messages on Log info level', () => {
+      Log.info('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[info][class test]', 'color: #006600;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+    test('to print messages on Log warn level', () => {
+      Log.warn('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[warn][class test]', 'color: #ff8000;font-weight: bold; font-size: 13px;', 'test message.')
+    })
+
+    test('to print messages on Log error level', () => {
+      Log.error('class test', 'test message.')
+
+      expect(console.log).toHaveBeenCalledWith('%c[error][class test]', 'color: #ff0000;font-weight: bold; font-size: 13px;', 'test message.')
     })
   })
 })
