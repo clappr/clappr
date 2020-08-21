@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import Log from './log'
 import mockConsole from 'jest-mock-console'
 
