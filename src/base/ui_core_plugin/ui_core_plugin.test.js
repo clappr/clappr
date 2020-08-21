@@ -2,7 +2,7 @@ import UICorePlugin from './ui_core_plugin'
 import ErrorMixin from '@/base/error_mixin'
 
 describe('UI Core Plugin', () => {
-  describe('#constructor', () => {
+  describe('constructor', () => {
     test('enables the plugin', () => {
       const plugin = new UICorePlugin({})
 
