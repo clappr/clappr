@@ -33,6 +33,7 @@ export default class Log {
       'container:progress'
     ]
     this.level = level
+    this.previousLevel = this.level
     this.offLevel = offLevel
   }
 
@@ -49,7 +50,7 @@ export default class Log {
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)  
+    window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
   }
 
   log(klass, level, message) {
