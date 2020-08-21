@@ -105,7 +105,10 @@ describe('Log', () => {
     })
   })
 
-  describe('don\'t print log', () => {
+  describe('don\'t print log', function() {
+    beforeEach(() => { this.restoreConsole = mockConsole() })
+    afterEach(() => this.restoreConsole())
+
     test('without the level attribute', () => {
       const logger = new Log()
       logger.log('test message.', '', '')
