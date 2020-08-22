@@ -1,6 +1,6 @@
-import { extend } from '../../utils'
-import UIObject from '../ui_object'
-import ErrorMixin from '../error_mixin'
+import { extend } from '@/utils'
+import UIObject from '@/base/ui_object'
+import ErrorMixin from '@/base/error_mixin'
 
 import $ from 'clappr-zepto'
 
@@ -72,10 +72,7 @@ export default class Playback extends UIObject {
    * @method consent
    * @param {Function} callback function called when playback is consented
    */
-  consent(cb) {
-    if (typeof cb === 'function')
-      cb()
-  }
+  consent(cb) { typeof cb === 'function' && cb() }
 
   /**
    * plays the playback.
