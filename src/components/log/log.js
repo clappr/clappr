@@ -24,7 +24,7 @@ export default class Log {
   set level(newLevel) {  this._level = newLevel }
 
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
-    this.BLACKLIST = [
+    this.EXCLUDE_LIST = [
       'timeupdate',
       'playback:timeupdate',
       'playback:progress',
@@ -54,7 +54,7 @@ export default class Log {
   }
 
   log(klass, level, message) {
-    if (this.BLACKLIST.indexOf(message[0]) >= 0) return
+    if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return
     if (level < this.level) return
 
     if (!message) {
