@@ -18,9 +18,22 @@ const COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
+
+  get level() { return this._level }
+
+  set level(newLevel) {  this._level = newLevel }
+
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
-    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress']
+    this.EXCLUDE_LIST = [
+      'timeupdate',
+      'playback:timeupdate',
+      'playback:progress',
+      'container:hover',
+      'container:timeupdate',
+      'container:progress'
+    ]
     this.level = level
+    this.previousLevel = this.level
     this.offLevel = offLevel
   }
 
@@ -30,22 +43,18 @@ export default class Log {
   error(klass) { this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1)) }
 
   onOff() {
-    if (this.level === this.offLevel) { this.level = this.previousLevel } else {
+    if (this.level === this.offLevel) {
+      this.level = this.previousLevel
+    } else {
       this.previousLevel = this.level
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    if (window.console && window.console.log)
-      window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
-
-  }
-
-  level(newLevel) {
-    this.level = newLevel
+    window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
   }
 
   log(klass, level, message) {
-    if (this.BLACKLIST.indexOf(message[0]) >= 0) return
+    if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return
     if (level < this.level) return
 
     if (!message) {
@@ -57,9 +66,7 @@ export default class Log {
     if (klass)
       klassDescription = '[' + klass + ']'
 
-    if (window.console && window.console.log)
-      window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
-
+    window.console && window.console.log && window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
   }
 }
 
