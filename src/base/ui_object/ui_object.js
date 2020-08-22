@@ -3,8 +3,8 @@
 // license that can be found in the LICENSE file.
 
 import $ from 'clappr-zepto'
-import { uniqueId, DomRecycler } from '../../utils'
-import BaseObject from '../base_object'
+import { uniqueId, DomRecycler } from '@/utils'
+import BaseObject from '@/base/base_object'
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/
 
@@ -154,7 +154,7 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   delegateEvents(events) {
-    if (!(events || (events = this.events))) return this
+    if (!events) events = this.events
     this.undelegateEvents()
     for (const key in events) {
       let method = events[key]
