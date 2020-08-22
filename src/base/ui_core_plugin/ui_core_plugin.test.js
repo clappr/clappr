@@ -1,24 +1,36 @@
 import UICorePlugin from './ui_core_plugin'
+import ErrorMixin from '@/base/error_mixin'
 
-describe('UI Core Plugin', function() {
-  class MyPlugin extends UICorePlugin {
-    render() { }
-  }
-  test('constructs', () => {
-    let callCount = 0
-    class MyPlugin extends UICorePlugin {
-      bindEvents() { callCount += 1 }
-      render() { callCount += 1 }
-    }
-    const plugin = new MyPlugin(42)
+describe('UI Core Plugin', () => {
+  describe('constructor', () => {
+    test('enables the plugin', () => {
+      const plugin = new UICorePlugin({})
 
-    expect(plugin.core).toEqual(42)
-    expect(plugin.enabled).toBeTruthy()
-    expect(callCount).toEqual(2)
+      expect(plugin.enabled).toBeTruthy()
+    })
+
+    test('binds all events', () => {
+      let bind = false
+      const Plugin = class MyPlugin extends UICorePlugin {
+        bindEvents() {
+          bind = true
+        }
+      }
+
+      new Plugin({})
+
+      expect(bind).toBeTruthy()
+    })
   })
 
-  test('enables', () => {
-    const plugin = new MyPlugin({})
+  test('has a default value for getExternalInterface method', () => {
+    const plugin = new UICorePlugin({})
+
+    expect(plugin.getExternalInterface()).toEqual({})
+  })
+
+  test('enables the plugin', () => {
+    const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'bindEvents')
     const show = jest.fn()
     plugin.$el = { show: show }
@@ -31,8 +43,33 @@ describe('UI Core Plugin', function() {
     expect(plugin.enabled).toBeTruthy()
   })
 
-  test('disables', () => {
-    const plugin = new MyPlugin({})
+  test('can be enabled after your creation', () => {
+    const plugin = new UICorePlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+
+    plugin.enable()
+
+    expect(plugin.enabled).toBeTruthy()
+  })
+
+  test('ignores enable call if the plugin is already enabled', () => {
+    const plugin = new UICorePlugin({})
+    const spy = jest.spyOn(plugin, 'bindEvents')
+
+    expect(plugin.enabled).toBeTruthy()
+
+    plugin.enable()
+    plugin.enable()
+
+    expect(spy).not.toHaveBeenCalled()
+    expect(plugin.enabled).toBeTruthy()
+  })
+
+  test('disables the plugin', () => {
+    const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
     const hide = jest.fn()
     plugin.$el = { hide: hide }
@@ -44,12 +81,33 @@ describe('UI Core Plugin', function() {
     expect(plugin.enabled).toBeFalsy()
   })
 
-  test('destroys', () => {
-    const plugin = new MyPlugin({})
+  test('can be disabled after your creation', () => {
+    const plugin = new UICorePlugin({})
+
+    plugin.disable()
+
+    expect(plugin.enabled).toBeFalsy()
+  })
+
+  test('destroys the plugin', () => {
+    const plugin = new UICorePlugin({})
     const spy = jest.spyOn(plugin, 'destroy')
 
     plugin.destroy()
 
     expect(spy).toHaveBeenCalledTimes(1)
+  })
+
+  test('receives createdError method from ErrorMixin', () => {
+    const plugin = new UICorePlugin({})
+
+    expect(plugin.createError).not.toBeUndefined()
+    expect(plugin.createError).toEqual(ErrorMixin.createError)
+  })
+
+  test('can be created via extends method', () => {
+    const plugin = UICorePlugin.extend({ name: 'test_plugin' })
+
+    expect(plugin.prototype instanceof UICorePlugin).toBeTruthy()
   })
 })
