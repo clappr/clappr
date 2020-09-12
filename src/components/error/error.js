@@ -24,7 +24,7 @@ class PlayerError extends BaseObject {
     }
   }
 
-  constructor(options={}, core) {
+  constructor(options = {}, core) {
     super(options)
     this.core = core
   }
