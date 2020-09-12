@@ -65,6 +65,56 @@ describe('Loader', () => {
     })
   })
 
+  describe('unregisterPlugin', () => {
+    let corePlugin, containerPlugin
+    beforeEach(() => {
+      corePlugin = CorePlugin.extend({ name: 'core-plugin' })
+      containerPlugin = ContainerPlugin.extend({ name: 'container-plugin' })
+    })
+
+    afterEach(() => {
+      Loader.clearPlugins()
+    })
+
+    test('rejects invalid plugin parameter', () => {
+      Loader.registerPlugin(corePlugin)
+      const unregistered = Loader.unregisterPlugin(undefined)
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlugins.core['core-plugin']).toEqual(corePlugin)
+    })
+
+    test('rejects unregistered plugin parameter', () => {
+      Loader.registerPlugin(corePlugin)
+      const unregistered = Loader.unregisterPlugin('unregistered-plugin')
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlugins.core['core-plugin']).toEqual(corePlugin)
+    })
+
+    test('remove a plugin from the corresponding scope registry', () => {
+      let registered = Loader.registerPlugin(corePlugin)
+
+      expect(registered).toBeTruthy()
+      expect(Loader.registeredPlugins.core['core-plugin']).toEqual(corePlugin)
+
+      registered = Loader.registerPlugin(containerPlugin)
+
+      expect(registered).toBeTruthy()
+
+      let unregistered = Loader.unregisterPlugin('core-plugin')
+
+      expect(unregistered).toBeTruthy()
+      expect(Loader.registeredPlugins.core).toEqual({})
+      expect(Loader.registeredPlugins.container['container-plugin']).toEqual(containerPlugin)
+
+      unregistered = Loader.unregisterPlugin('container-plugin')
+
+      expect(unregistered).toBeTruthy()
+      expect(Loader.registeredPlugins.container).toEqual({})
+    })
+  })
+
   describe('registerPlayback', () => {
     let playback
     beforeEach(() => {
