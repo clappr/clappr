@@ -340,6 +340,20 @@ describe('Loader', () => {
 
       expect(() => { loader.validateExternalPluginsType({ core: [UIContainerPlugin] }) }).toThrow('external container plugin on core array')
       expect(() => { loader.validateExternalPluginsType({ playback: [UIContainerPlugin] }) }).toThrow('external container plugin on playback array')
+
+      const core = CorePlugin.extend({ name: 'core-plugin' })
+      const container = ContainerPlugin.extend({ name: 'container-plugin' })
+      const playback = PlaybackPlugin.extend({ name: 'some-playback' })
+
+      const loader1 = new Loader({
+        core: [core],
+        container: [container],
+        playback: [playback],
+      })
+
+      expect(loader1.corePlugins[0]).toEqual(core)
+      expect(loader1.containerPlugins[0]).toEqual(container)
+      expect(loader1.playbackPlugins[0]).toEqual(playback)
     })
   })
 })
