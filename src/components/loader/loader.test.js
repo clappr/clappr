@@ -5,12 +5,7 @@ import CorePlugin from '../../base/core_plugin'
 import ContainerPlugin from '../../base/container_plugin'
 import UIContainerPlugin from '../../base/ui_container_plugin'
 
-describe('Loader', function() {
-  let loader
-  beforeEach(() => {
-    loader = new Loader()
-  })
-
+describe('Loader', () => {
   test('starts with an empty plugin registry', () => {
     expect(Loader.registeredPlugins.core).toEqual({})
     expect(Loader.registeredPlugins.container).toEqual({})
@@ -116,6 +111,7 @@ describe('Loader', function() {
 
   describe('addExternalPlugins function', () => {
     test('extends the plugins array with the external ones', () => {
+      const loader = new Loader()
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
       playbackPlugin.canPlay = () => true
       const containerPlugin = ContainerPlugin.extend({ name: 'containerPlugin' })
@@ -138,6 +134,7 @@ describe('Loader', function() {
     })
 
     test('supports an array of plugins and group them by type', () => {
+      const loader = new Loader()
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
       const containerPlugin = ContainerPlugin.extend({ name: 'containerPlugin' })
       const corePlugin = CorePlugin.extend({ name: 'corePlugin' })
@@ -235,7 +232,10 @@ describe('Loader', function() {
     })
 
     describe('overriding plugins', () => {
+      let loader
+
       beforeEach(() => {
+        loader = new Loader()
         loader.containerPlugins = [
           ...loader.containerPlugins,
           ContainerPlugin.extend({ name: 'spinner' })
@@ -327,6 +327,8 @@ describe('Loader', function() {
 
   describe('validateExternalPluginsType function', () => {
     test('throws an exception if plugin type does not match where it\'s being added', () => {
+      const loader = new Loader()
+
       expect(() => { loader.validateExternalPluginsType({ core: [PlaybackPlugin] }) }).toThrow('external playback plugin on core array')
       expect(() => { loader.validateExternalPluginsType({ container: [PlaybackPlugin] }) }).toThrow('external playback plugin on container array')
 
