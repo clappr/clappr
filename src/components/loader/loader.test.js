@@ -159,6 +159,46 @@ describe('Loader', () => {
     })
   })
 
+  describe('unregisterPlayback', () => {
+    let playback
+    beforeEach(() => {
+      playback = PlaybackPlugin.extend({ name: 'some-playback' })
+    })
+
+    afterEach(() => {
+      Loader.clearPlaybacks()
+    })
+
+    test('rejects invalid plugin parameter', () => {
+      Loader.registerPlayback(playback)
+      const unregistered = Loader.unregisterPlayback(undefined)
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlaybacks[0]).toEqual(playback)
+    })
+
+    test('rejects unregistered playback parameter', () => {
+      Loader.registerPlayback(playback)
+      const unregistered = Loader.unregisterPlayback('unregistered-playback')
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlaybacks[0]).toEqual(playback)
+    })
+
+    test('removes a playback', () => {
+      const registered = Loader.registerPlayback(playback)
+
+      expect(registered).toBeTruthy()
+      expect(Loader.registeredPlaybacks[0]).toEqual(playback)
+
+
+      const unregistered = Loader.unregisterPlayback('some-playback')
+
+      expect(unregistered).toBeTruthy()
+      expect(Loader.registeredPlaybacks).toEqual([])
+    })
+  })
+
   describe('addExternalPlugins function', () => {
     test('extends the plugins array with the external ones', () => {
       const loader = new Loader()
