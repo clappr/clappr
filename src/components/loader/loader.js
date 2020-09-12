@@ -91,7 +91,7 @@ export default (() => {
 
       let { playbacks } = registry
 
-      const previousEntryIdx = playbacks.findIndex((entry) => entry.name === playbackEntry.prototype.name)
+      const previousEntryIdx = playbacks.findIndex((entry) => entry.prototype.name === playbackEntry.prototype.name)
 
       if (previousEntryIdx >= 0) {
         const previousEntry = playbacks[previousEntryIdx]

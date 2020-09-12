@@ -82,7 +82,7 @@ describe('Loader', () => {
       expect(Loader.registeredPlaybacks).toEqual([])
     })
 
-    test('rejects a plugin without a valid name', () => {
+    test('rejects a playback without a valid name', () => {
       const invalidPlayback = PlaybackPlugin.extend({ name: '' })
       const registered = Loader.registerPlayback(invalidPlayback)
 
@@ -100,7 +100,7 @@ describe('Loader', () => {
 
     test('overrides a playback with the same name', () => {
       const otherPlayback = PlaybackPlugin.extend({ name: 'some-playback' })
-      Loader.registerPlugin(playback)
+      Loader.registerPlayback(playback)
       const registered = Loader.registerPlayback(otherPlayback)
 
       expect(registered).toBeTruthy()
