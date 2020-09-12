@@ -15,6 +15,46 @@ describe('Loader', () => {
     expect(Loader.registeredPlaybacks).toEqual([])
   })
 
+  describe('checkVersionSupport function', () => {
+    let corePlugin, containerPlugin
+    beforeEach(() => {
+      corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0' } })
+      containerPlugin = ContainerPlugin.extend({ name: 'container-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
+    })
+
+    afterEach(() => {
+      Loader.clearPlugins()
+    })
+
+    test('inform missing supportedVersion config', () => {
+      const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: {} })
+
+      const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(plugin)
+
+      expect(hasPluginMinimumSupportedVersion).toBeFalsy()
+    })
+
+    test('uses min version to stipulate the not informed max version', () => {
+      const isClapprVersionSupported = Loader.checkVersionSupport(corePlugin)
+
+      expect(isClapprVersionSupported).toBeTruthy()
+    })
+
+    test('inform the version incompatibility', () => {
+      const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0', max: '0.4.1' } })
+
+      const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(plugin)
+
+      expect(hasPluginMinimumSupportedVersion).toBeFalsy()
+    })
+
+    test('inform the version compatibility', () => {
+      const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(containerPlugin)
+
+      expect(hasPluginMinimumSupportedVersion).toBeTruthy()
+    })
+  })
+
   describe('registerPlugin', () => {
     let corePlugin, containerPlugin
     beforeEach(() => {
