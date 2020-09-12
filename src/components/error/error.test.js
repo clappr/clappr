@@ -16,6 +16,19 @@ describe('PlayerError', function() {
     }
   })
 
+  test('has default value to options', () => {
+    const playerError = new PlayerError(undefined, new Core({}))
+
+    expect(playerError.options).toEqual({})
+  })
+
+  test('have reference to access received options on your construction', () => {
+    const options = { testOption: 'some_option' }
+    const playerError = new PlayerError(options, new Core(options))
+
+    expect(playerError.options).toEqual(options)
+  })
+
   describe('when error method is called', () => {
     test('triggers ERROR event', () => {
       jest.spyOn(this.core, 'trigger')
