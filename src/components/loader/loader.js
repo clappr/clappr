@@ -240,8 +240,8 @@ export default (() => {
      * @param {Object} plugins the config object with all plugins
      */
     validateExternalPluginsType(plugins) {
-      const plugintypes = ['playback', 'container', 'core']
-      plugintypes.forEach((type) => {
+      const pluginTypes = ['playback', 'container', 'core']
+      pluginTypes.forEach((type) => {
         (plugins[type] || []).forEach((el) => {
           const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
           if (el.type !== type) throw new ReferenceError(errorMessage)
