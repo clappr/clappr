@@ -1,4 +1,6 @@
 import ContainerFactory from './container_factory'
+import Loader from '@/components/loader'
+import ContainerPlugin from '@/base/container_plugin'
 
 describe('ContainerFactory', function() {
   beforeEach(() => {
@@ -23,5 +25,19 @@ describe('ContainerFactory', function() {
     const newSource = 'http://some.url/for/video.m3u8'
     this.containerFactory.options = { ...this.options,  source: newSource }
     expect(this.containerFactory.options.source).toEqual(newSource)
+  })
+
+  test('addContainerPlugins method creates registered container plugins for a given container', () => {
+    const plugin = ContainerPlugin.extend({ name: 'test_plugin' })
+    Loader.registerPlugin(plugin)
+
+    const source = 'http://some.url/for/video.mp4'
+    const containerFactory =  new ContainerFactory({}, new Loader(), {})
+    const container = containerFactory.createContainer(source)
+    expect(container.getPlugin('test_plugin')).not.toBeUndefined()
+
+    const pluginInstance = container.getPlugin('test_plugin')
+
+    expect(pluginInstance.container).toEqual(container)
   })
 })
