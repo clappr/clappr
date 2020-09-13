@@ -1,7 +1,5 @@
 import ContainerFactory from './container_factory'
 
-import $ from 'clappr-zepto'
-
 describe('ContainerFactory', function() {
   beforeEach(() => {
     this.options = {
@@ -23,7 +21,7 @@ describe('ContainerFactory', function() {
     expect(this.containerFactory.options.source).toEqual(this.options.source)
     expect(this.containerFactory.options.autoPlay).toEqual(this.options.autoPlay)
     const newSource = 'http://some.url/for/video.m3u8'
-    this.containerFactory.options = $.extend({}, this.options, { source: newSource })
+    this.containerFactory.options = { ...this.options,  source: newSource }
     expect(this.containerFactory.options.source).toEqual(newSource)
   })
 })
