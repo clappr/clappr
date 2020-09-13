@@ -90,4 +90,17 @@ describe('ContainerFactory', function() {
       expect(container.options.src).toEqual(`http:${source}`)
     })
   })
+
+  describe('createContainers method', () => {
+    test('creates a container for each source existent in sources array option', (done) => {
+      const sources = ['http://some.url/for/video.mp4', 'http://another.url/for/video.mp4']
+      const containerFactory =  new ContainerFactory({ sources }, new Loader(), {})
+      containerFactory.createContainers().then(containers => {
+        expect(containers.length).toEqual(2)
+        expect(containers[0].options.src).toEqual(sources[0])
+        expect(containers[1].options.src).toEqual(sources[1])
+        done()
+      })
+    })
+  })
 })
