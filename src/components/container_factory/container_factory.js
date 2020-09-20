@@ -6,11 +6,11 @@
  * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
-import BaseObject from '../../base/base_object'
-import Events from '../../base/events'
-import Container from '../container'
 import $ from 'clappr-zepto'
-import Playback from '../../base/playback'
+import BaseObject from '@/base/base_object'
+import Events from '@/base/events'
+import Container from '@/components/container'
+import Playback from '@/base/playback'
 
 export default class ContainerFactory extends BaseObject {
   get options() { return this._options }
@@ -36,28 +36,26 @@ export default class ContainerFactory extends BaseObject {
   }
 
   createContainer(source) {
-    let resolvedSource = null,
-      mimeType = this.options.mimeType
+    let resolvedSource = null
+    let mimeType = this.options.mimeType
+
     if (typeof source === 'object') {
       resolvedSource = source.source.toString()
-      if (source.mimeType)
-        mimeType = source.mimeType
-
-    } else { resolvedSource = source.toString() }
-
+      if (source.mimeType) mimeType = source.mimeType
+    } else {
+      resolvedSource = source.toString()
+    }
 
     if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
 
-    let options = $.extend({}, this.options, {
-      src: resolvedSource,
-      mimeType: mimeType
-    })
+    let options = { ...this.options, src: resolvedSource, mimeType: mimeType }
+
     const playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
 
     // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
     const playback = playbackPlugin ? new playbackPlugin(options, this._i18n, this.playerError) : new Playback()
 
-    options = $.extend({}, options, { playback: playback })
+    options = { ...options, playback: playback }
 
     const container = new Container(options, this._i18n, this.playerError)
     const defer = $.Deferred()
