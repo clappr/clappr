@@ -1,16 +1,11 @@
 import Loader from './loader'
 
-import PlaybackPlugin from '../../base/playback'
-import CorePlugin from '../../base/core_plugin'
-import ContainerPlugin from '../../base/container_plugin'
-import UIContainerPlugin from '../../base/ui_container_plugin'
+import PlaybackPlugin from '@/base/playback'
+import CorePlugin from '@/base/core_plugin'
+import ContainerPlugin from '@/base/container_plugin'
+import UIContainerPlugin from '@/base/ui_container_plugin'
 
-describe('Loader', function() {
-  let loader
-  beforeEach(() => {
-    loader = new Loader()
-  })
-
+describe('Loader', () => {
   test('starts with an empty plugin registry', () => {
     expect(Loader.registeredPlugins.core).toEqual({})
     expect(Loader.registeredPlugins.container).toEqual({})
@@ -18,6 +13,46 @@ describe('Loader', function() {
 
   test('starts with an empty playback list', () => {
     expect(Loader.registeredPlaybacks).toEqual([])
+  })
+
+  describe('checkVersionSupport function', () => {
+    let corePlugin, containerPlugin
+    beforeEach(() => {
+      corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0' } })
+      containerPlugin = ContainerPlugin.extend({ name: 'container-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
+    })
+
+    afterEach(() => {
+      Loader.clearPlugins()
+    })
+
+    test('inform missing supportedVersion config', () => {
+      const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: {} })
+
+      const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(plugin)
+
+      expect(hasPluginMinimumSupportedVersion).toBeFalsy()
+    })
+
+    test('uses min version to stipulate the not informed max version', () => {
+      const isClapprVersionSupported = Loader.checkVersionSupport(corePlugin)
+
+      expect(isClapprVersionSupported).toBeTruthy()
+    })
+
+    test('inform the version incompatibility', () => {
+      const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0', max: '0.4.1' } })
+
+      const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(plugin)
+
+      expect(hasPluginMinimumSupportedVersion).toBeFalsy()
+    })
+
+    test('inform the version compatibility', () => {
+      const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(containerPlugin)
+
+      expect(hasPluginMinimumSupportedVersion).toBeTruthy()
+    })
   })
 
   describe('registerPlugin', () => {
@@ -70,6 +105,56 @@ describe('Loader', function() {
     })
   })
 
+  describe('unregisterPlugin', () => {
+    let corePlugin, containerPlugin
+    beforeEach(() => {
+      corePlugin = CorePlugin.extend({ name: 'core-plugin' })
+      containerPlugin = ContainerPlugin.extend({ name: 'container-plugin' })
+    })
+
+    afterEach(() => {
+      Loader.clearPlugins()
+    })
+
+    test('rejects invalid plugin parameter', () => {
+      Loader.registerPlugin(corePlugin)
+      const unregistered = Loader.unregisterPlugin(undefined)
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlugins.core['core-plugin']).toEqual(corePlugin)
+    })
+
+    test('rejects unregistered plugin parameter', () => {
+      Loader.registerPlugin(corePlugin)
+      const unregistered = Loader.unregisterPlugin('unregistered-plugin')
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlugins.core['core-plugin']).toEqual(corePlugin)
+    })
+
+    test('remove a plugin from the corresponding scope registry', () => {
+      let registered = Loader.registerPlugin(corePlugin)
+
+      expect(registered).toBeTruthy()
+      expect(Loader.registeredPlugins.core['core-plugin']).toEqual(corePlugin)
+
+      registered = Loader.registerPlugin(containerPlugin)
+
+      expect(registered).toBeTruthy()
+
+      let unregistered = Loader.unregisterPlugin('core-plugin')
+
+      expect(unregistered).toBeTruthy()
+      expect(Loader.registeredPlugins.core).toEqual({})
+      expect(Loader.registeredPlugins.container['container-plugin']).toEqual(containerPlugin)
+
+      unregistered = Loader.unregisterPlugin('container-plugin')
+
+      expect(unregistered).toBeTruthy()
+      expect(Loader.registeredPlugins.container).toEqual({})
+    })
+  })
+
   describe('registerPlayback', () => {
     let playback
     beforeEach(() => {
@@ -87,7 +172,7 @@ describe('Loader', function() {
       expect(Loader.registeredPlaybacks).toEqual([])
     })
 
-    test('rejects a plugin without a valid name', () => {
+    test('rejects a playback without a valid name', () => {
       const invalidPlayback = PlaybackPlugin.extend({ name: '' })
       const registered = Loader.registerPlayback(invalidPlayback)
 
@@ -105,7 +190,7 @@ describe('Loader', function() {
 
     test('overrides a playback with the same name', () => {
       const otherPlayback = PlaybackPlugin.extend({ name: 'some-playback' })
-      Loader.registerPlugin(playback)
+      Loader.registerPlayback(playback)
       const registered = Loader.registerPlayback(otherPlayback)
 
       expect(registered).toBeTruthy()
@@ -114,8 +199,49 @@ describe('Loader', function() {
     })
   })
 
+  describe('unregisterPlayback', () => {
+    let playback
+    beforeEach(() => {
+      playback = PlaybackPlugin.extend({ name: 'some-playback' })
+    })
+
+    afterEach(() => {
+      Loader.clearPlaybacks()
+    })
+
+    test('rejects invalid plugin parameter', () => {
+      Loader.registerPlayback(playback)
+      const unregistered = Loader.unregisterPlayback(undefined)
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlaybacks[0]).toEqual(playback)
+    })
+
+    test('rejects unregistered playback parameter', () => {
+      Loader.registerPlayback(playback)
+      const unregistered = Loader.unregisterPlayback('unregistered-playback')
+
+      expect(unregistered).toBeFalsy()
+      expect(Loader.registeredPlaybacks[0]).toEqual(playback)
+    })
+
+    test('removes a playback', () => {
+      const registered = Loader.registerPlayback(playback)
+
+      expect(registered).toBeTruthy()
+      expect(Loader.registeredPlaybacks[0]).toEqual(playback)
+
+
+      const unregistered = Loader.unregisterPlayback('some-playback')
+
+      expect(unregistered).toBeTruthy()
+      expect(Loader.registeredPlaybacks).toEqual([])
+    })
+  })
+
   describe('addExternalPlugins function', () => {
     test('extends the plugins array with the external ones', () => {
+      const loader = new Loader()
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
       playbackPlugin.canPlay = () => true
       const containerPlugin = ContainerPlugin.extend({ name: 'containerPlugin' })
@@ -138,6 +264,7 @@ describe('Loader', function() {
     })
 
     test('supports an array of plugins and group them by type', () => {
+      const loader = new Loader()
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
       const containerPlugin = ContainerPlugin.extend({ name: 'containerPlugin' })
       const corePlugin = CorePlugin.extend({ name: 'corePlugin' })
@@ -235,7 +362,10 @@ describe('Loader', function() {
     })
 
     describe('overriding plugins', () => {
+      let loader
+
       beforeEach(() => {
+        loader = new Loader()
         loader.containerPlugins = [
           ...loader.containerPlugins,
           ContainerPlugin.extend({ name: 'spinner' })
@@ -327,6 +457,8 @@ describe('Loader', function() {
 
   describe('validateExternalPluginsType function', () => {
     test('throws an exception if plugin type does not match where it\'s being added', () => {
+      const loader = new Loader()
+
       expect(() => { loader.validateExternalPluginsType({ core: [PlaybackPlugin] }) }).toThrow('external playback plugin on core array')
       expect(() => { loader.validateExternalPluginsType({ container: [PlaybackPlugin] }) }).toThrow('external playback plugin on container array')
 
@@ -338,6 +470,20 @@ describe('Loader', function() {
 
       expect(() => { loader.validateExternalPluginsType({ core: [UIContainerPlugin] }) }).toThrow('external container plugin on core array')
       expect(() => { loader.validateExternalPluginsType({ playback: [UIContainerPlugin] }) }).toThrow('external container plugin on playback array')
+
+      const core = CorePlugin.extend({ name: 'core-plugin' })
+      const container = ContainerPlugin.extend({ name: 'container-plugin' })
+      const playback = PlaybackPlugin.extend({ name: 'some-playback' })
+
+      const loader1 = new Loader({
+        core: [core],
+        container: [container],
+        playback: [playback],
+      })
+
+      expect(loader1.corePlugins[0]).toEqual(core)
+      expect(loader1.containerPlugins[0]).toEqual(container)
+      expect(loader1.playbackPlugins[0]).toEqual(playback)
     })
   })
 })

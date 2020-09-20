@@ -1,8 +1,8 @@
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-import Version from '../../utils/version'
-import Log from '../log'
+import Version from '@/utils/version'
+import Log from '@/components/log'
 
 const filterPluginsByType = (plugins, type) => {
   if (!plugins || !type) return {}
@@ -91,7 +91,7 @@ export default (() => {
 
       let { playbacks } = registry
 
-      const previousEntryIdx = playbacks.findIndex((entry) => entry.name === playbackEntry.prototype.name)
+      const previousEntryIdx = playbacks.findIndex((entry) => entry.prototype.name === playbackEntry.prototype.name)
 
       if (previousEntryIdx >= 0) {
         const previousEntry = playbacks[previousEntryIdx]
@@ -240,8 +240,8 @@ export default (() => {
      * @param {Object} plugins the config object with all plugins
      */
     validateExternalPluginsType(plugins) {
-      const plugintypes = ['playback', 'container', 'core']
-      plugintypes.forEach((type) => {
+      const pluginTypes = ['playback', 'container', 'core']
+      pluginTypes.forEach((type) => {
         (plugins[type] || []).forEach((el) => {
           const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
           if (el.type !== type) throw new ReferenceError(errorMessage)
