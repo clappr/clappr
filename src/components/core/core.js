@@ -319,7 +319,16 @@ export default class Core extends UIObject {
     } else {
       const fullscreenEl = Browser.isiOS ? this.activePlayback && this.activePlayback.el : this.el
       if (!fullscreenEl) return
-      Fullscreen.requestFullscreen(fullscreenEl)
+
+      (Browser.isSafari || Browser.isiOS) // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+        ? Fullscreen.requestFullscreen(fullscreenEl)
+        : Fullscreen.requestFullscreen(fullscreenEl).then(
+          _ => _,
+          error => setTimeout(() => {  // fixes the issue https://github.com/clappr/clappr/issues/1860
+            if (!this.isFullscreen()) throw new ReferenceError(error)
+          }, 600),
+        )
+
       !Browser.isiOS && this.$el.addClass('fullscreen')
     }
   }

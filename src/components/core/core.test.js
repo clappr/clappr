@@ -113,12 +113,15 @@ describe('Core', function() {
 
       describe('and is not an iOS Browser', () => {
         test('calls Fullscreen.requestFullscreen with core element', () => {
+          this.core.el.requestFullscreen = () => new Promise((resolve, reject) => this.core.el ? resolve() : reject())
           this.core.toggleFullscreen()
 
           expect(Fullscreen.requestFullscreen).toHaveBeenCalledWith(this.core.el)
+          delete this.core.el.requestFullscreen
         })
 
         test('adds a class "fullscreen" to core element', () => {
+          this.core.el.requestFullscreen = () => new Promise((resolve, reject) => this.core.el ? resolve() : reject())
           jest.spyOn(this.core.$el, 'addClass')
           jest.spyOn(this.core, 'isFullscreen').mockReturnValue(false)
 
@@ -127,6 +130,7 @@ describe('Core', function() {
           this.core.toggleFullscreen()
 
           expect(this.core.$el.addClass).toHaveBeenCalledWith('fullscreen')
+          delete this.core.el.requestFullscreen
         })
       })
 
