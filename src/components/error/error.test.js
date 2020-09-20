@@ -1,6 +1,6 @@
-import Core from '../core'
+import Core from '@/components/core'
 import PlayerError from './error'
-import Events from '../../base/events'
+import Events from '@/base/events'
 
 describe('PlayerError', function() {
   beforeEach(() => {
@@ -14,6 +14,19 @@ describe('PlayerError', function() {
       scope: 'it',
       raw: {},
     }
+  })
+
+  test('has default value to options', () => {
+    const playerError = new PlayerError(undefined, new Core({}))
+
+    expect(playerError.options).toEqual({})
+  })
+
+  test('have reference to access received options on your construction', () => {
+    const options = { testOption: 'some_option' }
+    const playerError = new PlayerError(options, new Core(options))
+
+    expect(playerError.options).toEqual(options)
   })
 
   describe('when error method is called', () => {
