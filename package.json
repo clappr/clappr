@@ -34,7 +34,7 @@
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
-    "@clappr/core": "^0.4.11",
+    "@clappr/core": "^0.4.14",
     "@clappr/hlsjs-playback": "^0.4.1",
     "@clappr/plugins": "^0.4.7",
     "@rollup/plugin-commonjs": "^14.0.0",
