@@ -17,6 +17,10 @@ const dev = !!process.env.DEV
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const minimize = !!process.env.MINIMIZE
 
+const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
+const livereloadPluginOptions = { watch: ['dist', 'public'] }
+const visualizePluginOptions = { open: true }
+
 const plugins = [
   replace({
     VERSION: JSON.stringify(pkg.version),
@@ -29,71 +33,49 @@ const plugins = [
   postcss(),
   size(),
   filesize(),
+  dev && serve(servePluginOptions),
+  dev && livereload(livereloadPluginOptions),
+  analyzeBundle && visualize(visualizePluginOptions),
 ]
 
-dev && plugins.push(
-  serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
-  livereload({ watch: ['dist', 'public'] }),
-)
-
-analyzeBundle && plugins.push(visualize({ open: true }))
-
-const rollupConfig = [
-  {
-    input: 'src/base_bundle.js',
-    output: {
-      name: 'Clappr',
-      file: 'dist/clappr.plainhtml5.js',
-      format: 'umd',
-      sourcemap: true,
-    },
-    plugins,
-  },
-  {
-    input: 'src/main.js',
-    output: {
-      name: 'Clappr',
-      file: pkg.main,
-      format: 'umd',
-      sourcemap: true,
-    },
-    plugins,
-  },
-]
-
-minimize && rollupConfig.push(
+export default [
   {
     input: 'src/base_bundle.js',
     output: [
       {
+        name: 'Clappr',
+        file: 'dist/clappr.plainhtml5.js',
+        format: 'umd',
+        sourcemap: true,
+      },
+      minimize && {
         name: 'Clappr',
         file: 'dist/clappr.plainhtml5.min.js',
-        format: 'umd',
+        format: 'iife',
         sourcemap: true,
-      },
+        plugins: terser(),
+      }
     ],
-    plugins: [
-      ...plugins,
-      terser({ include: [/^.+\.min\.js$/] }),
-    ],
+    plugins,
   },
   {
     input: 'src/main.js',
     output: [
       {
-        file: 'dist/clappr.min.js',
-        format: 'umd',
         name: 'Clappr',
+        file: pkg.main,
+        format: 'umd',
         sourcemap: true,
       },
+      minimize && {
+        file: 'dist/clappr.min.js',
+        format: 'iife',
+        name: 'Clappr',
+        sourcemap: true,
+        plugins: terser(),
+      }
     ],
-    plugins: [
-      ...plugins,
-      terser({
-        include: [/^.+\.min\.js$/],
-      }),
-    ],
+    plugins,
   }
-)
+]
 
-export default rollupConfig
