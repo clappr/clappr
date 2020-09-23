@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
 import html from 'rollup-plugin-html'
 import postcss from 'rollup-plugin-postcss'
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
 import filesize from 'rollup-plugin-filesize'
@@ -24,7 +24,7 @@ const plugins = [
   }),
   resolve(),
   commonjs(),
-  babel({ exclude: 'node_modules/**' }),
+  babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' }),
   html(),
   postcss(),
   size(),
