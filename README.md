@@ -1,8 +1,9 @@
+<h2 align=center><b>Huge changes in the latest version. See <a href=https://github.com/clappr/clappr/releases/tag/0.4.0>0.4.0 version changelog</a> for more information</b></h2>
+
 <p align=center>
   <a href="https://badge.fury.io/js/%40clappr%2Fplayer"><img src="https://badge.fury.io/js/%40clappr%2Fplayer.svg"></a>
   <a href="https://bundlephobia.com/result?p=@clappr/player@latest"><img src="https://img.shields.io/bundlephobia/min/@clappr/player"></a>
-  <a href="https://travis-ci.org/clappr/clappr-player"><img src="https://travis-ci.org/clappr/clappr-player.svg?branch=master"></a>
-  <a href="https://coveralls.io/github/clappr/clappr-player?branch=master"><img src="https://coveralls.io/repos/github/clappr/clappr-player/badge.svg?branch=master"></a>
+  <a href="https://travis-ci.com/clappr/clappr-player"><img src="https://travis-ci.com/clappr/clappr.svg?branch=dev"></a>
   <a href="https://github.com/clappr/clappr-player/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
   <a href="https://www.jsdelivr.com/package/npm/@clappr/player"><img alt="jsDelivr hits (npm scoped)" src="https://img.shields.io/jsdelivr/npm/hm/@clappr/player?color=orange"></a>
 </p>
@@ -45,7 +46,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 Add the following script on your HTML:
 ```html
 <head>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr/player@latest/dist/clappr.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
 </head>
 ```
 Now, create the player:
@@ -163,7 +164,7 @@ https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0d
 https://github.com/clappr/clappr/issues/933#issuecomment-228540381
 
 ### How can I Log messages with Clappr?
-Add this snipet before you instantiate the player `Clappr.Log.setLevel(0)`
+Add this snippet before you instantiate the player `Clappr.Log.setLevel(0)`
 
 ### Common steps to verify issues
 Very often people open issues related to stream **not working, freezing, glitching, stopping, and so on**. You can try the steps below, taking notes about the results:
