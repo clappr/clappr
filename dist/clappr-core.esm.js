@@ -36,6 +36,55 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function");
@@ -278,6 +327,8 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+/* istanbul ignore file */
+
 /**
  * Array.prototype.find
  *
@@ -433,6 +484,7 @@ if (!Array.prototype.findIndex) {
   });
 }
 
+/* istanbul ignore file */
 // https://github.com/mathiasbynens/small
 var mp4 = 'data:video/mp4;base64,AAAAHGZ0eXBpc29tAAACAGlzb21pc28ybXA0MQAAAAhmcmVlAAAC721kYXQhEAUgpBv/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3pwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcCEQBSCkG//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADengAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAsJtb292AAAAbG12aGQAAAAAAAAAAAAAAAAAAAPoAAAALwABAAABAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAB7HRyYWsAAABcdGtoZAAAAAMAAAAAAAAAAAAAAAIAAAAAAAAALwAAAAAAAAAAAAAAAQEAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAACRlZHRzAAAAHGVsc3QAAAAAAAAAAQAAAC8AAAAAAAEAAAAAAWRtZGlhAAAAIG1kaGQAAAAAAAAAAAAAAAAAAKxEAAAIAFXEAAAAAAAtaGRscgAAAAAAAAAAc291bgAAAAAAAAAAAAAAAFNvdW5kSGFuZGxlcgAAAAEPbWluZgAAABBzbWhkAAAAAAAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAADTc3RibAAAAGdzdHNkAAAAAAAAAAEAAABXbXA0YQAAAAAAAAABAAAAAAAAAAAAAgAQAAAAAKxEAAAAAAAzZXNkcwAAAAADgICAIgACAASAgIAUQBUAAAAAAfQAAAHz+QWAgIACEhAGgICAAQIAAAAYc3R0cwAAAAAAAAABAAAAAgAABAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAIAAAABAAAAHHN0c3oAAAAAAAAAAAAAAAIAAAFzAAABdAAAABRzdGNvAAAAAAAAAAEAAAAsAAAAYnVkdGEAAABabWV0YQAAAAAAAAAhaGRscgAAAAAAAAAAbWRpcmFwcGwAAAAAAAAAAAAAAAAtaWxzdAAAACWpdG9vAAAAHWRhdGEAAAABAAAAAExhdmY1Ni40MC4xMDE=';
 var Media = {
@@ -2881,6 +2933,12 @@ Browser.viewport = getViewportSize();
 Browser.device = getDevice(Browser.userAgent);
 typeof window.orientation !== 'undefined' && setViewportOrientation();
 
+var idsCounter = {};
+var videoStack = [];
+var requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
+  window.setTimeout(fn, 1000 / 60);
+}).bind(window);
+var cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
 function assign(obj, source) {
   if (source) {
     for (var prop in source) {
@@ -2944,7 +3002,20 @@ var Fullscreen = {
     return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
   },
   requestFullscreen: function requestFullscreen(el) {
-    if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
+    if (el.requestFullscreen) {
+      return el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      if (typeof el.then === 'function') return el.webkitRequestFullscreen();
+      el.webkitRequestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      return el.mozRequestFullScreen();
+    } else if (el.msRequestFullscreen) {
+      return el.msRequestFullscreen();
+    } else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) {
+      el.querySelector('video').webkitEnterFullScreen();
+    } else if (el.webkitEnterFullScreen) {
+      el.webkitEnterFullScreen();
+    }
   },
   cancelFullscreen: function cancelFullscreen() {
     var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
@@ -3083,7 +3154,6 @@ function seekStringToSeconds() {
 
   return seconds;
 }
-var idsCounter = {};
 function uniqueId(prefix) {
   idsCounter[prefix] || (idsCounter[prefix] = 0);
   var id = ++idsCounter[prefix];
@@ -3096,10 +3166,6 @@ function currentScriptUrl() {
   var scripts = document.getElementsByTagName('script');
   return scripts.length ? scripts[scripts.length - 1].src : '';
 }
-var requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
-  window.setTimeout(fn, 1000 / 60);
-}).bind(window);
-var cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
 function getBrowserLanguage() {
   return window.navigator && window.navigator.language;
 }
@@ -3156,7 +3222,6 @@ function canAutoPlayMedia(cb, options) {
   }
 } // Simple element factory with video recycle feature.
 
-var videoStack = [];
 var DomRecycler = /*#__PURE__*/function () {
   function DomRecycler() {
     _classCallCheck(this, DomRecycler);
@@ -3258,14 +3323,25 @@ var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
 var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
 
 var Log = /*#__PURE__*/function () {
+  _createClass(Log, [{
+    key: "level",
+    get: function get() {
+      return this._level;
+    },
+    set: function set(newLevel) {
+      this._level = newLevel;
+    }
+  }]);
+
   function Log() {
     var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
     var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
 
     _classCallCheck(this, Log);
 
-    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+    this.EXCLUDE_LIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
     this.level = level;
+    this.previousLevel = this.level;
     this.offLevel = offLevel;
   }
 
@@ -3300,17 +3376,12 @@ var Log = /*#__PURE__*/function () {
       } // handle instances where console.log is unavailable
 
 
-      if (window.console && window.console.log) window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
-    }
-  }, {
-    key: "level",
-    value: function level(newLevel) {
-      this.level = newLevel;
+      window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
     }
   }, {
     key: "log",
     value: function log(klass, level, message) {
-      if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
+      if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return;
       if (level < this.level) return;
 
       if (!message) {
@@ -3321,7 +3392,7 @@ var Log = /*#__PURE__*/function () {
       var color = COLORS[level];
       var klassDescription = '';
       if (klass) klassDescription = '[' + klass + ']';
-      if (window.console && window.console.log) window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
+      window.console && window.console.log && window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
     }
   }]);
 
@@ -4563,7 +4634,7 @@ var UIObject = /*#__PURE__*/function (_BaseObject) {
   }, {
     key: "delegateEvents",
     value: function delegateEvents(events) {
-      if (!(events || (events = this.events))) return this;
+      if (!events) events = this.events;
       this.undelegateEvents();
 
       for (var key in events) {
@@ -4717,7 +4788,7 @@ var ErrorMixin = {
       errorData.UI = defaultUI;
     }
 
-    if (this.playerError) this.playerError.createError(errorData);else Log.warn(origin, 'PlayerError is not defined. Error: ', errorData);
+    this.playerError ? this.playerError.createError(errorData) : Log.warn(origin, 'PlayerError is not defined. Error: ', errorData);
     return errorData;
   }
 };
@@ -5548,7 +5619,7 @@ var Playback = /*#__PURE__*/function (_UIObject) {
   _createClass(Playback, [{
     key: "consent",
     value: function consent(cb) {
-      if (typeof cb === 'function') cb();
+      typeof cb === 'function' && cb();
     }
     /**
      * plays the playback.
@@ -5893,8 +5964,8 @@ var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
   }, {
     key: "createContainer",
     value: function createContainer(source) {
-      var resolvedSource = null,
-          mimeType = this.options.mimeType;
+      var resolvedSource = null;
+      var mimeType = this.options.mimeType;
 
       if (_typeof(source) === 'object') {
         resolvedSource = source.source.toString();
@@ -5904,14 +5975,16 @@ var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
       }
 
       if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
-      var options = zepto.extend({}, this.options, {
+
+      var options = _objectSpread2(_objectSpread2({}, this.options), {}, {
         src: resolvedSource,
         mimeType: mimeType
       });
+
       var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType); // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
 
       var playback = playbackPlugin ? new playbackPlugin(options, this._i18n, this.playerError) : new Playback();
-      options = zepto.extend({}, options, {
+      options = _objectSpread2(_objectSpread2({}, options), {}, {
         playback: playback
       });
       var container = new Container(options, this._i18n, this.playerError);
@@ -6350,13 +6423,23 @@ var Core = /*#__PURE__*/function (_UIObject) {
   }, {
     key: "toggleFullscreen",
     value: function toggleFullscreen() {
+      var _this6 = this;
+
       if (this.isFullscreen()) {
         Fullscreen.cancelFullscreen();
         !Browser.isiOS && this.$el.removeClass('fullscreen nocursor');
       } else {
         var fullscreenEl = Browser.isiOS ? this.activePlayback && this.activePlayback.el : this.el;
         if (!fullscreenEl) return;
-        Fullscreen.requestFullscreen(fullscreenEl);
+        Browser.isSafari || Browser.isiOS ? // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+        Fullscreen.requestFullscreen(fullscreenEl) : Fullscreen.requestFullscreen(fullscreenEl).then(function (_) {
+          return _;
+        }, function (error) {
+          return setTimeout(function () {
+            // fixes the issue https://github.com/clappr/clappr/issues/1860
+            if (!_this6.isFullscreen()) throw new ReferenceError(error);
+          }, 600);
+        });
         !Browser.isiOS && this.$el.addClass('fullscreen');
       }
     }
@@ -6379,7 +6462,7 @@ var Core = /*#__PURE__*/function (_UIObject) {
   }, {
     key: "configure",
     value: function configure(options) {
-      var _this6 = this;
+      var _this7 = this;
 
       this._options = zepto.extend(this._options, options);
       this.configureDomRecycler();
@@ -6388,7 +6471,7 @@ var Core = /*#__PURE__*/function (_UIObject) {
       this.trigger(Events.CORE_OPTIONS_CHANGE, options); // Trigger with newly provided options
 
       this.containers.forEach(function (container) {
-        return container.configure(_this6.options);
+        return container.configure(_this7.options);
       });
     }
   }, {
@@ -6589,7 +6672,7 @@ var Loader = (function () {
     plugins: {},
     playbacks: []
   };
-  var currentVersion = "0.4.13";
+  var currentVersion = "0.4.14";
   return /*#__PURE__*/function () {
     _createClass(Loader, null, [{
       key: "checkVersionSupport",
@@ -6636,7 +6719,7 @@ var Loader = (function () {
         Loader.checkVersionSupport(playbackEntry);
         var playbacks = registry.playbacks;
         var previousEntryIdx = playbacks.findIndex(function (entry) {
-          return entry.name === playbackEntry.prototype.name;
+          return entry.prototype.name === playbackEntry.prototype.name;
         });
 
         if (previousEntryIdx >= 0) {
@@ -6810,8 +6893,8 @@ var Loader = (function () {
     }, {
       key: "validateExternalPluginsType",
       value: function validateExternalPluginsType(plugins) {
-        var plugintypes = ['playback', 'container', 'core'];
-        plugintypes.forEach(function (type) {
+        var pluginTypes = ['playback', 'container', 'core'];
+        pluginTypes.forEach(function (type) {
           (plugins[type] || []).forEach(function (el) {
             var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
             if (el.type !== type) throw new ReferenceError(errorMessage);
@@ -7853,7 +7936,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.13"
+        min: "0.4.14"
       };
     }
   }, {
@@ -7922,6 +8005,26 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
     get: function get() {
       return this._isBuffering;
     }
+  }, {
+    key: "isLive",
+    get: function get() {
+      return this.getPlaybackType() === Playback.LIVE;
+    }
+  }, {
+    key: "dvrEnabled",
+    get: function get() {
+      return this.getDuration() >= this._minDvrSize && this.isLive;
+    }
+  }, {
+    key: "minimumDVRSizeConfig",
+    get: function get() {
+      return this.options.playback && this.options.playback.minimumDvrSize;
+    }
+  }, {
+    key: "isValidMinimumDVRSizeConfig",
+    get: function get() {
+      return typeof this.minimumDVRSizeConfig !== 'undefined' && typeof this.minimumDVRSizeConfig === 'number';
+    }
   }]);
 
   function HTML5Video() {
@@ -7947,6 +8050,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
 
     _this.options.playback || (_this.options.playback = _this.options || {});
     _this.options.playback.disableContextMenu = _this.options.playback.disableContextMenu || _this.options.disableVideoTagContextMenu;
+    _this._minDvrSize = _this.isValidMinimumDVRSizeConfig ? _this.minimumDVRSizeConfig : 60;
     var playbackConfig = _this.options.playback;
     var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : _this.options.preload);
     var posterUrl; // FIXME: poster plugin should always convert poster to object with expected properties ?
@@ -8010,7 +8114,11 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
   }, {
     key: "canAutoPlay",
     value: function canAutoPlay(cb) {
-      if (this.options.disableCanAutoPlay) cb(true, null);
+      if (this.options.disableCanAutoPlay) {
+        cb(true, null);
+        return;
+      }
+
       var opts = {
         timeout: this.options.autoPlayTimeout || 500,
         inline: this.options.playback.playInline || false,
@@ -8143,6 +8251,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
     key: "pause",
     value: function pause() {
       this.el.pause();
+      this.dvrEnabled && this._updateDvr(true);
     }
   }, {
     key: "stop",
@@ -8356,8 +8465,24 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
       DomRecycler.garbage(this.el);
     }
   }, {
+    key: "_updateDvr",
+    value: function _updateDvr(status) {
+      this.trigger(Events.PLAYBACK_DVR, status);
+      this.trigger(Events.PLAYBACK_STATS_ADD, {
+        'dvr': status
+      });
+    }
+  }, {
     key: "seek",
     value: function seek(time) {
+      if (time < 0) {
+        Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
+        time = this.getDuration();
+      } // assume live if time within 3 seconds of end of stream
+
+
+      this.dvrEnabled && this._updateDvr(time < this.getDuration() - 3);
+      time += this.el.seekable.start(0);
       this.el.currentTime = time;
     }
   }, {
@@ -8380,17 +8505,27 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
   }, {
     key: "getDuration",
     value: function getDuration() {
+      var _this4 = this;
+
+      if (this.isLive) {
+        try {
+          return this.el.seekable.end(0) - this.el.seekable.start(0);
+        } catch (e) {
+          setTimeout(function () {
+            return _this4._updateSettings();
+          }, 1000);
+        }
+      }
+
       return this.el.duration;
     }
   }, {
     key: "_onTimeUpdate",
     value: function _onTimeUpdate() {
-      if (this.getPlaybackType() === Playback.LIVE) this.trigger(Events.PLAYBACK_TIMEUPDATE, {
-        current: 1,
-        total: 1
-      }, this.name);else this.trigger(Events.PLAYBACK_TIMEUPDATE, {
+      var duration = this.isLive ? this.getDuration() : this.el.duration;
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, {
         current: this.el.currentTime,
-        total: this.el.duration
+        total: duration
       }, this.name);
     }
   }, {
@@ -8606,7 +8741,7 @@ var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.13"
+        min: "0.4.14"
       };
     }
   }, {
@@ -8656,7 +8791,7 @@ var HTMLImg = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.13"
+        min: "0.4.14"
       };
     }
   }, {
@@ -8739,7 +8874,7 @@ var NoOp = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.13"
+        min: "0.4.14"
       };
     }
   }, {
@@ -8895,7 +9030,7 @@ var Strings = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.13"
+        min: "0.4.14"
       };
     }
   }]);
@@ -9030,12 +9165,9 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
       var firstValidSource = this.core.containers.filter(function (container) {
         return container.playback.name !== 'no_op';
       })[0] || this.core.containers[0];
-
-      if (firstValidSource) {
-        this.core.containers.forEach(function (container) {
-          if (container !== firstValidSource) container.destroy();
-        });
-      }
+      firstValidSource && this.core.containers.forEach(function (container) {
+        if (container !== firstValidSource) container.destroy();
+      });
     }
   }, {
     key: "name",
@@ -9046,7 +9178,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.13"
+        min: "0.4.14"
       };
     }
   }]);
@@ -9055,7 +9187,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
 }(CorePlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version = "0.4.13"; // Built-in Plugins/Playbacks
+var version = "0.4.14"; // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings);
 Loader.registerPlugin(SourcesPlugin);
