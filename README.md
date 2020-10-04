@@ -16,7 +16,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 
 :video_camera: Demo
 ---
-[Live demo](http://clappr.io/demo/) to test with a possibility to add external plugins.
+[Live demo](http://clappr.io/demo/) to test with support for external plugins.
 
 :triangular_flag_on_post: Table of Contents
 -----
@@ -32,42 +32,37 @@ Clappr is under development but production-ready. Feel free to open issues and s
 
 :gem: Features
 ---
-* Based on the [HTM5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
-  * Adding large platforms support and facility to use.
+* Uses the [HTM5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
+  * Makes it easy to use while maintaining high platform support.
 * Plugin architecture
-  * Add new features without impact other's functionalities.
+  * Add new features without impacting other functions.
 * Extensible
-  * Add support to video formats or modify existing plugins, just extending them.
+  * Add support for other video formats or modify already existing plugins.
 
 :clapper: Usage
 ---
 ### Via script tag:
 
-Add the following script on your HTML:
+Add the following script in your HTML `<head>`:
 ```html
-<head>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr/core@latest/dist/clappr-core.min.js"></script>
-</head>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr/core@latest/dist/clappr-core.min.js"></script>
 ```
 
-Now, create the player:
+Now, create the player by adding the following to your `<body>`:
 ```html
-<body>
-  <div class="player"></div>
-  <script>
-    var playerElement = document.querySelector(".player");
-
-    var player = new Clappr.Player({
-      source: "http://your.video/here.mp4",
-      parent: playerElement,
-    });
-  </script>
-</body>
+<div class="player"></div>
+<script>
+	var playerElement = document.querySelector(".player");
+	var player = new Clappr.Player({
+		source: "http://your.video/here.mp4",
+		parent: playerElement,
+	});
+</script>
 ```
 
 ### Via npm module:
 
-The project is on npm at https://www.npmjs.com/package/@clappr/core
+This project is available on npm at https://www.npmjs.com/package/@clappr/core
 
 `yarn install @clappr/core --save-dev`
 
