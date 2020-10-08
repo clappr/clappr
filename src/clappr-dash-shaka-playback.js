@@ -11,6 +11,8 @@ class DashShakaPlayback extends HTML5Video {
     }
   }
 
+  static get shakaPlayer() { return shaka }
+
   static canPlay (resource, mimeType = '') {
     shaka.polyfill.installAll()
     let browserSupported = shaka.Player.isBrowserSupported()
