@@ -152,6 +152,22 @@ class DashShakaPlayback extends HTML5Video {
     return super._onPlaying()
   }
 
+  _onSeeking() {
+    this._isSeeking = true
+    return super._onSeeking()
+  }
+
+  _onSeeked() {
+    /*
+      The `_onSeeked` should not be called while buffering.
+      It will be executed on bufferfull.
+    */
+    if (this._isBuffering) return
+
+    this._isSeeking = false
+    return super._onSeeked()
+  }
+
   _startTimeUpdateTimer() {
     this._stopTimeUpdateTimer()
     this._timeUpdateTimer = setInterval(() => {
@@ -391,6 +407,7 @@ class DashShakaPlayback extends HTML5Video {
     this._isBuffering = e.buffering
     let event = this._isBuffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
+    if (!this._isBuffering && this._isSeeking) this._onSeeked()
     if (!this._isBuffering) this._onPlaying()
   }
 
