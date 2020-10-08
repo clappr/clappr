@@ -374,9 +374,13 @@ class DashShakaPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
 
+  // skipping HTML5 `_handleBufferingEvents` in favor of shaka buffering events
+  _handleBufferingEvents() {}
+
   _onBuffering (e) {
     if (this._stopped) return
-    let event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
+    this._isBuffering = e.buffering
+    let event = this._isBuffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
   }
 
