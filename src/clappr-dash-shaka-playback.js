@@ -143,6 +143,15 @@ class DashShakaPlayback extends HTML5Video {
     this._startTimeUpdateTimer()
   }
 
+  _onPlaying() {
+    /*
+      The `_onPlaying` should not be called while buffering: https://github.com/google/shaka-player/issues/2230
+      It will be executed on bufferfull.
+    */
+    if (this._isBuffering) return
+    return super._onPlaying()
+  }
+
   _startTimeUpdateTimer() {
     this._stopTimeUpdateTimer()
     this._timeUpdateTimer = setInterval(() => {
@@ -382,6 +391,7 @@ class DashShakaPlayback extends HTML5Video {
     this._isBuffering = e.buffering
     let event = this._isBuffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
+    if (!this._isBuffering) this._onPlaying()
   }
 
   _loaded () {
