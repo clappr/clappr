@@ -102,6 +102,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
   }
 
+  get bandwidthEstimate() {
+    return this._hls && this._hls.bandwidthEstimate
+  }
+
   static get HLSJS() {
     return HLSJS
   }
