@@ -377,7 +377,7 @@ class DashShakaPlayback extends HTML5Video {
     let player = new shaka.Player(this.el)
     player.addEventListener('error', this._onError.bind(this))
     player.addEventListener('adaptation', this._onAdaptation.bind(this))
-    player.addEventListener('buffering', this._onBuffering.bind(this))
+    player.addEventListener('buffering', this._handleShakaBufferingEvents.bind(this))
     return player
   }
 
@@ -402,13 +402,21 @@ class DashShakaPlayback extends HTML5Video {
   // skipping HTML5 `_handleBufferingEvents` in favor of shaka buffering events
   _handleBufferingEvents() {}
 
-  _onBuffering (e) {
+  _handleShakaBufferingEvents(e) {
     if (this._stopped) return
+
     this._isBuffering = e.buffering
-    let event = this._isBuffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
-    this.trigger(event)
-    if (!this._isBuffering && this._isSeeking) this._onSeeked()
-    if (!this._isBuffering && this.isPlaying()) this._onPlaying()
+    this._isBuffering ? this._onBuffering() : this._onBufferfull()
+  }
+
+  _onBuffering () {
+    this.trigger(Events.PLAYBACK_BUFFERING)
+  }
+
+  _onBufferfull() {
+    this.trigger(Events.PLAYBACK_BUFFERFULL)
+    if (this._isSeeking) this._onSeeked()
+    if (this.isPlaying()) this._onPlaying()
   }
 
   _loaded () {
