@@ -74,6 +74,21 @@ describe('Container', function() {
     expect(this.container.timeUpdated).toHaveBeenCalledWith({ current: 2, total: 40 })
   })
 
+  test('listens to playback:seek event', (done) => {
+    let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    let container = new Container({ playback: playback })
+    let callback = jest.fn()
+
+    container.bindEvents()
+    container.on(Events.CONTAINER_SEEK, callback)
+    container.on(Events.CONTAINER_SEEK, () => {
+      expect(callback).toHaveBeenCalled()
+      done()
+    })
+
+    playback.el.dispatchEvent(new Event('seeking'))
+  })
+
   test('listens to playback:seeked event', (done) => {
     let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
     let container = new Container({ playback: playback })
