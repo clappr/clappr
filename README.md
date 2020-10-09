@@ -161,6 +161,15 @@ var player = new Clappr.Player({
 
 ### Seek time
 Inform the current time when a hover on media control seekbar occurs.
+```javascript
+var player = new Clappr.Player({
+  source: "http://your.video/here.mp4",
+  // Only for live stream with DVR
+  actualLiveTime: true, // default is false
+  // Meant to be used with actualLiveTime
+  actualLiveServerTime:  "2015/11/26 06:01:03" // default is current date
+});
+```
 
 ### Spinner three bounce
 Signals when player enter on buffering state.
