@@ -173,6 +173,7 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged)
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl)
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl)
+    this.listenTo(this.playback, Events.PLAYBACK_SEEK, this.onSeek)
     this.listenTo(this.playback, Events.PLAYBACK_SEEKED, this.onSeeked)
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.onEnded)
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing)
@@ -372,8 +373,11 @@ export default class Container extends UIObject {
   }
 
   seek(time) {
-    this.trigger(Events.CONTAINER_SEEK, time, this.name)
     this.playback.seek(time)
+  }
+
+  onSeek(time) {
+    this.trigger(Events.CONTAINER_SEEK, time, this.name)
   }
 
   onSeeked() {
