@@ -11,6 +11,8 @@ class DashShakaPlayback extends HTML5Video {
     }
   }
 
+  static get shakaPlayer() { return shaka }
+
   static canPlay (resource, mimeType = '') {
     shaka.polyfill.installAll()
     let browserSupported = shaka.Player.isBrowserSupported()
@@ -139,6 +141,31 @@ class DashShakaPlayback extends HTML5Video {
     this._src = this.el.src
     super.play()
     this._startTimeUpdateTimer()
+  }
+
+  _onPlaying() {
+    /*
+      The `_onPlaying` should not be called while buffering: https://github.com/google/shaka-player/issues/2230
+      It will be executed on bufferfull.
+    */
+    if (this._isBuffering) return
+    return super._onPlaying()
+  }
+
+  _onSeeking() {
+    this._isSeeking = true
+    return super._onSeeking()
+  }
+
+  _onSeeked() {
+    /*
+      The `_onSeeked` should not be called while buffering.
+      It will be executed on bufferfull.
+    */
+    if (this._isBuffering) return
+
+    this._isSeeking = false
+    return super._onSeeked()
   }
 
   _startTimeUpdateTimer() {
@@ -350,7 +377,7 @@ class DashShakaPlayback extends HTML5Video {
     let player = new shaka.Player(this.el)
     player.addEventListener('error', this._onError.bind(this))
     player.addEventListener('adaptation', this._onAdaptation.bind(this))
-    player.addEventListener('buffering', this._onBuffering.bind(this))
+    player.addEventListener('buffering', this._handleShakaBufferingEvents.bind(this))
     return player
   }
 
@@ -372,10 +399,24 @@ class DashShakaPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
 
-  _onBuffering (e) {
+  // skipping HTML5 `_handleBufferingEvents` in favor of shaka buffering events
+  _handleBufferingEvents() {}
+
+  _handleShakaBufferingEvents(e) {
     if (this._stopped) return
-    let event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
-    this.trigger(event)
+
+    this._isBuffering = e.buffering
+    this._isBuffering ? this._onBuffering() : this._onBufferfull()
+  }
+
+  _onBuffering () {
+    this.trigger(Events.PLAYBACK_BUFFERING)
+  }
+
+  _onBufferfull() {
+    this.trigger(Events.PLAYBACK_BUFFERFULL)
+    if (this._isSeeking) this._onSeeked()
+    if (this.isPlaying()) this._onPlaying()
   }
 
   _loaded () {
