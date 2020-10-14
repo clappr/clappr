@@ -237,6 +237,11 @@ var DashShakaPlayback = function (_HTML5Video) {
         SHAKA_READY: 'shaka:ready'
       };
     }
+  }, {
+    key: 'shakaPlayer',
+    get: function get() {
+      return _shakaPlayer2.default;
+    }
   }]);
 
   function DashShakaPlayback() {
@@ -304,6 +309,34 @@ var DashShakaPlayback = function (_HTML5Video) {
       this._src = this.el.src;
       _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'play', this).call(this);
       this._startTimeUpdateTimer();
+    }
+  }, {
+    key: '_onPlaying',
+    value: function _onPlaying() {
+      /*
+        The `_onPlaying` should not be called while buffering: https://github.com/google/shaka-player/issues/2230
+        It will be executed on bufferfull.
+      */
+      if (this._isBuffering) return;
+      return _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_onPlaying', this).call(this);
+    }
+  }, {
+    key: '_onSeeking',
+    value: function _onSeeking() {
+      this._isSeeking = true;
+      return _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_onSeeking', this).call(this);
+    }
+  }, {
+    key: '_onSeeked',
+    value: function _onSeeked() {
+      /*
+        The `_onSeeked` should not be called while buffering.
+        It will be executed on bufferfull.
+      */
+      if (this._isBuffering) return;
+
+      this._isSeeking = false;
+      return _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_onSeeked', this).call(this);
     }
   }, {
     key: '_startTimeUpdateTimer',
@@ -479,7 +512,7 @@ var DashShakaPlayback = function (_HTML5Video) {
       var player = new _shakaPlayer2.default.Player(this.el);
       player.addEventListener('error', this._onError.bind(this));
       player.addEventListener('adaptation', this._onAdaptation.bind(this));
-      player.addEventListener('buffering', this._onBuffering.bind(this));
+      player.addEventListener('buffering', this._handleShakaBufferingEvents.bind(this));
       return player;
     }
   }, {
@@ -498,12 +531,31 @@ var DashShakaPlayback = function (_HTML5Video) {
       this._lastTimeUpdate = update;
       this.trigger(_clappr.Events.PLAYBACK_TIMEUPDATE, update, this.name);
     }
+
+    // skipping HTML5 `_handleBufferingEvents` in favor of shaka buffering events
+
+  }, {
+    key: '_handleBufferingEvents',
+    value: function _handleBufferingEvents() {}
+  }, {
+    key: '_handleShakaBufferingEvents',
+    value: function _handleShakaBufferingEvents(e) {
+      if (this._stopped) return;
+
+      this._isBuffering = e.buffering;
+      this._isBuffering ? this._onBuffering() : this._onBufferfull();
+    }
   }, {
     key: '_onBuffering',
-    value: function _onBuffering(e) {
-      if (this._stopped) return;
-      var event = e.buffering ? _clappr.Events.PLAYBACK_BUFFERING : _clappr.Events.PLAYBACK_BUFFERFULL;
-      this.trigger(event);
+    value: function _onBuffering() {
+      this.trigger(_clappr.Events.PLAYBACK_BUFFERING);
+    }
+  }, {
+    key: '_onBufferfull',
+    value: function _onBufferfull() {
+      this.trigger(_clappr.Events.PLAYBACK_BUFFERFULL);
+      if (this._isSeeking) this._onSeeked();
+      if (this.isPlaying()) this._onPlaying();
     }
   }, {
     key: '_loaded',
