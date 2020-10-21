@@ -425,8 +425,8 @@ export default class HTML5Video extends Playback {
   }
 
   _onSeeking() {
+    this.trigger(Events.PLAYBACK_SEEK, this.getCurrentTime())
     this._handleBufferingEvents()
-    this.trigger(Events.PLAYBACK_SEEK)
   }
 
   _onSeeked() {
