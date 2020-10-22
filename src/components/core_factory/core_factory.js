@@ -22,9 +22,8 @@ export default class CoreFactory extends BaseObject {
    * @param {Player} player the player object
    */
   constructor(player) {
-    super()
+    super(player.options)
     this.player = player
-    this._options = player.options
   }
 
   /**
