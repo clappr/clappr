@@ -9,4 +9,12 @@ describe('CoreFactory', () => {
   test('creates player reference on constructor', () => {
     expect(bareFactory.player).toEqual(barePlayer)
   })
+
+  test('have a getter called loader', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(bareFactory), 'loader').get).toBeTruthy()
+  })
+
+  test('loader getter returns current player loader reference', () => {
+    expect(bareFactory.loader).toEqual(barePlayer.loader)
+  })
 })
