@@ -72,4 +72,30 @@ describe('CoreFactory', () => {
       expect(coreInstance instanceof Core).toBeTruthy()
     })
   })
+
+  describe('setupExternalInterface method', () => {
+    class TestPlugin extends CorePlugin {
+      get name() { return 'test_plugin' }
+      constructor(core) {
+        super(core)
+        this.message = ''
+      }
+      addMessage(message) { this.message = message }
+      getExternalInterface() { return { addMessage: message => this.addMessage(message) } }
+    }
+
+    const player = new Player(bareOptions)
+    const factory = new CoreFactory(player)
+    factory.loader.corePlugins = [TestPlugin]
+    factory.create()
+    factory.setupExternalInterface(factory.core.getPlugin('test_plugin'))
+
+    test('binds registered methods in core plugins on Player component ', () => {
+      expect(player.addMessage).not.toBeUndefined()
+
+      player.addMessage('My awesome test!')
+
+      expect(factory.core.getPlugin('test_plugin').message).toEqual('My awesome test!')
+    })
+  })
 })
