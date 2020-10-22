@@ -1,5 +1,6 @@
 import CoreFactory from './core_factory'
 import Core from '@/components/core'
+import CorePlugin from '@/base/core_plugin'
 import Player from '@/components/player'
 
 describe('CoreFactory', () => {
@@ -38,6 +39,32 @@ describe('CoreFactory', () => {
 
     test('trigger container creation for the core instance', () => {
       expect(factory.core.activeContainer).not.toBeUndefined()
+    })
+
+    test('returns the internal core instance', () => {
+      expect(coreInstance).toEqual(factory.core)
+      expect(coreInstance instanceof Core).toBeTruthy()
+    })
+  })
+
+  describe('addCorePlugins method', () => {
+    const factory = new CoreFactory(barePlayer)
+    const plugin = CorePlugin.extend({ name: 'test_plugin' })
+    factory.loader.corePlugins = [plugin]
+    factory.create()
+    jest.spyOn(factory, 'setupExternalInterface')
+    const coreInstance = factory.addCorePlugins()
+
+    test('adds registered core plugins into the core instance', () => {
+      expect(factory.core.getPlugin('test_plugin')).not.toBeUndefined()
+
+      const pluginInstance = factory.core.getPlugin('test_plugin')
+
+      expect(pluginInstance.core).toEqual(factory.core)
+    })
+
+    test('calls setupExternalInterface method for each plugin added', () => {
+      expect(factory.setupExternalInterface).toHaveBeenCalledTimes(1)
     })
 
     test('returns the internal core instance', () => {
