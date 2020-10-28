@@ -410,13 +410,9 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   pause() {
-    if (!this._hls)
-      return
-
-    super.pause()
-    if (this.dvrEnabled)
-      this._updateDvr(true)
-
+    if (!this._hls) return
+    this.el.pause()
+    if (this.dvrEnabled) this._updateDvr(true)
   }
 
   stop() {
