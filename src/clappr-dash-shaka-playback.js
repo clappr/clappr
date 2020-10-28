@@ -121,10 +121,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   pause() {
-    super.pause()
-
-    if (this.dvrEnabled)
-      this._updateDvr(true)
+    this.el.pause()
+    this.dvrEnabled && this._updateDvr(true)
   }
 
   play () {
