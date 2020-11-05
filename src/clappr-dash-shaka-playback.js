@@ -117,14 +117,12 @@ class DashShakaPlayback extends HTML5Video {
     // assume live if time within 3 seconds of end of stream
     this.dvrEnabled && this._updateDvr(time < this._duration-3)
     time += this._startTime
-    super.seek(time)
+    this.el.currentTime = time
   }
 
   pause() {
-    super.pause()
-
-    if (this.dvrEnabled)
-      this._updateDvr(true)
+    this.el.pause()
+    this.dvrEnabled && this._updateDvr(true)
   }
 
   play () {
