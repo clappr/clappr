@@ -253,7 +253,7 @@ export default class HlsjsPlayback extends HTML5Video {
     // assume live if time within 3 seconds of end of stream
     this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
     time += this._startTime
-    super.seek(time)
+    this.el.currentTime = time
   }
 
   seekToLivePoint() {
@@ -410,13 +410,9 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   pause() {
-    if (!this._hls)
-      return
-
-    super.pause()
-    if (this.dvrEnabled)
-      this._updateDvr(true)
-
+    if (!this._hls) return
+    this.el.pause()
+    if (this.dvrEnabled) this._updateDvr(true)
   }
 
   stop() {
