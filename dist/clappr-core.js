@@ -5099,6 +5099,7 @@
         this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged);
         this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
         this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
+        this.listenTo(this.playback, Events.PLAYBACK_SEEK, this.onSeek);
         this.listenTo(this.playback, Events.PLAYBACK_SEEKED, this.onSeeked);
         this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.onEnded);
         this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
@@ -5345,8 +5346,12 @@
     }, {
       key: "seek",
       value: function seek(time) {
-        this.trigger(Events.CONTAINER_SEEK, time, this.name);
         this.playback.seek(time);
+      }
+    }, {
+      key: "onSeek",
+      value: function onSeek(time) {
+        this.trigger(Events.CONTAINER_SEEK, time, this.name);
       }
     }, {
       key: "onSeeked",
@@ -6678,7 +6683,7 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.14";
+    var currentVersion = "0.4.15";
     return /*#__PURE__*/function () {
       _createClass(Loader, null, [{
         key: "checkVersionSupport",
@@ -7942,7 +7947,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.14"
+          min: "0.4.15"
         };
       }
     }, {
@@ -8406,9 +8411,9 @@
     }, {
       key: "_onSeeking",
       value: function _onSeeking() {
-        this._handleBufferingEvents();
+        this.trigger(Events.PLAYBACK_SEEK, this.getCurrentTime());
 
-        this.trigger(Events.PLAYBACK_SEEK);
+        this._handleBufferingEvents();
       }
     }, {
       key: "_onSeeked",
@@ -8747,7 +8752,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.14"
+          min: "0.4.15"
         };
       }
     }, {
@@ -8797,7 +8802,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.14"
+          min: "0.4.15"
         };
       }
     }, {
@@ -8880,7 +8885,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.14"
+          min: "0.4.15"
         };
       }
     }, {
@@ -9036,7 +9041,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.14"
+          min: "0.4.15"
         };
       }
     }]);
@@ -9184,7 +9189,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.14"
+          min: "0.4.15"
         };
       }
     }]);
@@ -9193,7 +9198,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version = "0.4.14"; // Built-in Plugins/Playbacks
+  var version = "0.4.15"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlugin(SourcesPlugin);
