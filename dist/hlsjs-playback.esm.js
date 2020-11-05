@@ -21364,6 +21364,11 @@ var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
       if (this._segmentTargetDuration === null) return 0;
       return this._extrapolatedWindowNumSegments * this._segmentTargetDuration;
     }
+  }, {
+    key: "bandwidthEstimate",
+    get: function get() {
+      return this._hls && this._hls.bandwidthEstimate;
+    }
   }], [{
     key: "HLSJS",
     get: function get() {
@@ -21578,8 +21583,7 @@ var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
 
       this.dvrEnabled && this._updateDvr(time < this.getDuration() - 3);
       time += this._startTime;
-
-      _get(_getPrototypeOf(HlsjsPlayback.prototype), "seek", this).call(this, time);
+      this.el.currentTime = time;
     }
   }, {
     key: "seekToLivePoint",
@@ -21767,9 +21771,7 @@ var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
     key: "pause",
     value: function pause() {
       if (!this._hls) return;
-
-      _get(_getPrototypeOf(HlsjsPlayback.prototype), "pause", this).call(this);
-
+      this.el.pause();
       if (this.dvrEnabled) this._updateDvr(true);
     }
   }, {
