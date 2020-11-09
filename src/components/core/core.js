@@ -4,17 +4,11 @@
 
 import { isNumber, Fullscreen, DomRecycler } from '../../utils'
 
-import Events from '../../base/events'
-import UIObject from '../../base/ui_object'
-import UICorePlugin from '../../base/ui_core_plugin'
-import Browser from '../../components/browser'
-import ContainerFactory from '../../components/container_factory'
-import PlayerError from '../../components/error'
-import ErrorMixin from '../../base/error_mixin'
+import Styler from '@/base/styler'
 
 import $ from 'clappr-zepto'
 
-import './public/style.scss'
+import CoreStyle from './public/style.scss'
 
 /**
  * The Core is responsible to manage Containers and the player state.
@@ -358,7 +352,10 @@ export default class Core extends UIObject {
   }
 
   appendToParent() {
-    let hasCoreParent = this.$el.parent() && this.$el.parent().length
+    const style = Styler.getStyleFor(CoreStyle.toString(), { baseUrl: this.options.baseUrl })
+    const optional = Styler.getStyleFor(OptionalStyle.toString(), { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
+    const hasCoreParent = this.$el.parent() && this.$el.parent().length
     !hasCoreParent && this.$el.appendTo(this.options.parentElement)
   }
 
