@@ -2,9 +2,16 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, Fullscreen, DomRecycler } from '../../utils'
+import { isNumber, Fullscreen, DomRecycler } from '@/utils'
 
 import Styler from '@/base/styler'
+import Events from '@/base/events'
+import UIObject from '@/base/ui_object'
+import UICorePlugin from '@/base/ui_core_plugin'
+import Browser from '@/components/browser'
+import ContainerFactory from '@/components/container_factory'
+import PlayerError from '@/components/error'
+import ErrorMixin from '@/base/error_mixin'
 
 import $ from 'clappr-zepto'
 
