@@ -16,6 +16,7 @@ import ErrorMixin from '@/base/error_mixin'
 import $ from 'clappr-zepto'
 
 import CoreStyle from './public/style.scss'
+import OptionalStyle from './public/optional.scss'
 
 /**
  * The Core is responsible to manage Containers and the player state.
@@ -362,6 +363,8 @@ export default class Core extends UIObject {
     const style = Styler.getStyleFor(CoreStyle.toString(), { baseUrl: this.options.baseUrl })
     const optional = Styler.getStyleFor(OptionalStyle.toString(), { baseUrl: this.options.baseUrl })
     this.$el.append(style[0])
+    this.options.resetStyle && this.$el.append(optional[0])
+
     const hasCoreParent = this.$el.parent() && this.$el.parent().length
     !hasCoreParent && this.$el.appendTo(this.options.parentElement)
   }
