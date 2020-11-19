@@ -1,7 +1,6 @@
 #!/bin/bash
 
-PROJECT_NAME='clappr'
-CDN_PATH="npm/$PROJECT_NAME@latest/dist/$PROJECT_NAME.min.js"
+CDN_PATH="npm/@clappr/player@latest/dist/clappr.min.js"
 
 update_dependencies() {
   echo 'updating dependencies' &&
@@ -15,9 +14,9 @@ update_version() {
 }
 
 build() {
-  echo "building $PROJECT_NAME.js" &&
+  echo "building clappr.js" &&
   yarn build &&
-  echo "building $PROJECT_NAME.min.js" &&
+  echo "building clappr.min.js" &&
   yarn release
 }
 
