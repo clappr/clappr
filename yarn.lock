@@ -828,10 +828,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.14":
-  version "0.4.14"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.14.tgz#2093ca9c2e9e857d96ece1e4075b38a6c095b073"
-  integrity sha512-n5B1t2e7GnXLQfTeDZyq1uUxr0SXozKFv3mSqLYETjPks6iXtrkdUxAOmgi5llTP5DHYCAiH5+fcNXXy9Gv0rA==
+"@clappr/core@^0.4.15":
+  version "0.4.15"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.15.tgz#a4d2cf629ca596caea06cc2344c74d2d4968e5c7"
+  integrity sha512-x9nuS4Wrk64yzoAeUTKXM47y9zL5ks1jkcWlb5BQfh4zud0yZMOTyrNOyFLLUWPZTgJo14c+huyyCSVaZXcYrQ==
 
 "@clappr/hlsjs-playback@^0.5.0":
   version "0.5.0"
