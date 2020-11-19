@@ -122,7 +122,7 @@ export default class Container extends UIObject {
     this.volume = 100
     this.playback = options.playback
     this.playerError = playerError
-    this.settings = $.extend({}, this.playback.settings)
+    this.settings = $.extend(true, {}, this.playback.settings)
     this.isReady = false
     this.mediaControlDisabled = false
     this.plugins = [this.playback]
@@ -510,7 +510,7 @@ export default class Container extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
-    this._options = $.extend(this._options, options)
+    this._options = $.extend(true, this._options, options)
     this.updateStyle()
     this.playback.configure(this.options)
     this.trigger(Events.CONTAINER_OPTIONS_CHANGE)

@@ -190,7 +190,7 @@ export default class UIObject extends BaseObject {
    */
   _ensureElement() {
     if (!this.el) {
-      const attrs = $.extend({}, this.attributes)
+      const attrs = $.extend(true, {}, this.attributes)
       if (this.id) attrs.id = this.id
       if (this.className) attrs['class'] = this.className
       const $el = $(DomRecycler.create(this.tagName)).attr(attrs)
