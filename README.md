@@ -105,6 +105,7 @@ You can check the plugins used on Clappr player via `@clappr/plugins` [here](htt
 |Scroll Text Overlay | Ready | Yes | https://github.com/Lethea/clappr-marquee-overlay |
 |Playback Speed Controller | Ready | Yes | https://github.com/Lethea/clapper-playback-speed-plugin-extended |
 |FLV | Ready | Yes | https://github.com/andrefilimono/clappr-flvjs-playback |
+|Context Menu | Ready | Yes | https://github.com/joaopaulovieira/clappr-context-menu-plugin |
 
 #### External Integrations
 
