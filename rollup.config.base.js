@@ -4,11 +4,9 @@ const babel = require('rollup-plugin-babel')
 const commonjs = require('@rollup/plugin-commonjs')
 const html = require('rollup-plugin-html')
 const namedDirectory = require('rollup-plugin-named-directory')
-const nodeBuiltins = require('rollup-plugin-node-builtins')
-const nodeGlobals = require('rollup-plugin-node-globals')
 const postcss = require('rollup-plugin-postcss')
 const replace = require('@rollup/plugin-replace')
-const resolve = require('@rollup/plugin-node-resolve')
+const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const svg = require('rollup-plugin-svg')
 
 const { version } = require('./package.json')
@@ -43,9 +41,7 @@ const baseConfig = {
       CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
     }),
     commonjs(),
-    nodeBuiltins(),
-    nodeGlobals(),
-    resolve(),
+    nodeResolve(),
     namedDirectory(),
     babel({
       exclude: 'node_modules/**'
