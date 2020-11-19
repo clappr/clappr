@@ -838,10 +838,10 @@
   resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-0.4.1.tgz#a8f1ce771e1eef888f5f450951b4662aa75a0ae5"
   integrity sha512-wM/CtYtLtLddTTLvNTpCrJypiow8DMEHSTxEUtTXnOLNG+XihNFqFfRGjj24kzxkNobw6dGiLADsvhrQ8gxGbQ==
 
-"@clappr/plugins@^0.4.8":
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.8.tgz#dec9ed230c0a9f791f2556d726ed04efe6239bc7"
-  integrity sha512-S52ybQuqTQObqFq0juO5ITnmvmHZr0/5O//IFnDoXGjY5xXN+KIBb5WSHazFUky1najIxXpMVKSD1ZUfYZlBhw==
+"@clappr/plugins@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.9.tgz#dbe798cf1b74f2723a84776d34b4f803a8a8f500"
+  integrity sha512-h17Wt8zyxw9Lw2wFeZ3WtEFzrEbSOobKVSGKnTfI6L3tdje+pvRbf4L6AR2oKY22GIbGGlBrgeeaFIeFbD2DIg==
 
 "@commitlint/execute-rule@^11.0.0":
   version "11.0.0"
