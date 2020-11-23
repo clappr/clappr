@@ -9,6 +9,8 @@ const { now, assign, listContainsIgnoreCase } = Utils
 
 const AUTO = -1
 
+Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA')
+
 export default class HlsjsPlayback extends HTML5Video {
   get name() { return 'hls' }
 
@@ -163,10 +165,15 @@ export default class HlsjsPlayback extends HTML5Video {
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitch(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
+    this._hls.on(HLSJS.Events.FRAG_PARSING_METADATA, (evt, data) => this._onFragmentParsingMetadata(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
     this._hls.attachMedia(this.el)
+  }
+
+  _onFragmentParsingMetadata(evt, data) {
+    this.trigger(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA, { evt, data })
   }
 
   render() {
