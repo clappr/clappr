@@ -6,12 +6,13 @@
  * Container is responsible for the video rendering and state
  */
 
-import Events from '../../base/events'
-import UIObject from '../../base/ui_object'
-import ErrorMixin from '../../base/error_mixin'
-import { DoubleEventHandler } from '../../utils'
+import Events from '@/base/events'
+import UIObject from '@/base/ui_object'
+import ErrorMixin from '@/base/error_mixin'
+import Styler from '@/base/styler'
+import { DoubleEventHandler } from '@/utils'
 
-import './public/style.scss'
+import ContainerStyle from './public/style.scss'
 
 import $ from 'clappr-zepto'
 
@@ -516,6 +517,8 @@ export default class Container extends UIObject {
   }
 
   render() {
+    const style = Styler.getStyleFor(ContainerStyle.toString(), { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
     this.$el.append(this.playback.render().el)
     this.updateStyle()
     this.checkResize()

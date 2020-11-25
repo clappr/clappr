@@ -345,7 +345,12 @@ By default, if the URL contains a time then the media will seek to this point.
 
 Example: `example.com?t=100` would start the media at 100 seconds.
 
-You can disable this behavior setting this option with the value `false`.
+You can disable this behaviour setting this option with the value `false`.
+
+#### includeResetStyle
+> Default value: `true`
+
+By default, Clappr reset a bunch of styles that may impact your own style. With this option, it's possible to enable/disable  the use of [_resets.scss](https://github.com/clappr/clappr-core/blob/master/src/base/scss/_reset.scss).
 
 ### Playback Configuration
 Clappr has a specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived playbacks).
