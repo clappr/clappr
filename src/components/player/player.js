@@ -236,7 +236,7 @@ export default class Player extends BaseObject {
       height: 360,
       baseUrl: baseUrl,
       allowUserInteraction: Browser.isMobile,
-      resetStyle: true,
+      includeResetStyle: true,
       playback: playbackDefaultOptions
     }
     this._options = $.extend(defaultOptions, options)

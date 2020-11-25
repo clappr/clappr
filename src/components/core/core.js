@@ -363,7 +363,7 @@ export default class Core extends UIObject {
     const style = Styler.getStyleFor(CoreStyle.toString(), { baseUrl: this.options.baseUrl })
     const optional = Styler.getStyleFor(OptionalStyle.toString(), { baseUrl: this.options.baseUrl })
     this.$el.append(style[0])
-    this.options.resetStyle && this.$el.append(optional[0])
+    this.options.includeResetStyle && this.$el.append(optional[0])
 
     const hasCoreParent = this.$el.parent() && this.$el.parent().length
     !hasCoreParent && this.$el.appendTo(this.options.parentElement)
