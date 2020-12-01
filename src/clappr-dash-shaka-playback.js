@@ -37,6 +37,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get seekRange() {
+    if (!this.shakaPlayerInstance) return { start: 0, end: 0}
+
     return this.shakaPlayerInstance.seekRange()
   }
 
@@ -75,6 +77,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   getCurrentTime() {
+    if (!this.shakaPlayerInstance) return 0
+
     return this.shakaPlayerInstance.getMediaElement().currentTime - this.seekRange.start
   }
 
@@ -83,6 +87,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get presentationTimeline() {
+    if (!this.shakaPlayerInstance) return
+
     return this.shakaPlayerInstance.getManifest().presentationTimeline
   }
 
@@ -101,6 +107,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   getProgramDateTime() {
+    if (!this.shakaPlayerInstance) return 0
+
     return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000)
   }
 
