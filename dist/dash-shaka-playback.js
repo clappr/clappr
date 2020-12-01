@@ -798,6 +798,8 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'getCurrentTime',
     value: function getCurrentTime() {
+      if (!this.shakaPlayerInstance) return 0;
+
       return this.shakaPlayerInstance.getMediaElement().currentTime - this.seekRange.start;
     }
   }, {
@@ -823,6 +825,8 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'seekRange',
     get: function get() {
+      if (!this.shakaPlayerInstance) return { start: 0, end: 0 };
+
       return this.shakaPlayerInstance.seekRange();
     }
   }, {
@@ -868,6 +872,8 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'presentationTimeline',
     get: function get() {
+      if (!this.shakaPlayerInstance) return;
+
       return this.shakaPlayerInstance.getManifest().presentationTimeline;
     }
   }, {
@@ -922,6 +928,8 @@ var DashShakaPlayback = function (_HTML5Video) {
   _createClass(DashShakaPlayback, [{
     key: 'getProgramDateTime',
     value: function getProgramDateTime() {
+      if (!this.shakaPlayerInstance) return 0;
+
       return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000);
     }
   }, {
@@ -940,14 +948,13 @@ var DashShakaPlayback = function (_HTML5Video) {
       // assume live if time within 3 seconds of end of stream
       this.dvrEnabled && this._updateDvr(time < this._duration - 3);
       time += this._startTime;
-      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'seek', this).call(this, time);
+      this.el.currentTime = time;
     }
   }, {
     key: 'pause',
     value: function pause() {
-      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'pause', this).call(this);
-
-      if (this.dvrEnabled) this._updateDvr(true);
+      this.el.pause();
+      this.dvrEnabled && this._updateDvr(true);
     }
   }, {
     key: 'play',
