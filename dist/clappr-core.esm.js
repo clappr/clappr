@@ -4444,6 +4444,109 @@ var BaseObject = /*#__PURE__*/function (_Events) {
   return BaseObject;
 }(Events);
 
+/* eslint-disable no-var */
+// Simple JavaScript Templating
+// Paul Miller (http://paulmillr.com)
+// http://underscorejs.org
+// (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+// By default, Underscore uses ERB-style template delimiters, change the
+// following template settings to use alternative delimiters.
+var settings = {
+  evaluate: /<%([\s\S]+?)%>/g,
+  interpolate: /<%=([\s\S]+?)%>/g,
+  escape: /<%-([\s\S]+?)%>/g
+}; // When customizing `templateSettings`, if you don't want to define an
+// interpolation, evaluation or escaping regex, we need one that is
+// guaranteed not to match.
+
+var noMatch = /(.)^/; // Certain characters need to be escaped so that they can be put into a
+// string literal.
+
+var escapes = {
+  '\'': '\'',
+  '\\': '\\',
+  '\r': 'r',
+  '\n': 'n',
+  '\t': 't',
+  "\u2028": 'u2028',
+  "\u2029": 'u2029'
+};
+var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g; // List of HTML entities for escaping.
+
+var htmlEntities = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  '\'': '&#x27;'
+};
+var entityRe = new RegExp('[&<>"\']', 'g');
+
+var escapeExpr = function escapeExpr(string) {
+  if (string === null) return '';
+  return ('' + string).replace(entityRe, function (match) {
+    return htmlEntities[match];
+  });
+};
+
+var counter = 0; // JavaScript micro-templating, similar to John Resig's implementation.
+// Underscore templating handles arbitrary delimiters, preserves whitespace,
+// and correctly escapes quotes within interpolated code.
+
+var tmpl = function tmpl(text, data) {
+  var render; // Combine delimiters into one regular expression via alternation.
+
+  var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g'); // Compile the template source, escaping string literals appropriately.
+
+  var index = 0;
+  var source = '__p+=\'';
+  text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
+    source += text.slice(index, offset).replace(escaper, function (match) {
+      return '\\' + escapes[match];
+    });
+    if (escape) source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\'';
+    if (interpolate) source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\'';
+    if (evaluate) source += '\';\n' + evaluate + '\n__p+=\'';
+    index = offset + match.length;
+    return match;
+  });
+  source += '\';\n'; // If a variable is not specified, place data values in local scope.
+
+  if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+  source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
+
+  try {
+    /*jshint -W054 */
+    // TODO: find a way to avoid eval
+    render = new Function(settings.variable || 'obj', 'escapeExpr', source);
+  } catch (e) {
+    e.source = source;
+    throw e;
+  }
+
+  if (data) return render(data, escapeExpr);
+
+  var template = function template(data) {
+    return render.call(this, data, escapeExpr);
+  }; // Provide the compiled function source as a convenience for precompilation.
+
+
+  template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+  return template;
+};
+
+tmpl.settings = settings;
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+var Styler = {
+  getStyleFor: function getStyleFor(style) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+      baseUrl: ''
+    };
+    return zepto('<style class="clappr-style"></style>').html(tmpl(style.toString())(options));
+  }
+};
+
 var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 /**
  * A base class to create ui object.
@@ -4862,35 +4965,7 @@ UICorePlugin.extend = function (properties) {
 
 UICorePlugin.type = 'core';
 
-function styleInject(css, ref) {
-  if ( ref === void 0 ) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') { return; }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
 var css_248z = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
-styleInject(css_248z);
 
 /**
  * An abstraction to represent a container for a given playback
@@ -5518,6 +5593,10 @@ var Container = /*#__PURE__*/function (_UIObject) {
   }, {
     key: "render",
     value: function render() {
+      var style = Styler.getStyleFor(css_248z.toString(), {
+        baseUrl: this.options.baseUrl
+      });
+      this.$el.append(style[0]);
       this.$el.append(this.playback.render().el);
       this.updateStyle();
       this.checkResize();
@@ -6013,8 +6092,9 @@ var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
   return ContainerFactory;
 }(BaseObject);
 
-var css_248z$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
-styleInject(css_248z$1);
+var css_248z$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
+
+var css_248z$2 = "[data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n[data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n[data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n[data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n[data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n[data-player] b, [data-player] u, [data-player] i, [data-player] center,\n[data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n[data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n[data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n[data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n[data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n[data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n[data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font: inherit;\n  font-size: 100%;\n  vertical-align: baseline; }\n\n[data-player] table {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n[data-player] caption, [data-player] th, [data-player] td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle; }\n\n[data-player] q, [data-player] blockquote {\n  quotes: none; }\n  [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n    content: \"\";\n    content: none; }\n\n[data-player] a img {\n  border: none; }\n";
 
 /**
  * The Core is responsible to manage Containers and the player state.
@@ -6482,6 +6562,14 @@ var Core = /*#__PURE__*/function (_UIObject) {
   }, {
     key: "appendToParent",
     value: function appendToParent() {
+      var style = Styler.getStyleFor(css_248z$1.toString(), {
+        baseUrl: this.options.baseUrl
+      });
+      var resetStyle = Styler.getStyleFor(css_248z$2.toString(), {
+        baseUrl: this.options.baseUrl
+      });
+      this.$el.append(style[0]);
+      this.options.includeResetStyle && this.$el.append(resetStyle[0]);
       var hasCoreParent = this.$el.parent() && this.$el.parent().length;
       !hasCoreParent && this.$el.appendTo(this.options.parentElement);
     }
@@ -6536,9 +6624,8 @@ var CoreFactory = /*#__PURE__*/function (_BaseObject) {
 
     _classCallCheck(this, CoreFactory);
 
-    _this = _super.call(this);
+    _this = _super.call(this, player.options);
     _this.player = player;
-    _this._options = player.options;
     return _this;
   }
   /**
@@ -6677,7 +6764,7 @@ var Loader = (function () {
     plugins: {},
     playbacks: []
   };
-  var currentVersion = "0.4.15";
+  var currentVersion = "0.4.16";
   return /*#__PURE__*/function () {
     _createClass(Loader, null, [{
       key: "checkVersionSupport",
@@ -7156,6 +7243,7 @@ var Player = /*#__PURE__*/function (_BaseObject) {
       height: 360,
       baseUrl: baseUrl,
       allowUserInteraction: Browser.isMobile,
+      includeResetStyle: true,
       playback: playbackDefaultOptions
     };
     _this._options = zepto.extend(defaultOptions, options);
@@ -7803,103 +7891,9 @@ UIContainerPlugin.extend = function (properties) {
 
 UIContainerPlugin.type = 'container';
 
-/* eslint-disable no-var */
-// Simple JavaScript Templating
-// Paul Miller (http://paulmillr.com)
-// http://underscorejs.org
-// (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-// By default, Underscore uses ERB-style template delimiters, change the
-// following template settings to use alternative delimiters.
-var settings = {
-  evaluate: /<%([\s\S]+?)%>/g,
-  interpolate: /<%=([\s\S]+?)%>/g,
-  escape: /<%-([\s\S]+?)%>/g
-}; // When customizing `templateSettings`, if you don't want to define an
-// interpolation, evaluation or escaping regex, we need one that is
-// guaranteed not to match.
-
-var noMatch = /(.)^/; // Certain characters need to be escaped so that they can be put into a
-// string literal.
-
-var escapes = {
-  '\'': '\'',
-  '\\': '\\',
-  '\r': 'r',
-  '\n': 'n',
-  '\t': 't',
-  "\u2028": 'u2028',
-  "\u2029": 'u2029'
-};
-var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g; // List of HTML entities for escaping.
-
-var htmlEntities = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  '\'': '&#x27;'
-};
-var entityRe = new RegExp('[&<>"\']', 'g');
-
-var escapeExpr = function escapeExpr(string) {
-  if (string === null) return '';
-  return ('' + string).replace(entityRe, function (match) {
-    return htmlEntities[match];
-  });
-};
-
-var counter = 0; // JavaScript micro-templating, similar to John Resig's implementation.
-// Underscore templating handles arbitrary delimiters, preserves whitespace,
-// and correctly escapes quotes within interpolated code.
-
-var tmpl = function tmpl(text, data) {
-  var render; // Combine delimiters into one regular expression via alternation.
-
-  var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g'); // Compile the template source, escaping string literals appropriately.
-
-  var index = 0;
-  var source = '__p+=\'';
-  text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
-    source += text.slice(index, offset).replace(escaper, function (match) {
-      return '\\' + escapes[match];
-    });
-    if (escape) source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\'';
-    if (interpolate) source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\'';
-    if (evaluate) source += '\';\n' + evaluate + '\n__p+=\'';
-    index = offset + match.length;
-    return match;
-  });
-  source += '\';\n'; // If a variable is not specified, place data values in local scope.
-
-  if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
-  source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
-
-  try {
-    /*jshint -W054 */
-    // TODO: find a way to avoid eval
-    render = new Function(settings.variable || 'obj', 'escapeExpr', source);
-  } catch (e) {
-    e.source = source;
-    throw e;
-  }
-
-  if (data) return render(data, escapeExpr);
-
-  var template = function template(data) {
-    return render.call(this, data, escapeExpr);
-  }; // Provide the compiled function source as a convenience for precompilation.
-
-
-  template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
-  return template;
-};
-
-tmpl.settings = settings;
-
 var tracksHTML = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\">\n<% }; %>\n";
 
-var css_248z$2 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
-styleInject(css_248z$2);
+var css_248z$3 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
 
 var MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
@@ -7941,7 +7935,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.15"
+        min: "0.4.16"
       };
     }
   }, {
@@ -8621,6 +8615,10 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
 
       this._ready();
 
+      var style = Styler.getStyleFor(css_248z$3.toString(), {
+        baseUrl: this.options.baseUrl
+      });
+      this.$el.append(style[0]);
       return this;
     }
   }, {
@@ -8746,7 +8744,7 @@ var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.15"
+        min: "0.4.16"
       };
     }
   }, {
@@ -8774,8 +8772,7 @@ HTML5Audio.canPlay = function (resourceUrl, mimeType) {
   return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType);
 };
 
-var css_248z$3 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
-styleInject(css_248z$3);
+var css_248z$4 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
 
 var HTMLImg = /*#__PURE__*/function (_Playback) {
   _inherits(HTMLImg, _Playback);
@@ -8796,7 +8793,7 @@ var HTMLImg = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.15"
+        min: "0.4.16"
       };
     }
   }, {
@@ -8835,6 +8832,10 @@ var HTMLImg = /*#__PURE__*/function (_Playback) {
   _createClass(HTMLImg, [{
     key: "render",
     value: function render() {
+      var style = Styler.getStyleFor(css_248z$4.toString(), {
+        baseUrl: this.options.baseUrl
+      });
+      this.$el.append(style[0]);
       this.trigger(Events.PLAYBACK_READY, this.name);
       return this;
     }
@@ -8862,8 +8863,7 @@ HTMLImg.canPlay = function (resource) {
 
 var noOpHTML = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%></p><p>\n</p>";
 
-var css_248z$4 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
-styleInject(css_248z$4);
+var css_248z$5 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
 
 var NoOp = /*#__PURE__*/function (_Playback) {
   _inherits(NoOp, _Playback);
@@ -8879,7 +8879,7 @@ var NoOp = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.15"
+        min: "0.4.16"
       };
     }
   }, {
@@ -8914,6 +8914,10 @@ var NoOp = /*#__PURE__*/function (_Playback) {
     key: "render",
     value: function render() {
       var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
+      var style = Styler.getStyleFor(css_248z$5.toString(), {
+        baseUrl: this.options.baseUrl
+      });
+      this.$el.append(style[0]);
       this.$el.html(this.template({
         message: playbackNotSupported
       }));
@@ -9003,16 +9007,6 @@ NoOp.canPlay = function (source) {
   return true;
 };
 
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-var Styler = {
-  getStyleFor: function getStyleFor(style) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-      baseUrl: ''
-    };
-    return zepto('<style class="clappr-style"></style>').html(tmpl(style.toString())(options));
-  }
-};
-
 /**
  * The internationalization (i18n) plugin
  * @class Strings
@@ -9035,7 +9029,7 @@ var Strings = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.15"
+        min: "0.4.16"
       };
     }
   }]);
@@ -9183,7 +9177,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.15"
+        min: "0.4.16"
       };
     }
   }]);
@@ -9192,7 +9186,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
 }(CorePlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version = "0.4.15"; // Built-in Plugins/Playbacks
+var version = "0.4.16"; // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings);
 Loader.registerPlugin(SourcesPlugin);
