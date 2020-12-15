@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import BaseObject from '../../base/base_object'
-import Core from '../core'
+import BaseObject from '@/base/base_object'
+import Core from '@/components/core'
 
 /**
  * The Core Factory is responsible for instantiate the core and it's plugins.
@@ -22,9 +22,8 @@ export default class CoreFactory extends BaseObject {
    * @param {Player} player the player object
    */
   constructor(player) {
-    super()
+    super(player.options)
     this.player = player
-    this._options = player.options
   }
 
   /**
