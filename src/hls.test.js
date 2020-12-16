@@ -104,6 +104,10 @@ describe('HLS playback', function() {
     })
   })
 
+  it('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', function() {
+    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
+  })
+
   xit('levels', function() {
     let playback
     beforeEach(() => {
