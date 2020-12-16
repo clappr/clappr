@@ -104,6 +104,10 @@ describe('HLS playback', function() {
     })
   })
 
+  it('registers PLAYBACK_FRAGMENT_CHANGED event', function() {
+    expect(Events.Custom.PLAYBACK_FRAGMENT_CHANGED).toEqual('playbackFragmentChanged')
+  })
+
   it('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', function() {
     expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
   })
