@@ -21263,6 +21263,7 @@ var now = Utils.now,
     assign = Utils.assign,
     listContainsIgnoreCase = Utils.listContainsIgnoreCase;
 var AUTO = -1;
+Events.register('PLAYBACK_FRAGMENT_CHANGED');
 Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA');
 
 var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
@@ -21455,6 +21456,10 @@ var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
 
       this._hls.on(HLSJS.Events.LEVEL_SWITCHING, function (evt, data) {
         return _this2._onLevelSwitch(evt, data);
+      });
+
+      this._hls.on(HLSJS.Events.FRAG_CHANGED, function (evt, data) {
+        return _this2._onFragmentChanged(evt, data);
       });
 
       this._hls.on(HLSJS.Events.FRAG_LOADED, function (evt, data) {
@@ -21962,6 +21967,11 @@ var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
 
       durationChanged && this._onDurationChange();
       startTimeChanged && this._onProgress();
+    }
+  }, {
+    key: "_onFragmentChanged",
+    value: function _onFragmentChanged(evt, data) {
+      this.trigger(Events.Custom.PLAYBACK_FRAGMENT_CHANGED, data);
     }
   }, {
     key: "_onFragmentLoaded",
