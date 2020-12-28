@@ -223,6 +223,7 @@
       assign = core.Utils.assign,
       listContainsIgnoreCase = core.Utils.listContainsIgnoreCase;
   var AUTO = -1;
+  core.Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA');
 
   var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
     _inherits(HlsjsPlayback, _HTML5Video);
@@ -420,6 +421,10 @@
           return _this2._onFragmentLoaded(evt, data);
         });
 
+        this._hls.on(HLSJS.Events.FRAG_PARSING_METADATA, function (evt, data) {
+          return _this2._onFragmentParsingMetadata(evt, data);
+        });
+
         this._hls.on(HLSJS.Events.ERROR, function (evt, data) {
           return _this2._onHLSJSError(evt, data);
         });
@@ -433,6 +438,14 @@
         });
 
         this._hls.attachMedia(this.el);
+      }
+    }, {
+      key: "_onFragmentParsingMetadata",
+      value: function _onFragmentParsingMetadata(evt, data) {
+        this.trigger(core.Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA, {
+          evt: evt,
+          data: data
+        });
       }
     }, {
       key: "render",
