@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 var NPM_RUN = process.env.npm_lifecycle_event
