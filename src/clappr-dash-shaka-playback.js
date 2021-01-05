@@ -374,10 +374,7 @@ class DashShakaPlayback extends HTML5Video {
     let runAllSteps = () => {
       this._player = this._createPlayer()
       this._setInitialConfig()
-  
-      let playerLoaded = this._player.load(this._options.src)
-      playerLoaded.then(() => this._loaded())
-        .catch((e) => this._setupError(e))
+      this._loadSource()
     }
 
     this._player
@@ -396,6 +393,12 @@ class DashShakaPlayback extends HTML5Video {
   _setInitialConfig() {
     this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
     this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
+  }
+
+  _loadSource() {
+    this._player.load(this._options.src)
+      .then(() => this._loaded())
+      .catch((e) => this._setupError(e))
   }
 
   _onTimeUpdate() {
