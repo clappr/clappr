@@ -702,12 +702,12 @@ export default class MediaControl extends UICorePlugin {
     this.displayedSeekBarPercentage = null
     this.setSeekPercentage(previousSeekPercentage)
 
-    process.nextTick(() => {
+    setTimeout(() => {
       !this.settings.seekEnabled && this.$seekBarContainer.addClass('seek-disabled')
       !Browser.isMobile && !this.options.disableKeyboardShortcuts && this.bindKeyEvents()
       this.playerResize({ width: this.options.width, height: this.options.height })
       this.hideVolumeBar(0)
-    })
+    }, 0)
 
     this.parseColors()
     this.highDefinitionUpdate(this.isHD)
