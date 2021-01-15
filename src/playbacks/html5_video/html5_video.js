@@ -139,7 +139,7 @@ export default class HTML5Video extends Playback {
 
     }
 
-    $.extend(this.el, {
+    $.extend(true, this.el, {
       muted: this.options.mute,
       defaultMuted: this.options.mute,
       loop: this.options.loop,

@@ -220,7 +220,7 @@ export default class Core extends UIObject {
     sources = sources && sources.constructor === Array ? sources : [sources]
     this.options.sources = sources
     this.containers.forEach((container) => container.destroy())
-    this.containerFactory.options = $.extend(this.options, { sources })
+    this.containerFactory.options = $.extend(true, this.options, { sources })
     this.prepareContainers()
   }
 
@@ -349,7 +349,7 @@ export default class Core extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
-    this._options = $.extend(this._options, options)
+    this._options = $.extend(true, this._options, options)
     this.configureDomRecycler()
 
     const sources = options.source || options.sources
