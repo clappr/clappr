@@ -3285,7 +3285,7 @@
     _createClass(DomRecycler, null, [{
       key: "configure",
       value: function configure(options) {
-        this.options = zepto.extend(this.options, options);
+        this.options = zepto.extend(true, this.options, options);
       }
     }, {
       key: "create",
@@ -4499,6 +4499,109 @@
     return BaseObject;
   }(Events);
 
+  /* eslint-disable no-var */
+  // Simple JavaScript Templating
+  // Paul Miller (http://paulmillr.com)
+  // http://underscorejs.org
+  // (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  var settings = {
+    evaluate: /<%([\s\S]+?)%>/g,
+    interpolate: /<%=([\s\S]+?)%>/g,
+    escape: /<%-([\s\S]+?)%>/g
+  }; // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+
+  var noMatch = /(.)^/; // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+
+  var escapes = {
+    '\'': '\'',
+    '\\': '\\',
+    '\r': 'r',
+    '\n': 'n',
+    '\t': 't',
+    "\u2028": 'u2028',
+    "\u2029": 'u2029'
+  };
+  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g; // List of HTML entities for escaping.
+
+  var htmlEntities = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&#x27;'
+  };
+  var entityRe = new RegExp('[&<>"\']', 'g');
+
+  var escapeExpr = function escapeExpr(string) {
+    if (string === null) return '';
+    return ('' + string).replace(entityRe, function (match) {
+      return htmlEntities[match];
+    });
+  };
+
+  var counter = 0; // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+
+  var tmpl = function tmpl(text, data) {
+    var render; // Combine delimiters into one regular expression via alternation.
+
+    var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g'); // Compile the template source, escaping string literals appropriately.
+
+    var index = 0;
+    var source = '__p+=\'';
+    text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset).replace(escaper, function (match) {
+        return '\\' + escapes[match];
+      });
+      if (escape) source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\'';
+      if (interpolate) source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\'';
+      if (evaluate) source += '\';\n' + evaluate + '\n__p+=\'';
+      index = offset + match.length;
+      return match;
+    });
+    source += '\';\n'; // If a variable is not specified, place data values in local scope.
+
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+    source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
+
+    try {
+      /*jshint -W054 */
+      // TODO: find a way to avoid eval
+      render = new Function(settings.variable || 'obj', 'escapeExpr', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
+    }
+
+    if (data) return render(data, escapeExpr);
+
+    var template = function template(data) {
+      return render.call(this, data, escapeExpr);
+    }; // Provide the compiled function source as a convenience for precompilation.
+
+
+    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+    return template;
+  };
+
+  tmpl.settings = settings;
+
+  // Copyright 2014 Globo.com Player authors. All rights reserved.
+  var Styler = {
+    getStyleFor: function getStyleFor(style) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+        baseUrl: ''
+      };
+      return zepto('<style class="clappr-style"></style>').html(tmpl(style.toString())(options));
+    }
+  };
+
   var delegateEventSplitter = /^(\S+)\s*(.*)$/;
   /**
    * A base class to create ui object.
@@ -4727,7 +4830,7 @@
       key: "_ensureElement",
       value: function _ensureElement() {
         if (!this.el) {
-          var attrs = zepto.extend({}, this.attributes);
+          var attrs = zepto.extend(true, {}, this.attributes);
           if (this.id) attrs.id = this.id;
           if (this.className) attrs['class'] = this.className;
           var $el = zepto(DomRecycler.create(this.tagName)).attr(attrs);
@@ -4917,35 +5020,7 @@
 
   UICorePlugin.type = 'core';
 
-  function styleInject(css, ref) {
-    if ( ref === void 0 ) ref = {};
-    var insertAt = ref.insertAt;
-
-    if (!css || typeof document === 'undefined') { return; }
-
-    var head = document.head || document.getElementsByTagName('head')[0];
-    var style = document.createElement('style');
-    style.type = 'text/css';
-
-    if (insertAt === 'top') {
-      if (head.firstChild) {
-        head.insertBefore(style, head.firstChild);
-      } else {
-        head.appendChild(style);
-      }
-    } else {
-      head.appendChild(style);
-    }
-
-    if (style.styleSheet) {
-      style.styleSheet.cssText = css;
-    } else {
-      style.appendChild(document.createTextNode(css));
-    }
-  }
-
   var css_248z = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
-  styleInject(css_248z);
 
   /**
    * An abstraction to represent a container for a given playback
@@ -5090,7 +5165,7 @@
       _this.volume = 100;
       _this.playback = options.playback;
       _this.playerError = playerError;
-      _this.settings = zepto.extend({}, _this.playback.settings);
+      _this.settings = zepto.extend(true, {}, _this.playback.settings);
       _this.isReady = false;
       _this.mediaControlDisabled = false;
       _this.plugins = [_this.playback];
@@ -5565,7 +5640,7 @@
     }, {
       key: "configure",
       value: function configure(options) {
-        this._options = zepto.extend(this._options, options);
+        this._options = zepto.extend(true, this._options, options);
         this.updateStyle();
         this.playback.configure(this.options);
         this.trigger(Events.CONTAINER_OPTIONS_CHANGE);
@@ -5573,6 +5648,10 @@
     }, {
       key: "render",
       value: function render() {
+        var style = Styler.getStyleFor(css_248z.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        this.$el.append(style[0]);
         this.$el.append(this.playback.render().el);
         this.updateStyle();
         this.checkResize();
@@ -5831,7 +5910,7 @@
     }, {
       key: "configure",
       value: function configure(options) {
-        this._options = zepto.extend(this._options, options);
+        this._options = zepto.extend(true, this._options, options);
       }
       /**
        * attempt to autoplays the playback.
@@ -6068,8 +6147,9 @@
     return ContainerFactory;
   }(BaseObject);
 
-  var css_248z$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
-  styleInject(css_248z$1);
+  var css_248z$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
+
+  var css_248z$2 = "[data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n[data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n[data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n[data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n[data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n[data-player] b, [data-player] u, [data-player] i, [data-player] center,\n[data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n[data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n[data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n[data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n[data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n[data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n[data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font: inherit;\n  font-size: 100%;\n  vertical-align: baseline; }\n\n[data-player] table {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n[data-player] caption, [data-player] th, [data-player] td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle; }\n\n[data-player] q, [data-player] blockquote {\n  quotes: none; }\n  [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n    content: \"\";\n    content: none; }\n\n[data-player] a img {\n  border: none; }\n";
 
   /**
    * The Core is responsible to manage Containers and the player state.
@@ -6360,7 +6440,7 @@
         this.containers.forEach(function (container) {
           return container.destroy();
         });
-        this.containerFactory.options = zepto.extend(this.options, {
+        this.containerFactory.options = zepto.extend(true, this.options, {
           sources: sources
         });
         this.prepareContainers();
@@ -6524,7 +6604,7 @@
       value: function configure(options) {
         var _this7 = this;
 
-        this._options = zepto.extend(this._options, options);
+        this._options = zepto.extend(true, this._options, options);
         this.configureDomRecycler();
         var sources = options.source || options.sources;
         sources && this.load(sources, options.mimeType || this.options.mimeType);
@@ -6537,6 +6617,14 @@
     }, {
       key: "appendToParent",
       value: function appendToParent() {
+        var style = Styler.getStyleFor(css_248z$1.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        var resetStyle = Styler.getStyleFor(css_248z$2.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        this.$el.append(style[0]);
+        this.options.includeResetStyle && this.$el.append(resetStyle[0]);
         var hasCoreParent = this.$el.parent() && this.$el.parent().length;
         !hasCoreParent && this.$el.appendTo(this.options.parentElement);
       }
@@ -6591,9 +6679,8 @@
 
       _classCallCheck(this, CoreFactory);
 
-      _this = _super.call(this);
+      _this = _super.call(this, player.options);
       _this.player = player;
-      _this._options = player.options;
       return _this;
     }
     /**
@@ -6732,7 +6819,7 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.15";
+    var currentVersion = "0.4.17";
     return /*#__PURE__*/function () {
       _createClass(Loader, null, [{
         key: "checkVersionSupport",
@@ -7211,9 +7298,10 @@
         height: 360,
         baseUrl: baseUrl,
         allowUserInteraction: Browser.isMobile,
+        includeResetStyle: true,
         playback: playbackDefaultOptions
       };
-      _this._options = zepto.extend(defaultOptions, options);
+      _this._options = zepto.extend(true, defaultOptions, options);
       _this.options.sources = _this._normalizeSources(options);
 
       if (!_this.options.chromeless) {
@@ -7858,103 +7946,9 @@
 
   UIContainerPlugin.type = 'container';
 
-  /* eslint-disable no-var */
-  // Simple JavaScript Templating
-  // Paul Miller (http://paulmillr.com)
-  // http://underscorejs.org
-  // (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-  // By default, Underscore uses ERB-style template delimiters, change the
-  // following template settings to use alternative delimiters.
-  var settings = {
-    evaluate: /<%([\s\S]+?)%>/g,
-    interpolate: /<%=([\s\S]+?)%>/g,
-    escape: /<%-([\s\S]+?)%>/g
-  }; // When customizing `templateSettings`, if you don't want to define an
-  // interpolation, evaluation or escaping regex, we need one that is
-  // guaranteed not to match.
-
-  var noMatch = /(.)^/; // Certain characters need to be escaped so that they can be put into a
-  // string literal.
-
-  var escapes = {
-    '\'': '\'',
-    '\\': '\\',
-    '\r': 'r',
-    '\n': 'n',
-    '\t': 't',
-    "\u2028": 'u2028',
-    "\u2029": 'u2029'
-  };
-  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g; // List of HTML entities for escaping.
-
-  var htmlEntities = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    '\'': '&#x27;'
-  };
-  var entityRe = new RegExp('[&<>"\']', 'g');
-
-  var escapeExpr = function escapeExpr(string) {
-    if (string === null) return '';
-    return ('' + string).replace(entityRe, function (match) {
-      return htmlEntities[match];
-    });
-  };
-
-  var counter = 0; // JavaScript micro-templating, similar to John Resig's implementation.
-  // Underscore templating handles arbitrary delimiters, preserves whitespace,
-  // and correctly escapes quotes within interpolated code.
-
-  var tmpl = function tmpl(text, data) {
-    var render; // Combine delimiters into one regular expression via alternation.
-
-    var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g'); // Compile the template source, escaping string literals appropriately.
-
-    var index = 0;
-    var source = '__p+=\'';
-    text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
-      source += text.slice(index, offset).replace(escaper, function (match) {
-        return '\\' + escapes[match];
-      });
-      if (escape) source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\'';
-      if (interpolate) source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\'';
-      if (evaluate) source += '\';\n' + evaluate + '\n__p+=\'';
-      index = offset + match.length;
-      return match;
-    });
-    source += '\';\n'; // If a variable is not specified, place data values in local scope.
-
-    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
-    source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
-
-    try {
-      /*jshint -W054 */
-      // TODO: find a way to avoid eval
-      render = new Function(settings.variable || 'obj', 'escapeExpr', source);
-    } catch (e) {
-      e.source = source;
-      throw e;
-    }
-
-    if (data) return render(data, escapeExpr);
-
-    var template = function template(data) {
-      return render.call(this, data, escapeExpr);
-    }; // Provide the compiled function source as a convenience for precompilation.
-
-
-    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
-    return template;
-  };
-
-  tmpl.settings = settings;
-
   var tracksHTML = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\">\n<% }; %>\n";
 
-  var css_248z$2 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
-  styleInject(css_248z$2);
+  var css_248z$3 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
 
   var MIMETYPES = {
     'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
@@ -7996,7 +7990,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.15"
+          min: "0.4.17"
         };
       }
     }, {
@@ -8119,7 +8113,7 @@
         if (typeof _this.options.poster === 'string') posterUrl = _this.options.poster;else if (typeof _this.options.poster.url === 'string') posterUrl = _this.options.poster.url;
       }
 
-      zepto.extend(_this.el, {
+      zepto.extend(true, _this.el, {
         muted: _this.options.mute,
         defaultMuted: _this.options.mute,
         loop: _this.options.loop,
@@ -8277,13 +8271,15 @@
       value: function consent(cb) {
         var _this3 = this;
 
-        if (this.isPlaying()) {
+        if (this.isPlaying() || this.el._consented) {
           _get(_getPrototypeOf(HTML5Video.prototype), "consent", this).call(this, cb);
         } else {
           var eventHandler = function eventHandler() {
             _this3.el.removeEventListener('loadedmetadata', eventHandler, false);
 
             _this3.el.removeEventListener('error', eventHandler, false);
+
+            _this3.el._consented = true; // Flag to call load() only once
 
             _get(_getPrototypeOf(HTML5Video.prototype), "consent", _this3).call(_this3, cb);
           };
@@ -8676,6 +8672,10 @@
 
         this._ready();
 
+        var style = Styler.getStyleFor(css_248z$3.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        this.$el.append(style[0]);
         return this;
       }
     }, {
@@ -8801,7 +8801,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.15"
+          min: "0.4.17"
         };
       }
     }, {
@@ -8829,8 +8829,7 @@
     return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType);
   };
 
-  var css_248z$3 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
-  styleInject(css_248z$3);
+  var css_248z$4 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
 
   var HTMLImg = /*#__PURE__*/function (_Playback) {
     _inherits(HTMLImg, _Playback);
@@ -8851,7 +8850,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.15"
+          min: "0.4.17"
         };
       }
     }, {
@@ -8890,6 +8889,10 @@
     _createClass(HTMLImg, [{
       key: "render",
       value: function render() {
+        var style = Styler.getStyleFor(css_248z$4.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        this.$el.append(style[0]);
         this.trigger(Events.PLAYBACK_READY, this.name);
         return this;
       }
@@ -8917,8 +8920,7 @@
 
   var noOpHTML = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%></p><p>\n</p>";
 
-  var css_248z$4 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
-  styleInject(css_248z$4);
+  var css_248z$5 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
 
   var NoOp = /*#__PURE__*/function (_Playback) {
     _inherits(NoOp, _Playback);
@@ -8934,7 +8936,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.15"
+          min: "0.4.17"
         };
       }
     }, {
@@ -8969,6 +8971,10 @@
       key: "render",
       value: function render() {
         var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
+        var style = Styler.getStyleFor(css_248z$5.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        this.$el.append(style[0]);
         this.$el.html(this.template({
           message: playbackNotSupported
         }));
@@ -9058,16 +9064,6 @@
     return true;
   };
 
-  // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var Styler = {
-    getStyleFor: function getStyleFor(style) {
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-        baseUrl: ''
-      };
-      return zepto('<style class="clappr-style"></style>').html(tmpl(style.toString())(options));
-    }
-  };
-
   /**
    * The internationalization (i18n) plugin
    * @class Strings
@@ -9090,7 +9086,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.15"
+          min: "0.4.17"
         };
       }
     }]);
@@ -9238,7 +9234,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.15"
+          min: "0.4.17"
         };
       }
     }]);
@@ -9247,7 +9243,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version = "0.4.15"; // Built-in Plugins/Playbacks
+  var version = "0.4.17"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlugin(SourcesPlugin);
@@ -9334,6 +9330,19 @@
     return _setPrototypeOf$1(o, p);
   }
 
+  function _isNativeReflectConstruct$1() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function _assertThisInitialized$1(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -9348,6 +9357,25 @@
     }
 
     return _assertThisInitialized$1(self);
+  }
+
+  function _createSuper$1(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct$1();
+
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf$1(Derived),
+          result;
+
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf$1(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn$1(this, result);
+    };
   }
 
   function _superPropBase$1(object, property) {
@@ -9383,6 +9411,8 @@
   var ClickToPausePlugin = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(ClickToPausePlugin, _ContainerPlugin);
 
+    var _super = _createSuper$1(ClickToPausePlugin);
+
     _createClass$1(ClickToPausePlugin, [{
       key: "name",
       get: function get() {
@@ -9392,7 +9422,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }]);
@@ -9400,7 +9430,7 @@
     function ClickToPausePlugin(container) {
       _classCallCheck$1(this, ClickToPausePlugin);
 
-      return _possibleConstructorReturn$1(this, _getPrototypeOf$1(ClickToPausePlugin).call(this, container));
+      return _super.call(this, container);
     }
 
     _createClass$1(ClickToPausePlugin, [{
@@ -9434,7 +9464,7 @@
 
   var ccHTML = "<button type=\"button\" class=\"cc-button media-control-button media-control-icon\" data-cc-button aria-label=\"<%= ariaLabel %>\"></button>\n<ul>\n  <% if (title) { %>\n  <li data-title><%= title %></li>\n  <% }; %>\n  <li><a href=\"#\" data-cc-select=\"-1\"><%= disabledLabel %></a></li>\n  <% for (var i = 0; i < tracks.length; i++) { %>\n    <li><a href=\"#\" data-cc-select=\"<%= tracks[i].id %>\"><%= tracks[i].label %></a></li>\n  <% }; %>\n</ul>\n";
 
-  function styleInject$1(css, ref) {
+  function styleInject(css, ref) {
     if ( ref === void 0 ) ref = {};
     var insertAt = ref.insertAt;
 
@@ -9461,11 +9491,13 @@
     }
   }
 
-  var css = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
-  styleInject$1(css);
+  var css_248z$6 = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
+  styleInject(css_248z$6);
 
   var ClosedCaptions = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ClosedCaptions, _UICorePlugin);
+
+    var _super = _createSuper$1(ClosedCaptions);
 
     _createClass$1(ClosedCaptions, [{
       key: "name",
@@ -9476,7 +9508,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -9507,7 +9539,7 @@
 
       _classCallCheck$1(this, ClosedCaptions);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(ClosedCaptions).call(this, core));
+      _this = _super.call(this, core);
       var config = core.options.closedCaptionsConfig;
       _this._title = config && config.title ? config.title : null;
       _this._ariaLabel = config && config.ariaLabel ? config.ariaLabel : 'cc-button';
@@ -9634,11 +9666,13 @@
 
   var dvrHTML = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
-  var css$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
-  styleInject$1(css$1);
+  var css_248z$1$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
+  styleInject(css_248z$1$1);
 
   var DVRControls = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(DVRControls, _UICorePlugin);
+
+    var _super = _createSuper$1(DVRControls);
 
     _createClass$1(DVRControls, [{
       key: "template",
@@ -9654,7 +9688,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -9679,7 +9713,7 @@
 
       _classCallCheck$1(this, DVRControls);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(DVRControls).call(this, core));
+      _this = _super.call(this, core);
 
       _this.settingsUpdate();
 
@@ -9789,10 +9823,12 @@
   var EndVideo = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(EndVideo, _CorePlugin);
 
+    var _super = _createSuper$1(EndVideo);
+
     function EndVideo() {
       _classCallCheck$1(this, EndVideo);
 
-      return _possibleConstructorReturn$1(this, _getPrototypeOf$1(EndVideo).apply(this, arguments));
+      return _super.apply(this, arguments);
     }
 
     _createClass$1(EndVideo, [{
@@ -9827,7 +9863,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }]);
@@ -9839,11 +9875,13 @@
 
   var templateHtml = "<div class=\"player-error-screen__content\" data-error-screen>\n  <% if (icon) { %>\n  <div class=\"player-error-screen__icon\" data-error-screen><%= icon %></div>\n  <% } %>\n  <div class=\"player-error-screen__title\" data-error-screen><%= title %></div>\n  <div class=\"player-error-screen__message\" data-error-screen><%= message %></div>\n  <div class=\"player-error-screen__code\" data-error-screen>Error code: <%= code %></div>\n  <div class=\"player-error-screen__reload\" data-error-screen><%= reloadIcon %></div>\n</div>\n";
 
-  var css$2 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex;\n  flex-direction: column;\n  justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0; }\n";
-  styleInject$1(css$2);
+  var css_248z$2$1 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex;\n  flex-direction: column;\n  justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0; }\n";
+  styleInject(css_248z$2$1);
 
   var ErrorScreen = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ErrorScreen, _UICorePlugin);
+
+    var _super = _createSuper$1(ErrorScreen);
 
     _createClass$1(ErrorScreen, [{
       key: "name",
@@ -9854,7 +9892,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -9882,7 +9920,7 @@
 
       _classCallCheck$1(this, ErrorScreen);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(ErrorScreen).call(this, core));
+      _this = _super.call(this, core);
       if (_this.options.disableErrorScreen) return _possibleConstructorReturn$1(_this, _this.disable());
       return _this;
     }
@@ -9974,6 +10012,8 @@
   var Favicon = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(Favicon, _CorePlugin);
 
+    var _super = _createSuper$1(Favicon);
+
     _createClass$1(Favicon, [{
       key: "name",
       get: function get() {
@@ -9983,7 +10023,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -9998,7 +10038,7 @@
 
       _classCallCheck$1(this, Favicon);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(Favicon).call(this, core));
+      _this = _super.call(this, core);
       _this._container = null;
 
       _this.configure();
@@ -10101,6 +10141,8 @@
   var GoogleAnalytics = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(GoogleAnalytics, _ContainerPlugin);
 
+    var _super = _createSuper$1(GoogleAnalytics);
+
     _createClass$1(GoogleAnalytics, [{
       key: "name",
       get: function get() {
@@ -10110,7 +10152,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }]);
@@ -10120,7 +10162,7 @@
 
       _classCallCheck$1(this, GoogleAnalytics);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(GoogleAnalytics).call(this, container));
+      _this = _super.call(this, container);
 
       if (_this.container.options.gaAccount) {
         _this.account = _this.container.options.gaAccount;
@@ -10271,154 +10313,6 @@
 
     return GoogleAnalytics;
   }(ContainerPlugin);
-
-  var global$1 = (typeof global !== "undefined" ? global :
-              typeof self !== "undefined" ? self :
-              typeof window !== "undefined" ? window : {});
-
-  // shim for using process in browser
-  // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
-
-  function defaultSetTimout() {
-      throw new Error('setTimeout has not been defined');
-  }
-  function defaultClearTimeout () {
-      throw new Error('clearTimeout has not been defined');
-  }
-  var cachedSetTimeout = defaultSetTimout;
-  var cachedClearTimeout = defaultClearTimeout;
-  if (typeof global$1.setTimeout === 'function') {
-      cachedSetTimeout = setTimeout;
-  }
-  if (typeof global$1.clearTimeout === 'function') {
-      cachedClearTimeout = clearTimeout;
-  }
-
-  function runTimeout(fun) {
-      if (cachedSetTimeout === setTimeout) {
-          //normal enviroments in sane situations
-          return setTimeout(fun, 0);
-      }
-      // if setTimeout wasn't available but was latter defined
-      if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-          cachedSetTimeout = setTimeout;
-          return setTimeout(fun, 0);
-      }
-      try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
-          return cachedSetTimeout(fun, 0);
-      } catch(e){
-          try {
-              // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-              return cachedSetTimeout.call(null, fun, 0);
-          } catch(e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-              return cachedSetTimeout.call(this, fun, 0);
-          }
-      }
-
-
-  }
-  function runClearTimeout(marker) {
-      if (cachedClearTimeout === clearTimeout) {
-          //normal enviroments in sane situations
-          return clearTimeout(marker);
-      }
-      // if clearTimeout wasn't available but was latter defined
-      if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-          cachedClearTimeout = clearTimeout;
-          return clearTimeout(marker);
-      }
-      try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
-          return cachedClearTimeout(marker);
-      } catch (e){
-          try {
-              // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-              return cachedClearTimeout.call(null, marker);
-          } catch (e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-              // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-              return cachedClearTimeout.call(this, marker);
-          }
-      }
-
-
-
-  }
-  var queue = [];
-  var draining = false;
-  var currentQueue;
-  var queueIndex = -1;
-
-  function cleanUpNextTick() {
-      if (!draining || !currentQueue) {
-          return;
-      }
-      draining = false;
-      if (currentQueue.length) {
-          queue = currentQueue.concat(queue);
-      } else {
-          queueIndex = -1;
-      }
-      if (queue.length) {
-          drainQueue();
-      }
-  }
-
-  function drainQueue() {
-      if (draining) {
-          return;
-      }
-      var timeout = runTimeout(cleanUpNextTick);
-      draining = true;
-
-      var len = queue.length;
-      while(len) {
-          currentQueue = queue;
-          queue = [];
-          while (++queueIndex < len) {
-              if (currentQueue) {
-                  currentQueue[queueIndex].run();
-              }
-          }
-          queueIndex = -1;
-          len = queue.length;
-      }
-      currentQueue = null;
-      draining = false;
-      runClearTimeout(timeout);
-  }
-  function nextTick(fun) {
-      var args = new Array(arguments.length - 1);
-      if (arguments.length > 1) {
-          for (var i = 1; i < arguments.length; i++) {
-              args[i - 1] = arguments[i];
-          }
-      }
-      queue.push(new Item(fun, args));
-      if (queue.length === 1 && !draining) {
-          runTimeout(drainQueue);
-      }
-  }
-  // v8 likes predictible objects
-  function Item(fun, array) {
-      this.fun = fun;
-      this.array = array;
-  }
-  Item.prototype.run = function () {
-      this.fun.apply(null, this.array);
-  };
-
-  // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
-  var performance$1 = global$1.performance || {};
-  var performanceNow =
-    performance$1.now        ||
-    performance$1.mozNow     ||
-    performance$1.msNow      ||
-    performance$1.oNow       ||
-    performance$1.webkitNow  ||
-    function(){ return (new Date()).getTime() };
 
   /* eslint-disable */
   // Kibo is released under the MIT License. Copyright (c) 2013 marquete.
@@ -10774,8 +10668,8 @@
     Kibo: Kibo
   };
 
-  var css$3 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    will-change: transform, opacity;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    transform: translateY(50px); }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    transform: translateY(-7px);\n    bottom: 0;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
-  styleInject$1(css$3);
+  var css_248z$3$1 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    will-change: transform, opacity;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    transform: translateY(50px); }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    transform: translateY(-7px);\n    bottom: 0;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
+  styleInject(css_248z$3$1);
 
   var mediaControlHTML = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
@@ -10800,6 +10694,8 @@
   var MediaControl = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(MediaControl, _UICorePlugin);
 
+    var _super = _createSuper$1(MediaControl);
+
     _createClass$1(MediaControl, [{
       key: "name",
       get: function get() {
@@ -10809,7 +10705,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -10882,7 +10778,7 @@
 
       _classCallCheck$1(this, MediaControl);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(MediaControl).call(this, core));
+      _this = _super.call(this, core);
       _this.persistConfig = _this.options.persistConfig;
       _this.currentPositionValue = null;
       _this.currentDurationValue = null;
@@ -11633,7 +11529,7 @@
         if (this.displayedSeekBarPercentage) previousSeekPercentage = this.displayedSeekBarPercentage;
         this.displayedSeekBarPercentage = null;
         this.setSeekPercentage(previousSeekPercentage);
-        nextTick(function () {
+        setTimeout(function () {
           !_this10.settings.seekEnabled && _this10.$seekBarContainer.addClass('seek-disabled');
           !Browser.isMobile && !_this10.options.disableKeyboardShortcuts && _this10.bindKeyEvents();
 
@@ -11643,7 +11539,7 @@
           });
 
           _this10.hideVolumeBar(0);
-        });
+        }, 0);
         this.parseColors();
         this.highDefinitionUpdate(this.isHD);
         this.core.$el.append(this.el);
@@ -11663,11 +11559,13 @@
 
   var posterHTML = "<div class=\"play-wrapper\" data-poster></div>\n";
 
-  var css$4 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
-  styleInject$1(css$4);
+  var css_248z$4$1 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
+  styleInject(css_248z$4$1);
 
   var PosterPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(PosterPlugin, _UIContainerPlugin);
+
+    var _super = _createSuper$1(PosterPlugin);
 
     _createClass$1(PosterPlugin, [{
       key: "name",
@@ -11678,7 +11576,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -11719,15 +11617,15 @@
 
       _classCallCheck$1(this, PosterPlugin);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(PosterPlugin).call(this, container));
+      _this = _super.call(this, container);
       _this.hasStartedPlaying = false;
       _this.playRequested = false;
 
       _this.render();
 
-      nextTick(function () {
+      setTimeout(function () {
         return _this.update();
-      });
+      }, 0);
       return _this;
     }
 
@@ -11872,13 +11770,15 @@
 
   var seekTimeHTML = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
-  var css$5 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
-  styleInject$1(css$5);
+  var css_248z$5$1 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
+  styleInject(css_248z$5$1);
 
   var formatTime$1$1 = Utils.formatTime;
 
   var SeekTime = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(SeekTime, _UICorePlugin);
+
+    var _super = _createSuper$1(SeekTime);
 
     _createClass$1(SeekTime, [{
       key: "name",
@@ -11889,7 +11789,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -11937,7 +11837,7 @@
 
       _classCallCheck$1(this, SeekTime);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(SeekTime).call(this, core));
+      _this = _super.call(this, core);
       _this.hoveringOverSeekBar = false;
       _this.hoverPosition = null;
       _this.duration = null;
@@ -12093,11 +11993,13 @@
 
   var spinnerHTML = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
-  var css$6 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
-  styleInject$1(css$6);
+  var css_248z$6$1 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
+  styleInject(css_248z$6$1);
 
   var SpinnerThreeBouncePlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(SpinnerThreeBouncePlugin, _UIContainerPlugin);
+
+    var _super = _createSuper$1(SpinnerThreeBouncePlugin);
 
     _createClass$1(SpinnerThreeBouncePlugin, [{
       key: "name",
@@ -12108,7 +12010,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -12126,7 +12028,7 @@
 
       _classCallCheck$1(this, SpinnerThreeBouncePlugin);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(SpinnerThreeBouncePlugin).call(this, container));
+      _this = _super.call(this, container);
       _this.template = tmpl(spinnerHTML);
       _this.showTimeout = null;
 
@@ -12196,6 +12098,8 @@
   var StatsPlugin = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(StatsPlugin, _ContainerPlugin);
 
+    var _super = _createSuper$1(StatsPlugin);
+
     _createClass$1(StatsPlugin, [{
       key: "name",
       get: function get() {
@@ -12205,7 +12109,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }]);
@@ -12215,7 +12119,7 @@
 
       _classCallCheck$1(this, StatsPlugin);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(StatsPlugin).call(this, container));
+      _this = _super.call(this, container);
 
       _this.setInitialAttrs();
 
@@ -12328,11 +12232,13 @@
 
   var watermarkHTML = "<div class=\"clappr-watermark\" data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=\"_blank\" href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
 
-  var css$7 = ".clappr-watermark[data-watermark] {\n  position: absolute;\n  min-width: 70px;\n  max-width: 200px;\n  width: 12%;\n  text-align: center;\n  z-index: 10; }\n\n.clappr-watermark[data-watermark] a {\n  outline: none;\n  cursor: pointer; }\n\n.clappr-watermark[data-watermark] img {\n  max-width: 100%; }\n\n.clappr-watermark[data-watermark-bottom-left] {\n  bottom: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-bottom-right] {\n  bottom: 10px;\n  right: 42px; }\n\n.clappr-watermark[data-watermark-top-left] {\n  top: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-top-right] {\n  top: 10px;\n  right: 37px; }\n";
-  styleInject$1(css$7);
+  var css_248z$7 = ".clappr-watermark[data-watermark] {\n  position: absolute;\n  min-width: 70px;\n  max-width: 200px;\n  width: 12%;\n  text-align: center;\n  z-index: 10; }\n\n.clappr-watermark[data-watermark] a {\n  outline: none;\n  cursor: pointer; }\n\n.clappr-watermark[data-watermark] img {\n  max-width: 100%; }\n\n.clappr-watermark[data-watermark-bottom-left] {\n  bottom: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-bottom-right] {\n  bottom: 10px;\n  right: 42px; }\n\n.clappr-watermark[data-watermark-top-left] {\n  top: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-top-right] {\n  top: 10px;\n  right: 37px; }\n";
+  styleInject(css_248z$7);
 
   var WaterMarkPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(WaterMarkPlugin, _UIContainerPlugin);
+
+    var _super = _createSuper$1(WaterMarkPlugin);
 
     _createClass$1(WaterMarkPlugin, [{
       key: "name",
@@ -12343,7 +12249,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.9"
+          min: "0.4.17"
         };
       }
     }, {
@@ -12358,7 +12264,7 @@
 
       _classCallCheck$1(this, WaterMarkPlugin);
 
-      _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(WaterMarkPlugin).call(this, container));
+      _this = _super.call(this, container);
 
       _this.configure();
 
@@ -12570,7 +12476,7 @@
     return _setPrototypeOf$2(o, p);
   }
 
-  function _isNativeReflectConstruct$1() {
+  function _isNativeReflectConstruct$2() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -12599,8 +12505,8 @@
     return _assertThisInitialized$2(self);
   }
 
-  function _createSuper$1(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct$1();
+  function _createSuper$2(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct$2();
 
     return function _createSuperInternal() {
       var Super = _getPrototypeOf$2(Derived),
@@ -14700,8 +14606,6 @@
           frameCropTopOffset = 0,
           frameCropBottomOffset = 0,
           profileIdc,
-          profileCompat,
-          levelIdc,
           numRefFramesInPicOrderCntCycle,
           picWidthInMbsMinus1,
           picHeightInMapUnitsMinus1,
@@ -14719,11 +14623,11 @@
       readUByte();
       profileIdc = readUByte(); // profile_idc
 
-      profileCompat = readBits(5); // constraint_set[0-4]_flag, u(5)
+      readBits(5); // constraint_set[0-4]_flag, u(5)
 
       skipBits(3); // reserved_zero_3bits u(3),
 
-      levelIdc = readUByte(); // level_idc u(8)
+      readUByte(); // level_idc u(8)
 
       skipUEG(); // seq_parameter_set_id
       // some profiles have more optional data we don't need
@@ -28852,9 +28756,8 @@
     },
     // Accept a setting if its a valid percentage.
     percent: function percent(k, v) {
-      var m;
 
-      if (m = v.match(/^([\d]{1,3})(\.[\d]*)?%$/)) {
+      if (v.match(/^([\d]{1,3})(\.[\d]*)?%$/)) {
         v = parseFloat(v);
 
         if (v >= 0 && v <= 100) {
@@ -33731,11 +33634,13 @@
       assign$1 = Utils.assign,
       listContainsIgnoreCase$1 = Utils.listContainsIgnoreCase;
   var AUTO = -1;
+  Events.register('PLAYBACK_FRAGMENT_CHANGED');
+  Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA');
 
   var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
     _inherits$2(HlsjsPlayback, _HTML5Video);
 
-    var _super = _createSuper$1(HlsjsPlayback);
+    var _super = _createSuper$2(HlsjsPlayback);
 
     _createClass$2(HlsjsPlayback, [{
       key: "name",
@@ -33924,8 +33829,16 @@
           return _this2._onLevelSwitch(evt, data);
         });
 
+        this._hls.on(HLSJS.Events.FRAG_CHANGED, function (evt, data) {
+          return _this2._onFragmentChanged(evt, data);
+        });
+
         this._hls.on(HLSJS.Events.FRAG_LOADED, function (evt, data) {
           return _this2._onFragmentLoaded(evt, data);
+        });
+
+        this._hls.on(HLSJS.Events.FRAG_PARSING_METADATA, function (evt, data) {
+          return _this2._onFragmentParsingMetadata(evt, data);
         });
 
         this._hls.on(HLSJS.Events.ERROR, function (evt, data) {
@@ -33941,6 +33854,14 @@
         });
 
         this._hls.attachMedia(this.el);
+      }
+    }, {
+      key: "_onFragmentParsingMetadata",
+      value: function _onFragmentParsingMetadata(evt, data) {
+        this.trigger(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA, {
+          evt: evt,
+          data: data
+        });
       }
     }, {
       key: "render",
@@ -34417,6 +34338,11 @@
 
         durationChanged && this._onDurationChange();
         startTimeChanged && this._onProgress();
+      }
+    }, {
+      key: "_onFragmentChanged",
+      value: function _onFragmentChanged(evt, data) {
+        this.trigger(Events.Custom.PLAYBACK_FRAGMENT_CHANGED, data);
       }
     }, {
       key: "_onFragmentLoaded",
