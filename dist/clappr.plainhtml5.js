@@ -12334,7 +12334,7 @@
     WaterMark: WaterMarkPlugin
   };
 
-  var version$1 = "0.4.2";
+  var version$1 = "0.4.3";
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
