@@ -320,12 +320,12 @@ Restart video after the video ends enabling the [video tag](https://developer.mo
 #### language
 > Default Value: `en-US`
 
-Sets one of the current languages supported on Clappr. You can check all supported languages on the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js#L35-93).
+Sets one of the current languages supported on Clappr. You can check all supported languages on the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings/strings.js#L35-93).
 
-If you want to provide your translations, create a PR by editing the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js).
+If you want to provide your translations, create a PR by editing the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings/strings.js).
 
 #### playbackNotSupportedMessage
-> Default Value: The `playback_not_supported` string on [Strings Plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js)
+> Default Value: The `playback_not_supported` string on [Strings Plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings/strings.js)
 
 Define a custom message to be displayed when playback is not supported.
 
