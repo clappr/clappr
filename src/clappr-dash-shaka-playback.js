@@ -87,7 +87,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get presentationTimeline() {
-    if (!this.shakaPlayerInstance) return
+    if (!this.shakaPlayerInstance || !this.shakaPlayerInstance.getManifest()) return null
 
     return this.shakaPlayerInstance.getManifest().presentationTimeline
   }
@@ -107,7 +107,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   getProgramDateTime() {
-    if (!this.shakaPlayerInstance) return 0
+    if (!this.shakaPlayerInstance || !this.presentationTimeline) return 0
 
     return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000)
   }
