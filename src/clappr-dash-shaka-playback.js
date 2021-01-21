@@ -367,24 +367,38 @@ class DashShakaPlayback extends HTML5Video {
     super.destroy()
   }
 
-  _setup () {
+  _setup() {
     this._isShakaReadyState = false
     this._ccIsSetup = false
-    this._player = this._createPlayer()
-    this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
-    this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
 
-    let playerLoaded = this._player.load(this._options.src)
-    playerLoaded.then(() => this._loaded())
-      .catch((e) => this._setupError(e))
+    let runAllSteps = () => {
+      this._player = this._createPlayer()
+      this._setInitialConfig()
+      this._loadSource()
+    }
+
+    this._player
+      ? this._player.destroy().then(() => runAllSteps())
+      : runAllSteps()
   }
 
-  _createPlayer () {
+  _createPlayer() {
     let player = new shaka.Player(this.el)
     player.addEventListener('error', this._onError.bind(this))
     player.addEventListener('adaptation', this._onAdaptation.bind(this))
     player.addEventListener('buffering', this._handleShakaBufferingEvents.bind(this))
     return player
+  }
+
+  _setInitialConfig() {
+    this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
+    this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
+  }
+
+  _loadSource() {
+    this._player.load(this._options.src)
+      .then(() => this._loaded())
+      .catch((e) => this._setupError(e))
   }
 
   _onTimeUpdate() {
