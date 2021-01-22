@@ -14,6 +14,10 @@
     "release": "webpack",
     "lint": "eslint src/"
   },
+  "files": [
+    "/dist",
+    "/src"
+  ],
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "peerDependencies": {
