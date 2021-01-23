@@ -42,6 +42,14 @@ export default class Strings extends CorePlugin {
         'default_error_title': 'Could not play video.',
         'default_error_message': 'There was a problem trying to load the video.',
       },
+      'de': {
+        'live': 'Live',
+        'back_to_live': 'Zurück zum Live-Video',
+        'disabled': 'Deaktiviert',
+        'playback_not_supported': 'Ihr Browser unterstützt das Playback Verfahren nicht. Bitte vesuchen Sie es mit einem anderen Browser.',
+        'default_error_title': 'Video kann nicht abgespielt werden',
+        'default_error_message': 'Es gab ein Problem beim Laden des Videos',
+      },
       'pt': {
         'live': 'ao vivo',
         'back_to_live': 'voltar para o ao vivo',
@@ -93,6 +101,7 @@ export default class Strings extends CorePlugin {
     }
 
     this._messages = $.extend(true, defaultMessages, this.core.options.strings || {})
+    this._messages['de-DE'] = this._messages['de']
     this._messages['pt-BR'] = this._messages['pt']
     this._messages['en-US'] = this._messages['en']
     this._messages['es-419'] = this._messages['es']
