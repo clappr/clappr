@@ -173,6 +173,41 @@ describe('HlsjsPlayback', () => {
     })
   })
 
+  describe('_ready method', () => {
+    test('call _setup method if HLS.JS internal don\'t exists', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+      jest.spyOn(playback, '_setup')
+      playback._ready()
+
+      expect(playback._setup).toHaveBeenCalledTimes(1)
+
+      playback._ready()
+      expect(playback._setup).toHaveBeenCalledTimes(1)
+    })
+
+    test('update _isReadyState flag value to true', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+
+      expect(playback._isReadyState).toBeFalsy()
+
+      playback._ready()
+
+      expect(playback._isReadyState).toBeTruthy()
+    })
+
+    test('triggers PLAYBACK_READY event', done => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+
+      playback.listenTo(playback, Events.PLAYBACK_READY, cb)
+      playback.listenTo(playback, Events.PLAYBACK_READY, () => {
+        expect(cb).toHaveBeenCalledTimes(1)
+        done()
+      })
+      playback._ready()
+    })
+  })
+
   describe('play method', () => {
     test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.preload are falsy', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: true } })
