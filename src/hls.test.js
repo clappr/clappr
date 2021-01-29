@@ -2,16 +2,9 @@ import { Core, Events } from '@clappr/core'
 import HlsjsPlayback from './hls.js'
 import HLSJS from 'hls.js'
 
-describe('HLS playback', function() {
-  beforeEach(() => {
-    this.isSupportedStub = jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
-  })
-
-  // afterEach(() => {
-  //   this.isSupportedStub.restore()
-  // })
-
-  it('should be able to identify it can play resources independently of the file extension case', function() {
+describe('HLS playback', () => {
+  test('should be able to identify it can play resources independently of the file extension case', () => {
+    jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
     expect(HlsjsPlayback.canPlay('/relative/VIDEO.M3U8')).toBeTruthy()
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8?foobarQuery=1234#somefragment')).toBeTruthy()
@@ -19,12 +12,13 @@ describe('HLS playback', function() {
     expect(HlsjsPlayback.canPlay('//whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegURL' )).toBeTruthy()
   })
 
-  it('can play regardless of any mime type letter case', function() {
+  test('can play regardless of any mime type letter case', () => {
+    jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL' )).toBeTruthy()
     expect(HlsjsPlayback.canPlay('whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegurl' )).toBeTruthy()
   })
 
-  it('should ensure it does not create an audio tag if audioOnly is not set', function() {
+  test('should ensure it does not create an audio tag if audioOnly is not set', () => {
     let options = { src: 'http://clappr.io/video.m3u8' },
       playback = new HlsjsPlayback(options)
     expect(playback.tagName).toEqual('video')
@@ -33,15 +27,15 @@ describe('HLS playback', function() {
     expect(playback.tagName).toEqual('video')
   })
 
-  it('should play on an audio tag if audioOnly is set', function() {
+  test('should play on an audio tag if audioOnly is set', () => {
     let options = { src: 'http://clappr.io/video.m3u8', playback: { audioOnly: true } },
       playback = new HlsjsPlayback(options)
     expect(playback.tagName).toEqual('audio')
   })
 
-  describe('options backwards compatibility', function() {
+  describe('options backwards compatibility', () => {
     // backwards compatibility (TODO: remove on 0.3.0)
-    it('should set options.playback as a reference to options if options.playback not set', function() {
+    test('should set options.playback as a reference to options if options.playback not set', () => {
       let options = { src: 'http://clappr.io/video.m3u8' },
         hls = new HlsjsPlayback(options)
       expect(hls.options.playback).toEqual(hls.options)
@@ -51,8 +45,8 @@ describe('HLS playback', function() {
     })
   })
 
-  describe('HlsjsPlayback.js configuration', function() {
-    it('should use hlsjsConfig from playback options', function() {
+  describe('HlsjsPlayback.js configuration', () => {
+    test('should use hlsjsConfig from playback options', () => {
       const options = {
         src: 'http://clappr.io/video.m3u8',
         playback: {
@@ -67,7 +61,7 @@ describe('HLS playback', function() {
       expect(playback._hls.config.someHlsjsOption).toEqual('value')
     })
 
-    it('should use hlsjsConfig from player options as fallback', function() {
+    test('should use hlsjsConfig from player options as fallback', () => {
       const options = {
         src: 'http://clappr.io/video.m3u8',
         hlsMinimumDvrSize: 1,
@@ -81,7 +75,7 @@ describe('HLS playback', function() {
     })
   })
 
-  it('should trigger a playback error if source load failed', function() {
+  test('should trigger a playback error if source load failed', () => {
     jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => {})
     let resolveFn = undefined
     const promise = new Promise((resolve) => {
@@ -104,39 +98,33 @@ describe('HLS playback', function() {
     })
   })
 
-  it('registers PLAYBACK_FRAGMENT_CHANGED event', function() {
+  test('registers PLAYBACK_FRAGMENT_CHANGED event', () => {
     expect(Events.Custom.PLAYBACK_FRAGMENT_CHANGED).toEqual('playbackFragmentChanged')
   })
 
-  it('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', function() {
+  test('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', () => {
     expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
   })
 
-  xit('levels', function() {
+  test('levels supports specifying the level', () => {
     let playback
-    beforeEach(() => {
-      const options = { src: 'http://clappr.io/foo.m3u8' }
-      playback = new HlsjsPlayback(options)
-      playback.setupHls()
-      // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place
-      playback.hls = {
-        levels: []
-      }
-      playback.fillLevels()
-    })
+    const options = { src: 'http://clappr.io/foo.m3u8' }
+    playback = new HlsjsPlayback(options)
+    playback._setup()
+    // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place
+    playback._hls = { levels: [] }
+    playback._fillLevels()
 
-    it('supports specifying the level', () => {
-      // AUTO by default (-1)
-      expect(playback.currentLevel).to.equal(-1)
+    // AUTO by default (-1)
+    expect(playback.currentLevel).toEqual(-1)
 
-      // Supports other level specification. Should keep track of it
-      // on itself and by proxy on the HLS.js object.
-      playback.currentLevel = 0
-      expect(playback.currentLevel).to.equal(0)
-      expect(playback.hls.currentLevel).to.equal(0)
-      playback.currentLevel = 1
-      expect(playback.currentLevel).to.equal(1)
-      expect(playback.hls.currentLevel).to.equal(1)
-    })
+    // Supports other level specification. Should keep track of it
+    // on itself and by proxy on the HLS.js object.
+    playback.currentLevel = 0
+    expect(playback.currentLevel).toEqual(0)
+    expect(playback._hls.currentLevel).toEqual(0)
+    playback.currentLevel = 1
+    expect(playback.currentLevel).toEqual(1)
+    expect(playback._hls.currentLevel).toEqual(1)
   })
 })
