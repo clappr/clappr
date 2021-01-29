@@ -192,6 +192,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _ready() {
+    !this._hls && this._setup()
     this._isReadyState = true
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
