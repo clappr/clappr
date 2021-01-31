@@ -128,7 +128,7 @@ describe('HlsjsPlayback', () => {
     test('merges defaultOptions with received options.hlsPlayback', () => {
       const options = {
         src: 'http://clappr.io/foo.m3u8',
-        hlsjsPlayback: { foo: 'bar' },
+        hlsPlayback: { foo: 'bar' },
       }
       const playback = new HlsjsPlayback(options)
       expect(playback.options.hlsPlayback).toEqual({ ...options.hlsPlayback, ...playback.defaultOptions })
@@ -146,7 +146,7 @@ describe('HlsjsPlayback', () => {
     })
 
     test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.loadSourceBeforePlay is true', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsjsPlayback: { loadSourceBeforePlay: false } })
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { loadSourceBeforePlay: false } })
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
@@ -175,7 +175,7 @@ describe('HlsjsPlayback', () => {
 
   describe('play method', () => {
     test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.loadSourceBeforePlay are falsy', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsjsPlayback: { loadSourceBeforePlay: true } })
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { loadSourceBeforePlay: true } })
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
       playback.play()
