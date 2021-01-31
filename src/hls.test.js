@@ -171,6 +171,14 @@ describe('HlsjsPlayback', () => {
 
       expect(playback._manifestParsed).toBeTruthy()
     })
+
+    test('calls bindCustomListeners method', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      jest.spyOn(playback, 'bindCustomListeners')
+      playback._setup()
+
+      expect(playback.bindCustomListeners).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('_ready method', () => {
