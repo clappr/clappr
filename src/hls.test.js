@@ -43,48 +43,6 @@ describe('HlsjsPlayback', () => {
     expect(playback.tagName).toEqual('audio')
   })
 
-  describe('options backwards compatibility', () => {
-    // backwards compatibility (TODO: remove on 0.3.0)
-    test('should set options.playback as a reference to options if options.playback not set', () => {
-      let options = { src: 'http://clappr.io/video.m3u8' },
-        hls = new HlsjsPlayback(options)
-      expect(hls.options.playback).toEqual(hls.options)
-      options = { src: 'http://clappr.io/video.m3u8', playback: { test: true } }
-      hls = new HlsjsPlayback(options)
-      expect(hls.options.playback.test).toEqual(true)
-    })
-  })
-
-  describe('HlsjsPlayback.js configuration', () => {
-    test('should use hlsjsConfig from playback options', () => {
-      const options = {
-        src: 'http://clappr.io/video.m3u8',
-        playback: {
-          hlsMinimumDvrSize: 1,
-          hlsjsConfig: {
-            someHlsjsOption: 'value'
-          }
-        }
-      }
-      const playback = new HlsjsPlayback(options)
-      playback._setup()
-      expect(playback._hls.config.someHlsjsOption).toEqual('value')
-    })
-
-    test('should use hlsjsConfig from player options as fallback', () => {
-      const options = {
-        src: 'http://clappr.io/video.m3u8',
-        hlsMinimumDvrSize: 1,
-        hlsjsConfig: {
-          someHlsjsOption: 'value'
-        }
-      }
-      const playback = new HlsjsPlayback(options)
-      playback._setup()
-      expect(playback._hls.config.someHlsjsOption).toEqual('value')
-    })
-  })
-
   test('should trigger a playback error if source load failed', () => {
     jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => {})
     let resolveFn = undefined
@@ -136,5 +94,44 @@ describe('HlsjsPlayback', () => {
     playback.currentLevel = 1
     expect(playback.currentLevel).toEqual(1)
     expect(playback._hls.currentLevel).toEqual(1)
+  })
+
+  describe('constructor', () => {
+    test('should use hlsjsConfig from playback options', () => {
+      const options = {
+        src: 'http://clappr.io/video.m3u8',
+        playback: {
+          hlsMinimumDvrSize: 1,
+          hlsjsConfig: {
+            someHlsjsOption: 'value'
+          }
+        }
+      }
+      const playback = new HlsjsPlayback(options)
+      playback._setup()
+      expect(playback._hls.config.someHlsjsOption).toEqual('value')
+    })
+
+    test('should use hlsjsConfig from player options as fallback', () => {
+      const options = {
+        src: 'http://clappr.io/video.m3u8',
+        hlsMinimumDvrSize: 1,
+        hlsjsConfig: {
+          someHlsjsOption: 'value'
+        }
+      }
+      const playback = new HlsjsPlayback(options)
+      playback._setup()
+      expect(playback._hls.config.someHlsjsOption).toEqual('value')
+    })
+
+    test('merges defaultOptions with received options.hlsPlayback', () => {
+      const options = {
+        src: 'http://clappr.io/foo.m3u8',
+        hlsjsPlayback: { foo: 'bar' },
+      }
+      const playback = new HlsjsPlayback(options)
+      expect(playback.options.hlsPlayback).toEqual({ ...options.hlsPlayback, ...playback.defaultOptions })
+    })
   })
 })
