@@ -109,6 +109,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return this._hls && this._hls.bandwidthEstimate
   }
 
+  get defaultOptions() {
+    return { loadSourceBeforePlay: true }
+  }
+
   static get HLSJS() {
     return HLSJS
   }
