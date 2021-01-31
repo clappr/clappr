@@ -2,7 +2,17 @@ import { Core, Events } from '@clappr/core'
 import HlsjsPlayback from './hls.js'
 import HLSJS from 'hls.js'
 
+const simplePlaybackMock = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+
 describe('HlsjsPlayback', () => {
+  test('have a getter called template', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'defaultOptions').get).toBeTruthy()
+  })
+
+  test('defaultOptions getter returns all the default options values into one object', () => {
+    expect(simplePlaybackMock.defaultOptions).toEqual({ loadSourceBeforePlay: true })
+  })
+
   test('should be able to identify it can play resources independently of the file extension case', () => {
     jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
