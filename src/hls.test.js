@@ -2,7 +2,7 @@ import { Core, Events } from '@clappr/core'
 import HlsjsPlayback from './hls.js'
 import HLSJS from 'hls.js'
 
-describe('HLS playback', () => {
+describe('HlsjsPlayback', () => {
   test('should be able to identify it can play resources independently of the file extension case', () => {
     jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
