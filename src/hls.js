@@ -179,6 +179,9 @@ export default class HlsjsPlayback extends HTML5Video {
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
+
+    this.bindCustomListeners()
+
     this._hls.attachMedia(this.el)
   }
 
