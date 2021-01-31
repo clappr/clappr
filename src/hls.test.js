@@ -134,4 +134,15 @@ describe('HlsjsPlayback', () => {
       expect(playback.options.hlsPlayback).toEqual({ ...options.hlsPlayback, ...playback.defaultOptions })
     })
   })
+
+  describe('_setup method', () => {
+    test('sets _manifestParsed flag to false', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      expect(playback._manifestParsed).toBeUndefined()
+
+      playback._setup()
+
+      expect(playback._manifestParsed).toBeFalsy()
+    })
+  })
 })
