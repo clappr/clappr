@@ -423,8 +423,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   play() {
-    if (!this._hls)
-      this._setup()
+    !this._hls && this._setup()
 
     super.play()
     this._startTimeUpdateTimer()
