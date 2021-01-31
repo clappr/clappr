@@ -121,6 +121,7 @@ export default class HlsjsPlayback extends HTML5Video {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback = { ...this.options, ...this.options.playback }
+    this.options.hlsPlayback = { ...this.defaultOptions, ...this.options.hlsPlayback }
     this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
     // The size of the start time extrapolation window measured as a multiple of segments.
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
