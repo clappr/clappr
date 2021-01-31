@@ -302,4 +302,21 @@ describe('HlsjsPlayback', () => {
       expect(cb).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('unbindCustomListeners method', () => {
+    test('remove listeners for each item configured on customListeners array', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: {
+          customListeners: [{ eventName: 'FRAG_LOADED', callback: cb }]
+        }
+      })
+      playback._setup()
+      playback.unbindCustomListeners()
+      playback._hls.trigger(HLSJS.Events.FRAG_LOADED)
+
+      expect(cb).not.toHaveBeenCalled()
+    })
+  })
 })
