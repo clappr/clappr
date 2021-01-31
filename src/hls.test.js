@@ -238,4 +238,60 @@ describe('HlsjsPlayback', () => {
       expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('bindCustomListeners method', () => {
+    test('creates listeners for each item configured on customListeners array', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: {
+          customListeners: [{ eventName: 'MEDIA_ATTACHING', callback: cb }]
+        }
+      })
+      playback._setup()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHING)
+
+      expect(cb).toHaveBeenCalledTimes(2)
+    })
+
+    test('don\'t add one listener without a valid configuration', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      playback._setup()
+
+      expect(cb).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback = {}
+
+      expect(cb).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.customListeners = []
+
+      expect(cb).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.customListeners.push([{ eventName: 'invalid_name', callback: cb }])
+
+      expect(cb).not.toHaveBeenCalled()
+    })
+
+    test('adds a listener for one time when the customListeners array item is configured with the "once" param', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: {
+          customListeners: [{ eventName: 'MEDIA_ATTACHING', callback: cb, once: true }]
+        }
+      })
+      playback._setup()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHING)
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
 })
