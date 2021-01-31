@@ -172,4 +172,26 @@ describe('HlsjsPlayback', () => {
       expect(playback._manifestParsed).toBeTruthy()
     })
   })
+
+  describe('play method', () => {
+    test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.loadSourceBeforePlay are falsy', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsjsPlayback: { loadSourceBeforePlay: true } })
+      playback._setup()
+      jest.spyOn(playback._hls, 'loadSource')
+      playback.play()
+
+      expect(playback._hls.loadSource).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.loadSourceBeforePlay = false
+      playback._manifestParsed = true
+      playback.play()
+
+      expect(playback._hls.loadSource).not.toHaveBeenCalled()
+
+      playback._manifestParsed = false
+      playback.play()
+
+      expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+    })
+  })
 })
