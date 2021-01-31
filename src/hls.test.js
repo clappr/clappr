@@ -144,5 +144,32 @@ describe('HlsjsPlayback', () => {
 
       expect(playback._manifestParsed).toBeFalsy()
     })
+
+    test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.loadSourceBeforePlay is true', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsjsPlayback: { loadSourceBeforePlay: false } })
+      playback._setup()
+      jest.spyOn(playback._hls, 'loadSource')
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
+
+      expect(playback._hls.loadSource).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.loadSourceBeforePlay = true
+      playback._setup()
+      jest.spyOn(playback._hls, 'loadSource')
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
+
+      expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+    })
+
+    test('updates _manifestParsed flag value to true if MANIFEST_PARSED event is triggered', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+
+      expect(playback._manifestParsed).toBeUndefined()
+
+      playback._setup()
+      playback._hls.trigger(HLSJS.Events.MANIFEST_PARSED)
+
+      expect(playback._manifestParsed).toBeTruthy()
+    })
   })
 })
