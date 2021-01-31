@@ -182,6 +182,15 @@ export default class HlsjsPlayback extends HTML5Video {
     this._hls.attachMedia(this.el)
   }
 
+  bindCustomListeners() {
+    this.options.hlsPlayback &&
+    this.options.hlsPlayback.customListeners &&
+    this.options.hlsPlayback.customListeners.forEach(item => {
+      const requestedEventName = item.eventName
+      const typeOfListener = item.once ? 'once': 'on'
+      HLSJS.Events[`${requestedEventName}`] && this._hls[`${typeOfListener}`](HLSJS.Events[`${requestedEventName}`], item.callback)
+    })
+  }
   _onFragmentParsingMetadata(evt, data) {
     this.trigger(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA, { evt, data })
   }
