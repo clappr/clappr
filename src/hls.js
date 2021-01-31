@@ -163,6 +163,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _setup() {
+    this._manifestParsed = false
     this._ccIsSetup = false
     this._ccTracksUpdated = false
     this._hls && this._hls.destroy()
