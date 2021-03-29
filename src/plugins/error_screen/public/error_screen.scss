@@ -10,7 +10,7 @@ div.player-error-screen {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 2000;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   justify-content: center;
 
@@ -39,6 +39,6 @@ div.player-error-screen {
   &__reload {
     cursor: pointer;
     width: 30px;
-    margin: 15px auto 0;
+    margin: 15px auto 0 !important;
   }
 }
