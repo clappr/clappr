@@ -1,10 +1,12 @@
+
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Clappr = factory());
 }(this, (function () { 'use strict';
 
-  function _defineProperty(obj, key, value) {
+  function _defineProperty$2(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value: value,
@@ -19,7 +21,7 @@
     return obj;
   }
 
-  function ownKeys(object, enumerableOnly) {
+  function ownKeys$2(object, enumerableOnly) {
     var keys = Object.keys(object);
 
     if (Object.getOwnPropertySymbols) {
@@ -33,18 +35,18 @@
     return keys;
   }
 
-  function _objectSpread2(target) {
+  function _objectSpread2$2(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
+        ownKeys$2(Object(source), true).forEach(function (key) {
+          _defineProperty$2(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(Object(source)).forEach(function (key) {
+        ownKeys$2(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -69,13 +71,13 @@
     return _typeof(obj);
   }
 
-  function _classCallCheck(instance, Constructor) {
+  function _classCallCheck$2(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties(target, props) {
+  function _defineProperties$2(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -85,9 +87,9 @@
     }
   }
 
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
+  function _createClass$2(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties$2(Constructor, staticProps);
     return Constructor;
   }
 
@@ -140,7 +142,7 @@
     return target;
   }
 
-  function _inherits(subClass, superClass) {
+  function _inherits$2(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -152,26 +154,26 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf(subClass, superClass);
+    if (superClass) _setPrototypeOf$2(subClass, superClass);
   }
 
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf$2(o) {
+    _getPrototypeOf$2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf(o);
+    return _getPrototypeOf$2(o);
   }
 
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf$2(o, p) {
+    _setPrototypeOf$2 = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf(o, p);
+    return _setPrototypeOf$2(o, p);
   }
 
-  function _isNativeReflectConstruct() {
+  function _isNativeReflectConstruct$2() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -184,7 +186,7 @@
     }
   }
 
-  function _assertThisInitialized(self) {
+  function _assertThisInitialized$2(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -192,48 +194,48 @@
     return self;
   }
 
-  function _possibleConstructorReturn(self, call) {
+  function _possibleConstructorReturn$2(self, call) {
     if (call && (typeof call === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized(self);
+    return _assertThisInitialized$2(self);
   }
 
-  function _createSuper(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+  function _createSuper$2(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct$2();
 
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf(Derived),
+      var Super = _getPrototypeOf$2(Derived),
           result;
 
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf(this).constructor;
+        var NewTarget = _getPrototypeOf$2(this).constructor;
 
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
 
-      return _possibleConstructorReturn(this, result);
+      return _possibleConstructorReturn$2(this, result);
     };
   }
 
-  function _superPropBase(object, property) {
+  function _superPropBase$2(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf(object);
+      object = _getPrototypeOf$2(object);
       if (object === null) break;
     }
 
     return object;
   }
 
-  function _get(target, property, receiver) {
+  function _get$2(target, property, receiver) {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get = Reflect.get;
+      _get$2 = Reflect.get;
     } else {
-      _get = function _get(target, property, receiver) {
-        var base = _superPropBase(target, property);
+      _get$2 = function _get(target, property, receiver) {
+        var base = _superPropBase$2(target, property);
 
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -246,26 +248,26 @@
       };
     }
 
-    return _get(target, property, receiver || target);
+    return _get$2(target, property, receiver || target);
   }
 
   function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray$1(arr, i) || _nonIterableRest();
   }
 
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+  function _toConsumableArray$1(arr) {
+    return _arrayWithoutHoles$1(arr) || _iterableToArray$1(arr) || _unsupportedIterableToArray$1(arr) || _nonIterableSpread$1();
   }
 
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  function _arrayWithoutHoles$1(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray$1(arr);
   }
 
   function _arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
   }
 
-  function _iterableToArray(iter) {
+  function _iterableToArray$1(iter) {
     if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
   }
 
@@ -296,16 +298,16 @@
     return _arr;
   }
 
-  function _unsupportedIterableToArray(o, minLen) {
+  function _unsupportedIterableToArray$1(o, minLen) {
     if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    if (typeof o === "string") return _arrayLikeToArray$1(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
     if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$1(o, minLen);
   }
 
-  function _arrayLikeToArray(arr, len) {
+  function _arrayLikeToArray$1(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
 
     for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
@@ -313,7 +315,7 @@
     return arr2;
   }
 
-  function _nonIterableSpread() {
+  function _nonIterableSpread$1() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
@@ -325,7 +327,7 @@
     var it;
 
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray$1(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it) o = it;
         var i = 0;
 
@@ -2994,7 +2996,7 @@
     window.setTimeout(fn, 1000 / 60);
   }).bind(window);
   var cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
-  function assign(obj, source) {
+  function assign$1(obj, source) {
     if (source) {
       for (var prop in source) {
         var propDescriptor = Object.getOwnPropertyDescriptor(source, prop);
@@ -3004,33 +3006,33 @@
 
     return obj;
   }
-  function extend(parent, properties) {
+  function extend$1(parent, properties) {
     var Surrogate = /*#__PURE__*/function (_parent) {
-      _inherits(Surrogate, _parent);
+      _inherits$2(Surrogate, _parent);
 
-      var _super = _createSuper(Surrogate);
+      var _super = _createSuper$2(Surrogate);
 
       function Surrogate() {
         var _this;
 
-        _classCallCheck(this, Surrogate);
+        _classCallCheck$2(this, Surrogate);
 
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
         }
 
         _this = _super.call.apply(_super, [this].concat(args));
-        if (properties.initialize) properties.initialize.apply(_assertThisInitialized(_this), args);
+        if (properties.initialize) properties.initialize.apply(_assertThisInitialized$2(_this), args);
         return _this;
       }
 
       return Surrogate;
     }(parent);
 
-    assign(Surrogate.prototype, properties);
+    assign$1(Surrogate.prototype, properties);
     return Surrogate;
   }
-  function formatTime(time, paddedHours) {
+  function formatTime$2(time, paddedHours) {
     if (!isFinite(time)) return '--:--';
     time = time * 1000;
     time = parseInt(time / 1000);
@@ -3052,7 +3054,7 @@
     out += ('0' + seconds).slice(-2);
     return out.trim();
   }
-  var Fullscreen = {
+  var Fullscreen$1 = {
     fullscreenElement: function fullscreenElement() {
       return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
     },
@@ -3080,12 +3082,12 @@
       return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
     }
   };
-  var Config = /*#__PURE__*/function () {
+  var Config$1 = /*#__PURE__*/function () {
     function Config() {
-      _classCallCheck(this, Config);
+      _classCallCheck$2(this, Config);
     }
 
-    _createClass(Config, null, [{
+    _createClass$2(Config, null, [{
       key: "_defaultConfig",
       value: function _defaultConfig() {
         return {
@@ -3133,10 +3135,10 @@
   }();
   var QueryString = /*#__PURE__*/function () {
     function QueryString() {
-      _classCallCheck(this, QueryString);
+      _classCallCheck$2(this, QueryString);
     }
 
-    _createClass(QueryString, null, [{
+    _createClass$2(QueryString, null, [{
       key: "parse",
       value: function parse(paramsString) {
         var match;
@@ -3224,17 +3226,17 @@
   function getBrowserLanguage() {
     return window.navigator && window.navigator.language;
   }
-  function now() {
+  function now$1() {
     if (window.performance && window.performance.now) return performance.now();
     return Date.now();
   } // remove the item from the array if it exists in the array
 
-  function removeArrayItem(arr, item) {
+  function removeArrayItem$1(arr, item) {
     var i = arr.indexOf(item);
     if (i >= 0) arr.splice(i, 1);
   } // find an item regardless of its letter case
 
-  function listContainsIgnoreCase(item, items) {
+  function listContainsIgnoreCase$1(item, items) {
     if (item === undefined || items === undefined) return false;
     return items.find(function (itemEach) {
       return item.toLowerCase() === itemEach.toLowerCase();
@@ -3279,10 +3281,10 @@
 
   var DomRecycler = /*#__PURE__*/function () {
     function DomRecycler() {
-      _classCallCheck(this, DomRecycler);
+      _classCallCheck$2(this, DomRecycler);
     }
 
-    _createClass(DomRecycler, null, [{
+    _createClass$2(DomRecycler, null, [{
       key: "configure",
       value: function configure(options) {
         this.options = zepto.extend(true, this.options, options);
@@ -3314,13 +3316,13 @@
     function DoubleEventHandler() {
       var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
 
-      _classCallCheck(this, DoubleEventHandler);
+      _classCallCheck$2(this, DoubleEventHandler);
 
       this.delay = delay;
       this.lastTime = 0;
     }
 
-    _createClass(DoubleEventHandler, [{
+    _createClass$2(DoubleEventHandler, [{
       key: "handle",
       value: function handle(event, cb) {
         var prevented = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
@@ -3340,13 +3342,13 @@
     return DoubleEventHandler;
   }();
   var Utils = {
-    Config: Config,
-    Fullscreen: Fullscreen,
+    Config: Config$1,
+    Fullscreen: Fullscreen$1,
     QueryString: QueryString,
     DomRecycler: DomRecycler,
-    assign: assign,
-    extend: extend,
-    formatTime: formatTime,
+    assign: assign$1,
+    extend: extend$1,
+    formatTime: formatTime$2,
     seekStringToSeconds: seekStringToSeconds,
     uniqueId: uniqueId,
     currentScriptUrl: currentScriptUrl,
@@ -3354,9 +3356,9 @@
     requestAnimationFrame: requestAnimationFrame,
     cancelAnimationFrame: cancelAnimationFrame,
     getBrowserLanguage: getBrowserLanguage,
-    now: now,
-    removeArrayItem: removeArrayItem,
-    listContainsIgnoreCase: listContainsIgnoreCase,
+    now: now$1,
+    removeArrayItem: removeArrayItem$1,
+    listContainsIgnoreCase: listContainsIgnoreCase$1,
     canAutoPlayMedia: canAutoPlayMedia,
     Media: Media,
     DoubleEventHandler: DoubleEventHandler
@@ -3378,7 +3380,7 @@
   var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
 
   var Log = /*#__PURE__*/function () {
-    _createClass(Log, [{
+    _createClass$2(Log, [{
       key: "level",
       get: function get() {
         return this._level;
@@ -3392,7 +3394,7 @@
       var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
       var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
 
-      _classCallCheck(this, Log);
+      _classCallCheck$2(this, Log);
 
       this.EXCLUDE_LIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
       this.level = level;
@@ -3400,7 +3402,7 @@
       this.offLevel = offLevel;
     }
 
-    _createClass(Log, [{
+    _createClass$2(Log, [{
       key: "debug",
       value: function debug(klass) {
         this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
@@ -3574,10 +3576,10 @@
 
   var Events = /*#__PURE__*/function () {
     function Events() {
-      _classCallCheck(this, Events);
+      _classCallCheck$2(this, Events);
     }
 
-    _createClass(Events, [{
+    _createClass$2(Events, [{
       key: "on",
 
       /**
@@ -4454,11 +4456,11 @@
    */
 
   var BaseObject = /*#__PURE__*/function (_Events) {
-    _inherits(BaseObject, _Events);
+    _inherits$2(BaseObject, _Events);
 
-    var _super = _createSuper(BaseObject);
+    var _super = _createSuper$2(BaseObject);
 
-    _createClass(BaseObject, [{
+    _createClass$2(BaseObject, [{
       key: "options",
 
       /**
@@ -4481,7 +4483,7 @@
 
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      _classCallCheck(this, BaseObject);
+      _classCallCheck$2(this, BaseObject);
 
       _this = _super.call(this, options);
       _this._options = options;
@@ -4612,11 +4614,11 @@
    */
 
   var UIObject = /*#__PURE__*/function (_BaseObject) {
-    _inherits(UIObject, _BaseObject);
+    _inherits$2(UIObject, _BaseObject);
 
-    var _super = _createSuper(UIObject);
+    var _super = _createSuper$2(UIObject);
 
-    _createClass(UIObject, [{
+    _createClass$2(UIObject, [{
       key: "tagName",
 
       /**
@@ -4712,7 +4714,7 @@
     function UIObject(options) {
       var _this;
 
-      _classCallCheck(this, UIObject);
+      _classCallCheck$2(this, UIObject);
 
       _this = _super.call(this, options);
       _this.cid = uniqueId('c');
@@ -4735,7 +4737,7 @@
      */
 
 
-    _createClass(UIObject, [{
+    _createClass$2(UIObject, [{
       key: "$",
       value: function $(selector) {
         return this.$el.find(selector);
@@ -4853,11 +4855,11 @@
    */
 
   var PlayerError = /*#__PURE__*/function (_BaseObject) {
-    _inherits(PlayerError, _BaseObject);
+    _inherits$2(PlayerError, _BaseObject);
 
-    var _super = _createSuper(PlayerError);
+    var _super = _createSuper$2(PlayerError);
 
-    _createClass(PlayerError, [{
+    _createClass$2(PlayerError, [{
       key: "name",
       get: function get() {
         return 'error';
@@ -4884,7 +4886,7 @@
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var core = arguments.length > 1 ? arguments[1] : undefined;
 
-      _classCallCheck(this, PlayerError);
+      _classCallCheck$2(this, PlayerError);
 
       _this = _super.call(this, options);
       _this.core = core;
@@ -4897,7 +4899,7 @@
      */
 
 
-    _createClass(PlayerError, [{
+    _createClass$2(PlayerError, [{
       key: "createError",
       value: function createError(err) {
         if (!this.core) {
@@ -4952,11 +4954,11 @@
   };
 
   var UICorePlugin = /*#__PURE__*/function (_UIObject) {
-    _inherits(UICorePlugin, _UIObject);
+    _inherits$2(UICorePlugin, _UIObject);
 
-    var _super = _createSuper(UICorePlugin);
+    var _super = _createSuper$2(UICorePlugin);
 
-    _createClass(UICorePlugin, [{
+    _createClass$2(UICorePlugin, [{
       key: "playerError",
       get: function get() {
         return this.core.playerError;
@@ -4966,7 +4968,7 @@
     function UICorePlugin(core) {
       var _this;
 
-      _classCallCheck(this, UICorePlugin);
+      _classCallCheck$2(this, UICorePlugin);
 
       _this = _super.call(this, core.options);
       _this.core = core;
@@ -4979,7 +4981,7 @@
       return _this;
     }
 
-    _createClass(UICorePlugin, [{
+    _createClass$2(UICorePlugin, [{
       key: "bindEvents",
       value: function bindEvents() {}
     }, {
@@ -5015,12 +5017,12 @@
   Object.assign(UICorePlugin.prototype, ErrorMixin);
 
   UICorePlugin.extend = function (properties) {
-    return extend(UICorePlugin, properties);
+    return extend$1(UICorePlugin, properties);
   };
 
   UICorePlugin.type = 'core';
 
-  var css_248z = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
+  var css_248z$8 = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
 
   /**
    * An abstraction to represent a container for a given playback
@@ -5032,11 +5034,11 @@
    */
 
   var Container = /*#__PURE__*/function (_UIObject) {
-    _inherits(Container, _UIObject);
+    _inherits$2(Container, _UIObject);
 
-    var _super = _createSuper(Container);
+    var _super = _createSuper$2(Container);
 
-    _createClass(Container, [{
+    _createClass$2(Container, [{
       key: "name",
 
       /**
@@ -5157,7 +5159,7 @@
     function Container(options, i18n, playerError) {
       var _this;
 
-      _classCallCheck(this, Container);
+      _classCallCheck$2(this, Container);
 
       _this = _super.call(this, options);
       _this._i18n = i18n;
@@ -5207,7 +5209,7 @@
      */
 
 
-    _createClass(Container, [{
+    _createClass$2(Container, [{
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.onProgress);
@@ -5648,7 +5650,7 @@
     }, {
       key: "render",
       value: function render() {
-        var style = Styler.getStyleFor(css_248z.toString(), {
+        var style = Styler.getStyleFor(css_248z$8.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -5673,11 +5675,11 @@
    */
 
   var Playback = /*#__PURE__*/function (_UIObject) {
-    _inherits(Playback, _UIObject);
+    _inherits$2(Playback, _UIObject);
 
-    var _super = _createSuper(Playback);
+    var _super = _createSuper$2(Playback);
 
-    _createClass(Playback, [{
+    _createClass$2(Playback, [{
       key: "isAudioOnly",
 
       /**
@@ -5739,7 +5741,7 @@
     function Playback(options, i18n, playerError) {
       var _this;
 
-      _classCallCheck(this, Playback);
+      _classCallCheck$2(this, Playback);
 
       _this = _super.call(this, options);
       _this.settings = {};
@@ -5755,7 +5757,7 @@
      */
 
 
-    _createClass(Playback, [{
+    _createClass$2(Playback, [{
       key: "consent",
       value: function consent(cb) {
         typeof cb === 'function' && cb();
@@ -5990,7 +5992,7 @@
   Object.assign(Playback.prototype, ErrorMixin);
 
   Playback.extend = function (properties) {
-    return extend(Playback, properties);
+    return extend$1(Playback, properties);
   };
   /**
    * checks if the playback can play a given `source`
@@ -6056,11 +6058,11 @@
   Playback.type = 'playback';
 
   var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
-    _inherits(ContainerFactory, _BaseObject);
+    _inherits$2(ContainerFactory, _BaseObject);
 
-    var _super = _createSuper(ContainerFactory);
+    var _super = _createSuper$2(ContainerFactory);
 
-    _createClass(ContainerFactory, [{
+    _createClass$2(ContainerFactory, [{
       key: "options",
       get: function get() {
         return this._options;
@@ -6073,7 +6075,7 @@
     function ContainerFactory(options, loader, i18n, playerError) {
       var _this;
 
-      _classCallCheck(this, ContainerFactory);
+      _classCallCheck$2(this, ContainerFactory);
 
       _this = _super.call(this, options);
       _this._i18n = i18n;
@@ -6082,7 +6084,7 @@
       return _this;
     }
 
-    _createClass(ContainerFactory, [{
+    _createClass$2(ContainerFactory, [{
       key: "createContainers",
       value: function createContainers() {
         var _this2 = this;
@@ -6147,9 +6149,9 @@
     return ContainerFactory;
   }(BaseObject);
 
-  var css_248z$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
+  var css_248z$1$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
 
-  var css_248z$2 = "[data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n[data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n[data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n[data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n[data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n[data-player] b, [data-player] u, [data-player] i, [data-player] center,\n[data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n[data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n[data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n[data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n[data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n[data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n[data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font: inherit;\n  font-size: 100%;\n  vertical-align: baseline; }\n\n[data-player] table {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n[data-player] caption, [data-player] th, [data-player] td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle; }\n\n[data-player] q, [data-player] blockquote {\n  quotes: none; }\n  [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n    content: \"\";\n    content: none; }\n\n[data-player] a img {\n  border: none; }\n";
+  var css_248z$2$1 = "[data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n[data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n[data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n[data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n[data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n[data-player] b, [data-player] u, [data-player] i, [data-player] center,\n[data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n[data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n[data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n[data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n[data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n[data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n[data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font: inherit;\n  font-size: 100%;\n  vertical-align: baseline; }\n\n[data-player] table {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n[data-player] caption, [data-player] th, [data-player] td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle; }\n\n[data-player] q, [data-player] blockquote {\n  quotes: none; }\n  [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n    content: \"\";\n    content: none; }\n\n[data-player] a img {\n  border: none; }\n";
 
   /**
    * The Core is responsible to manage Containers and the player state.
@@ -6160,11 +6162,11 @@
    */
 
   var Core = /*#__PURE__*/function (_UIObject) {
-    _inherits(Core, _UIObject);
+    _inherits$2(Core, _UIObject);
 
-    var _super = _createSuper(Core);
+    var _super = _createSuper$2(Core);
 
-    _createClass(Core, [{
+    _createClass$2(Core, [{
       key: "events",
       get: function get() {
         return {
@@ -6263,10 +6265,10 @@
     function Core(options) {
       var _this;
 
-      _classCallCheck(this, Core);
+      _classCallCheck$2(this, Core);
 
       _this = _super.call(this, options);
-      _this.playerError = new PlayerError(options, _assertThisInitialized(_this));
+      _this.playerError = new PlayerError(options, _assertThisInitialized$2(_this));
 
       _this.configureDomRecycler();
 
@@ -6287,7 +6289,7 @@
       return _this;
     }
 
-    _createClass(Core, [{
+    _createClass$2(Core, [{
       key: "configureDomRecycler",
       value: function configureDomRecycler() {
         var recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo;
@@ -6555,7 +6557,7 @@
       key: "isFullscreen",
       value: function isFullscreen() {
         // Ensure current instance is in fullscreen mode by checking fullscreen element
-        var fullscreenElement = Fullscreen.fullscreenElement();
+        var fullscreenElement = Fullscreen$1.fullscreenElement();
         if (!fullscreenElement) return false;
         var playbackEl = this.activePlayback && this.activePlayback.el;
         return fullscreenElement === this.el || fullscreenElement === playbackEl;
@@ -6566,13 +6568,13 @@
         var _this6 = this;
 
         if (this.isFullscreen()) {
-          Fullscreen.cancelFullscreen();
+          Fullscreen$1.cancelFullscreen();
           !Browser.isiOS && this.$el.removeClass('fullscreen nocursor');
         } else {
           var fullscreenEl = Browser.isiOS ? this.activePlayback && this.activePlayback.el : this.el;
           if (!fullscreenEl) return;
           Browser.isSafari || Browser.isiOS ? // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
-          Fullscreen.requestFullscreen(fullscreenEl) : Fullscreen.requestFullscreen(fullscreenEl).then(function (_) {
+          Fullscreen$1.requestFullscreen(fullscreenEl) : Fullscreen$1.requestFullscreen(fullscreenEl).then(function (_) {
             return _;
           }, function (error) {
             return setTimeout(function () {
@@ -6617,10 +6619,10 @@
     }, {
       key: "appendToParent",
       value: function appendToParent() {
-        var style = Styler.getStyleFor(css_248z$1.toString(), {
+        var style = Styler.getStyleFor(css_248z$1$1.toString(), {
           baseUrl: this.options.baseUrl
         });
-        var resetStyle = Styler.getStyleFor(css_248z$2.toString(), {
+        var resetStyle = Styler.getStyleFor(css_248z$2$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -6657,11 +6659,11 @@
    */
 
   var CoreFactory = /*#__PURE__*/function (_BaseObject) {
-    _inherits(CoreFactory, _BaseObject);
+    _inherits$2(CoreFactory, _BaseObject);
 
-    var _super = _createSuper(CoreFactory);
+    var _super = _createSuper$2(CoreFactory);
 
-    _createClass(CoreFactory, [{
+    _createClass$2(CoreFactory, [{
       key: "loader",
       get: function get() {
         return this.player.loader;
@@ -6677,7 +6679,7 @@
     function CoreFactory(player) {
       var _this;
 
-      _classCallCheck(this, CoreFactory);
+      _classCallCheck$2(this, CoreFactory);
 
       _this = _super.call(this, player.options);
       _this.player = player;
@@ -6690,7 +6692,7 @@
      */
 
 
-    _createClass(CoreFactory, [{
+    _createClass$2(CoreFactory, [{
       key: "create",
       value: function create() {
         this.options.loader = this.loader;
@@ -6736,7 +6738,7 @@
   var VERSION_REGEX = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/;
 
   var Version = /*#__PURE__*/function () {
-    _createClass(Version, null, [{
+    _createClass$2(Version, null, [{
       key: "parse",
       value: function parse() {
         var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
@@ -6753,14 +6755,14 @@
     }]);
 
     function Version(major, minor, patch) {
-      _classCallCheck(this, Version);
+      _classCallCheck$2(this, Version);
 
       this.major = parseInt(major || 0, 10);
       this.minor = parseInt(minor || 0, 10);
       this.patch = parseInt(patch || 0, 10);
     }
 
-    _createClass(Version, [{
+    _createClass$2(Version, [{
       key: "compare",
       value: function compare(other) {
         var diff = this.major - other.major;
@@ -6819,9 +6821,9 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.17";
+    var currentVersion = "0.4.18";
     return /*#__PURE__*/function () {
-      _createClass(Loader, null, [{
+      _createClass$2(Loader, null, [{
         key: "checkVersionSupport",
         value: function checkVersionSupport(entry) {
           var _entry$prototype = entry.prototype,
@@ -6875,7 +6877,7 @@
             Log.warn('Loader', "overriding playback entry: ".concat(previousEntry.name, " - ").concat(previousEntry));
           }
 
-          registry.playbacks = [playbackEntry].concat(_toConsumableArray(playbacks));
+          registry.playbacks = [playbackEntry].concat(_toConsumableArray$1(playbacks));
           return true;
         }
       }, {
@@ -6921,7 +6923,7 @@
       }, {
         key: "registeredPlaybacks",
         get: function get() {
-          return _toConsumableArray(registry.playbacks);
+          return _toConsumableArray$1(registry.playbacks);
         }
       }, {
         key: "registeredPlugins",
@@ -6940,10 +6942,10 @@
         var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
         var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-        _classCallCheck(this, Loader);
+        _classCallCheck$2(this, Loader);
 
         this.playerId = playerId;
-        this.playbackPlugins = _toConsumableArray(registry.playbacks);
+        this.playbackPlugins = _toConsumableArray$1(registry.playbacks);
         var _Loader$registeredPlu = Loader.registeredPlugins,
             core = _Loader$registeredPlu.core,
             container = _Loader$registeredPlu.container;
@@ -6961,7 +6963,7 @@
        */
 
 
-      _createClass(Loader, [{
+      _createClass$2(Loader, [{
         key: "groupPluginsByType",
         value: function groupPluginsByType(plugins) {
           if (Array.isArray(plugins)) {
@@ -7081,11 +7083,11 @@
    */
 
   var Player = /*#__PURE__*/function (_BaseObject) {
-    _inherits(Player, _BaseObject);
+    _inherits$2(Player, _BaseObject);
 
-    var _super = _createSuper(Player);
+    var _super = _createSuper$2(Player);
 
-    _createClass(Player, [{
+    _createClass$2(Player, [{
       key: "loader",
       set: function set(loader) {
         this._loader = loader;
@@ -7285,7 +7287,7 @@
     function Player(options) {
       var _this;
 
-      _classCallCheck(this, Player);
+      _classCallCheck$2(this, Player);
 
       _this = _super.call(this, options);
       var playbackDefaultOptions = {
@@ -7316,7 +7318,7 @@
 
       _this._registerOptionEventListeners(_this.options.events);
 
-      _this._coreFactory = new CoreFactory(_assertThisInitialized(_this));
+      _this._coreFactory = new CoreFactory(_assertThisInitialized$2(_this));
       if (_this.options.parentId) _this.setParentId(_this.options.parentId);else if (_this.options.parent) _this.attachTo(_this.options.parent);
       return _this;
     }
@@ -7328,7 +7330,7 @@
      */
 
 
-    _createClass(Player, [{
+    _createClass$2(Player, [{
       key: "setParentId",
       value: function setParentId(parentId) {
         var el = document.querySelector(parentId);
@@ -7753,11 +7755,11 @@
    */
 
   var ContainerPlugin = /*#__PURE__*/function (_BaseObject) {
-    _inherits(ContainerPlugin, _BaseObject);
+    _inherits$2(ContainerPlugin, _BaseObject);
 
-    var _super = _createSuper(ContainerPlugin);
+    var _super = _createSuper$2(ContainerPlugin);
 
-    _createClass(ContainerPlugin, [{
+    _createClass$2(ContainerPlugin, [{
       key: "playerError",
       get: function get() {
         return this.container.playerError;
@@ -7767,7 +7769,7 @@
     function ContainerPlugin(container) {
       var _this;
 
-      _classCallCheck(this, ContainerPlugin);
+      _classCallCheck$2(this, ContainerPlugin);
 
       _this = _super.call(this, container.options);
       _this.container = container;
@@ -7778,7 +7780,7 @@
       return _this;
     }
 
-    _createClass(ContainerPlugin, [{
+    _createClass$2(ContainerPlugin, [{
       key: "enable",
       value: function enable() {
         if (!this.enabled) {
@@ -7809,17 +7811,17 @@
   Object.assign(ContainerPlugin.prototype, ErrorMixin);
 
   ContainerPlugin.extend = function (properties) {
-    return extend(ContainerPlugin, properties);
+    return extend$1(ContainerPlugin, properties);
   };
 
   ContainerPlugin.type = 'container';
 
   var CorePlugin = /*#__PURE__*/function (_BaseObject) {
-    _inherits(CorePlugin, _BaseObject);
+    _inherits$2(CorePlugin, _BaseObject);
 
-    var _super = _createSuper(CorePlugin);
+    var _super = _createSuper$2(CorePlugin);
 
-    _createClass(CorePlugin, [{
+    _createClass$2(CorePlugin, [{
       key: "playerError",
       get: function get() {
         return this.core.playerError;
@@ -7829,7 +7831,7 @@
     function CorePlugin(core) {
       var _this;
 
-      _classCallCheck(this, CorePlugin);
+      _classCallCheck$2(this, CorePlugin);
 
       _this = _super.call(this, core.options);
       _this.core = core;
@@ -7840,7 +7842,7 @@
       return _this;
     }
 
-    _createClass(CorePlugin, [{
+    _createClass$2(CorePlugin, [{
       key: "bindEvents",
       value: function bindEvents() {}
     }, {
@@ -7876,7 +7878,7 @@
   Object.assign(CorePlugin.prototype, ErrorMixin);
 
   CorePlugin.extend = function (properties) {
-    return extend(CorePlugin, properties);
+    return extend$1(CorePlugin, properties);
   };
 
   CorePlugin.type = 'core';
@@ -7890,11 +7892,11 @@
    */
 
   var UIContainerPlugin = /*#__PURE__*/function (_UIObject) {
-    _inherits(UIContainerPlugin, _UIObject);
+    _inherits$2(UIContainerPlugin, _UIObject);
 
-    var _super = _createSuper(UIContainerPlugin);
+    var _super = _createSuper$2(UIContainerPlugin);
 
-    _createClass(UIContainerPlugin, [{
+    _createClass$2(UIContainerPlugin, [{
       key: "playerError",
       get: function get() {
         return this.container.playerError;
@@ -7904,7 +7906,7 @@
     function UIContainerPlugin(container) {
       var _this;
 
-      _classCallCheck(this, UIContainerPlugin);
+      _classCallCheck$2(this, UIContainerPlugin);
 
       _this = _super.call(this, container.options);
       _this.container = container;
@@ -7915,7 +7917,7 @@
       return _this;
     }
 
-    _createClass(UIContainerPlugin, [{
+    _createClass$2(UIContainerPlugin, [{
       key: "enable",
       value: function enable() {
         if (!this.enabled) {
@@ -7941,14 +7943,14 @@
   Object.assign(UIContainerPlugin.prototype, ErrorMixin);
 
   UIContainerPlugin.extend = function (properties) {
-    return extend(UIContainerPlugin, properties);
+    return extend$1(UIContainerPlugin, properties);
   };
 
   UIContainerPlugin.type = 'container';
 
   var tracksHTML = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\">\n<% }; %>\n";
 
-  var css_248z$3 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
+  var css_248z$3$1 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
 
   var MIMETYPES = {
     'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
@@ -7969,7 +7971,7 @@
     'oga': ['audio/ogg']
   };
   var KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce(function (acc, k) {
-    return [].concat(_toConsumableArray(acc), _toConsumableArray(AUDIO_MIMETYPES[k]));
+    return [].concat(_toConsumableArray$1(acc), _toConsumableArray$1(AUDIO_MIMETYPES[k]));
   }, []);
   var UNKNOWN_ERROR = {
     code: 'unknown',
@@ -7977,11 +7979,11 @@
   }; // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 
   var HTML5Video = /*#__PURE__*/function (_Playback) {
-    _inherits(HTML5Video, _Playback);
+    _inherits$2(HTML5Video, _Playback);
 
-    var _super = _createSuper(HTML5Video);
+    var _super = _createSuper$2(HTML5Video);
 
-    _createClass(HTML5Video, [{
+    _createClass$2(HTML5Video, [{
       key: "name",
       get: function get() {
         return 'html5_video';
@@ -7990,7 +7992,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -8084,7 +8086,7 @@
     function HTML5Video() {
       var _this;
 
-      _classCallCheck(this, HTML5Video);
+      _classCallCheck$2(this, HTML5Video);
 
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -8140,10 +8142,10 @@
       return _this;
     }
 
-    _createClass(HTML5Video, [{
+    _createClass$2(HTML5Video, [{
       key: "configure",
       value: function configure(options) {
-        _get(_getPrototypeOf(HTML5Video.prototype), "configure", this).call(this, options);
+        _get$2(_getPrototypeOf$2(HTML5Video.prototype), "configure", this).call(this, options);
 
         this.el.loop = !!options.loop;
       } // See Playback.attemptAutoPlay()
@@ -8272,7 +8274,7 @@
         var _this3 = this;
 
         if (this.isPlaying() || this.el._consented) {
-          _get(_getPrototypeOf(HTML5Video.prototype), "consent", this).call(this, cb);
+          _get$2(_getPrototypeOf$2(HTML5Video.prototype), "consent", this).call(this, cb);
         } else {
           var eventHandler = function eventHandler() {
             _this3.el.removeEventListener('loadedmetadata', eventHandler, false);
@@ -8281,7 +8283,7 @@
 
             _this3.el._consented = true; // Flag to call load() only once
 
-            _get(_getPrototypeOf(HTML5Video.prototype), "consent", _this3).call(_this3, cb);
+            _get$2(_getPrototypeOf$2(HTML5Video.prototype), "consent", _this3).call(_this3, cb);
           };
 
           this.el.addEventListener('loadedmetadata', eventHandler, false);
@@ -8512,7 +8514,7 @@
         this._destroyed = true;
         this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange);
 
-        _get(_getPrototypeOf(HTML5Video.prototype), "destroy", this).call(this);
+        _get$2(_getPrototypeOf$2(HTML5Video.prototype), "destroy", this).call(this);
 
         this.el.removeAttribute('src');
         this.el.load(); // load with no src to stop loading of the previous source and avoid leaks
@@ -8592,7 +8594,7 @@
         var bufferedPos = 0;
 
         for (var i = 0; i < this.el.buffered.length; i++) {
-          buffered = [].concat(_toConsumableArray(buffered), [{
+          buffered = [].concat(_toConsumableArray$1(buffered), [{
             start: this.el.buffered.start(i),
             end: this.el.buffered.end(i)
           }]);
@@ -8672,7 +8674,7 @@
 
         this._ready();
 
-        var style = Styler.getStyleFor(css_248z$3.toString(), {
+        var style = Styler.getStyleFor(css_248z$3$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -8770,17 +8772,17 @@
   };
 
   var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
-    _inherits(HTML5Audio, _HTML5Video);
+    _inherits$2(HTML5Audio, _HTML5Video);
 
-    var _super = _createSuper(HTML5Audio);
+    var _super = _createSuper$2(HTML5Audio);
 
     function HTML5Audio() {
-      _classCallCheck(this, HTML5Audio);
+      _classCallCheck$2(this, HTML5Audio);
 
       return _super.apply(this, arguments);
     }
 
-    _createClass(HTML5Audio, [{
+    _createClass$2(HTML5Audio, [{
       key: "updateSettings",
       value: function updateSettings() {
         this.settings.left = ['playpause', 'position', 'duration'];
@@ -8801,7 +8803,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -8829,14 +8831,14 @@
     return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType);
   };
 
-  var css_248z$4 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
+  var css_248z$4$1 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
 
   var HTMLImg = /*#__PURE__*/function (_Playback) {
-    _inherits(HTMLImg, _Playback);
+    _inherits$2(HTMLImg, _Playback);
 
-    var _super = _createSuper(HTMLImg);
+    var _super = _createSuper$2(HTMLImg);
 
-    _createClass(HTMLImg, [{
+    _createClass$2(HTMLImg, [{
       key: "getPlaybackType",
       value: function getPlaybackType() {
         return Playback.NO_OP;
@@ -8850,7 +8852,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -8879,17 +8881,17 @@
     function HTMLImg(params) {
       var _this;
 
-      _classCallCheck(this, HTMLImg);
+      _classCallCheck$2(this, HTMLImg);
 
       _this = _super.call(this, params);
       _this.el.src = params.src;
       return _this;
     }
 
-    _createClass(HTMLImg, [{
+    _createClass$2(HTMLImg, [{
       key: "render",
       value: function render() {
-        var style = Styler.getStyleFor(css_248z$4.toString(), {
+        var style = Styler.getStyleFor(css_248z$4$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -8920,14 +8922,14 @@
 
   var noOpHTML = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%></p><p>\n</p>";
 
-  var css_248z$5 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
+  var css_248z$5$1 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
 
   var NoOp = /*#__PURE__*/function (_Playback) {
-    _inherits(NoOp, _Playback);
+    _inherits$2(NoOp, _Playback);
 
-    var _super = _createSuper(NoOp);
+    var _super = _createSuper$2(NoOp);
 
-    _createClass(NoOp, [{
+    _createClass$2(NoOp, [{
       key: "name",
       get: function get() {
         return 'no_op';
@@ -8936,7 +8938,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -8956,7 +8958,7 @@
     function NoOp() {
       var _this;
 
-      _classCallCheck(this, NoOp);
+      _classCallCheck$2(this, NoOp);
 
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -8967,11 +8969,11 @@
       return _this;
     }
 
-    _createClass(NoOp, [{
+    _createClass$2(NoOp, [{
       key: "render",
       value: function render() {
         var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
-        var style = Styler.getStyleFor(css_248z$5.toString(), {
+        var style = Styler.getStyleFor(css_248z$5$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -9073,11 +9075,11 @@
    */
 
   var Strings = /*#__PURE__*/function (_CorePlugin) {
-    _inherits(Strings, _CorePlugin);
+    _inherits$2(Strings, _CorePlugin);
 
-    var _super = _createSuper(Strings);
+    var _super = _createSuper$2(Strings);
 
-    _createClass(Strings, [{
+    _createClass$2(Strings, [{
       key: "name",
       get: function get() {
         return 'strings';
@@ -9086,7 +9088,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }]);
@@ -9094,7 +9096,7 @@
     function Strings(core) {
       var _this;
 
-      _classCallCheck(this, Strings);
+      _classCallCheck$2(this, Strings);
 
       _this = _super.call(this, core);
 
@@ -9110,7 +9112,7 @@
      */
 
 
-    _createClass(Strings, [{
+    _createClass$2(Strings, [{
       key: "t",
       value: function t(key) {
         var lang = this._language();
@@ -9135,6 +9137,14 @@
             'playback_not_supported': 'Your browser does not support the playback of this video. Please try using a different browser.',
             'default_error_title': 'Could not play video.',
             'default_error_message': 'There was a problem trying to load the video.'
+          },
+          'de': {
+            'live': 'Live',
+            'back_to_live': 'Zurück zum Live-Video',
+            'disabled': 'Deaktiviert',
+            'playback_not_supported': 'Ihr Browser unterstützt das Playback Verfahren nicht. Bitte vesuchen Sie es mit einem anderen Browser.',
+            'default_error_title': 'Video kann nicht abgespielt werden',
+            'default_error_message': 'Es gab ein Problem beim Laden des Videos'
           },
           'pt': {
             'live': 'ao vivo',
@@ -9186,6 +9196,7 @@
           }
         };
         this._messages = zepto.extend(true, defaultMessages, this.core.options.strings || {});
+        this._messages['de-DE'] = this._messages['de'];
         this._messages['pt-BR'] = this._messages['pt'];
         this._messages['en-US'] = this._messages['en'];
         this._messages['es-419'] = this._messages['es'];
@@ -9200,17 +9211,17 @@
   }(CorePlugin);
 
   var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
-    _inherits(SourcesPlugin, _CorePlugin);
+    _inherits$2(SourcesPlugin, _CorePlugin);
 
-    var _super = _createSuper(SourcesPlugin);
+    var _super = _createSuper$2(SourcesPlugin);
 
     function SourcesPlugin() {
-      _classCallCheck(this, SourcesPlugin);
+      _classCallCheck$2(this, SourcesPlugin);
 
       return _super.apply(this, arguments);
     }
 
-    _createClass(SourcesPlugin, [{
+    _createClass$2(SourcesPlugin, [{
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated);
@@ -9234,7 +9245,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }]);
@@ -9243,7 +9254,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version = "0.4.17"; // Built-in Plugins/Playbacks
+  var version$1 = "0.4.18"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlugin(SourcesPlugin);
@@ -9251,7 +9262,7 @@
   Loader.registerPlayback(HTMLImg);
   Loader.registerPlayback(HTML5Audio);
   Loader.registerPlayback(HTML5Video);
-  var main = {
+  var main$1 = {
     Player: Player,
     Events: Events,
     Browser: Browser,
@@ -9272,7 +9283,7 @@
     HTMLImg: HTMLImg,
     Log: Log,
     Styler: Styler,
-    version: version,
+    version: version$1,
     template: tmpl,
     $: zepto
   };
@@ -9491,10 +9502,10 @@
     }
   }
 
-  var css_248z$6 = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
-  styleInject(css_248z$6);
+  var css_248z = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
+  styleInject(css_248z);
 
-  var ClosedCaptions = /*#__PURE__*/function (_UICorePlugin) {
+  var ClosedCaptions$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ClosedCaptions, _UICorePlugin);
 
     var _super = _createSuper$1(ClosedCaptions);
@@ -9666,10 +9677,10 @@
 
   var dvrHTML = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
-  var css_248z$1$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
-  styleInject(css_248z$1$1);
+  var css_248z$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
+  styleInject(css_248z$1);
 
-  var DVRControls = /*#__PURE__*/function (_UICorePlugin) {
+  var DVRControls$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(DVRControls, _UICorePlugin);
 
     var _super = _createSuper$1(DVRControls);
@@ -9820,7 +9831,7 @@
     return DVRControls;
   }(UICorePlugin);
 
-  var EndVideo = /*#__PURE__*/function (_CorePlugin) {
+  var EndVideo$1 = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(EndVideo, _CorePlugin);
 
     var _super = _createSuper$1(EndVideo);
@@ -9875,10 +9886,10 @@
 
   var templateHtml = "<div class=\"player-error-screen__content\" data-error-screen>\n  <% if (icon) { %>\n  <div class=\"player-error-screen__icon\" data-error-screen><%= icon %></div>\n  <% } %>\n  <div class=\"player-error-screen__title\" data-error-screen><%= title %></div>\n  <div class=\"player-error-screen__message\" data-error-screen><%= message %></div>\n  <div class=\"player-error-screen__code\" data-error-screen>Error code: <%= code %></div>\n  <div class=\"player-error-screen__reload\" data-error-screen><%= reloadIcon %></div>\n</div>\n";
 
-  var css_248z$2$1 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex;\n  flex-direction: column;\n  justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0; }\n";
-  styleInject(css_248z$2$1);
+  var css_248z$2 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex !important;\n  flex-direction: column;\n  justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0 !important; }\n";
+  styleInject(css_248z$2);
 
-  var ErrorScreen = /*#__PURE__*/function (_UICorePlugin) {
+  var ErrorScreen$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ErrorScreen, _UICorePlugin);
 
     var _super = _createSuper$1(ErrorScreen);
@@ -10009,7 +10020,7 @@
 
   var oldIcon = zepto('link[rel="shortcut icon"]');
 
-  var Favicon = /*#__PURE__*/function (_CorePlugin) {
+  var Favicon$1 = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(Favicon, _CorePlugin);
 
     var _super = _createSuper$1(Favicon);
@@ -10138,7 +10149,7 @@
     return Favicon;
   }(CorePlugin);
 
-  var GoogleAnalytics = /*#__PURE__*/function (_ContainerPlugin) {
+  var GoogleAnalytics$1 = /*#__PURE__*/function (_ContainerPlugin) {
     _inherits$1(GoogleAnalytics, _ContainerPlugin);
 
     var _super = _createSuper$1(GoogleAnalytics);
@@ -10668,8 +10679,8 @@
     Kibo: Kibo
   };
 
-  var css_248z$3$1 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    will-change: transform, opacity;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    transform: translateY(50px); }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    transform: translateY(-7px);\n    bottom: 0;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
-  styleInject(css_248z$3$1);
+  var css_248z$3 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    will-change: transform, opacity;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    transform: translateY(50px); }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    transform: translateY(-7px);\n    bottom: 0;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
+  styleInject(css_248z$3);
 
   var mediaControlHTML = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
@@ -10685,13 +10696,13 @@
 
   var hdIcon = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\">\n  <path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"/>\n</svg>";
 
-  var Config$1 = Utils.Config,
-      Fullscreen$1 = Utils.Fullscreen,
-      formatTime$1 = Utils.formatTime,
-      extend$1 = Utils.extend,
-      removeArrayItem$1 = Utils.removeArrayItem;
+  var Config = Utils.Config,
+      Fullscreen = Utils.Fullscreen,
+      formatTime = Utils.formatTime,
+      extend = Utils.extend,
+      removeArrayItem = Utils.removeArrayItem;
 
-  var MediaControl = /*#__PURE__*/function (_UICorePlugin) {
+  var MediaControl$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(MediaControl, _UICorePlugin);
 
     var _super = _createSuper$1(MediaControl);
@@ -10904,7 +10915,7 @@
     }, {
       key: "setInitialVolume",
       value: function setInitialVolume() {
-        var initialVolume = this.persistConfig ? Config$1.restore('volume') : 100;
+        var initialVolume = this.persistConfig ? Config.restore('volume') : 100;
         var options = this.container && this.container.options || this.options;
         this.setVolume(options.mute ? 0 : initialVolume, true);
       }
@@ -10919,7 +10930,7 @@
         var video = this.playback && this.playback.el; // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
         // see https://github.com/clappr/clappr/issues/1127
 
-        if (!Fullscreen$1.fullscreenEnabled() && video.webkitSupportsFullscreen) {
+        if (!Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
           this.fullScreenOnVideoTagSupported = true;
           this.settingsUpdate();
         }
@@ -11091,7 +11102,7 @@
         // if the container is not ready etc
 
         this.intendedVolume = value;
-        this.persistConfig && !isInitialVolume && Config$1.persist('volume', value);
+        this.persistConfig && !isInitialVolume && Config.persist('volume', value);
 
         var setWhenContainerReady = function setWhenContainerReady() {
           if (_this4.container && _this4.container.isReady) {
@@ -11188,8 +11199,8 @@
         this.currentSeekBarPercentage = 100;
         if (this.container && (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse())) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
         this.setSeekPercentage(this.currentSeekBarPercentage);
-        var newPosition = formatTime$1(this.currentPositionValue);
-        var newDuration = formatTime$1(this.currentDurationValue);
+        var newPosition = formatTime(this.currentPositionValue);
+        var newDuration = formatTime(this.currentDurationValue);
 
         if (newPosition !== this.displayedPosition) {
           this.$position.text(newPosition);
@@ -11301,11 +11312,11 @@
       value: function settingsUpdate() {
         var newSettings = this.getSettings();
 
-        if (newSettings && !this.fullScreenOnVideoTagSupported && !Fullscreen$1.fullscreenEnabled()) {
+        if (newSettings && !this.fullScreenOnVideoTagSupported && !Fullscreen.fullscreenEnabled()) {
           // remove fullscreen from settings if it is present
-          newSettings["default"] && removeArrayItem$1(newSettings["default"], 'fullscreen');
-          newSettings.left && removeArrayItem$1(newSettings.left, 'fullscreen');
-          newSettings.right && removeArrayItem$1(newSettings.right, 'fullscreen');
+          newSettings["default"] && removeArrayItem(newSettings["default"], 'fullscreen');
+          newSettings.left && removeArrayItem(newSettings.left, 'fullscreen');
+          newSettings.right && removeArrayItem(newSettings.right, 'fullscreen');
         }
 
         var settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(newSettings);
@@ -11553,14 +11564,14 @@
     return MediaControl;
   }(UICorePlugin);
 
-  MediaControl.extend = function (properties) {
-    return extend$1(MediaControl, properties);
+  MediaControl$1.extend = function (properties) {
+    return extend(MediaControl$1, properties);
   };
 
   var posterHTML = "<div class=\"play-wrapper\" data-poster></div>\n";
 
-  var css_248z$4$1 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
-  styleInject(css_248z$4$1);
+  var css_248z$4 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
+  styleInject(css_248z$4);
 
   var PosterPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(PosterPlugin, _UIContainerPlugin);
@@ -11770,12 +11781,12 @@
 
   var seekTimeHTML = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
-  var css_248z$5$1 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
-  styleInject(css_248z$5$1);
+  var css_248z$5 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
+  styleInject(css_248z$5);
 
-  var formatTime$1$1 = Utils.formatTime;
+  var formatTime$1 = Utils.formatTime;
 
-  var SeekTime = /*#__PURE__*/function (_UICorePlugin) {
+  var SeekTime$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(SeekTime, _UICorePlugin);
 
     var _super = _createSuper$1(SeekTime);
@@ -11938,7 +11949,7 @@
           this.$el.css('left', '-100%');
         } else {
           var seekTime = this.getSeekTime();
-          var currentSeekTime = formatTime$1$1(seekTime.seekTime, this.useActualLiveTime); // only update dom if necessary, ie time actually changed
+          var currentSeekTime = formatTime$1(seekTime.seekTime, this.useActualLiveTime); // only update dom if necessary, ie time actually changed
 
           if (currentSeekTime !== this.displayedSeekTime) {
             this.$seekTimeEl.text(currentSeekTime);
@@ -11947,7 +11958,7 @@
 
           if (this.durationShown) {
             this.$durationEl.show();
-            var currentDuration = formatTime$1$1(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
+            var currentDuration = formatTime$1(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
 
             if (currentDuration !== this.displayedDuration) {
               this.$durationEl.text(currentDuration);
@@ -11993,8 +12004,8 @@
 
   var spinnerHTML = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
-  var css_248z$6$1 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
-  styleInject(css_248z$6$1);
+  var css_248z$6 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
+  styleInject(css_248z$6);
 
   var SpinnerThreeBouncePlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(SpinnerThreeBouncePlugin, _UIContainerPlugin);
@@ -12320,21 +12331,21 @@
   }(UIContainerPlugin);
   var Plugins = {
     ClickToPause: ClickToPausePlugin,
-    ClosedCaptions: ClosedCaptions,
-    DVRControls: DVRControls,
-    EndVideo: EndVideo,
-    ErrorScreen: ErrorScreen,
-    Favicon: Favicon,
-    GoogleAnalytics: GoogleAnalytics,
-    MediaControl: MediaControl,
+    ClosedCaptions: ClosedCaptions$1,
+    DVRControls: DVRControls$1,
+    EndVideo: EndVideo$1,
+    ErrorScreen: ErrorScreen$1,
+    Favicon: Favicon$1,
+    GoogleAnalytics: GoogleAnalytics$1,
+    MediaControl: MediaControl$1,
     Poster: PosterPlugin,
-    SeekTime: SeekTime,
+    SeekTime: SeekTime$1,
     SpinnerThreeBounce: SpinnerThreeBouncePlugin,
     Stats: StatsPlugin,
     WaterMark: WaterMarkPlugin
   };
 
-  var version$1 = "0.4.3";
+  var version = "0.4.3";
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
@@ -12343,44 +12354,44 @@
 
 
   var ClickToPause = Plugins.ClickToPause,
-      ClosedCaptions$1 = Plugins.ClosedCaptions,
-      DVRControls$1 = Plugins.DVRControls,
-      EndVideo$1 = Plugins.EndVideo,
-      ErrorScreen$1 = Plugins.ErrorScreen,
-      Favicon$1 = Plugins.Favicon,
-      GoogleAnalytics$1 = Plugins.GoogleAnalytics,
-      MediaControl$1 = Plugins.MediaControl,
+      ClosedCaptions = Plugins.ClosedCaptions,
+      DVRControls = Plugins.DVRControls,
+      EndVideo = Plugins.EndVideo,
+      ErrorScreen = Plugins.ErrorScreen,
+      Favicon = Plugins.Favicon,
+      GoogleAnalytics = Plugins.GoogleAnalytics,
+      MediaControl = Plugins.MediaControl,
       Poster = Plugins.Poster,
-      SeekTime$1 = Plugins.SeekTime,
+      SeekTime = Plugins.SeekTime,
       SpinnerThreeBounce = Plugins.SpinnerThreeBounce,
       Stats = Plugins.Stats,
       WaterMark = Plugins.WaterMark;
-  var BaseExports = _objectSpread2(_objectSpread2({}, main), {}, {
+  var BaseExports = _objectSpread2$2(_objectSpread2$2({}, main$1), {}, {
     ClickToPause: ClickToPause,
-    ClosedCaptions: ClosedCaptions$1,
-    DVRControls: DVRControls$1,
-    EndVideo: EndVideo$1,
-    ErrorScreen: ErrorScreen$1,
-    Favicon: Favicon$1,
-    GoogleAnalytics: GoogleAnalytics$1,
-    MediaControl: MediaControl$1,
+    ClosedCaptions: ClosedCaptions,
+    DVRControls: DVRControls,
+    EndVideo: EndVideo,
+    ErrorScreen: ErrorScreen,
+    Favicon: Favicon,
+    GoogleAnalytics: GoogleAnalytics,
+    MediaControl: MediaControl,
     Poster: Poster,
-    SeekTime: SeekTime$1,
+    SeekTime: SeekTime,
     SpinnerThreeBounce: SpinnerThreeBounce,
     Stats: Stats,
     WaterMark: WaterMark,
     Vendor: index,
     Plugins: Plugins,
-    version: version$1
+    version: version
   });
 
-  function _classCallCheck$2(instance, Constructor) {
+  function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
 
-  function _defineProperties$2(target, props) {
+  function _defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -12390,13 +12401,13 @@
     }
   }
 
-  function _createClass$2(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties$2(Constructor, staticProps);
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
     return Constructor;
   }
 
-  function _defineProperty$2(obj, key, value) {
+  function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value: value,
@@ -12411,7 +12422,7 @@
     return obj;
   }
 
-  function ownKeys$2(object, enumerableOnly) {
+  function ownKeys(object, enumerableOnly) {
     var keys = Object.keys(object);
 
     if (Object.getOwnPropertySymbols) {
@@ -12425,18 +12436,18 @@
     return keys;
   }
 
-  function _objectSpread2$2(target) {
+  function _objectSpread2(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys$2(Object(source), true).forEach(function (key) {
-          _defineProperty$2(target, key, source[key]);
+        ownKeys(Object(source), true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys$2(Object(source)).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -12445,7 +12456,7 @@
     return target;
   }
 
-  function _inherits$2(subClass, superClass) {
+  function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
@@ -12457,26 +12468,26 @@
         configurable: true
       }
     });
-    if (superClass) _setPrototypeOf$2(subClass, superClass);
+    if (superClass) _setPrototypeOf(subClass, superClass);
   }
 
-  function _getPrototypeOf$2(o) {
-    _getPrototypeOf$2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
-    return _getPrototypeOf$2(o);
+    return _getPrototypeOf(o);
   }
 
-  function _setPrototypeOf$2(o, p) {
-    _setPrototypeOf$2 = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
 
-    return _setPrototypeOf$2(o, p);
+    return _setPrototypeOf(o, p);
   }
 
-  function _isNativeReflectConstruct$2() {
+  function _isNativeReflectConstruct() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -12489,7 +12500,7 @@
     }
   }
 
-  function _assertThisInitialized$2(self) {
+  function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
@@ -12497,48 +12508,48 @@
     return self;
   }
 
-  function _possibleConstructorReturn$2(self, call) {
+  function _possibleConstructorReturn(self, call) {
     if (call && (typeof call === "object" || typeof call === "function")) {
       return call;
     }
 
-    return _assertThisInitialized$2(self);
+    return _assertThisInitialized(self);
   }
 
-  function _createSuper$2(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct$2();
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
 
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf$2(Derived),
+      var Super = _getPrototypeOf(Derived),
           result;
 
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf$2(this).constructor;
+        var NewTarget = _getPrototypeOf(this).constructor;
 
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
 
-      return _possibleConstructorReturn$2(this, result);
+      return _possibleConstructorReturn(this, result);
     };
   }
 
-  function _superPropBase$2(object, property) {
+  function _superPropBase(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf$2(object);
+      object = _getPrototypeOf(object);
       if (object === null) break;
     }
 
     return object;
   }
 
-  function _get$2(target, property, receiver) {
+  function _get(target, property, receiver) {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$2 = Reflect.get;
+      _get = Reflect.get;
     } else {
-      _get$2 = function _get(target, property, receiver) {
-        var base = _superPropBase$2(target, property);
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
 
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
@@ -12551,31 +12562,31 @@
       };
     }
 
-    return _get$2(target, property, receiver || target);
+    return _get(target, property, receiver || target);
   }
 
-  function _toConsumableArray$1(arr) {
-    return _arrayWithoutHoles$1(arr) || _iterableToArray$1(arr) || _unsupportedIterableToArray$1(arr) || _nonIterableSpread$1();
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
 
-  function _arrayWithoutHoles$1(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray$1(arr);
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
   }
 
-  function _iterableToArray$1(iter) {
+  function _iterableToArray(iter) {
     if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
   }
 
-  function _unsupportedIterableToArray$1(o, minLen) {
+  function _unsupportedIterableToArray(o, minLen) {
     if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray$1(o, minLen);
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
     if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$1(o, minLen);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
   }
 
-  function _arrayLikeToArray$1(arr, len) {
+  function _arrayLikeToArray(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
 
     for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
@@ -12583,7 +12594,7 @@
     return arr2;
   }
 
-  function _nonIterableSpread$1() {
+  function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
@@ -13880,7 +13891,7 @@
     return Decrypter;
   }();
 
-  /* harmony default export */ var decrypter = __webpack_exports__["default"] = (decrypter_Decrypter);
+  /* harmony default export */ __webpack_exports__["default"] = (decrypter_Decrypter);
 
   /***/ }),
 
@@ -17944,7 +17955,7 @@
     return DemuxerInline;
   }();
 
-  /* harmony default export */ var demuxer_inline = __webpack_exports__["default"] = (demuxer_inline_DemuxerInline);
+  /* harmony default export */ __webpack_exports__["default"] = (demuxer_inline_DemuxerInline);
 
   /***/ }),
 
@@ -33630,19 +33641,19 @@
 
   var HLSJS = /*@__PURE__*/unwrapExports(hls);
 
-  var now$1 = Utils.now,
-      assign$1 = Utils.assign,
-      listContainsIgnoreCase$1 = Utils.listContainsIgnoreCase;
+  var now = Utils.now,
+      assign = Utils.assign,
+      listContainsIgnoreCase = Utils.listContainsIgnoreCase;
   var AUTO = -1;
   Events.register('PLAYBACK_FRAGMENT_CHANGED');
   Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA');
 
   var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
-    _inherits$2(HlsjsPlayback, _HTML5Video);
+    _inherits(HlsjsPlayback, _HTML5Video);
 
-    var _super = _createSuper$2(HlsjsPlayback);
+    var _super = _createSuper(HlsjsPlayback);
 
-    _createClass$2(HlsjsPlayback, [{
+    _createClass(HlsjsPlayback, [{
       key: "name",
       get: function get() {
         return 'hls';
@@ -33683,7 +33694,7 @@
     }, {
       key: "_now",
       get: function get() {
-        return now$1();
+        return now();
       } // the time in the video element which should represent the start of the sliding window
       // extrapolated to increase in real time (instead of jumping as the early segments are removed)
 
@@ -33752,7 +33763,7 @@
     function HlsjsPlayback() {
       var _this;
 
-      _classCallCheck$2(this, HlsjsPlayback);
+      _classCallCheck(this, HlsjsPlayback);
 
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -33760,7 +33771,7 @@
 
       _this = _super.call.apply(_super, [this].concat(args)); // backwards compatibility (TODO: remove on 0.3.0)
 
-      _this.options.playback = _objectSpread2$2(_objectSpread2$2({}, _this.options), _this.options.playback);
+      _this.options.playback = _objectSpread2(_objectSpread2({}, _this.options), _this.options.playback);
       _this._minDvrSize = typeof _this.options.hlsMinimumDvrSize === 'undefined' ? 60 : _this.options.hlsMinimumDvrSize; // The size of the start time extrapolation window measured as a multiple of segments.
       // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
       // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
@@ -33804,14 +33815,15 @@
       return _this;
     }
 
-    _createClass$2(HlsjsPlayback, [{
+    _createClass(HlsjsPlayback, [{
       key: "_setup",
       value: function _setup() {
         var _this2 = this;
 
         this._ccIsSetup = false;
         this._ccTracksUpdated = false;
-        this._hls = new HLSJS(assign$1({}, this.options.playback.hlsjsConfig));
+        this._hls && this._hls.destroy();
+        this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig));
 
         this._hls.once(HLSJS.Events.MEDIA_ATTACHED, function () {
           return _this2._hls.loadSource(_this2.options.src);
@@ -33868,7 +33880,7 @@
       value: function render() {
         this._ready();
 
-        return _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "render", this).call(this);
+        return _get(_getPrototypeOf(HlsjsPlayback.prototype), "render", this).call(this);
       }
     }, {
       key: "_ready",
@@ -34122,7 +34134,7 @@
         if (this._lastDuration === duration) return;
         this._lastDuration = duration;
 
-        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "_onDurationChange", this).call(this);
+        _get(_getPrototypeOf(HlsjsPlayback.prototype), "_onDurationChange", this).call(this);
       }
     }, {
       key: "_onProgress",
@@ -34132,7 +34144,7 @@
         var bufferedPos = 0;
 
         for (var i = 0; i < this.el.buffered.length; i++) {
-          buffered = [].concat(_toConsumableArray$1(buffered), [{
+          buffered = [].concat(_toConsumableArray(buffered), [{
             // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
             start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
             end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
@@ -34152,7 +34164,7 @@
       value: function play() {
         if (!this._hls) this._setup();
 
-        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "play", this).call(this);
+        _get(_getPrototypeOf(HlsjsPlayback.prototype), "play", this).call(this);
 
         this._startTimeUpdateTimer();
       }
@@ -34169,7 +34181,7 @@
         this._stopTimeUpdateTimer();
 
         if (this._hls) {
-          _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "stop", this).call(this);
+          _get(_getPrototypeOf(HlsjsPlayback.prototype), "stop", this).call(this);
 
           this._hls.destroy();
 
@@ -34187,7 +34199,7 @@
           delete this._hls;
         }
 
-        _get$2(_getPrototypeOf$2(HlsjsPlayback.prototype), "destroy", this).call(this);
+        _get(_getPrototypeOf(HlsjsPlayback.prototype), "destroy", this).call(this);
       }
     }, {
       key: "_updatePlaybackType",
@@ -34408,16 +34420,16 @@
 
   HlsjsPlayback.canPlay = function (resource, mimeType) {
     var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-    var isHls = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8' || listContainsIgnoreCase$1(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']);
+    var isHls = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8' || listContainsIgnoreCase(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']);
     return !!(HLSJS.isSupported() && isHls);
   };
 
   BaseExports.Loader.registerPlayback(HlsjsPlayback);
-  var main$1 = _objectSpread2(_objectSpread2({}, BaseExports), {}, {
+  var main = _objectSpread2$2(_objectSpread2$2({}, BaseExports), {}, {
     HLS: HlsjsPlayback
   });
 
-  return main$1;
+  return main;
 
 })));
 //# sourceMappingURL=clappr.js.map
