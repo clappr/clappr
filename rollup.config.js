@@ -23,8 +23,11 @@ const visualizePluginOptions = { open: true }
 
 const plugins = [
   replace({
-    VERSION: JSON.stringify(pkg.version),
-    CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
+    preventAssignment: true,
+    values: {
+      VERSION: JSON.stringify(pkg.version),
+      CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
+    }
   }),
   resolve(),
   commonjs(),

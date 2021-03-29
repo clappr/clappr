@@ -82,6 +82,8 @@ You can check the plugins used on Clappr player via `@clappr/plugins` [here](htt
 
 |Plugin         |Status|Compatible with latest Clappr|URL|
 |-----------------------|--------|-------------------------------|--------------------------------------------------------|
+|Media Control | Ready | Yes | https://github.com/joaopaulovieira/clappr-media-control-plugin |
+|Video Queue (Playlist) | Ready | Yes | https://github.com/joaopaulovieira/clappr-queue-plugin |
 |Thumbnails on seekbar| Ready | Yes | https://github.com/tjenkinson/clappr-thumbnails-plugin |
 |Markers       | Ready | Yes | https://github.com/tjenkinson/clappr-markers-plugin |
 |Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-plugin |
