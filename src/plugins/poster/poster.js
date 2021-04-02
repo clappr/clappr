@@ -146,7 +146,11 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (isRegularPoster) {
       const posterUrl = this.options.poster.url || this.options.poster
       this.$el.css({ 'background-image': 'url(' + posterUrl + ')' })
-    } else if (this.options.poster) { this.$el.css({ 'background': this.options.poster.custom }) }
+      this.removeVideoElementPoster()
+    } else if (this.options.poster) {
+      this.$el.css({ 'background': this.options.poster.custom })
+      this.removeVideoElementPoster()
+    }
 
     this.container.$el.append(this.el)
     this.$playWrapper = this.$el.find('.play-wrapper')
@@ -165,5 +169,13 @@ export default class PosterPlugin extends UIContainerPlugin {
     }
     this.update()
     return this
+  }
+
+  removeVideoElementPoster() {
+    this.container.playback &&
+    this.container.playback.$el &&
+    this.container.playback.$el[0] &&
+    this.container.playback.$el[0].removeAttribute &&
+    this.container.playback.$el[0].removeAttribute('poster')
   }
 }
