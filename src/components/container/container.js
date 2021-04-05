@@ -40,7 +40,9 @@ export default class Container extends UIObject {
       'touchend': 'dblTap',
       'contextmenu': 'onContextMenu',
       'mouseenter': 'mouseEnter',
-      'mouseleave': 'mouseLeave'
+      'mouseleave': 'mouseLeave',
+      'mouseup': 'onMouseUp',
+      'mousedown': 'onMouseDown'
     }
   }
 
@@ -449,6 +451,16 @@ export default class Container extends UIObject {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_LEAVE)
 
+  }
+
+  mouseUp() {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
+      this.trigger(Events.CONTAINER_MOUSE_UP)
+  }
+
+  mouseDown() {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
+      this.trigger(Events.CONTAINER_MOUSE_DOWN)
   }
 
   settingsUpdate() {
