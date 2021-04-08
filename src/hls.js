@@ -113,6 +113,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return { preload: true }
   }
 
+  get customListeners() {
+    return this.options.hlsPlayback && this.options.hlsPlayback.customListeners || []
+  }
+
   static get HLSJS() {
     return HLSJS
   }
@@ -186,9 +190,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   bindCustomListeners() {
-    this.options.hlsPlayback &&
-    this.options.hlsPlayback.customListeners &&
-    this.options.hlsPlayback.customListeners.forEach(item => {
+    this.customListeners.forEach(item => {
       const requestedEventName = item.eventName
       const typeOfListener = item.once ? 'once': 'on'
       HLSJS.Events[`${requestedEventName}`] && this._hls[`${typeOfListener}`](HLSJS.Events[`${requestedEventName}`], item.callback)
@@ -196,9 +198,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   unbindCustomListeners() {
-    this.options.hlsPlayback &&
-    this.options.hlsPlayback.customListeners &&
-    this.options.hlsPlayback.customListeners.forEach(item => {
+    this.customListeners.forEach(item => {
       const requestedEventName = item.eventName
       HLSJS.Events[`${requestedEventName}`] && this._hls.off(HLSJS.Events[`${requestedEventName}`], item.callback)
     })

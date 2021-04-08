@@ -5,12 +5,27 @@ import HLSJS from 'hls.js'
 const simplePlaybackMock = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
 
 describe('HlsjsPlayback', () => {
-  test('have a getter called template', () => {
+  test('have a getter called defaultOptions', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'defaultOptions').get).toBeTruthy()
   })
 
   test('defaultOptions getter returns all the default options values into one object', () => {
     expect(simplePlaybackMock.defaultOptions).toEqual({ preload: true })
+  })
+
+  test('have a getter called customListeners', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'customListeners').get).toBeTruthy()
+  })
+
+  test('customListeners getter returns all configured custom listeners for each hls.js event', () => {
+    const cb = () => {}
+    const playback = new HlsjsPlayback({
+      src: 'http://clappr.io/foo.m3u8',
+      hlsPlayback: {
+        customListeners: [{ eventName: 'MEDIA_ATTACHING', callback: cb }]
+      }
+    })
+    expect(playback.customListeners).toEqual(playback.options.hlsPlayback.customListeners)
   })
 
   test('should be able to identify it can play resources independently of the file extension case', () => {
