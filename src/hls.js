@@ -110,7 +110,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   get defaultOptions() {
-    return { loadSourceBeforePlay: true }
+    return { preload: true }
   }
 
   static get HLSJS() {
@@ -168,7 +168,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._ccTracksUpdated = false
     this._hls && this._hls.destroy()
     this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
-    this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => { this.options.hlsPlayback.loadSourceBeforePlay && this._hls.loadSource(this.options.src) })
+    this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => { this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src) })
     this._hls.on(HLSJS.Events.MANIFEST_PARSED, () => this._manifestParsed = true)
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
@@ -424,7 +424,7 @@ export default class HlsjsPlayback extends HTML5Video {
 
   play() {
     !this._hls && this._setup()
-    !this._manifestParsed && !this.options.hlsPlayback.loadSourceBeforePlay && this._hls.loadSource(this.options.src)
+    !this._manifestParsed && !this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src)
 
     super.play()
     this._startTimeUpdateTimer()

@@ -45,7 +45,7 @@ var player = new Clappr.Player(
     hlsMinimumDvrSize: 60,
     hlsRecoverAttempts: 16,
     hlsPlayback: {
-      loadSourceBeforePlay: true,
+      preload: true,
     },
     playback: {
       extrapolatedWindowNumSegments: 2,
@@ -96,12 +96,12 @@ var player = new Clappr.Player(
   {
     ...
     hlsPlayback: {
-      loadSourceBeforePlay: true,
+      preload: true,
     },
   });
 ```
 
-#### `hlsPlayback.loadSourceBeforePlay`
+#### `hlsPlayback.preload`
 > Default value: `true`
 
 Configures whether the source should be loaded as soon as the `HLS.JS` internal reference is setup or only after the first play.

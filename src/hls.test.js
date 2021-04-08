@@ -10,7 +10,7 @@ describe('HlsjsPlayback', () => {
   })
 
   test('defaultOptions getter returns all the default options values into one object', () => {
-    expect(simplePlaybackMock.defaultOptions).toEqual({ loadSourceBeforePlay: true })
+    expect(simplePlaybackMock.defaultOptions).toEqual({ preload: true })
   })
 
   test('should be able to identify it can play resources independently of the file extension case', () => {
@@ -145,15 +145,15 @@ describe('HlsjsPlayback', () => {
       expect(playback._manifestParsed).toBeFalsy()
     })
 
-    test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.loadSourceBeforePlay is true', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { loadSourceBeforePlay: false } })
+    test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.preload is true', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: false } })
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
 
       expect(playback._hls.loadSource).not.toHaveBeenCalled()
 
-      playback.options.hlsPlayback.loadSourceBeforePlay = true
+      playback.options.hlsPlayback.preload = true
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
@@ -174,15 +174,15 @@ describe('HlsjsPlayback', () => {
   })
 
   describe('play method', () => {
-    test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.loadSourceBeforePlay are falsy', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { loadSourceBeforePlay: true } })
+    test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.preload are falsy', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: true } })
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
       playback.play()
 
       expect(playback._hls.loadSource).not.toHaveBeenCalled()
 
-      playback.options.hlsPlayback.loadSourceBeforePlay = false
+      playback.options.hlsPlayback.preload = false
       playback._manifestParsed = true
       playback.play()
 
