@@ -174,6 +174,15 @@ describe('HlsjsPlayback', () => {
   })
 
   describe('_ready method', () => {
+    test('avoid to run internal logic if _isReadyState flag is true', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+      playback._isReadyState = true
+      jest.spyOn(playback, '_setup')
+      playback._ready()
+
+      expect(playback._setup).not.toHaveBeenCalled()
+    })
+
     test('call _setup method if HLS.JS internal don\'t exists', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
       jest.spyOn(playback, '_setup')
