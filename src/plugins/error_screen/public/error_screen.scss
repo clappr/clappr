@@ -1,7 +1,7 @@
 @import 'fontsmoothing';
 
 
-div.player-error-screen {
+[data-player] .player-error-screen {
   @include font-smoothing(antialiased);
   color: #CCCACA;
   position: absolute;
@@ -10,7 +10,7 @@ div.player-error-screen {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 2000;
-  display: flex !important;
+  display: flex;
   flex-direction: column;
   justify-content: center;
 
