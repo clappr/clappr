@@ -109,6 +109,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return this._hls && this._hls.bandwidthEstimate
   }
 
+  get defaultOptions() {
+    return { preload: true }
+  }
+
   static get HLSJS() {
     return HLSJS
   }
@@ -117,6 +121,7 @@ export default class HlsjsPlayback extends HTML5Video {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback = { ...this.options, ...this.options.playback }
+    this.options.hlsPlayback = { ...this.defaultOptions, ...this.options.hlsPlayback }
     this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
     // The size of the start time extrapolation window measured as a multiple of segments.
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
@@ -158,11 +163,13 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _setup() {
+    this._manifestParsed = false
     this._ccIsSetup = false
     this._ccTracksUpdated = false
     this._hls && this._hls.destroy()
     this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
-    this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
+    this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => { this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src) })
+    this._hls.on(HLSJS.Events.MANIFEST_PARSED, () => this._manifestParsed = true)
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitch(evt, data))
@@ -416,8 +423,8 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   play() {
-    if (!this._hls)
-      this._setup()
+    !this._hls && this._setup()
+    !this._manifestParsed && !this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src)
 
     super.play()
     this._startTimeUpdateTimer()

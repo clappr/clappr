@@ -2,7 +2,17 @@ import { Core, Events } from '@clappr/core'
 import HlsjsPlayback from './hls.js'
 import HLSJS from 'hls.js'
 
-describe('HLS playback', () => {
+const simplePlaybackMock = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+
+describe('HlsjsPlayback', () => {
+  test('have a getter called template', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'defaultOptions').get).toBeTruthy()
+  })
+
+  test('defaultOptions getter returns all the default options values into one object', () => {
+    expect(simplePlaybackMock.defaultOptions).toEqual({ preload: true })
+  })
+
   test('should be able to identify it can play resources independently of the file extension case', () => {
     jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
@@ -31,48 +41,6 @@ describe('HLS playback', () => {
     let options = { src: 'http://clappr.io/video.m3u8', playback: { audioOnly: true } },
       playback = new HlsjsPlayback(options)
     expect(playback.tagName).toEqual('audio')
-  })
-
-  describe('options backwards compatibility', () => {
-    // backwards compatibility (TODO: remove on 0.3.0)
-    test('should set options.playback as a reference to options if options.playback not set', () => {
-      let options = { src: 'http://clappr.io/video.m3u8' },
-        hls = new HlsjsPlayback(options)
-      expect(hls.options.playback).toEqual(hls.options)
-      options = { src: 'http://clappr.io/video.m3u8', playback: { test: true } }
-      hls = new HlsjsPlayback(options)
-      expect(hls.options.playback.test).toEqual(true)
-    })
-  })
-
-  describe('HlsjsPlayback.js configuration', () => {
-    test('should use hlsjsConfig from playback options', () => {
-      const options = {
-        src: 'http://clappr.io/video.m3u8',
-        playback: {
-          hlsMinimumDvrSize: 1,
-          hlsjsConfig: {
-            someHlsjsOption: 'value'
-          }
-        }
-      }
-      const playback = new HlsjsPlayback(options)
-      playback._setup()
-      expect(playback._hls.config.someHlsjsOption).toEqual('value')
-    })
-
-    test('should use hlsjsConfig from player options as fallback', () => {
-      const options = {
-        src: 'http://clappr.io/video.m3u8',
-        hlsMinimumDvrSize: 1,
-        hlsjsConfig: {
-          someHlsjsOption: 'value'
-        }
-      }
-      const playback = new HlsjsPlayback(options)
-      playback._setup()
-      expect(playback._hls.config.someHlsjsOption).toEqual('value')
-    })
   })
 
   test('should trigger a playback error if source load failed', () => {
@@ -126,5 +94,104 @@ describe('HLS playback', () => {
     playback.currentLevel = 1
     expect(playback.currentLevel).toEqual(1)
     expect(playback._hls.currentLevel).toEqual(1)
+  })
+
+  describe('constructor', () => {
+    test('should use hlsjsConfig from playback options', () => {
+      const options = {
+        src: 'http://clappr.io/video.m3u8',
+        playback: {
+          hlsMinimumDvrSize: 1,
+          hlsjsConfig: {
+            someHlsjsOption: 'value'
+          }
+        }
+      }
+      const playback = new HlsjsPlayback(options)
+      playback._setup()
+      expect(playback._hls.config.someHlsjsOption).toEqual('value')
+    })
+
+    test('should use hlsjsConfig from player options as fallback', () => {
+      const options = {
+        src: 'http://clappr.io/video.m3u8',
+        hlsMinimumDvrSize: 1,
+        hlsjsConfig: {
+          someHlsjsOption: 'value'
+        }
+      }
+      const playback = new HlsjsPlayback(options)
+      playback._setup()
+      expect(playback._hls.config.someHlsjsOption).toEqual('value')
+    })
+
+    test('merges defaultOptions with received options.hlsPlayback', () => {
+      const options = {
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: { foo: 'bar' },
+      }
+      const playback = new HlsjsPlayback(options)
+      expect(playback.options.hlsPlayback).toEqual({ ...options.hlsPlayback, ...playback.defaultOptions })
+    })
+  })
+
+  describe('_setup method', () => {
+    test('sets _manifestParsed flag to false', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      expect(playback._manifestParsed).toBeUndefined()
+
+      playback._setup()
+
+      expect(playback._manifestParsed).toBeFalsy()
+    })
+
+    test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.preload is true', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: false } })
+      playback._setup()
+      jest.spyOn(playback._hls, 'loadSource')
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
+
+      expect(playback._hls.loadSource).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.preload = true
+      playback._setup()
+      jest.spyOn(playback._hls, 'loadSource')
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
+
+      expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+    })
+
+    test('updates _manifestParsed flag value to true if MANIFEST_PARSED event is triggered', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+
+      expect(playback._manifestParsed).toBeUndefined()
+
+      playback._setup()
+      playback._hls.trigger(HLSJS.Events.MANIFEST_PARSED)
+
+      expect(playback._manifestParsed).toBeTruthy()
+    })
+  })
+
+  describe('play method', () => {
+    test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.preload are falsy', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: true } })
+      playback._setup()
+      jest.spyOn(playback._hls, 'loadSource')
+      playback.play()
+
+      expect(playback._hls.loadSource).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.preload = false
+      playback._manifestParsed = true
+      playback.play()
+
+      expect(playback._hls.loadSource).not.toHaveBeenCalled()
+
+      playback._manifestParsed = false
+      playback.play()
+
+      expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+    })
   })
 })

@@ -44,6 +44,9 @@ var player = new Clappr.Player(
     hlsUseNextLevel: false,
     hlsMinimumDvrSize: 60,
     hlsRecoverAttempts: 16,
+    hlsPlayback: {
+      preload: true,
+    },
     playback: {
       extrapolatedWindowNumSegments: 2,
       triggerFatalErrorOnResourceDenied: false,
@@ -82,6 +85,26 @@ The `hls.js` have recover approaches for some fatal errors. This option sets the
 > Default value: `false`
 
 If this option is set to true, the playback will triggers fatal error event if decrypt key http response code is greater than or equal to 400. This option is used to attempt to reproduce iOS devices behaviour which internally use html5 video playback.
+
+#### hlsPlayback
+>  Soon (in a new breaking change version), all options related to this playback that are declared in the scope of the `options` object will have to be declared necessarily within this new scope!
+
+Groups all options related directly to `HlsjsPlayback` configs.
+
+```javascript
+var player = new Clappr.Player(
+  {
+    ...
+    hlsPlayback: {
+      preload: true,
+    },
+  });
+```
+
+#### `hlsPlayback.preload`
+> Default value: `true`
+
+Configures whether the source should be loaded as soon as the `HLS.JS` internal reference is setup or only after the first play.
 
 #### hlsjsConfig
 
