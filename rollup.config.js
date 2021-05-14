@@ -21,11 +21,10 @@ const minimize = !!process.env.MINIMIZE
 const babelOptionsPlugins = { exclude: 'node_modules/**', babelHelpers: 'bundled' }
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
-const baseReplacePluginOptions = { CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion) }
-const replacePluginOptions = { ...baseReplacePluginOptions, 'process.env.NODE_ENV': JSON.stringify('development') }
+const replacePluginOptions = { CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion), preventAssignment: false }
 
 let plugins = [
-  replace(baseReplacePluginOptions),
+  replace(replacePluginOptions),
   resolve(),
   commonjs(),
   babel(babelOptionsPlugins),
@@ -33,7 +32,7 @@ let plugins = [
   filesize(),
 ]
 
-serveLocal && (plugins = [...plugins, replace(replacePluginOptions), serve(servePluginOptions)])
+serveLocal && (plugins = [...plugins, replace({ ...replacePluginOptions, 'process.env.NODE_ENV': JSON.stringify('development') }), serve(servePluginOptions)])
 reloadEnabled && (plugins = [...plugins, livereload(livereloadPluginOptions)])
 analyzeBundle && plugins.push(visualize({ open: true }))
 
