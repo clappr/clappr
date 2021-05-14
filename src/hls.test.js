@@ -5,12 +5,27 @@ import HLSJS from 'hls.js'
 const simplePlaybackMock = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
 
 describe('HlsjsPlayback', () => {
-  test('have a getter called template', () => {
+  test('have a getter called defaultOptions', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'defaultOptions').get).toBeTruthy()
   })
 
   test('defaultOptions getter returns all the default options values into one object', () => {
     expect(simplePlaybackMock.defaultOptions).toEqual({ preload: true })
+  })
+
+  test('have a getter called customListeners', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'customListeners').get).toBeTruthy()
+  })
+
+  test('customListeners getter returns all configured custom listeners for each hls.js event', () => {
+    const cb = () => {}
+    const playback = new HlsjsPlayback({
+      src: 'http://clappr.io/foo.m3u8',
+      hlsPlayback: {
+        customListeners: [{ eventName: 'hlsMediaAttaching', callback: cb }]
+      }
+    })
+    expect(playback.customListeners).toEqual(playback.options.hlsPlayback.customListeners)
   })
 
   test('should be able to identify it can play resources independently of the file extension case', () => {
@@ -171,6 +186,14 @@ describe('HlsjsPlayback', () => {
 
       expect(playback._manifestParsed).toBeTruthy()
     })
+
+    test('calls bindCustomListeners method', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      jest.spyOn(playback, 'bindCustomListeners')
+      playback._setup()
+
+      expect(playback.bindCustomListeners).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('_ready method', () => {
@@ -236,6 +259,79 @@ describe('HlsjsPlayback', () => {
       playback.play()
 
       expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('bindCustomListeners method', () => {
+    test('creates listeners for each item configured on customListeners array', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: {
+          customListeners: [{ eventName: HLSJS.Events.MEDIA_ATTACHING, callback: cb }]
+        }
+      })
+      playback._setup()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHING)
+
+      expect(cb).toHaveBeenCalledTimes(2)
+    })
+
+    test('don\'t add one listener without a valid configuration', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      playback._setup()
+
+      expect(cb).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback = {}
+
+      expect(cb).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.customListeners = []
+
+      expect(cb).not.toHaveBeenCalled()
+
+      playback.options.hlsPlayback.customListeners.push([{ eventName: 'invalid_name', callback: cb }])
+
+      expect(cb).not.toHaveBeenCalled()
+    })
+
+    test('adds a listener for one time when the customListeners array item is configured with the "once" param', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: {
+          customListeners: [{ eventName: HLSJS.Events.MEDIA_ATTACHING, callback: cb, once: true }]
+        }
+      })
+      playback._setup()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHING)
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('unbindCustomListeners method', () => {
+    test('remove listeners for each item configured on customListeners array', () => {
+      const cb = jest.fn()
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: {
+          customListeners: [{ eventName: 'hlsFragLoaded', callback: cb }]
+        }
+      })
+      playback._setup()
+      playback.unbindCustomListeners()
+      playback._hls.trigger(HLSJS.Events.FRAG_LOADED)
+
+      expect(cb).not.toHaveBeenCalled()
     })
   })
 })

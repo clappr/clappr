@@ -46,6 +46,7 @@ var player = new Clappr.Player(
     hlsRecoverAttempts: 16,
     hlsPlayback: {
       preload: true,
+      customListeners: [],
     },
     playback: {
       extrapolatedWindowNumSegments: 2,
@@ -97,6 +98,7 @@ var player = new Clappr.Player(
     ...
     hlsPlayback: {
       preload: true,
+      customListeners: [],
     },
   });
 ```
@@ -105,6 +107,30 @@ var player = new Clappr.Player(
 > Default value: `true`
 
 Configures whether the source should be loaded as soon as the `HLS.JS` internal reference is setup or only after the first play.
+
+#### `hlsPlayback.customListeners`
+
+An array of listeners object with specific parameters to add on `HLS.JS` instance.
+
+```javascript
+var player = new Clappr.Player(
+  {
+    ...
+    hlsPlayback: {
+      ...
+      customListeners: [
+        // "hlsFragLoaded" is the value of HlsjsPlayback.HLSJS.Events.FRAG_LOADED constant.
+        { eventName: 'hlsFragLoaded', callback: (event, data) => { console.log('>>>>>> data: ', data) }, once: true }
+      ],
+    },
+  });
+```
+
+The listener object parameters are:
+
+* `eventName`: A valid event name of `hls.js` [events API](https://github.com/video-dev/hls.js/blob/master/docs/API.md#runtime-events);
+* `callback`: The callback that should be called  when the event listened happen.
+* `once`: Flag to configure if the listener needs to be valid just for one time.
 
 #### hlsjsConfig
 

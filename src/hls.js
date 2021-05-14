@@ -113,6 +113,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return { preload: true }
   }
 
+  get customListeners() {
+    return this.options.hlsPlayback && this.options.hlsPlayback.customListeners || []
+  }
+
   static get HLSJS() {
     return HLSJS
   }
@@ -179,7 +183,25 @@ export default class HlsjsPlayback extends HTML5Video {
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
+
+    this.bindCustomListeners()
+
     this._hls.attachMedia(this.el)
+  }
+
+  bindCustomListeners() {
+    this.customListeners.forEach(item => {
+      const requestedEventName = item.eventName
+      const typeOfListener = item.once ? 'once': 'on'
+      requestedEventName && this._hls[`${typeOfListener}`](requestedEventName, item.callback)
+    })
+  }
+
+  unbindCustomListeners() {
+    this.customListeners.forEach(item => {
+      const requestedEventName = item.eventName
+      requestedEventName && this._hls.off(requestedEventName, item.callback)
+    })
   }
 
   _onFragmentParsingMetadata(evt, data) {
