@@ -4,29 +4,18 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Clappr = factory());
 }(this, (function () { 'use strict';
 
-  function _defineProperty$2(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-
-    return obj;
-  }
-
   function ownKeys$2(object, enumerableOnly) {
     var keys = Object.keys(object);
 
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
+
+      if (enumerableOnly) {
+        symbols = symbols.filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      }
+
       keys.push.apply(keys, symbols);
     }
 
@@ -51,6 +40,21 @@
     }
 
     return target;
+  }
+
+  function _defineProperty$2(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
   }
 
   function _typeof(obj) {
@@ -9345,7 +9349,7 @@
     if (typeof Proxy === "function") return true;
 
     try {
-      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
       return true;
     } catch (e) {
       return false;
@@ -9422,6 +9426,12 @@
 
     var _super = _createSuper$1(ClickToPausePlugin);
 
+    function ClickToPausePlugin(container) {
+      _classCallCheck$1(this, ClickToPausePlugin);
+
+      return _super.call(this, container);
+    }
+
     _createClass$1(ClickToPausePlugin, [{
       key: "name",
       get: function get() {
@@ -9431,18 +9441,10 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
-    }]);
-
-    function ClickToPausePlugin(container) {
-      _classCallCheck$1(this, ClickToPausePlugin);
-
-      return _super.call(this, container);
-    }
-
-    _createClass$1(ClickToPausePlugin, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.container, Events.CONTAINER_CLICK, this.click);
@@ -9500,13 +9502,28 @@
     }
   }
 
-  var css_248z = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
-  styleInject(css_248z);
+  var css_248z$7 = ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n";
+  styleInject(css_248z$7);
 
   var ClosedCaptions$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ClosedCaptions, _UICorePlugin);
 
     var _super = _createSuper$1(ClosedCaptions);
+
+    function ClosedCaptions(core) {
+      var _this;
+
+      _classCallCheck$1(this, ClosedCaptions);
+
+      _this = _super.call(this, core);
+      var config = core.options.closedCaptionsConfig;
+      _this._title = config && config.title ? config.title : null;
+      _this._ariaLabel = config && config.ariaLabel ? config.ariaLabel : 'cc-button';
+      _this._labelCb = config && config.labelCallback && typeof config.labelCallback === 'function' ? config.labelCallback : function (track) {
+        return track.name;
+      };
+      return _this;
+    }
 
     _createClass$1(ClosedCaptions, [{
       key: "name",
@@ -9517,7 +9534,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -9541,24 +9558,7 @@
           'data-cc-controls': ''
         };
       }
-    }]);
-
-    function ClosedCaptions(core) {
-      var _this;
-
-      _classCallCheck$1(this, ClosedCaptions);
-
-      _this = _super.call(this, core);
-      var config = core.options.closedCaptionsConfig;
-      _this._title = config && config.title ? config.title : null;
-      _this._ariaLabel = config && config.ariaLabel ? config.ariaLabel : 'cc-button';
-      _this._labelCb = config && config.labelCallback && typeof config.labelCallback === 'function' ? config.labelCallback : function (track) {
-        return track.name;
-      };
-      return _this;
-    }
-
-    _createClass$1(ClosedCaptions, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
@@ -9675,13 +9675,25 @@
 
   var dvrHTML = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
-  var css_248z$1 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
-  styleInject(css_248z$1);
+  var css_248z$6 = ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n";
+  styleInject(css_248z$6);
 
   var DVRControls$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(DVRControls, _UICorePlugin);
 
     var _super = _createSuper$1(DVRControls);
+
+    function DVRControls(core) {
+      var _this;
+
+      _classCallCheck$1(this, DVRControls);
+
+      _this = _super.call(this, core);
+
+      _this.settingsUpdate();
+
+      return _this;
+    }
 
     _createClass$1(DVRControls, [{
       key: "template",
@@ -9697,7 +9709,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -9715,21 +9727,7 @@
           'data-dvr-controls': ''
         };
       }
-    }]);
-
-    function DVRControls(core) {
-      var _this;
-
-      _classCallCheck$1(this, DVRControls);
-
-      _this = _super.call(this, core);
-
-      _this.settingsUpdate();
-
-      return _this;
-    }
-
-    _createClass$1(DVRControls, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.bindCoreEvents();
@@ -9841,6 +9839,18 @@
     }
 
     _createClass$1(EndVideo, [{
+      key: "name",
+      get: function get() {
+        return 'end_video';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.18"
+        };
+      }
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
@@ -9863,18 +9873,6 @@
         var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === 'undefined' || this.core.options.exitFullscreenOnEnd;
         if (exitOnEnd && this.core.isFullscreen()) this.core.toggleFullscreen();
       }
-    }, {
-      key: "name",
-      get: function get() {
-        return 'end_video';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.17"
-        };
-      }
     }]);
 
     return EndVideo;
@@ -9884,13 +9882,23 @@
 
   var templateHtml = "<div class=\"player-error-screen__content\" data-error-screen>\n  <% if (icon) { %>\n  <div class=\"player-error-screen__icon\" data-error-screen><%= icon %></div>\n  <% } %>\n  <div class=\"player-error-screen__title\" data-error-screen><%= title %></div>\n  <div class=\"player-error-screen__message\" data-error-screen><%= message %></div>\n  <div class=\"player-error-screen__code\" data-error-screen>Error code: <%= code %></div>\n  <div class=\"player-error-screen__reload\" data-error-screen><%= reloadIcon %></div>\n</div>\n";
 
-  var css_248z$2 = "div.player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex !important;\n  flex-direction: column;\n  justify-content: center; }\n  div.player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  div.player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  div.player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  div.player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  div.player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0 !important; }\n";
-  styleInject(css_248z$2);
+  var css_248z$5 = "[data-player] .player-error-screen {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  color: #CCCACA;\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 100%;\n  background-color: rgba(0, 0, 0, 0.7);\n  z-index: 2000;\n  display: flex;\n  flex-direction: column;\n  justify-content: center; }\n  [data-player] .player-error-screen__content[data-error-screen] {\n    font-size: 14px;\n    color: #CCCACA;\n    margin-top: 45px; }\n  [data-player] .player-error-screen__title[data-error-screen] {\n    font-weight: bold;\n    line-height: 30px;\n    font-size: 18px; }\n  [data-player] .player-error-screen__message[data-error-screen] {\n    width: 90%;\n    margin: 0 auto; }\n  [data-player] .player-error-screen__code[data-error-screen] {\n    font-size: 13px;\n    margin-top: 15px; }\n  [data-player] .player-error-screen__reload {\n    cursor: pointer;\n    width: 30px;\n    margin: 15px auto 0 !important; }\n";
+  styleInject(css_248z$5);
 
   var ErrorScreen$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(ErrorScreen, _UICorePlugin);
 
     var _super = _createSuper$1(ErrorScreen);
+
+    function ErrorScreen(core) {
+      var _this;
+
+      _classCallCheck$1(this, ErrorScreen);
+
+      _this = _super.call(this, core);
+      if (_this.options.disableErrorScreen) return _possibleConstructorReturn$1(_this, _this.disable());
+      return _this;
+    }
 
     _createClass$1(ErrorScreen, [{
       key: "name",
@@ -9901,7 +9909,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -9922,19 +9930,7 @@
           'data-error-screen': ''
         };
       }
-    }]);
-
-    function ErrorScreen(core) {
-      var _this;
-
-      _classCallCheck$1(this, ErrorScreen);
-
-      _this = _super.call(this, core);
-      if (_this.options.disableErrorScreen) return _possibleConstructorReturn$1(_this, _this.disable());
-      return _this;
-    }
-
-    _createClass$1(ErrorScreen, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.core, Events.ERROR, this.onError);
@@ -10023,25 +10019,6 @@
 
     var _super = _createSuper$1(Favicon);
 
-    _createClass$1(Favicon, [{
-      key: "name",
-      get: function get() {
-        return 'favicon';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.17"
-        };
-      }
-    }, {
-      key: "oldIcon",
-      get: function get() {
-        return oldIcon;
-      }
-    }]);
-
     function Favicon(core) {
       var _this;
 
@@ -10056,6 +10033,23 @@
     }
 
     _createClass$1(Favicon, [{
+      key: "name",
+      get: function get() {
+        return 'favicon';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.18"
+        };
+      }
+    }, {
+      key: "oldIcon",
+      get: function get() {
+        return oldIcon;
+      }
+    }, {
       key: "configure",
       value: function configure() {
         if (this.core.options.changeFavicon) {
@@ -10152,20 +10146,6 @@
 
     var _super = _createSuper$1(GoogleAnalytics);
 
-    _createClass$1(GoogleAnalytics, [{
-      key: "name",
-      get: function get() {
-        return 'google_analytics';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.17"
-        };
-      }
-    }]);
-
     function GoogleAnalytics(container) {
       var _this;
 
@@ -10186,6 +10166,18 @@
     }
 
     _createClass$1(GoogleAnalytics, [{
+      key: "name",
+      get: function get() {
+        return 'google_analytics';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.18"
+        };
+      }
+    }, {
       key: "embedScript",
       value: function embedScript() {
         var _this2 = this;
@@ -10677,8 +10669,8 @@
     Kibo: Kibo
   };
 
-  var css_248z$3 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    will-change: transform, opacity;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    transform: translateY(50px); }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    transform: translateY(-7px);\n    bottom: 0;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
-  styleInject(css_248z$3);
+  var css_248z$4 = ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(\"closed-hand.cur\"), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(\"closed-hand.cur\"), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    will-change: transform, opacity;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    transform: translateY(50px); }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    transform: translateY(-7px);\n    bottom: 0;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n";
+  styleInject(css_248z$4);
 
   var mediaControlHTML = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
@@ -10696,7 +10688,7 @@
 
   var Config = Utils.Config,
       Fullscreen = Utils.Fullscreen,
-      formatTime = Utils.formatTime,
+      formatTime$1 = Utils.formatTime,
       extend = Utils.extend,
       removeArrayItem = Utils.removeArrayItem;
 
@@ -10704,6 +10696,51 @@
     _inherits$1(MediaControl, _UICorePlugin);
 
     var _super = _createSuper$1(MediaControl);
+
+    function MediaControl(core) {
+      var _this;
+
+      _classCallCheck$1(this, MediaControl);
+
+      _this = _super.call(this, core);
+      _this.persistConfig = _this.options.persistConfig;
+      _this.currentPositionValue = null;
+      _this.currentDurationValue = null;
+      _this.keepVisible = false;
+      _this.fullScreenOnVideoTagSupported = null; // unknown
+
+      _this.setInitialVolume();
+
+      _this.settings = {
+        left: ['play', 'stop', 'pause'],
+        right: ['volume'],
+        "default": ['position', 'seekbar', 'duration']
+      };
+      _this.kibo = new Kibo(_this.options.focusElement);
+
+      _this.bindKeyEvents();
+
+      if (_this.container) {
+        if (!zepto.isEmptyObject(_this.container.settings)) _this.settings = zepto.extend({}, _this.container.settings);
+      } else {
+        _this.settings = {};
+      }
+
+      _this.userDisabled = false;
+      if (_this.container && _this.container.mediaControlDisabled || _this.options.chromeless) _this.disable();
+
+      _this.stopDragHandler = function (event) {
+        return _this.stopDrag(event);
+      };
+
+      _this.updateDragHandler = function (event) {
+        return _this.updateDrag(event);
+      };
+
+      zepto(document).bind('mouseup', _this.stopDragHandler);
+      zepto(document).bind('mousemove', _this.updateDragHandler);
+      return _this;
+    }
 
     _createClass$1(MediaControl, [{
       key: "name",
@@ -10714,7 +10751,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -10780,54 +10817,7 @@
       get: function get() {
         return this.volume === 0;
       }
-    }]);
-
-    function MediaControl(core) {
-      var _this;
-
-      _classCallCheck$1(this, MediaControl);
-
-      _this = _super.call(this, core);
-      _this.persistConfig = _this.options.persistConfig;
-      _this.currentPositionValue = null;
-      _this.currentDurationValue = null;
-      _this.keepVisible = false;
-      _this.fullScreenOnVideoTagSupported = null; // unknown
-
-      _this.setInitialVolume();
-
-      _this.settings = {
-        left: ['play', 'stop', 'pause'],
-        right: ['volume'],
-        "default": ['position', 'seekbar', 'duration']
-      };
-      _this.kibo = new Kibo(_this.options.focusElement);
-
-      _this.bindKeyEvents();
-
-      if (_this.container) {
-        if (!zepto.isEmptyObject(_this.container.settings)) _this.settings = zepto.extend({}, _this.container.settings);
-      } else {
-        _this.settings = {};
-      }
-
-      _this.userDisabled = false;
-      if (_this.container && _this.container.mediaControlDisabled || _this.options.chromeless) _this.disable();
-
-      _this.stopDragHandler = function (event) {
-        return _this.stopDrag(event);
-      };
-
-      _this.updateDragHandler = function (event) {
-        return _this.updateDrag(event);
-      };
-
-      zepto(document).bind('mouseup', _this.stopDragHandler);
-      zepto(document).bind('mousemove', _this.updateDragHandler);
-      return _this;
-    }
-
-    _createClass$1(MediaControl, [{
+    }, {
       key: "getExternalInterface",
       value: function getExternalInterface() {
         var _this2 = this;
@@ -11197,8 +11187,8 @@
         this.currentSeekBarPercentage = 100;
         if (this.container && (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse())) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
         this.setSeekPercentage(this.currentSeekBarPercentage);
-        var newPosition = formatTime(this.currentPositionValue);
-        var newDuration = formatTime(this.currentDurationValue);
+        var newPosition = formatTime$1(this.currentPositionValue);
+        var newDuration = formatTime$1(this.currentDurationValue);
 
         if (newPosition !== this.displayedPosition) {
           this.$position.text(newPosition);
@@ -11568,13 +11558,30 @@
 
   var posterHTML = "<div class=\"play-wrapper\" data-poster></div>\n";
 
-  var css_248z$4 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
-  styleInject(css_248z$4);
+  var css_248z$3 = ".player-poster[data-poster] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: transparent;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n";
+  styleInject(css_248z$3);
 
   var PosterPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(PosterPlugin, _UIContainerPlugin);
 
     var _super = _createSuper$1(PosterPlugin);
+
+    function PosterPlugin(container) {
+      var _this;
+
+      _classCallCheck$1(this, PosterPlugin);
+
+      _this = _super.call(this, container);
+      _this.hasStartedPlaying = false;
+      _this.playRequested = false;
+
+      _this.render();
+
+      setTimeout(function () {
+        return _this.update();
+      }, 0);
+      return _this;
+    }
 
     _createClass$1(PosterPlugin, [{
       key: "name",
@@ -11585,7 +11592,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -11619,26 +11626,7 @@
       get: function get() {
         return !this.options.poster || this.options.poster.showOnVideoEnd || this.options.poster.showOnVideoEnd === undefined;
       }
-    }]);
-
-    function PosterPlugin(container) {
-      var _this;
-
-      _classCallCheck$1(this, PosterPlugin);
-
-      _this = _super.call(this, container);
-      _this.hasStartedPlaying = false;
-      _this.playRequested = false;
-
-      _this.render();
-
-      setTimeout(function () {
-        return _this.update();
-      }, 0);
-      return _this;
-    }
-
-    _createClass$1(PosterPlugin, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
@@ -11699,7 +11687,7 @@
           if (!this.options.chromeless || this.options.allowUserInteraction) {
             this.playRequested = true;
             this.update();
-            this.container.playback && this.container.playback.consent();
+            this.container.playback && (this.container.playback._consented = true);
             this.container.play();
           }
 
@@ -11749,10 +11737,12 @@
           this.$el.css({
             'background-image': 'url(' + posterUrl + ')'
           });
+          this.removeVideoElementPoster();
         } else if (this.options.poster) {
           this.$el.css({
             'background': this.options.poster.custom
           });
+          this.removeVideoElementPoster();
         }
 
         this.container.$el.append(this.el);
@@ -11772,6 +11762,11 @@
         this.update();
         return this;
       }
+    }, {
+      key: "removeVideoElementPoster",
+      value: function removeVideoElementPoster() {
+        this.container.playback && this.container.playback.$el && this.container.playback.$el[0] && this.container.playback.$el[0].removeAttribute && this.container.playback.$el[0].removeAttribute('poster');
+      }
     }]);
 
     return PosterPlugin;
@@ -11779,15 +11774,34 @@
 
   var seekTimeHTML = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
-  var css_248z$5 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
-  styleInject(css_248z$5);
+  var css_248z$2 = ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n";
+  styleInject(css_248z$2);
 
-  var formatTime$1 = Utils.formatTime;
+  var formatTime = Utils.formatTime;
 
   var SeekTime$1 = /*#__PURE__*/function (_UICorePlugin) {
     _inherits$1(SeekTime, _UICorePlugin);
 
     var _super = _createSuper$1(SeekTime);
+
+    function SeekTime(core) {
+      var _this;
+
+      _classCallCheck$1(this, SeekTime);
+
+      _this = _super.call(this, core);
+      _this.hoveringOverSeekBar = false;
+      _this.hoverPosition = null;
+      _this.duration = null;
+      _this.firstFragDateTime = null;
+      _this.actualLiveTime = !!_this.mediaControl.options.actualLiveTime;
+
+      if (_this.actualLiveTime) {
+        if (_this.mediaControl.options.actualLiveServerTime) _this.actualLiveServerTimeDiff = new Date().getTime() - new Date(_this.mediaControl.options.actualLiveServerTime).getTime();else _this.actualLiveServerTimeDiff = 0;
+      }
+
+      return _this;
+    }
 
     _createClass$1(SeekTime, [{
       key: "name",
@@ -11798,7 +11812,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.17"
+          min: "0.4.18"
         };
       }
     }, {
@@ -11839,28 +11853,7 @@
       get: function get() {
         return this.actualLiveTime && this.isLiveStreamWithDvr;
       }
-    }]);
-
-    function SeekTime(core) {
-      var _this;
-
-      _classCallCheck$1(this, SeekTime);
-
-      _this = _super.call(this, core);
-      _this.hoveringOverSeekBar = false;
-      _this.hoverPosition = null;
-      _this.duration = null;
-      _this.firstFragDateTime = null;
-      _this.actualLiveTime = !!_this.mediaControl.options.actualLiveTime;
-
-      if (_this.actualLiveTime) {
-        if (_this.mediaControl.options.actualLiveServerTime) _this.actualLiveServerTimeDiff = new Date().getTime() - new Date(_this.mediaControl.options.actualLiveServerTime).getTime();else _this.actualLiveServerTimeDiff = 0;
-      }
-
-      return _this;
-    }
-
-    _createClass$1(SeekTime, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.mediaControl, Events.MEDIACONTROL_RENDERED, this.render);
@@ -11947,7 +11940,7 @@
           this.$el.css('left', '-100%');
         } else {
           var seekTime = this.getSeekTime();
-          var currentSeekTime = formatTime$1(seekTime.seekTime, this.useActualLiveTime); // only update dom if necessary, ie time actually changed
+          var currentSeekTime = formatTime(seekTime.seekTime, this.useActualLiveTime); // only update dom if necessary, ie time actually changed
 
           if (currentSeekTime !== this.displayedSeekTime) {
             this.$seekTimeEl.text(currentSeekTime);
@@ -11956,7 +11949,7 @@
 
           if (this.durationShown) {
             this.$durationEl.show();
-            var currentDuration = formatTime$1(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
+            var currentDuration = formatTime(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
 
             if (currentDuration !== this.displayedDuration) {
               this.$durationEl.text(currentDuration);
@@ -12002,35 +11995,13 @@
 
   var spinnerHTML = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
-  var css_248z$6 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
-  styleInject(css_248z$6);
+  var css_248z$1 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
+  styleInject(css_248z$1);
 
   var SpinnerThreeBouncePlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(SpinnerThreeBouncePlugin, _UIContainerPlugin);
 
     var _super = _createSuper$1(SpinnerThreeBouncePlugin);
-
-    _createClass$1(SpinnerThreeBouncePlugin, [{
-      key: "name",
-      get: function get() {
-        return 'spinner';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.17"
-        };
-      }
-    }, {
-      key: "attributes",
-      get: function get() {
-        return {
-          'data-spinner': '',
-          'class': 'spinner-three-bounce'
-        };
-      }
-    }]);
 
     function SpinnerThreeBouncePlugin(container) {
       var _this;
@@ -12057,6 +12028,26 @@
     }
 
     _createClass$1(SpinnerThreeBouncePlugin, [{
+      key: "name",
+      get: function get() {
+        return 'spinner';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.18"
+        };
+      }
+    }, {
+      key: "attributes",
+      get: function get() {
+        return {
+          'data-spinner': '',
+          'class': 'spinner-three-bounce'
+        };
+      }
+    }, {
       key: "onBuffering",
       value: function onBuffering() {
         this.show();
@@ -12109,20 +12100,6 @@
 
     var _super = _createSuper$1(StatsPlugin);
 
-    _createClass$1(StatsPlugin, [{
-      key: "name",
-      get: function get() {
-        return 'stats';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.17"
-        };
-      }
-    }]);
-
     function StatsPlugin(container) {
       var _this;
 
@@ -12138,6 +12115,18 @@
     }
 
     _createClass$1(StatsPlugin, [{
+      key: "name",
+      get: function get() {
+        return 'stats';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.18"
+        };
+      }
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.container.playback, Events.PLAYBACK_PLAY, this.onPlay);
@@ -12241,32 +12230,13 @@
 
   var watermarkHTML = "<div class=\"clappr-watermark\" data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=\"_blank\" href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
 
-  var css_248z$7 = ".clappr-watermark[data-watermark] {\n  position: absolute;\n  min-width: 70px;\n  max-width: 200px;\n  width: 12%;\n  text-align: center;\n  z-index: 10; }\n\n.clappr-watermark[data-watermark] a {\n  outline: none;\n  cursor: pointer; }\n\n.clappr-watermark[data-watermark] img {\n  max-width: 100%; }\n\n.clappr-watermark[data-watermark-bottom-left] {\n  bottom: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-bottom-right] {\n  bottom: 10px;\n  right: 42px; }\n\n.clappr-watermark[data-watermark-top-left] {\n  top: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-top-right] {\n  top: 10px;\n  right: 37px; }\n";
-  styleInject(css_248z$7);
+  var css_248z = ".clappr-watermark[data-watermark] {\n  position: absolute;\n  min-width: 70px;\n  max-width: 200px;\n  width: 12%;\n  text-align: center;\n  z-index: 10; }\n\n.clappr-watermark[data-watermark] a {\n  outline: none;\n  cursor: pointer; }\n\n.clappr-watermark[data-watermark] img {\n  max-width: 100%; }\n\n.clappr-watermark[data-watermark-bottom-left] {\n  bottom: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-bottom-right] {\n  bottom: 10px;\n  right: 42px; }\n\n.clappr-watermark[data-watermark-top-left] {\n  top: 10px;\n  left: 10px; }\n\n.clappr-watermark[data-watermark-top-right] {\n  top: 10px;\n  right: 37px; }\n";
+  styleInject(css_248z);
 
   var WaterMarkPlugin = /*#__PURE__*/function (_UIContainerPlugin) {
     _inherits$1(WaterMarkPlugin, _UIContainerPlugin);
 
     var _super = _createSuper$1(WaterMarkPlugin);
-
-    _createClass$1(WaterMarkPlugin, [{
-      key: "name",
-      get: function get() {
-        return 'watermark';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.17"
-        };
-      }
-    }, {
-      key: "template",
-      get: function get() {
-        return tmpl(watermarkHTML);
-      }
-    }]);
 
     function WaterMarkPlugin(container) {
       var _this;
@@ -12281,6 +12251,23 @@
     }
 
     _createClass$1(WaterMarkPlugin, [{
+      key: "name",
+      get: function get() {
+        return 'watermark';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.18"
+        };
+      }
+    }, {
+      key: "template",
+      get: function get() {
+        return tmpl(watermarkHTML);
+      }
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay);
@@ -12343,7 +12330,7 @@
     WaterMark: WaterMarkPlugin
   };
 
-  var version = "0.4.4";
+  var version = "0.4.5";
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
@@ -12383,6 +12370,44 @@
     version: version
   });
 
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+
+      if (enumerableOnly) {
+        symbols = symbols.filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      }
+
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -12418,40 +12443,6 @@
     }
 
     return obj;
-  }
-
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-
-    return keys;
-  }
-
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
-    }
-
-    return target;
   }
 
   function _inherits(subClass, superClass) {
@@ -12491,7 +12482,7 @@
     if (typeof Proxy === "function") return true;
 
     try {
-      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
       return true;
     } catch (e) {
       return false;
@@ -12572,7 +12563,7 @@
   }
 
   function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _unsupportedIterableToArray(o, minLen) {
@@ -12598,25 +12589,13 @@
 
   var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-  function unwrapExports (x) {
+  function getDefaultExportFromCjs (x) {
   	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
   }
 
-  function createCommonjsModule(fn, basedir, module) {
-  	return module = {
-  	  path: basedir,
-  	  exports: {},
-  	  require: function (path, base) {
-        return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-      }
-  	}, fn(module, module.exports), module.exports;
-  }
+  var hls = {exports: {}};
 
-  function commonjsRequire () {
-  	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-  }
-
-  var hls = createCommonjsModule(function (module, exports) {
+  (function (module, exports) {
   typeof window !== "undefined" &&
   (function webpackUniversalModuleDefinition(root, factory) {
   	module.exports = factory();
@@ -13066,23 +13045,20 @@
 
   // see https://tools.ietf.org/html/rfc1808
 
-  /* jshint ignore:start */
-  (function(root) { 
-  /* jshint ignore:end */
-
-    var URL_REGEX = /^((?:[a-zA-Z0-9+\-.]+:)?)(\/\/[^\/?#]*)?((?:[^\/\?#]*\/)*.*?)??(;.*?)?(\?.*?)?(#.*?)?$/;
+  (function (root) {
+    var URL_REGEX = /^((?:[a-zA-Z0-9+\-.]+:)?)(\/\/[^\/?#]*)?((?:[^\/?#]*\/)*[^;?#]*)?(;[^?#]*)?(\?[^#]*)?(#.*)?$/;
     var FIRST_SEGMENT_REGEX = /^([^\/?#]*)(.*)$/;
     var SLASH_DOT_REGEX = /(?:\/|^)\.(?=\/)/g;
-    var SLASH_DOT_DOT_REGEX = /(?:\/|^)\.\.\/(?!\.\.\/).*?(?=\/)/g;
+    var SLASH_DOT_DOT_REGEX = /(?:\/|^)\.\.\/(?!\.\.\/)[^\/]*(?=\/)/g;
 
-    var URLToolkit = { // jshint ignore:line
+    var URLToolkit = {
       // If opts.alwaysNormalize is true then the path will always be normalized even when it starts with / or //
       // E.g
       // With opts.alwaysNormalize = false (default, spec compliant)
       // http://a.com/b/cd + /e/f/../g => http://a.com/e/f/../g
       // With opts.alwaysNormalize = true (not spec compliant)
       // http://a.com/b/cd + /e/f/../g => http://a.com/e/g
-      buildAbsoluteURL: function(baseURL, relativeURL, opts) {
+      buildAbsoluteURL: function (baseURL, relativeURL, opts) {
         opts = opts || {};
         // remove any remaining space and CRLF
         baseURL = baseURL.trim();
@@ -13098,7 +13074,9 @@
           if (!basePartsForNormalise) {
             throw new Error('Error trying to parse base URL.');
           }
-          basePartsForNormalise.path = URLToolkit.normalizePath(basePartsForNormalise.path);
+          basePartsForNormalise.path = URLToolkit.normalizePath(
+            basePartsForNormalise.path
+          );
           return URLToolkit.buildURLFromParts(basePartsForNormalise);
         }
         var relativeParts = URLToolkit.parseURL(relativeURL);
@@ -13136,7 +13114,7 @@
           path: null,
           params: relativeParts.params,
           query: relativeParts.query,
-          fragment: relativeParts.fragment
+          fragment: relativeParts.fragment,
         };
         if (!relativeParts.netLoc) {
           // 3) If the embedded URL's <net_loc> is non-empty, we skip to
@@ -13168,17 +13146,21 @@
               // slash is present) is removed and the embedded URL's path is
               // appended in its place.
               var baseURLPath = baseParts.path;
-              var newPath = baseURLPath.substring(0, baseURLPath.lastIndexOf('/') + 1) + relativeParts.path;
+              var newPath =
+                baseURLPath.substring(0, baseURLPath.lastIndexOf('/') + 1) +
+                relativeParts.path;
               builtParts.path = URLToolkit.normalizePath(newPath);
             }
           }
         }
         if (builtParts.path === null) {
-          builtParts.path = opts.alwaysNormalize ? URLToolkit.normalizePath(relativeParts.path) : relativeParts.path;
+          builtParts.path = opts.alwaysNormalize
+            ? URLToolkit.normalizePath(relativeParts.path)
+            : relativeParts.path;
         }
         return URLToolkit.buildURLFromParts(builtParts);
       },
-      parseURL: function(url) {
+      parseURL: function (url) {
         var parts = URL_REGEX.exec(url);
         if (!parts) {
           return null;
@@ -13189,10 +13171,10 @@
           path: parts[3] || '',
           params: parts[4] || '',
           query: parts[5] || '',
-          fragment: parts[6] || ''
+          fragment: parts[6] || '',
         };
       },
-      normalizePath: function(path) {
+      normalizePath: function (path) {
         // The following operations are
         // then applied, in order, to the new path:
         // 6a) All occurrences of "./", where "." is a complete path
@@ -13208,18 +13190,25 @@
         // 6d) If the path ends with "<segment>/..", where <segment> is a
         // complete path segment not equal to "..", that
         // "<segment>/.." is removed.
-        while (path.length !== (path = path.replace(SLASH_DOT_DOT_REGEX, '')).length) {} // jshint ignore:line
+        while (
+          path.length !== (path = path.replace(SLASH_DOT_DOT_REGEX, '')).length
+        ) {}
         return path.split('').reverse().join('');
       },
-      buildURLFromParts: function(parts) {
-        return parts.scheme + parts.netLoc + parts.path + parts.params + parts.query + parts.fragment;
-      }
+      buildURLFromParts: function (parts) {
+        return (
+          parts.scheme +
+          parts.netLoc +
+          parts.path +
+          parts.params +
+          parts.query +
+          parts.fragment
+        );
+      },
     };
 
-  /* jshint ignore:start */
     module.exports = URLToolkit;
   })();
-  /* jshint ignore:end */
 
 
   /***/ }),
@@ -13448,12 +13437,11 @@
   /*! ModuleConcatenation bailout: Cannot concat with ./src/utils/get-self-scope.js because of ./src/hls.ts */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/utils/logger.js because of ./src/hls.ts */
   /***/ (function(module, __webpack_exports__, __webpack_require__) {
+  // ESM COMPAT FLAG
   __webpack_require__.r(__webpack_exports__);
 
   // CONCATENATED MODULE: ./src/crypt/aes-crypto.js
-  var AESCrypto =
-  /*#__PURE__*/
-  function () {
+  var AESCrypto = /*#__PURE__*/function () {
     function AESCrypto(subtle, iv) {
       this.subtle = subtle;
       this.aesIV = iv;
@@ -13473,9 +13461,7 @@
 
 
   // CONCATENATED MODULE: ./src/crypt/fast-aes-key.js
-  var FastAESKey =
-  /*#__PURE__*/
-  function () {
+  var FastAESKey = /*#__PURE__*/function () {
     function FastAESKey(subtle, key) {
       this.subtle = subtle;
       this.key = key;
@@ -13506,9 +13492,7 @@
     }
   }
 
-  var AESDecryptor =
-  /*#__PURE__*/
-  function () {
+  var AESDecryptor = /*#__PURE__*/function () {
     function AESDecryptor() {
       // Static after running initTable
       this.rcon = [0x0, 0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36];
@@ -13784,9 +13768,7 @@
 
   var global = Object(get_self_scope["getSelfScope"])(); // safeguard for code that might run both on worker and main thread
 
-  var decrypter_Decrypter =
-  /*#__PURE__*/
-  function () {
+  var decrypter_Decrypter = /*#__PURE__*/function () {
     function Decrypter(observer, config, _temp) {
       var _ref = _temp === void 0 ? {} : _temp,
           _ref$removePKCS7Paddi = _ref.removePKCS7Padding,
@@ -13903,10 +13885,11 @@
   /*! ModuleConcatenation bailout: Cannot concat with ./src/demux/mp4demuxer.js because of ./src/hls.ts */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/errors.ts because of ./src/hls.ts */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/events.js because of ./src/hls.ts */
-  /*! ModuleConcatenation bailout: Cannot concat with ./src/polyfills/number-isFinite.js because of ./src/hls.ts */
+  /*! ModuleConcatenation bailout: Cannot concat with ./src/polyfills/number.js because of ./src/hls.ts */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/utils/get-self-scope.js because of ./src/hls.ts */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/utils/logger.js because of ./src/hls.ts */
   /***/ (function(module, __webpack_exports__, __webpack_require__) {
+  // ESM COMPAT FLAG
   __webpack_require__.r(__webpack_exports__);
 
   // EXTERNAL MODULE: ./src/events.js
@@ -13918,8 +13901,8 @@
   // EXTERNAL MODULE: ./src/crypt/decrypter.js + 3 modules
   var crypt_decrypter = __webpack_require__("./src/crypt/decrypter.js");
 
-  // EXTERNAL MODULE: ./src/polyfills/number-isFinite.js
-  var number_isFinite = __webpack_require__("./src/polyfills/number-isFinite.js");
+  // EXTERNAL MODULE: ./src/polyfills/number.js
+  var number = __webpack_require__("./src/polyfills/number.js");
 
   // EXTERNAL MODULE: ./src/utils/logger.js
   var logger = __webpack_require__("./src/utils/logger.js");
@@ -14094,12 +14077,17 @@
     // or end of data is reached
     if (isHeader(data, offset)) {
       // ADTS header Length
-      var headerLength = getHeaderLength(data, offset); // ADTS frame Length
+      var headerLength = getHeaderLength(data, offset);
 
-      var frameLength = headerLength;
+      if (offset + headerLength >= data.length) {
+        return false;
+      } // ADTS frame Length
 
-      if (offset + 5 < data.length) {
-        frameLength = getFullFrameLength(data, offset);
+
+      var frameLength = getFullFrameLength(data, offset);
+
+      if (frameLength <= headerLength) {
+        return false;
       }
 
       var newOffset = offset + frameLength;
@@ -14182,9 +14170,7 @@
 
 
 
-  var aacdemuxer_AACDemuxer =
-  /*#__PURE__*/
-  function () {
+  var aacdemuxer_AACDemuxer = /*#__PURE__*/function () {
     function AACDemuxer(observer, remuxer, config) {
       this.observer = observer;
       this.config = config;
@@ -14237,7 +14223,7 @@
       var track = this._audioTrack;
       var id3Data = id3["default"].getID3Data(data, 0) || [];
       var timestamp = id3["default"].getTimeStamp(id3Data);
-      var pts = Object(number_isFinite["isFiniteNumber"])(timestamp) ? timestamp * 90 : timeOffset * 90000;
+      var pts = Object(number["isFiniteNumber"])(timestamp) ? timestamp * 90 : timeOffset * 90000;
       var frameIndex = 0;
       var stamp = pts;
       var length = data.length;
@@ -14427,9 +14413,7 @@
   */
 
 
-  var exp_golomb_ExpGolomb =
-  /*#__PURE__*/
-  function () {
+  var exp_golomb_ExpGolomb = /*#__PURE__*/function () {
     function ExpGolomb(data) {
       this.data = data; // the number of bytes left to examine in this.data
 
@@ -14824,9 +14808,7 @@
   */
 
 
-  var sample_aes_SampleAesDecrypter =
-  /*#__PURE__*/
-  function () {
+  var sample_aes_SampleAesDecrypter = /*#__PURE__*/function () {
     function SampleAesDecrypter(observer, config, decryptdata, discardEPB) {
       this.decryptdata = decryptdata;
       this.discardEPB = discardEPB;
@@ -14930,7 +14912,7 @@
 
           var curUnit = curUnits[unitIndex];
 
-          if (curUnit.length <= 48 || curUnit.type !== 1 && curUnit.type !== 5) {
+          if (curUnit.data.length <= 48 || curUnit.type !== 1 && curUnit.type !== 5) {
             continue;
           }
 
@@ -14983,15 +14965,14 @@
     text: 4
   };
 
-  var tsdemuxer_TSDemuxer =
-  /*#__PURE__*/
-  function () {
+  var tsdemuxer_TSDemuxer = /*#__PURE__*/function () {
     function TSDemuxer(observer, remuxer, config, typeSupported) {
       this.observer = observer;
       this.config = config;
       this.typeSupported = typeSupported;
       this.remuxer = remuxer;
       this.sampleAes = null;
+      this.pmtUnknownTypes = {};
     }
 
     var _proto = TSDemuxer.prototype;
@@ -15072,6 +15053,7 @@
     _proto.resetInitSegment = function resetInitSegment(initSegment, audioCodec, videoCodec, duration) {
       this.pmtParsed = false;
       this._pmtId = -1;
+      this.pmtUnknownTypes = {};
       this._avcTrack = TSDemuxer.createTrack('video', duration);
       this._audioTrack = TSDemuxer.createTrack('audio', duration);
       this._id3Track = TSDemuxer.createTrack('id3', duration);
@@ -15102,6 +15084,7 @@
           offset,
           pes,
           unknownPIDs = false;
+      this.pmtUnknownTypes = {};
       this.contiguous = contiguous;
 
       var pmtParsed = this.pmtParsed,
@@ -15116,7 +15099,7 @@
           audioData = audioTrack.pesData,
           id3Data = id3Track.pesData,
           parsePAT = this._parsePAT,
-          parsePMT = this._parsePMT,
+          parsePMT = this._parsePMT.bind(this),
           parsePES = this._parsePES,
           parseAVCPES = this._parseAVCPES.bind(this),
           parseAACPES = this._parseAACPES.bind(this),
@@ -15347,6 +15330,21 @@
       return (data[offset + 10] & 0x1F) << 8 | data[offset + 11]; // logger.log('PMT PID:'  + this._pmtId);
     };
 
+    _proto._trackUnknownPmt = function _trackUnknownPmt(type, logLevel, message) {
+      // Only log unknown and unsupported stream types once per append or stream (by resetting this.pmtUnknownTypes)
+      // For more information on elementary stream types see:
+      // https://en.wikipedia.org/wiki/Program-specific_information#Elementary_stream_types
+      var result = this.pmtUnknownTypes[type] || 0;
+
+      if (result === 0) {
+        this.pmtUnknownTypes[type] = 0;
+        logLevel.call(logger["logger"], message);
+      }
+
+      this.pmtUnknownTypes[type]++;
+      return result;
+    };
+
     _proto._parsePMT = function _parsePMT(data, offset, mpegSupported, isSampleAes) {
       var sectionLength,
           tableEnd,
@@ -15373,7 +15371,8 @@
           case 0xcf:
             // SAMPLE-AES AAC
             if (!isSampleAes) {
-              logger["logger"].log('unknown stream type:' + data[offset]);
+              this._trackUnknownPmt(data[offset], logger["logger"].warn, 'ADTS AAC with AES-128-CBC frame encryption found in unencrypted stream');
+
               break;
             }
 
@@ -15400,7 +15399,8 @@
           case 0xdb:
             // SAMPLE-AES AVC
             if (!isSampleAes) {
-              logger["logger"].log('unknown stream type:' + data[offset]);
+              this._trackUnknownPmt(data[offset], logger["logger"].warn, 'H.264 with AES-128-CBC slice encryption found in unencrypted stream');
+
               break;
             }
 
@@ -15421,7 +15421,7 @@
           case 0x04:
             // logger.log('MPEG PID:'  + pid);
             if (!mpegSupported) {
-              logger["logger"].log('MPEG audio found, not supported in this browser for now');
+              this._trackUnknownPmt(data[offset], logger["logger"].warn, 'MPEG audio found, not supported in this browser');
             } else if (result.audio === -1) {
               result.audio = pid;
               result.isAAC = false;
@@ -15430,11 +15430,13 @@
             break;
 
           case 0x24:
-            logger["logger"].warn('HEVC stream type found, not supported for now');
+            this._trackUnknownPmt(data[offset], logger["logger"].warn, 'Unsupported HEVC stream type found');
+
             break;
 
           default:
-            logger["logger"].log('unknown stream type:' + data[offset]);
+            this._trackUnknownPmt(data[offset], logger["logger"].log, 'Unknown stream type:' + data[offset]);
+
             break;
         } // move to the next table entry
         // skip past the elementary stream descriptors, if present
@@ -15496,24 +15498,14 @@
           (frag[10] & 0xFF) * 4194304 + // 1 << 22
           (frag[11] & 0xFE) * 16384 + // 1 << 14
           (frag[12] & 0xFF) * 128 + // 1 << 7
-          (frag[13] & 0xFE) / 2; // check if greater than 2^32 -1
-
-          if (pesPts > 4294967295) {
-            // decrement 2^33
-            pesPts -= 8589934592;
-          }
+          (frag[13] & 0xFE) / 2;
 
           if (pesFlags & 0x40) {
             pesDts = (frag[14] & 0x0E) * 536870912 + // 1 << 29
             (frag[15] & 0xFF) * 4194304 + // 1 << 22
             (frag[16] & 0xFE) * 16384 + // 1 << 14
             (frag[17] & 0xFF) * 128 + // 1 << 7
-            (frag[18] & 0xFE) / 2; // check if greater than 2^32 -1
-
-            if (pesDts > 4294967295) {
-              // decrement 2^33
-              pesDts -= 8589934592;
-            }
+            (frag[18] & 0xFE) / 2;
 
             if (pesPts - pesDts > 60 * 90000) {
               logger["logger"].warn(Math.round((pesPts - pesDts) / 90000) + "s delta between PTS and DTS, align them");
@@ -15832,7 +15824,7 @@
               pushAccesUnit(avcSample, track);
             }
 
-            avcSample = _this.avcSample = createAVCSample(false, pes.pts, pes.dts,  '');
+            avcSample = _this.avcSample = createAVCSample(false, pes.pts, pes.dts, '');
             break;
           // Filler Data
 
@@ -16209,9 +16201,7 @@
 
 
 
-  var mp3demuxer_MP3Demuxer =
-  /*#__PURE__*/
-  function () {
+  var mp3demuxer_MP3Demuxer = /*#__PURE__*/function () {
     function MP3Demuxer(observer, remuxer, config) {
       this.observer = observer;
       this.config = config;
@@ -16259,9 +16249,9 @@
     ;
 
     _proto.append = function append(data, timeOffset, contiguous, accurateTimeOffset) {
-      var id3Data = id3["default"].getID3Data(data, 0);
+      var id3Data = id3["default"].getID3Data(data, 0) || [];
       var timestamp = id3["default"].getTimeStamp(id3Data);
-      var pts = timestamp ? 90 * timestamp : timeOffset * 90000;
+      var pts = timestamp !== undefined ? 90 * timestamp : timeOffset * 90000;
       var offset = id3Data.length;
       var length = data.length;
       var frameIndex = 0,
@@ -16319,9 +16309,7 @@
   /**
    *  AAC helper
    */
-  var AAC =
-  /*#__PURE__*/
-  function () {
+  var AAC = /*#__PURE__*/function () {
     function AAC() {}
 
     AAC.getSilentFrame = function getSilentFrame(codec, channelCount) {
@@ -16372,9 +16360,7 @@
   */
   var UINT32_MAX = Math.pow(2, 32) - 1;
 
-  var MP4 =
-  /*#__PURE__*/
-  function () {
+  var MP4 = /*#__PURE__*/function () {
     function MP4() {}
 
     MP4.init = function init() {
@@ -16774,7 +16760,8 @@
           lowerWordBaseMediaDecodeTime = Math.floor(baseMediaDecodeTime % (UINT32_MAX + 1));
       return MP4.box(MP4.types.traf, MP4.box(MP4.types.tfhd, new Uint8Array([0x00, // version 0
       0x00, 0x00, 0x00, // flags
-      id >> 24, id >> 16 & 0XFF, id >> 8 & 0XFF, id & 0xFF])), MP4.box(MP4.types.tfdt, new Uint8Array([0x01, // version 1
+      id >> 24, id >> 16 & 0XFF, id >> 8 & 0XFF, id & 0xFF // track_ID
+      ])), MP4.box(MP4.types.tfdt, new Uint8Array([0x01, // version 1
       0x00, 0x00, 0x00, // flags
       upperWordBaseMediaDecodeTime >> 24, upperWordBaseMediaDecodeTime >> 16 & 0XFF, upperWordBaseMediaDecodeTime >> 8 & 0XFF, upperWordBaseMediaDecodeTime & 0xFF, lowerWordBaseMediaDecodeTime >> 24, lowerWordBaseMediaDecodeTime >> 16 & 0XFF, lowerWordBaseMediaDecodeTime >> 8 & 0XFF, lowerWordBaseMediaDecodeTime & 0xFF])), MP4.trun(track, sampleDependencyTable.length + 16 + // tfhd
       20 + // tfdt
@@ -16900,17 +16887,19 @@
 
   var MAX_SILENT_FRAME_DURATION_90KHZ = toMpegTsClockFromTimescale(10);
   var PTS_DTS_SHIFT_TOLERANCE_90KHZ = toMpegTsClockFromTimescale(0.2);
+  var chromeVersion = null;
 
-  var mp4_remuxer_MP4Remuxer =
-  /*#__PURE__*/
-  function () {
+  var mp4_remuxer_MP4Remuxer = /*#__PURE__*/function () {
     function MP4Remuxer(observer, config, typeSupported, vendor) {
       this.observer = observer;
       this.config = config;
       this.typeSupported = typeSupported;
-      var userAgent = navigator.userAgent;
-      this.isSafari = vendor && vendor.indexOf('Apple') > -1 && userAgent && !userAgent.match('CriOS');
       this.ISGenerated = false;
+
+      if (chromeVersion === null) {
+        var result = navigator.userAgent.match(/Chrome\/(\d+)/i);
+        chromeVersion = result ? parseInt(result[1]) : 0;
+      }
     }
 
     var _proto = MP4Remuxer.prototype;
@@ -16923,6 +16912,29 @@
 
     _proto.resetInitSegment = function resetInitSegment() {
       this.ISGenerated = false;
+    };
+
+    _proto.getVideoStartPts = function getVideoStartPts(videoSamples) {
+      var rolloverDetected = false;
+      var startPTS = videoSamples.reduce(function (minPTS, sample) {
+        var delta = sample.pts - minPTS;
+
+        if (delta < -4294967296) {
+          // 2^32, see PTSNormalize for reasoning, but we're hitting a rollover here, and we don't want that to impact the timeOffset calculation
+          rolloverDetected = true;
+          return PTSNormalize(minPTS, sample.pts);
+        } else if (delta > 0) {
+          return minPTS;
+        } else {
+          return sample.pts;
+        }
+      }, videoSamples[0].pts);
+
+      if (rolloverDetected) {
+        logger["logger"].debug('PTS rollover detected');
+      }
+
+      return startPTS;
     };
 
     _proto.remux = function remux(audioTrack, videoTrack, id3Track, textTrack, timeOffset, contiguous, accurateTimeOffset) {
@@ -16942,9 +16954,11 @@
           // if first audio DTS is not aligned with first video DTS then we need to take that into account
           // when providing timeOffset to remuxAudio / remuxVideo. if we don't do that, there might be a permanent / small
           // drift between audio and video streams
-          var audiovideoDeltaDts = (audioTrack.samples[0].pts - videoTrack.samples[0].pts) / videoTrack.inputTimeScale;
-          audioTimeOffset += Math.max(0, audiovideoDeltaDts);
-          videoTimeOffset += Math.max(0, -audiovideoDeltaDts);
+          var startPTS = this.getVideoStartPts(videoTrack.samples);
+          var tsDelta = PTSNormalize(audioTrack.samples[0].pts, startPTS) - startPTS;
+          var audiovideoTimestampDelta = tsDelta / videoTrack.inputTimeScale;
+          audioTimeOffset += Math.max(0, audiovideoTimestampDelta);
+          videoTimeOffset += Math.max(0, -audiovideoTimestampDelta);
         } // Purposefully remuxing audio before video, so that remuxVideo can use nextAudioPts, which is
         // calculated in remuxAudio.
         // logger.log('nb AAC samples:' + audioTrack.samples.length);
@@ -16972,7 +16986,7 @@
               this.generateIS(audioTrack, videoTrack, timeOffset);
             }
 
-            this.remuxVideo(videoTrack, videoTimeOffset, contiguous, audioTrackLength, accurateTimeOffset);
+            this.remuxVideo(videoTrack, videoTimeOffset, contiguous, audioTrackLength);
           }
         } else {
           // logger.log('nb AVC samples:' + videoTrack.samples.length);
@@ -17048,7 +17062,7 @@
 
         if (computePTSDTS) {
           // remember first PTS of this demuxing context. for audio, PTS = DTS
-          initPTS = initDTS = audioSamples[0].pts - audioTrack.inputTimeScale * timeOffset;
+          initPTS = initDTS = audioSamples[0].pts - Math.round(audioTrack.inputTimeScale * timeOffset);
         }
       }
 
@@ -17068,12 +17082,19 @@
         };
 
         if (computePTSDTS) {
-          initPTS = Math.min(initPTS, videoSamples[0].pts - inputTimeScale * timeOffset);
-          initDTS = Math.min(initDTS, videoSamples[0].dts - inputTimeScale * timeOffset);
+          var startPTS = this.getVideoStartPts(videoSamples);
+          var startOffset = Math.round(inputTimeScale * timeOffset);
+          initDTS = Math.min(initDTS, PTSNormalize(videoSamples[0].dts, startPTS) - startOffset);
+          initPTS = Math.min(initPTS, startPTS - startOffset);
           this.observer.trigger(events["default"].INIT_PTS_FOUND, {
             initPTS: initPTS
           });
         }
+      } else if (computePTSDTS && tracks.audio) {
+        // initPTS found for audio-only stream with main and alt audio
+        this.observer.trigger(events["default"].INIT_PTS_FOUND, {
+          initPTS: initPTS
+        });
       }
 
       if (Object.keys(tracks).length) {
@@ -17094,114 +17115,129 @@
       }
     };
 
-    _proto.remuxVideo = function remuxVideo(track, timeOffset, contiguous, audioTrackLength, accurateTimeOffset) {
-      var offset = 8;
-      var mp4SampleDuration;
-      var mdat;
-      var moof;
-      var firstPTS;
-      var firstDTS;
-      var lastPTS;
-      var lastDTS;
+    _proto.remuxVideo = function remuxVideo(track, timeOffset, contiguous, audioTrackLength) {
       var timeScale = track.timescale;
       var inputSamples = track.samples;
       var outputSamples = [];
       var nbSamples = inputSamples.length;
-      var ptsNormalize = this._PTSNormalize;
-      var initPTS = this._initPTS; // if parsed fragment is contiguous with last one, let's use last DTS value as reference
+      var initPTS = this._initPTS;
+      var offset = 8;
+      var mp4SampleDuration;
+      var mdat;
+      var moof;
+      var firstDTS;
+      var lastDTS;
+      var minPTS = Number.POSITIVE_INFINITY;
+      var maxPTS = Number.NEGATIVE_INFINITY;
+      var ptsDtsShift = 0;
+      var sortSamples = false; // if parsed fragment is contiguous with last one, let's use last DTS value as reference
 
       var nextAvcDts = this.nextAvcDts;
-      var isSafari = this.isSafari;
 
       if (nbSamples === 0) {
         return;
-      } // Safari does not like overlapping DTS on consecutive fragments. let's use nextAvcDts to overcome this if fragments are consecutive
-
-
-      if (isSafari) {
-        // also consider consecutive fragments as being contiguous (even if a level switch occurs),
-        // for sake of clarity:
-        // consecutive fragments are frags with
-        //  - less than 100ms gaps between new time offset (if accurate) and next expected PTS OR
-        //  - less than 200 ms PTS gaps (timeScale/5)
-        contiguous |= inputSamples.length && nextAvcDts && (accurateTimeOffset && Math.abs(timeOffset - nextAvcDts / timeScale) < 0.1 || Math.abs(inputSamples[0].pts - nextAvcDts - initPTS) < timeScale / 5);
       }
 
       if (!contiguous) {
-        // if not contiguous, let's use target timeOffset
-        nextAvcDts = timeOffset * timeScale;
+        var pts = timeOffset * timeScale;
+        var cts = inputSamples[0].pts - PTSNormalize(inputSamples[0].dts, inputSamples[0].pts); // if not contiguous, let's use target timeOffset
+
+        nextAvcDts = pts - cts;
       } // PTS is coded on 33bits, and can loop from -2^32 to 2^32
-      // ptsNormalize will make PTS/DTS value monotonic, we use last known DTS value as reference value
+      // PTSNormalize will make PTS/DTS value monotonic, we use last known DTS value as reference value
 
 
-      inputSamples.forEach(function (sample) {
-        sample.pts = ptsNormalize(sample.pts - initPTS, nextAvcDts);
-        sample.dts = ptsNormalize(sample.dts - initPTS, nextAvcDts);
-      }); // sort video samples by DTS then PTS then demux id order
+      for (var i = 0; i < nbSamples; i++) {
+        var sample = inputSamples[i];
+        sample.pts = PTSNormalize(sample.pts - initPTS, nextAvcDts);
+        sample.dts = PTSNormalize(sample.dts - initPTS, nextAvcDts);
 
-      inputSamples.sort(function (a, b) {
-        var deltadts = a.dts - b.dts;
-        var deltapts = a.pts - b.pts;
-        return deltadts || deltapts || a.id - b.id;
-      }); // handle broken streams with PTS < DTS, tolerance up 0.2 seconds
-
-      var PTSDTSshift = inputSamples.reduce(function (prev, curr) {
-        return Math.max(Math.min(prev, curr.pts - curr.dts), -1 * PTS_DTS_SHIFT_TOLERANCE_90KHZ);
-      }, 0);
-
-      if (PTSDTSshift < 0) {
-        logger["logger"].warn("PTS < DTS detected in video samples, shifting DTS by " + toMsFromMpegTsClock(PTSDTSshift, true) + " ms to overcome this issue");
-
-        for (var i = 0; i < inputSamples.length; i++) {
-          inputSamples[i].dts += PTSDTSshift;
+        if (sample.dts > sample.pts) {
+          ptsDtsShift = Math.max(Math.min(ptsDtsShift, sample.pts - sample.dts), -1 * PTS_DTS_SHIFT_TOLERANCE_90KHZ);
         }
-      } // compute first DTS and last DTS, normalize them against reference value
 
-
-      var sample = inputSamples[0];
-      firstDTS = Math.max(sample.dts, 0);
-      firstPTS = Math.max(sample.pts, 0); // check timestamp continuity accross consecutive fragments (this is to remove inter-fragment gap/hole)
-
-      var delta = firstDTS - nextAvcDts; // if fragment are contiguous, detect hole/overlapping between fragments
-
-      if (contiguous) {
-        if (delta) {
-          if (delta > 1) {
-            logger["logger"].log("AVC: " + toMsFromMpegTsClock(delta, true) + " ms hole between fragments detected,filling it");
-          } else if (delta < -1) {
-            logger["logger"].log("AVC: " + toMsFromMpegTsClock(-delta, true) + " ms overlapping between fragments detected");
-          } // remove hole/gap : set DTS to next expected DTS
-
-
-          firstDTS = nextAvcDts;
-          inputSamples[0].dts = firstDTS; // offset PTS as well, ensure that PTS is smaller or equal than new DTS
-
-          firstPTS = Math.max(firstPTS - delta, nextAvcDts);
-          inputSamples[0].pts = firstPTS;
-          logger["logger"].log("Video: PTS/DTS adjusted: " + toMsFromMpegTsClock(firstPTS, true) + "/" + toMsFromMpegTsClock(firstDTS, true) + ", delta: " + toMsFromMpegTsClock(delta, true) + " ms");
+        if (sample.dts < inputSamples[i > 0 ? i - 1 : i].dts) {
+          sortSamples = true;
         }
-      } // compute lastPTS/lastDTS
+      } // sort video samples by DTS then PTS then demux id order
 
 
-      sample = inputSamples[inputSamples.length - 1];
-      lastDTS = Math.max(sample.dts, 0);
-      lastPTS = Math.max(sample.pts, 0, lastDTS); // on Safari let's signal the same sample duration for all samples
+      if (sortSamples) {
+        inputSamples.sort(function (a, b) {
+          var deltadts = a.dts - b.dts;
+          var deltapts = a.pts - b.pts;
+          return deltadts || deltapts || a.id - b.id;
+        });
+      } // Get first/last DTS
+
+
+      firstDTS = inputSamples[0].dts;
+      lastDTS = inputSamples[nbSamples - 1].dts; // on Safari let's signal the same sample duration for all samples
       // sample duration (as expected by trun MP4 boxes), should be the delta between sample DTS
       // set this constant duration as being the avg delta between consecutive DTS.
 
-      if (isSafari) {
-        mp4SampleDuration = Math.round((lastDTS - firstDTS) / (inputSamples.length - 1));
+      var averageSampleDuration = Math.round((lastDTS - firstDTS) / (nbSamples - 1)); // handle broken streams with PTS < DTS, tolerance up 0.2 seconds
+
+      if (ptsDtsShift < 0) {
+        if (ptsDtsShift < averageSampleDuration * -2) {
+          // Fix for "CNN special report, with CC" in test-streams (including Safari browser)
+          // With large PTS < DTS errors such as this, we want to correct CTS while maintaining increasing DTS values
+          logger["logger"].warn("PTS < DTS detected in video samples, offsetting DTS from PTS by " + toMsFromMpegTsClock(-averageSampleDuration, true) + " ms");
+          var lastDts = ptsDtsShift;
+
+          for (var _i = 0; _i < nbSamples; _i++) {
+            inputSamples[_i].dts = lastDts = Math.max(lastDts, inputSamples[_i].pts - averageSampleDuration);
+            inputSamples[_i].pts = Math.max(lastDts, inputSamples[_i].pts);
+          }
+        } else {
+          // Fix for "Custom IV with bad PTS DTS" in test-streams
+          // With smaller PTS < DTS errors we can simply move all DTS back. This increases CTS without causing buffer gaps or decode errors in Safari
+          logger["logger"].warn("PTS < DTS detected in video samples, shifting DTS by " + toMsFromMpegTsClock(ptsDtsShift, true) + " ms to overcome this issue");
+
+          for (var _i2 = 0; _i2 < nbSamples; _i2++) {
+            inputSamples[_i2].dts = inputSamples[_i2].dts + ptsDtsShift;
+          }
+        }
+
+        firstDTS = inputSamples[0].dts;
+        lastDTS = inputSamples[nbSamples - 1].dts;
+      } // if fragment are contiguous, detect hole/overlapping between fragments
+
+
+      if (contiguous) {
+        // check timestamp continuity across consecutive fragments (this is to remove inter-fragment gap/hole)
+        var delta = firstDTS - nextAvcDts;
+        var foundHole = delta > averageSampleDuration;
+        var foundOverlap = delta < -1;
+
+        if (foundHole || foundOverlap) {
+          if (foundHole) {
+            logger["logger"].warn("AVC: " + toMsFromMpegTsClock(delta, true) + " ms (" + delta + "dts) hole between fragments detected, filling it");
+          } else {
+            logger["logger"].warn("AVC: " + toMsFromMpegTsClock(-delta, true) + " ms (" + delta + "dts) overlapping between fragments detected");
+          }
+
+          firstDTS = nextAvcDts;
+          var firstPTS = inputSamples[0].pts - delta;
+          inputSamples[0].dts = firstDTS;
+          inputSamples[0].pts = firstPTS;
+          logger["logger"].log("Video: First PTS/DTS adjusted: " + toMsFromMpegTsClock(firstPTS, true) + "/" + toMsFromMpegTsClock(firstDTS, true) + ", delta: " + toMsFromMpegTsClock(delta, true) + " ms");
+        }
       }
 
-      var nbNalu = 0,
-          naluLen = 0;
+      if (chromeVersion && chromeVersion < 75) {
+        firstDTS = Math.max(0, firstDTS);
+      }
 
-      for (var _i = 0; _i < nbSamples; _i++) {
+      var nbNalu = 0;
+      var naluLen = 0;
+
+      for (var _i3 = 0; _i3 < nbSamples; _i3++) {
         // compute total/avc sample length and nb of NAL units
-        var _sample = inputSamples[_i],
-            units = _sample.units,
-            nbUnits = units.length,
-            sampleLen = 0;
+        var _sample = inputSamples[_i3];
+        var units = _sample.units;
+        var nbUnits = units.length;
+        var sampleLen = 0;
 
         for (var j = 0; j < nbUnits; j++) {
           sampleLen += units[j].data.length;
@@ -17210,21 +17246,18 @@
         naluLen += sampleLen;
         nbNalu += nbUnits;
         _sample.length = sampleLen; // normalize PTS/DTS
+        // ensure sample monotonic DTS
 
-        if (isSafari) {
-          // sample DTS is computed using a constant decoding offset (mp4SampleDuration) between samples
-          _sample.dts = firstDTS + _i * mp4SampleDuration;
-        } else {
-          // ensure sample monotonic DTS
-          _sample.dts = Math.max(_sample.dts, firstDTS);
-        } // ensure that computed value is greater or equal than sample DTS
+        _sample.dts = Math.max(_sample.dts, firstDTS); // ensure that computed value is greater or equal than sample DTS
 
-
-        _sample.pts = Math.max(_sample.pts, _sample.dts);
+        _sample.pts = Math.max(_sample.pts, _sample.dts, 0);
+        minPTS = Math.min(_sample.pts, minPTS);
+        maxPTS = Math.max(_sample.pts, maxPTS);
       }
+
+      lastDTS = inputSamples[nbSamples - 1].dts;
       /* concatenate the video data and construct the mdat in place
         (need 8 more bytes to fill length and mpdat type) */
-
 
       var mdatSize = naluLen + 4 * nbNalu + 8;
 
@@ -17245,64 +17278,59 @@
       view.setUint32(0, mdatSize);
       mdat.set(mp4_generator.types.mdat, 4);
 
-      for (var _i2 = 0; _i2 < nbSamples; _i2++) {
-        var avcSample = inputSamples[_i2],
-            avcSampleUnits = avcSample.units,
-            mp4SampleLength = 0,
-            compositionTimeOffset = void 0; // convert NALU bitstream to MP4 format (prepend NALU with size field)
+      for (var _i4 = 0; _i4 < nbSamples; _i4++) {
+        var avcSample = inputSamples[_i4];
+        var avcSampleUnits = avcSample.units;
+        var mp4SampleLength = 0;
+        var compositionTimeOffset = void 0; // convert NALU bitstream to MP4 format (prepend NALU with size field)
 
         for (var _j = 0, _nbUnits = avcSampleUnits.length; _j < _nbUnits; _j++) {
-          var unit = avcSampleUnits[_j],
-              unitData = unit.data,
-              unitDataLen = unit.data.byteLength;
+          var unit = avcSampleUnits[_j];
+          var unitData = unit.data;
+          var unitDataLen = unit.data.byteLength;
           view.setUint32(offset, unitDataLen);
           offset += 4;
           mdat.set(unitData, offset);
           offset += unitDataLen;
           mp4SampleLength += 4 + unitDataLen;
-        }
+        } // expected sample duration is the Decoding Timestamp diff of consecutive samples
 
-        if (!isSafari) {
-          // expected sample duration is the Decoding Timestamp diff of consecutive samples
-          if (_i2 < nbSamples - 1) {
-            mp4SampleDuration = inputSamples[_i2 + 1].dts - avcSample.dts;
-          } else {
-            var config = this.config,
-                lastFrameDuration = avcSample.dts - inputSamples[_i2 > 0 ? _i2 - 1 : _i2].dts;
 
-            if (config.stretchShortVideoTrack) {
-              // In some cases, a segment's audio track duration may exceed the video track duration.
-              // Since we've already remuxed audio, and we know how long the audio track is, we look to
-              // see if the delta to the next segment is longer than maxBufferHole.
-              // If so, playback would potentially get stuck, so we artificially inflate
-              // the duration of the last frame to minimize any potential gap between segments.
-              var maxBufferHole = config.maxBufferHole,
-                  gapTolerance = Math.floor(maxBufferHole * timeScale),
-                  deltaToFrameEnd = (audioTrackLength ? firstPTS + audioTrackLength * timeScale : this.nextAudioPts) - avcSample.pts;
+        if (_i4 < nbSamples - 1) {
+          mp4SampleDuration = inputSamples[_i4 + 1].dts - avcSample.dts;
+        } else {
+          var config = this.config;
+          var lastFrameDuration = avcSample.dts - inputSamples[_i4 > 0 ? _i4 - 1 : _i4].dts;
 
-              if (deltaToFrameEnd > gapTolerance) {
-                // We subtract lastFrameDuration from deltaToFrameEnd to try to prevent any video
-                // frame overlap. maxBufferHole should be >> lastFrameDuration anyway.
-                mp4SampleDuration = deltaToFrameEnd - lastFrameDuration;
+          if (config.stretchShortVideoTrack) {
+            // In some cases, a segment's audio track duration may exceed the video track duration.
+            // Since we've already remuxed audio, and we know how long the audio track is, we look to
+            // see if the delta to the next segment is longer than maxBufferHole.
+            // If so, playback would potentially get stuck, so we artificially inflate
+            // the duration of the last frame to minimize any potential gap between segments.
+            var maxBufferHole = config.maxBufferHole;
+            var gapTolerance = Math.floor(maxBufferHole * timeScale);
+            var deltaToFrameEnd = (audioTrackLength ? minPTS + audioTrackLength * timeScale : this.nextAudioPts) - avcSample.pts;
 
-                if (mp4SampleDuration < 0) {
-                  mp4SampleDuration = lastFrameDuration;
-                }
+            if (deltaToFrameEnd > gapTolerance) {
+              // We subtract lastFrameDuration from deltaToFrameEnd to try to prevent any video
+              // frame overlap. maxBufferHole should be >> lastFrameDuration anyway.
+              mp4SampleDuration = deltaToFrameEnd - lastFrameDuration;
 
-                logger["logger"].log("It is approximately " + toMsFromMpegTsClock(deltaToFrameEnd, false) + " ms to the next segment; using duration " + toMsFromMpegTsClock(mp4SampleDuration, false) + " ms for the last video frame.");
-              } else {
+              if (mp4SampleDuration < 0) {
                 mp4SampleDuration = lastFrameDuration;
               }
+
+              logger["logger"].log("It is approximately " + toMsFromMpegTsClock(deltaToFrameEnd, false) + " ms to the next segment; using duration " + toMsFromMpegTsClock(mp4SampleDuration, false) + " ms for the last video frame.");
             } else {
               mp4SampleDuration = lastFrameDuration;
             }
+          } else {
+            mp4SampleDuration = lastFrameDuration;
           }
+        }
 
-          compositionTimeOffset = Math.round(avcSample.pts - avcSample.dts);
-        } else {
-          compositionTimeOffset = Math.max(0, mp4SampleDuration * Math.round((avcSample.pts - avcSample.dts) / mp4SampleDuration));
-        } // console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${avcSample.pts}/${avcSample.dts}/${initDTS}/${ptsnorm}/${dtsnorm}/${(avcSample.pts/4294967296).toFixed(3)}');
-
+        compositionTimeOffset = Math.round(avcSample.pts - avcSample.dts); // console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${avcSample.pts}/${avcSample.dts}/${initDTS}/${ptsnorm}/${dtsnorm}/${(avcSample.pts/4294967296).toFixed(3)}');
 
         outputSamples.push({
           size: mp4SampleLength,
@@ -17340,8 +17368,8 @@
       var data = {
         data1: moof,
         data2: mdat,
-        startPTS: firstPTS / timeScale,
-        endPTS: (lastPTS + mp4SampleDuration) / timeScale,
+        startPTS: minPTS / timeScale,
+        endPTS: (maxPTS + mp4SampleDuration) / timeScale,
         startDTS: firstDTS / timeScale,
         endDTS: this.nextAvcDts / timeScale,
         type: 'video',
@@ -17360,7 +17388,6 @@
       var scaleFactor = inputTimeScale / mp4timeScale;
       var mp4SampleDuration = track.isAAC ? 1024 : 1152;
       var inputSampleDuration = mp4SampleDuration * scaleFactor;
-      var ptsNormalize = this._PTSNormalize;
       var initPTS = this._initPTS;
       var rawMPEG = !track.isAAC && this.typeSupported.mpeg;
       var mp4Sample;
@@ -17384,7 +17411,7 @@
       contiguous |= inputSamples.length && nextAudioPts && (accurateTimeOffset && Math.abs(timeOffset - nextAudioPts / inputTimeScale) < 0.1 || Math.abs(inputSamples[0].pts - nextAudioPts - initPTS) < 20 * inputSampleDuration); // compute normalized PTS
 
       inputSamples.forEach(function (sample) {
-        sample.pts = sample.dts = ptsNormalize(sample.pts - initPTS, timeOffset * inputTimeScale);
+        sample.pts = sample.dts = PTSNormalize(sample.pts - initPTS, timeOffset * inputTimeScale);
       }); // filter out sample with negative PTS that are not playable anyway
       // if we don't remove these negative samples, they will shift all audio samples forward.
       // leading to audio overlap between current / next fragment
@@ -17403,7 +17430,7 @@
           nextAudioPts = inputSamples[0].pts;
         } else {
           // if timeOffset is accurate, let's use it as predicted next audio PTS
-          nextAudioPts = timeOffset * inputTimeScale;
+          nextAudioPts = Math.max(0, timeOffset * inputTimeScale);
         }
       } // If the audio track is missing samples, the frames seem to get "left-shifted" within the
       // resulting mp4 segment, causing sync issues and leaving gaps at the end of the audio segment.
@@ -17417,14 +17444,21 @@
 
         for (var i = 0, nextPts = nextAudioPts; i < inputSamples.length;) {
           // First, let's see how far off this frame is from where we expect it to be
-          var sample = inputSamples[i],
-              delta;
+          var sample = inputSamples[i];
           var pts = sample.pts;
-          delta = pts - nextPts; // If we're overlapping by more than a duration, drop this sample
+          var delta = pts - nextPts; // If we're overlapping by more than a duration, drop this sample
 
           if (delta <= -maxAudioFramesDrift * inputSampleDuration) {
-            logger["logger"].warn("Dropping 1 audio frame @ " + toMsFromMpegTsClock(nextPts, true) + " ms due to " + toMsFromMpegTsClock(delta, true) + " ms overlap.");
-            inputSamples.splice(i, 1); // Don't touch nextPtsNorm or i
+            if (contiguous || i > 0) {
+              logger["logger"].warn("Dropping 1 audio frame @ " + toMsFromMpegTsClock(nextPts, true) / 1000 + "s due to " + toMsFromMpegTsClock(delta, true) + " ms overlap.");
+              inputSamples.splice(i, 1); // Don't touch nextPtsNorm or i
+            } else {
+              // When changing qualities we can't trust that audio has been appended up to nextAudioPts
+              // Warn about the overlap but do not drop samples as that can introduce buffer gaps
+              logger["logger"].warn("Audio frame @ " + toMsFromMpegTsClock(pts, true) / 1000 + "s overlaps nextAudioPts by " + toMsFromMpegTsClock(delta, true) + " ms.");
+              nextPts = pts + inputSampleDuration;
+              i++;
+            }
           } // eslint-disable-line brace-style
           // Insert missing frames if:
           // 1: We're more than maxAudioFramesDrift frame away
@@ -17432,7 +17466,7 @@
           // 3: currentTime (aka nextPtsNorm) is not 0
           else if (delta >= maxAudioFramesDrift * inputSampleDuration && delta < MAX_SILENT_FRAME_DURATION_90KHZ && nextPts) {
               var missing = Math.round(delta / inputSampleDuration);
-              logger["logger"].warn("Injecting " + missing + " audio frames @ " + toMsFromMpegTsClock(nextPts, true) + " ms due to " + toMsFromMpegTsClock(nextPts, true) + " ms gap.");
+              logger["logger"].warn("Injecting " + missing + " audio frames @ " + toMsFromMpegTsClock(nextPts, true) / 1000 + "s due to " + toMsFromMpegTsClock(delta, true) + " ms gap.");
 
               for (var j = 0; j < missing; j++) {
                 var newStamp = Math.max(nextPts, 0);
@@ -17479,7 +17513,7 @@
         var _pts = audioSample.pts; // logger.log(`Audio/PTS:${toMsFromMpegTsClock(pts, true)}`);
         // if not first sample
 
-        if (lastPTS !== undefined) {
+        if (lastPTS !== undefined && mp4Sample) {
           mp4Sample.duration = Math.round((_pts - lastPTS) / scaleFactor);
         } else {
           var _delta = _pts - nextAudioPts;
@@ -17547,7 +17581,7 @@
             return;
           }
 
-          for (var _i3 = 0; _i3 < numMissingFrames; _i3++) {
+          for (var _i5 = 0; _i5 < numMissingFrames; _i5++) {
             fillFrame = aac_helper.getSilentFrame(track.manifestCodec || track.codec, track.channelCount);
 
             if (!fillFrame) {
@@ -17672,47 +17706,47 @@
       this.remuxAudio(track, timeOffset, contiguous);
     };
 
-    _proto.remuxID3 = function remuxID3(track) {
-      var length = track.samples.length,
-          sample;
+    _proto.remuxID3 = function remuxID3(track, timeOffset) {
+      var length = track.samples.length;
+
+      if (!length) {
+        return;
+      }
+
       var inputTimeScale = track.inputTimeScale;
       var initPTS = this._initPTS;
       var initDTS = this._initDTS; // consume samples
 
-      if (length) {
-        for (var index = 0; index < length; index++) {
-          sample = track.samples[index]; // setting id3 pts, dts to relative time
-          // using this._initPTS and this._initDTS to calculate relative time
+      for (var index = 0; index < length; index++) {
+        var sample = track.samples[index]; // setting id3 pts, dts to relative time
+        // using this._initPTS and this._initDTS to calculate relative time
 
-          sample.pts = (sample.pts - initPTS) / inputTimeScale;
-          sample.dts = (sample.dts - initDTS) / inputTimeScale;
-        }
-
-        this.observer.trigger(events["default"].FRAG_PARSING_METADATA, {
-          samples: track.samples
-        });
+        sample.pts = PTSNormalize(sample.pts - initPTS, timeOffset * inputTimeScale) / inputTimeScale;
+        sample.dts = PTSNormalize(sample.dts - initDTS, timeOffset * inputTimeScale) / inputTimeScale;
       }
 
+      this.observer.trigger(events["default"].FRAG_PARSING_METADATA, {
+        samples: track.samples
+      });
       track.samples = [];
     };
 
-    _proto.remuxText = function remuxText(track) {
-      track.samples.sort(function (a, b) {
-        return a.pts - b.pts;
-      });
-      var length = track.samples.length,
-          sample;
+    _proto.remuxText = function remuxText(track, timeOffset) {
+      var length = track.samples.length;
       var inputTimeScale = track.inputTimeScale;
       var initPTS = this._initPTS; // consume samples
 
       if (length) {
         for (var index = 0; index < length; index++) {
-          sample = track.samples[index]; // setting text pts, dts to relative time
+          var sample = track.samples[index]; // setting text pts, dts to relative time
           // using this._initPTS and this._initDTS to calculate relative time
 
-          sample.pts = (sample.pts - initPTS) / inputTimeScale;
+          sample.pts = PTSNormalize(sample.pts - initPTS, timeOffset * inputTimeScale) / inputTimeScale;
         }
 
+        track.samples.sort(function (a, b) {
+          return a.pts - b.pts;
+        });
         this.observer.trigger(events["default"].FRAG_PARSING_USERDATA, {
           samples: track.samples
         });
@@ -17721,34 +17755,34 @@
       track.samples = [];
     };
 
-    _proto._PTSNormalize = function _PTSNormalize(value, reference) {
-      var offset;
-
-      if (reference === undefined) {
-        return value;
-      }
-
-      if (reference < value) {
-        // - 2^33
-        offset = -8589934592;
-      } else {
-        // + 2^33
-        offset = 8589934592;
-      }
-      /* PTS is 33bit (from 0 to 2^33 -1)
-        if diff between value and reference is bigger than half of the amplitude (2^32) then it means that
-        PTS looping occured. fill the gap */
-
-
-      while (Math.abs(value - reference) > 4294967296) {
-        value += offset;
-      }
-
-      return value;
-    };
-
     return MP4Remuxer;
   }();
+
+  function PTSNormalize(value, reference) {
+    var offset;
+
+    if (reference === undefined) {
+      return value;
+    }
+
+    if (reference < value) {
+      // - 2^33
+      offset = -8589934592;
+    } else {
+      // + 2^33
+      offset = 8589934592;
+    }
+    /* PTS is 33bit (from 0 to 2^33 -1)
+      if diff between value and reference is bigger than half of the amplitude (2^32) then it means that
+      PTS looping occured. fill the gap */
+
+
+    while (Math.abs(value - reference) > 4294967296) {
+      value += offset;
+    }
+
+    return value;
+  }
 
   /* harmony default export */ var mp4_remuxer = (mp4_remuxer_MP4Remuxer);
   // CONCATENATED MODULE: ./src/remux/passthrough-remuxer.js
@@ -17757,9 +17791,7 @@
   */
 
 
-  var passthrough_remuxer_PassThroughRemuxer =
-  /*#__PURE__*/
-  function () {
+  var passthrough_remuxer_PassThroughRemuxer = /*#__PURE__*/function () {
     function PassThroughRemuxer(observer) {
       this.observer = observer;
     }
@@ -17832,9 +17864,7 @@
     now = global.Date.now;
   }
 
-  var demuxer_inline_DemuxerInline =
-  /*#__PURE__*/
-  function () {
+  var demuxer_inline_DemuxerInline = /*#__PURE__*/function () {
     function DemuxerInline(observer, typeSupported, config, vendor) {
       this.observer = observer;
       this.typeSupported = typeSupported;
@@ -17882,11 +17912,11 @@
 
     _proto.pushDecrypted = function pushDecrypted(data, decryptdata, initSegment, audioCodec, videoCodec, timeOffset, discontinuity, trackSwitch, contiguous, duration, accurateTimeOffset, defaultInitPTS) {
       var demuxer = this.demuxer;
+      var remuxer = this.remuxer;
 
       if (!demuxer || // in case of continuity change, or track switch
       // we might switch from content type (AAC container to TS container, or TS to fmp4 for example)
-      // so let's check that current demuxer is still valid
-      (discontinuity || trackSwitch) && !this.probe(data)) {
+      discontinuity || trackSwitch) {
         var observer = this.observer;
         var typeSupported = this.typeSupported;
         var config = this.config; // probing order is TS/MP4/AAC/MP3
@@ -17905,20 +17935,17 @@
           remux: mp4_remuxer
         }]; // probe for content type
 
+        var mux;
+
         for (var i = 0, len = muxConfig.length; i < len; i++) {
-          var mux = muxConfig[i];
-          var probe = mux.demux.probe;
+          mux = muxConfig[i];
 
-          if (probe(data)) {
-            var _remuxer = this.remuxer = new mux.remux(observer, config, typeSupported, this.vendor);
-
-            demuxer = new mux.demux(observer, _remuxer, config, typeSupported);
-            this.probe = probe;
+          if (mux.demux.probe(data)) {
             break;
           }
         }
 
-        if (!demuxer) {
+        if (!mux) {
           observer.trigger(events["default"].ERROR, {
             type: errors["ErrorTypes"].MEDIA_ERROR,
             details: errors["ErrorDetails"].FRAG_PARSING_ERROR,
@@ -17926,12 +17953,21 @@
             reason: 'no demux matching with content found'
           });
           return;
+        } // so let's check that current remuxer and demuxer are still valid
+
+
+        if (!remuxer || !(remuxer instanceof mux.remux)) {
+          remuxer = new mux.remux(observer, config, typeSupported, this.vendor);
+        }
+
+        if (!demuxer || !(demuxer instanceof mux.demux)) {
+          demuxer = new mux.demux(observer, remuxer, config, typeSupported);
+          this.probe = mux.demux.probe;
         }
 
         this.demuxer = demuxer;
+        this.remuxer = remuxer;
       }
-
-      var remuxer = this.remuxer;
 
       if (discontinuity || trackSwitch) {
         demuxer.resetInitSegment(initSegment, audioCodec, videoCodec, duration);
@@ -18072,9 +18108,7 @@
    * ID3 parser
    */
 
-  var ID3 =
-  /*#__PURE__*/
-  function () {
+  var ID3 = /*#__PURE__*/function () {
     function ID3() {}
 
     /**
@@ -18272,13 +18306,11 @@
     ID3._decodeFrame = function _decodeFrame(frame) {
       if (frame.type === 'PRIV') {
         return ID3._decodePrivFrame(frame);
-      } else if (frame.type[0] === 'T') {
-        return ID3._decodeTextFrame(frame);
       } else if (frame.type[0] === 'W') {
         return ID3._decodeURLFrame(frame);
       }
 
-      return undefined;
+      return ID3._decodeTextFrame(frame);
     };
 
     ID3._readTimeStamp = function _readTimeStamp(timeStampFrame) {
@@ -18371,7 +18403,7 @@
 
         var index = 1;
 
-        var description = ID3._utf8ArrayToStr(frame.data.subarray(index));
+        var description = ID3._utf8ArrayToStr(frame.data.subarray(index), true);
 
         index += description.length + 1;
 
@@ -18512,9 +18544,7 @@
 
   var UINT32_MAX = Math.pow(2, 32) - 1;
 
-  var MP4Demuxer =
-  /*#__PURE__*/
-  function () {
+  var MP4Demuxer = /*#__PURE__*/function () {
     function MP4Demuxer(observer, remuxer) {
       this.observer = observer;
       this.remuxer = remuxer;
@@ -18984,6 +19014,7 @@
     ErrorDetails["MANIFEST_LOAD_TIMEOUT"] = "manifestLoadTimeOut";
     ErrorDetails["MANIFEST_PARSING_ERROR"] = "manifestParsingError";
     ErrorDetails["MANIFEST_INCOMPATIBLE_CODECS_ERROR"] = "manifestIncompatibleCodecsError";
+    ErrorDetails["LEVEL_EMPTY_ERROR"] = "levelEmptyError";
     ErrorDetails["LEVEL_LOAD_ERROR"] = "levelLoadError";
     ErrorDetails["LEVEL_LOAD_TIMEOUT"] = "levelLoadTimeOut";
     ErrorDetails["LEVEL_SWITCH_ERROR"] = "levelSwitchError";
@@ -19062,6 +19093,8 @@
     LEVEL_UPDATED: 'hlsLevelUpdated',
     // fired when a level's PTS information has been updated after parsing a fragment - data: { details : levelDetails object, level : id of updated level, drift: PTS drift observed when parsing last fragment }
     LEVEL_PTS_UPDATED: 'hlsLevelPtsUpdated',
+    // fired to notify that levels have changed after removing a level - data: { levels : [available quality levels] }
+    LEVELS_UPDATED: 'hlsLevelsUpdated',
     // fired to notify that audio track lists has been updated - data: { audioTracks : audioTracks }
     AUDIO_TRACKS_UPDATED: 'hlsAudioTracksUpdated',
     // fired when an audio track switching is requested - data: { id : audio track id }
@@ -19082,6 +19115,10 @@
     SUBTITLE_TRACK_LOADED: 'hlsSubtitleTrackLoaded',
     // fired when a subtitle fragment has been processed - data: { success : boolean, frag : the processed frag }
     SUBTITLE_FRAG_PROCESSED: 'hlsSubtitleFragProcessed',
+    // fired when a set of VTTCues to be managed externally has been parsed - data: { type: string, track: string, cues: [ VTTCue ] }
+    CUES_PARSED: 'hlsCuesParsed',
+    // fired when a text track to be managed externally is found - data: { tracks: [ { label: string, kind: string, default: boolean } ] }
+    NON_NATIVE_TEXT_TRACKS_FOUND: 'hlsNonNativeTextTracksFound',
     // fired when the first timestamp is found - data: { id : demuxer id, initPTS: initPTS, frag : fragment object }
     INIT_PTS_FOUND: 'hlsInitPtsFound',
     // fired when a fragment loading starts - data: { frag : fragment object }
@@ -19140,13 +19177,19 @@
   /*! ModuleConcatenation bailout: Cannot concat with ./src/demux/mp4demuxer.js because of ./src/demux/demuxer-worker.js */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/errors.ts because of ./src/demux/demuxer-worker.js */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/events.js because of ./src/demux/demuxer-worker.js */
-  /*! ModuleConcatenation bailout: Cannot concat with ./src/polyfills/number-isFinite.js because of ./src/demux/demuxer-worker.js */
+  /*! ModuleConcatenation bailout: Cannot concat with ./src/polyfills/number.js because of ./src/demux/demuxer-worker.js */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/utils/get-self-scope.js because of ./src/demux/demuxer-worker.js */
   /*! ModuleConcatenation bailout: Cannot concat with ./src/utils/logger.js because of ./src/demux/demuxer-worker.js */
   /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/eventemitter3/index.js (<- Module is not an ECMAScript module) */
   /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/url-toolkit/src/url-toolkit.js (<- Module is not an ECMAScript module) */
   /***/ (function(module, __webpack_exports__, __webpack_require__) {
+  // ESM COMPAT FLAG
   __webpack_require__.r(__webpack_exports__);
+
+  // EXPORTS
+  __webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ hls_Hls; });
+
+  // NAMESPACE OBJECT: ./src/utils/cues.ts
   var cues_namespaceObject = {};
   __webpack_require__.r(cues_namespaceObject);
   __webpack_require__.d(cues_namespaceObject, "newCue", function() { return newCue; });
@@ -19157,8 +19200,8 @@
   // EXTERNAL MODULE: ./src/errors.ts
   var errors = __webpack_require__("./src/errors.ts");
 
-  // EXTERNAL MODULE: ./src/polyfills/number-isFinite.js
-  var number_isFinite = __webpack_require__("./src/polyfills/number-isFinite.js");
+  // EXTERNAL MODULE: ./src/polyfills/number.js
+  var number = __webpack_require__("./src/polyfills/number.js");
 
   // EXTERNAL MODULE: ./src/events.js
   var events = __webpack_require__("./src/events.js");
@@ -19181,9 +19224,7 @@
     'hlsHandlerDestroyed': true
   };
 
-  var event_handler_EventHandler =
-  /*#__PURE__*/
-  function () {
+  var event_handler_EventHandler = /*#__PURE__*/function () {
     function EventHandler(hls) {
       this.hls = void 0;
       this.handledEvents = void 0;
@@ -19308,9 +19349,7 @@
 
 
 
-  var level_key_LevelKey =
-  /*#__PURE__*/
-  function () {
+  var level_key_LevelKey = /*#__PURE__*/function () {
     function LevelKey(baseURI, relativeURI) {
       this._uri = null;
       this.baseuri = void 0;
@@ -19357,9 +19396,7 @@
     ElementaryStreamTypes["VIDEO"] = "video";
   })(ElementaryStreamTypes || (ElementaryStreamTypes = {}));
 
-  var fragment_Fragment =
-  /*#__PURE__*/
-  function () {
+  var fragment_Fragment = /*#__PURE__*/function () {
     function Fragment() {
       var _this$_elementaryStre;
 
@@ -19443,7 +19480,7 @@
     _proto.setDecryptDataFromLevelKey = function setDecryptDataFromLevelKey(levelkey, segmentNumber) {
       var decryptdata = levelkey;
 
-      if (levelkey && levelkey.method && levelkey.uri && !levelkey.iv) {
+      if ((levelkey === null || levelkey === void 0 ? void 0 : levelkey.method) && levelkey.uri && !levelkey.iv) {
         decryptdata = new level_key_LevelKey(levelkey.baseuri, levelkey.reluri);
         decryptdata.method = levelkey.method;
         decryptdata.iv = this.createInitializationVector(segmentNumber);
@@ -19530,11 +19567,11 @@
           return null;
         }
 
-        if (!Object(number_isFinite["isFiniteNumber"])(this.programDateTime)) {
+        if (!Object(number["isFiniteNumber"])(this.programDateTime)) {
           return null;
         }
 
-        var duration = !Object(number_isFinite["isFiniteNumber"])(this.duration) ? 0 : this.duration;
+        var duration = !Object(number["isFiniteNumber"])(this.duration) ? 0 : this.duration;
         return this.programDateTime + duration * 1000;
       }
     }, {
@@ -19555,9 +19592,7 @@
 
   function level_createClass(Constructor, protoProps, staticProps) { if (protoProps) level_defineProperties(Constructor.prototype, protoProps); if (staticProps) level_defineProperties(Constructor, staticProps); return Constructor; }
 
-  var level_Level =
-  /*#__PURE__*/
-  function () {
+  var level_Level = /*#__PURE__*/function () {
     function Level(baseUrl) {
       // Please keep properties in alphabetical order
       this.endCC = 0;
@@ -19579,7 +19614,7 @@
     level_createClass(Level, [{
       key: "hasProgramDateTime",
       get: function get() {
-        return !!(this.fragments[0] && Object(number_isFinite["isFiniteNumber"])(this.fragments[0].programDateTime));
+        return !!(this.fragments[0] && Object(number["isFiniteNumber"])(this.fragments[0].programDateTime));
       }
     }]);
 
@@ -19593,9 +19628,7 @@
   var ATTR_LIST_REGEX = /\s*(.+?)\s*=((?:\".*?\")|.*?)(?:,|$)/g; // eslint-disable-line no-useless-escape
   // adapted from https://github.com/kanongil/node-m3u8parse/blob/master/attrlist.js
 
-  var AttrList =
-  /*#__PURE__*/
-  function () {
+  var AttrList = /*#__PURE__*/function () {
     function AttrList(attrs) {
       if (typeof attrs === 'string') {
         attrs = AttrList.parseAttrList(attrs);
@@ -19783,7 +19816,7 @@
    * @module
    */
   // https://regex101.com is your friend
-  var MASTER_PLAYLIST_REGEX = /#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)/g;
+  var MASTER_PLAYLIST_REGEX = /(?:#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)|#EXT-X-SESSION-DATA:([^\n\r]*)[\r\n]+)/g;
   var MASTER_PLAYLIST_MEDIA_REGEX = /#EXT-X-MEDIA:(.*)/g;
   var LEVEL_PLAYLIST_REGEX_FAST = new RegExp([/#EXTINF:\s*(\d*(?:\.\d+)?)(?:,(.*)\s+)?/.source, // duration (#EXTINF:<duration>,<title>), group 1 => duration, group 2 => title
   /|(?!#)([\S+ ?]+)/.source, // segment URI, group 3 => the URI (note newline is not eaten)
@@ -19791,12 +19824,10 @@
   /|#EXT-X-PROGRAM-DATE-TIME:(.+)/.source, // next segment's program date/time group 5 => the datetime spec
   /|#.*/.source // All other non-segment oriented tags will match with all groups empty
   ].join(''), 'g');
-  var LEVEL_PLAYLIST_REGEX_SLOW = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.+))|(?:#EXT-X-(MEDIA-SEQUENCE): *(\d+))|(?:#EXT-X-(TARGETDURATION): *(\d+))|(?:#EXT-X-(KEY):(.+))|(?:#EXT-X-(START):(.+))|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DISCONTINUITY-SEQ)UENCE:(\d+))|(?:#EXT-X-(DIS)CONTINUITY))|(?:#EXT-X-("0.4.4"):(\d+))|(?:#EXT-X-(MAP):(.+))|(?:(#)([^:]*):(.*))|(?:(#)(.*))(?:.*)\r?\n?/;
+  var LEVEL_PLAYLIST_REGEX_SLOW = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.+))|(?:#EXT-X-(MEDIA-SEQUENCE): *(\d+))|(?:#EXT-X-(TARGETDURATION): *(\d+))|(?:#EXT-X-(KEY):(.+))|(?:#EXT-X-(START):(.+))|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DISCONTINUITY-SEQ)UENCE:(\d+))|(?:#EXT-X-(DIS)CONTINUITY))|(?:#EXT-X-("0.4.5"):(\d+))|(?:#EXT-X-(MAP):(.+))|(?:(#)([^:]*):(.*))|(?:(#)(.*))(?:.*)\r?\n?/;
   var MP4_REGEX_SUFFIX = /\.(mp4|m4s|m4v|m4a)$/i;
 
-  var m3u8_parser_M3U8Parser =
-  /*#__PURE__*/
-  function () {
+  var m3u8_parser_M3U8Parser = /*#__PURE__*/function () {
     function M3U8Parser() {}
 
     M3U8Parser.findGroup = function findGroup(groups, mediaGroupId) {
@@ -19833,6 +19864,8 @@
     M3U8Parser.parseMasterPlaylist = function parseMasterPlaylist(string, baseurl) {
       // TODO(typescript-level)
       var levels = [];
+      var sessionData = {};
+      var hasSessionData = false;
       MASTER_PLAYLIST_REGEX.lastIndex = 0; // TODO(typescript-level)
 
       function setCodecs(codecs, level) {
@@ -19858,29 +19891,43 @@
       var result;
 
       while ((result = MASTER_PLAYLIST_REGEX.exec(string)) != null) {
-        // TODO(typescript-level)
-        var level = {};
-        var attrs = level.attrs = new attr_list(result[1]);
-        level.url = M3U8Parser.resolve(result[2], baseurl);
-        var resolution = attrs.decimalResolution('RESOLUTION');
+        if (result[1]) {
+          // '#EXT-X-STREAM-INF' is found, parse level tag  in group 1
+          // TODO(typescript-level)
+          var level = {};
+          var attrs = level.attrs = new attr_list(result[1]);
+          level.url = M3U8Parser.resolve(result[2], baseurl);
+          var resolution = attrs.decimalResolution('RESOLUTION');
 
-        if (resolution) {
-          level.width = resolution.width;
-          level.height = resolution.height;
+          if (resolution) {
+            level.width = resolution.width;
+            level.height = resolution.height;
+          }
+
+          level.bitrate = attrs.decimalInteger('AVERAGE-BANDWIDTH') || attrs.decimalInteger('BANDWIDTH');
+          level.name = attrs.NAME;
+          setCodecs([].concat((attrs.CODECS || '').split(/[ ,]+/)), level);
+
+          if (level.videoCodec && level.videoCodec.indexOf('avc1') !== -1) {
+            level.videoCodec = M3U8Parser.convertAVC1ToAVCOTI(level.videoCodec);
+          }
+
+          levels.push(level);
+        } else if (result[3]) {
+          // '#EXT-X-SESSION-DATA' is found, parse session data in group 3
+          var sessionAttrs = new attr_list(result[3]);
+
+          if (sessionAttrs['DATA-ID']) {
+            hasSessionData = true;
+            sessionData[sessionAttrs['DATA-ID']] = sessionAttrs;
+          }
         }
-
-        level.bitrate = attrs.decimalInteger('AVERAGE-BANDWIDTH') || attrs.decimalInteger('BANDWIDTH');
-        level.name = attrs.NAME;
-        setCodecs([].concat((attrs.CODECS || '').split(/[ ,]+/)), level);
-
-        if (level.videoCodec && level.videoCodec.indexOf('avc1') !== -1) {
-          level.videoCodec = M3U8Parser.convertAVC1ToAVCOTI(level.videoCodec);
-        }
-
-        levels.push(level);
       }
 
-      return levels;
+      return {
+        levels: levels,
+        sessionData: hasSessionData ? sessionData : null
+      };
     };
 
     M3U8Parser.parseMasterPlaylistMedia = function parseMasterPlaylistMedia(string, baseurl, type, audioGroups) {
@@ -19898,8 +19945,10 @@
 
         if (attrs.TYPE === type) {
           var media = {
+            attrs: attrs,
             id: id++,
             groupId: attrs['GROUP-ID'],
+            instreamId: attrs['INSTREAM-ID'],
             name: attrs.NAME || attrs.LANGUAGE,
             type: type,
             default: attrs.DEFAULT === 'YES',
@@ -19952,7 +20001,7 @@
           frag.tagList.push(title ? ['INF', duration, title] : ['INF', duration]);
         } else if (result[3]) {
           // url
-          if (Object(number_isFinite["isFiniteNumber"])(frag.duration)) {
+          if (Object(number["isFiniteNumber"])(frag.duration)) {
             var sn = currentSN++;
             frag.type = type;
             frag.start = totalduration;
@@ -20027,7 +20076,7 @@
               level.targetduration = parseFloat(value1);
               break;
 
-            case '"0.4.4"':
+            case '"0.4.5"':
               level.version = parseInt(value1);
               break;
 
@@ -20049,12 +20098,19 @@
 
             case 'KEY':
               {
-                // https://tools.ietf.org/html/draft-pantos-http-live-streaming-08#section-3.4.4
+                // https://tools.ietf.org/html/rfc8216#section-4.3.2.4
                 var decryptparams = value1;
                 var keyAttrs = new attr_list(decryptparams);
                 var decryptmethod = keyAttrs.enumeratedString('METHOD');
                 var decrypturi = keyAttrs.URI;
-                var decryptiv = keyAttrs.hexadecimalInteger('IV');
+                var decryptiv = keyAttrs.hexadecimalInteger('IV'); // From RFC: This attribute is OPTIONAL; its absence indicates an implicit value of "identity".
+
+                var decryptkeyformat = keyAttrs.KEYFORMAT || 'identity';
+
+                if (decryptkeyformat === 'com.apple.streamingkeydelivery') {
+                  logger["logger"].warn('Keyformat com.apple.streamingkeydelivery is not supported');
+                  continue;
+                }
 
                 if (decryptmethod) {
                   levelkey = new level_key_LevelKey(baseurl, decrypturi);
@@ -20075,7 +20131,7 @@
                 var startAttrs = new attr_list(value1);
                 var startTimeOffset = startAttrs.decimalFloatingPoint('TIME-OFFSET'); // TIME-OFFSET can be 0
 
-                if (Object(number_isFinite["isFiniteNumber"])(startTimeOffset)) {
+                if (Object(number["isFiniteNumber"])(startTimeOffset)) {
                   level.startTimeOffset = startTimeOffset;
                 }
 
@@ -20175,11 +20231,11 @@
   function assignProgramDateTime(frag, prevFrag) {
     if (frag.rawProgramDateTime) {
       frag.programDateTime = Date.parse(frag.rawProgramDateTime);
-    } else if (prevFrag && prevFrag.programDateTime) {
+    } else if (prevFrag === null || prevFrag === void 0 ? void 0 : prevFrag.programDateTime) {
       frag.programDateTime = prevFrag.endProgramDateTime;
     }
 
-    if (!Object(number_isFinite["isFiniteNumber"])(frag.programDateTime)) {
+    if (!Object(number["isFiniteNumber"])(frag.programDateTime)) {
       frag.programDateTime = null;
       frag.rawProgramDateTime = null;
     }
@@ -20213,9 +20269,7 @@
    * @constructor
    */
 
-  var playlist_loader_PlaylistLoader =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var playlist_loader_PlaylistLoader = /*#__PURE__*/function (_EventHandler) {
     _inheritsLoose(PlaylistLoader, _EventHandler);
 
     /**
@@ -20492,7 +20546,10 @@
       var hls = this.hls;
       var string = response.data;
       var url = PlaylistLoader.getResponseUrl(response, context);
-      var levels = m3u8_parser_M3U8Parser.parseMasterPlaylist(string, url);
+
+      var _M3U8Parser$parseMast = m3u8_parser_M3U8Parser.parseMasterPlaylist(string, url),
+          levels = _M3U8Parser$parseMast.levels,
+          sessionData = _M3U8Parser$parseMast.sessionData;
 
       if (!levels.length) {
         this._handleManifestParsingError(response, context, 'no level found in manifest', networkDetails);
@@ -20509,6 +20566,7 @@
       });
       var audioTracks = m3u8_parser_M3U8Parser.parseMasterPlaylistMedia(string, url, 'AUDIO', audioGroups);
       var subtitles = m3u8_parser_M3U8Parser.parseMasterPlaylistMedia(string, url, 'SUBTITLES');
+      var captions = m3u8_parser_M3U8Parser.parseMasterPlaylistMedia(string, url, 'CLOSED-CAPTIONS');
 
       if (audioTracks.length) {
         // check if we have found an audio track embedded in main playlist (audio track without URI attribute)
@@ -20530,7 +20588,9 @@
             default: false,
             autoselect: false,
             forced: false,
-            id: -1
+            id: -1,
+            attrs: {},
+            url: ''
           });
         }
       }
@@ -20539,9 +20599,11 @@
         levels: levels,
         audioTracks: audioTracks,
         subtitles: subtitles,
+        captions: captions,
         url: url,
         stats: stats,
-        networkDetails: networkDetails
+        networkDetails: networkDetails,
+        sessionData: sessionData
       });
     };
 
@@ -20552,16 +20614,29 @@
           type = context.type;
       var url = PlaylistLoader.getResponseUrl(response, context); // if the values are null, they will result in the else conditional
 
-      var levelUrlId = Object(number_isFinite["isFiniteNumber"])(id) ? id : 0;
-      var levelId = Object(number_isFinite["isFiniteNumber"])(level) ? level : levelUrlId;
+      var levelUrlId = Object(number["isFiniteNumber"])(id) ? id : 0;
+      var levelId = Object(number["isFiniteNumber"])(level) ? level : levelUrlId;
       var levelType = PlaylistLoader.mapContextToLevelType(context);
       var levelDetails = m3u8_parser_M3U8Parser.parseLevelPlaylist(response.data, url, levelId, levelType, levelUrlId); // set stats on level structure
       // TODO(jstackhouse): why? mixing concerns, is it just treated as value bag?
 
-      levelDetails.tload = stats.tload; // We have done our first request (Manifest-type) and receive
+      levelDetails.tload = stats.tload;
+
+      if (!levelDetails.fragments.length) {
+        hls.trigger(events["default"].ERROR, {
+          type: errors["ErrorTypes"].NETWORK_ERROR,
+          details: errors["ErrorDetails"].LEVEL_EMPTY_ERROR,
+          fatal: false,
+          url: url,
+          reason: 'no fragments found in level',
+          level: typeof context.level === 'number' ? context.level : undefined
+        });
+        return;
+      } // We have done our first request (Manifest-type) and receive
       // not a master playlist but a chunk-list (track/level)
       // We fire the manifest-loaded event anyway with the parsed level-details
       // by creating a single-level structure for it.
+
 
       if (type === PlaylistContextType.MANIFEST) {
         var singleLevel = {
@@ -20573,7 +20648,8 @@
           audioTracks: [],
           url: url,
           stats: stats,
-          networkDetails: networkDetails
+          networkDetails: networkDetails,
+          sessionData: null
         });
       } // save parsing time
 
@@ -20768,9 +20844,7 @@
 
 
 
-  var fragment_loader_FragmentLoader =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var fragment_loader_FragmentLoader = /*#__PURE__*/function (_EventHandler) {
     fragment_loader_inheritsLoose(FragmentLoader, _EventHandler);
 
     function FragmentLoader(hls) {
@@ -20826,7 +20900,7 @@
       var start = frag.byteRangeStartOffset,
           end = frag.byteRangeEndOffset;
 
-      if (Object(number_isFinite["isFiniteNumber"])(start) && Object(number_isFinite["isFiniteNumber"])(end)) {
+      if (Object(number["isFiniteNumber"])(start) && Object(number["isFiniteNumber"])(end)) {
         loaderContext.rangeStart = start;
         loaderContext.rangeEnd = end;
       }
@@ -20940,9 +21014,7 @@
 
 
 
-  var key_loader_KeyLoader =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var key_loader_KeyLoader = /*#__PURE__*/function (_EventHandler) {
     key_loader_inheritsLoose(KeyLoader, _EventHandler);
 
     function KeyLoader(hls) {
@@ -21098,9 +21170,7 @@
     PARTIAL: 'PARTIAL',
     OK: 'OK'
   };
-  var fragment_tracker_FragmentTracker =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var fragment_tracker_FragmentTracker = /*#__PURE__*/function (_EventHandler) {
     fragment_tracker_inheritsLoose(FragmentTracker, _EventHandler);
 
     function FragmentTracker(hls) {
@@ -21170,27 +21240,30 @@
     _proto.detectEvictedFragments = function detectEvictedFragments(elementaryStream, timeRange) {
       var _this2 = this;
 
-      var fragmentTimes, time; // Check if any flagged fragments have been unloaded
-
+      // Check if any flagged fragments have been unloaded
       Object.keys(this.fragments).forEach(function (key) {
         var fragmentEntity = _this2.fragments[key];
 
-        if (fragmentEntity.buffered === true) {
-          var esData = fragmentEntity.range[elementaryStream];
+        if (!fragmentEntity || !fragmentEntity.buffered) {
+          return;
+        }
 
-          if (esData) {
-            fragmentTimes = esData.time;
+        var esData = fragmentEntity.range[elementaryStream];
 
-            for (var i = 0; i < fragmentTimes.length; i++) {
-              time = fragmentTimes[i];
+        if (!esData) {
+          return;
+        }
 
-              if (_this2.isTimeBuffered(time.startPTS, time.endPTS, timeRange) === false) {
-                // Unregister partial fragment as it needs to load again to be reused
-                _this2.removeFragment(fragmentEntity.body);
+        var fragmentTimes = esData.time;
 
-                break;
-              }
-            }
+        for (var i = 0; i < fragmentTimes.length; i++) {
+          var time = fragmentTimes[i];
+
+          if (!_this2.isTimeBuffered(time.startPTS, time.endPTS, timeRange)) {
+            // Unregister partial fragment as it needs to load again to be reused
+            _this2.removeFragment(fragmentEntity.body);
+
+            break;
           }
         }
       });
@@ -21350,7 +21423,7 @@
       var fragment = e.frag; // don't track initsegment (for which sn is not a number)
       // don't track frags used for bitrateTest, they're irrelevant.
 
-      if (!Object(number_isFinite["isFiniteNumber"])(fragment.sn) || fragment.bitrateTest) {
+      if (!Object(number["isFiniteNumber"])(fragment.sn) || fragment.bitrateTest) {
         return;
       }
 
@@ -21467,9 +21540,7 @@
    *
    * Also @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/buffered
   */
-  var BufferHelper =
-  /*#__PURE__*/
-  function () {
+  var BufferHelper = /*#__PURE__*/function () {
     function BufferHelper() {}
 
     /**
@@ -21629,9 +21700,7 @@
    * Simple adapter sub-class of Nodejs-like EventEmitter.
    */
 
-  var Observer =
-  /*#__PURE__*/
-  function (_EventEmitter) {
+  var Observer = /*#__PURE__*/function (_EventEmitter) {
     observer_inheritsLoose(Observer, _EventEmitter);
 
     function Observer() {
@@ -21675,9 +21744,7 @@
     }
   };
 
-  var demuxer_Demuxer =
-  /*#__PURE__*/
-  function () {
+  var demuxer_Demuxer = /*#__PURE__*/function () {
     function Demuxer(hls, id) {
       var _this = this;
 
@@ -21784,7 +21851,7 @@
 
     _proto.push = function push(data, initSegment, audioCodec, videoCodec, frag, duration, accurateTimeOffset, defaultInitPTS) {
       var w = this.w;
-      var timeOffset = Object(number_isFinite["isFiniteNumber"])(frag.startPTS) ? frag.startPTS : frag.start;
+      var timeOffset = Object(number["isFiniteNumber"])(frag.startPTS) ? frag.startPTS : frag.start;
       var decryptdata = frag.decryptdata;
       var lastFrag = this.frag;
       var discontinuity = !(lastFrag && frag.cc === lastFrag.cc);
@@ -21900,7 +21967,7 @@
         fragTo = fragments[toIdx],
         fragToPTS = fragTo.startPTS; // if we know startPTS[toIdx]
 
-    if (Object(number_isFinite["isFiniteNumber"])(fragToPTS)) {
+    if (Object(number["isFiniteNumber"])(fragToPTS)) {
       // update fragment duration.
       // it helps to fix drifts between playlist reported duration and fragment real duration
       if (toIdx > fromIdx) {
@@ -21919,7 +21986,8 @@
     } else {
       // we dont know startPTS[toIdx]
       if (toIdx > fromIdx) {
-        fragTo.start = fragFrom.start + fragFrom.duration;
+        var contiguous = fragFrom.cc === fragTo.cc;
+        fragTo.start = fragFrom.start + (contiguous && fragFrom.minEndPTS ? fragFrom.minEndPTS - fragFrom.start : fragFrom.duration);
       } else {
         fragTo.start = Math.max(fragFrom.start - fragTo.duration, 0);
       }
@@ -21928,12 +21996,13 @@
   function updateFragPTSDTS(details, frag, startPTS, endPTS, startDTS, endDTS) {
     // update frag PTS/DTS
     var maxStartPTS = startPTS;
+    var minEndPTS = endPTS;
 
-    if (Object(number_isFinite["isFiniteNumber"])(frag.startPTS)) {
+    if (Object(number["isFiniteNumber"])(frag.startPTS)) {
       // delta PTS between audio and video
       var deltaPTS = Math.abs(frag.startPTS - startPTS);
 
-      if (!Object(number_isFinite["isFiniteNumber"])(frag.deltaPTS)) {
+      if (!Object(number["isFiniteNumber"])(frag.deltaPTS)) {
         frag.deltaPTS = deltaPTS;
       } else {
         frag.deltaPTS = Math.max(deltaPTS, frag.deltaPTS);
@@ -21941,6 +22010,7 @@
 
       maxStartPTS = Math.max(startPTS, frag.startPTS);
       startPTS = Math.min(startPTS, frag.startPTS);
+      minEndPTS = Math.min(endPTS, frag.endPTS);
       endPTS = Math.max(endPTS, frag.endPTS);
       startDTS = Math.min(startDTS, frag.startDTS);
       endDTS = Math.max(endDTS, frag.endDTS);
@@ -21950,6 +22020,7 @@
     frag.start = frag.startPTS = startPTS;
     frag.maxStartPTS = maxStartPTS;
     frag.endPTS = endPTS;
+    frag.minEndPTS = minEndPTS;
     frag.startDTS = startDTS;
     frag.endDTS = endDTS;
     frag.duration = endPTS - startPTS;
@@ -21994,7 +22065,7 @@
     mapFragmentIntersection(oldDetails, newDetails, function (oldFrag, newFrag) {
       ccOffset = oldFrag.cc - newFrag.cc;
 
-      if (Object(number_isFinite["isFiniteNumber"])(oldFrag.startPTS)) {
+      if (Object(number["isFiniteNumber"])(oldFrag.startPTS)) {
         newFrag.start = newFrag.startPTS = oldFrag.startPTS;
         newFrag.endPTS = oldFrag.endPTS;
         newFrag.duration = oldFrag.duration;
@@ -22252,7 +22323,7 @@
 
       var sliding = (newPDT - lastPDT) / 1000 + lastDetails.fragments[0].start;
 
-      if (Object(number_isFinite["isFiniteNumber"])(sliding)) {
+      if (Object(number["isFiniteNumber"])(sliding)) {
         logger["logger"].log("adjusting PTS using programDateTime delta, sliding:" + sliding.toFixed(3));
         adjustPts(sliding, details);
       }
@@ -22270,7 +22341,7 @@
    * @returns {*|null} fragment - The best matching fragment
    */
   function findFragmentByPDT(fragments, PDTValue, maxFragLookUpTolerance) {
-    if (PDTValue === null || !Array.isArray(fragments) || !fragments.length || !Object(number_isFinite["isFiniteNumber"])(PDTValue)) {
+    if (PDTValue === null || !Array.isArray(fragments) || !fragments.length || !Object(number["isFiniteNumber"])(PDTValue)) {
       return null;
     } // if less than start
 
@@ -22319,13 +22390,28 @@
       maxFragLookUpTolerance = 0;
     }
 
-    var fragNext = fragPrevious ? fragments[fragPrevious.sn - fragments[0].sn + 1] : null; // Prefer the next fragment if it's within tolerance
+    var fragNext = null;
 
-    if (fragNext && !fragment_finders_fragmentWithinToleranceTest(bufferEnd, maxFragLookUpTolerance, fragNext)) {
+    if (fragPrevious) {
+      fragNext = fragments[fragPrevious.sn - fragments[0].sn + 1];
+    } else if (bufferEnd === 0 && fragments[0].start === 0) {
+      fragNext = fragments[0];
+    } // Prefer the next fragment if it's within tolerance
+
+
+    if (fragNext && fragmentWithinToleranceTest(bufferEnd, maxFragLookUpTolerance, fragNext) === 0) {
       return fragNext;
-    }
+    } // We might be seeking past the tolerance so find the best match
 
-    return binary_search.search(fragments, fragment_finders_fragmentWithinToleranceTest.bind(null, bufferEnd, maxFragLookUpTolerance));
+
+    var foundFragment = binary_search.search(fragments, fragmentWithinToleranceTest.bind(null, bufferEnd, maxFragLookUpTolerance));
+
+    if (foundFragment) {
+      return foundFragment;
+    } // If no match was found return the next fragment after fragPrevious, or null
+
+
+    return fragNext;
   }
   /**
    * The test function used by the findFragmentBySn's BinarySearch to look for the best match to the current buffer conditions.
@@ -22335,7 +22421,7 @@
    * @returns {number} - 0 if it matches, 1 if too low, -1 if too high
    */
 
-  function fragment_finders_fragmentWithinToleranceTest(bufferEnd, maxFragLookUpTolerance, candidate) {
+  function fragmentWithinToleranceTest(bufferEnd, maxFragLookUpTolerance, candidate) {
     if (bufferEnd === void 0) {
       bufferEnd = 0;
     }
@@ -22394,9 +22480,7 @@
   var SKIP_BUFFER_HOLE_STEP_SECONDS = 0.1;
   var SKIP_BUFFER_RANGE_START = 0.05;
 
-  var gap_controller_GapController =
-  /*#__PURE__*/
-  function () {
+  var gap_controller_GapController = /*#__PURE__*/function () {
     function GapController(config, media, fragmentTracker, hls) {
       this.config = config;
       this.media = media;
@@ -22469,7 +22553,7 @@
         // Waiting for seeking in a buffered range to complete
         var hasEnoughBuffer = bufferInfo.len > MAX_START_GAP_JUMP; // Next buffered range is too far ahead to jump to while still seeking
 
-        var noBufferGap = !nextStart || nextStart - currentTime > MAX_START_GAP_JUMP;
+        var noBufferGap = !nextStart || nextStart - currentTime > MAX_START_GAP_JUMP && !this.fragmentTracker.getPartialFragment(currentTime);
 
         if (hasEnoughBuffer || noBufferGap) {
           return;
@@ -22567,7 +22651,7 @@
       if (!stallReported) {
         // Report stalled error once
         this.stallReported = true;
-        logger["logger"].warn("Playback stalling at @" + media.currentTime + " due to low buffer");
+        logger["logger"].warn("Playback stalling at @" + media.currentTime + " due to low buffer (buffer=" + bufferLen + ")");
         hls.trigger(events["default"].ERROR, {
           type: errors["ErrorTypes"].MEDIA_ERROR,
           details: errors["ErrorDetails"].BUFFER_STALLED_ERROR,
@@ -22691,9 +22775,7 @@
    * we are limiting the task execution per call stack to exactly one, but scheduling/post-poning further
    * task processing on the next main loop iteration (also known as "next tick" in the Node/JS runtime lingo).
    */
-  var TaskLoop =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var TaskLoop = /*#__PURE__*/function (_EventHandler) {
     task_loop_inheritsLoose(TaskLoop, _EventHandler);
 
     function TaskLoop(hls) {
@@ -22843,9 +22925,7 @@
     WAITING_LEVEL: 'WAITING_LEVEL'
   };
 
-  var base_stream_controller_BaseStreamController =
-  /*#__PURE__*/
-  function (_TaskLoop) {
+  var base_stream_controller_BaseStreamController = /*#__PURE__*/function (_TaskLoop) {
     base_stream_controller_inheritsLoose(BaseStreamController, _TaskLoop);
 
     function BaseStreamController() {
@@ -22903,10 +22983,7 @@
           state = this.state;
       var currentTime = media ? media.currentTime : null;
       var bufferInfo = BufferHelper.bufferInfo(mediaBuffer || media, currentTime, this.config.maxBufferHole);
-
-      if (Object(number_isFinite["isFiniteNumber"])(currentTime)) {
-        logger["logger"].log("media seeking to " + currentTime.toFixed(3));
-      }
+      logger["logger"].log("media seeking to " + (Object(number["isFiniteNumber"])(currentTime) ? currentTime.toFixed(3) : currentTime));
 
       if (state === State.FRAG_LOADING) {
         var fragCurrent = this.fragCurrent; // check if we are seeking to a unbuffered area AND if frag loading is in progress
@@ -22986,6 +23063,7 @@
 
 
 
+
   function stream_controller_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
   function stream_controller_createClass(Constructor, protoProps, staticProps) { if (protoProps) stream_controller_defineProperties(Constructor.prototype, protoProps); if (staticProps) stream_controller_defineProperties(Constructor, staticProps); return Constructor; }
@@ -23012,15 +23090,13 @@
 
   var TICK_INTERVAL = 100; // how often to tick in ms
 
-  var stream_controller_StreamController =
-  /*#__PURE__*/
-  function (_BaseStreamController) {
+  var stream_controller_StreamController = /*#__PURE__*/function (_BaseStreamController) {
     stream_controller_inheritsLoose(StreamController, _BaseStreamController);
 
     function StreamController(hls, fragmentTracker) {
       var _this;
 
-      _this = _BaseStreamController.call(this, hls, events["default"].MEDIA_ATTACHED, events["default"].MEDIA_DETACHING, events["default"].MANIFEST_LOADING, events["default"].MANIFEST_PARSED, events["default"].LEVEL_LOADED, events["default"].KEY_LOADED, events["default"].FRAG_LOADED, events["default"].FRAG_LOAD_EMERGENCY_ABORTED, events["default"].FRAG_PARSING_INIT_SEGMENT, events["default"].FRAG_PARSING_DATA, events["default"].FRAG_PARSED, events["default"].ERROR, events["default"].AUDIO_TRACK_SWITCHING, events["default"].AUDIO_TRACK_SWITCHED, events["default"].BUFFER_CREATED, events["default"].BUFFER_APPENDED, events["default"].BUFFER_FLUSHED) || this;
+      _this = _BaseStreamController.call(this, hls, events["default"].MEDIA_ATTACHED, events["default"].MEDIA_DETACHING, events["default"].MANIFEST_LOADING, events["default"].MANIFEST_PARSED, events["default"].LEVEL_LOADED, events["default"].LEVELS_UPDATED, events["default"].KEY_LOADED, events["default"].FRAG_LOADED, events["default"].FRAG_LOAD_EMERGENCY_ABORTED, events["default"].FRAG_PARSING_INIT_SEGMENT, events["default"].FRAG_PARSING_DATA, events["default"].FRAG_PARSED, events["default"].ERROR, events["default"].AUDIO_TRACK_SWITCHING, events["default"].AUDIO_TRACK_SWITCHED, events["default"].BUFFER_CREATED, events["default"].BUFFER_APPENDED, events["default"].BUFFER_FLUSHED) || this;
       _this.fragmentTracker = fragmentTracker;
       _this.config = hls.config;
       _this.audioCodecSwap = false;
@@ -23028,6 +23104,8 @@
       _this.stallReported = false;
       _this.gapController = null;
       _this.altAudio = false;
+      _this.audioOnly = false;
+      _this.bitrateTest = false;
       return _this;
     }
 
@@ -23047,9 +23125,13 @@
           var startLevel = hls.startLevel;
 
           if (startLevel === -1) {
-            // -1 : guess start Level by doing a bitrate test by loading first fragment of lowest quality level
-            startLevel = 0;
-            this.bitrateTest = true;
+            if (hls.config.testBandwidth) {
+              // -1 : guess start Level by doing a bitrate test by loading first fragment of lowest quality level
+              startLevel = 0;
+              this.bitrateTest = true;
+            } else {
+              startLevel = hls.nextAutoLevel;
+            }
           } // set new level to playlist loader : this will trigger start level load
           // hls.nextLoadLevel remains until it is set to a new value or until a new frag is successfully loaded
 
@@ -23131,6 +23213,13 @@
 
       if (this.levelLastLoaded === undefined || !media && (this.startFragRequested || !config.startFragPrefetch)) {
         return;
+      } // If the "main" level is audio-only but we are loading an alternate track in the same group, do not load anything
+
+
+      if (this.altAudio && this.audioOnly) {
+        // Clear audio demuxer state so when switching back to main audio we're not still appending where we left off
+        this.demuxer.frag = null;
+        return;
       } // if we have not yet loaded any fragment, start loading from start position
 
 
@@ -23162,8 +23251,9 @@
       maxBufLen = Math.min(maxBufLen, config.maxMaxBufferLength); // determine next candidate fragment to be loaded, based on current position and end of buffer position
       // ensure up to `config.maxMaxBufferLength` of buffer upfront
 
-      var bufferInfo = BufferHelper.bufferInfo(this.mediaBuffer ? this.mediaBuffer : media, pos, config.maxBufferHole),
-          bufferLen = bufferInfo.len; // Stay idle if we are still with buffer margins
+      var maxBufferHole = pos < config.maxBufferHole ? Math.max(MAX_START_GAP_JUMP, config.maxBufferHole) : config.maxBufferHole;
+      var bufferInfo = BufferHelper.bufferInfo(this.mediaBuffer ? this.mediaBuffer : media, pos, maxBufferHole);
+      var bufferLen = bufferInfo.len; // Stay idle if we are still with buffer margins
 
       if (bufferLen >= maxBufLen) {
         return;
@@ -23199,9 +23289,9 @@
     };
 
     _proto._fetchPayloadOrEos = function _fetchPayloadOrEos(pos, bufferInfo, levelDetails) {
-      var fragPrevious = this.fragPrevious,
-          level = this.level,
-          fragments = levelDetails.fragments,
+      var fragPrevious = this.fragPrevious;
+          this.level;
+          var fragments = levelDetails.fragments,
           fragLen = fragments.length; // empty playlist
 
       if (fragLen === 0) {
@@ -23226,7 +23316,7 @@
             return;
           }
 
-          frag = this._ensureFragmentAtLivePoint(levelDetails, bufferEnd, start, end, fragPrevious, fragments, fragLen); // if it explicitely returns null don't load any fragment and exit function now
+          frag = this._ensureFragmentAtLivePoint(levelDetails, bufferEnd, start, end, fragPrevious, fragments); // if it explicitely returns null don't load any fragment and exit function now
 
           if (frag === null) {
             return;
@@ -23245,24 +23335,26 @@
 
       if (frag) {
         if (frag.encrypted) {
-          logger["logger"].log("Loading key for " + frag.sn + " of [" + levelDetails.startSN + " ," + levelDetails.endSN + "],level " + level);
-
-          this._loadKey(frag);
+          this._loadKey(frag, levelDetails);
         } else {
-          logger["logger"].log("Loading " + frag.sn + " of [" + levelDetails.startSN + " ," + levelDetails.endSN + "],level " + level + ", currentTime:" + pos.toFixed(3) + ",bufferEnd:" + bufferEnd.toFixed(3));
-
-          this._loadFragment(frag);
+          this._loadFragment(frag, levelDetails, pos, bufferEnd);
         }
       }
     };
 
-    _proto._ensureFragmentAtLivePoint = function _ensureFragmentAtLivePoint(levelDetails, bufferEnd, start, end, fragPrevious, fragments, fragLen) {
+    _proto._ensureFragmentAtLivePoint = function _ensureFragmentAtLivePoint(levelDetails, bufferEnd, start, end, fragPrevious, fragments) {
       var config = this.hls.config,
           media = this.media;
       var frag; // check if requested position is within seekable boundaries :
       // logger.log(`start/pos/bufEnd/seeking:${start.toFixed(3)}/${pos.toFixed(3)}/${bufferEnd.toFixed(3)}/${this.media.seeking}`);
 
-      var maxLatency = config.liveMaxLatencyDuration !== undefined ? config.liveMaxLatencyDuration : config.liveMaxLatencyDurationCount * levelDetails.targetduration;
+      var maxLatency = Infinity;
+
+      if (config.liveMaxLatencyDuration !== undefined) {
+        maxLatency = config.liveMaxLatencyDuration;
+      } else if (Object(number["isFiniteNumber"])(config.liveMaxLatencyDurationCount)) {
+        maxLatency = config.liveMaxLatencyDurationCount * levelDetails.targetduration;
+      }
 
       if (bufferEnd < Math.max(start - config.maxFragLookUpTolerance, end - maxLatency)) {
         var liveSyncPosition = this.liveSyncPosition = this.computeLivePosition(start, levelDetails);
@@ -23326,14 +23418,6 @@
             }
           }
         }
-
-        if (!frag) {
-          /* we have no idea about which fragment should be loaded.
-             so let's load mid fragment. it will help computing playlist sliding and find the right one
-          */
-          frag = fragments[Math.min(fragLen - 1, Math.round(fragLen / 2))];
-          logger["logger"].log("live playlist, switching playlist, unknown, load middle frag : " + frag.sn);
-        }
       }
 
       return frag;
@@ -23372,7 +23456,10 @@
                 logger["logger"].warn('Previous fragment was dropped with large PTS gap between audio and video. Maybe fragment is not starting with a keyframe? Loading previous one to try to overcome this');
               } else {
                 fragNextLoad = nextSnFrag;
-                logger["logger"].log("Re-loading fragment with SN: " + fragNextLoad.sn);
+
+                if (this.fragmentTracker.getState(fragNextLoad) !== FragmentState.OK) {
+                  logger["logger"].log("Re-loading fragment with SN: " + fragNextLoad.sn);
+                }
               }
             } else {
               fragNextLoad = null;
@@ -23403,14 +23490,15 @@
       return fragNextLoad;
     };
 
-    _proto._loadKey = function _loadKey(frag) {
+    _proto._loadKey = function _loadKey(frag, levelDetails) {
+      logger["logger"].log("Loading key for " + frag.sn + " of [" + levelDetails.startSN + "-" + levelDetails.endSN + "], level " + this.level);
       this.state = State.KEY_LOADING;
       this.hls.trigger(events["default"].KEY_LOADING, {
         frag: frag
       });
     };
 
-    _proto._loadFragment = function _loadFragment(frag) {
+    _proto._loadFragment = function _loadFragment(frag, levelDetails, pos, bufferEnd) {
       // Check if fragment is not loaded
       var fragState = this.fragmentTracker.getState(frag);
       this.fragCurrent = frag;
@@ -23420,7 +23508,7 @@
       } // Don't update nextLoadPosition for fragments which are not buffered
 
 
-      if (Object(number_isFinite["isFiniteNumber"])(frag.sn) && !frag.bitrateTest) {
+      if (Object(number["isFiniteNumber"])(frag.sn) && !frag.bitrateTest) {
         this.nextLoadPosition = frag.start + frag.duration;
       } // Allow backtracked fragments to load
 
@@ -23428,6 +23516,7 @@
       if (frag.backtracked || fragState === FragmentState.NOT_LOADED || fragState === FragmentState.PARTIAL) {
         frag.autoLevel = this.hls.autoLevelEnabled;
         frag.bitrateTest = this.bitrateTest;
+        logger["logger"].log("Loading " + frag.sn + " of [" + levelDetails.startSN + "-" + levelDetails.endSN + "], level " + this.level + ", " + (this.loadedmetadata ? 'currentTime' : 'nextLoadPosition') + ": " + parseFloat(pos.toFixed(3)) + ", bufferEnd: " + parseFloat(bufferEnd.toFixed(3)));
         this.hls.trigger(events["default"].FRAG_LOADING, {
           frag: frag
         }); // lazy demuxer init, as this could take some time ... do it during frag loading
@@ -23525,7 +23614,10 @@
 
         if (media) {
           previouslyPaused = media.paused;
-          media.pause();
+
+          if (!previouslyPaused) {
+            media.pause();
+          }
         } else {
           // don't restart playback after instant level switch in case media not attached
           previouslyPaused = true;
@@ -23557,7 +23649,7 @@
       if (media && media.buffered.length) {
         this.immediateSwitch = false;
 
-        if (BufferHelper.isBuffered(media, media.currentTime)) {
+        if (media.currentTime > 0 && BufferHelper.isBuffered(media, media.currentTime)) {
           // only nudge if currentTime is buffered
           media.currentTime -= 0.0001;
         }
@@ -23579,8 +23671,8 @@
       var media = this.media; // ensure that media is defined and that metadata are available (to retrieve currentTime)
 
       if (media && media.readyState) {
-        var fetchdelay, fragPlayingCurrent, nextBufferedFrag;
-        fragPlayingCurrent = this.getBufferedFrag(media.currentTime);
+        var fetchdelay;
+        var fragPlayingCurrent = this.getBufferedFrag(media.currentTime);
 
         if (fragPlayingCurrent && fragPlayingCurrent.startPTS > 1) {
           // flush buffer preceding current fragment (flush until current fragment start offset)
@@ -23605,11 +23697,11 @@
         // find buffer range that will be reached once new fragment will be fetched
 
 
-        nextBufferedFrag = this.getBufferedFrag(media.currentTime + fetchdelay);
+        var bufferedFrag = this.getBufferedFrag(media.currentTime + fetchdelay);
 
-        if (nextBufferedFrag) {
+        if (bufferedFrag) {
           // we can flush buffer range following this one without stalling playback
-          nextBufferedFrag = this.followingBufferedFrag(nextBufferedFrag);
+          var nextBufferedFrag = this.followingBufferedFrag(bufferedFrag);
 
           if (nextBufferedFrag) {
             // if we are here, we can also cancel any loading/demuxing in progress, as they are useless
@@ -23623,7 +23715,8 @@
             // we use frag.naxStartPTS which is max(audio startPTS, video startPTS).
             // in case there is a small PTS Delta between audio and video, using maxStartPTS avoids flushing last samples from current fragment
 
-            this.flushMainBuffer(nextBufferedFrag.maxStartPTS, Number.POSITIVE_INFINITY);
+            var startPts = Math.max(bufferedFrag.endPTS, nextBufferedFrag.maxStartPTS + Math.min(this.config.maxFragLookUpTolerance, nextBufferedFrag.duration));
+            this.flushMainBuffer(startPts, Number.POSITIVE_INFINITY);
           }
         }
       }
@@ -23699,7 +23792,7 @@
       var media = this.media;
       var currentTime = media ? media.currentTime : undefined;
 
-      if (Object(number_isFinite["isFiniteNumber"])(currentTime)) {
+      if (Object(number["isFiniteNumber"])(currentTime)) {
         logger["logger"].log("media seeked to " + currentTime.toFixed(3));
       } // tick to speed up FRAGMENT_PLAYING triggering
 
@@ -23759,7 +23852,7 @@
       var sliding = 0;
       logger["logger"].log("level " + newLevelId + " loaded [" + newDetails.startSN + "," + newDetails.endSN + "],duration:" + duration);
 
-      if (newDetails.live) {
+      if (newDetails.live || curLevel.details && curLevel.details.live) {
         var curDetails = curLevel.details;
 
         if (curDetails && newDetails.fragments.length > 0) {
@@ -23768,7 +23861,7 @@
           sliding = newDetails.fragments[0].start;
           this.liveSyncPosition = this.computeLivePosition(sliding, curDetails);
 
-          if (newDetails.PTSKnown && Object(number_isFinite["isFiniteNumber"])(sliding)) {
+          if (newDetails.PTSKnown && Object(number["isFiniteNumber"])(sliding)) {
             logger["logger"].log("live playlist sliding:" + sliding.toFixed(3));
           } else {
             logger["logger"].log('live playlist - outdated PTS, unknown sliding');
@@ -23797,7 +23890,7 @@
           // first, check if start time offset has been set in playlist, if yes, use this value
           var startTimeOffset = newDetails.startTimeOffset;
 
-          if (Object(number_isFinite["isFiniteNumber"])(startTimeOffset)) {
+          if (Object(number["isFiniteNumber"])(startTimeOffset)) {
             if (startTimeOffset < 0) {
               logger["logger"].log("negative start time offset " + startTimeOffset + ", count from end of last fragment");
               startTimeOffset = sliding + duration + startTimeOffset;
@@ -23912,9 +24005,10 @@
       if (fragCurrent && data.id === 'main' && fragNew.sn === fragCurrent.sn && fragNew.level === fragCurrent.level && this.state === State.PARSING) {
         var tracks = data.tracks,
             trackName,
-            track; // if audio track is expected to come from audio stream controller, discard any coming from main
+            track;
+        this.audioOnly = tracks.audio && !tracks.video; // if audio track is expected to come from audio stream controller, discard any coming from main
 
-        if (tracks.audio && this.altAudio) {
+        if (this.altAudio && !this.audioOnly) {
           delete tracks.audio;
         } // include levelCodec in audio and video tracks
 
@@ -24001,7 +24095,7 @@
         var level = this.levels[this.level],
             frag = fragCurrent;
 
-        if (!Object(number_isFinite["isFiniteNumber"])(data.endPTS)) {
+        if (!Object(number["isFiniteNumber"])(data.endPTS)) {
           data.endPTS = data.startPTS + fragCurrent.duration;
           data.endDTS = data.startDTS + fragCurrent.duration;
         }
@@ -24035,6 +24129,12 @@
                 this.nextLoadPosition = data.startPTS;
                 this.state = State.IDLE;
                 this.fragPrevious = frag;
+
+                if (this.demuxer) {
+                  this.demuxer.destroy();
+                  this.demuxer = null;
+                }
+
                 this.tick();
                 return;
               }
@@ -24092,8 +24192,9 @@
 
     _proto.onAudioTrackSwitching = function onAudioTrackSwitching(data) {
       // if any URL found on new audio track, it is an alternate audio track
-      var altAudio = !!data.url,
-          trackId = data.id; // if we switch on main audio, ensure that main fragment scheduling is synced with media.buffered
+      var fromAltAudio = this.altAudio;
+      var altAudio = !!data.url;
+      var trackId = data.id; // if we switch on main audio, ensure that main fragment scheduling is synced with media.buffered
       // don't do anything if we switch to alt audio: audio stream controller is handling it.
       // we will just have to change buffer scheduling on audioTrackSwitched
 
@@ -24120,17 +24221,19 @@
           this.state = State.IDLE;
         }
 
-        var hls = this.hls; // switching to main audio, flush all audio and trigger track switched
+        var hls = this.hls; // If switching from alt to main audio, flush all audio and trigger track switched
 
-        hls.trigger(events["default"].BUFFER_FLUSHING, {
-          startOffset: 0,
-          endOffset: Number.POSITIVE_INFINITY,
-          type: 'audio'
-        });
+        if (fromAltAudio) {
+          hls.trigger(events["default"].BUFFER_FLUSHING, {
+            startOffset: 0,
+            endOffset: Number.POSITIVE_INFINITY,
+            type: 'audio'
+          });
+        }
+
         hls.trigger(events["default"].AUDIO_TRACK_SWITCHED, {
           id: trackId
         });
-        this.altAudio = false;
       }
     };
 
@@ -24212,9 +24315,12 @@
             id: 'main'
           });
           this.state = State.IDLE;
-        }
+        } // Do not tick when _seekToStartPos needs to be called as seeking to the start can fail on live streams at this point
 
-        this.tick();
+
+        if (this.loadedmetadata || this.startPosition <= 0) {
+          this.tick();
+        }
       }
     };
 
@@ -24360,13 +24466,18 @@
 
       if (media) {
         // filter fragments potentially evicted from buffer. this is to avoid memleak on live streams
-        this.fragmentTracker.detectEvictedFragments(ElementaryStreamTypes.VIDEO, media.buffered);
+        var elementaryStreamType = this.audioOnly ? ElementaryStreamTypes.AUDIO : ElementaryStreamTypes.VIDEO;
+        this.fragmentTracker.detectEvictedFragments(elementaryStreamType, media.buffered);
       } // move to IDLE once flush complete. this should trigger new fragment loading
 
 
       this.state = State.IDLE; // reset reference to frag
 
       this.fragPrevious = null;
+    };
+
+    _proto.onLevelsUpdated = function onLevelsUpdated(data) {
+      this.levels = data.levels;
     };
 
     _proto.swapAudioCodec = function swapAudioCodec() {
@@ -24380,14 +24491,26 @@
 
     _proto._seekToStartPos = function _seekToStartPos() {
       var media = this.media;
-      var currentTime = media.currentTime; // only adjust currentTime if different from startPosition or if startPosition not buffered
+      var currentTime = media.currentTime;
+      var startPosition = this.startPosition; // only adjust currentTime if different from startPosition or if startPosition not buffered
       // at that stage, there should be only one buffered range, as we reach that code after first fragment has been buffered
 
-      var startPosition = media.seeking ? currentTime : this.startPosition; // if currentTime not matching with expected startPosition or startPosition not buffered but close to first buffered
-
       if (currentTime !== startPosition && startPosition >= 0) {
-        // if startPosition not buffered, let's seek to buffered.start(0)
-        logger["logger"].log("target start position not buffered, seek to buffered.start(0) " + startPosition + " from current time " + currentTime + " ");
+        if (media.seeking) {
+          logger["logger"].log("could not seek to " + startPosition + ", already seeking at " + currentTime);
+          return;
+        }
+
+        var bufferStart = media.buffered.length ? media.buffered.start(0) : 0;
+        var delta = bufferStart - startPosition;
+
+        if (delta > 0 && delta < this.config.maxBufferHole) {
+          logger["logger"].log("adjusting start position by " + delta + " to match buffer start");
+          startPosition += delta;
+          this.startPosition = startPosition;
+        }
+
+        logger["logger"].log("seek to target start position " + startPosition + " from current time " + currentTime + ". ready state " + media.readyState);
         media.currentTime = startPosition;
       }
     };
@@ -24484,11 +24607,19 @@
   function level_controller_createClass(Constructor, protoProps, staticProps) { if (protoProps) level_controller_defineProperties(Constructor.prototype, protoProps); if (staticProps) level_controller_defineProperties(Constructor, staticProps); return Constructor; }
 
   function level_controller_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+  /*
+   * Level Controller
+  */
+
+
+
+
+
+
   var chromeOrFirefox;
 
-  var level_controller_LevelController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var level_controller_LevelController = /*#__PURE__*/function (_EventHandler) {
     level_controller_inheritsLoose(LevelController, _EventHandler);
 
     function LevelController(hls) {
@@ -24577,7 +24708,6 @@
 
         if (attributes) {
           if (attributes.AUDIO) {
-            audioCodecFound = true;
             addGroupId(levelFromSet || level, 'audio', attributes.AUDIO);
           }
 
@@ -24626,9 +24756,11 @@
             logger["logger"].log("manifest loaded," + levels.length + " level(s) found, first bitrate:" + bitrateStart);
             break;
           }
-        } // Audio is only alternate if manifest include a URI along with the audio group tag
+        } // Audio is only alternate if manifest include a URI along with the audio group tag,
+        // and this is not an audio-only stream where levels contain audio-only
 
 
+        var audioOnly = audioCodecFound && !videoCodecFound;
         this.hls.trigger(events["default"].MANIFEST_PARSED, {
           levels: levels,
           audioTracks: audioTracks,
@@ -24636,7 +24768,7 @@
           stats: data.stats,
           audio: audioCodecFound,
           video: videoCodecFound,
-          altAudio: audioTracks.some(function (t) {
+          altAudio: !audioOnly && audioTracks.some(function (t) {
             return !!t.url;
           })
         });
@@ -24892,6 +25024,38 @@
       }
     };
 
+    _proto.removeLevel = function removeLevel(levelIndex, urlId) {
+      var levels = this.levels.filter(function (level, index) {
+        if (index !== levelIndex) {
+          return true;
+        }
+
+        if (level.url.length > 1 && urlId !== undefined) {
+          level.url = level.url.filter(function (url, id) {
+            return id !== urlId;
+          });
+          level.urlId = 0;
+          return true;
+        }
+
+        return false;
+      }).map(function (level, index) {
+        var details = level.details;
+
+        if (details && details.fragments) {
+          details.fragments.forEach(function (fragment) {
+            fragment.level = index;
+          });
+        }
+
+        return level;
+      });
+      this._levels = levels;
+      this.hls.trigger(events["default"].LEVELS_UPDATED, {
+        levels: levels
+      });
+    };
+
     level_controller_createClass(LevelController, [{
       key: "levels",
       get: function get() {
@@ -24998,7 +25162,7 @@
     videoEl.dispatchEvent(event);
   }
   function clearCurrentCues(track) {
-    if (track && track.cues) {
+    if (track === null || track === void 0 ? void 0 : track.cues) {
       while (track.cues.length > 0) {
         track.removeCue(track.cues[0]);
       }
@@ -25055,11 +25219,9 @@
 
 
 
+  var MIN_CUE_DURATION = 0.25;
 
-
-  var id3_track_controller_ID3TrackController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var id3_track_controller_ID3TrackController = /*#__PURE__*/function (_EventHandler) {
     id3_track_controller_inheritsLoose(ID3TrackController, _EventHandler);
 
     function ID3TrackController(hls) {
@@ -25123,15 +25285,18 @@
         var frames = id3["default"].getID3Frames(samples[i].data);
 
         if (frames) {
-          var startTime = samples[i].pts;
+          // Ensure the pts is positive - sometimes it's reported as a small negative number
+          var startTime = Math.max(samples[i].pts, 0);
           var endTime = i < samples.length - 1 ? samples[i + 1].pts : fragment.endPTS;
 
-          if (startTime === endTime) {
-            // Give a slight bump to the endTime if it's equal to startTime to avoid a SyntaxError in IE
-            endTime += 0.0001;
-          } else if (startTime > endTime) {
-            logger["logger"].warn('detected an id3 sample with endTime < startTime, adjusting endTime to (startTime + 0.25)');
-            endTime = startTime + 0.25;
+          if (!endTime) {
+            endTime = fragment.start + fragment.duration;
+          }
+
+          var timeDiff = endTime - startTime;
+
+          if (timeDiff <= 0) {
+            endTime = startTime + MIN_CUE_DURATION;
           }
 
           for (var j = 0; j < frames.length; j++) {
@@ -25192,9 +25357,7 @@
    * - https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
    *  - heavily inspired from shaka-player
    */
-  var EWMA =
-  /*#__PURE__*/
-  function () {
+  var EWMA = /*#__PURE__*/function () {
     //  About half of the estimated value will be from the last |halfLife| samples by weight.
     function EWMA(halfLife) {
       this.alpha_ = void 0;
@@ -25241,9 +25404,7 @@
    */
 
 
-  var ewma_bandwidth_estimator_EwmaBandWidthEstimator =
-  /*#__PURE__*/
-  function () {
+  var ewma_bandwidth_estimator_EwmaBandWidthEstimator = /*#__PURE__*/function () {
     // TODO(typescript-hls)
     function EwmaBandWidthEstimator(hls, slow, fast, defaultEstimate) {
       this.hls = void 0;
@@ -25322,9 +25483,7 @@
   var abr_controller_window = window,
       abr_controller_performance = abr_controller_window.performance;
 
-  var abr_controller_AbrController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var abr_controller_AbrController = /*#__PURE__*/function (_EventHandler) {
     abr_controller_inheritsLoose(AbrController, _EventHandler);
 
     function AbrController(hls) {
@@ -25393,8 +25552,7 @@
         return;
       }
 
-      var loader = frag.loader;
-      var minAutoLevel = hls.minAutoLevel; // if loader has been destroyed or loading has been aborted, stop timer and return
+      var loader = frag.loader; // if loader has been destroyed or loading has been aborted, stop timer and return
 
       if (!loader || loader.stats && loader.stats.aborted) {
         logger["logger"].warn('frag loader destroy or aborted, disarm abandonRules');
@@ -25418,6 +25576,11 @@
           // compute expected fragment length using frag duration and level bitrate. also ensure that expected len is gte than already loaded size
 
           var level = levels[frag.level];
+
+          if (!level) {
+            return;
+          }
+
           var levelBitrate = level.realBitrate ? Math.max(level.realBitrate, level.bitrate) : level.bitrate;
           var expectedLen = stats.total ? stats.total : Math.max(stats.loaded, Math.round(frag.duration * levelBitrate / 8));
           var pos = video.currentTime;
@@ -25427,6 +25590,7 @@
           // ie if we risk buffer starvation if bw does not increase quickly
 
           if (bufferStarvationDelay < 2 * frag.duration / playbackRate && fragLoadedDelay > bufferStarvationDelay) {
+            var minAutoLevel = hls.minAutoLevel;
             var fragLevelNextLoadedDelay;
             var nextLoadLevel; // lets iterate through lower level and try to find the biggest one that could avoid rebuffering
             // we start from current level - 1 and we step down , until we find a matching level
@@ -25471,7 +25635,7 @@
     _proto.onFragLoaded = function onFragLoaded(data) {
       var frag = data.frag;
 
-      if (frag.type === 'main' && Object(number_isFinite["isFiniteNumber"])(frag.sn)) {
+      if (frag.type === 'main' && Object(number["isFiniteNumber"])(frag.sn)) {
         // stop monitoring bw once frag loaded
         this.clearTimer(); // store level id after successful fragment load
 
@@ -25506,7 +25670,7 @@
       // and leading to wrong bw estimation
       // on bitrate test, also only update stats once (if tload = tbuffered == on FRAG_LOADED)
 
-      if (stats.aborted !== true && frag.type === 'main' && Object(number_isFinite["isFiniteNumber"])(frag.sn) && (!frag.bitrateTest || stats.tload === stats.tbuffered)) {
+      if (stats.aborted !== true && frag.type === 'main' && Object(number["isFiniteNumber"])(frag.sn) && (!frag.bitrateTest || stats.tload === stats.tbuffered)) {
         // use tparsed-trequest instead of tbuffered-trequest to compute fragLoadingProcessing; rationale is that  buffer appending only happens once media is attached
         // in case we use config.startFragPrefetch while media is not attached yet, fragment might be parsed while media not attached yet, but it will only be buffered on media attached
         // as a consequence it could happen really late in the process. meaning that appending duration might appears huge ... leading to underestimated throughput estimation
@@ -25678,9 +25842,7 @@
 
   var buffer_controller_MediaSource = getMediaSource();
 
-  var buffer_controller_BufferController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var buffer_controller_BufferController = /*#__PURE__*/function (_EventHandler) {
     buffer_controller_inheritsLoose(BufferController, _EventHandler);
 
     // the value that we have set mediasource.duration to
@@ -25871,11 +26033,17 @@
     };
 
     _proto.onManifestParsed = function onManifestParsed(data) {
-      // in case of alt audio 2 BUFFER_CODECS events will be triggered, one per stream controller
+      // in case of alt audio (where all tracks have urls) 2 BUFFER_CODECS events will be triggered, one per stream controller
       // sourcebuffers will be created all at once when the expected nb of tracks will be reached
       // in case alt audio is not used, only one BUFFER_CODEC event will be fired from main stream controller
       // it will contain the expected nb of source buffers, no need to compute it
-      this.bufferCodecEventsExpected = this._bufferCodecEventsTotal = data.altAudio ? 2 : 1;
+      var codecEvents = 2;
+
+      if (data.audio && !data.video || !data.altAudio) {
+        codecEvents = 1;
+      }
+
+      this.bufferCodecEventsExpected = this._bufferCodecEventsTotal = codecEvents;
       logger["logger"].log(this.bufferCodecEventsExpected + " bufferCodec event(s) expected");
     };
 
@@ -26235,7 +26403,7 @@
         // Override duration to Infinity
         logger["logger"].log('Media Source duration is set to Infinity');
         this._msDuration = this.mediaSource.duration = Infinity;
-      } else if (this._levelDuration > this._msDuration && this._levelDuration > duration || !Object(number_isFinite["isFiniteNumber"])(duration)) {
+      } else if (this._levelDuration > this._msDuration && this._levelDuration > duration || !Object(number["isFiniteNumber"])(duration)) {
         // levelDuration was the last value we set.
         // not using mediaSource.duration as the browser may tweak this value
         // only update Media Source duration if its value increase, this is to avoid
@@ -26483,21 +26651,20 @@
 
 
 
-  var cap_level_controller_CapLevelController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var cap_level_controller_CapLevelController = /*#__PURE__*/function (_EventHandler) {
     cap_level_controller_inheritsLoose(CapLevelController, _EventHandler);
 
     function CapLevelController(hls) {
       var _this;
 
-      _this = _EventHandler.call(this, hls, events["default"].FPS_DROP_LEVEL_CAPPING, events["default"].MEDIA_ATTACHING, events["default"].MANIFEST_PARSED, events["default"].BUFFER_CODECS, events["default"].MEDIA_DETACHING) || this;
+      _this = _EventHandler.call(this, hls, events["default"].FPS_DROP_LEVEL_CAPPING, events["default"].MEDIA_ATTACHING, events["default"].MANIFEST_PARSED, events["default"].LEVELS_UPDATED, events["default"].BUFFER_CODECS, events["default"].MEDIA_DETACHING) || this;
       _this.autoLevelCapping = Number.POSITIVE_INFINITY;
       _this.firstLevel = null;
       _this.levels = [];
       _this.media = null;
       _this.restrictedLevels = [];
       _this.timer = null;
+      _this.clientRect = null;
       return _this;
     }
 
@@ -26506,6 +26673,7 @@
     _proto.destroy = function destroy() {
       if (this.hls.config.capLevelToPlayerSize) {
         this.media = null;
+        this.clientRect = null;
         this.stopCapping();
       }
     };
@@ -26585,6 +26753,7 @@
       var validLevels = this.levels.filter(function (level, index) {
         return CapLevelController.isLevelAllowed(index, _this2.restrictedLevels) && index <= capLevelIndex;
       });
+      this.clientRect = null;
       return CapLevelController.getMaxLevelByMediaSize(validLevels, this.mediaWidth, this.mediaHeight);
     };
 
@@ -26610,6 +26779,34 @@
         this.timer = clearInterval(this.timer);
         this.timer = null;
       }
+    };
+
+    _proto.getDimensions = function getDimensions() {
+      if (this.clientRect) {
+        return this.clientRect;
+      }
+
+      var media = this.media;
+      var boundsRect = {
+        width: 0,
+        height: 0
+      };
+
+      if (media) {
+        var clientRect = media.getBoundingClientRect();
+        boundsRect.width = clientRect.width;
+        boundsRect.height = clientRect.height;
+
+        if (!boundsRect.width && !boundsRect.height) {
+          // When the media element has no width or height (equivalent to not being in the DOM),
+          // then use its width and height attributes (media.width, media.height)
+          boundsRect.width = clientRect.right - clientRect.left || media.width || 0;
+          boundsRect.height = clientRect.bottom - clientRect.top || media.height || 0;
+        }
+      }
+
+      this.clientRect = boundsRect;
+      return boundsRect;
     };
 
     CapLevelController.isLevelAllowed = function isLevelAllowed(level, restrictedLevels) {
@@ -26654,28 +26851,12 @@
     cap_level_controller_createClass(CapLevelController, [{
       key: "mediaWidth",
       get: function get() {
-        var width;
-        var media = this.media;
-
-        if (media) {
-          width = media.width || media.clientWidth || media.offsetWidth;
-          width *= CapLevelController.contentScaleFactor;
-        }
-
-        return width;
+        return this.getDimensions().width * CapLevelController.contentScaleFactor;
       }
     }, {
       key: "mediaHeight",
       get: function get() {
-        var height;
-        var media = this.media;
-
-        if (media) {
-          height = media.height || media.clientHeight || media.offsetHeight;
-          height *= CapLevelController.contentScaleFactor;
-        }
-
-        return height;
+        return this.getDimensions().height * CapLevelController.contentScaleFactor;
       }
     }], [{
       key: "contentScaleFactor",
@@ -26706,9 +26887,7 @@
   var fps_controller_window = window,
       fps_controller_performance = fps_controller_window.performance;
 
-  var fps_controller_FPSController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var fps_controller_FPSController = /*#__PURE__*/function (_EventHandler) {
     fps_controller_inheritsLoose(FPSController, _EventHandler);
 
     function FPSController(hls) {
@@ -26803,13 +26982,8 @@
    * XHR based logger
   */
 
-  var xhr_loader_window = window,
-      xhr_loader_performance = xhr_loader_window.performance,
-      xhr_loader_XMLHttpRequest = xhr_loader_window.XMLHttpRequest;
 
-  var xhr_loader_XhrLoader =
-  /*#__PURE__*/
-  function () {
+  var xhr_loader_XhrLoader = /*#__PURE__*/function () {
     function XhrLoader(config) {
       if (config && config.xhrSetup) {
         this.xhrSetup = config.xhrSetup;
@@ -26842,7 +27016,7 @@
       this.config = config;
       this.callbacks = callbacks;
       this.stats = {
-        trequest: xhr_loader_performance.now(),
+        trequest: window.performance.now(),
         retry: 0
       };
       this.retryDelay = config.retryDelay;
@@ -26852,7 +27026,7 @@
     _proto.loadInternal = function loadInternal() {
       var xhr,
           context = this.context;
-      xhr = this.loader = new xhr_loader_XMLHttpRequest();
+      xhr = this.loader = new window.XMLHttpRequest();
       var stats = this.stats;
       stats.tfirst = 0;
       stats.loaded = 0;
@@ -26911,14 +27085,14 @@
         window.clearTimeout(this.requestTimeout);
 
         if (stats.tfirst === 0) {
-          stats.tfirst = Math.max(xhr_loader_performance.now(), stats.trequest);
+          stats.tfirst = Math.max(window.performance.now(), stats.trequest);
         }
 
         if (readyState === 4) {
           var status = xhr.status; // http status between 200 to 299 are all successful
 
           if (status >= 200 && status < 300) {
-            stats.tload = Math.max(stats.tfirst, xhr_loader_performance.now());
+            stats.tload = Math.max(stats.tfirst, window.performance.now());
             var data, len;
 
             if (context.responseType === 'arraybuffer') {
@@ -27021,9 +27195,7 @@
    *
    */
 
-  var audio_track_controller_AudioTrackController =
-  /*#__PURE__*/
-  function (_TaskLoop) {
+  var audio_track_controller_AudioTrackController = /*#__PURE__*/function (_TaskLoop) {
     audio_track_controller_inheritsLoose(AudioTrackController, _TaskLoop);
 
     function AudioTrackController(hls) {
@@ -27480,13 +27652,13 @@
 
 
 
+
+
   var audio_stream_controller_window = window,
       audio_stream_controller_performance = audio_stream_controller_window.performance;
   var audio_stream_controller_TICK_INTERVAL = 100; // how often to tick in ms
 
-  var audio_stream_controller_AudioStreamController =
-  /*#__PURE__*/
-  function (_BaseStreamController) {
+  var audio_stream_controller_AudioStreamController = /*#__PURE__*/function (_BaseStreamController) {
     audio_stream_controller_inheritsLoose(AudioStreamController, _BaseStreamController);
 
     function AudioStreamController(hls, fragmentTracker) {
@@ -27500,6 +27672,7 @@
       _this.initPTS = [];
       _this.waitingFragment = null;
       _this.videoTrackCC = null;
+      _this.waitingVideoCC = null;
       return _this;
     } // Signal that video PTS was found
 
@@ -27516,7 +27689,7 @@
         // Can change due level switch
         this.initPTS[cc] = initPTS;
         this.videoTrackCC = cc;
-        logger["logger"].log("InitPTS for cc: " + cc + " found from video track: " + initPTS); // If we are waiting we need to demux/remux the waiting frag
+        logger["logger"].log("InitPTS for cc: " + cc + " found from main: " + initPTS); // If we are waiting we need to demux/remux the waiting frag
         // With the new initPTS
 
         if (this.state === State.WAITING_INIT_PTS) {
@@ -27596,20 +27769,21 @@
             }
           }
 
-          var media = this.mediaBuffer ? this.mediaBuffer : this.media,
-              videoBuffer = this.videoBuffer ? this.videoBuffer : this.media,
-              bufferInfo = BufferHelper.bufferInfo(media, pos, config.maxBufferHole),
-              mainBufferInfo = BufferHelper.bufferInfo(videoBuffer, pos, config.maxBufferHole),
-              bufferLen = bufferInfo.len,
-              bufferEnd = bufferInfo.end,
-              fragPrevious = this.fragPrevious,
-              // ensure we buffer at least config.maxBufferLength (default 30s) or config.maxMaxBufferLength (default: 600s)
+          var media = this.mediaBuffer ? this.mediaBuffer : this.media;
+          var videoBuffer = this.videoBuffer ? this.videoBuffer : this.media;
+          var maxBufferHole = pos < config.maxBufferHole ? Math.max(MAX_START_GAP_JUMP, config.maxBufferHole) : config.maxBufferHole;
+          var bufferInfo = BufferHelper.bufferInfo(media, pos, maxBufferHole);
+          var mainBufferInfo = BufferHelper.bufferInfo(videoBuffer, pos, maxBufferHole);
+          var bufferLen = bufferInfo.len;
+          var bufferEnd = bufferInfo.end;
+          var fragPrevious = this.fragPrevious; // ensure we buffer at least config.maxBufferLength (default 30s) or config.maxMaxBufferLength (default: 600s)
           // whichever is smaller.
           // once we reach that threshold, don't buffer more than video (mainBufferInfo.len)
-          maxConfigBuffer = Math.min(config.maxBufferLength, config.maxMaxBufferLength),
-              maxBufLen = Math.max(maxConfigBuffer, mainBufferInfo.len),
-              audioSwitch = this.audioSwitch,
-              trackId = this.trackId; // if buffer length is less than maxBufLen try to load a new fragment
+
+          var maxConfigBuffer = Math.min(config.maxBufferLength, config.maxMaxBufferLength);
+          var maxBufLen = Math.max(maxConfigBuffer, mainBufferInfo.len);
+          var audioSwitch = this.audioSwitch;
+          var trackId = this.trackId; // if buffer length is less than maxBufLen try to load a new fragment
 
           if ((bufferLen < maxBufLen || audioSwitch) && trackId < tracks.length) {
             trackDetails = tracks[trackId].details; // if track info not retrieved yet, switch state and wait for track retrieval
@@ -27678,43 +27852,18 @@
                 var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
                 var fragNext = fragPrevious ? fragments[fragPrevious.sn - fragments[0].sn + 1] : undefined;
 
-                var fragmentWithinToleranceTest = function fragmentWithinToleranceTest(candidate) {
-                  // offset should be within fragment boundary - config.maxFragLookUpTolerance
-                  // this is to cope with situations like
-                  // bufferEnd = 9.991
-                  // frag[Ø] : [0,10]
-                  // frag[1] : [10,20]
-                  // bufferEnd is within frag[0] range ... although what we are expecting is to return frag[1] here
-                  //              frag start               frag start+duration
-                  //                  |-----------------------------|
-                  //              <--->                         <--->
-                  //  ...--------><-----------------------------><---------....
-                  // previous frag         matching fragment         next frag
-                  //  return -1             return 0                 return 1
-                  // logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
-                  // Set the lookup tolerance to be small enough to detect the current segment - ensures we don't skip over very small segments
-                  var candidateLookupTolerance = Math.min(maxFragLookUpTolerance, candidate.duration);
-
-                  if (candidate.start + candidate.duration - candidateLookupTolerance <= bufferEnd) {
-                    return 1;
-                  } else if (candidate.start - candidateLookupTolerance > bufferEnd && candidate.start) {
-                    // if maxFragLookUpTolerance will have negative value then don't return -1 for first element
-                    return -1;
-                  }
-
-                  return 0;
-                };
-
                 if (bufferEnd < end) {
                   if (bufferEnd > end - maxFragLookUpTolerance) {
                     maxFragLookUpTolerance = 0;
                   } // Prefer the next fragment if it's within tolerance
 
 
-                  if (fragNext && !fragmentWithinToleranceTest(fragNext)) {
+                  if (fragNext && !fragmentWithinToleranceTest(bufferEnd, maxFragLookUpTolerance, fragNext)) {
                     foundFrag = fragNext;
                   } else {
-                    foundFrag = binary_search.search(fragments, fragmentWithinToleranceTest);
+                    foundFrag = binary_search.search(fragments, function (frag) {
+                      return fragmentWithinToleranceTest(bufferEnd, maxFragLookUpTolerance, frag);
+                    });
                   }
                 } else {
                   // reach end of playlist
@@ -27728,7 +27877,10 @@
                   if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
                     if (frag.sn < trackDetails.endSN) {
                       frag = fragments[frag.sn + 1 - trackDetails.startSN];
-                      logger["logger"].log("SN just loaded, load next one: " + frag.sn);
+
+                      if (this.fragmentTracker.getState(frag) !== FragmentState.OK) {
+                        logger["logger"].log("SN just loaded, load next one: " + frag.sn);
+                      }
                     } else {
                       frag = null;
                     }
@@ -27745,17 +27897,18 @@
                   frag: frag
                 });
               } else {
-                logger["logger"].log("Loading " + frag.sn + ", cc: " + frag.cc + " of [" + trackDetails.startSN + " ," + trackDetails.endSN + "],track " + trackId + ", currentTime:" + pos + ",bufferEnd:" + bufferEnd.toFixed(3)); // only load if fragment is not loaded or if in audio switch
+                // only load if fragment is not loaded or if in audio switch
                 // we force a frag loading in audio switch as fragment tracker might not have evicted previous frags in case of quick audio switch
-
                 this.fragCurrent = frag;
 
                 if (audioSwitch || this.fragmentTracker.getState(frag) === FragmentState.NOT_LOADED) {
+                  logger["logger"].log("Loading " + frag.sn + ", cc: " + frag.cc + " of [" + trackDetails.startSN + " ," + trackDetails.endSN + "],track " + trackId + ", " + (this.loadedmetadata ? 'currentTime' : 'nextLoadPosition') + ": " + pos + ", bufferEnd: " + bufferEnd.toFixed(3));
+
                   if (frag.sn !== 'initSegment') {
                     this.startFragRequested = true;
                   }
 
-                  if (Object(number_isFinite["isFiniteNumber"])(frag.sn)) {
+                  if (Object(number["isFiniteNumber"])(frag.sn)) {
                     this.nextLoadPosition = frag.start + frag.duration;
                   }
 
@@ -27793,36 +27946,47 @@
           break;
 
         case State.WAITING_INIT_PTS:
-          var videoTrackCC = this.videoTrackCC;
-
-          if (this.initPTS[videoTrackCC] === undefined) {
-            break;
-          } // Ensure we don't get stuck in the WAITING_INIT_PTS state if the waiting frag CC doesn't match any initPTS
-
-
+          // Ensure we don't get stuck in the WAITING_INIT_PTS state if the waiting frag CC doesn't match any initPTS
           var waitingFrag = this.waitingFragment;
 
           if (waitingFrag) {
             var waitingFragCC = waitingFrag.frag.cc;
 
-            if (videoTrackCC !== waitingFragCC) {
-              track = this.tracks[this.trackId];
-
-              if (track.details && track.details.live) {
-                logger["logger"].warn("Waiting fragment CC (" + waitingFragCC + ") does not match video track CC (" + videoTrackCC + ")");
-                this.waitingFragment = null;
-                this.state = State.IDLE;
-              }
-            } else {
-              this.state = State.FRAG_LOADING;
-              this.onFragLoaded(this.waitingFragment);
+            if (this.initPTS[waitingFragCC] !== undefined) {
               this.waitingFragment = null;
+              this.state = State.FRAG_LOADING;
+              this.onFragLoaded(waitingFrag);
+            } else if (this.videoTrackCC !== this.waitingVideoCC) {
+              // Drop waiting fragment if videoTrackCC has changed since waitingFragment was set and initPTS was not found
+              logger["logger"].log("Waiting fragment cc (" + waitingFragCC + ") cancelled because video is at cc " + this.videoTrackCC);
+              this.clearWaitingFragment();
+            } else {
+              // Drop waiting fragment if an earlier fragment is needed
+              var _bufferInfo = BufferHelper.bufferInfo(this.mediaBuffer, this.media.currentTime, config.maxBufferHole);
+
+              var waitingFragmentAtPosition = fragmentWithinToleranceTest(_bufferInfo.end, config.maxFragLookUpTolerance, waitingFrag.frag);
+
+              if (waitingFragmentAtPosition < 0) {
+                logger["logger"].log("Waiting fragment cc (" + waitingFragCC + ") @ " + waitingFrag.frag.start + " cancelled because another fragment at " + _bufferInfo.end + " is needed");
+                this.clearWaitingFragment();
+              }
             }
           } else {
             this.state = State.IDLE;
           }
 
           break;
+      }
+    };
+
+    _proto.clearWaitingFragment = function clearWaitingFragment() {
+      var waitingFrag = this.waitingFragment;
+
+      if (waitingFrag) {
+        this.fragmentTracker.removeFragment(waitingFrag.frag);
+        this.waitingFragment = null;
+        this.waitingVideoCC = null;
+        this.state = State.IDLE;
       }
     };
 
@@ -27870,8 +28034,8 @@
       var altAudio = !!data.url;
       this.trackId = data.id;
       this.fragCurrent = null;
-      this.state = State.PAUSED;
-      this.waitingFragment = null; // destroy useless demuxer when switching audio to main
+      this.clearWaitingFragment();
+      this.state = State.PAUSED; // destroy useless demuxer when switching audio to main
 
       if (!altAudio) {
         if (this.demuxer) {
@@ -27897,13 +28061,12 @@
       var newDetails = data.details,
           trackId = data.id,
           track = this.tracks[trackId],
+          curDetails = track.details,
           duration = newDetails.totalduration,
           sliding = 0;
       logger["logger"].log("track " + trackId + " loaded [" + newDetails.startSN + "," + newDetails.endSN + "],duration:" + duration);
 
-      if (newDetails.live) {
-        var curDetails = track.details;
-
+      if (newDetails.live || curDetails && curDetails.live) {
         if (curDetails && newDetails.fragments.length > 0) {
           // we already have details for that level, merge them
           mergeDetails(curDetails, newDetails);
@@ -27931,7 +28094,7 @@
           // first, check if start time offset has been set in playlist, if yes, use this value
           var startTimeOffset = newDetails.startTimeOffset;
 
-          if (Object(number_isFinite["isFiniteNumber"])(startTimeOffset)) {
+          if (Object(number["isFiniteNumber"])(startTimeOffset)) {
             logger["logger"].log("start time offset found in playlist, adjust startPosition to " + startTimeOffset);
             this.startPosition = startTimeOffset;
           } else {
@@ -28001,7 +28164,7 @@
           var initPTS = this.initPTS[cc];
           var initSegmentData = details.initSegment ? details.initSegment.data : [];
 
-          if (details.initSegment || initPTS !== undefined) {
+          if (initPTS !== undefined) {
             this.pendingBuffering = true;
             logger["logger"].log("Demuxing " + sn + " of [" + details.startSN + " ," + details.endSN + "],track " + trackId); // time Offset is accurate if level PTS is known, or if playlist is not sliding (not live)
 
@@ -28009,8 +28172,9 @@
 
             this.demuxer.push(data.payload, initSegmentData, audioCodec, null, fragCurrent, duration, accurateTimeOffset, initPTS);
           } else {
-            logger["logger"].log("unknown video PTS for continuity counter " + cc + ", waiting for video PTS before demuxing audio frag " + sn + " of [" + details.startSN + " ," + details.endSN + "],track " + trackId);
+            logger["logger"].log("Unknown video PTS for cc " + cc + ", waiting for video PTS before demuxing audio frag " + sn + " of [" + details.startSN + " ," + details.endSN + "],track " + trackId);
             this.waitingFragment = data;
+            this.waitingVideoCC = this.videoTrackCC;
             this.state = State.WAITING_INIT_PTS;
           }
         }
@@ -28076,7 +28240,7 @@
             track = this.tracks[trackId],
             hls = this.hls;
 
-        if (!Object(number_isFinite["isFiniteNumber"])(data.endPTS)) {
+        if (!Object(number["isFiniteNumber"])(data.endPTS)) {
           data.endPTS = data.startPTS + fragCurrent.duration;
           data.endDTS = data.startDTS + fragCurrent.duration;
         }
@@ -28084,11 +28248,10 @@
         fragCurrent.addElementaryStream(ElementaryStreamTypes.AUDIO);
         logger["logger"].log("parsed " + data.type + ",PTS:[" + data.startPTS.toFixed(3) + "," + data.endPTS.toFixed(3) + "],DTS:[" + data.startDTS.toFixed(3) + "/" + data.endDTS.toFixed(3) + "],nb:" + data.nb);
         updateFragPTSDTS(track.details, fragCurrent, data.startPTS, data.endPTS);
-        var audioSwitch = this.audioSwitch,
-            media = this.media,
-            appendOnBufferFlush = false; // Only flush audio from old audio tracks when PTS is known on new audio track
+        var media = this.media;
+        var appendOnBufferFlush = false; // Only flush audio from old audio tracks when PTS is known on new audio track
 
-        if (audioSwitch) {
+        if (this.audioSwitch) {
           if (media && media.readyState) {
             var currentTime = media.currentTime;
             logger["logger"].log('switching audio track : currentTime:' + currentTime);
@@ -29148,6 +29311,7 @@
   // CONCATENATED MODULE: ./src/utils/cues.ts
 
   function newCue(track, startTime, endTime, captionScreen) {
+    var result = [];
     var row; // the type data states this is VTTCue, but it can potentially be a TextTrackCue on old browsers
 
     var cue;
@@ -29198,11 +29362,18 @@
         cue.align = 'left'; // Clamp the position between 0 and 100 - if out of these bounds, Firefox throws an exception and captions break
 
         cue.position = Math.max(0, Math.min(100, 100 * (indent / 32)));
-        track.addCue(cue);
+        result.push(cue);
+
+        if (track) {
+          track.addCue(cue);
+        }
       }
     }
+
+    return result;
   }
   // CONCATENATED MODULE: ./src/utils/cea-608-parser.ts
+
   /**
    *
    * This code was ported from the dash.js project at:
@@ -29242,8 +29413,9 @@
    */
 
   /**
-       *  Exceptions from regular ASCII. CodePoints are mapped to UTF-16 codes
-       */
+   *  Exceptions from regular ASCII. CodePoints are mapped to UTF-16 codes
+   */
+
   var specialCea608CharsCodes = {
     0x2a: 0xe1,
     // lowercase a, acute accent
@@ -29437,18 +29609,18 @@
    * Utils
    */
 
-  var getCharForByte = function getCharForByte(byte) {
-    var charCode = byte;
+  var getCharForByte = function getCharForByte(_byte) {
+    var charCode = _byte;
 
-    if (specialCea608CharsCodes.hasOwnProperty(byte)) {
-      charCode = specialCea608CharsCodes[byte];
+    if (specialCea608CharsCodes.hasOwnProperty(_byte)) {
+      charCode = specialCea608CharsCodes[_byte];
     }
 
     return String.fromCharCode(charCode);
   };
 
-  var NR_ROWS = 15,
-      NR_COLS = 100; // Tables to look up row from PAC data
+  var NR_ROWS = 15;
+  var NR_COLS = 100; // Tables to look up row from PAC data
 
   var rowsLowCh1 = {
     0x11: 1,
@@ -29489,41 +29661,33 @@
     0x1C: 15
   };
   var backgroundColors = ['white', 'green', 'blue', 'cyan', 'red', 'yellow', 'magenta', 'black', 'transparent'];
-  var VerboseFilter;
-  /**
-   * Simple logger class to be able to write with time-stamps and filter on level.
-   */
+  var VerboseLevel;
 
-  (function (VerboseFilter) {
-    VerboseFilter[VerboseFilter["ERROR"] = 0] = "ERROR";
-    VerboseFilter[VerboseFilter["TEXT"] = 1] = "TEXT";
-    VerboseFilter[VerboseFilter["WARNING"] = 2] = "WARNING";
-    VerboseFilter[VerboseFilter["INFO"] = 2] = "INFO";
-    VerboseFilter[VerboseFilter["DEBUG"] = 3] = "DEBUG";
-    VerboseFilter[VerboseFilter["DATA"] = 3] = "DATA";
-  })(VerboseFilter || (VerboseFilter = {}));
+  (function (VerboseLevel) {
+    VerboseLevel[VerboseLevel["ERROR"] = 0] = "ERROR";
+    VerboseLevel[VerboseLevel["TEXT"] = 1] = "TEXT";
+    VerboseLevel[VerboseLevel["WARNING"] = 2] = "WARNING";
+    VerboseLevel[VerboseLevel["INFO"] = 2] = "INFO";
+    VerboseLevel[VerboseLevel["DEBUG"] = 3] = "DEBUG";
+    VerboseLevel[VerboseLevel["DATA"] = 3] = "DATA";
+  })(VerboseLevel || (VerboseLevel = {}));
 
-  var cea_608_parser_logger = {
-    verboseFilter: {
-      'DATA': 3,
-      'DEBUG': 3,
-      'INFO': 2,
-      'WARNING': 2,
-      'TEXT': 1,
-      'ERROR': 0
-    },
-    time: null,
-    verboseLevel: 0,
-    // Only write errors
-    setTime: function setTime(newTime) {
-      this.time = newTime;
-    },
-    log: function log(severity, msg) {
-      var minLevel = this.verboseFilter[severity];
-
-      if (this.verboseLevel >= minLevel) ;
+  var cea_608_parser_CaptionsLogger = /*#__PURE__*/function () {
+    function CaptionsLogger() {
+      this.time = null;
+      this.verboseLevel = VerboseLevel.ERROR;
     }
-  };
+
+    var _proto = CaptionsLogger.prototype;
+
+    _proto.log = function log(severity, msg) {
+      if (this.verboseLevel >= severity) {
+        logger["logger"].log(this.time + " [" + severity + "] " + msg);
+      }
+    };
+
+    return CaptionsLogger;
+  }();
 
   var numArrayToHexArray = function numArrayToHexArray(numArray) {
     var hexArray = [];
@@ -29535,9 +29699,7 @@
     return hexArray;
   };
 
-  var PenState =
-  /*#__PURE__*/
-  function () {
+  var PenState = /*#__PURE__*/function () {
     function PenState(foreground, underline, italics, background, flash) {
       this.foreground = void 0;
       this.underline = void 0;
@@ -29551,9 +29713,9 @@
       this.flash = flash || false;
     }
 
-    var _proto = PenState.prototype;
+    var _proto2 = PenState.prototype;
 
-    _proto.reset = function reset() {
+    _proto2.reset = function reset() {
       this.foreground = 'white';
       this.underline = false;
       this.italics = false;
@@ -29561,7 +29723,7 @@
       this.flash = false;
     };
 
-    _proto.setStyles = function setStyles(styles) {
+    _proto2.setStyles = function setStyles(styles) {
       var attribs = ['foreground', 'underline', 'italics', 'background', 'flash'];
 
       for (var i = 0; i < attribs.length; i++) {
@@ -29573,15 +29735,15 @@
       }
     };
 
-    _proto.isDefault = function isDefault() {
+    _proto2.isDefault = function isDefault() {
       return this.foreground === 'white' && !this.underline && !this.italics && this.background === 'black' && !this.flash;
     };
 
-    _proto.equals = function equals(other) {
+    _proto2.equals = function equals(other) {
       return this.foreground === other.foreground && this.underline === other.underline && this.italics === other.italics && this.background === other.background && this.flash === other.flash;
     };
 
-    _proto.copy = function copy(newPenState) {
+    _proto2.copy = function copy(newPenState) {
       this.foreground = newPenState.foreground;
       this.underline = newPenState.underline;
       this.italics = newPenState.italics;
@@ -29589,7 +29751,7 @@
       this.flash = newPenState.flash;
     };
 
-    _proto.toString = function toString() {
+    _proto2.toString = function toString() {
       return 'color=' + this.foreground + ', underline=' + this.underline + ', italics=' + this.italics + ', background=' + this.background + ', flash=' + this.flash;
     };
 
@@ -29601,9 +29763,7 @@
    */
 
 
-  var StyledUnicodeChar =
-  /*#__PURE__*/
-  function () {
+  var StyledUnicodeChar = /*#__PURE__*/function () {
     function StyledUnicodeChar(uchar, foreground, underline, italics, background, flash) {
       this.uchar = void 0;
       this.penState = void 0;
@@ -29612,32 +29772,32 @@
       this.penState = new PenState(foreground, underline, italics, background, flash);
     }
 
-    var _proto2 = StyledUnicodeChar.prototype;
+    var _proto3 = StyledUnicodeChar.prototype;
 
-    _proto2.reset = function reset() {
+    _proto3.reset = function reset() {
       this.uchar = ' ';
       this.penState.reset();
     };
 
-    _proto2.setChar = function setChar(uchar, newPenState) {
+    _proto3.setChar = function setChar(uchar, newPenState) {
       this.uchar = uchar;
       this.penState.copy(newPenState);
     };
 
-    _proto2.setPenState = function setPenState(newPenState) {
+    _proto3.setPenState = function setPenState(newPenState) {
       this.penState.copy(newPenState);
     };
 
-    _proto2.equals = function equals(other) {
+    _proto3.equals = function equals(other) {
       return this.uchar === other.uchar && this.penState.equals(other.penState);
     };
 
-    _proto2.copy = function copy(newChar) {
+    _proto3.copy = function copy(newChar) {
       this.uchar = newChar.uchar;
       this.penState.copy(newChar.penState);
     };
 
-    _proto2.isEmpty = function isEmpty() {
+    _proto3.isEmpty = function isEmpty() {
       return this.uchar === ' ' && this.penState.isDefault();
     };
 
@@ -29649,27 +29809,27 @@
    */
 
 
-  var Row =
-  /*#__PURE__*/
-  function () {
-    function Row() {
+  var Row = /*#__PURE__*/function () {
+    function Row(logger) {
       this.chars = void 0;
       this.pos = void 0;
       this.currPenState = void 0;
       this.cueStartTime = void 0;
+      this.logger = void 0;
       this.chars = [];
 
       for (var i = 0; i < NR_COLS; i++) {
         this.chars.push(new StyledUnicodeChar());
       }
 
+      this.logger = logger;
       this.pos = 0;
       this.currPenState = new PenState();
     }
 
-    var _proto3 = Row.prototype;
+    var _proto4 = Row.prototype;
 
-    _proto3.equals = function equals(other) {
+    _proto4.equals = function equals(other) {
       var equal = true;
 
       for (var i = 0; i < NR_COLS; i++) {
@@ -29682,13 +29842,13 @@
       return equal;
     };
 
-    _proto3.copy = function copy(other) {
+    _proto4.copy = function copy(other) {
       for (var i = 0; i < NR_COLS; i++) {
         this.chars[i].copy(other.chars[i]);
       }
     };
 
-    _proto3.isEmpty = function isEmpty() {
+    _proto4.isEmpty = function isEmpty() {
       var empty = true;
 
       for (var i = 0; i < NR_COLS; i++) {
@@ -29701,29 +29861,29 @@
       return empty;
     }
     /**
-       *  Set the cursor to a valid column.
-       */
+     *  Set the cursor to a valid column.
+     */
     ;
 
-    _proto3.setCursor = function setCursor(absPos) {
+    _proto4.setCursor = function setCursor(absPos) {
       if (this.pos !== absPos) {
         this.pos = absPos;
       }
 
       if (this.pos < 0) {
-        cea_608_parser_logger.log('ERROR', 'Negative cursor position ' + this.pos);
+        this.logger.log(VerboseLevel.DEBUG, 'Negative cursor position ' + this.pos);
         this.pos = 0;
       } else if (this.pos > NR_COLS) {
-        cea_608_parser_logger.log('ERROR', 'Too large cursor position ' + this.pos);
+        this.logger.log(VerboseLevel.DEBUG, 'Too large cursor position ' + this.pos);
         this.pos = NR_COLS;
       }
     }
     /**
-       * Move the cursor relative to current position.
-       */
+     * Move the cursor relative to current position.
+     */
     ;
 
-    _proto3.moveCursor = function moveCursor(relPos) {
+    _proto4.moveCursor = function moveCursor(relPos) {
       var newPos = this.pos + relPos;
 
       if (relPos > 1) {
@@ -29735,33 +29895,33 @@
       this.setCursor(newPos);
     }
     /**
-       * Backspace, move one step back and clear character.
-       */
+     * Backspace, move one step back and clear character.
+     */
     ;
 
-    _proto3.backSpace = function backSpace() {
+    _proto4.backSpace = function backSpace() {
       this.moveCursor(-1);
       this.chars[this.pos].setChar(' ', this.currPenState);
     };
 
-    _proto3.insertChar = function insertChar(byte) {
-      if (byte >= 0x90) {
+    _proto4.insertChar = function insertChar(_byte2) {
+      if (_byte2 >= 0x90) {
         // Extended char
         this.backSpace();
       }
 
-      var char = getCharForByte(byte);
+      var _char = getCharForByte(_byte2);
 
       if (this.pos >= NR_COLS) {
-        cea_608_parser_logger.log('ERROR', 'Cannot insert ' + byte.toString(16) + ' (' + char + ') at position ' + this.pos + '. Skipping it!');
+        this.logger.log(VerboseLevel.ERROR, 'Cannot insert ' + _byte2.toString(16) + ' (' + _char + ') at position ' + this.pos + '. Skipping it!');
         return;
       }
 
-      this.chars[this.pos].setChar(char, this.currPenState);
+      this.chars[this.pos].setChar(_char, this.currPenState);
       this.moveCursor(1);
     };
 
-    _proto3.clearFromPos = function clearFromPos(startPos) {
+    _proto4.clearFromPos = function clearFromPos(startPos) {
       var i;
 
       for (i = startPos; i < NR_COLS; i++) {
@@ -29769,28 +29929,28 @@
       }
     };
 
-    _proto3.clear = function clear() {
+    _proto4.clear = function clear() {
       this.clearFromPos(0);
       this.pos = 0;
       this.currPenState.reset();
     };
 
-    _proto3.clearToEndOfRow = function clearToEndOfRow() {
+    _proto4.clearToEndOfRow = function clearToEndOfRow() {
       this.clearFromPos(this.pos);
     };
 
-    _proto3.getTextString = function getTextString() {
+    _proto4.getTextString = function getTextString() {
       var chars = [];
       var empty = true;
 
       for (var i = 0; i < NR_COLS; i++) {
-        var char = this.chars[i].uchar;
+        var _char2 = this.chars[i].uchar;
 
-        if (char !== ' ') {
+        if (_char2 !== ' ') {
           empty = false;
         }
 
-        chars.push(char);
+        chars.push(_char2);
       }
 
       if (empty) {
@@ -29800,7 +29960,7 @@
       }
     };
 
-    _proto3.setPenStyles = function setPenStyles(styles) {
+    _proto4.setPenStyles = function setPenStyles(styles) {
       this.currPenState.setStyles(styles);
       var currChar = this.chars[this.pos];
       currChar.setPenState(this.currPenState);
@@ -29811,31 +29971,32 @@
   /**
    * Keep a CEA-608 screen of 32x15 styled characters
    * @constructor
-  */
+   */
 
-  var CaptionScreen =
-  /*#__PURE__*/
-  function () {
-    function CaptionScreen() {
+  var CaptionScreen = /*#__PURE__*/function () {
+    function CaptionScreen(logger) {
       this.rows = void 0;
       this.currRow = void 0;
       this.nrRollUpRows = void 0;
       this.lastOutputScreen = void 0;
+      this.logger = void 0;
       this.rows = [];
 
       for (var i = 0; i < NR_ROWS; i++) {
-        this.rows.push(new Row());
+        this.rows.push(new Row(logger));
       } // Note that we use zero-based numbering (0-14)
 
 
+      this.logger = logger;
       this.currRow = NR_ROWS - 1;
       this.nrRollUpRows = null;
+      this.lastOutputScreen = null;
       this.reset();
     }
 
-    var _proto4 = CaptionScreen.prototype;
+    var _proto5 = CaptionScreen.prototype;
 
-    _proto4.reset = function reset() {
+    _proto5.reset = function reset() {
       for (var i = 0; i < NR_ROWS; i++) {
         this.rows[i].clear();
       }
@@ -29843,7 +30004,7 @@
       this.currRow = NR_ROWS - 1;
     };
 
-    _proto4.equals = function equals(other) {
+    _proto5.equals = function equals(other) {
       var equal = true;
 
       for (var i = 0; i < NR_ROWS; i++) {
@@ -29856,13 +30017,13 @@
       return equal;
     };
 
-    _proto4.copy = function copy(other) {
+    _proto5.copy = function copy(other) {
       for (var i = 0; i < NR_ROWS; i++) {
         this.rows[i].copy(other.rows[i]);
       }
     };
 
-    _proto4.isEmpty = function isEmpty() {
+    _proto5.isEmpty = function isEmpty() {
       var empty = true;
 
       for (var i = 0; i < NR_ROWS; i++) {
@@ -29875,43 +30036,43 @@
       return empty;
     };
 
-    _proto4.backSpace = function backSpace() {
+    _proto5.backSpace = function backSpace() {
       var row = this.rows[this.currRow];
       row.backSpace();
     };
 
-    _proto4.clearToEndOfRow = function clearToEndOfRow() {
+    _proto5.clearToEndOfRow = function clearToEndOfRow() {
       var row = this.rows[this.currRow];
       row.clearToEndOfRow();
     }
     /**
-       * Insert a character (without styling) in the current row.
-       */
+     * Insert a character (without styling) in the current row.
+     */
     ;
 
-    _proto4.insertChar = function insertChar(char) {
+    _proto5.insertChar = function insertChar(_char3) {
       var row = this.rows[this.currRow];
-      row.insertChar(char);
+      row.insertChar(_char3);
     };
 
-    _proto4.setPen = function setPen(styles) {
+    _proto5.setPen = function setPen(styles) {
       var row = this.rows[this.currRow];
       row.setPenStyles(styles);
     };
 
-    _proto4.moveCursor = function moveCursor(relPos) {
+    _proto5.moveCursor = function moveCursor(relPos) {
       var row = this.rows[this.currRow];
       row.moveCursor(relPos);
     };
 
-    _proto4.setCursor = function setCursor(absPos) {
-      cea_608_parser_logger.log('INFO', 'setCursor: ' + absPos);
+    _proto5.setCursor = function setCursor(absPos) {
+      this.logger.log(VerboseLevel.INFO, 'setCursor: ' + absPos);
       var row = this.rows[this.currRow];
       row.setCursor(absPos);
     };
 
-    _proto4.setPAC = function setPAC(pacData) {
-      cea_608_parser_logger.log('INFO', 'pacData = ' + JSON.stringify(pacData));
+    _proto5.setPAC = function setPAC(pacData) {
+      this.logger.log(VerboseLevel.INFO, 'pacData = ' + JSON.stringify(pacData));
       var newRow = pacData.row - 1;
 
       if (this.nrRollUpRows && newRow < this.nrRollUpRows - 1) {
@@ -29934,8 +30095,9 @@
 
         if (lastOutputScreen) {
           var prevLineTime = lastOutputScreen.rows[topRowIndex].cueStartTime;
+          var time = this.logger.time;
 
-          if (prevLineTime && cea_608_parser_logger.time && prevLineTime < cea_608_parser_logger.time) {
+          if (prevLineTime && time !== null && prevLineTime < time) {
             for (var _i = 0; _i < this.nrRollUpRows; _i++) {
               this.rows[newRow - this.nrRollUpRows + _i + 1].copy(lastOutputScreen.rows[topRowIndex + _i]);
             }
@@ -29963,40 +30125,40 @@
       this.setPen(styles);
     }
     /**
-       * Set background/extra foreground, but first do back_space, and then insert space (backwards compatibility).
-       */
+     * Set background/extra foreground, but first do back_space, and then insert space (backwards compatibility).
+     */
     ;
 
-    _proto4.setBkgData = function setBkgData(bkgData) {
-      cea_608_parser_logger.log('INFO', 'bkgData = ' + JSON.stringify(bkgData));
+    _proto5.setBkgData = function setBkgData(bkgData) {
+      this.logger.log(VerboseLevel.INFO, 'bkgData = ' + JSON.stringify(bkgData));
       this.backSpace();
       this.setPen(bkgData);
       this.insertChar(0x20); // Space
     };
 
-    _proto4.setRollUpRows = function setRollUpRows(nrRows) {
+    _proto5.setRollUpRows = function setRollUpRows(nrRows) {
       this.nrRollUpRows = nrRows;
     };
 
-    _proto4.rollUp = function rollUp() {
+    _proto5.rollUp = function rollUp() {
       if (this.nrRollUpRows === null) {
-        cea_608_parser_logger.log('DEBUG', 'roll_up but nrRollUpRows not set yet');
+        this.logger.log(VerboseLevel.DEBUG, 'roll_up but nrRollUpRows not set yet');
         return; // Not properly setup
       }
 
-      cea_608_parser_logger.log('TEXT', this.getDisplayText());
+      this.logger.log(VerboseLevel.TEXT, this.getDisplayText());
       var topRowIndex = this.currRow + 1 - this.nrRollUpRows;
       var topRow = this.rows.splice(topRowIndex, 1)[0];
       topRow.clear();
       this.rows.splice(this.currRow, 0, topRow);
-      cea_608_parser_logger.log('INFO', 'Rolling up'); // logger.log('TEXT', this.get_display_text())
+      this.logger.log(VerboseLevel.INFO, 'Rolling up'); // this.logger.log(VerboseLevel.TEXT, this.get_display_text())
     }
     /**
-      * Get all non-empty rows with as unicode text.
-      */
+     * Get all non-empty rows with as unicode text.
+     */
     ;
 
-    _proto4.getDisplayText = function getDisplayText(asOneRow) {
+    _proto5.getDisplayText = function getDisplayText(asOneRow) {
       asOneRow = asOneRow || false;
       var displayText = [];
       var text = '';
@@ -30027,17 +30189,15 @@
       return text;
     };
 
-    _proto4.getTextAndFormat = function getTextAndFormat() {
+    _proto5.getTextAndFormat = function getTextAndFormat() {
       return this.rows;
     };
 
     return CaptionScreen;
   }(); // var modes = ['MODE_ROLL-UP', 'MODE_POP-ON', 'MODE_PAINT-ON', 'MODE_TEXT'];
 
-  var Cea608Channel =
-  /*#__PURE__*/
-  function () {
-    function Cea608Channel(channelNumber, outputFilter) {
+  var Cea608Channel = /*#__PURE__*/function () {
+    function Cea608Channel(channelNumber, outputFilter, logger) {
       this.chNr = void 0;
       this.outputFilter = void 0;
       this.mode = void 0;
@@ -30048,56 +30208,59 @@
       this.currRollUpRow = void 0;
       this.writeScreen = void 0;
       this.cueStartTime = void 0;
-      this.lastCueEndTime = void 0;
+      this.logger = void 0;
       this.chNr = channelNumber;
       this.outputFilter = outputFilter;
       this.mode = null;
       this.verbose = 0;
-      this.displayedMemory = new CaptionScreen();
-      this.nonDisplayedMemory = new CaptionScreen();
-      this.lastOutputScreen = new CaptionScreen();
+      this.displayedMemory = new CaptionScreen(logger);
+      this.nonDisplayedMemory = new CaptionScreen(logger);
+      this.lastOutputScreen = new CaptionScreen(logger);
       this.currRollUpRow = this.displayedMemory.rows[NR_ROWS - 1];
       this.writeScreen = this.displayedMemory;
       this.mode = null;
       this.cueStartTime = null; // Keeps track of where a cue started.
+
+      this.logger = logger;
     }
 
-    var _proto5 = Cea608Channel.prototype;
+    var _proto6 = Cea608Channel.prototype;
 
-    _proto5.reset = function reset() {
+    _proto6.reset = function reset() {
       this.mode = null;
       this.displayedMemory.reset();
       this.nonDisplayedMemory.reset();
       this.lastOutputScreen.reset();
+      this.outputFilter.reset();
       this.currRollUpRow = this.displayedMemory.rows[NR_ROWS - 1];
       this.writeScreen = this.displayedMemory;
       this.mode = null;
       this.cueStartTime = null;
     };
 
-    _proto5.getHandler = function getHandler() {
+    _proto6.getHandler = function getHandler() {
       return this.outputFilter;
     };
 
-    _proto5.setHandler = function setHandler(newHandler) {
+    _proto6.setHandler = function setHandler(newHandler) {
       this.outputFilter = newHandler;
     };
 
-    _proto5.setPAC = function setPAC(pacData) {
+    _proto6.setPAC = function setPAC(pacData) {
       this.writeScreen.setPAC(pacData);
     };
 
-    _proto5.setBkgData = function setBkgData(bkgData) {
+    _proto6.setBkgData = function setBkgData(bkgData) {
       this.writeScreen.setBkgData(bkgData);
     };
 
-    _proto5.setMode = function setMode(newMode) {
+    _proto6.setMode = function setMode(newMode) {
       if (newMode === this.mode) {
         return;
       }
 
       this.mode = newMode;
-      cea_608_parser_logger.log('INFO', 'MODE=' + newMode);
+      this.logger.log(VerboseLevel.INFO, 'MODE=' + newMode);
 
       if (this.mode === 'MODE_POP-ON') {
         this.writeScreen = this.nonDisplayedMemory;
@@ -30114,29 +30277,29 @@
       this.mode = newMode;
     };
 
-    _proto5.insertChars = function insertChars(chars) {
+    _proto6.insertChars = function insertChars(chars) {
       for (var i = 0; i < chars.length; i++) {
         this.writeScreen.insertChar(chars[i]);
       }
 
       var screen = this.writeScreen === this.displayedMemory ? 'DISP' : 'NON_DISP';
-      cea_608_parser_logger.log('INFO', screen + ': ' + this.writeScreen.getDisplayText(true));
+      this.logger.log(VerboseLevel.INFO, screen + ': ' + this.writeScreen.getDisplayText(true));
 
       if (this.mode === 'MODE_PAINT-ON' || this.mode === 'MODE_ROLL-UP') {
-        cea_608_parser_logger.log('TEXT', 'DISPLAYED: ' + this.displayedMemory.getDisplayText(true));
+        this.logger.log(VerboseLevel.TEXT, 'DISPLAYED: ' + this.displayedMemory.getDisplayText(true));
         this.outputDataUpdate();
       }
     };
 
-    _proto5.ccRCL = function ccRCL() {
+    _proto6.ccRCL = function ccRCL() {
       // Resume Caption Loading (switch mode to Pop On)
-      cea_608_parser_logger.log('INFO', 'RCL - Resume Caption Loading');
+      this.logger.log(VerboseLevel.INFO, 'RCL - Resume Caption Loading');
       this.setMode('MODE_POP-ON');
     };
 
-    _proto5.ccBS = function ccBS() {
+    _proto6.ccBS = function ccBS() {
       // BackSpace
-      cea_608_parser_logger.log('INFO', 'BS - BackSpace');
+      this.logger.log(VerboseLevel.INFO, 'BS - BackSpace');
 
       if (this.mode === 'MODE_TEXT') {
         return;
@@ -30149,95 +30312,95 @@
       }
     };
 
-    _proto5.ccAOF = function ccAOF() {// Reserved (formerly Alarm Off)
+    _proto6.ccAOF = function ccAOF() {// Reserved (formerly Alarm Off)
     };
 
-    _proto5.ccAON = function ccAON() {// Reserved (formerly Alarm On)
+    _proto6.ccAON = function ccAON() {// Reserved (formerly Alarm On)
     };
 
-    _proto5.ccDER = function ccDER() {
+    _proto6.ccDER = function ccDER() {
       // Delete to End of Row
-      cea_608_parser_logger.log('INFO', 'DER- Delete to End of Row');
+      this.logger.log(VerboseLevel.INFO, 'DER- Delete to End of Row');
       this.writeScreen.clearToEndOfRow();
       this.outputDataUpdate();
     };
 
-    _proto5.ccRU = function ccRU(nrRows) {
+    _proto6.ccRU = function ccRU(nrRows) {
       // Roll-Up Captions-2,3,or 4 Rows
-      cea_608_parser_logger.log('INFO', 'RU(' + nrRows + ') - Roll Up');
+      this.logger.log(VerboseLevel.INFO, 'RU(' + nrRows + ') - Roll Up');
       this.writeScreen = this.displayedMemory;
       this.setMode('MODE_ROLL-UP');
       this.writeScreen.setRollUpRows(nrRows);
     };
 
-    _proto5.ccFON = function ccFON() {
+    _proto6.ccFON = function ccFON() {
       // Flash On
-      cea_608_parser_logger.log('INFO', 'FON - Flash On');
+      this.logger.log(VerboseLevel.INFO, 'FON - Flash On');
       this.writeScreen.setPen({
         flash: true
       });
     };
 
-    _proto5.ccRDC = function ccRDC() {
+    _proto6.ccRDC = function ccRDC() {
       // Resume Direct Captioning (switch mode to PaintOn)
-      cea_608_parser_logger.log('INFO', 'RDC - Resume Direct Captioning');
+      this.logger.log(VerboseLevel.INFO, 'RDC - Resume Direct Captioning');
       this.setMode('MODE_PAINT-ON');
     };
 
-    _proto5.ccTR = function ccTR() {
+    _proto6.ccTR = function ccTR() {
       // Text Restart in text mode (not supported, however)
-      cea_608_parser_logger.log('INFO', 'TR');
+      this.logger.log(VerboseLevel.INFO, 'TR');
       this.setMode('MODE_TEXT');
     };
 
-    _proto5.ccRTD = function ccRTD() {
+    _proto6.ccRTD = function ccRTD() {
       // Resume Text Display in Text mode (not supported, however)
-      cea_608_parser_logger.log('INFO', 'RTD');
+      this.logger.log(VerboseLevel.INFO, 'RTD');
       this.setMode('MODE_TEXT');
     };
 
-    _proto5.ccEDM = function ccEDM() {
+    _proto6.ccEDM = function ccEDM() {
       // Erase Displayed Memory
-      cea_608_parser_logger.log('INFO', 'EDM - Erase Displayed Memory');
+      this.logger.log(VerboseLevel.INFO, 'EDM - Erase Displayed Memory');
       this.displayedMemory.reset();
       this.outputDataUpdate(true);
     };
 
-    _proto5.ccCR = function ccCR() {
+    _proto6.ccCR = function ccCR() {
       // Carriage Return
-      cea_608_parser_logger.log('INFO', 'CR - Carriage Return');
+      this.logger.log(VerboseLevel.INFO, 'CR - Carriage Return');
       this.writeScreen.rollUp();
       this.outputDataUpdate(true);
     };
 
-    _proto5.ccENM = function ccENM() {
+    _proto6.ccENM = function ccENM() {
       // Erase Non-Displayed Memory
-      cea_608_parser_logger.log('INFO', 'ENM - Erase Non-displayed Memory');
+      this.logger.log(VerboseLevel.INFO, 'ENM - Erase Non-displayed Memory');
       this.nonDisplayedMemory.reset();
     };
 
-    _proto5.ccEOC = function ccEOC() {
+    _proto6.ccEOC = function ccEOC() {
       // End of Caption (Flip Memories)
-      cea_608_parser_logger.log('INFO', 'EOC - End Of Caption');
+      this.logger.log(VerboseLevel.INFO, 'EOC - End Of Caption');
 
       if (this.mode === 'MODE_POP-ON') {
         var tmp = this.displayedMemory;
         this.displayedMemory = this.nonDisplayedMemory;
         this.nonDisplayedMemory = tmp;
         this.writeScreen = this.nonDisplayedMemory;
-        cea_608_parser_logger.log('TEXT', 'DISP: ' + this.displayedMemory.getDisplayText());
+        this.logger.log(VerboseLevel.TEXT, 'DISP: ' + this.displayedMemory.getDisplayText());
       }
 
       this.outputDataUpdate(true);
     };
 
-    _proto5.ccTO = function ccTO(nrCols) {
+    _proto6.ccTO = function ccTO(nrCols) {
       // Tab Offset 1,2, or 3 columns
-      cea_608_parser_logger.log('INFO', 'TO(' + nrCols + ') - Tab Offset');
+      this.logger.log(VerboseLevel.INFO, 'TO(' + nrCols + ') - Tab Offset');
       this.writeScreen.moveCursor(nrCols);
     };
 
-    _proto5.ccMIDROW = function ccMIDROW(secondByte) {
+    _proto6.ccMIDROW = function ccMIDROW(secondByte) {
       // Parse MIDROW command
       var styles = {
         flash: false
@@ -30253,34 +30416,34 @@
         styles.foreground = 'white';
       }
 
-      cea_608_parser_logger.log('INFO', 'MIDROW: ' + JSON.stringify(styles));
+      this.logger.log(VerboseLevel.INFO, 'MIDROW: ' + JSON.stringify(styles));
       this.writeScreen.setPen(styles);
     };
 
-    _proto5.outputDataUpdate = function outputDataUpdate(dispatch) {
+    _proto6.outputDataUpdate = function outputDataUpdate(dispatch) {
       if (dispatch === void 0) {
         dispatch = false;
       }
 
-      var t = cea_608_parser_logger.time;
+      var time = this.logger.time;
 
-      if (t === null) {
+      if (time === null) {
         return;
       }
 
       if (this.outputFilter) {
         if (this.cueStartTime === null && !this.displayedMemory.isEmpty()) {
           // Start of a new cue
-          this.cueStartTime = t;
+          this.cueStartTime = time;
         } else {
           if (!this.displayedMemory.equals(this.lastOutputScreen)) {
-            this.outputFilter.newCue(this.cueStartTime, t, this.lastOutputScreen);
+            this.outputFilter.newCue(this.cueStartTime, time, this.lastOutputScreen);
 
             if (dispatch && this.outputFilter.dispatchCue) {
               this.outputFilter.dispatchCue();
             }
 
-            this.cueStartTime = this.displayedMemory.isEmpty() ? null : t;
+            this.cueStartTime = this.displayedMemory.isEmpty() ? null : time;
           }
         }
 
@@ -30288,7 +30451,7 @@
       }
     };
 
-    _proto5.cueSplitAtTime = function cueSplitAtTime(t) {
+    _proto6.cueSplitAtTime = function cueSplitAtTime(t) {
       if (this.outputFilter) {
         if (!this.displayedMemory.isEmpty()) {
           if (this.outputFilter.newCue) {
@@ -30303,67 +30466,47 @@
     return Cea608Channel;
   }();
 
-  var Cea608Parser =
-  /*#__PURE__*/
-  function () {
+  var Cea608Parser = /*#__PURE__*/function () {
     function Cea608Parser(field, out1, out2) {
-      this.field = void 0;
-      this.outputs = void 0;
       this.channels = void 0;
-      this.currChNr = void 0;
-      this.lastCmdA = void 0;
-      this.lastCmdB = void 0;
-      this.lastTime = void 0;
-      this.dataCounters = void 0;
-      this.field = field || 1;
-      this.outputs = [out1, out2];
-      this.channels = [new Cea608Channel(1, out1), new Cea608Channel(2, out2)];
-      this.currChNr = -1; // Will be 1 or 2
-
-      this.lastCmdA = null; // First byte of last command
-
-      this.lastCmdB = null; // Second byte of last command
-
-      this.lastTime = null;
-      this.dataCounters = {
-        'padding': 0,
-        'char': 0,
-        'cmd': 0,
-        'other': 0
-      };
+      this.currentChannel = 0;
+      this.cmdHistory = void 0;
+      this.logger = void 0;
+      var logger = new cea_608_parser_CaptionsLogger();
+      this.channels = [null, new Cea608Channel(field, out1, logger), new Cea608Channel(field + 1, out2, logger)];
+      this.cmdHistory = createCmdHistory();
+      this.logger = logger;
     }
 
-    var _proto6 = Cea608Parser.prototype;
+    var _proto7 = Cea608Parser.prototype;
 
-    _proto6.getHandler = function getHandler(index) {
-      return this.channels[index].getHandler();
+    _proto7.getHandler = function getHandler(channel) {
+      return this.channels[channel].getHandler();
     };
 
-    _proto6.setHandler = function setHandler(index, newHandler) {
-      this.channels[index].setHandler(newHandler);
+    _proto7.setHandler = function setHandler(channel, newHandler) {
+      this.channels[channel].setHandler(newHandler);
     }
     /**
-       * Add data for time t in forms of list of bytes (unsigned ints). The bytes are treated as pairs.
-       */
+     * Add data for time t in forms of list of bytes (unsigned ints). The bytes are treated as pairs.
+     */
     ;
 
-    _proto6.addData = function addData(t, byteList) {
-      var cmdFound,
-          a,
-          b,
-          charsFound = false;
-      this.lastTime = t;
-      cea_608_parser_logger.setTime(t);
+    _proto7.addData = function addData(time, byteList) {
+      var cmdFound;
+      var a;
+      var b;
+      var charsFound = false;
+      this.logger.time = time;
 
       for (var i = 0; i < byteList.length; i += 2) {
         a = byteList[i] & 0x7f;
         b = byteList[i + 1] & 0x7f;
 
         if (a === 0 && b === 0) {
-          this.dataCounters.padding += 2;
           continue;
         } else {
-          cea_608_parser_logger.log('DATA', '[' + numArrayToHexArray([byteList[i], byteList[i + 1]]) + '] -> (' + numArrayToHexArray([a, b]) + ')');
+          this.logger.log(VerboseLevel.DATA, '[' + numArrayToHexArray([byteList[i], byteList[i + 1]]) + '] -> (' + numArrayToHexArray([a, b]) + ')');
         }
 
         cmdFound = this.parseCmd(a, b);
@@ -30384,58 +30527,47 @@
           charsFound = this.parseChars(a, b);
 
           if (charsFound) {
-            if (this.currChNr && this.currChNr >= 0) {
-              var channel = this.channels[this.currChNr - 1];
+            var currChNr = this.currentChannel;
+
+            if (currChNr && currChNr > 0) {
+              var channel = this.channels[currChNr];
               channel.insertChars(charsFound);
             } else {
-              cea_608_parser_logger.log('WARNING', 'No channel found yet. TEXT-MODE?');
+              this.logger.log(VerboseLevel.WARNING, 'No channel found yet. TEXT-MODE?');
             }
           }
         }
 
-        if (cmdFound) {
-          this.dataCounters.cmd += 2;
-        } else if (charsFound) {
-          this.dataCounters.char += 2;
-        } else {
-          this.dataCounters.other += 2;
-          cea_608_parser_logger.log('WARNING', 'Couldn\'t parse cleaned data ' + numArrayToHexArray([a, b]) + ' orig: ' + numArrayToHexArray([byteList[i], byteList[i + 1]]));
+        if (!cmdFound && !charsFound) {
+          this.logger.log(VerboseLevel.WARNING, 'Couldn\'t parse cleaned data ' + numArrayToHexArray([a, b]) + ' orig: ' + numArrayToHexArray([byteList[i], byteList[i + 1]]));
         }
       }
     }
     /**
-       * Parse Command.
-       * @returns {Boolean} Tells if a command was found
-       */
+     * Parse Command.
+     * @returns {Boolean} Tells if a command was found
+     */
     ;
 
-    _proto6.parseCmd = function parseCmd(a, b) {
-      var chNr = null;
-      var cond1 = (a === 0x14 || a === 0x1C) && b >= 0x20 && b <= 0x2F;
+    _proto7.parseCmd = function parseCmd(a, b) {
+      var cmdHistory = this.cmdHistory;
+      var cond1 = (a === 0x14 || a === 0x1C || a === 0x15 || a === 0x1D) && b >= 0x20 && b <= 0x2F;
       var cond2 = (a === 0x17 || a === 0x1F) && b >= 0x21 && b <= 0x23;
 
       if (!(cond1 || cond2)) {
         return false;
       }
 
-      if (a === this.lastCmdA && b === this.lastCmdB) {
-        this.lastCmdA = null;
-        this.lastCmdB = null; // Repeated commands are dropped (once)
-
-        cea_608_parser_logger.log('DEBUG', 'Repeated command (' + numArrayToHexArray([a, b]) + ') is dropped');
+      if (hasCmdRepeated(a, b, cmdHistory)) {
+        setLastCmd(null, null, cmdHistory);
+        this.logger.log(VerboseLevel.DEBUG, 'Repeated command (' + numArrayToHexArray([a, b]) + ') is dropped');
         return true;
       }
 
-      if (a === 0x14 || a === 0x17) {
-        chNr = 1;
-      } else {
-        chNr = 2;
-      } // (a === 0x1C || a=== 0x1f)
+      var chNr = a === 0x14 || a === 0x15 || a === 0x17 ? 1 : 2;
+      var channel = this.channels[chNr];
 
-
-      var channel = this.channels[chNr - 1];
-
-      if (a === 0x14 || a === 0x1C) {
+      if (a === 0x14 || a === 0x15 || a === 0x1C || a === 0x1D) {
         if (b === 0x20) {
           channel.ccRCL();
         } else if (b === 0x21) {
@@ -30474,19 +30606,18 @@
         channel.ccTO(b - 0x20);
       }
 
-      this.lastCmdA = a;
-      this.lastCmdB = b;
-      this.currChNr = chNr;
+      setLastCmd(a, b, cmdHistory);
+      this.currentChannel = chNr;
       return true;
     }
     /**
-       * Parse midrow styling command
-       * @returns {Boolean}
-       */
+     * Parse midrow styling command
+     * @returns {Boolean}
+     */
     ;
 
-    _proto6.parseMidrow = function parseMidrow(a, b) {
-      var chNr = null;
+    _proto7.parseMidrow = function parseMidrow(a, b) {
+      var chNr = 0;
 
       if ((a === 0x11 || a === 0x19) && b >= 0x20 && b <= 0x2f) {
         if (a === 0x11) {
@@ -30495,28 +30626,33 @@
           chNr = 2;
         }
 
-        if (chNr !== this.currChNr) {
-          cea_608_parser_logger.log('ERROR', 'Mismatch channel in midrow parsing');
+        if (chNr !== this.currentChannel) {
+          this.logger.log(VerboseLevel.ERROR, 'Mismatch channel in midrow parsing');
           return false;
         }
 
-        var channel = this.channels[chNr - 1];
+        var channel = this.channels[chNr];
+
+        if (!channel) {
+          return false;
+        }
+
         channel.ccMIDROW(b);
-        cea_608_parser_logger.log('DEBUG', 'MIDROW (' + numArrayToHexArray([a, b]) + ')');
+        this.logger.log(VerboseLevel.DEBUG, 'MIDROW (' + numArrayToHexArray([a, b]) + ')');
         return true;
       }
 
       return false;
     }
     /**
-       * Parse Preable Access Codes (Table 53).
-       * @returns {Boolean} Tells if PAC found
-       */
+     * Parse Preable Access Codes (Table 53).
+     * @returns {Boolean} Tells if PAC found
+     */
     ;
 
-    _proto6.parsePAC = function parsePAC(a, b) {
-      var chNr = null;
-      var row = null;
+    _proto7.parsePAC = function parsePAC(a, b) {
+      var row;
+      var cmdHistory = this.cmdHistory;
       var case1 = (a >= 0x11 && a <= 0x17 || a >= 0x19 && a <= 0x1F) && b >= 0x40 && b <= 0x7F;
       var case2 = (a === 0x10 || a === 0x18) && b >= 0x40 && b <= 0x5F;
 
@@ -30524,13 +30660,12 @@
         return false;
       }
 
-      if (a === this.lastCmdA && b === this.lastCmdB) {
-        this.lastCmdA = null;
-        this.lastCmdB = null;
+      if (hasCmdRepeated(a, b, cmdHistory)) {
+        setLastCmd(null, null, cmdHistory);
         return true; // Repeated commands are dropped (once)
       }
 
-      chNr = a <= 0x17 ? 1 : 2;
+      var chNr = a <= 0x17 ? 1 : 2;
 
       if (b >= 0x40 && b <= 0x5F) {
         row = chNr === 1 ? rowsLowCh1[a] : rowsLowCh2[a];
@@ -30539,22 +30674,25 @@
         row = chNr === 1 ? rowsHighCh1[a] : rowsHighCh2[a];
       }
 
-      var pacData = this.interpretPAC(row, b);
-      var channel = this.channels[chNr - 1];
-      channel.setPAC(pacData);
-      this.lastCmdA = a;
-      this.lastCmdB = b;
-      this.currChNr = chNr;
+      var channel = this.channels[chNr];
+
+      if (!channel) {
+        return false;
+      }
+
+      channel.setPAC(this.interpretPAC(row, b));
+      setLastCmd(a, b, cmdHistory);
+      this.currentChannel = chNr;
       return true;
     }
     /**
-       * Interpret the second byte of the pac, and return the information.
-       * @returns {Object} pacData with style parameters.
-       */
+     * Interpret the second byte of the pac, and return the information.
+     * @returns {Object} pacData with style parameters.
+     */
     ;
 
-    _proto6.interpretPAC = function interpretPAC(row, byte) {
-      var pacIndex = byte;
+    _proto7.interpretPAC = function interpretPAC(row, _byte3) {
+      var pacIndex = _byte3;
       var pacData = {
         color: null,
         italics: false,
@@ -30563,10 +30701,10 @@
         row: row
       };
 
-      if (byte > 0x5F) {
-        pacIndex = byte - 0x60;
+      if (_byte3 > 0x5F) {
+        pacIndex = _byte3 - 0x60;
       } else {
-        pacIndex = byte - 0x40;
+        pacIndex = _byte3 - 0x40;
       }
 
       pacData.underline = (pacIndex & 1) === 1;
@@ -30583,15 +30721,15 @@
       return pacData; // Note that row has zero offset. The spec uses 1.
     }
     /**
-       * Parse characters.
-       * @returns An array with 1 to 2 codes corresponding to chars, if found. null otherwise.
-       */
+     * Parse characters.
+     * @returns An array with 1 to 2 codes corresponding to chars, if found. null otherwise.
+     */
     ;
 
-    _proto6.parseChars = function parseChars(a, b) {
-      var channelNr = null,
-          charCodes = null,
-          charCode1 = null;
+    _proto7.parseChars = function parseChars(a, b) {
+      var channelNr;
+      var charCodes = null;
+      var charCode1 = null;
 
       if (a >= 0x19) {
         channelNr = 2;
@@ -30613,7 +30751,7 @@
           oneCode = b + 0x90;
         }
 
-        cea_608_parser_logger.log('INFO', 'Special char \'' + getCharForByte(oneCode) + '\' in channel ' + channelNr);
+        this.logger.log(VerboseLevel.INFO, 'Special char \'' + getCharForByte(oneCode) + '\' in channel ' + channelNr);
         charCodes = [oneCode];
       } else if (a >= 0x20 && a <= 0x7f) {
         charCodes = b === 0 ? [a] : [a, b];
@@ -30621,21 +30759,19 @@
 
       if (charCodes) {
         var hexCodes = numArrayToHexArray(charCodes);
-        cea_608_parser_logger.log('DEBUG', 'Char codes =  ' + hexCodes.join(','));
-        this.lastCmdA = null;
-        this.lastCmdB = null;
+        this.logger.log(VerboseLevel.DEBUG, 'Char codes =  ' + hexCodes.join(','));
+        setLastCmd(a, b, this.cmdHistory);
       }
 
       return charCodes;
     }
     /**
-      * Parse extended background attributes as well as new foreground color black.
-      * @returns {Boolean} Tells if background attributes are found
-      */
+     * Parse extended background attributes as well as new foreground color black.
+     * @returns {Boolean} Tells if background attributes are found
+     */
     ;
 
-    _proto6.parseBackgroundAttributes = function parseBackgroundAttributes(a, b) {
-      var bkgData, index, chNr, channel;
+    _proto7.parseBackgroundAttributes = function parseBackgroundAttributes(a, b) {
       var case1 = (a === 0x10 || a === 0x18) && b >= 0x20 && b <= 0x2f;
       var case2 = (a === 0x17 || a === 0x1f) && b >= 0x2d && b <= 0x2f;
 
@@ -30643,7 +30779,8 @@
         return false;
       }
 
-      bkgData = {};
+      var index;
+      var bkgData = {};
 
       if (a === 0x10 || a === 0x18) {
         index = Math.floor((b - 0x20) / 2);
@@ -30662,37 +30799,39 @@
         }
       }
 
-      chNr = a < 0x18 ? 1 : 2;
-      channel = this.channels[chNr - 1];
+      var chNr = a <= 0x17 ? 1 : 2;
+      var channel = this.channels[chNr];
       channel.setBkgData(bkgData);
-      this.lastCmdA = null;
-      this.lastCmdB = null;
+      setLastCmd(a, b, this.cmdHistory);
       return true;
     }
     /**
-       * Reset state of parser and its channels.
-       */
+     * Reset state of parser and its channels.
+     */
     ;
 
-    _proto6.reset = function reset() {
-      for (var i = 0; i < this.channels.length; i++) {
-        if (this.channels[i]) {
-          this.channels[i].reset();
+    _proto7.reset = function reset() {
+      for (var i = 0; i < Object.keys(this.channels).length; i++) {
+        var channel = this.channels[i];
+
+        if (channel) {
+          channel.reset();
         }
       }
 
-      this.lastCmdA = null;
-      this.lastCmdB = null;
+      this.cmdHistory = createCmdHistory();
     }
     /**
-       * Trigger the generation of a cue, and the start of a new one if displayScreens are not empty.
-       */
+     * Trigger the generation of a cue, and the start of a new one if displayScreens are not empty.
+     */
     ;
 
-    _proto6.cueSplitAtTime = function cueSplitAtTime(t) {
+    _proto7.cueSplitAtTime = function cueSplitAtTime(t) {
       for (var i = 0; i < this.channels.length; i++) {
-        if (this.channels[i]) {
-          this.channels[i].cueSplitAtTime(t);
+        var channel = this.channels[i];
+
+        if (channel) {
+          channel.cueSplitAtTime(t);
         }
       }
     };
@@ -30700,23 +30839,34 @@
     return Cea608Parser;
   }();
 
+  function setLastCmd(a, b, cmdHistory) {
+    cmdHistory.a = a;
+    cmdHistory.b = b;
+  }
+
+  function hasCmdRepeated(a, b, cmdHistory) {
+    return cmdHistory.a === a && cmdHistory.b === b;
+  }
+
+  function createCmdHistory() {
+    return {
+      a: null,
+      b: null
+    };
+  }
+
   /* harmony default export */ var cea_608_parser = (Cea608Parser);
   // CONCATENATED MODULE: ./src/utils/output-filter.ts
-  var OutputFilter =
-  /*#__PURE__*/
-  function () {
-    // TODO(typescript-timelineController)
+  var OutputFilter = /*#__PURE__*/function () {
     function OutputFilter(timelineController, trackName) {
       this.timelineController = void 0;
+      this.cueRanges = [];
       this.trackName = void 0;
-      this.startTime = void 0;
-      this.endTime = void 0;
-      this.screen = void 0;
-      this.timelineController = timelineController;
-      this.trackName = trackName;
       this.startTime = null;
       this.endTime = null;
       this.screen = null;
+      this.timelineController = timelineController;
+      this.trackName = trackName;
     }
 
     var _proto = OutputFilter.prototype;
@@ -30726,7 +30876,7 @@
         return;
       }
 
-      this.timelineController.addCues(this.trackName, this.startTime, this.endTime, this.screen);
+      this.timelineController.addCues(this.trackName, this.startTime, this.endTime, this.screen, this.cueRanges);
       this.startTime = null;
     };
 
@@ -30738,6 +30888,10 @@
       this.endTime = endTime;
       this.screen = screen;
       this.timelineController.createCaptionsTrack(this.trackName);
+    };
+
+    _proto.reset = function reset() {
+      this.cueRanges = [];
     };
 
     return OutputFilter;
@@ -30762,7 +30916,7 @@
     var mins = parseInt(timeString.substr(-9, 2));
     var hours = timeString.length > 9 ? parseInt(timeString.substr(0, timeString.indexOf(':'))) : 0;
 
-    if (!Object(number_isFinite["isFiniteNumber"])(ts) || !Object(number_isFinite["isFiniteNumber"])(secs) || !Object(number_isFinite["isFiniteNumber"])(mins) || !Object(number_isFinite["isFiniteNumber"])(hours)) {
+    if (!Object(number["isFiniteNumber"])(ts) || !Object(number["isFiniteNumber"])(secs) || !Object(number["isFiniteNumber"])(mins) || !Object(number["isFiniteNumber"])(hours)) {
       throw Error("Malformed X-TIMESTAMP-MAP: Local:" + timeString);
     }
 
@@ -30937,10 +31091,7 @@
 
 
 
-  // TS todo: Reduce usage of any
-  var timeline_controller_TimelineController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var timeline_controller_TimelineController = /*#__PURE__*/function (_EventHandler) {
     timeline_controller_inheritsLoose(TimelineController, _EventHandler);
 
     function TimelineController(hls) {
@@ -30955,13 +31106,14 @@
       _this.tracks = [];
       _this.initPTS = [];
       _this.unparsedVttFrags = [];
-      _this.cueRanges = [];
       _this.captionsTracks = {};
+      _this.nonNativeCaptionsTracks = {};
       _this.captionsProperties = void 0;
-      _this.cea608Parser = void 0;
+      _this.cea608Parser1 = void 0;
+      _this.cea608Parser2 = void 0;
       _this.lastSn = -1;
       _this.prevCC = -1;
-      _this.vttCCs = null;
+      _this.vttCCs = newVTTCCs();
       _this.hls = hls;
       _this.config = hls.config;
       _this.Cues = hls.config.cueHandler;
@@ -30973,13 +31125,24 @@
         textTrack2: {
           label: _this.config.captionsTextTrack2Label,
           languageCode: _this.config.captionsTextTrack2LanguageCode
+        },
+        textTrack3: {
+          label: _this.config.captionsTextTrack3Label,
+          languageCode: _this.config.captionsTextTrack3LanguageCode
+        },
+        textTrack4: {
+          label: _this.config.captionsTextTrack4Label,
+          languageCode: _this.config.captionsTextTrack4LanguageCode
         }
       };
 
       if (_this.config.enableCEA708Captions) {
         var channel1 = new OutputFilter(timeline_controller_assertThisInitialized(_this), 'textTrack1');
         var channel2 = new OutputFilter(timeline_controller_assertThisInitialized(_this), 'textTrack2');
-        _this.cea608Parser = new cea_608_parser(0, channel1, channel2);
+        var channel3 = new OutputFilter(timeline_controller_assertThisInitialized(_this), 'textTrack3');
+        var channel4 = new OutputFilter(timeline_controller_assertThisInitialized(_this), 'textTrack4');
+        _this.cea608Parser1 = new cea_608_parser(1, channel1, channel2);
+        _this.cea608Parser2 = new cea_608_parser(3, channel3, channel4);
       }
 
       return _this;
@@ -30987,13 +31150,12 @@
 
     var _proto = TimelineController.prototype;
 
-    _proto.addCues = function addCues(trackName, startTime, endTime, screen) {
+    _proto.addCues = function addCues(trackName, startTime, endTime, screen, cueRanges) {
       // skip cues which overlap more than 50% with previously parsed time ranges
-      var ranges = this.cueRanges;
       var merged = false;
 
-      for (var i = ranges.length; i--;) {
-        var cueRange = ranges[i];
+      for (var i = cueRanges.length; i--;) {
+        var cueRange = cueRanges[i];
         var overlap = intersection(cueRange[0], cueRange[1], startTime, endTime);
 
         if (overlap >= 0) {
@@ -31008,10 +31170,19 @@
       }
 
       if (!merged) {
-        ranges.push([startTime, endTime]);
+        cueRanges.push([startTime, endTime]);
       }
 
-      this.Cues.newCue(this.captionsTracks[trackName], startTime, endTime, screen);
+      if (this.config.renderTextTracksNatively) {
+        this.Cues.newCue(this.captionsTracks[trackName], startTime, endTime, screen);
+      } else {
+        var cues = this.Cues.newCue(null, startTime, endTime, screen);
+        this.hls.trigger(events["default"].CUES_PARSED, {
+          type: 'captions',
+          cues: cues,
+          track: trackName
+        });
+      }
     } // Triggered when an initial PTS is found; used for synchronisation of WebVTT.
     ;
 
@@ -31054,31 +31225,66 @@
     };
 
     _proto.createCaptionsTrack = function createCaptionsTrack(trackName) {
+      if (this.config.renderTextTracksNatively) {
+        this.createNativeTrack(trackName);
+      } else {
+        this.createNonNativeTrack(trackName);
+      }
+    };
+
+    _proto.createNativeTrack = function createNativeTrack(trackName) {
+      if (this.captionsTracks[trackName]) {
+        return;
+      }
+
       var captionsProperties = this.captionsProperties,
           captionsTracks = this.captionsTracks,
           media = this.media;
       var _captionsProperties$t = captionsProperties[trackName],
           label = _captionsProperties$t.label,
-          languageCode = _captionsProperties$t.languageCode;
+          languageCode = _captionsProperties$t.languageCode; // Enable reuse of existing text track.
 
-      if (!captionsTracks[trackName]) {
-        // Enable reuse of existing text track.
-        var existingTrack = this.getExistingTrack(trackName);
+      var existingTrack = this.getExistingTrack(trackName);
 
-        if (!existingTrack) {
-          var textTrack = this.createTextTrack('captions', label, languageCode);
+      if (!existingTrack) {
+        var textTrack = this.createTextTrack('captions', label, languageCode);
 
-          if (textTrack) {
-            // Set a special property on the track so we know it's managed by Hls.js
-            textTrack[trackName] = true;
-            captionsTracks[trackName] = textTrack;
-          }
-        } else {
-          captionsTracks[trackName] = existingTrack;
-          clearCurrentCues(captionsTracks[trackName]);
-          sendAddTrackEvent(captionsTracks[trackName], media);
+        if (textTrack) {
+          // Set a special property on the track so we know it's managed by Hls.js
+          textTrack[trackName] = true;
+          captionsTracks[trackName] = textTrack;
         }
+      } else {
+        captionsTracks[trackName] = existingTrack;
+        clearCurrentCues(captionsTracks[trackName]);
+        sendAddTrackEvent(captionsTracks[trackName], media);
       }
+    };
+
+    _proto.createNonNativeTrack = function createNonNativeTrack(trackName) {
+      if (this.nonNativeCaptionsTracks[trackName]) {
+        return;
+      } // Create a list of a single track for the provider to consume
+
+
+      var trackProperties = this.captionsProperties[trackName];
+
+      if (!trackProperties) {
+        return;
+      }
+
+      var label = trackProperties.label;
+      var track = {
+        _id: trackName,
+        label: label,
+        kind: 'captions',
+        default: trackProperties.media ? !!trackProperties.media.default : false,
+        closedCaptions: trackProperties.media
+      };
+      this.nonNativeCaptionsTracks[trackName] = track;
+      this.hls.trigger(events["default"].NON_NATIVE_TEXT_TRACKS_FOUND, {
+        tracks: [track]
+      });
     };
 
     _proto.createTextTrack = function createTextTrack(kind, label, lang) {
@@ -31107,24 +31313,20 @@
         clearCurrentCues(captionsTracks[trackName]);
         delete captionsTracks[trackName];
       });
+      this.nonNativeCaptionsTracks = {};
     };
 
     _proto.onManifestLoading = function onManifestLoading() {
       this.lastSn = -1; // Detect discontiguity in fragment parsing
 
       this.prevCC = -1;
-      this.vttCCs = {
-        // Detect discontinuity in subtitle manifests
-        ccOffset: 0,
-        presentationOffset: 0,
-        0: {
-          start: 0,
-          prevCC: -1,
-          new: false
-        }
-      };
+      this.vttCCs = newVTTCCs(); // Detect discontinuity in subtitle manifests
 
       this._cleanTracks();
+
+      this.tracks = [];
+      this.captionsTracks = {};
+      this.nonNativeCaptionsTracks = {};
     };
 
     _proto._cleanTracks = function _cleanTracks() {
@@ -31150,41 +31352,89 @@
       this.textTracks = [];
       this.unparsedVttFrags = this.unparsedVttFrags || [];
       this.initPTS = [];
-      this.cueRanges = [];
+
+      if (this.cea608Parser1 && this.cea608Parser2) {
+        this.cea608Parser1.reset();
+        this.cea608Parser2.reset();
+      }
 
       if (this.config.enableWebVTT) {
+        var tracks = data.subtitles || [];
+        var sameTracks = this.tracks && tracks && this.tracks.length === tracks.length;
         this.tracks = data.subtitles || [];
-        var inUseTracks = this.media ? this.media.textTracks : [];
-        this.tracks.forEach(function (track, index) {
-          var textTrack;
 
-          if (index < inUseTracks.length) {
-            var inUseTrack = null;
+        if (this.config.renderTextTracksNatively) {
+          var inUseTracks = this.media ? this.media.textTracks : [];
+          this.tracks.forEach(function (track, index) {
+            var textTrack;
 
-            for (var i = 0; i < inUseTracks.length; i++) {
-              if (canReuseVttTextTrack(inUseTracks[i], track)) {
-                inUseTrack = inUseTracks[i];
-                break;
+            if (index < inUseTracks.length) {
+              var inUseTrack = null;
+
+              for (var i = 0; i < inUseTracks.length; i++) {
+                if (canReuseVttTextTrack(inUseTracks[i], track)) {
+                  inUseTrack = inUseTracks[i];
+                  break;
+                }
+              } // Reuse tracks with the same label, but do not reuse 608/708 tracks
+
+
+              if (inUseTrack) {
+                textTrack = inUseTrack;
               }
-            } // Reuse tracks with the same label, but do not reuse 608/708 tracks
-
-
-            if (inUseTrack) {
-              textTrack = inUseTrack;
             }
+
+            if (!textTrack) {
+              textTrack = _this3.createTextTrack('subtitles', track.name, track.lang);
+            }
+
+            if (track.default) {
+              textTrack.mode = _this3.hls.subtitleDisplay ? 'showing' : 'hidden';
+            } else {
+              textTrack.mode = 'disabled';
+            }
+
+            _this3.textTracks.push(textTrack);
+          });
+        } else if (!sameTracks && this.tracks && this.tracks.length) {
+          // Create a list of tracks for the provider to consume
+          var tracksList = this.tracks.map(function (track) {
+            return {
+              label: track.name,
+              kind: track.type.toLowerCase(),
+              default: track.default,
+              subtitleTrack: track
+            };
+          });
+          this.hls.trigger(events["default"].NON_NATIVE_TEXT_TRACKS_FOUND, {
+            tracks: tracksList
+          });
+        }
+      }
+
+      if (this.config.enableCEA708Captions && data.captions) {
+        data.captions.forEach(function (captionsTrack) {
+          var instreamIdMatch = /(?:CC|SERVICE)([1-4])/.exec(captionsTrack.instreamId);
+
+          if (!instreamIdMatch) {
+            return;
           }
 
-          if (!textTrack) {
-            textTrack = _this3.createTextTrack('subtitles', track.name, track.lang);
+          var trackName = "textTrack" + instreamIdMatch[1];
+          var trackProperties = _this3.captionsProperties[trackName];
+
+          if (!trackProperties) {
+            return;
           }
 
-          if (track.default) {
-            textTrack.mode = _this3.hls.subtitleDisplay ? 'showing' : 'hidden';
-          } else {
-            textTrack.mode = 'disabled';
+          trackProperties.label = captionsTrack.name;
+
+          if (captionsTrack.lang) {
+            // optional attribute
+            trackProperties.languageCode = captionsTrack.lang;
           }
 
-          _this3.textTracks.push(textTrack);
+          trackProperties.media = captionsTrack;
         });
       }
     };
@@ -31192,7 +31442,8 @@
     _proto.onFragLoaded = function onFragLoaded(data) {
       var frag = data.frag,
           payload = data.payload;
-      var cea608Parser = this.cea608Parser,
+      var cea608Parser1 = this.cea608Parser1,
+          cea608Parser2 = this.cea608Parser2,
           initPTS = this.initPTS,
           lastSn = this.lastSn,
           unparsedVttFrags = this.unparsedVttFrags;
@@ -31201,8 +31452,9 @@
         var sn = frag.sn; // if this frag isn't contiguous, clear the parser so cues with bad start/end times aren't added to the textTrack
 
         if (frag.sn !== lastSn + 1) {
-          if (cea608Parser) {
-            cea608Parser.reset();
+          if (cea608Parser1 && cea608Parser2) {
+            cea608Parser1.reset();
+            cea608Parser2.reset();
           }
         }
 
@@ -31212,7 +31464,7 @@
       else if (frag.type === 'subtitle') {
           if (payload.byteLength) {
             // We need an initial synchronisation PTS. Store fragments as long as none has arrived.
-            if (!Object(number_isFinite["isFiniteNumber"])(initPTS[frag.cc])) {
+            if (!Object(number["isFiniteNumber"])(initPTS[frag.cc])) {
               unparsedVttFrags.push(data);
 
               if (initPTS.length) {
@@ -31242,6 +31494,8 @@
     };
 
     _proto._parseVTTs = function _parseVTTs(frag, payload) {
+      var _this4 = this;
+
       var hls = this.hls,
           prevCC = this.prevCC,
           textTracks = this.textTracks,
@@ -31258,38 +31512,49 @@
 
 
       webvtt_parser.parse(payload, this.initPTS[frag.cc], vttCCs, frag.cc, function (cues) {
-        var currentTrack = textTracks[frag.level]; // WebVTTParser.parse is an async method and if the currently selected text track mode is set to "disabled"
-        // before parsing is done then don't try to access currentTrack.cues.getCueById as cues will be null
-        // and trying to access getCueById method of cues will throw an exception
+        if (_this4.config.renderTextTracksNatively) {
+          var currentTrack = textTracks[frag.level]; // WebVTTParser.parse is an async method and if the currently selected text track mode is set to "disabled"
+          // before parsing is done then don't try to access currentTrack.cues.getCueById as cues will be null
+          // and trying to access getCueById method of cues will throw an exception
+          // Because we check if the mode is diabled, we can force check `cues` below. They can't be null.
 
-        if (currentTrack.mode === 'disabled') {
-          hls.trigger(events["default"].SUBTITLE_FRAG_PROCESSED, {
-            success: false,
-            frag: frag
-          });
-          return;
-        } // Add cues and trigger event with success true.
+          if (currentTrack.mode === 'disabled') {
+            hls.trigger(events["default"].SUBTITLE_FRAG_PROCESSED, {
+              success: false,
+              frag: frag
+            });
+            return;
+          } // Add cues and trigger event with success true.
 
 
-        cues.forEach(function (cue) {
-          // Sometimes there are cue overlaps on segmented vtts so the same
-          // cue can appear more than once in different vtt files.
-          // This avoid showing duplicated cues with same timecode and text.
-          if (!currentTrack.cues.getCueById(cue.id)) {
-            try {
-              currentTrack.addCue(cue);
+          cues.forEach(function (cue) {
+            // Sometimes there are cue overlaps on segmented vtts so the same
+            // cue can appear more than once in different vtt files.
+            // This avoid showing duplicated cues with same timecode and text.
+            if (!currentTrack.cues.getCueById(cue.id)) {
+              try {
+                currentTrack.addCue(cue);
 
-              if (!currentTrack.cues.getCueById(cue.id)) {
-                throw new Error("addCue is failed for: " + cue);
+                if (!currentTrack.cues.getCueById(cue.id)) {
+                  throw new Error("addCue is failed for: " + cue);
+                }
+              } catch (err) {
+                logger["logger"].debug("Failed occurred on adding cues: " + err);
+                var textTrackCue = new window.TextTrackCue(cue.startTime, cue.endTime, cue.text);
+                textTrackCue.id = cue.id;
+                currentTrack.addCue(textTrackCue);
               }
-            } catch (err) {
-              logger["logger"].debug("Failed occurred on adding cues: " + err);
-              var textTrackCue = new window.TextTrackCue(cue.startTime, cue.endTime, cue.text);
-              textTrackCue.id = cue.id;
-              currentTrack.addCue(textTrackCue);
             }
-          }
-        });
+          });
+        } else {
+          var trackId = _this4.tracks[frag.level].default ? 'default' : 'subtitles' + frag.level;
+          hls.trigger(events["default"].CUES_PARSED, {
+            type: 'subtitles',
+            cues: cues,
+            track: trackId
+          });
+        }
+
         hls.trigger(events["default"].SUBTITLE_FRAG_PROCESSED, {
           success: true,
           frag: frag
@@ -31309,7 +31574,7 @@
           payload = data.payload;
 
       if (frag.type === 'subtitle') {
-        if (!Object(number_isFinite["isFiniteNumber"])(this.initPTS[frag.cc])) {
+        if (!Object(number["isFiniteNumber"])(this.initPTS[frag.cc])) {
           this.unparsedVttFrags.push(data);
           return;
         }
@@ -31319,7 +31584,10 @@
     };
 
     _proto.onFragParsingUserdata = function onFragParsingUserdata(data) {
-      if (!this.enabled || !this.cea608Parser) {
+      var cea608Parser1 = this.cea608Parser1,
+          cea608Parser2 = this.cea608Parser2;
+
+      if (!this.enabled || !(cea608Parser1 && cea608Parser2)) {
         return;
       } // If the event contains captions (found in the bytes property), push all bytes into the parser immediately
       // It will create the proper timestamps based on the PTS value
@@ -31330,7 +31598,8 @@
 
         if (ccBytes) {
           var ccdatas = this.extractCea608Data(ccBytes);
-          this.cea608Parser.addData(data.samples[i].pts, ccdatas);
+          cea608Parser1.addData(data.samples[i].pts, ccdatas[0]);
+          cea608Parser2.addData(data.samples[i].pts, ccdatas[1]);
         }
       }
     };
@@ -31338,25 +31607,23 @@
     _proto.extractCea608Data = function extractCea608Data(byteArray) {
       var count = byteArray[0] & 31;
       var position = 2;
-      var tmpByte, ccbyte1, ccbyte2, ccValid, ccType;
-      var actualCCBytes = [];
+      var actualCCBytes = [[], []];
 
       for (var j = 0; j < count; j++) {
-        tmpByte = byteArray[position++];
-        ccbyte1 = 0x7F & byteArray[position++];
-        ccbyte2 = 0x7F & byteArray[position++];
-        ccValid = (4 & tmpByte) !== 0;
-        ccType = 3 & tmpByte;
+        var tmpByte = byteArray[position++];
+        var ccbyte1 = 0x7F & byteArray[position++];
+        var ccbyte2 = 0x7F & byteArray[position++];
+        var ccValid = (4 & tmpByte) !== 0;
+        var ccType = 3 & tmpByte;
 
         if (ccbyte1 === 0 && ccbyte2 === 0) {
           continue;
         }
 
         if (ccValid) {
-          if (ccType === 0) {
-            // || ccType === 1
-            actualCCBytes.push(ccbyte1);
-            actualCCBytes.push(ccbyte2);
+          if (ccType === 0 || ccType === 1) {
+            actualCCBytes[ccType].push(ccbyte1);
+            actualCCBytes[ccType].push(ccbyte2);
           }
         }
       }
@@ -31373,6 +31640,18 @@
 
   function intersection(x1, x2, y1, y2) {
     return Math.min(x2, y2) - Math.max(x1, y1);
+  }
+
+  function newVTTCCs() {
+    return {
+      ccOffset: 0,
+      presentationOffset: 0,
+      0: {
+        start: 0,
+        prevCC: -1,
+        new: false
+      }
+    };
   }
 
   /* harmony default export */ var timeline_controller = (timeline_controller_TimelineController);
@@ -31393,9 +31672,7 @@
 
 
 
-  var subtitle_track_controller_SubtitleTrackController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var subtitle_track_controller_SubtitleTrackController = /*#__PURE__*/function (_EventHandler) {
     subtitle_track_controller_inheritsLoose(SubtitleTrackController, _EventHandler);
 
     function SubtitleTrackController(hls) {
@@ -31436,7 +31713,7 @@
         return;
       }
 
-      if (Object(number_isFinite["isFiniteNumber"])(this.queuedDefaultTrack)) {
+      if (Object(number["isFiniteNumber"])(this.queuedDefaultTrack)) {
         this.subtitleTrack = this.queuedDefaultTrack;
         this.queuedDefaultTrack = null;
       }
@@ -31464,7 +31741,7 @@
         this.media.textTracks.removeEventListener('change', this.trackChangeListener);
       }
 
-      if (Object(number_isFinite["isFiniteNumber"])(this.subtitleTrack)) {
+      if (Object(number["isFiniteNumber"])(this.subtitleTrack)) {
         this.queuedDefaultTrack = this.subtitleTrack;
       }
 
@@ -31618,7 +31895,7 @@
       var hls = this.hls,
           tracks = this.tracks;
 
-      if (!Object(number_isFinite["isFiniteNumber"])(newId) || newId < -1 || newId >= tracks.length) {
+      if (!Object(number["isFiniteNumber"])(newId) || newId < -1 || newId >= tracks.length) {
         return;
       }
 
@@ -31633,7 +31910,7 @@
 
     _proto._onTextTracksChanged = function _onTextTracksChanged() {
       // Media is undefined when switching streams via loadSource()
-      if (!this.media) {
+      if (!this.media || !this.hls.config.renderTextTracksNatively) {
         return;
       }
 
@@ -31718,9 +31995,7 @@
       subtitle_stream_controller_performance = subtitle_stream_controller_window.performance;
   var subtitle_stream_controller_TICK_INTERVAL = 500; // how often to tick in ms
 
-  var subtitle_stream_controller_SubtitleStreamController =
-  /*#__PURE__*/
-  function (_BaseStreamController) {
+  var subtitle_stream_controller_SubtitleStreamController = /*#__PURE__*/function (_BaseStreamController) {
     subtitle_stream_controller_inheritsLoose(SubtitleStreamController, _BaseStreamController);
 
     function SubtitleStreamController(hls, fragmentTracker) {
@@ -31741,6 +32016,18 @@
     }
 
     var _proto = SubtitleStreamController.prototype;
+
+    _proto.startLoad = function startLoad() {
+      this.stopLoad();
+      this.state = State.IDLE; // Check if we already have a track with necessary details to load fragments
+
+      var currentTrack = this.tracks[this.currentTrackId];
+
+      if (currentTrack && currentTrack.details) {
+        this.setInterval(subtitle_stream_controller_TICK_INTERVAL);
+        this.tick();
+      }
+    };
 
     _proto.onSubtitleFragProcessed = function onSubtitleFragProcessed(data) {
       var frag = data.frag,
@@ -31813,6 +32100,10 @@
 
       if (!frag || frag.type !== 'subtitle') {
         return;
+      }
+
+      if (this.fragCurrent && this.fragCurrent.loader) {
+        this.fragCurrent.loader.abort();
       }
 
       this.state = State.IDLE;
@@ -31973,6 +32264,7 @@
 
     _proto.stopLoad = function stopLoad() {
       this.lastAVStart = 0;
+      this.fragPrevious = null;
 
       _BaseStreamController.prototype.stopLoad.call(this);
     };
@@ -31982,7 +32274,26 @@
     };
 
     _proto.onMediaSeeking = function onMediaSeeking() {
-      this.fragPrevious = null;
+      if (this.fragCurrent) {
+        var currentTime = this.media ? this.media.currentTime : 0;
+        var tolerance = this.config.maxFragLookUpTolerance;
+        var fragStartOffset = this.fragCurrent.start - tolerance;
+        var fragEndOffset = this.fragCurrent.start + this.fragCurrent.duration + tolerance; // check if position will be out of currently loaded frag range after seeking : if out, cancel frag load, if in, don't do anything
+
+        if (currentTime < fragStartOffset || currentTime > fragEndOffset) {
+          if (this.fragCurrent.loader) {
+            this.fragCurrent.loader.abort();
+          }
+
+          this.fragmentTracker.removeFragment(this.fragCurrent);
+          this.fragCurrent = null;
+          this.fragPrevious = null; // switch to IDLE state to load new fragment
+
+          this.state = State.IDLE; // speed up things
+
+          this.tick();
+        }
+      }
     };
 
     return SubtitleStreamController;
@@ -32033,7 +32344,7 @@
    * @returns {Array<MediaSystemConfiguration>} An array of supported configurations
    */
 
-  var createWidevineMediaKeySystemConfigurations = function createWidevineMediaKeySystemConfigurations(audioCodecs, videoCodecs) {
+  var createWidevineMediaKeySystemConfigurations = function createWidevineMediaKeySystemConfigurations(audioCodecs, videoCodecs, drmSystemOptions) {
     /* jshint ignore:line */
     var baseConfig = {
       // initDataTypes: ['keyids', 'mp4'],
@@ -32041,12 +32352,21 @@
       // persistentState: "not-allowed", // or "required" ?
       // distinctiveIdentifier: "not-allowed", // or "required" ?
       // sessionTypes: ['temporary'],
+      audioCapabilities: [],
+      // { contentType: 'audio/mp4; codecs="mp4a.40.2"' }
       videoCapabilities: [] // { contentType: 'video/mp4; codecs="avc1.42E01E"' }
 
     };
+    audioCodecs.forEach(function (codec) {
+      baseConfig.audioCapabilities.push({
+        contentType: "audio/mp4; codecs=\"" + codec + "\"",
+        robustness: drmSystemOptions.audioRobustness || ''
+      });
+    });
     videoCodecs.forEach(function (codec) {
       baseConfig.videoCapabilities.push({
-        contentType: "video/mp4; codecs=\"" + codec + "\""
+        contentType: "video/mp4; codecs=\"" + codec + "\"",
+        robustness: drmSystemOptions.videoRobustness || ''
       });
     });
     return [baseConfig];
@@ -32065,10 +32385,10 @@
    */
 
 
-  var eme_controller_getSupportedMediaKeySystemConfigurations = function getSupportedMediaKeySystemConfigurations(keySystem, audioCodecs, videoCodecs) {
+  var eme_controller_getSupportedMediaKeySystemConfigurations = function getSupportedMediaKeySystemConfigurations(keySystem, audioCodecs, videoCodecs, drmSystemOptions) {
     switch (keySystem) {
       case KeySystems.WIDEVINE:
-        return createWidevineMediaKeySystemConfigurations(audioCodecs, videoCodecs);
+        return createWidevineMediaKeySystemConfigurations(audioCodecs, videoCodecs, drmSystemOptions);
 
       default:
         throw new Error("Unknown key-system: " + keySystem);
@@ -32082,9 +32402,7 @@
    * @class
    * @constructor
    */
-  var eme_controller_EMEController =
-  /*#__PURE__*/
-  function (_EventHandler) {
+  var eme_controller_EMEController = /*#__PURE__*/function (_EventHandler) {
     eme_controller_inheritsLoose(EMEController, _EventHandler);
 
     /**
@@ -32099,18 +32417,41 @@
       _this._licenseXhrSetup = void 0;
       _this._emeEnabled = void 0;
       _this._requestMediaKeySystemAccess = void 0;
+      _this._drmSystemOptions = void 0;
       _this._config = void 0;
       _this._mediaKeysList = [];
       _this._media = null;
       _this._hasSetMediaKeys = false;
       _this._requestLicenseFailureCount = 0;
+      _this.mediaKeysPromise = null;
 
       _this._onMediaEncrypted = function (e) {
         logger["logger"].log("Media is encrypted using \"" + e.initDataType + "\" init data type");
 
-        _this._attemptSetMediaKeys();
+        if (!_this.mediaKeysPromise) {
+          logger["logger"].error('Fatal: Media is encrypted but no CDM access or no keys have been requested');
 
-        _this._generateRequestWithPreferredKeySession(e.initDataType, e.initData);
+          _this.hls.trigger(events["default"].ERROR, {
+            type: errors["ErrorTypes"].KEY_SYSTEM_ERROR,
+            details: errors["ErrorDetails"].KEY_SYSTEM_NO_KEYS,
+            fatal: true
+          });
+
+          return;
+        }
+
+        var finallySetKeyAndStartSession = function finallySetKeyAndStartSession(mediaKeys) {
+          if (!_this._media) {
+            return;
+          }
+
+          _this._attemptSetMediaKeys(mediaKeys);
+
+          _this._generateRequestWithPreferredKeySession(e.initDataType, e.initData);
+        }; // Could use `Promise.finally` but some Promise polyfills are missing it
+
+
+        _this.mediaKeysPromise.then(finallySetKeyAndStartSession).catch(finallySetKeyAndStartSession);
       };
 
       _this._config = hls.config;
@@ -32118,6 +32459,7 @@
       _this._licenseXhrSetup = _this._config.licenseXhrSetup;
       _this._emeEnabled = _this._config.emeEnabled;
       _this._requestMediaKeySystemAccess = _this._config.requestMediaKeySystemAccessFunc;
+      _this._drmSystemOptions = hls.config.drmSystemOptions;
       return _this;
     }
     /**
@@ -32154,14 +32496,15 @@
     _proto._attemptKeySystemAccess = function _attemptKeySystemAccess(keySystem, audioCodecs, videoCodecs) {
       var _this2 = this;
 
-      // TODO: add other DRM "options"
       // This can throw, but is caught in event handler callpath
-      var mediaKeySystemConfigs = eme_controller_getSupportedMediaKeySystemConfigurations(keySystem, audioCodecs, videoCodecs);
+      var mediaKeySystemConfigs = eme_controller_getSupportedMediaKeySystemConfigurations(keySystem, audioCodecs, videoCodecs, this._drmSystemOptions);
       logger["logger"].log('Requesting encrypted media key-system access'); // expecting interface like window.navigator.requestMediaKeySystemAccess
 
-      this.requestMediaKeySystemAccess(keySystem, mediaKeySystemConfigs).then(function (mediaKeySystemAccess) {
-        _this2._onMediaKeySystemAccessObtained(keySystem, mediaKeySystemAccess);
-      }).catch(function (err) {
+      var keySystemAccessPromise = this.requestMediaKeySystemAccess(keySystem, mediaKeySystemConfigs);
+      this.mediaKeysPromise = keySystemAccessPromise.then(function (mediaKeySystemAccess) {
+        return _this2._onMediaKeySystemAccessObtained(keySystem, mediaKeySystemAccess);
+      });
+      keySystemAccessPromise.catch(function (err) {
         logger["logger"].error("Failed to obtain key-system \"" + keySystem + "\" access:", err);
       });
     };
@@ -32184,14 +32527,20 @@
 
       this._mediaKeysList.push(mediaKeysListItem);
 
-      mediaKeySystemAccess.createMediaKeys().then(function (mediaKeys) {
+      var mediaKeysPromise = Promise.resolve().then(function () {
+        return mediaKeySystemAccess.createMediaKeys();
+      }).then(function (mediaKeys) {
         mediaKeysListItem.mediaKeys = mediaKeys;
         logger["logger"].log("Media-keys created for key-system \"" + keySystem + "\"");
 
         _this3._onMediaKeysCreated();
-      }).catch(function (err) {
+
+        return mediaKeys;
+      });
+      mediaKeysPromise.catch(function (err) {
         logger["logger"].error('Failed to create media-keys:', err);
       });
+      return mediaKeysPromise;
     }
     /**
      * Handles key-creation (represents access to CDM). We are going to create key-sessions upon this
@@ -32245,15 +32594,14 @@
     }
     /**
      * @private
-     * @param {string} initDataType
-     * @param {ArrayBuffer|null} initData
+     * @param e {MediaEncryptedEvent}
      */
     ;
 
     /**
      * @private
      */
-    _proto._attemptSetMediaKeys = function _attemptSetMediaKeys() {
+    _proto._attemptSetMediaKeys = function _attemptSetMediaKeys(mediaKeys) {
       if (!this._media) {
         throw new Error('Attempted to set mediaKeys without first attaching a media element');
       }
@@ -32518,11 +32866,27 @@
     };
 
     _proto.onMediaDetached = function onMediaDetached() {
-      if (this._media) {
-        this._media.removeEventListener('encrypted', this._onMediaEncrypted);
+      var media = this._media;
+      var mediaKeysList = this._mediaKeysList;
 
-        this._media = null; // release reference
+      if (!media) {
+        return;
       }
+
+      media.removeEventListener('encrypted', this._onMediaEncrypted);
+      this._media = null;
+      this._mediaKeysList = []; // Close all sessions and remove media keys from the video element.
+
+      Promise.all(mediaKeysList.map(function (mediaKeysListItem) {
+        if (mediaKeysListItem.mediaKeysSession) {
+          return mediaKeysListItem.mediaKeysSession.close().catch(function () {// Ignore errors when closing the sessions. Closing a session that
+            // generated no key requests will throw an error.
+          });
+        }
+      })).then(function () {
+        return media.setMediaKeys(null);
+      }).catch(function () {// Ignore any failures while removing media keys from the video element.
+      });
     } // TODO: Use manifest types here when they are defined
     ;
 
@@ -32557,7 +32921,9 @@
 
   /* harmony default export */ var eme_controller = (eme_controller_EMEController);
   // CONCATENATED MODULE: ./src/config.ts
-  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -32580,7 +32946,8 @@
 
   // If possible, keep hlsDefaultConfig shallow
   // It is cloned whenever a new Hls instance is created, by keeping the config
-  var hlsDefaultConfig = _objectSpread({
+  // shallow the properties are cloned, and we don't end up manipulating the default
+  var hlsDefaultConfig = _objectSpread(_objectSpread({
     autoStartLoad: true,
     // used by stream-controller
     startPosition: -1,
@@ -32710,18 +33077,21 @@
     // used by eme-controller
     widevineLicenseUrl: void 0,
     // used by eme-controller
-    requestMediaKeySystemAccessFunc: requestMediaKeySystemAccess
-  }, timelineConfig(), {
-    subtitleStreamController:   subtitle_stream_controller_SubtitleStreamController ,
-    subtitleTrackController:   subtitle_track_controller ,
-    timelineController:   timeline_controller ,
-    audioStreamController:   audio_stream_controller ,
-    audioTrackController:   audio_track_controller ,
-    emeController:   eme_controller 
+    drmSystemOptions: {},
+    // used by eme-controller
+    requestMediaKeySystemAccessFunc: requestMediaKeySystemAccess,
+    // used by eme-controller
+    testBandwidth: true
+  }, timelineConfig()), {}, {
+    subtitleStreamController:  subtitle_stream_controller_SubtitleStreamController ,
+    subtitleTrackController:  subtitle_track_controller ,
+    timelineController:  timeline_controller ,
+    audioStreamController:  audio_stream_controller ,
+    audioTrackController:  audio_track_controller ,
+    emeController:  eme_controller 
   });
 
   function timelineConfig() {
-
     return {
       cueHandler: cues_namespaceObject,
       // used by timeline-controller
@@ -32735,13 +33105,23 @@
       // used by timeline-controller
       captionsTextTrack2Label: 'Spanish',
       // used by timeline-controller
-      captionsTextTrack2LanguageCode: 'es' // used by timeline-controller
-
+      captionsTextTrack2LanguageCode: 'es',
+      // used by timeline-controller
+      captionsTextTrack3Label: 'Unknown CC',
+      // used by timeline-controller
+      captionsTextTrack3LanguageCode: '',
+      // used by timeline-controller
+      captionsTextTrack4Label: 'Unknown CC',
+      // used by timeline-controller
+      captionsTextTrack4LanguageCode: '',
+      // used by timeline-controller
+      renderTextTracksNatively: true
     };
   }
   // CONCATENATED MODULE: ./src/hls.ts
-  /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return hls_Hls; });
-  function hls_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { hls_defineProperty(target, key, source[key]); }); } return target; }
+  function hls_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+  function hls_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { hls_ownKeys(Object(source), true).forEach(function (key) { hls_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { hls_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
   function hls_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -32773,9 +33153,7 @@
    * @constructor
    */
 
-  var hls_Hls =
-  /*#__PURE__*/
-  function (_Observer) {
+  var hls_Hls = /*#__PURE__*/function (_Observer) {
     hls_inheritsLoose(Hls, _Observer);
 
     /**
@@ -32796,7 +33174,7 @@
        * @type {string}
        */
       get: function get() {
-        return "0.13.2";
+        return "0.14.17";
       }
     }, {
       key: "Events",
@@ -32878,7 +33256,7 @@
       } // Shallow clone
 
 
-      _this.config = hls_objectSpread({}, defaultConfig, userConfig);
+      _this.config = hls_objectSpread(hls_objectSpread({}, defaultConfig), userConfig);
 
       var _assertThisInitialize = hls_assertThisInitialized(_this),
           config = _assertThisInitialize.config;
@@ -33117,6 +33495,23 @@
       }
     }
     /**
+     * Remove a loaded level from the list of levels, or a level url in from a list of redundant level urls.
+     * This can be used to remove a rendition or playlist url that errors frequently from the list of levels that a user
+     * or hls.js can choose from.
+     *
+     * @param levelIndex {number} The quality level index to of the level to remove
+     * @param urlId {number} The quality level url index in the case that fallback levels are available. Defaults to 0.
+     */
+    ;
+
+    _proto.removeLevel = function removeLevel(levelIndex, urlId) {
+      if (urlId === void 0) {
+        urlId = 0;
+      }
+
+      this.levelController.removeLevel(levelIndex, urlId);
+    }
+    /**
      * @type {QualityLevel[]}
      */
     // todo(typescript-levelController)
@@ -33141,7 +33536,7 @@
        * Set quality level index immediately .
        * This will flush the current buffer to replace the quality asap.
        * That means playback will interrupt at least shortly to re-buffer and re-sync eventually.
-       * @type {number} -1 for automatic level selection
+       * @param newLevel {number} -1 for automatic level selection
        */
       ,
       set: function set(newLevel) {
@@ -33509,17 +33904,19 @@
 
   /***/ }),
 
-  /***/ "./src/polyfills/number-isFinite.js":
-  /*!******************************************!*\
-    !*** ./src/polyfills/number-isFinite.js ***!
-    \******************************************/
-  /*! exports provided: isFiniteNumber */
+  /***/ "./src/polyfills/number.js":
+  /*!*********************************!*\
+    !*** ./src/polyfills/number.js ***!
+    \*********************************/
+  /*! exports provided: isFiniteNumber, MAX_SAFE_INTEGER */
   /***/ (function(module, __webpack_exports__, __webpack_require__) {
   __webpack_require__.r(__webpack_exports__);
   /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFiniteNumber", function() { return isFiniteNumber; });
+  /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_SAFE_INTEGER", function() { return MAX_SAFE_INTEGER; });
   var isFiniteNumber = Number.isFinite || function (value) {
     return typeof value === 'number' && isFinite(value);
   };
+  var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
 
   /***/ }),
 
@@ -33634,10 +34031,10 @@
 
   /******/ })["default"];
   });
+  //# sourceMappingURL=hls.js.map
+  }(hls));
 
-  });
-
-  var HLSJS = /*@__PURE__*/unwrapExports(hls);
+  var HLSJS = /*@__PURE__*/getDefaultExportFromCjs(hls.exports);
 
   var now = Utils.now,
       assign = Utils.assign,
@@ -33651,6 +34048,62 @@
 
     var _super = _createSuper(HlsjsPlayback);
 
+    function HlsjsPlayback() {
+      var _this;
+
+      _classCallCheck(this, HlsjsPlayback);
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      _this = _super.call.apply(_super, [this].concat(args)); // backwards compatibility (TODO: remove on 0.3.0)
+
+      _this.options.playback = _objectSpread2(_objectSpread2({}, _this.options), _this.options.playback);
+      _this.options.hlsPlayback = _objectSpread2(_objectSpread2({}, _this.defaultOptions), _this.options.hlsPlayback);
+      _this._minDvrSize = typeof _this.options.hlsMinimumDvrSize === 'undefined' ? 60 : _this.options.hlsMinimumDvrSize; // The size of the start time extrapolation window measured as a multiple of segments.
+      // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
+      // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
+      // added/removed every 5.
+
+      _this._extrapolatedWindowNumSegments = !_this.options.playback || typeof _this.options.playback.extrapolatedWindowNumSegments === 'undefined' ? 2 : _this.options.playback.extrapolatedWindowNumSegments;
+      _this._playbackType = Playback.VOD;
+      _this._lastTimeUpdate = {
+        current: 0,
+        total: 0
+      };
+      _this._lastDuration = null; // for hls streams which have dvr with a sliding window,
+      // the content at the start of the playlist is removed as new
+      // content is appended at the end.
+      // this means the actual playable start time will increase as the
+      // start content is deleted
+      // For streams with dvr where the entire recording is kept from the
+      // beginning this should stay as 0
+
+      _this._playableRegionStartTime = 0; // {local, remote} remote is the time in the video element that should represent 0
+      //                 local is the system time when the 'remote' measurment took place
+
+      _this._localStartTimeCorrelation = null; // {local, remote} remote is the time in the video element that should represents the end
+      //                 local is the system time when the 'remote' measurment took place
+
+      _this._localEndTimeCorrelation = null; // if content is removed from the beginning then this empty area should
+      // be ignored. "playableRegionDuration" excludes the empty area
+
+      _this._playableRegionDuration = 0; // #EXT-X-PROGRAM-DATE-TIME
+
+      _this._programDateTime = 0; // true when the actual duration is longer than hlsjs's live sync point
+      // when this is false playableRegionDuration will be the actual duration
+      // when this is true playableRegionDuration will exclude the time after the sync point
+
+      _this._durationExcludesAfterLiveSyncPoint = false; // #EXT-X-TARGETDURATION
+
+      _this._segmentTargetDuration = null; // #EXT-X-PLAYLIST-TYPE
+
+      _this._playlistType = null;
+      _this._recoverAttemptsRemaining = _this.options.hlsRecoverAttempts || 16;
+      return _this;
+    }
+
     _createClass(HlsjsPlayback, [{
       key: "name",
       get: function get() {
@@ -33660,7 +34113,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.11"
+          min: "0.4.18"
         };
       }
     }, {
@@ -33751,80 +34204,35 @@
       get: function get() {
         return this._hls && this._hls.bandwidthEstimate;
       }
-    }], [{
-      key: "HLSJS",
+    }, {
+      key: "defaultOptions",
       get: function get() {
-        return HLSJS;
+        return {
+          preload: true
+        };
       }
-    }]);
-
-    function HlsjsPlayback() {
-      var _this;
-
-      _classCallCheck(this, HlsjsPlayback);
-
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+    }, {
+      key: "customListeners",
+      get: function get() {
+        return this.options.hlsPlayback && this.options.hlsPlayback.customListeners || [];
       }
-
-      _this = _super.call.apply(_super, [this].concat(args)); // backwards compatibility (TODO: remove on 0.3.0)
-
-      _this.options.playback = _objectSpread2(_objectSpread2({}, _this.options), _this.options.playback);
-      _this._minDvrSize = typeof _this.options.hlsMinimumDvrSize === 'undefined' ? 60 : _this.options.hlsMinimumDvrSize; // The size of the start time extrapolation window measured as a multiple of segments.
-      // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
-      // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
-      // added/removed every 5.
-
-      _this._extrapolatedWindowNumSegments = !_this.options.playback || typeof _this.options.playback.extrapolatedWindowNumSegments === 'undefined' ? 2 : _this.options.playback.extrapolatedWindowNumSegments;
-      _this._playbackType = Playback.VOD;
-      _this._lastTimeUpdate = {
-        current: 0,
-        total: 0
-      };
-      _this._lastDuration = null; // for hls streams which have dvr with a sliding window,
-      // the content at the start of the playlist is removed as new
-      // content is appended at the end.
-      // this means the actual playable start time will increase as the
-      // start content is deleted
-      // For streams with dvr where the entire recording is kept from the
-      // beginning this should stay as 0
-
-      _this._playableRegionStartTime = 0; // {local, remote} remote is the time in the video element that should represent 0
-      //                 local is the system time when the 'remote' measurment took place
-
-      _this._localStartTimeCorrelation = null; // {local, remote} remote is the time in the video element that should represents the end
-      //                 local is the system time when the 'remote' measurment took place
-
-      _this._localEndTimeCorrelation = null; // if content is removed from the beginning then this empty area should
-      // be ignored. "playableRegionDuration" excludes the empty area
-
-      _this._playableRegionDuration = 0; // #EXT-X-PROGRAM-DATE-TIME
-
-      _this._programDateTime = 0; // true when the actual duration is longer than hlsjs's live sync point
-      // when this is false playableRegionDuration will be the actual duration
-      // when this is true playableRegionDuration will exclude the time after the sync point
-
-      _this._durationExcludesAfterLiveSyncPoint = false; // #EXT-X-TARGETDURATION
-
-      _this._segmentTargetDuration = null; // #EXT-X-PLAYLIST-TYPE
-
-      _this._playlistType = null;
-      _this._recoverAttemptsRemaining = _this.options.hlsRecoverAttempts || 16;
-      return _this;
-    }
-
-    _createClass(HlsjsPlayback, [{
+    }, {
       key: "_setup",
       value: function _setup() {
         var _this2 = this;
 
+        this._manifestParsed = false;
         this._ccIsSetup = false;
         this._ccTracksUpdated = false;
         this._hls && this._hls.destroy();
         this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig));
 
         this._hls.once(HLSJS.Events.MEDIA_ATTACHED, function () {
-          return _this2._hls.loadSource(_this2.options.src);
+          _this2.options.hlsPlayback.preload && _this2._hls.loadSource(_this2.options.src);
+        });
+
+        this._hls.on(HLSJS.Events.MANIFEST_PARSED, function () {
+          return _this2._manifestParsed = true;
         });
 
         this._hls.on(HLSJS.Events.LEVEL_LOADED, function (evt, data) {
@@ -33863,7 +34271,30 @@
           return _this2._ccTracksUpdated = true;
         });
 
+        this.bindCustomListeners();
+
         this._hls.attachMedia(this.el);
+      }
+    }, {
+      key: "bindCustomListeners",
+      value: function bindCustomListeners() {
+        var _this3 = this;
+
+        this.customListeners.forEach(function (item) {
+          var requestedEventName = item.eventName;
+          var typeOfListener = item.once ? 'once' : 'on';
+          requestedEventName && _this3._hls["".concat(typeOfListener)](requestedEventName, item.callback);
+        });
+      }
+    }, {
+      key: "unbindCustomListeners",
+      value: function unbindCustomListeners() {
+        var _this4 = this;
+
+        this.customListeners.forEach(function (item) {
+          var requestedEventName = item.eventName;
+          requestedEventName && _this4._hls.off(requestedEventName, item.callback);
+        });
       }
     }, {
       key: "_onFragmentParsingMetadata",
@@ -33883,6 +34314,8 @@
     }, {
       key: "_ready",
       value: function _ready() {
+        if (this._isReadyState) return;
+        !this._hls && this._setup();
         this._isReadyState = true;
         this.trigger(Events.PLAYBACK_READY, this.name);
       }
@@ -33919,13 +34352,13 @@
     }, {
       key: "_startTimeUpdateTimer",
       value: function _startTimeUpdateTimer() {
-        var _this3 = this;
+        var _this5 = this;
 
         if (this._timeUpdateTimer) return;
         this._timeUpdateTimer = setInterval(function () {
-          _this3._onDurationChange();
+          _this5._onDurationChange();
 
-          _this3._onTimeUpdate();
+          _this5._onTimeUpdate();
         }, 100);
       }
     }, {
@@ -34160,7 +34593,8 @@
     }, {
       key: "play",
       value: function play() {
-        if (!this._hls) this._setup();
+        !this._hls && this._setup();
+        !this._manifestParsed && !this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src);
 
         _get(_getPrototypeOf(HlsjsPlayback.prototype), "play", this).call(this);
 
@@ -34393,6 +34827,15 @@
         }
       }
     }, {
+      key: "dvrEnabled",
+      get: function get() {
+        // enabled when:
+        // - the duration does not include content after hlsjs's live sync point
+        // - the playable region duration is longer than the configured duration to enable dvr after
+        // - the playback type is LIVE.
+        return this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE;
+      }
+    }, {
       key: "getPlaybackType",
       value: function getPlaybackType() {
         return this._playbackType;
@@ -34402,14 +34845,10 @@
       value: function isSeekEnabled() {
         return this._playbackType === Playback.VOD || this.dvrEnabled;
       }
-    }, {
-      key: "dvrEnabled",
+    }], [{
+      key: "HLSJS",
       get: function get() {
-        // enabled when:
-        // - the duration does not include content after hlsjs's live sync point
-        // - the playable region duration is longer than the configured duration to enable dvr after
-        // - the playback type is LIVE.
-        return this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE;
+        return HLSJS;
       }
     }]);
 
