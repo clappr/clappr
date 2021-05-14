@@ -193,14 +193,14 @@ export default class HlsjsPlayback extends HTML5Video {
     this.customListeners.forEach(item => {
       const requestedEventName = item.eventName
       const typeOfListener = item.once ? 'once': 'on'
-      HLSJS.Events[`${requestedEventName}`] && this._hls[`${typeOfListener}`](HLSJS.Events[`${requestedEventName}`], item.callback)
+      requestedEventName && this._hls[`${typeOfListener}`](requestedEventName, item.callback)
     })
   }
 
   unbindCustomListeners() {
     this.customListeners.forEach(item => {
       const requestedEventName = item.eventName
-      HLSJS.Events[`${requestedEventName}`] && this._hls.off(HLSJS.Events[`${requestedEventName}`], item.callback)
+      requestedEventName && this._hls.off(requestedEventName, item.callback)
     })
   }
 

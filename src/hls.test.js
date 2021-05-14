@@ -22,7 +22,7 @@ describe('HlsjsPlayback', () => {
     const playback = new HlsjsPlayback({
       src: 'http://clappr.io/foo.m3u8',
       hlsPlayback: {
-        customListeners: [{ eventName: 'MEDIA_ATTACHING', callback: cb }]
+        customListeners: [{ eventName: 'hlsMediaAttaching', callback: cb }]
       }
     })
     expect(playback.customListeners).toEqual(playback.options.hlsPlayback.customListeners)
@@ -268,7 +268,7 @@ describe('HlsjsPlayback', () => {
       const playback = new HlsjsPlayback({
         src: 'http://clappr.io/foo.m3u8',
         hlsPlayback: {
-          customListeners: [{ eventName: 'MEDIA_ATTACHING', callback: cb }]
+          customListeners: [{ eventName: HLSJS.Events.MEDIA_ATTACHING, callback: cb }]
         }
       })
       playback._setup()
@@ -305,7 +305,7 @@ describe('HlsjsPlayback', () => {
       const playback = new HlsjsPlayback({
         src: 'http://clappr.io/foo.m3u8',
         hlsPlayback: {
-          customListeners: [{ eventName: 'MEDIA_ATTACHING', callback: cb, once: true }]
+          customListeners: [{ eventName: HLSJS.Events.MEDIA_ATTACHING, callback: cb, once: true }]
         }
       })
       playback._setup()
@@ -324,7 +324,7 @@ describe('HlsjsPlayback', () => {
       const playback = new HlsjsPlayback({
         src: 'http://clappr.io/foo.m3u8',
         hlsPlayback: {
-          customListeners: [{ eventName: 'FRAG_LOADED', callback: cb }]
+          customListeners: [{ eventName: 'hlsFragLoaded', callback: cb }]
         }
       })
       playback._setup()
