@@ -39,6 +39,7 @@ const baseConfig = {
     replace({
       VERSION: JSON.stringify(version),
       CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
+      preventAssignment: false,
     }),
     commonjs(),
     nodeResolve(),
