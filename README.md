@@ -347,6 +347,20 @@ var player = new Clappr.Player({
 player.attachTo(playerElement);
 ```
 
+### Why autoplay is not working?
+
+Clappr has no control over `autoplay` Browser Policy.
+
+Therefore, we're not able to execute play and unmute actions sequentially in every situation. There are a series of scenarios where the Browser blocks these actions based on it’s own policy.
+
+Each browser has their own different restrictions, and the usual behavior is to activate the sound only after an user interaction with the player.
+
+For more infos about auto play video policy, you can read these docs:
+
+- [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes)
+- [WebKit Autoplay Policy](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/)
+
+
 :rocket: Companies using Clappr
 ---
 https://github.com/clappr/clappr/issues/522
