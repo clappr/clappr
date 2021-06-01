@@ -34,6 +34,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 * [Built-in Plugins](https://github.com/clappr/clappr#electric_plug-built-in-plugins)
 * [Third party plugins/integrations](https://github.com/clappr/clappr#handshake-third-party-pluginsintegrations)
 * [Supported Formats](https://github.com/clappr/clappr#film_strip-supported-formats)
+* [About Autoplay](https://github.com/clappr/clappr#about-autoplay)
 * [FAQ & Troubleshooting](https://github.com/clappr/clappr#interrobang-faq--troubleshooting)
 * [Companies using Clappr](https://github.com/clappr/clappr#rocket-companies-using-clappr)
 * [Contributors](https://github.com/clappr/clappr#raised_hands-contributors)
@@ -134,6 +135,19 @@ WiiU Browser   | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✘ | ?
 
 ![rtmp](http://flv.io/external3.png) means that the support is made by an external plugin.
+
+:play_or_pause_button: About Autoplay
+---
+**Clappr has no control over `autoplay` Browser Policy.**
+
+Therefore, we're not able to execute play and unmute actions sequentially in every situation. There are a series of scenarios where the Browser blocks these actions based on it’s own policy.
+
+Each browser has their own different restrictions, and the usual behavior is to activate the sound only after an user interaction with the player.
+
+For more infos about auto play video policy, you can read these docs:
+
+- [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes)
+- [WebKit Autoplay Policy](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/)
 
 :interrobang: FAQ & Troubleshooting
 ---
@@ -346,20 +360,6 @@ var player = new Clappr.Player({
 
 player.attachTo(playerElement);
 ```
-
-### Why autoplay is not working?
-
-Clappr has no control over `autoplay` Browser Policy.
-
-Therefore, we're not able to execute play and unmute actions sequentially in every situation. There are a series of scenarios where the Browser blocks these actions based on it’s own policy.
-
-Each browser has their own different restrictions, and the usual behavior is to activate the sound only after an user interaction with the player.
-
-For more infos about auto play video policy, you can read these docs:
-
-- [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes)
-- [WebKit Autoplay Policy](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/)
-
 
 :rocket: Companies using Clappr
 ---
