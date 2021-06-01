@@ -34,7 +34,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 * [Built-in Plugins](https://github.com/clappr/clappr#electric_plug-built-in-plugins)
 * [Third party plugins/integrations](https://github.com/clappr/clappr#handshake-third-party-pluginsintegrations)
 * [Supported Formats](https://github.com/clappr/clappr#film_strip-supported-formats)
-* [About Autoplay](https://github.com/clappr/clappr#about-autoplay)
+* [About Autoplay](https://github.com/clappr/clappr#play_or_pause_button-about-autoplay)
 * [FAQ & Troubleshooting](https://github.com/clappr/clappr#interrobang-faq--troubleshooting)
 * [Companies using Clappr](https://github.com/clappr/clappr#rocket-companies-using-clappr)
 * [Contributors](https://github.com/clappr/clappr#raised_hands-contributors)
