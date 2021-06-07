@@ -54,6 +54,15 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.el.tagName).toEqual('VIDEO')
   })
 
+  describe('constructor', () => {
+    test('calls _setupSource with options.src', () => {
+      jest.spyOn(HTML5TVsPlayback.prototype, '_setupSource')
+      setupTest({ src: URL_VIDEO_MP4_EXAMPLE })
+
+      expect(HTML5TVsPlayback.prototype._setupSource).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
+    })
+  })
+
   describe('_setupSource method', () => {
     test('avoids unnecessary video.src updates', () => {
       this.playback.el.src = URL_VIDEO_MP4_EXAMPLE
@@ -76,11 +85,11 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('play method', () => {
-    test('calls _setupSource method', () => {
+    test('calls _setupSource method with video.src internal reference', () => {
       jest.spyOn(this.playback, '_setupSource')
       this.playback.play()
 
-      expect(this.playback._setupSource).toHaveBeenCalledTimes(1)
+      expect(this.playback._setupSource).toHaveBeenCalledWith(this.playback._src)
     })
 
     test('calls native video.play method', () => {
