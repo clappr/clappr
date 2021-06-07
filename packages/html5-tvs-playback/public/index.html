@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Playground page to plays with the Clappr playback.">
+    <title>Playback Playground</title>
+    <link rel="shortcut icon" type="image/png" href="images/favico.png">
+    <style>
+      *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;font-size:62.5%;-webkit-tap-highlight-color:transparent;height:100%}body{margin:0;padding:0;height:100%}.snackbar{visibility:hidden;margin:0;background-color:#333;color:#fff;font-size:40px;text-align:center;border-radius:2px;position:absolute;z-index:1;bottom:30px;left:50%;transform:translate(-50%, 0)}.snackbar.show{visibility:visible;-webkit-animation:fadein .5s,fadeout .5s 2.5s;animation:fadein .5s,fadeout .5s 2.5s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@-webkit-keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}@keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}
+    </style>
+  </head>
+  <body>
+    <script src="http://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js" defer></script>
+    <script src="http://cdn.jsdelivr.net/npm/@joaopaulo.vieira/clappr-tvs-key-mapping-plugin@latest/dist/clappr-tvs-key-mapping-plugin.min.js" defer></script>
+    <script src="clappr-tvs-html5-playback.js" defer></script>
+    <script src="/javascript/clappr-config.js" defer></script>
+    <div class="snackbar"></div>
+  </body>
+</html>
