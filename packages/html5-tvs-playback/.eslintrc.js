@@ -1,6 +1,6 @@
 module.exports = {
   env: { browser: true, node: true, jest: true },
-  globals: { Clappr: true, $: true },
+  globals: { Clappr: true, $: true, Promise: true },
   extends: ['eslint:recommended'],
   parserOptions: { sourceType: 'module', ecmaVersion: 2018 },
   rules: {

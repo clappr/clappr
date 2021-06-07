@@ -1,5 +1,12 @@
+/* eslint-disable no-console */
+
+import mockConsole from 'jest-mock-console'
+
 import { Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
+
+const LOG_WARN_HEAD_MESSAGE = '%c[warn][html5_tvs_playback]'
+const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
 
 const URL_VIDEO_MP4_EXAMPLE = 'http://example.com/awesome_video.mp4'
 
@@ -16,6 +23,8 @@ describe('HTML5TVsPlayback', function() {
     window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
     window.HTMLMediaElement.prototype.pause = () => { /* do nothing */ }
 
+    this.restoreConsole = mockConsole()
+
     jest.clearAllMocks()
     const response = setupTest()
     this.core = response.core
@@ -23,6 +32,7 @@ describe('HTML5TVsPlayback', function() {
     this.core.activeContainer = this.container
     this.playback = this.container.playback
   })
+  afterEach(() => this.restoreConsole())
 
   describe('canPlay static method', () => {
     test('always return truthy response', () => {
@@ -78,6 +88,16 @@ describe('HTML5TVsPlayback', function() {
       this.playback.play()
 
       expect(this.playback.el.play).toHaveBeenCalledTimes(1)
+    })
+
+    test('logs video.play promise problems', () => {
+      window.HTMLMediaElement.prototype.play = () => new Promise(() => { throw new Error('Uh-oh!') })
+
+      this.playback.el.play().catch(() => expect(console.log).toHaveBeenCalledWith(
+        LOG_WARN_HEAD_MESSAGE,
+        LOG_WARN_STYLE,
+        'The play promise throws one error: Uh-oh!',
+      ))
     })
   })
 

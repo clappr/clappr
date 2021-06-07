@@ -1,4 +1,4 @@
-import { Playback, version } from '@clappr/core'
+import { Log, Playback, version } from '@clappr/core'
 /**
  * HTML5 playback implementation for HbbTV 2.0.1 capable devices.
  * @class HTML5TVsPlayback
@@ -23,7 +23,9 @@ export default class HTML5TVsPlayback extends Playback {
 
   play() {
     this._setupSource(this._src)
-    this.el.play()
+
+    const promise = this.el.play()
+    promise && promise.catch && promise.catch(error => Log.warn(this.name, 'The play promise throws one error: ', error))
   }
 
   pause() {
