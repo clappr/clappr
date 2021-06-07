@@ -45,6 +45,13 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('_setupSource method', () => {
+    test('avoids unnecessary video.src updates', () => {
+      this.playback.el.src = URL_VIDEO_MP4_EXAMPLE
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this._src).toBeUndefined()
+    })
+
     test('sets received source URL as video.src attribute', () => {
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 

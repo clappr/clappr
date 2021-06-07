@@ -15,6 +15,8 @@ export default class HTML5TVsPlayback extends Playback {
   get tagName() { return 'video' }
 
   _setupSource(sourceURL) {
+    if (this.el.src === sourceURL) return
+
     this.el.src = sourceURL
     this._src = this.el.src
   }
