@@ -1,4 +1,4 @@
-import { Log, Playback, version } from '@clappr/core'
+import { Events, Log, Playback, version } from '@clappr/core'
 /**
  * HTML5 playback implementation for HbbTV 2.0.1 capable devices.
  * @class HTML5TVsPlayback
@@ -16,7 +16,12 @@ export default class HTML5TVsPlayback extends Playback {
 
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
+    this.setPrivateFlags()
     this._setupSource(this.options.src)
+  }
+
+  setPrivateFlags() {
+    this._isStopped = false
   }
 
   _setupSource(sourceURL) {
@@ -27,6 +32,7 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   play() {
+    this._isStopped = false
     this._setupSource(this._src)
 
     const promise = this.el.play()
@@ -35,5 +41,17 @@ export default class HTML5TVsPlayback extends Playback {
 
   pause() {
     this.el.pause()
+  }
+
+  stop() {
+    this.pause()
+    this._isStopped = true
+    this._wipeUpMedia()
+    this.trigger(Events.PLAYBACK_STOP)
+  }
+
+  _wipeUpMedia() {
+    this.el.removeAttribute('src') // The src attribute will be added again in play().
+    this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.
   }
 }

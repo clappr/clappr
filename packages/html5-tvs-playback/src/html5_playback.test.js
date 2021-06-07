@@ -2,7 +2,7 @@
 
 import mockConsole from 'jest-mock-console'
 
-import { Core, Container, Playback, UIObject, version } from '@clappr/core'
+import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
 
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][html5_tvs_playback]'
@@ -22,6 +22,7 @@ describe('HTML5TVsPlayback', function() {
   beforeEach(() => {
     window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
     window.HTMLMediaElement.prototype.pause = () => { /* do nothing */ }
+    window.HTMLMediaElement.prototype.load = () => { /* do nothing */ }
 
     this.restoreConsole = mockConsole()
 
@@ -55,11 +56,25 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('constructor', () => {
+    test('calls setPrivateFlags method', () => {
+      jest.spyOn(HTML5TVsPlayback.prototype, 'setPrivateFlags')
+      setupTest()
+
+      expect(HTML5TVsPlayback.prototype.setPrivateFlags).toHaveBeenCalledTimes(1)
+    })
+
     test('calls _setupSource with options.src', () => {
       jest.spyOn(HTML5TVsPlayback.prototype, '_setupSource')
       setupTest({ src: URL_VIDEO_MP4_EXAMPLE })
 
       expect(HTML5TVsPlayback.prototype._setupSource).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
+    })
+  })
+
+  describe('setPrivateFlags method', () => {
+    test('sets _isStopped flag with false value', () => {
+      expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
+      expect(this.playback._isStopped).toBeFalsy()
     })
   })
 
@@ -85,6 +100,14 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('play method', () => {
+    test('sets _isStopped flag with false value', () => {
+      expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
+
+      this.playback.play()
+
+      expect(this.playback._isStopped).toBeFalsy()
+    })
+
     test('calls _setupSource method with video.src internal reference', () => {
       jest.spyOn(this.playback, '_setupSource')
       this.playback.play()
@@ -116,6 +139,60 @@ describe('HTML5TVsPlayback', function() {
       this.playback.pause()
 
       expect(this.playback.el.pause).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('stop method', () => {
+    test('calls pause method', () => {
+      jest.spyOn(this.playback, 'pause')
+      this.playback.stop()
+
+      expect(this.playback.pause).toHaveBeenCalledTimes(1)
+    })
+
+    test('sets _isStopped flag with true value', () => {
+      this.playback.play()
+
+      expect(this.playback._isStopped).toBeFalsy()
+
+      this.playback.stop()
+
+      expect(this.playback._isStopped).toBeTruthy()
+    })
+
+    test('calls _wipeUpMedia method', () => {
+      jest.spyOn(this.playback, '_wipeUpMedia')
+      this.playback.stop()
+
+      expect(this.playback._wipeUpMedia).toHaveBeenCalledTimes(1)
+    })
+
+    test('triggers PLAYBACK_STOP event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_STOP, cb)
+      this.playback.stop()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_wipeUpMedia method', () => {
+    test('removes src attribute from video element', () => {
+      this.playback._src = URL_VIDEO_MP4_EXAMPLE
+      this.playback.play()
+
+      expect(this.playback.el.src).toEqual(URL_VIDEO_MP4_EXAMPLE)
+
+      this.playback._wipeUpMedia()
+
+      expect(this.playback.el.src).toEqual('')
+    })
+
+    test('calls native video.load method without arguments', () => {
+      jest.spyOn(this.playback.el, 'load')
+      this.playback._wipeUpMedia()
+
+      expect(this.playback.el.load).toHaveBeenCalledTimes(1)
     })
   })
 })
