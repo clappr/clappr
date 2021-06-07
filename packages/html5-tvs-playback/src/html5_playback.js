@@ -44,6 +44,11 @@ export default class HTML5TVsPlayback extends Playback {
     this.el.pause()
   }
 
+  seek(time) {
+    if (time < 0) return Log.warn(this.name, 'Attempting to seek to a negative time. Ignoring this operation.')
+    this.el.currentTime = time
+  }
+
   stop() {
     this.pause()
     this._isStopped = true

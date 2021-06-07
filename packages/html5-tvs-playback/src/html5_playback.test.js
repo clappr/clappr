@@ -147,6 +147,24 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  describe('seek method', () => {
+    test('returns warning message if receives a negative value', () => {
+      this.playback.seek(-1)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_WARN_HEAD_MESSAGE,
+        LOG_WARN_STYLE,
+        'Attempting to seek to a negative time. Ignoring this operation.',
+      )
+    })
+
+    test('sets received value on video.currentTime attribute', () => {
+      this.playback.seek(10)
+
+      expect(this.playback.el.currentTime).toEqual(10)
+    })
+  })
+
   describe('stop method', () => {
     test('calls pause method', () => {
       jest.spyOn(this.playback, 'pause')
