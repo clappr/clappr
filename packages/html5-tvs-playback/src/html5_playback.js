@@ -22,6 +22,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   setPrivateFlags() {
     this._isStopped = false
+    this._isDestroyed = false
   }
 
   _setupSource(sourceURL) {
@@ -48,6 +49,13 @@ export default class HTML5TVsPlayback extends Playback {
     this._isStopped = true
     this._wipeUpMedia()
     this.trigger(Events.PLAYBACK_STOP)
+  }
+
+  destroy() {
+    this._isDestroyed = true
+    super.destroy()
+    this._wipeUpMedia()
+    this._src = null
   }
 
   _wipeUpMedia() {

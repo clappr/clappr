@@ -76,6 +76,11 @@ describe('HTML5TVsPlayback', function() {
       expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
       expect(this.playback._isStopped).toBeFalsy()
     })
+
+    test('sets _isDestroyed flag with false value', () => {
+      expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
+      expect(this.playback._isDestroyed).toBeFalsy()
+    })
   })
 
   describe('_setupSource method', () => {
@@ -173,6 +178,30 @@ describe('HTML5TVsPlayback', function() {
       this.playback.stop()
 
       expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('destroy method', () => {
+    test('sets _isDestroyed flag with true value', () => {
+      expect(this.playback._isDestroyed).toBeFalsy()
+
+      this.playback.destroy()
+
+      expect(this.playback._isDestroyed).toBeTruthy()
+    })
+
+    test('calls _wipeUpMedia method', () => {
+      jest.spyOn(this.playback, '_wipeUpMedia')
+      this.playback.destroy()
+
+      expect(this.playback._wipeUpMedia).toHaveBeenCalledTimes(1)
+    })
+
+    test('updates video.src internal reference with null value', () => {
+      this.playback._src = URL_VIDEO_MP4_EXAMPLE
+      this.playback.destroy()
+
+      expect(this.playback._src).toBeNull()
     })
   })
 
