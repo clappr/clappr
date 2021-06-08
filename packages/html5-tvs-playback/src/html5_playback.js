@@ -27,7 +27,9 @@ export default class HTML5TVsPlayback extends Playback {
 
   get events() {
     return {
+      canplay: this._onCanPlay,
       loadeddata: this._onLoadedData,
+      waiting: this._onWaiting,
       error: this._onError,
     }
   }
@@ -40,6 +42,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   setPrivateFlags() {
     this._isReady = false
+    this._isBuffering = false
     this._isStopped = false
     this._isDestroyed = false
   }
@@ -51,9 +54,23 @@ export default class HTML5TVsPlayback extends Playback {
     this._src = this.el.src
   }
 
+  _onCanPlay(e) {
+    Log.info(this.name, 'The HTMLMediaElement canplay event is triggered: ', e)
+    if (this._isBuffering) {
+      this._isBuffering = false
+      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+    }
+  }
+
   _onLoadedData(e) {
     Log.info(this.name, 'The HTMLMediaElement loadeddata event is triggered: ', e)
     !this._isReady && this._signalizeReadyState()
+  }
+
+  _onWaiting(e) {
+    this._isBuffering = true
+    Log.info(this.name, 'The HTMLMediaElement waiting event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_BUFFERING, this.name)
   }
 
   _onError(e) {

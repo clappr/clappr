@@ -94,6 +94,18 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('events getter', () => {
+    test('maps _onCanPlay method as canplay event callback', () => {
+      const canPlayEvent = new Event('canplay')
+      this.playback.el.dispatchEvent(canPlayEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement canplay event is triggered: ',
+        canPlayEvent,
+      )
+    })
+
     test('maps _onLoadedData method as loadeddata event callback', () => {
       const loadDataEvent = new Event('loadeddata')
       this.playback.el.dispatchEvent(loadDataEvent)
@@ -103,6 +115,18 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_STYLE,
         'The HTMLMediaElement loadeddata event is triggered: ',
         loadDataEvent,
+      )
+    })
+
+    test('maps _onWaiting method as waiting event callback', () => {
+      const waitingEvent = new Event('waiting')
+      this.playback.el.dispatchEvent(waitingEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement waiting event is triggered: ',
+        waitingEvent,
       )
     })
 
@@ -142,6 +166,11 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback._isReady).toBeFalsy()
     })
 
+    test('sets _isBuffering flag with false value', () => {
+      expect(HTML5TVsPlayback.prototype._isBuffering).toBeUndefined()
+      expect(this.playback._isBuffering).toBeFalsy()
+    })
+
     test('sets _isStopped flag with false value', () => {
       expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
       expect(this.playback._isStopped).toBeFalsy()
@@ -174,6 +203,24 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  describe('_onCanPlay callback', () => {
+    test('sets _isBuffering flag with false value if the current value is true', () => {
+      this.playback._isBuffering = true
+      this.playback._onCanPlay()
+
+      expect(this.playback._isBuffering).toBeFalsy()
+    })
+
+    test('triggers PLAYBACK_BUFFERFULL event if _isBuffering flag value is true', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_BUFFERFULL, cb)
+      this.playback._isBuffering = true
+      this.playback._onCanPlay()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('_onLoadedData callback', () => {
     test('calls _signalizeReadyState method if _isReady flag has a falsy value', () => {
       jest.spyOn(this.playback, '_signalizeReadyState')
@@ -183,6 +230,23 @@ describe('HTML5TVsPlayback', function() {
       this.playback._onLoadedData()
 
       expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onWaiting callback', () => {
+    test('sets _isBuffering flag with true value', () => {
+      this.playback._isBuffering = false
+      this.playback._onWaiting()
+
+      expect(this.playback._isBuffering).toBeTruthy()
+    })
+
+    test('triggers PLAYBACK_BUFFERING event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_BUFFERING, cb)
+      this.playback._onWaiting()
+
+      expect(cb).toHaveBeenCalledTimes(1)
     })
   })
 
