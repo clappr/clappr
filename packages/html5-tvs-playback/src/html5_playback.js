@@ -16,6 +16,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get currentTime() { return this.el.currentTime }
 
+  get duration() { return this.el.duration }
+
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
     this.setPrivateFlags()
