@@ -55,6 +55,14 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.el.tagName).toEqual('VIDEO')
   })
 
+  test('have a getter called currentTime', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'currentTime').get).toBeTruthy()
+  })
+
+  test('currentTime getter returns video.currentTime property', () => {
+    expect(this.playback.currentTime).toEqual(this.playback.el.currentTime)
+  })
+
   describe('constructor', () => {
     test('calls setPrivateFlags method', () => {
       jest.spyOn(HTML5TVsPlayback.prototype, 'setPrivateFlags')
