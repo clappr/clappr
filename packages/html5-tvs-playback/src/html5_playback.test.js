@@ -89,6 +89,22 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.duration).toEqual(this.playback.el.duration)
   })
 
+  test('have a getter called ended', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'ended').get).toBeTruthy()
+  })
+
+  test('ended getter returns video.ended property', () => {
+    expect(this.playback.ended).toEqual(this.playback.el.ended)
+  })
+
+  test('have a getter called buffering', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'buffering').get).toBeTruthy()
+  })
+
+  test('buffering getter returns _isBuffering flag value', () => {
+    expect(this.playback.buffering).toEqual(this.playback._isBuffering)
+  })
+
   test('have a getter called events', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'events').get).toBeTruthy()
   })

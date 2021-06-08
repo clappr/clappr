@@ -25,6 +25,10 @@ export default class HTML5TVsPlayback extends Playback {
 
   get duration() { return this.el.duration }
 
+  get ended() { return this.el.ended }
+
+  get buffering() { return this._isBuffering }
+
   get events() {
     return {
       canplay: this._onCanPlay,
