@@ -105,6 +105,19 @@ describe('HTML5TVsPlayback', function() {
         loadDataEvent,
       )
     })
+
+    test('maps _onError method as error event callback', () => {
+      const errorEvent = new Event('error')
+      this.playback.el.dispatchEvent(errorEvent)
+
+      expect(console.log).toHaveBeenNthCalledWith(
+        1,
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement error event is triggered: ',
+        errorEvent,
+      )
+    })
   })
 
   describe('constructor', () => {
@@ -170,6 +183,46 @@ describe('HTML5TVsPlayback', function() {
       this.playback._onLoadedData()
 
       expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onError callback', () => {
+    test('logs warn message if is an unknown error', () => {
+      this.playback._onError()
+
+      expect(console.log).toHaveBeenNthCalledWith(
+        3,
+        LOG_WARN_HEAD_MESSAGE,
+        LOG_WARN_STYLE,
+        'HTML5 unknown error: ',
+        {
+          code: 'html5_tvs_playback:unknown',
+          description: 'unknown',
+          level: 'WARN',
+          origin: 'html5_tvs_playback',
+          raw: undefined,
+          scope: 'playback',
+        },
+      )
+    })
+
+    test('triggers PLAYBACK_ERROR event with formatted error object', () => {
+      const cb = jest.fn()
+
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_ERROR, cb)
+      this.playback.el.error = { code: 171, message: 'É mentirinha!' }
+      this.playback._onError()
+
+      expect(cb).toHaveBeenCalledWith(
+        {
+          code: 'html5_tvs_playback:171',
+          description: 'É mentirinha!',
+          level: 'FATAL',
+          origin: 'html5_tvs_playback',
+          raw: { code: 171, message: 'É mentirinha!' },
+          scope: 'playback',
+        },
+      )
     })
   })
 

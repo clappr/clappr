@@ -1,6 +1,7 @@
-import { Events, Log, Playback, version } from '@clappr/core'
+import { Events, Log, Playback, PlayerError, version } from '@clappr/core'
 import {
   READY_STATE_STAGES,
+  UNKNOWN_ERROR,
 } from './constants'
 
 /**
@@ -27,6 +28,7 @@ export default class HTML5TVsPlayback extends Playback {
   get events() {
     return {
       loadeddata: this._onLoadedData,
+      error: this._onError,
     }
   }
 
@@ -52,6 +54,23 @@ export default class HTML5TVsPlayback extends Playback {
   _onLoadedData(e) {
     Log.info(this.name, 'The HTMLMediaElement loadeddata event is triggered: ', e)
     !this._isReady && this._signalizeReadyState()
+  }
+
+  _onError(e) {
+    Log.info(this.name, 'The HTMLMediaElement error event is triggered: ', e)
+    const { code, message } = this.el.error || UNKNOWN_ERROR
+    const isUnknownError = code === UNKNOWN_ERROR.code
+
+    const formattedError = this.createError({
+      code,
+      description: message,
+      raw: this.el.error,
+      level: isUnknownError ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL,
+    })
+
+    isUnknownError
+      ? Log.warn(this.name, 'HTML5 unknown error: ', formattedError)
+      : this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   getPlaybackType() {
