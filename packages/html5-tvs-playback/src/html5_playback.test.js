@@ -82,25 +82,25 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.isReady).toBeTruthy()
   })
 
-  test('have a getter called isPlaying', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isPlaying').get).toBeTruthy()
+  test('have a getter called playing', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'playing').get).toBeTruthy()
   })
 
-  test('isPlaying getter returns if video it\'s not paused and it\'s not ended', () => {
+  test('playing getter returns if video it\'s not paused and it\'s not ended', () => {
     jest.spyOn(this.playback.el, 'paused', 'get').mockReturnValueOnce(false)
     jest.spyOn(this.playback.el, 'ended', 'get').mockReturnValueOnce(true)
 
-    expect(this.playback.isPlaying).toBeFalsy()
+    expect(this.playback.playing).toBeFalsy()
 
     jest.spyOn(this.playback.el, 'paused', 'get').mockReturnValueOnce(true)
     jest.spyOn(this.playback.el, 'ended', 'get').mockReturnValueOnce(false)
 
-    expect(this.playback.isPlaying).toBeFalsy()
+    expect(this.playback.playing).toBeFalsy()
 
     jest.spyOn(this.playback.el, 'paused', 'get').mockReturnValueOnce(false)
     jest.spyOn(this.playback.el, 'ended', 'get').mockReturnValueOnce(false)
 
-    expect(this.playback.isPlaying).toBeTruthy()
+    expect(this.playback.playing).toBeTruthy()
   })
 
   test('have a getter called currentTime', () => {
@@ -803,5 +803,9 @@ describe('HTML5TVsPlayback', function() {
 
   test('getDuration method returns duration getter', () => {
     expect(this.playback.getDuration()).toEqual(this.playback.el.duration)
+  })
+
+  test('isPlaying method returns playing getter', () => {
+    expect(this.playback.isPlaying()).toEqual(this.playback.playing)
   })
 })

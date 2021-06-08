@@ -28,7 +28,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   get isReady() { return this.el.readyState >= READY_STATE_STAGES.HAVE_CURRENT_DATA }
 
-  get isPlaying() { return !this.el.paused && !this.el.ended }
+  get playing() { return !this.el.paused && !this.el.ended }
 
   get currentTime() { return this.el.currentTime }
 
@@ -271,4 +271,11 @@ export default class HTML5TVsPlayback extends Playback {
    * Use the duration getter instead of it.
    */
   getDuration() { return this.duration }
+
+  /**
+   * @deprecated
+   * This method currently exists for backward compatibility reasons.
+   * Use the playing getter instead of it.
+   */
+  isPlaying() { return this.playing }
 }
