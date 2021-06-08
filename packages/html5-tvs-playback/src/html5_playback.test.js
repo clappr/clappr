@@ -258,4 +258,12 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback.el.load).toHaveBeenCalledTimes(1)
     })
   })
+
+  test('getCurrentTime method returns currentTime getter', () => {
+    expect(this.playback.getCurrentTime()).toEqual(this.playback.el.currentTime)
+  })
+
+  test('getDuration method returns duration getter', () => {
+    expect(this.playback.getDuration()).toEqual(this.playback.el.duration)
+  })
 })

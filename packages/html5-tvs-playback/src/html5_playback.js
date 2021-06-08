@@ -71,4 +71,18 @@ export default class HTML5TVsPlayback extends Playback {
     this.el.removeAttribute('src') // The src attribute will be added again in play().
     this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.
   }
+
+  /**
+   * @deprecated
+   * This method currently exists for backward compatibility reasons.
+   * Use the currentTime getter instead of it.
+   */
+  getCurrentTime() { return this.currentTime }
+
+  /**
+   * @deprecated
+   * This method currently exists for backward compatibility reasons.
+   * Use the duration getter instead of it.
+   */
+  getDuration() { return this.duration }
 }
