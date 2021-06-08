@@ -54,6 +54,10 @@ export default class HTML5TVsPlayback extends Playback {
     !this._isReady && this._signalizeReadyState()
   }
 
+  getPlaybackType() {
+    return Playback.VOD
+  }
+
   play() {
     this._isStopped = false
     this._setupSource(this._src)
