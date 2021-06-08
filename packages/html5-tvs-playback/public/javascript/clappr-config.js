@@ -14,6 +14,7 @@ var onReadyCallback = function() {
 
     if (data.keyName === window.TVsKeyMappingPlugin.KeyNames.KEY_CODE_PLAY) player.core.activePlayback.play();
     if (data.keyName === window.TVsKeyMappingPlugin.KeyNames.KEY_CODE_PAUSE) player.core.activePlayback.pause();
+    if (data.keyName === window.TVsKeyMappingPlugin.KeyNames.KEY_CODE_STOP) player.core.activePlayback.stop();
   });
 
 };
