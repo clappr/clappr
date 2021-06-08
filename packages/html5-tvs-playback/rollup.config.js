@@ -36,7 +36,7 @@ const mainBundle = {
     },
     minimize && {
       name: 'HTML5TVsPlayback',
-      file: 'dist/clappr-tvs-html5-playback.min.js',
+      file: 'dist/clappr-html5-tvs-playback.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
       plugins: terser(),

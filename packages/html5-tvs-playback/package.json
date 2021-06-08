@@ -1,5 +1,5 @@
 {
-  "name": "@joaopaulo.vieira/clappr-tvs-html5-playback",
+  "name": "@joaopaulo.vieira/clappr-html5-tvs-playback",
   "version": "0.0.1",
   "description": "A Clappr HTML5 playback for smart TVs based on HbbTV 2.0.1 specs.",
   "keywords": [
@@ -9,9 +9,9 @@
     "HTML5",
     "HBBTV"
   ],
-  "homepage": "https://github.com/joaopaulovieira/clappr-tvs-html5-playback",
+  "homepage": "https://github.com/joaopaulovieira/clappr-html5-tvs-playback",
   "bugs": {
-    "url": "https://github.com/joaopaulovieira/clappr-tvs-html5-playback/issues",
+    "url": "https://github.com/joaopaulovieira/clappr-html5-tvs-playback/issues",
     "email": "vieira.joaopaulo.91@gmail.com"
   },
   "license": "BSD-3-Clause",
@@ -23,11 +23,11 @@
     "/dist",
     "/src"
   ],
-  "main": "dist/clappr-tvs-html5-playback.js",
-  "module": "dist/clappr-tvs-html5-playback.esm.js",
+  "main": "dist/clappr-html5-tvs-playback.js",
+  "module": "dist/clappr-html5-tvs-playback.esm.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:joaopaulovieira/clappr-tvs-html5-playback.git"
+    "url": "git@github.com:joaopaulovieira/clappr-html5-tvs-playback.git"
   },
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
