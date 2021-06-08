@@ -17,6 +17,8 @@ var onReadyCallback = function() {
     if (data.keyName === window.TVsKeyMappingPlugin.KeyNames.KEY_CODE_STOP) player.core.activePlayback.stop();
   });
 
+  this.core.activePlayback.listenTo(this.core.activePlayback, Clappr.Events.PLAYBACK_BUFFERING, function() { document.querySelector('.loading-hint').className += ' show'; });
+  this.core.activePlayback.listenTo(this.core.activePlayback, Clappr.Events.PLAYBACK_BUFFERFULL, function() { document.querySelector('.loading-hint').className = 'loading-hint'; });
 };
 
 var searchParams;
