@@ -1,7 +1,10 @@
 import { Events, Log, Playback, PlayerError, version } from '@clappr/core'
 import {
+  MIME_TYPES,
+  MIME_TYPES_BY_EXTENSION,
   READY_STATE_STAGES,
   UNKNOWN_ERROR,
+  getExtension,
 } from './constants'
 
 /**
@@ -9,8 +12,12 @@ import {
  * @class HTML5TVsPlayback
  */
 export default class HTML5TVsPlayback extends Playback {
-  static canPlay() {
-    return true
+  static canPlay(resourceUrl, mimeType) {
+    const isSupportedMimetype = Object.values(MIME_TYPES).find(item => mimeType === item)
+    const sourceExtension = getExtension(resourceUrl)
+    const isSourceExtensionSupported = MIME_TYPES_BY_EXTENSION[sourceExtension]
+
+    return isSupportedMimetype || isSourceExtensionSupported
   }
 
   get name() { return 'html5_tvs_playback' }

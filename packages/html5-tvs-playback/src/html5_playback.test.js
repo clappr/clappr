@@ -12,7 +12,10 @@ const LOG_INFO_HEAD_MESSAGE = '%c[info][html5_tvs_playback]'
 const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
 const LOG_INFO_STYLE = 'color: #006600;font-weight: bold; font-size: 13px;'
 
-const URL_VIDEO_MP4_EXAMPLE = 'http://example.com/awesome_video.mp4'
+const URL_VIDEO_EXAMPLE = 'http://example.com/awesome_video'
+const URL_VIDEO_MP4_EXAMPLE = `${URL_VIDEO_EXAMPLE}.mp4`
+const URL_VIDEO_M3U8_EXAMPLE = `${URL_VIDEO_EXAMPLE}.m3u8`
+const URL_VIDEO_UNSUPPORTED_FORMAT_EXAMPLE = `${URL_VIDEO_EXAMPLE}.xpto`
 
 const setupTest = (options = {}) => {
   const playbackPlugin = new HTML5TVsPlayback(options)
@@ -40,8 +43,16 @@ describe('HTML5TVsPlayback', function() {
   afterEach(() => this.restoreConsole())
 
   describe('canPlay static method', () => {
-    test('always return truthy response', () => {
-      expect(HTML5TVsPlayback.canPlay()).toBeTruthy()
+    test('checks if one video URL has supported format', () => {
+      expect(HTML5TVsPlayback.canPlay(URL_VIDEO_MP4_EXAMPLE)).toBeTruthy()
+      expect(HTML5TVsPlayback.canPlay(URL_VIDEO_M3U8_EXAMPLE)).toBeTruthy()
+      expect(HTML5TVsPlayback.canPlay(URL_VIDEO_UNSUPPORTED_FORMAT_EXAMPLE)).toBeFalsy()
+    })
+
+    test('checks if one video is supported via mime type', () => {
+      expect(HTML5TVsPlayback.canPlay(URL_VIDEO_EXAMPLE, 'video/mp4')).toBeTruthy()
+      expect(HTML5TVsPlayback.canPlay(URL_VIDEO_EXAMPLE, 'application/vnd.apple.mpegurl')).toBeTruthy()
+      expect(HTML5TVsPlayback.canPlay(URL_VIDEO_EXAMPLE, 'mock/xpto')).toBeFalsy()
     })
   })
 
