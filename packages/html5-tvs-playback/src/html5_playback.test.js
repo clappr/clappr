@@ -106,6 +106,30 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
+    test('maps _onCanPlayThrough method as canplaythrough event callback', () => {
+      const canPlayThroughEvent = new Event('canplaythrough')
+      this.playback.el.dispatchEvent(canPlayThroughEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement canplaythrough event is triggered: ',
+        canPlayThroughEvent,
+      )
+    })
+
+    test('maps _onLoadStart method as loadstart event callback', () => {
+      const loadStartEvent = new Event('loadstart')
+      this.playback.el.dispatchEvent(loadStartEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement loadstart event is triggered: ',
+        loadStartEvent,
+      )
+    })
+
     test('maps _onLoadedMetadata method as loadedmetadata event callback', () => {
       const loadedMetadataEvent = new Event('loadedmetadata')
       this.playback.el.dispatchEvent(loadedMetadataEvent)
@@ -139,6 +163,30 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_STYLE,
         'The HTMLMediaElement waiting event is triggered: ',
         waitingEvent,
+      )
+    })
+
+    test('maps _onStalled method as stalled event callback', () => {
+      const stalledEvent = new Event('stalled')
+      this.playback.el.dispatchEvent(stalledEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement stalled event is triggered: ',
+        stalledEvent,
+      )
+    })
+
+    test('maps _onEmptied method as emptied event callback', () => {
+      const emptiedEvent = new Event('emptied')
+      this.playback.el.dispatchEvent(emptiedEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement emptied event is triggered: ',
+        emptiedEvent,
       )
     })
 
@@ -178,6 +226,30 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
+    test('maps _onRateChange method as ratechange event callback', () => {
+      const rateChangeEvent = new Event('ratechange')
+      this.playback.el.dispatchEvent(rateChangeEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement ratechange event is triggered: ',
+        rateChangeEvent,
+      )
+    })
+
+    test('maps _onVolumeChange method as volumechange event callback', () => {
+      const volumeChangeEvent = new Event('volumechange')
+      this.playback.el.dispatchEvent(volumeChangeEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement volumechange event is triggered: ',
+        volumeChangeEvent,
+      )
+    })
+
     test('maps _onSeeking method as seeking event callback', () => {
       const seekingEvent = new Event('seeking')
       this.playback.el.dispatchEvent(seekingEvent)
@@ -202,15 +274,39 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
-    test('maps _onSeeked method as seeked event callback', () => {
-      const seekedEvent = new Event('seeked')
-      this.playback.el.dispatchEvent(seekedEvent)
+    test('maps _onDurationChange method as durationchange event callback', () => {
+      const durationChangeEvent = new Event('durationchange')
+      this.playback.el.dispatchEvent(durationChangeEvent)
 
       expect(console.log).toHaveBeenCalledWith(
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
-        'The HTMLMediaElement seeked event is triggered: ',
-        seekedEvent,
+        'The HTMLMediaElement durationchange event is triggered: ',
+        durationChangeEvent,
+      )
+    })
+
+    test('maps _onAbort method as abort event callback', () => {
+      const abortEvent = new Event('abort')
+      this.playback.el.dispatchEvent(abortEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement abort event is triggered: ',
+        abortEvent,
+      )
+    })
+
+    test('maps _onSuspend method as suspend event callback', () => {
+      const suspendEvent = new Event('suspend')
+      this.playback.el.dispatchEvent(suspendEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement suspend event is triggered: ',
+        suspendEvent,
       )
     })
 

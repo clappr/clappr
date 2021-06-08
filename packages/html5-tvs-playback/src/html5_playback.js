@@ -28,15 +28,25 @@ export default class HTML5TVsPlayback extends Playback {
   get events() {
     return {
       canplay: this._onCanPlay,
+      canplaythrough: this._onCanPlayThrough,
+      loadstart: this._onLoadStart,
       loadedmetadata: this._onLoadedMetadata,
       loadeddata: this._onLoadedData,
       waiting: this._onWaiting,
+      stalled: this._onStalled,
+      emptied: this._onEmptied,
       play: this._onPlay,
       playing: this._onPlaying,
       pause: this._onPause,
+      ratechange: this._onRateChange,
+      volumechange: this._onVolumeChange,
       seeking: this._onSeeking,
       seeked: this._onSeeked,
+      progress: this._onProgress,
       timeupdate: this._onTimeUpdate,
+      durationchange: this._onDurationChange,
+      abort: this._onAbort,
+      suspend: this._onSuspend,
       ended: this._onEnded,
       error: this._onError,
     }
@@ -70,6 +80,14 @@ export default class HTML5TVsPlayback extends Playback {
     }
   }
 
+  _onCanPlayThrough(e) {
+    Log.info(this.name, 'The HTMLMediaElement canplaythrough event is triggered: ', e)
+  }
+
+  _onLoadStart(e) {
+    Log.info(this.name, 'The HTMLMediaElement loadstart event is triggered: ', e)
+  }
+
   _onLoadedMetadata(e) {
     Log.info(this.name, 'The HTMLMediaElement loadedmetadata event is triggered: ', e)
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e })
@@ -84,6 +102,14 @@ export default class HTML5TVsPlayback extends Playback {
     this._isBuffering = true
     Log.info(this.name, 'The HTMLMediaElement waiting event is triggered: ', e)
     this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+  }
+
+  _onStalled(e) {
+    Log.info(this.name, 'The HTMLMediaElement stalled event is triggered: ', e)
+  }
+
+  _onEmptied(e) {
+    Log.info(this.name, 'The HTMLMediaElement emptied event is triggered: ', e)
   }
 
   _onPlay(e) {
@@ -101,6 +127,14 @@ export default class HTML5TVsPlayback extends Playback {
     this.trigger(Events.PLAYBACK_PAUSE)
   }
 
+  _onRateChange(e) {
+    Log.info(this.name, 'The HTMLMediaElement ratechange event is triggered: ', e)
+  }
+
+  _onVolumeChange(e) {
+    Log.info(this.name, 'The HTMLMediaElement volumechange event is triggered: ', e)
+  }
+
   _onSeeking(e) {
     Log.info(this.name, 'The HTMLMediaElement seeking event is triggered: ', e)
     this.trigger(Events.PLAYBACK_SEEK)
@@ -111,9 +145,25 @@ export default class HTML5TVsPlayback extends Playback {
     this.trigger(Events.PLAYBACK_SEEKED)
   }
 
+  _onProgress(e) {
+    Log.debug(this.name, 'The HTMLMediaElement timeupdate event is triggered: ', e) // Preferring to debug level because of the high frequency of calls.
+  }
+
   _onTimeUpdate(e) {
     Log.debug(this.name, 'The HTMLMediaElement timeupdate event is triggered: ', e) // Preferring to debug level because of the high frequency of calls.
     this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.duration }, this.name)
+  }
+
+  _onDurationChange(e) {
+    Log.info(this.name, 'The HTMLMediaElement durationchange event is triggered: ', e)
+  }
+
+  _onAbort(e) {
+    Log.info(this.name, 'The HTMLMediaElement abort event is triggered: ', e)
+  }
+
+  _onSuspend(e) {
+    Log.info(this.name, 'The HTMLMediaElement suspend event is triggered: ', e)
   }
 
   _onEnded(e) {
