@@ -1,5 +1,6 @@
 /* eslint-disable */
 var mp4Source = 'http://clappr.io/highline.mp4';
+var hlsSource = 'http://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8';
 Clappr.Log.setLevel(Clappr.Log.LEVEL_INFO);
 
 var onReadyCallback = function() {
