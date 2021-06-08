@@ -28,6 +28,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get isReady() { return this.el.readyState >= READY_STATE_STAGES.HAVE_CURRENT_DATA }
 
+  get isPlaying() { return !this.el.paused && !this.el.ended }
+
   get currentTime() { return this.el.currentTime }
 
   get duration() { return this.el.duration }

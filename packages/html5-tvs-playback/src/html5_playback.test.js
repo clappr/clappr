@@ -3,9 +3,7 @@ import mockConsole from 'jest-mock-console'
 
 import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
-import {
-  READY_STATE_STAGES,
-} from './constants'
+import { READY_STATE_STAGES } from './constants'
 
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][html5_tvs_playback]'
 const LOG_INFO_HEAD_MESSAGE = '%c[info][html5_tvs_playback]'
@@ -82,6 +80,27 @@ describe('HTML5TVsPlayback', function() {
     jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_CURRENT_DATA)
 
     expect(this.playback.isReady).toBeTruthy()
+  })
+
+  test('have a getter called isPlaying', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isPlaying').get).toBeTruthy()
+  })
+
+  test('isPlaying getter returns if video it\'s not paused and it\'s not ended', () => {
+    jest.spyOn(this.playback.el, 'paused', 'get').mockReturnValueOnce(false)
+    jest.spyOn(this.playback.el, 'ended', 'get').mockReturnValueOnce(true)
+
+    expect(this.playback.isPlaying).toBeFalsy()
+
+    jest.spyOn(this.playback.el, 'paused', 'get').mockReturnValueOnce(true)
+    jest.spyOn(this.playback.el, 'ended', 'get').mockReturnValueOnce(false)
+
+    expect(this.playback.isPlaying).toBeFalsy()
+
+    jest.spyOn(this.playback.el, 'paused', 'get').mockReturnValueOnce(false)
+    jest.spyOn(this.playback.el, 'ended', 'get').mockReturnValueOnce(false)
+
+    expect(this.playback.isPlaying).toBeTruthy()
   })
 
   test('have a getter called currentTime', () => {
