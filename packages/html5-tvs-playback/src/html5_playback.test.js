@@ -106,6 +106,18 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
+    test('maps _onLoadedMetadata method as loadedmetadata event callback', () => {
+      const loadedMetadataEvent = new Event('loadedmetadata')
+      this.playback.el.dispatchEvent(loadedMetadataEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement loadedmetadata event is triggered: ',
+        loadedMetadataEvent,
+      )
+    })
+
     test('maps _onLoadedData method as loadeddata event callback', () => {
       const loadDataEvent = new Event('loadeddata')
       this.playback.el.dispatchEvent(loadDataEvent)
@@ -127,6 +139,90 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_STYLE,
         'The HTMLMediaElement waiting event is triggered: ',
         waitingEvent,
+      )
+    })
+
+    test('maps _onPlay method as play event callback', () => {
+      const playEvent = new Event('play')
+      this.playback.el.dispatchEvent(playEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement play event is triggered: ',
+        playEvent,
+      )
+    })
+
+    test('maps _onPlaying method as playing event callback', () => {
+      const playingEvent = new Event('playing')
+      this.playback.el.dispatchEvent(playingEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement playing event is triggered: ',
+        playingEvent,
+      )
+    })
+
+    test('maps _onPause method as pause event callback', () => {
+      const pauseEvent = new Event('pause')
+      this.playback.el.dispatchEvent(pauseEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement pause event is triggered: ',
+        pauseEvent,
+      )
+    })
+
+    test('maps _onSeeking method as seeking event callback', () => {
+      const seekingEvent = new Event('seeking')
+      this.playback.el.dispatchEvent(seekingEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement seeking event is triggered: ',
+        seekingEvent,
+      )
+    })
+
+    test('maps _onSeeked method as seeked event callback', () => {
+      const seekedEvent = new Event('seeked')
+      this.playback.el.dispatchEvent(seekedEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement seeked event is triggered: ',
+        seekedEvent,
+      )
+    })
+
+    test('maps _onSeeked method as seeked event callback', () => {
+      const seekedEvent = new Event('seeked')
+      this.playback.el.dispatchEvent(seekedEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement seeked event is triggered: ',
+        seekedEvent,
+      )
+    })
+
+    test('maps _onEnded method as ended event callback', () => {
+      const endedEvent = new Event('ended')
+      this.playback.el.dispatchEvent(endedEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement ended event is triggered: ',
+        endedEvent,
       )
     })
 
@@ -221,6 +317,16 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  describe('_onLoadedMetadata callback', () => {
+    test('triggers PLAYBACK_LOADEDMETADATA event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_LOADEDMETADATA, cb)
+      this.playback._onLoadedMetadata({ target: { duration: 0 } })
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('_onLoadedData callback', () => {
     test('calls _signalizeReadyState method if _isReady flag has a falsy value', () => {
       jest.spyOn(this.playback, '_signalizeReadyState')
@@ -245,6 +351,76 @@ describe('HTML5TVsPlayback', function() {
       const cb = jest.fn()
       this.playback.listenToOnce(this.playback, Events.PLAYBACK_BUFFERING, cb)
       this.playback._onWaiting()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onPlay callback', () => {
+    test('triggers PLAYBACK_PLAY_INTENT event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_PLAY_INTENT, cb)
+      this.playback._onPlay()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onPlaying callback', () => {
+    test('triggers PLAYBACK_PLAY event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_PLAY, cb)
+      this.playback._onPlaying()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onPause callback', () => {
+    test('triggers PLAYBACK_PAUSE event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_PAUSE, cb)
+      this.playback._onPause()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onSeeking callback', () => {
+    test('triggers PLAYBACK_SEEK event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_SEEK, cb)
+      this.playback._onSeeking()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onSeeked callback', () => {
+    test('triggers PLAYBACK_SEEKED event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_SEEKED, cb)
+      this.playback._onSeeked()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onTimeUpdate callback', () => {
+    test('triggers PLAYBACK_TIMEUPDATE event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_TIMEUPDATE, cb)
+      this.playback._onTimeUpdate()
+
+      expect(cb).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_onEnded callback', () => {
+    test('triggers PLAYBACK_ENDED event', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_ENDED, cb)
+      this.playback._onEnded()
 
       expect(cb).toHaveBeenCalledTimes(1)
     })

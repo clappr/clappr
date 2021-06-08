@@ -28,8 +28,16 @@ export default class HTML5TVsPlayback extends Playback {
   get events() {
     return {
       canplay: this._onCanPlay,
+      loadedmetadata: this._onLoadedMetadata,
       loadeddata: this._onLoadedData,
       waiting: this._onWaiting,
+      play: this._onPlay,
+      playing: this._onPlaying,
+      pause: this._onPause,
+      seeking: this._onSeeking,
+      seeked: this._onSeeked,
+      timeupdate: this._onTimeUpdate,
+      ended: this._onEnded,
       error: this._onError,
     }
   }
@@ -62,6 +70,11 @@ export default class HTML5TVsPlayback extends Playback {
     }
   }
 
+  _onLoadedMetadata(e) {
+    Log.info(this.name, 'The HTMLMediaElement loadedmetadata event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e })
+  }
+
   _onLoadedData(e) {
     Log.info(this.name, 'The HTMLMediaElement loadeddata event is triggered: ', e)
     !this._isReady && this._signalizeReadyState()
@@ -71,6 +84,41 @@ export default class HTML5TVsPlayback extends Playback {
     this._isBuffering = true
     Log.info(this.name, 'The HTMLMediaElement waiting event is triggered: ', e)
     this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+  }
+
+  _onPlay(e) {
+    Log.info(this.name, 'The HTMLMediaElement play event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_PLAY_INTENT)
+  }
+
+  _onPlaying(e) {
+    Log.info(this.name, 'The HTMLMediaElement playing event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_PLAY)
+  }
+
+  _onPause(e) {
+    Log.info(this.name, 'The HTMLMediaElement pause event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_PAUSE)
+  }
+
+  _onSeeking(e) {
+    Log.info(this.name, 'The HTMLMediaElement seeking event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_SEEK)
+  }
+
+  _onSeeked(e) {
+    Log.info(this.name, 'The HTMLMediaElement seeked event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_SEEKED)
+  }
+
+  _onTimeUpdate(e) {
+    Log.debug(this.name, 'The HTMLMediaElement timeupdate event is triggered: ', e) // Preferring to debug level because of the high frequency of calls.
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.duration }, this.name)
+  }
+
+  _onEnded(e) {
+    Log.info(this.name, 'The HTMLMediaElement ended event is triggered: ', e)
+    this.trigger(Events.PLAYBACK_ENDED, this.name)
   }
 
   _onError(e) {
