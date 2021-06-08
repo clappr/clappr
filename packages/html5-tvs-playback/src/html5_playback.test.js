@@ -1,12 +1,16 @@
 /* eslint-disable no-console */
-
 import mockConsole from 'jest-mock-console'
 
 import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
+import {
+  READY_STATE_STAGES,
+} from './constants'
 
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][html5_tvs_playback]'
+const LOG_INFO_HEAD_MESSAGE = '%c[info][html5_tvs_playback]'
 const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
+const LOG_INFO_STYLE = 'color: #006600;font-weight: bold; font-size: 13px;'
 
 const URL_VIDEO_MP4_EXAMPLE = 'http://example.com/awesome_video.mp4'
 
@@ -55,6 +59,20 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.el.tagName).toEqual('VIDEO')
   })
 
+  test('have a getter called isReady', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isReady').get).toBeTruthy()
+  })
+
+  test('isReady getter returns the check if video.readyState is greater than or equal HAVE_CURRENT_DATA value', () => {
+    jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_NOTHING)
+
+    expect(this.playback.isReady).toBeFalsy()
+
+    jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_CURRENT_DATA)
+
+    expect(this.playback.isReady).toBeTruthy()
+  })
+
   test('have a getter called currentTime', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'currentTime').get).toBeTruthy()
   })
@@ -69,6 +87,24 @@ describe('HTML5TVsPlayback', function() {
 
   test('duration getter returns video.duration property', () => {
     expect(this.playback.duration).toEqual(this.playback.el.duration)
+  })
+
+  test('have a getter called events', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'events').get).toBeTruthy()
+  })
+
+  describe('events getter', () => {
+    test('maps _onLoadedData method as loadeddata event callback', () => {
+      const loadDataEvent = new Event('loadeddata')
+      this.playback.el.dispatchEvent(loadDataEvent)
+
+      expect(console.log).toHaveBeenCalledWith(
+        LOG_INFO_HEAD_MESSAGE,
+        LOG_INFO_STYLE,
+        'The HTMLMediaElement loadeddata event is triggered: ',
+        loadDataEvent,
+      )
+    })
   })
 
   describe('constructor', () => {
@@ -88,6 +124,11 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('setPrivateFlags method', () => {
+    test('sets _isReady flag with false value', () => {
+      expect(HTML5TVsPlayback.prototype._isReady).toBeUndefined()
+      expect(this.playback._isReady).toBeFalsy()
+    })
+
     test('sets _isStopped flag with false value', () => {
       expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
       expect(this.playback._isStopped).toBeFalsy()
@@ -117,6 +158,18 @@ describe('HTML5TVsPlayback', function() {
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
       expect(this.playback._src).toEqual(URL_VIDEO_MP4_EXAMPLE)
+    })
+  })
+
+  describe('_onLoadedData callback', () => {
+    test('calls _signalizeReadyState method if _isReady flag has a falsy value', () => {
+      jest.spyOn(this.playback, '_signalizeReadyState')
+      this.playback._isReady = true
+      this.playback._onLoadedData()
+      this.playback._isReady = false
+      this.playback._onLoadedData()
+
+      expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -199,6 +252,13 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback._isStopped).toBeTruthy()
     })
 
+    test('sets _isReady flag with false value', () => {
+      this.playback._isReady = true
+      this.playback.stop()
+
+      expect(this.playback._isReady).toBeFalsy()
+    })
+
     test('calls _wipeUpMedia method', () => {
       jest.spyOn(this.playback, '_wipeUpMedia')
       this.playback.stop()
@@ -222,6 +282,13 @@ describe('HTML5TVsPlayback', function() {
       this.playback.destroy()
 
       expect(this.playback._isDestroyed).toBeTruthy()
+    })
+
+    test('sets _isReady flag with false value', () => {
+      this.playback._isReady = true
+      this.playback.destroy()
+
+      expect(this.playback._isReady).toBeFalsy()
     })
 
     test('calls _wipeUpMedia method', () => {
@@ -256,6 +323,36 @@ describe('HTML5TVsPlayback', function() {
       this.playback._wipeUpMedia()
 
       expect(this.playback.el.load).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('_signalizeReadyState method', () => {
+    test('only trigger PLAYBACK_READY event if isReady getter returns true', () => {
+      const cb = jest.fn()
+      jest.spyOn(this.playback, '_signalizeReadyState')
+      jest.useFakeTimers()
+
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_READY, cb)
+      this.playback._signalizeReadyState()
+
+      jest.advanceTimersByTime(1000)
+
+      expect(cb).not.toHaveBeenCalled()
+      expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(4)
+
+      jest.spyOn(this.playback, 'isReady', 'get').mockReturnValueOnce(true)
+      jest.advanceTimersByTime(500)
+
+      expect(cb).toHaveBeenCalledTimes(1)
+      expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(5)
+    })
+
+    test('sets _isReady flag with true value', () => {
+      jest.spyOn(this.playback, 'isReady', 'get').mockReturnValueOnce(true)
+      this.playback._isReady = false
+      this.playback._signalizeReadyState()
+
+      expect(this.playback._isReady).toBeTruthy()
     })
   })
 

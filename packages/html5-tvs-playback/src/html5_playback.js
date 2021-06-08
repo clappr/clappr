@@ -1,4 +1,8 @@
 import { Events, Log, Playback, version } from '@clappr/core'
+import {
+  READY_STATE_STAGES,
+} from './constants'
+
 /**
  * HTML5 playback implementation for HbbTV 2.0.1 capable devices.
  * @class HTML5TVsPlayback
@@ -14,9 +18,17 @@ export default class HTML5TVsPlayback extends Playback {
 
   get tagName() { return 'video' }
 
+  get isReady() { return this.el.readyState >= READY_STATE_STAGES.HAVE_CURRENT_DATA }
+
   get currentTime() { return this.el.currentTime }
 
   get duration() { return this.el.duration }
+
+  get events() {
+    return {
+      loadeddata: this._onLoadedData,
+    }
+  }
 
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
@@ -25,6 +37,7 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   setPrivateFlags() {
+    this._isReady = false
     this._isStopped = false
     this._isDestroyed = false
   }
@@ -34,6 +47,11 @@ export default class HTML5TVsPlayback extends Playback {
 
     this.el.src = sourceURL
     this._src = this.el.src
+  }
+
+  _onLoadedData(e) {
+    Log.info(this.name, 'The HTMLMediaElement loadeddata event is triggered: ', e)
+    !this._isReady && this._signalizeReadyState()
   }
 
   play() {
@@ -56,12 +74,14 @@ export default class HTML5TVsPlayback extends Playback {
   stop() {
     this.pause()
     this._isStopped = true
+    this._isReady = false
     this._wipeUpMedia()
     this.trigger(Events.PLAYBACK_STOP)
   }
 
   destroy() {
     this._isDestroyed = true
+    this._isReady = false
     super.destroy()
     this._wipeUpMedia()
     this._src = null
@@ -70,6 +90,21 @@ export default class HTML5TVsPlayback extends Playback {
   _wipeUpMedia() {
     this.el.removeAttribute('src') // The src attribute will be added again in play().
     this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.
+  }
+
+  /**
+   * Triggers the Clappr playback ready event if the isReady getter returns a true value.
+   * If isReady getter returns a false value, invoke itself with a delay that's grown exponentially at every new auto invocation.
+   * The initial delay value is 100 milliseconds.
+   * Also, set the _isReady flag with true value.
+   * @private
+   * @param {number} backOff - interval interval between retries (in milliseconds).
+   */
+  _signalizeReadyState(backOff = 100) {
+    if (!this.isReady) return setTimeout(() => { this._signalizeReadyState(backOff * 2) }, backOff)
+
+    this.trigger(Events.PLAYBACK_READY, this.name)
+    this._isReady = true
   }
 
   /**
