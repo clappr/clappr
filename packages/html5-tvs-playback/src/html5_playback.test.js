@@ -640,6 +640,7 @@ describe('HTML5TVsPlayback', function() {
     test('logs video.play promise problems', () => {
       window.HTMLMediaElement.prototype.play = () => new Promise(() => { throw new Error('Uh-oh!') })
 
+      this.playback.play()
       this.playback.el.play().catch(() => expect(console.log).toHaveBeenCalledWith(
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
