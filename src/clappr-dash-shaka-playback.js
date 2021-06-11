@@ -106,12 +106,6 @@ class DashShakaPlayback extends HTML5Video {
     this._minDvrSize = typeof (this.options.shakaMinimumDvrSize) === 'undefined' ? 60 : this.options.shakaMinimumDvrSize
   }
 
-  getProgramDateTime() {
-    if (!this.shakaPlayerInstance || !this.presentationTimeline) return 0
-
-    return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000)
-  }
-
   _updateDvr(status) {
     this.trigger(Events.PLAYBACK_DVR, status)
     this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
