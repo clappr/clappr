@@ -86,10 +86,10 @@ class DashShakaPlayback extends HTML5Video {
     return this.seekRange.start
   }
 
-  get presentationTimeline() {
-    if (!this.shakaPlayerInstance || !this.shakaPlayerInstance.getManifest()) return null
+  get presentationStartTimeAsDate() {
+    if (!this.shakaPlayerInstance || !this.shakaPlayerInstance.getPresentationStartTimeAsDate()) return 0
 
-    return this.shakaPlayerInstance.getManifest().presentationTimeline
+    return new Date(this.shakaPlayerInstance.getPresentationStartTimeAsDate().getTime() + this.seekRange.start * 1000)
   }
 
   get bandwidthEstimate() {
@@ -407,7 +407,7 @@ class DashShakaPlayback extends HTML5Video {
     let update = {
       current: this.getCurrentTime(),
       total: this.getDuration(),
-      firstFragDateTime: this.getProgramDateTime()
+      firstFragDateTime: this.presentationStartTimeAsDate
     }
     let isSame = this._lastTimeUpdate && (
       update.current === this._lastTimeUpdate.current &&
