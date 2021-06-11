@@ -33,7 +33,7 @@ var player = new Clappr.Player({
 ### Playback API
 | static method | arguments | description |
 |---------------|-----------|-------------|
-| `HTML5TVsPlayback.canPlay` | * `{String} - resourceUrl` * `{String} - mimeType (optional)` | Returns a {Boolean} response accordingly to the given media URL (`resourceUrl`). If a `mimeType` is provided then this will be used instead of inferring the mimetype via the given URL. |
+| `HTML5TVsPlayback.canPlay` | <ul><li>`{String} - resourceUrl`</li><li>`{String} - mimeType (optional)`</li></ul> | Returns a {Boolean} response accordingly to the given media URL (`resourceUrl`). If a `mimeType` is provided then this will be used instead of inferring the mimetype via the given URL. |
 
 | instance method | arguments | description |
 |-----------------|-----------|-------------|
