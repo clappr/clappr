@@ -32,11 +32,11 @@ var player = new Clappr.Player({
 
 ### Playback API
 | static method | arguments | description |
-|---------------|:---------:|-------------|
-| `HTML5TVsPlayback.canPlay` | `{String} - resourceUrl, {String} - mimeType (optional)` | Returns a {Boolean} response accordingly to the given media URL (`resourceUrl`). If a `mimeType` is provided then this will be used instead of inferring the mimetype via the given URL. |
+|---------------|-----------|-------------|
+| `HTML5TVsPlayback.canPlay` | * `{String} - resourceUrl` * `{String} - mimeType (optional)` | Returns a {Boolean} response accordingly to the given media URL (`resourceUrl`). If a `mimeType` is provided then this will be used instead of inferring the mimetype via the given URL. |
 
 | instance method | arguments | description |
-|-----------------|:---------:|-------------|
+|-----------------|-----------|-------------|
 | `playback.play` |  | Begins/resume playback of the media. |
 | `playback.pause` |  | Pauses the media playback. |
 | `playback.stop` | | Stops the media playback. This implies on the removing the src attribute from the video element and calling the load() method without a valid source to stop downloading the source that was removed. |
