@@ -106,6 +106,10 @@ class DashShakaPlayback extends HTML5Video {
     this._minDvrSize = typeof (this.options.shakaMinimumDvrSize) === 'undefined' ? 60 : this.options.shakaMinimumDvrSize
   }
 
+  getProgramDateTime() {
+    return this.presentationStartTimeAsDate
+  }
+
   _updateDvr(status) {
     this.trigger(Events.PLAYBACK_DVR, status)
     this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
@@ -401,7 +405,7 @@ class DashShakaPlayback extends HTML5Video {
     let update = {
       current: this.getCurrentTime(),
       total: this.getDuration(),
-      firstFragDateTime: this.presentationStartTimeAsDate
+      firstFragDateTime: this.getProgramDateTime()
     }
     let isSame = this._lastTimeUpdate && (
       update.current === this._lastTimeUpdate.current &&
