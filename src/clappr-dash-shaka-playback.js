@@ -86,10 +86,10 @@ class DashShakaPlayback extends HTML5Video {
     return this.seekRange.start
   }
 
-  get presentationTimeline() {
-    if (!this.shakaPlayerInstance || !this.shakaPlayerInstance.getManifest()) return null
+  get presentationStartTimeAsDate() {
+    if (!this.shakaPlayerInstance || !this.shakaPlayerInstance.getPresentationStartTimeAsDate()) return 0
 
-    return this.shakaPlayerInstance.getManifest().presentationTimeline
+    return new Date(this.shakaPlayerInstance.getPresentationStartTimeAsDate().getTime() + this.seekRange.start * 1000)
   }
 
   get bandwidthEstimate() {
@@ -107,9 +107,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   getProgramDateTime() {
-    if (!this.shakaPlayerInstance || !this.presentationTimeline) return 0
-
-    return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000)
+    return this.presentationStartTimeAsDate
   }
 
   _updateDvr(status) {
