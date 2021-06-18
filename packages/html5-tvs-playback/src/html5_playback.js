@@ -67,11 +67,11 @@ export default class HTML5TVsPlayback extends Playback {
 
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
-    this.setPrivateFlags()
+    this._setPrivateFlags()
     this._setupSource(this.options.src)
   }
 
-  setPrivateFlags() {
+  _setPrivateFlags() {
     this._isReady = false
     this._isBuffering = false
     this._isStopped = false

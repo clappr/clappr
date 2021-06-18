@@ -383,11 +383,11 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('constructor', () => {
-    test('calls setPrivateFlags method', () => {
-      jest.spyOn(HTML5TVsPlayback.prototype, 'setPrivateFlags')
+    test('calls _setPrivateFlags method', () => {
+      jest.spyOn(HTML5TVsPlayback.prototype, '_setPrivateFlags')
       setupTest()
 
-      expect(HTML5TVsPlayback.prototype.setPrivateFlags).toHaveBeenCalledTimes(1)
+      expect(HTML5TVsPlayback.prototype._setPrivateFlags).toHaveBeenCalledTimes(1)
     })
 
     test('calls _setupSource with options.src', () => {
@@ -398,7 +398,7 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
-  describe('setPrivateFlags method', () => {
+  describe('_setPrivateFlags method', () => {
     test('sets _isReady flag with false value', () => {
       expect(HTML5TVsPlayback.prototype._isReady).toBeUndefined()
       expect(this.playback._isReady).toBeFalsy()
