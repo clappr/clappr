@@ -1,6 +1,7 @@
 /* eslint-disable */
 var mp4Source = 'http://clappr.io/highline.mp4';
 var hlsSource = 'http://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8';
+var smoothStreamingSource = 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest';
 Clappr.Log.setLevel(Clappr.Log.LEVEL_INFO);
 
 var onReadyCallback = function() {

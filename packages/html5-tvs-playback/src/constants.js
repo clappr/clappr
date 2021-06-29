@@ -24,19 +24,24 @@ export const READY_STATE_STAGES = {
 export const MIME_TYPES = {
   MP4: 'video/mp4',
   VND_APPLE_MPEGURL: 'application/vnd.apple.mpegurl',
+  VND_MS_SSTR: 'application/vnd.ms-sstr+xml',
 }
 
 export const MIME_TYPES_BY_EXTENSION = {
   m3u8: MIME_TYPES.VND_APPLE_MPEGURL,
   m3u: MIME_TYPES.VND_APPLE_MPEGURL,
   mp4: MIME_TYPES.MP4,
+  ism: MIME_TYPES.VND_MS_SSTR,
 }
 
 export const getExtension = url => {
   const urlWithoutParameters = url.split('?')[0] //eslint-disable-line
   const match = urlWithoutParameters.match(/\.([a-z0-9]+)$/i)
+  const matchForISM = urlWithoutParameters.match(/[^/].+(\.)(.*?)(?=\/).([a-z0-9]+)$/i)
 
   return match && match[1]
     ? match[1].toLowerCase()
-    : ''
+    : matchForISM && matchForISM[2]
+      ? matchForISM[2].toLowerCase()
+      : ''
 }
