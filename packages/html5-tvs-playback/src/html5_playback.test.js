@@ -3,7 +3,7 @@ import mockConsole from 'jest-mock-console'
 
 import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
-import { READY_STATE_STAGES } from './constants'
+import { READY_STATE_STAGES } from './utils/constants'
 
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][html5_tvs_playback]'
 const LOG_INFO_HEAD_MESSAGE = '%c[info][html5_tvs_playback]'

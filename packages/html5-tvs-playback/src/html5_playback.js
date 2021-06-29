@@ -5,7 +5,7 @@ import {
   READY_STATE_STAGES,
   UNKNOWN_ERROR,
   getExtension,
-} from './constants'
+} from './utils/constants'
 
 /**
  * HTML5 playback implementation for HbbTV 2.0.1 capable devices.
