@@ -1,4 +1,5 @@
 import { Events, Log, Playback, PlayerError, version } from '@clappr/core'
+import DRMHandler from './drm/drm_handler'
 import {
   MIME_TYPES,
   MIME_TYPES_BY_EXTENSION,
@@ -74,6 +75,7 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   _setPrivateFlags() {
+    this._drmConfigured = false
     this._isReady = false
     this._isBuffering = false
     this._isStopped = false
@@ -84,7 +86,9 @@ export default class HTML5TVsPlayback extends Playback {
     const currentSource = this.$sourceElement && this.$sourceElement.src
     if (sourceURL === currentSource) return
 
-    this._setSourceOnVideoTag(sourceURL)
+    this.config && this.config.drm && this.config.drm.licenseServerURL && !this._drmConfigured
+      ? DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured)
+      : this._setSourceOnVideoTag(sourceURL)
   }
 
   _setSourceOnVideoTag(sourceURL) {
@@ -97,6 +101,10 @@ export default class HTML5TVsPlayback extends Playback {
     this.el.appendChild(this.$sourceElement)
   }
 
+  _onDrmConfigured() {
+    this._drmConfigured = true
+    this._setSourceOnVideoTag(this.options.src)
+  }
   _onCanPlay(e) {
     Log.info(this.name, 'The HTMLMediaElement canplay event is triggered: ', e)
     if (this._isBuffering) {
