@@ -422,22 +422,55 @@ describe('HTML5TVsPlayback', function() {
 
   describe('_setupSource method', () => {
     test('avoids unnecessary video.src updates', () => {
-      this.playback.el.src = URL_VIDEO_MP4_EXAMPLE
+      jest.spyOn(this.playback, '_setSourceOnVideoTag')
+
+      this.playback.$sourceElement = document.createElement('source')
+      this.playback.$sourceElement.src = URL_VIDEO_MP4_EXAMPLE
+      this.playback.el.appendChild(this.playback.$sourceElement)
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
-      expect(this._src).toBeUndefined()
+      expect(this.playback._setSourceOnVideoTag).not.toHaveBeenCalled()
     })
 
-    test('sets received source URL as video.src attribute', () => {
+    test('calls _setSourceOnVideoTag method', () => {
+      jest.spyOn(this.playback, '_setSourceOnVideoTag')
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
-      expect(this.playback.el.src).toEqual(URL_VIDEO_MP4_EXAMPLE)
+      expect(this.playback._setSourceOnVideoTag).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
+    })
+  })
+
+  describe('_setSourceOnVideoTag method', () => {
+    test('creates the $sourceElement reference', () => {
+      expect(this.playback.$sourceElement).toBeUndefined()
+
+      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.$sourceElement).toBeDefined()
     })
 
-    test('saves current video.src value on internal reference', () => {
+    test('sets received source URL extension as $sourceElement.type attribute', () => {
+      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.$sourceElement.type).toEqual('video/mp4')
+    })
+
+    test('sets received source URL as $sourceElement.src attribute', () => {
+      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.$sourceElement.src).toEqual(URL_VIDEO_MP4_EXAMPLE)
+    })
+
+    test('saves current $sourceElement.src value on internal reference', () => {
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
       expect(this.playback._src).toEqual(URL_VIDEO_MP4_EXAMPLE)
+    })
+
+    test('appends $sourceElement into the playback.el', () => {
+      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.el.firstChild).toEqual(this.playback.$sourceElement)
     })
   })
 

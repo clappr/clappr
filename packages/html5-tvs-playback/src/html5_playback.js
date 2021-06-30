@@ -79,10 +79,20 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   _setupSource(sourceURL) {
-    if (this.el.src === sourceURL) return
+    const currentSource = this.$sourceElement && this.$sourceElement.src
+    if (sourceURL === currentSource) return
 
-    this.el.src = sourceURL
-    this._src = this.el.src
+    this._setSourceOnVideoTag(sourceURL)
+  }
+
+  _setSourceOnVideoTag(sourceURL) {
+    this.$sourceElement = document.createElement('source')
+    this.$sourceElement.type = MIME_TYPES_BY_EXTENSION[getExtension(sourceURL)]
+    this.$sourceElement.src = sourceURL
+
+    this._src = this.$sourceElement.src
+
+    this.el.appendChild(this.$sourceElement)
   }
 
   _onCanPlay(e) {
