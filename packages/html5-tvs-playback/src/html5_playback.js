@@ -105,6 +105,11 @@ export default class HTML5TVsPlayback extends Playback {
     this._drmConfigured = true
     this._setSourceOnVideoTag(this.options.src)
   }
+
+  _onDrmCleared() {
+    this._drmConfigured = false
+  }
+
   _onCanPlay(e) {
     Log.info(this.name, 'The HTMLMediaElement canplay event is triggered: ', e)
     if (this._isBuffering) {
@@ -245,21 +250,22 @@ export default class HTML5TVsPlayback extends Playback {
   stop() {
     this.pause()
     this._isStopped = true
-    this._isReady = false
     this._wipeUpMedia()
     this.trigger(Events.PLAYBACK_STOP)
   }
 
   destroy() {
     this._isDestroyed = true
-    this._isReady = false
     super.destroy()
     this._wipeUpMedia()
     this._src = null
   }
 
   _wipeUpMedia() {
-    this.el.removeAttribute('src') // The src attribute will be added again in play().
+    this._isReady = false
+    this._drmConfigured && DRMHandler.clearLicenseRequest.call(this, this._onDrmCleared)
+    this.$sourceElement && this.$sourceElement.removeAttribute('src') // The src attribute will be added again in play().
+    this.$sourceElement && this.$sourceElement.remove()
     this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.
   }
 

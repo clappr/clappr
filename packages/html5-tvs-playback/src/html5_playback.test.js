@@ -528,6 +528,15 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  describe('_onDrmCleared callback', () => {
+    test('sets _drmConfigured flag with false value', () => {
+      this.playback._drmConfigured = true
+      this.playback._onDrmCleared()
+
+      expect(this.playback._drmConfigured).toBeFalsy()
+    })
+  })
+
   describe('_onCanPlay callback', () => {
     test('sets _isBuffering flag with false value if the current value is true', () => {
       this.playback._isBuffering = true
@@ -781,13 +790,6 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback._isStopped).toBeTruthy()
     })
 
-    test('sets _isReady flag with false value', () => {
-      this.playback._isReady = true
-      this.playback.stop()
-
-      expect(this.playback._isReady).toBeFalsy()
-    })
-
     test('calls _wipeUpMedia method', () => {
       jest.spyOn(this.playback, '_wipeUpMedia')
       this.playback.stop()
@@ -813,13 +815,6 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback._isDestroyed).toBeTruthy()
     })
 
-    test('sets _isReady flag with false value', () => {
-      this.playback._isReady = true
-      this.playback.destroy()
-
-      expect(this.playback._isReady).toBeFalsy()
-    })
-
     test('calls _wipeUpMedia method', () => {
       jest.spyOn(this.playback, '_wipeUpMedia')
       this.playback.destroy()
@@ -836,15 +831,36 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('_wipeUpMedia method', () => {
-    test('removes src attribute from video element', () => {
-      this.playback._src = URL_VIDEO_MP4_EXAMPLE
-      this.playback.play()
+    beforeEach(() => {
+      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
+    })
 
-      expect(this.playback.el.src).toEqual(URL_VIDEO_MP4_EXAMPLE)
-
+    test('sets _isReady flag with false value', () => {
+      this.playback._isReady = true
       this.playback._wipeUpMedia()
 
-      expect(this.playback.el.src).toEqual('')
+      expect(this.playback._isReady).toBeFalsy()
+    })
+
+    test('removes license server if _drmConfigured flag is true', () => {
+      jest.spyOn(DRMHandler, 'clearLicenseRequest').mockImplementation(() => {})
+      this.playback._drmConfigured = true
+      this.playback._wipeUpMedia()
+
+      expect(DRMHandler.clearLicenseRequest).toHaveBeenCalledTimes(1)
+      expect(DRMHandler.clearLicenseRequest).toHaveBeenCalledWith(this.playback._onDrmCleared)
+    })
+
+    test('removes src attribute from the $sourceElement', () => {
+      this.playback._wipeUpMedia()
+
+      expect(this.playback.$sourceElement.src).toEqual('')
+    })
+
+    test('removes $sourceElement the DOM', () => {
+      this.playback._wipeUpMedia()
+
+      expect(this.playback.el.getElementsByTagName('source').length).toEqual(0)
     })
 
     test('calls native video.load method without arguments', () => {
