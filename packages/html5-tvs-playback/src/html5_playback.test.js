@@ -662,6 +662,13 @@ describe('HTML5TVsPlayback', function() {
 
       expect(cb).toHaveBeenCalledTimes(1)
     })
+
+    test('calls _wipeUpMedia method', () => {
+      jest.spyOn(this.playback, '_wipeUpMedia')
+      this.playback._onEnded()
+
+      expect(this.playback._wipeUpMedia).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('_onError callback', () => {
