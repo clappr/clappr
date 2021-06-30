@@ -65,6 +65,8 @@ export default class HTML5TVsPlayback extends Playback {
     }
   }
 
+  get config() { return this.options.html5TvsPlayback }
+
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
     this._setPrivateFlags()

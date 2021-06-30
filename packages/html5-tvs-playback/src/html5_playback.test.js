@@ -382,6 +382,17 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  test('have a getter called config', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'config').get).toBeTruthy()
+  })
+
+  test('config getter returns the options.html5TvsPlayback value', () => {
+    const { core, container } = setupTest({ src: URL_VIDEO_MP4_EXAMPLE })
+    core.activeContainer = container
+
+    expect(container.playback.config).toEqual(core.options.html5TvsPlayback)
+  })
+
   describe('constructor', () => {
     test('calls _setPrivateFlags method', () => {
       jest.spyOn(HTML5TVsPlayback.prototype, '_setPrivateFlags')
