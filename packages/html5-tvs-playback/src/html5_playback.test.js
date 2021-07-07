@@ -921,6 +921,37 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
+    test('calls _updateDvr method with current DVR status if dvrEnabled getter returns true', () => {
+      jest.spyOn(this.playback, 'duration', 'get').mockReturnValue(100)
+      jest.spyOn(this.playback, 'dvrEnabled', 'get').mockReturnValueOnce(false)
+      jest.spyOn(this.playback, '_updateDvr')
+      this.playback.seek(10)
+
+      expect(this.playback._updateDvr).not.toHaveBeenCalled()
+
+      jest.spyOn(this.playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
+      this.playback.seek(10)
+
+      expect(this.playback._updateDvr).toHaveBeenCalledTimes(1)
+      expect(this.playback._updateDvr).toHaveBeenCalledWith(true)
+
+      jest.spyOn(this.playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
+      this.playback.seek(99)
+
+      expect(this.playback._updateDvr).toHaveBeenCalledTimes(2)
+      expect(this.playback._updateDvr).toHaveBeenCalledWith(false)
+    })
+
+    test('use video.seekable.start(0) as basis to update current time', () => {
+      const startTimeChunks = [10, 50]
+
+      jest.spyOn(this.playback, 'duration', 'get').mockReturnValueOnce(100)
+      this.playback.el = { seekable: { start: index => startTimeChunks[index] } }
+      this.playback.seek(30)
+
+      expect(this.playback.el.currentTime).toEqual(40)
+    })
+
     test('sets received value on video.currentTime attribute', () => {
       this.playback.seek(10)
 

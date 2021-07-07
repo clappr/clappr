@@ -6,6 +6,7 @@ import {
   READY_STATE_STAGES,
   UNKNOWN_ERROR,
   DEFAULT_MINIMUM_DVR_SIZE,
+  LIVE_STATE_THRESHOLD,
   getExtension,
 } from './utils/constants'
 
@@ -277,7 +278,16 @@ export default class HTML5TVsPlayback extends Playback {
 
   seek(time) {
     if (time < 0) return Log.warn(this.name, 'Attempting to seek to a negative time. Ignoring this operation.')
-    this.el.currentTime = time
+
+    let timeToSeek = time
+
+    // Assumes that is a live state if the time is within the LIVE_STATE_THRESHOLD of the end of the stream.
+    const dvrStatus = timeToSeek < this.duration - LIVE_STATE_THRESHOLD
+
+    this.dvrEnabled && this._updateDvr(dvrStatus)
+    this.el.seekable && this.el.seekable.start && (timeToSeek += this.el.seekable.start(0))
+
+    this.el.currentTime = timeToSeek
   }
 
   stop() {
