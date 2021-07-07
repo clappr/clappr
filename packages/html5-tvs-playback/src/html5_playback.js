@@ -41,6 +41,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get buffering() { return this._isBuffering }
 
+  get config() { return this.options.html5TvsPlayback }
+
   get events() {
     return {
       canplay: this._onCanPlay,
@@ -67,8 +69,6 @@ export default class HTML5TVsPlayback extends Playback {
       error: this._onError,
     }
   }
-
-  get config() { return this.options.html5TvsPlayback }
 
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
