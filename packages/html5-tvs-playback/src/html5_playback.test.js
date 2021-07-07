@@ -172,6 +172,20 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.buffering).toEqual(this.playback._isBuffering)
   })
 
+  test('have a getter called isLive', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isLive').get).toBeTruthy()
+  })
+
+  test('isLive getter returns the check if the mediaType getter returns the Playback.LIVE value', () => {
+    jest.spyOn(this.playback, 'mediaType', 'get').mockReturnValueOnce(Playback.VOD)
+
+    expect(this.playback.isLive).toBeFalsy()
+
+    jest.spyOn(this.playback, 'mediaType', 'get').mockReturnValueOnce(Playback.LIVE)
+
+    expect(this.playback.isLive).toBeTruthy()
+  })
+
   test('have a getter called events', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'events').get).toBeTruthy()
   })

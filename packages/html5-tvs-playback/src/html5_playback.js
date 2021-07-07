@@ -46,6 +46,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get buffering() { return this._isBuffering }
 
+  get isLive() { return this.mediaType === Playback.LIVE }
+
   get config() { return this.options.html5TvsPlayback }
 
   get events() {
