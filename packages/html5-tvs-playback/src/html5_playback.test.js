@@ -675,6 +675,23 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  describe('_updateDvr method', () => {
+    test('triggers PLAYBACK_DVR event with received status', () => {
+      const cb = jest.fn()
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_DVR, cb)
+      this.playback._updateDvr(true)
+
+      expect(cb).toHaveBeenCalledTimes(1)
+      expect(cb).toHaveBeenCalledWith(true)
+
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_DVR, cb)
+      this.playback._updateDvr(false)
+
+      expect(cb).toHaveBeenCalledTimes(2)
+      expect(cb).toHaveBeenCalledWith(false)
+    })
+  })
+
   describe('_onCanPlay callback', () => {
     test('sets _isBuffering flag with false value if the current value is true', () => {
       this.playback._isBuffering = true
