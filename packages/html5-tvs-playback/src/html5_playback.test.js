@@ -134,8 +134,26 @@ describe('HTML5TVsPlayback', function() {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'duration').get).toBeTruthy()
   })
 
-  test('duration getter returns video.duration property', () => {
-    expect(this.playback.duration).toEqual(this.playback.el.duration)
+  describe('duration getter', () => {
+    test('returns video.duration property for VoD content', () => {
+      expect(this.playback.duration).toEqual(this.playback.el.duration)
+    })
+
+    test('returns the difference between video.seekable.end(0) and video.seekable.start(0) values for live content', () => {
+      const startTimeChunks = [0, 11, 101]
+      const endTimeChunks = [10, 100, 1000]
+
+      jest.spyOn(this.playback, 'isLive', 'get').mockImplementation(() => true)
+
+      this.playback.el = {
+        seekable: {
+          start: index => startTimeChunks[index],
+          end: index => endTimeChunks[index],
+        },
+      }
+
+      expect(this.playback.duration).toEqual(10)
+    })
   })
 
   test('have a getter called ended', () => {
