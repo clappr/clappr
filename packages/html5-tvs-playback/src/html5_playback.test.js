@@ -69,6 +69,24 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.el.tagName).toEqual('VIDEO')
   })
 
+  test('have a getter called mediaType', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'mediaType').get).toBeTruthy()
+  })
+
+  describe('mediaType getter', () => {
+    test('returns Playback.LIVE if video.duration property is Infinity', () => {
+      this.playback.el = { duration: Infinity }
+
+      expect(this.playback.mediaType).toEqual(Playback.LIVE)
+    })
+
+    test('returns Playback.VOD if video.duration property is not Infinity', () => {
+      this.playback.el = { duration: 0 }
+
+      expect(this.playback.mediaType).toEqual(Playback.VOD)
+    })
+  })
+
   test('have a getter called isReady', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isReady').get).toBeTruthy()
   })
