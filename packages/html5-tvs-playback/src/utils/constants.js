@@ -34,6 +34,8 @@ export const MIME_TYPES_BY_EXTENSION = {
   ism: MIME_TYPES.VND_MS_SSTR,
 }
 
+export const DEFAULT_MINIMUM_DVR_SIZE = 60 // in seconds
+
 export const getExtension = url => {
   const urlWithoutParameters = url.split('?')[0] //eslint-disable-line
   const match = urlWithoutParameters.match(/(\.[A-Z0-9]+)/gi)
