@@ -4,7 +4,7 @@ import mockConsole from 'jest-mock-console'
 import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
 import DRMHandler from './drm/drm_handler'
-import { READY_STATE_STAGES } from './utils/constants'
+import { READY_STATE_STAGES, DEFAULT_MINIMUM_DVR_SIZE } from './utils/constants'
 
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][html5_tvs_playback]'
 const LOG_INFO_HEAD_MESSAGE = '%c[info][html5_tvs_playback]'
@@ -202,6 +202,24 @@ describe('HTML5TVsPlayback', function() {
     this.playback.options.playback.minimumDvrSize = 120
 
     expect(this.playback.minimumDvrSizeConfig).toEqual(120)
+  })
+
+  test('have a getter called dvrSize', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'dvrSize').get).toBeTruthy()
+  })
+
+  describe('dvrSize getter', () => {
+    test('returns the minimumDvrSizeConfig getter value if options.playback.minimumDvrSize is valid', () => {
+      this.playback.options.playback = { minimumDvrSize: 120 }
+
+      expect(this.playback.dvrSize).toEqual(120)
+    })
+
+    test('returns the DEFAULT_MINIMUM_DVR_SIZE value if options.playback.minimumDvrSize is invalid', () => {
+      this.playback.options.playback = { minimumDvrSize: 'invalid_config' }
+
+      expect(this.playback.dvrSize).toEqual(DEFAULT_MINIMUM_DVR_SIZE)
+    })
   })
 
   test('have a getter called events', () => {

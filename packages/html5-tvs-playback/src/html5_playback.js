@@ -5,6 +5,7 @@ import {
   MIME_TYPES_BY_EXTENSION,
   READY_STATE_STAGES,
   UNKNOWN_ERROR,
+  DEFAULT_MINIMUM_DVR_SIZE,
   getExtension,
 } from './utils/constants'
 
@@ -52,6 +53,8 @@ export default class HTML5TVsPlayback extends Playback {
     const DVRSizeConfig = this.options.playback && this.options.playback.minimumDvrSize
     return typeof DVRSizeConfig !== 'undefined' && typeof DVRSizeConfig === 'number' && DVRSizeConfig
   }
+
+  get dvrSize() { return this.minimumDvrSizeConfig ? this.minimumDvrSizeConfig : DEFAULT_MINIMUM_DVR_SIZE }
 
   get config() { return this.options.html5TvsPlayback }
 
