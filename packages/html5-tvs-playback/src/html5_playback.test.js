@@ -222,6 +222,30 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  test('have a getter called dvrEnabled', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'dvrEnabled').get).toBeTruthy()
+  })
+
+  test('dvrEnabled getter returns the check of the isLive is truthy and if the duration is greater or equal the dvrSize value', () => {
+    jest.spyOn(this.playback, 'isLive', 'get').mockReturnValueOnce(false)
+    jest.spyOn(this.playback, 'duration', 'get').mockReturnValueOnce(100)
+    jest.spyOn(this.playback, 'dvrSize', 'get').mockReturnValueOnce(60)
+
+    expect(this.playback.dvrEnabled).toBeFalsy()
+
+    jest.spyOn(this.playback, 'isLive', 'get').mockReturnValueOnce(true)
+    jest.spyOn(this.playback, 'duration', 'get').mockReturnValueOnce(10)
+    jest.spyOn(this.playback, 'dvrSize', 'get').mockReturnValueOnce(60)
+
+    expect(this.playback.dvrEnabled).toBeFalsy()
+
+    jest.spyOn(this.playback, 'isLive', 'get').mockReturnValueOnce(true)
+    jest.spyOn(this.playback, 'duration', 'get').mockReturnValueOnce(120)
+    jest.spyOn(this.playback, 'dvrSize', 'get').mockReturnValueOnce(60)
+
+    expect(this.playback.dvrEnabled).toBeTruthy()
+  })
+
   test('have a getter called events', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'events').get).toBeTruthy()
   })

@@ -56,6 +56,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get dvrSize() { return this.minimumDvrSizeConfig ? this.minimumDvrSizeConfig : DEFAULT_MINIMUM_DVR_SIZE }
 
+  get dvrEnabled() { return this.duration >= this.dvrSize && this.isLive }
+
   get config() { return this.options.html5TvsPlayback }
 
   get events() {
