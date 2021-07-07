@@ -908,6 +908,15 @@ describe('HTML5TVsPlayback', function() {
 
       expect(this.playback.el.pause).toHaveBeenCalledTimes(1)
     })
+
+    test('calls _updateDvr with true value if dvrEnabled getter is truthy', () => {
+      jest.spyOn(this.playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
+      jest.spyOn(this.playback, '_updateDvr')
+      this.playback.pause()
+
+      expect(this.playback._updateDvr).toHaveBeenCalledTimes(1)
+      expect(this.playback._updateDvr).toHaveBeenCalledWith(true)
+    })
   })
 
   describe('seek method', () => {

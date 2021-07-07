@@ -274,6 +274,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   pause() {
     this.el.pause()
+    this.dvrEnabled && this._updateDvr(true)
   }
 
   seek(time) {
