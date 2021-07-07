@@ -757,12 +757,6 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
-  describe('getPlaybackType method', () => {
-    test('always returns VoD type', () => {
-      expect(this.playback.getPlaybackType()).toEqual(Playback.VOD)
-    })
-  })
-
   describe('play method', () => {
     test('sets _isStopped flag with false value', () => {
       expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
@@ -964,5 +958,9 @@ describe('HTML5TVsPlayback', function() {
 
   test('isPlaying method returns playing getter', () => {
     expect(this.playback.isPlaying()).toEqual(this.playback.playing)
+  })
+
+  test('getPlaybackType method returns mediaType getter', () => {
+    expect(this.playback.getPlaybackType()).toEqual(this.playback.mediaType)
   })
 })

@@ -241,10 +241,6 @@ export default class HTML5TVsPlayback extends Playback {
       : this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
-  getPlaybackType() {
-    return Playback.VOD
-  }
-
   play() {
     this._isStopped = false
     this._setupSource(this._src)
@@ -319,4 +315,11 @@ export default class HTML5TVsPlayback extends Playback {
    * Use the playing getter instead of it.
    */
   isPlaying() { return this.playing }
+
+  /**
+   * @deprecated
+   * This method currently exists for backward compatibility reasons.
+   * Use the mediaType getter instead of it.
+   */
+  getPlaybackType() { return this.mediaType }
 }
