@@ -186,6 +186,24 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.isLive).toBeTruthy()
   })
 
+  test('have a getter called minimumDvrSizeConfig', () => {
+    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'minimumDvrSizeConfig').get).toBeTruthy()
+  })
+
+  test('minimumDvrSizeConfig getter returns the value of a valid options.playback.minimumDvrSize config', () => {
+    this.playback.options.playback = { minimumDvrSize: 'invalid_config' }
+
+    expect(this.playback.minimumDvrSizeConfig).toBeFalsy()
+
+    this.playback.options.playback.minimumDvrSize = null
+
+    expect(this.playback.minimumDvrSizeConfig).toBeFalsy()
+
+    this.playback.options.playback.minimumDvrSize = 120
+
+    expect(this.playback.minimumDvrSizeConfig).toEqual(120)
+  })
+
   test('have a getter called events', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'events').get).toBeTruthy()
   })

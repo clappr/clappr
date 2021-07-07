@@ -48,6 +48,11 @@ export default class HTML5TVsPlayback extends Playback {
 
   get isLive() { return this.mediaType === Playback.LIVE }
 
+  get minimumDvrSizeConfig() {
+    const DVRSizeConfig = this.options.playback && this.options.playback.minimumDvrSize
+    return typeof DVRSizeConfig !== 'undefined' && typeof DVRSizeConfig === 'number' && DVRSizeConfig
+  }
+
   get config() { return this.options.html5TvsPlayback }
 
   get events() {
