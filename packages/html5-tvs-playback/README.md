@@ -57,7 +57,7 @@ var player = new Clappr.Player({
 | `playback.buffering` | Indicates whether the media on the buffering state. | `{Boolean}` |
 
 ## Next Steps
-- [ ] Media with DRM;
+- [x] Media with DRM;
 - [ ] Live media;
 - [ ] subtitles/closed captions;
 - [ ] multi-audio;
