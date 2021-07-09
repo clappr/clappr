@@ -18,7 +18,8 @@ A Clappr HTML5 playback for smart TVs devices that implement the [HbbTV 2.0.1 sp
 ---
 
 ## Features
-* Supports VoD (for `.mp4` and `.m3u8`);
+* Supports VoD;
+  * Current mime types: [`video/mp4`, `application/vnd.apple.mpegurl`, `application/vnd.ms-sstr+xml`].
 
 ## Configuration
 ```javascript
