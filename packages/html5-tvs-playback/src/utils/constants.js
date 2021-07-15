@@ -36,12 +36,8 @@ export const MIME_TYPES_BY_EXTENSION = {
 
 export const getExtension = url => {
   const urlWithoutParameters = url.split('?')[0] //eslint-disable-line
-  const match = urlWithoutParameters.match(/\.([a-z0-9]+)$/i)
-  const matchForISM = urlWithoutParameters.match(/.+\/.+\.([a-z0-9]+)\/.+/i)
+  const match = urlWithoutParameters.match(/(\.[A-Z0-9]+)/gi)
+  const extension = match ? match.pop().replace('.', '') : ''
 
-  return match && match[1]
-    ? match[1].toLowerCase()
-    : matchForISM && matchForISM[1]
-      ? matchForISM[1].toLowerCase()
-      : ''
+  return extension
 }
