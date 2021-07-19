@@ -87,7 +87,7 @@ export default class HTML5TVsPlayback extends Playback {
     if (sourceURL === currentSource) return
 
     this.config && this.config.drm && this.config.drm.licenseServerURL && !this._drmConfigured
-      ? DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured)
+      ? DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured, this._onDrmError)
       : this._setSourceOnVideoTag(sourceURL)
   }
 
@@ -108,6 +108,18 @@ export default class HTML5TVsPlayback extends Playback {
 
   _onDrmCleared() {
     this._drmConfigured = false
+  }
+
+  _onDrmError(errorMessage) {
+    this._drmConfigured = false
+
+    const formattedError = this.createError({
+      code: 'DRM',
+      description: errorMessage,
+      level: PlayerError.Levels.FATAL,
+    })
+
+    this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   _onCanPlay(e) {
@@ -264,7 +276,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   _wipeUpMedia() {
     this._isReady = false
-    this._drmConfigured && DRMHandler.clearLicenseRequest.call(this, this._onDrmCleared)
+    this._drmConfigured && DRMHandler.clearLicenseRequest.call(this, this._onDrmCleared, this._onDrmError)
     this.$sourceElement && this.$sourceElement.removeAttribute('src') // The src attribute will be added again in play().
     this.$sourceElement && this.$sourceElement.remove()
     this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.

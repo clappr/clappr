@@ -461,6 +461,7 @@ describe('HTML5TVsPlayback', function() {
       expect(DRMHandler.sendLicenseRequest).toHaveBeenCalledWith(
         container.playback.config.drm,
         container.playback._onDrmConfigured,
+        container.playback._onDrmError,
       )
     })
 
@@ -534,6 +535,33 @@ describe('HTML5TVsPlayback', function() {
       this.playback._onDrmCleared()
 
       expect(this.playback._drmConfigured).toBeFalsy()
+    })
+  })
+
+  describe('_onDrmError callback', () => {
+    test('sets _drmConfigured flag with false value', () => {
+      this.playback._drmConfigured = true
+      this.playback._onDrmError()
+
+      expect(this.playback._drmConfigured).toBeFalsy()
+    })
+
+    test('triggers PLAYBACK_ERROR event with formatted error object', () => {
+      const cb = jest.fn()
+
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_ERROR, cb)
+      this.playback._onDrmError('fake error message')
+
+      expect(cb).toHaveBeenCalledWith(
+        {
+          code: 'html5_tvs_playback:DRM',
+          description: 'fake error message',
+          level: 'FATAL',
+          origin: 'html5_tvs_playback',
+          raw: {},
+          scope: 'playback',
+        },
+      )
     })
   })
 
@@ -855,7 +883,7 @@ describe('HTML5TVsPlayback', function() {
       this.playback._wipeUpMedia()
 
       expect(DRMHandler.clearLicenseRequest).toHaveBeenCalledTimes(1)
-      expect(DRMHandler.clearLicenseRequest).toHaveBeenCalledWith(this.playback._onDrmCleared)
+      expect(DRMHandler.clearLicenseRequest).toHaveBeenCalledWith(this.playback._onDrmCleared, this.playback._onDrmError)
     })
 
     test('removes src attribute from the $sourceElement', () => {
