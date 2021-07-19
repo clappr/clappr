@@ -82,10 +82,8 @@ describe('DRMHandler', function() {
     })
 
     test('reuses drmAgent element if already exists', () => {
-      const cb = jest.fn()
-
       document.body.appendChild(createDrmAgent())
-      sendLicenseRequest(this.config, cb)
+      sendLicenseRequest(this.config)
 
       const duplicateIds = document.querySelectorAll('[id=\'oipfdrmagent\']')
 
@@ -93,16 +91,14 @@ describe('DRMHandler', function() {
     })
 
     test('prefer to append drmAgent on parent element of received scope if exits', () => {
-      const cb = jest.fn()
       const wantedScope = { el: document.createElement('div') }
-      sendLicenseRequest.call(wantedScope, this.config, cb)
+      sendLicenseRequest.call(wantedScope, this.config)
 
       expect(wantedScope.el.firstChild.id).toEqual('oipfdrmagent')
     })
 
     test('appends drmAgent on document.body if any external scope is received', () => {
-      const cb = jest.fn()
-      sendLicenseRequest(this.config, cb)
+      sendLicenseRequest(this.config)
 
       expect(document.body.firstChild.id).toEqual('oipfdrmagent')
     })
@@ -118,9 +114,10 @@ describe('DRMHandler', function() {
       )
     })
 
-    test('logs a error message if the sendDRMMessage call fails', () => {
-      const cb = jest.fn()
-      sendLicenseRequest(this.config, cb)
+    test('calls the errorCallback if the sendDRMMessage call fails', () => {
+      const successCb = jest.fn()
+      const errorCb = jest.fn()
+      sendLicenseRequest(this.config, successCb, errorCb)
 
       /* eslint-disable-next-line no-console */
       expect(console.log).toHaveBeenCalledWith(
@@ -129,19 +126,22 @@ describe('DRMHandler', function() {
         'Error at sendDRMMessage call',
         'oipfdrmagent.sendDRMMessage is not a function',
       )
+
+      expect(errorCb).toHaveBeenCalledTimes(1)
     })
 
     describe('at onDRMRightsError callback', () => {
-      test('don\'t return one error if the received code number is greater o equal 2', () => {
+      test('don\'t calls the errorCallback if the received code number is greater o equal 2', () => {
         document.body.appendChild(createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 
-        const cb = jest.fn()
-        sendLicenseRequest(this.config, cb)
-        const errorResponse = drmAgentElement.onDRMRightsError(2)
+        const successCb = jest.fn()
+        const errorCb = jest.fn()
+        sendLicenseRequest(this.config, successCb, errorCb)
+        drmAgentElement.onDRMRightsError(2)
 
-        expect(errorResponse).toBeUndefined()
+        expect(errorCb).not.toHaveBeenCalled()
       })
 
       test('returns one error if the received code number is below 2', () => {
@@ -149,25 +149,27 @@ describe('DRMHandler', function() {
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 
-        const cb = jest.fn()
-        sendLicenseRequest(this.config, cb)
-        const errorResponse = drmAgentElement.onDRMRightsError(1)
+        const successCb = jest.fn()
+        const errorCb = jest.fn()
+        sendLicenseRequest(this.config, successCb, errorCb)
+        drmAgentElement.onDRMRightsError(1)
 
-        expect(errorResponse).toEqual('DRM: Invalid license error')
+        expect(errorCb).toHaveBeenCalledWith('DRM: Invalid license error')
       })
     })
 
     describe('at onDRMMessageResult callback', () => {
-      test('returns one error if the received result code is greater than 0', () => {
+      test('calls the errorCallback if the received result code is greater than 0', () => {
         document.body.appendChild(createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 
-        const cb = jest.fn()
-        sendLicenseRequest(this.config, cb)
-        const resultResponse = drmAgentElement.onDRMMessageResult(0, 'a error message', 1)
+        const successCb = jest.fn()
+        const errorCb = jest.fn()
+        sendLicenseRequest(this.config, successCb, errorCb)
+        drmAgentElement.onDRMMessageResult(0, 'a error message', 1)
 
-        expect(resultResponse).toEqual('DRM: Unspecified error')
+        expect(errorCb).toHaveBeenCalledWith('DRM: Unspecified error')
       })
 
       test('calls the successCallback if the received result code is 0', () => {
@@ -201,10 +203,11 @@ describe('DRMHandler', function() {
       )
     })
 
-    test('logs a error message if the sendDRMMessage call fails', () => {
-      const cb = jest.fn()
+    test('calls the errorCallback if the sendDRMMessage call fails', () => {
+      const successCb = jest.fn()
+      const errorCb = jest.fn()
       document.body.appendChild(createDrmAgent())
-      clearLicenseRequest(cb)
+      clearLicenseRequest(successCb, errorCb)
 
       /* eslint-disable-next-line no-console */
       expect(console.log).toHaveBeenCalledWith(
@@ -213,6 +216,8 @@ describe('DRMHandler', function() {
         'Error at sendDRMMessage call',
         'oipfdrmagent.sendDRMMessage is not a function',
       )
+
+      expect(errorCb).toHaveBeenCalledTimes(1)
     })
 
     describe('at onDRMMessageResult callback', () => {

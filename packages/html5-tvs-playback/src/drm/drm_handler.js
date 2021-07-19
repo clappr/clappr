@@ -36,8 +36,9 @@ export const createDrmAgent = () => {
 }
 
 /* eslint-disable-next-line func-style */
-export function sendLicenseRequest(config = {}, callback = () => {}) {
-  const successCallback = callback.bind(this)
+export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = () => {}) {
+  const successCallback = onSuccess.bind(this)
+  const errorCallback = onFail.bind(this)
   let oipfdrmagent = document.getElementById('oipfdrmagent')
 
   if (!oipfdrmagent) {
@@ -55,12 +56,12 @@ export function sendLicenseRequest(config = {}, callback = () => {}) {
     const errorMessage = {
       0: 'DRM: No license error',
       1: 'DRM: Invalid license error',
-      2: 'license valid',
+      2: 'DRM: License valid',
     }
 
     if (resultCode < 2) {
       Log.error('DRMHandler', 'Error at onDRMRightsError call', errorMessage[resultCode])
-      return errorMessage[resultCode]
+      errorCallback(errorMessage[resultCode])
     }
   }
 
@@ -79,7 +80,7 @@ export function sendLicenseRequest(config = {}, callback = () => {}) {
 
     if (resultCode > 0) {
       Log.error('DRMHandler', 'Error at onDRMMessageResult call', errorMessage[resultCode])
-      return errorMessage[resultCode]
+      errorCallback(errorMessage[resultCode])
     }
 
     successCallback()
@@ -91,12 +92,14 @@ export function sendLicenseRequest(config = {}, callback = () => {}) {
     oipfdrmagent.sendDRMMessage(MESSAGE_TYPE, xmlLicenceAcquisition, DRM_SYSTEM_ID)
   } catch (error) {
     Log.error('DRMHandler', 'Error at sendDRMMessage call', error.message)
+    errorCallback(error.message)
   }
 }
 
 /* eslint-disable-next-line func-style */
-export function clearLicenseRequest(callback = () => {}) {
-  const successCallback = callback.bind(this)
+export function clearLicenseRequest(onSuccess = () => {}, onFail = () => {}) {
+  const successCallback = onSuccess.bind(this)
+  const errorCallback = onFail.bind(this)
   const oipfdrmagent = document.getElementById('oipfdrmagent')
 
   if (!oipfdrmagent) {
@@ -117,6 +120,7 @@ export function clearLicenseRequest(callback = () => {}) {
     oipfdrmagent.sendDRMMessage(MESSAGE_TYPE, xmlLicenceAcquisition, DRM_SYSTEM_ID)
   } catch (error) {
     Log.error('DRMHandler', 'Error at sendDRMMessage call', error.message)
+    errorCallback(error.message)
   }
 }
 
