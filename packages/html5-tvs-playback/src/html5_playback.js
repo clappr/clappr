@@ -51,8 +51,8 @@ export default class HTML5TVsPlayback extends Playback {
   get isLive() { return this.mediaType === Playback.LIVE }
 
   get minimumDvrSizeConfig() {
-    const DVRSizeConfig = this.options.playback && this.options.playback.minimumDvrSize
-    return typeof DVRSizeConfig !== 'undefined' && typeof DVRSizeConfig === 'number' && DVRSizeConfig
+    const dvrSizeConfig = this.options.playback && this.options.playback.minimumDvrSize
+    return typeof dvrSizeConfig !== 'undefined' && typeof dvrSizeConfig === 'number' && dvrSizeConfig
   }
 
   get dvrSize() { return this.minimumDvrSizeConfig ? this.minimumDvrSizeConfig : DEFAULT_MINIMUM_DVR_SIZE }
