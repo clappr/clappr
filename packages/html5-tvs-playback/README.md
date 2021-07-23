@@ -18,7 +18,7 @@ A Clappr HTML5 playback for smart TVs devices that implement the [HbbTV 2.0.1 sp
 ---
 
 ## Features
-* Supports VoD;
+* Supports VoD an Live content;
   * Current mime types: [`video/mp4`, `application/vnd.apple.mpegurl`, `application/vnd.ms-sstr+xml`].
 * Supports DRM content;
   * Using [`oipfDrmAgent`](https://www.oipf.tv/docs/OIPF-T1-R2_Specification-Volume-5-Declarative-Application-Environment-v2_3-2014-01-24.pdf#page=121). (Only with Playready at the moment)
@@ -61,22 +61,27 @@ Group all DRM-related config. The currently available configs are:
 | `playback.getCurrentTime (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer currentTime getter. |
 | `playback.getDuration (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer duration getter. |
 | `playback.isPlaying (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer playing getter. |
+| `playback.getPlaybackType (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer mediaType getter. |
 
 | getter | description | response |
 |--------|-------------|----------|
+| `playback.mediaType` | Returns if the media is `live` or `vod`. | `{String}` |
 | `playback.isReady` |  Indicates if the video is  ready to play, checking if [HTMLMediaElement.readyState](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) is greater than or equal [HAVE_CURRENT_DATA](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState#value) value. | `{Boolean}` |
 | `playback.playing` | Indicates if the video is playing or not. | `{Boolean}` |
-| `playback.currentTime` |Returns the current position of the media is at the moment. | `{Number} - time in seconds` |
+| `playback.currentTime` | Returns the current position of the media is at the moment. | `{Number} - time in seconds` |
 | `playback.duration` | Returns the duration of the current media. | `{Number} - time in seconds` |
 | `playback.ended` | Indicates whether the media has finished playing. | `{Boolean}` |
 | `playback.buffering` | Indicates whether the media on the buffering state. | `{Boolean}` |
+| `playback.isLive` | Indicates whether the media is a live content. | `{Boolean}` |
+| `playback.minimumDvrSizeConfig` | Returns `options.playback.minimumDvrSize` if is configured and is a valid value. | `{Number}` |
+| `playback.dvrSize` | Returns `playback.minimumDvrSizeConfig` if is a valid value or one default value. (Currently, is 60 seconds) | `{Number}` |
+| `playback.dvrEnabled` | Indicates whether the live media is on DVR state. | `{Boolean}` |
 
 ## Next Steps
 - [x] Media with DRM;
-- [ ] Live media;
+- [x] Live media;
 - [ ] subtitles/closed captions;
 - [ ] multi-audio;
-- [ ] DVR for live media;
 - [ ] Advertisement;
 
 ## Development
