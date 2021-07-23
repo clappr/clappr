@@ -40,7 +40,7 @@ export default class HTML5TVsPlayback extends Playback {
   get duration() {
     // The HTMLMediaElement.duration returns Infinity for live streams: https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/duration#value
     return this.isLive
-      ? this.el.seekable.end(0) - this.el.seekable.start(0)
+      ? this.el.seekable.end(this.el.seekable.length - 1) - this.el.seekable.start(0)
       : this.el.duration
   }
 

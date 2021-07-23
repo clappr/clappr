@@ -139,7 +139,7 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback.duration).toEqual(this.playback.el.duration)
     })
 
-    test('returns the difference between video.seekable.end(0) and video.seekable.start(0) values for live content', () => {
+    test('returns the difference between the last and first seekable range values for live content', () => {
       const startTimeChunks = [0, 11, 101]
       const endTimeChunks = [10, 100, 1000]
 
@@ -149,10 +149,11 @@ describe('HTML5TVsPlayback', function() {
         seekable: {
           start: index => startTimeChunks[index],
           end: index => endTimeChunks[index],
+          length: 3,
         },
       }
 
-      expect(this.playback.duration).toEqual(10)
+      expect(this.playback.duration).toEqual(1000)
     })
   })
 
