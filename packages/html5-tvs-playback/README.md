@@ -65,6 +65,7 @@ Group all DRM-related config. The currently available configs are:
 
 | getter | description | response |
 |--------|-------------|----------|
+| `playback.config` | Returns the `options.html5TvsPlayback` value. | `{Object}` |
 | `playback.mediaType` | Returns if the media is `live` or `vod`. | `{String}` |
 | `playback.isReady` |  Indicates if the video is  ready to play, checking if [HTMLMediaElement.readyState](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) is greater than or equal [HAVE_CURRENT_DATA](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState#value) value. | `{Boolean}` |
 | `playback.playing` | Indicates if the video is playing or not. | `{Boolean}` |
