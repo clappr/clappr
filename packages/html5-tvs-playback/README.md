@@ -18,7 +18,7 @@ A Clappr HTML5 playback for smart TVs devices that implement the [HbbTV 2.0.1 sp
 ---
 
 ## Features
-* Supports VoD an Live content;
+* Supports VoD and Live content;
   * Current mime types: [`video/mp4`, `application/vnd.apple.mpegurl`, `application/vnd.ms-sstr+xml`].
 * Supports DRM content;
   * Using [`oipfDrmAgent`](https://www.oipf.tv/docs/OIPF-T1-R2_Specification-Volume-5-Declarative-Application-Environment-v2_3-2014-01-24.pdf#page=121). (Only with Playready `post-acquisition` at the moment)
