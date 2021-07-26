@@ -48,6 +48,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get buffering() { return this._isBuffering }
 
+  get audioTracks() { return this.el.audioTracks || {} }
+
   get isLive() { return this.mediaType === Playback.LIVE }
 
   get minimumDvrSizeConfig() {

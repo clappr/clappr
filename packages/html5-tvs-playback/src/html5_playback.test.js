@@ -173,6 +173,18 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.buffering).toEqual(this.playback._isBuffering)
   })
 
+  describe('audioTracks getter', () => {
+    test('returns the video.audioTracks property', () => {
+      expect(this.playback.audioTracks).toEqual(this.playback.el.audioTracks)
+    })
+
+    test('returns empty object if video.audioTracks property doesn\'t exists', () => {
+      this.playback.el = { audioTracks: null }
+
+      expect(this.playback.audioTracks).toEqual({})
+    })
+  })
+
   test('have a getter called isLive', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isLive').get).toBeTruthy()
   })
