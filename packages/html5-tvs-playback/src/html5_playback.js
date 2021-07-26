@@ -50,6 +50,15 @@ export default class HTML5TVsPlayback extends Playback {
 
   get audioTracks() { return this.el.audioTracks || {} }
 
+  get currentAudioTrack() { return Object.values(this.audioTracks).find(track => track.enabled) }
+
+  set currentAudioTrack(selectedTrack) {
+    const confirmedTrack = Object.values(this.audioTracks).find(track => track === selectedTrack)
+    confirmedTrack
+      ? confirmedTrack.enabled = true
+      : Log.warn(this.name, 'The received audio track is not available on the playback.audioTracks object')
+  }
+
   get isLive() { return this.mediaType === Playback.LIVE }
 
   get minimumDvrSizeConfig() {

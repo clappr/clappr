@@ -185,6 +185,28 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
+  test('currentAudioTrack getter returns the enabled audio track on playback.audioTracks', () => {
+    this.playback.el = { audioTracks: { 0: { enabled: false }, 1: { enabled: true }, 2: { enabled: false } } }
+
+    expect(this.playback.currentAudioTrack).toEqual(this.playback.audioTracks[1])
+  })
+
+  test('currentAudioTrack setter only set one audio track available on the playback.audioTracks', () => {
+    this.playback.el = { audioTracks: { 0: { enabled: false }, 1: { enabled: false }, 2: { enabled: false } } }
+    this.playback.currentAudioTrack = {}
+
+    expect(console.log).toHaveBeenCalledWith(
+      LOG_WARN_HEAD_MESSAGE,
+      LOG_WARN_STYLE,
+      'The received audio track is not available on the playback.audioTracks object',
+    )
+
+    // eslint-disable-next-line prefer-destructuring
+    this.playback.currentAudioTrack = this.playback.el.audioTracks[1]
+
+    expect(this.playback.currentAudioTrack).toEqual(this.playback.audioTracks[1])
+  })
+
   test('have a getter called isLive', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isLive').get).toBeTruthy()
   })
