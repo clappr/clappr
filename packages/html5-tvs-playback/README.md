@@ -73,16 +73,22 @@ Group all DRM-related config. The currently available configs are:
 | `playback.duration` | Returns the duration of the current media. | `{Number} - time in seconds` |
 | `playback.ended` | Indicates whether the media has finished playing. | `{Boolean}` |
 | `playback.buffering` | Indicates whether the media on the buffering state. | `{Boolean}` |
+| `playback.audioTracks` | Returns the [audioTrackList](https://developer.mozilla.org/en-US/docs/Web/API/AudioTrackList) of the current media. | `{Object}` |
+| `playback.currentAudioTrack` | Returns the enabled [audioTrack](https://developer.mozilla.org/en-US/docs/Web/API/AudioTrack) of the current media. | `{Object}` |
 | `playback.isLive` | Indicates whether the media is a live content. | `{Boolean}` |
 | `playback.minimumDvrSizeConfig` | Returns `options.playback.minimumDvrSize` if is configured and is a valid value. | `{Number}` |
 | `playback.dvrSize` | Returns `playback.minimumDvrSizeConfig` if is a valid value or one default value. (Currently, is 60 seconds) | `{Number}` |
 | `playback.dvrEnabled` | Indicates whether the live media is on DVR state. | `{Boolean}` |
 
+| setter | arguments | description |
+|--------|-----------|-------------|
+| `playback.currentAudioTrack` | {[audioTrack](https://developer.mozilla.org/en-US/docs/Web/API/AudioTrack)} | Sets the received audio track as the current audio if it's in the current media's audioTrackList. |
+
 ## Next Steps
 - [x] Media with DRM;
 - [x] Live media;
 - [ ] subtitles/closed captions;
-- [ ] multi-audio;
+- [x] multi-audio;
 - [ ] Advertisement;
 
 ## Development
