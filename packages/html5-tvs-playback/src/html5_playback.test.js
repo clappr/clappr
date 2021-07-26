@@ -69,6 +69,10 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.el.tagName).toEqual('VIDEO')
   })
 
+  test('attributes getter returns the width attribute that will be added on the plugin DOM element', () => {
+    expect(`${this.playback.el.width}%`).toEqual(this.playback.attributes.width)
+  })
+
   test('have a getter called mediaType', () => {
     expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'mediaType').get).toBeTruthy()
   })

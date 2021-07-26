@@ -29,6 +29,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   get tagName() { return 'video' }
 
+  get attributes() { return { width: '100%' } }
+
   get mediaType() { return this.el.duration === Infinity ? Playback.LIVE : Playback.VOD }
 
   get isReady() { return this.el.readyState >= READY_STATE_STAGES.HAVE_CURRENT_DATA }
