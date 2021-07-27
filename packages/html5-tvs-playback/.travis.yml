@@ -1,0 +1,15 @@
+language: node_js
+node_js: "12"
+cache: npm
+os: linux
+dist: bionic
+
+addons:
+  chrome: "stable"
+  firefox: "latest"
+
+notifications:
+  email:
+    - player-web@g.globo
+
+before_script: "npm run lint"
