@@ -10,6 +10,9 @@ addons:
 
 notifications:
   email:
-    - player-web@g.globo
+    recipients:
+      - player-web@g.globo
+    on_success: never
+    on_failure: always
 
 before_script: "npm run lint"
