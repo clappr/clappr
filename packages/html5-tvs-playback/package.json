@@ -50,7 +50,7 @@
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "babel-jest": "^26.6.3",
-    "coveralls": "^3.1.0",
+    "coveralls": "^3.1.1",
     "eslint": "^7.23.0",
     "jest": "^26.6.3",
     "jest-mock-console": "^1.0.1",
