@@ -110,7 +110,7 @@ describe('DRMHandler', function() {
       expect(console.log).toHaveBeenNthCalledWith(1,
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
-        'No one license server is found. The expected result for this behavior is clear the current license.')
+        'No one license server was found. The expected result for this behavior is to clear the current license.')
     })
 
     test('calls the errorCallback if the sendDRMMessage call fails', () => {
