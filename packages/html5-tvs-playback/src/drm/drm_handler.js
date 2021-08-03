@@ -49,7 +49,7 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
   }
 
   !config.licenseServerURL
-    && Log.warn('DRMHandler', 'No one license server is found. The expected result for this behavior is clear the current license.')
+    && Log.warn('DRMHandler', 'No one license server was found. The expected result for this behavior is to clear the current license.')
   const xmlLicenceAcquisition = getLicenseOverrideMessageTemplate(config.licenseServerURL)
 
   const drmRightsErrorHandler = resultCode => {
