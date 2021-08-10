@@ -73,7 +73,7 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
 
     if (resultCode < 2) {
       Log.error('DRMHandler', 'Error at onDRMRightsError call', errorMessage[resultCode])
-      errorCallback(errorMessage[resultCode])
+      return errorCallback(errorMessage[resultCode])
     }
   }
 
@@ -90,12 +90,12 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
       5: 'DRM: Unknown DRM system',
     }
 
-    if (resultCode > 0) {
+    if (resultCode !== 0) {
       Log.error('DRMHandler', 'Error at onDRMMessageResult call', errorMessage[resultCode])
-      errorCallback(errorMessage[resultCode])
+      return errorCallback(errorMessage[resultCode])
     }
 
-    successCallback()
+    return successCallback()
   }
 
   try {
@@ -104,7 +104,7 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
     oipfdrmagent.sendDRMMessage(MESSAGE_TYPE, xmlLicenceAcquisition, DRM_SYSTEM_ID)
   } catch (error) {
     Log.error('DRMHandler', 'Error at sendDRMMessage call', error.message)
-    errorCallback(error.message)
+    return errorCallback(error.message)
   }
 }
 
