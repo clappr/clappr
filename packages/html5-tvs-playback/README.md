@@ -21,7 +21,7 @@ A Clappr HTML5 playback for smart TVs devices that implement the [HbbTV 2.0.1 sp
 * Supports VoD and Live content;
   * Current mime types: [`video/mp4`, `application/vnd.apple.mpegurl`, `application/vnd.ms-sstr+xml`].
 * Supports DRM content;
-  * Using [`oipfDrmAgent`](https://www.oipf.tv/docs/OIPF-T1-R2_Specification-Volume-5-Declarative-Application-Environment-v2_3-2014-01-24.pdf#page=121). (Only with Playready `post-acquisition` at the moment)
+  * Using [`oipfDrmAgent`](https://www.oipf.tv/docs/OIPF-T1-R2_Specification-Volume-5-Declarative-Application-Environment-v2_3-2014-01-24.pdf#page=121).
 
 ## Configuration
 The options for the playback must be placed in the `html5TvsPlayback` property as shown below:
@@ -33,6 +33,7 @@ var player = new Clappr.Player({
   html5TvsPlayback: {
     drm: {
       licenseServerURL: 'https://my-license-server.com/keys/my-key',
+      xmlLicenceAcquisition: '<WRMHEADER xmlns="http://schemas.microsoft.com/DRM/2007/03 PlayReadyHeader" version="4.0.0.0"><DATA><PROTECTINFO><ALGID>AESCTR</ALGID><KEYLEN>16</KEYLEN></PROTECTINFO><KID>base64-encoded kid</KID><CHECKSUM>checksum of the content key for verification</CHECKSUM><LA_URL>URL for license acquisition</LA_URL></DATA></WRMHEADER>',
     },
   },
 });
@@ -42,7 +43,10 @@ var player = new Clappr.Player({
 Group all DRM-related config. The currently available configs are:
 
 * #### `licenseServerURL {String}`
-  The license server URL used on the license acquisition. This config is mandatory to play content with DRM.
+  The license server URL used on the license acquisition. Only used to do the post acquisition.
+
+* #### `xmlLicenceAcquisition {String}`
+  The part of XML that contains all necessary info to do the full challenge of license acquisition. See more about the PlayReady Header Specification [here](https://docs.microsoft.com/en-us/playready/specifications/playready-header-specification).
 
 ## API Documentation
 
