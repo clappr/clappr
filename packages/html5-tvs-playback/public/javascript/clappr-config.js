@@ -1,7 +1,7 @@
 /* eslint-disable */
-var mp4Source = 'http://clappr.io/highline.mp4';
-var hlsSource = 'https://playertest.longtailvideo.com/adaptive/elephants_dream_v4/index.m3u8';
-var smoothStreamingSource = 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest';
+var mp4Resource = 'http://clappr.io/highline.mp4';
+var hlsResource = 'https://playertest.longtailvideo.com/adaptive/elephants_dream_v4/index.m3u8';
+var mssResource = 'http://test.playready.microsoft.com/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest';
 Clappr.Log.setLevel(Clappr.Log.LEVEL_INFO);
 
 var onReadyCallback = function() {
@@ -27,7 +27,7 @@ var searchParams;
 window.URLSearchParams && (searchParams = new window.URLSearchParams(window.location.search));
 
 var player = new Clappr.Player({
-  source: searchParams && searchParams.get('source') || hlsSource,
+  source: searchParams && searchParams.get('source') || hlsResource,
   height: searchParams && searchParams.get('height') || '100%',
   width: searchParams && searchParams.get('width') || '100%',
   tvsKeyMapping: { deviceToMap: 'panasonic' },
