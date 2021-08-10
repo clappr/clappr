@@ -600,7 +600,7 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback._setSourceOnVideoTag).not.toHaveBeenCalled()
     })
 
-    test('sets license server if one license server URL is configured and _drmConfigured flag is false', () => {
+    test('sets license server if config.drm exists and _drmConfigured flag is false', () => {
       const { core, container } = setupTest({ src: URL_VIDEO_MP4_EXAMPLE, html5TvsPlayback: { drm: { licenseServerURL: 'http://fake-domain.com/license_server/playready' } } })
       core.activeContainer = container
 

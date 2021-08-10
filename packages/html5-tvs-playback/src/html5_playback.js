@@ -119,7 +119,7 @@ export default class HTML5TVsPlayback extends Playback {
     const currentSource = this.$sourceElement && this.$sourceElement.src
     if (sourceURL === currentSource) return
 
-    this.config && this.config.drm && this.config.drm.licenseServerURL && !this._drmConfigured
+    this.config && this.config.drm && this.config.drm && !this._drmConfigured
       ? DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured, this._onDrmError)
       : this._setSourceOnVideoTag(sourceURL)
   }
