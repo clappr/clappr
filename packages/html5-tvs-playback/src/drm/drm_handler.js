@@ -3,6 +3,18 @@ import { Log } from '@clappr/core'
 const MESSAGE_TYPE = 'application/vnd.ms-playready.initiator+xml'
 const DRM_SYSTEM_ID = 'urn:dvb:casystemid:19219'
 
+export const getFullChallengeMessageTemplate = header => {
+  const template = '<?xml version="1.0" encoding="utf-8"?>'
+  + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
+  + '<LicenseAcquisition>'
+  + '<Header>'
+  + `${header}`
+  + '</Header>'
+  + '</LicenseAcquisition>'
+  + '</PlayReadyInitiator>'
+  return template
+}
+
 export const getLicenseOverrideMessageTemplate = licenseServerURL => {
   const template = '<?xml version="1.0" encoding="utf-8"?>'
   + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
@@ -48,9 +60,9 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
       : document.body.appendChild(oipfdrmagent)
   }
 
-  !config.licenseServerURL
-    && Log.warn('DRMHandler', 'No one license server was found. The expected result for this behavior is to clear the current license.')
-  const xmlLicenceAcquisition = getLicenseOverrideMessageTemplate(config.licenseServerURL)
+  const xmlLicenceAcquisition = config.xmlLicenceAcquisition
+    ? getFullChallengeMessageTemplate(config.xmlLicenceAcquisition)
+    : getLicenseOverrideMessageTemplate(config.licenseServerURL)
 
   const drmRightsErrorHandler = resultCode => {
     const errorMessage = {

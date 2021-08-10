@@ -1,6 +1,7 @@
 import mockConsole from 'jest-mock-console'
 
 import DRMHandler, {
+  getFullChallengeMessageTemplate,
   getLicenseOverrideMessageTemplate,
   getClearMessageTemplate,
   createDrmAgent,
@@ -21,9 +22,25 @@ describe('DRMHandler', function() {
   test('only exports methods to handle with license request', () => {
     expect(DRMHandler.sendLicenseRequest).toBeDefined()
     expect(DRMHandler.clearLicenseRequest).toBeDefined()
+    expect(DRMHandler.getFullChallengeMessageTemplate).toBeUndefined()
     expect(DRMHandler.getLicenseOverrideMessageTemplate).toBeUndefined()
     expect(DRMHandler.getClearMessageTemplate).toBeUndefined()
     expect(DRMHandler.createDrmAgent).toBeUndefined()
+  })
+
+  describe('getFullChallengeMessageTemplate method', () => {
+    test('returns XML template with the composition of the received XML', () => {
+      const header = 'fake_xml'
+      const result = '<?xml version="1.0" encoding="utf-8"?>'
+      + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
+      + '<LicenseAcquisition>'
+      + `<Header>${header}</Header>`
+      + '</LicenseAcquisition>'
+      + '</PlayReadyInitiator>'
+      const response = getFullChallengeMessageTemplate(header)
+
+      expect(response).toEqual(result)
+    })
   })
 
   describe('getLicenseOverrideMessageTemplate method', () => {
@@ -98,19 +115,9 @@ describe('DRMHandler', function() {
     })
 
     test('appends drmAgent on document.body if any external scope is received', () => {
-      sendLicenseRequest(this.config)
+      sendLicenseRequest({ xmlLicenceAcquisition: 'fake_xml' })
 
       expect(document.body.firstChild.id).toEqual('oipfdrmagent')
-    })
-
-    test('logs warn message if no one licenser server URL is received', () => {
-      sendLicenseRequest()
-
-      /* eslint-disable-next-line no-console */
-      expect(console.log).toHaveBeenNthCalledWith(1,
-        LOG_WARN_HEAD_MESSAGE,
-        LOG_WARN_STYLE,
-        'No one license server was found. The expected result for this behavior is to clear the current license.')
     })
 
     test('calls the errorCallback if the sendDRMMessage call fails', () => {
@@ -158,7 +165,7 @@ describe('DRMHandler', function() {
     })
 
     describe('at onDRMMessageResult callback', () => {
-      test('calls the errorCallback if the received result code is greater than 0', () => {
+      test('calls the errorCallback if the received result code is nonzero', () => {
         document.body.appendChild(createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
