@@ -32,6 +32,11 @@ var player = new Clappr.Player({
   width: searchParams && searchParams.get('width') || '100%',
   tvsKeyMapping: { deviceToMap: 'panasonic' },
   playback: { controls: true },
+  // html5TvsPlayback: { drm: {
+  //   fullChallenge: true,
+  //   xmlLicenceAcquisition: '<WRMHEADER xmlns="http://schemas.microsoft.com/DRM/2007/03/PlayReadyHeader" version="4.0.0.0"><DATA><PROTECTINFO><KEYLEN>16</KEYLEN><ALGID>AESCTR</ALGID></PROTECTINFO><KID>AAAAEAAQABAQABAAAAAAAQ==</KID><CHECKSUM>5TzIYQ2hrOY=</CHECKSUM><LA_URL>http://test.playready.microsoft.com/service/rightsmanager.asmx</LA_URL></DATA></WRMHEADER>',
+  //   licenseServerURL: 'http://test.playready.microsoft.com/service/rightsmanager.asmx',
+  // } },
   plugins: [window.TVsKeyMappingPlugin.Watcher, window.HTML5TVsPlayback],
   events: { onReady: onReadyCallback },
 });
