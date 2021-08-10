@@ -2,6 +2,8 @@
 var mp4Resource = 'http://clappr.io/highline.mp4';
 var hlsResource = 'https://playertest.longtailvideo.com/adaptive/elephants_dream_v4/index.m3u8';
 var mssResource = 'http://test.playready.microsoft.com/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest';
+var mssResourceWithPlayReady = 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest';
+
 Clappr.Log.setLevel(Clappr.Log.LEVEL_INFO);
 
 var onReadyCallback = function() {
