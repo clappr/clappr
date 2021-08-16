@@ -16,8 +16,8 @@ labels: bug
 * then second step
 * I was expecting X but instead it shows Y
 
-**Is this only happenning in your streaming?**
-* If yes, please provide to us the public video URL
+**Does it happen only in your streaming?**
+* If it does, please provide your streaming URL.
 
 **To consider:**
 * Did you try to reproduce this issue at http://cdn.clappr.io/?
