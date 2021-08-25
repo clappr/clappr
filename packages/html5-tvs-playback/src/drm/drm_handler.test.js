@@ -174,8 +174,9 @@ describe('DRMHandler', function() {
         const errorCb = jest.fn()
         sendLicenseRequest(this.config, successCb, errorCb)
         drmAgentElement.onDRMMessageResult(0, 'a error message', 1)
+        drmAgentElement.onDRMMessageResult(0, 'success', 0)
 
-        expect(errorCb).toHaveBeenCalledWith('DRM: Unspecified error')
+        expect(errorCb).toHaveBeenCalledTimes(1)
       })
 
       test('calls the successCallback if the received result code is 0', () => {
