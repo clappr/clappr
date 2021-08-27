@@ -236,9 +236,10 @@ export default class Player extends BaseObject {
       height: 360,
       baseUrl: baseUrl,
       allowUserInteraction: Browser.isMobile,
+      includeResetStyle: true,
       playback: playbackDefaultOptions
     }
-    this._options = $.extend(defaultOptions, options)
+    this._options = $.extend(true, defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
       // "allowUserInteraction" cannot be false if not in chromeless mode.

@@ -25,7 +25,7 @@ run_tests() {
 }
 
 make_release_commit() {
-  git add package.json yarn.lock dist &&
+  git add package.json yarn.lock &&
   git commit -m 'chore(package): bump to '$1 &&
   git tag -m "$1" $1
 }

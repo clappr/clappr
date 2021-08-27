@@ -6,12 +6,13 @@
  * Container is responsible for the video rendering and state
  */
 
-import Events from '../../base/events'
-import UIObject from '../../base/ui_object'
-import ErrorMixin from '../../base/error_mixin'
-import { DoubleEventHandler } from '../../utils'
+import Events from '@/base/events'
+import UIObject from '@/base/ui_object'
+import ErrorMixin from '@/base/error_mixin'
+import Styler from '@/base/styler'
+import { DoubleEventHandler } from '@/utils'
 
-import './public/style.scss'
+import ContainerStyle from './public/style.scss'
 
 import $ from 'clappr-zepto'
 
@@ -121,7 +122,7 @@ export default class Container extends UIObject {
     this.volume = 100
     this.playback = options.playback
     this.playerError = playerError
-    this.settings = $.extend({}, this.playback.settings)
+    this.settings = $.extend(true, {}, this.playback.settings)
     this.isReady = false
     this.mediaControlDisabled = false
     this.plugins = [this.playback]
@@ -173,6 +174,7 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged)
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl)
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl)
+    this.listenTo(this.playback, Events.PLAYBACK_SEEK, this.onSeek)
     this.listenTo(this.playback, Events.PLAYBACK_SEEKED, this.onSeeked)
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.onEnded)
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing)
@@ -372,8 +374,11 @@ export default class Container extends UIObject {
   }
 
   seek(time) {
-    this.trigger(Events.CONTAINER_SEEK, time, this.name)
     this.playback.seek(time)
+  }
+
+  onSeek(time) {
+    this.trigger(Events.CONTAINER_SEEK, time, this.name)
   }
 
   onSeeked() {
@@ -505,13 +510,15 @@ export default class Container extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
-    this._options = $.extend(this._options, options)
+    this._options = $.extend(true, this._options, options)
     this.updateStyle()
     this.playback.configure(this.options)
     this.trigger(Events.CONTAINER_OPTIONS_CHANGE)
   }
 
   render() {
+    const style = Styler.getStyleFor(ContainerStyle.toString(), { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
     this.$el.append(this.playback.render().el)
     this.updateStyle()
     this.checkResize()

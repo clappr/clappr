@@ -289,7 +289,7 @@ export function canAutoPlayMedia(cb, options) {
 // Simple element factory with video recycle feature.
 export class DomRecycler {
   static configure(options) {
-    this.options = $.extend(this.options, options)
+    this.options = $.extend(true, this.options, options)
   }
 
   static create(name) {

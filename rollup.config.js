@@ -24,7 +24,8 @@ const postcssOptions = {
     ['sass', {
       includePaths: ['src/base/scss']
     }]
-  ]
+  ],
+  inject: false,
 }
 const aliasPluginOptions = { entries: { 'clappr-zepto': 'node_modules/clappr-zepto/zepto.js', '@': __dirname + '/src' } }
 const replacePluginOptions = { VERSION: JSON.stringify(pkg.version) }

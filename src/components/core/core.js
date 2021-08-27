@@ -2,19 +2,21 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, Fullscreen, DomRecycler } from '../../utils'
+import { isNumber, Fullscreen, DomRecycler } from '@/utils'
 
-import Events from '../../base/events'
-import UIObject from '../../base/ui_object'
-import UICorePlugin from '../../base/ui_core_plugin'
-import Browser from '../../components/browser'
-import ContainerFactory from '../../components/container_factory'
-import PlayerError from '../../components/error'
-import ErrorMixin from '../../base/error_mixin'
+import Styler from '@/base/styler'
+import Events from '@/base/events'
+import UIObject from '@/base/ui_object'
+import UICorePlugin from '@/base/ui_core_plugin'
+import Browser from '@/components/browser'
+import ContainerFactory from '@/components/container_factory'
+import PlayerError from '@/components/error'
+import ErrorMixin from '@/base/error_mixin'
 
 import $ from 'clappr-zepto'
 
-import './public/style.scss'
+import CoreStyle from './public/style.scss'
+import ResetStyle from './public/optional_reset.scss'
 
 /**
  * The Core is responsible to manage Containers and the player state.
@@ -218,7 +220,7 @@ export default class Core extends UIObject {
     sources = sources && sources.constructor === Array ? sources : [sources]
     this.options.sources = sources
     this.containers.forEach((container) => container.destroy())
-    this.containerFactory.options = $.extend(this.options, { sources })
+    this.containerFactory.options = $.extend(true, this.options, { sources })
     this.prepareContainers()
   }
 
@@ -347,7 +349,7 @@ export default class Core extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
-    this._options = $.extend(this._options, options)
+    this._options = $.extend(true, this._options, options)
     this.configureDomRecycler()
 
     const sources = options.source || options.sources
@@ -358,7 +360,12 @@ export default class Core extends UIObject {
   }
 
   appendToParent() {
-    let hasCoreParent = this.$el.parent() && this.$el.parent().length
+    const style = Styler.getStyleFor(CoreStyle.toString(), { baseUrl: this.options.baseUrl })
+    const resetStyle = Styler.getStyleFor(ResetStyle.toString(), { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
+    this.options.includeResetStyle && this.$el.append(resetStyle[0])
+
+    const hasCoreParent = this.$el.parent() && this.$el.parent().length
     !hasCoreParent && this.$el.appendTo(this.options.parentElement)
   }
 

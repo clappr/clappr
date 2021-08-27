@@ -1,9 +1,7 @@
-@import 'reset';
 @import 'noselect';
 @import 'fontsmoothing';
 
 [data-player] {
-  @include nested-reset;
   @include no-select;
   @include font-smoothing;
   transform: translate3d(0,0,0);

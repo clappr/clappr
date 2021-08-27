@@ -45,7 +45,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 
 Add the following script in your HTML `<head>`:
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr/core@latest/dist/clappr-core.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
 ```
 
 Now, create the player by adding the following to your `<body>`:
@@ -315,12 +315,12 @@ Restart video after the video ends enabling the [video tag](https://developer.mo
 #### language
 > Default Value: `en-US`
 
-Sets one of the current languages supported on Clappr. You can check all supported languages on the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js#L35-93).
+Sets one of the current languages supported on Clappr. You can check all supported languages on the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings/strings.js#L35-93).
 
-If you want to provide your translations, create a PR by editing the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js).
+If you want to provide your translations, create a PR by editing the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings/strings.js).
 
 #### playbackNotSupportedMessage
-> Default Value: The `playback_not_supported` string on [Strings Plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js)
+> Default Value: The `playback_not_supported` string on [Strings Plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings/strings.js)
 
 Define a custom message to be displayed when playback is not supported.
 
@@ -340,7 +340,12 @@ By default, if the URL contains a time then the media will seek to this point.
 
 Example: `example.com?t=100` would start the media at 100 seconds.
 
-You can disable this behavior setting this option with the value `false`.
+You can disable this behaviour setting this option with the value `false`.
+
+#### includeResetStyle
+> Default value: `true`
+
+By default, Clappr reset a bunch of styles that may impact your own style. With this option, it's possible to enable/disable  the use of [_resets.scss](https://github.com/clappr/clappr-core/blob/master/src/base/scss/_reset.scss).
 
 ### Playback Configuration
 Clappr has a specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived playbacks).

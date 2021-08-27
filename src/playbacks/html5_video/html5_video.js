@@ -4,15 +4,16 @@
 
 import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../utils'
 
-import Events from '../../base/events'
-import Playback from '../../base/playback'
-import Browser from '../../components/browser'
-import Log from '../../components/log'
-import PlayerError from '../../components/error'
+import Events from '@/base/events'
+import Playback from '@/base/playback'
+import Browser from '@/components/browser'
+import Log from '@/components/log'
+import PlayerError from '@/components/error'
 import $ from 'clappr-zepto'
-import template from '../../base/template'
+import template from '@/base/template'
 import tracksHTML from './public/tracks.html'
-import './public/style.scss'
+import Styler from '@/base/styler'
+import HTML5VideoStyle from './public/style.scss'
 
 const MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
@@ -138,7 +139,7 @@ export default class HTML5Video extends Playback {
 
     }
 
-    $.extend(this.el, {
+    $.extend(true, this.el, {
       muted: this.options.mute,
       defaultMuted: this.options.mute,
       loop: this.options.loop,
@@ -273,12 +274,13 @@ export default class HTML5Video extends Playback {
   // On mobile device, HTML5 video element "retains" user action consent if
   // load() method is called. See Player.consent().
   consent(cb) {
-    if (this.isPlaying()) {
+    if (this.isPlaying() || this.el._consented) {
       super.consent(cb)
     } else {
       let eventHandler = () => {
         this.el.removeEventListener('loadedmetadata', eventHandler, false)
         this.el.removeEventListener('error', eventHandler, false)
+        this.el._consented = true // Flag to call load() only once
         super.consent(cb)
       }
 
@@ -425,8 +427,8 @@ export default class HTML5Video extends Playback {
   }
 
   _onSeeking() {
+    this.trigger(Events.PLAYBACK_SEEK, this.getCurrentTime())
     this._handleBufferingEvents()
-    this.trigger(Events.PLAYBACK_SEEK)
   }
 
   _onSeeked() {
@@ -663,6 +665,8 @@ export default class HTML5Video extends Playback {
     }
 
     this._ready()
+    const style = Styler.getStyleFor(HTML5VideoStyle.toString(), { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
     return this
   }
 }
