@@ -732,6 +732,9 @@ Events.CONTAINER_DBLCLICK = 'container:dblclick'
 Events.CONTAINER_CONTEXTMENU = 'container:contextmenu'
 Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter'
 Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave'
+Events.CONTAINER_MOUSE_UP = 'container:mouseup'
+Events.CONTAINER_MOUSE_DOWN = 'container:mousedown'
+
 /**
  * Fired when the container seeks the video
  *
