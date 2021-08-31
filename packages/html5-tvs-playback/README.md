@@ -66,6 +66,7 @@ Group all DRM-related config. The currently available configs are:
 | `playback.getDuration (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer duration getter. |
 | `playback.isPlaying (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer playing getter. |
 | `playback.getPlaybackType (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer mediaType getter. |
+| `playback.switchAudioTrack` | `{String} - track id` | Updates the current audio track to the one with the provided id. |
 
 | getter | description | response |
 |--------|-------------|----------|
@@ -77,16 +78,31 @@ Group all DRM-related config. The currently available configs are:
 | `playback.duration` | Returns the duration of the current media. | `{Number} - time in seconds` |
 | `playback.ended` | Indicates whether the media has finished playing. | `{Boolean}` |
 | `playback.buffering` | Indicates whether the media on the buffering state. | `{Boolean}` |
-| `playback.audioTracks` | Returns the [audioTrackList](https://developer.mozilla.org/en-US/docs/Web/API/AudioTrackList) of the current media. | `{Object}` |
-| `playback.currentAudioTrack` | Returns the enabled [audioTrack](https://developer.mozilla.org/en-US/docs/Web/API/AudioTrack) of the current media. | `{Object}` |
+| `playback.audioTracks` | Returns a list of audio tracks currently available. | [`{AudioTrack[]}`](#audiotrack) |
+| `playback.currentAudioTrack` | Returns the audio track currenlty in use. | [`{AudioTrack}`](#audiotrack) |
 | `playback.isLive` | Indicates whether the media is a live content. | `{Boolean}` |
 | `playback.minimumDvrSizeConfig` | Returns `options.playback.minimumDvrSize` if is configured and is a valid value. | `{Number}` |
 | `playback.dvrSize` | Returns `playback.minimumDvrSizeConfig` if is a valid value or one default value. (Currently, is 60 seconds) | `{Number}` |
 | `playback.dvrEnabled` | Indicates whether the live media is on DVR state. | `{Boolean}` |
 
-| setter | arguments | description |
-|--------|-----------|-------------|
-| `playback.currentAudioTrack` | {[audioTrack](https://developer.mozilla.org/en-US/docs/Web/API/AudioTrack)} | Sets the received audio track as the current audio if it's in the current media's audioTrackList. |
+## Types
+#### `AudioTrack`
+```javascript
+/**
+ * An object representing a single audio track.
+ * @typedef {Object} AudioTrack
+ * @property {String} id - A unique identifier for the track. Used to identify it among the others.
+ * @property {String} language - The language of the track (e.g., 'en', 'pt-BR').
+ * @property {String} label - An optional label to be used in the UI to describe the track.
+ * @property {String} kind - The category this track belongs to (e.g., 'main', 'description').
+ */
+{
+  id: '0',
+  language: 'en',
+  label: 'English (audio description)',
+  kind: 'description',
+}
+```
 
 ## Next Steps
 - [x] Media with DRM;

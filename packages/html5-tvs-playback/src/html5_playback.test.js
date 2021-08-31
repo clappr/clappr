@@ -24,11 +24,66 @@ const setupTest = (options = {}) => {
   return { core, container }
 }
 
+// See MDN docs for more information about the behavior of the AudioTrackList object
+// https://developer.mozilla.org/en-US/docs/Web/API/AudioTrackList
+const createAudioTrackListStub = () => {
+  const tracks = {}
+  const updateEnabledProperty = (trackId, value) => {
+    Object.values(tracks).forEach(track => {
+      if (track.id === trackId)
+        track._enabled = value
+      else
+        track._enabled = value ? false : this._enabled
+    })
+  }
+  const createAudioTrack = trackInfo => ({
+    ...trackInfo,
+    get enabled() { return this._enabled },
+    set enabled(value) { updateEnabledProperty(this.id, value) },
+  })
+
+  Object.defineProperties(tracks, {
+    addEventListener: { value: jest.fn() },
+    getTrackById: { value: id => tracks[id] },
+    0: {
+      value: createAudioTrack({
+        id: '0',
+        language: 'en',
+        kind: 'description',
+        label: 'English (describes video)',
+        _enabled: true,
+      }),
+      enumerable: true,
+    },
+    1: {
+      value: createAudioTrack({
+        id: '1',
+        language: 'en',
+        kind: 'main',
+        label: 'English',
+        _enabled: false,
+      }),
+      enumerable: true,
+    },
+    length: { value: 2 },
+  })
+
+  return {
+    value: tracks,
+    configurable: true,
+  }
+}
+
+const setHTMLMediaElementStubs = () => {
+  window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
+  window.HTMLMediaElement.prototype.pause = () => { /* do nothing */ }
+  window.HTMLMediaElement.prototype.load = () => { /* do nothing */ }
+  Object.defineProperty(window.HTMLMediaElement.prototype, 'audioTracks', createAudioTrackListStub())
+}
+
 describe('HTML5TVsPlayback', function() {
   beforeEach(() => {
-    window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
-    window.HTMLMediaElement.prototype.pause = () => { /* do nothing */ }
-    window.HTMLMediaElement.prototype.load = () => { /* do nothing */ }
+    setHTMLMediaElementStubs()
 
     this.restoreConsole = mockConsole()
 
@@ -177,38 +232,95 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.buffering).toEqual(this.playback._isBuffering)
   })
 
-  describe('audioTracks getter', () => {
-    test('returns the video.audioTracks property', () => {
-      expect(this.playback.audioTracks).toEqual(this.playback.el.audioTracks)
+  test('adds event listeners to the audioTrack object of the media element', () => {
+    expect(this.playback.el.audioTracks.addEventListener).toHaveBeenCalledWith('addtrack', this.playback._onAudioTracksUpdated)
+    expect(this.playback.el.audioTracks.addEventListener).toHaveBeenCalledWith('removetrack', this.playback._onAudioTracksUpdated)
+  })
+
+  describe('get audioTracks', () => {
+    test('returns empty array if audioTracks property doesn\'t exist on media element', () => {
+      delete window.HTMLMediaElement.prototype.audioTracks
+
+      expect(this.playback.audioTracks).toEqual([])
     })
 
-    test('returns empty object if video.audioTracks property doesn\'t exists', () => {
-      this.playback.el = { audioTracks: null }
+    test('returns the media element audio tracks mapped to the public interface', () => {
+      const tracks = this.playback.audioTracks
 
-      expect(this.playback.audioTracks).toEqual({})
+      expect(tracks.length).toBe(2)
+      expect(tracks).toContainEqual({
+        id: '0',
+        language: 'en',
+        kind: 'description',
+        label: 'English (describes video)',
+      })
+      expect(tracks).toContainEqual({
+        id: '1',
+        language: 'en',
+        kind: 'main',
+        label: 'English',
+      })
     })
   })
 
-  test('currentAudioTrack getter returns the enabled audio track on playback.audioTracks', () => {
-    this.playback.el = { audioTracks: { 0: { enabled: false }, 1: { enabled: true }, 2: { enabled: false } } }
+  describe('get currentAudioTrack', () => {
+    test('returns the media element audio track with the enabled flag on mapped to the public interface', () => {
+      expect(this.playback.currentAudioTrack).toEqual({
+        id: '0',
+        language: 'en',
+        kind: 'description',
+        label: 'English (describes video)',
+      })
+    })
 
-    expect(this.playback.currentAudioTrack).toEqual(this.playback.audioTracks[1])
+    test('returns null if audioTracks property doesn\'t exist on media element', () => {
+      delete window.HTMLMediaElement.prototype.audioTracks
+
+      expect(this.playback.currentAudioTrack).toBeNull()
+    })
   })
 
-  test('currentAudioTrack setter only set one audio track available on the playback.audioTracks', () => {
-    this.playback.el = { audioTracks: { 0: { enabled: false }, 1: { enabled: false }, 2: { enabled: false } } }
-    this.playback.currentAudioTrack = {}
+  describe('switchAudioTrack', () => {
+    test('does not change current audio track if id is unknown', () => {
+      const { currentAudioTrack } = this.playback
 
-    expect(console.log).toHaveBeenCalledWith(
-      LOG_WARN_HEAD_MESSAGE,
-      LOG_WARN_STYLE,
-      'The received audio track is not available on the playback.audioTracks object',
-    )
+      this.playback.switchAudioTrack('invalid-id')
 
-    // eslint-disable-next-line prefer-destructuring
-    this.playback.currentAudioTrack = this.playback.el.audioTracks[1]
+      expect(this.playback.currentAudioTrack.id).toBe(currentAudioTrack.id)
+    })
 
-    expect(this.playback.currentAudioTrack).toEqual(this.playback.audioTracks[1])
+    test('changes current audio track to the one owning the provided id', () => {
+      const newerAudioTrack = this.playback.audioTracks.find(track => track.id !== this.playback.currentAudioTrack.id)
+
+      this.playback.switchAudioTrack(newerAudioTrack.id)
+
+      expect(this.playback.currentAudioTrack.id).toBe(newerAudioTrack.id)
+    })
+
+    test('triggers PLAYBACK_AUDIO_CHANGED event with newer audio track as payload when updated', () => {
+      const newerAudioTrack = this.playback.audioTracks.find(track => track.id !== this.playback.currentAudioTrack.id)
+      jest.spyOn(this.playback, 'trigger')
+
+      this.playback.switchAudioTrack(newerAudioTrack.id)
+
+      expect(this.playback.trigger).toHaveBeenCalledWith(Events.PLAYBACK_AUDIO_CHANGED, newerAudioTrack)
+    })
+
+    test('does not trigger PLAYBACK_AUDIO_CHANGED event if current audio track has not changed', () => {
+      jest.spyOn(this.playback, 'trigger')
+
+      this.playback.switchAudioTrack(this.playback.currentAudioTrack.id)
+
+      expect(this.playback.trigger).not.toHaveBeenCalledWith(Events.PLAYBACK_AUDIO_CHANGED, expect.anything())
+    })
+  })
+
+  test('triggers PLAYBACK_AUDIO_AVAILABLE event with current audio tracks when audio tracks are updated', () => {
+    jest.spyOn(this.playback, 'trigger')
+
+    this.playback._onAudioTracksUpdated()
+
+    expect(this.playback.trigger).toHaveBeenCalledWith(Events.PLAYBACK_AUDIO_AVAILABLE, this.playback.audioTracks)
   })
 
   test('have a getter called isLive', () => {

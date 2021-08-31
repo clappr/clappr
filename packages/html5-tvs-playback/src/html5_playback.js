@@ -50,15 +50,17 @@ export default class HTML5TVsPlayback extends Playback {
 
   get buffering() { return this._isBuffering }
 
-  get audioTracks() { return this.el.audioTracks || {} }
+  get audioTracks() {
+    if (!this.el.audioTracks) return []
 
-  get currentAudioTrack() { return Object.values(this.audioTracks).find(track => track.enabled) }
+    return Object.values(this.el.audioTracks).map(this._formatAudioTrack)
+  }
 
-  set currentAudioTrack(selectedTrack) {
-    const confirmedTrack = Object.values(this.audioTracks).find(track => track === selectedTrack)
-    confirmedTrack
-      ? confirmedTrack.enabled = true
-      : Log.warn(this.name, 'The received audio track is not available on the playback.audioTracks object')
+  get currentAudioTrack() {
+    if (!this.el.audioTracks) return null
+
+    const track = Object.values(this.el.audioTracks).find(track => track.enabled)
+    return this._formatAudioTrack(track)
   }
 
   get isLive() { return this.mediaType === Playback.LIVE }
@@ -103,7 +105,10 @@ export default class HTML5TVsPlayback extends Playback {
 
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
+    this._onAudioTracksUpdated = this._onAudioTracksUpdated.bind(this)
+
     this._setPrivateFlags()
+    this._setAudioTrackListeners()
     this._setupSource(this.options.src)
   }
 
@@ -153,6 +158,27 @@ export default class HTML5TVsPlayback extends Playback {
     })
 
     this.trigger(Events.PLAYBACK_ERROR, formattedError)
+  }
+
+  _setAudioTrackListeners() {
+    const tracks = this.el.audioTracks
+    if (!tracks) return
+
+    tracks.addEventListener('addtrack', this._onAudioTracksUpdated)
+    tracks.addEventListener('removetrack', this._onAudioTracksUpdated)
+  }
+
+  _onAudioTracksUpdated() {
+    this.trigger(Events.PLAYBACK_AUDIO_AVAILABLE, this.audioTracks)
+  }
+
+  _formatAudioTrack(htmlAudioTrack) {
+    return {
+      id: htmlAudioTrack.id,
+      language: htmlAudioTrack.language,
+      label: htmlAudioTrack.label,
+      kind: htmlAudioTrack.kind,
+    }
   }
 
   _updateDvr(status) {
@@ -302,6 +328,14 @@ export default class HTML5TVsPlayback extends Playback {
     this.el.seekable && this.el.seekable.start && (timeToSeek += this.el.seekable.start(0))
 
     this.el.currentTime = timeToSeek
+  }
+
+  switchAudioTrack(id) {
+    const track = this.el.audioTracks?.getTrackById(id)
+    if (!track || track.enabled) return
+
+    track.enabled = true
+    this.trigger(Events.PLAYBACK_AUDIO_CHANGED, this._formatAudioTrack(track))
   }
 
   stop() {
