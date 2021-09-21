@@ -29,6 +29,33 @@ describe('Container', function() {
     expect( this.container.getPlugin('fake')).toEqual(plugin)
   })
 
+  test('delegates audioTracks calls to playback', () => {
+    const audioTracks = []
+    jest.spyOn(this.playback, 'audioTracks', 'get').mockReturnValue(audioTracks)
+
+    const result = this.container.audioTracks
+
+    expect(result).toBe(audioTracks)
+  })
+
+  test('delegates currentAudioTrack calls to playback', () => {
+    const currentAudioTrack = {}
+    jest.spyOn(this.playback, 'currentAudioTrack', 'get').mockReturnValue(currentAudioTrack)
+
+    const result = this.container.currentAudioTrack
+
+    expect(result).toBe(currentAudioTrack)
+  })
+
+  test('delegates switchAudioTrack calls to playback', () => {
+    jest.spyOn(this.playback, 'switchAudioTrack').mockImplementation()
+
+    this.container.switchAudioTrack(42)
+
+    expect(this.playback.switchAudioTrack).toHaveBeenCalledTimes(1)
+    expect(this.playback.switchAudioTrack).toHaveBeenCalledWith(42)
+  })
+
   test('destroys all the plugins', () => {
     const fakePlugin = { destroy: () => {} }
 
@@ -234,6 +261,26 @@ describe('Container', function() {
     this.playback.trigger(Events.PLAYBACK_STOP)
     
     expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_STOP, parameter)
+  })
+
+  test('triggers CONTAINER_AUDIO_AVAILABLE when PLAYBACK_AUDIO_AVAILABLE happens', () => {
+    const audioTracks = []
+    jest.spyOn(this.container, 'trigger')
+    this.container.bindEvents()
+
+    this.playback.trigger(Events.PLAYBACK_AUDIO_AVAILABLE, audioTracks)
+
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_AUDIO_AVAILABLE, audioTracks)
+  })
+
+  test('triggers CONTAINER_AUDIO_CHANGED when PLAYBACK_AUDIO_CHANGED happens', () => {
+    const audioTracks = []
+    jest.spyOn(this.container, 'trigger')
+    this.container.bindEvents()
+
+    this.playback.trigger(Events.PLAYBACK_AUDIO_CHANGED, audioTracks)
+
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_AUDIO_CHANGED, audioTracks)
   })
 
   describe('#checkResize', () => {

@@ -112,6 +112,22 @@ export default class Container extends UIObject {
   }
 
   /**
+   * returns a list of the available audio tracks.
+   * @type {import('../../base/playback/playback').AudioTrack[]} audio tracks
+   */
+  get audioTracks() {
+    return this.playback.audioTracks
+  }
+
+  /**
+  * returns the audio track currently in use.
+  * @type {import('../../base/playback/playback').AudioTrack} audio track
+  */
+  get currentAudioTrack() {
+    return this.playback.currentAudioTrack
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
@@ -186,6 +202,8 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
     this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_AVAILABLE, this.subtitleAvailable)
     this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged)
+    this.listenTo(this.playback, Events.PLAYBACK_AUDIO_AVAILABLE, this.audioAvailable)
+    this.listenTo(this.playback, Events.PLAYBACK_AUDIO_CHANGED, this.audioChanged)
   }
 
   subtitleAvailable() {
@@ -194,6 +212,14 @@ export default class Container extends UIObject {
 
   subtitleChanged(track) {
     this.trigger(Events.CONTAINER_SUBTITLE_CHANGED, track)
+  }
+
+  audioAvailable(tracks) {
+    this.trigger(Events.CONTAINER_AUDIO_AVAILABLE, tracks)
+  }
+
+  audioChanged(track) {
+    this.trigger(Events.CONTAINER_AUDIO_CHANGED, track)
   }
 
   playbackStateChanged(state) {
@@ -331,6 +357,10 @@ export default class Container extends UIObject {
     this.actionsMetadata.stopEvent = customData
     this.playback.stop(customData)
     this.currentTime = 0
+  }
+
+  switchAudioTrack(id) {
+    this.playback.switchAudioTrack(id)
   }
 
   /**
