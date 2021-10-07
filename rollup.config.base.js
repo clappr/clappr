@@ -19,7 +19,8 @@ const postcssOptions = {
         path.resolve('node_modules/@clappr/core/src/base/scss')
       ]
     }]
-  ]
+  ],
+  inject: false,
 }
 
 const baseConfig = {
