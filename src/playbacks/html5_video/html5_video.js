@@ -533,10 +533,10 @@ export default class HTML5Video extends Playback {
   }
 
   _scheduleUpdateSettingsCheck() {
-    if (this._updateSettingsCheckInFlight) return;
+    if (this._updateSettingsCheckInFlight) return
     this._updateSettingsCheckInFlight = setTimeout(() => {
       this._updateSettings()
-      this._updateSettingsCheckInFlight = null;
+      this._updateSettingsCheckInFlight = null
     }, 1000)
   }
 
