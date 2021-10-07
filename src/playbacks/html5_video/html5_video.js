@@ -521,13 +521,23 @@ export default class HTML5Video extends Playback {
 
   getDuration() {
     if (this.isLive) {
-      try {
+      if (this.el.seekable.length > 0) {
         return this.el.seekable.end(0) - this.el.seekable.start(0)
-      } catch (e) {
-        setTimeout(() => this._updateSettings(), 1000)
+      } else {
+        // `seekable` is not available; this is probably OK, but make sure we're
+        // updating the control bar to reflect it
+        this._scheduleUpdateSettingsCheck()
       }
     }
     return this.el.duration
+  }
+
+  _scheduleUpdateSettingsCheck() {
+    if (this._updateSettingsCheckInFlight) return;
+    this._updateSettingsCheckInFlight = setTimeout(() => {
+      this._updateSettings()
+      this._updateSettingsCheckInFlight = null;
+    }, 1000)
   }
 
   _onTimeUpdate() {
