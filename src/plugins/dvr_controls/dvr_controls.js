@@ -1,6 +1,6 @@
-import { Events, Playback, UICorePlugin, template } from '@clappr/core'
+import { Events, Playback, UICorePlugin, template, Styler } from '@clappr/core'
 import dvrHTML from './public/index.html'
-import './public/dvr_controls.scss'
+import dvrStyle from './public/dvr_controls.scss'
 
 export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }
@@ -88,10 +88,12 @@ export default class DVRControls extends UICorePlugin {
   }
 
   render() {
+    const style = Styler.getStyleFor(dvrStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template({
       live: this.core.i18n.t('live'),
       backToLive: this.core.i18n.t('back_to_live')
     }))
+    this.$el.append(style[0])
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)

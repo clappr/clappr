@@ -1,7 +1,7 @@
-import { Events, UICorePlugin, template } from '@clappr/core'
+import { Events, UICorePlugin, template, Styler } from '@clappr/core'
 import ccIcon from '../../icons/09-cc.svg'
 import ccHTML from './public/closed_captions.html'
-import './public/closed_captions.scss'
+import ccStyle from './public/closed_captions.scss'
 
 export default class ClosedCaptions extends UICorePlugin {
   get name() { return 'closed_captions' }
@@ -111,6 +111,7 @@ export default class ClosedCaptions extends UICorePlugin {
       tracks[i].label = this._labelCb(tracks[i])
 
 
+    const style = Styler.getStyleFor(ccStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template({
       ariaLabel: this._ariaLabel,
       disabledLabel: this.core.i18n.t('disabled'),
@@ -120,7 +121,7 @@ export default class ClosedCaptions extends UICorePlugin {
 
     this.$ccButton = this.$el.find('button.cc-button[data-cc-button]')
     this.$ccButton.append(ccIcon)
-    this.$el.append(this.style)
+    this.$el.append(style[0])
   }
 
   render() {

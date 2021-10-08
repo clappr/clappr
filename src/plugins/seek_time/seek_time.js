@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, Playback, UICorePlugin, Utils, template } from '@clappr/core'
+import { Events, Playback, UICorePlugin, Utils, template, Styler } from '@clappr/core'
 import seekTimeHTML from './public/seek_time.html'
-import './public/seek_time.scss'
+import seekTimeStyle from './public/seek_time.scss'
 
 const { formatTime } = Utils
 
@@ -144,10 +144,12 @@ export default class SeekTime extends UICorePlugin {
   }
 
   render() {
+    const style = Styler.getStyleFor(seekTimeStyle, { baseUrl: this.options.baseUrl })
     this.rendered = true
     this.displayedDuration = null
     this.displayedSeekTime = null
     this.$el.html(this.template())
+    this.$el.append(style[0])
     this.$el.hide()
     this.mediaControl.$el.append(this.el)
     this.$seekTimeEl = this.$el.find('[data-seek-time]')

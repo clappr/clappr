@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, UIContainerPlugin, template } from '@clappr/core'
+import { Events, UIContainerPlugin, template, Styler } from '@clappr/core'
 
 import watermarkHTML from './public/watermark.html'
-import './public/watermark.scss'
+import watermarkStyle from './public/watermark.scss'
 
 export default class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }
@@ -44,8 +44,10 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   render() {
     this.$el.hide()
+    const style = Styler.getStyleFor(watermarkStyle, { baseUrl: this.options.baseUrl })
     const templateOptions = { position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink }
     this.$el.html(this.template(templateOptions))
+    this.$el.append(style[0])
     this.container.$el.append(this.$el)
     return this
   }

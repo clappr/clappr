@@ -1,8 +1,8 @@
-import { Events, PlayerError, UICorePlugin, template } from '@clappr/core'
+import { Events, PlayerError, UICorePlugin, template, Styler } from '@clappr/core'
 
 import reloadIcon from '../../icons/10-reload.svg'
 import templateHtml from './public/error_screen.html'
-import './public/error_screen.scss'
+import errorScreenStyle from './public/error_screen.scss'
 
 export default class ErrorScreen extends UICorePlugin {
   get name() { return 'error_screen' }
@@ -69,6 +69,7 @@ export default class ErrorScreen extends UICorePlugin {
   render() {
     if (!this.err) return
 
+    const style = Styler.getStyleFor(errorScreenStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template({
       title: this.err.UI.title,
       message: this.err.UI.message,
@@ -76,6 +77,7 @@ export default class ErrorScreen extends UICorePlugin {
       icon: this.err.UI.icon || '',
       reloadIcon,
     }))
+    this.$el.append(style[0])
 
     this.core.$el.append(this.el)
 

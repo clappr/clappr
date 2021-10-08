@@ -8,9 +8,9 @@
 
 import { Kibo } from '../../vendor'
 
-import { Events, UICorePlugin, Browser, Playback, Utils, template, $ } from '@clappr/core'
+import { Events, UICorePlugin, Browser, Playback, Utils, template, Styler, $ } from '@clappr/core'
 
-import './public/media-control.scss'
+import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
 
 import playIcon from '../../icons/01-play.svg'
@@ -671,6 +671,8 @@ export default class MediaControl extends UICorePlugin {
   render() {
     const timeout = this.options.hideMediaControlDelay || 2000
     this.settings && this.$el.html(this.template({ settings: this.settings }))
+    const style = Styler.getStyleFor(mediaControlStyle, { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')

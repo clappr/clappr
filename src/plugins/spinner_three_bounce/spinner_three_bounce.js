@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, UIContainerPlugin, template } from '@clappr/core'
+import { Events, UIContainerPlugin, template, Styler } from '@clappr/core'
 
 import spinnerHTML from './public/spinner.html'
-import './public/spinner.scss'
+import spinnerStyle from './public/spinner.scss'
 
 export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
@@ -56,7 +56,9 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 
   render() {
+    const style = Styler.getStyleFor(spinnerStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template())
+    this.$el.append(style[0])
     this.container.$el.append(this.$el)
     this.$el.hide()
     if (this.container.buffering)

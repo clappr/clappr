@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, Playback, PlayerError, UIContainerPlugin, template } from '@clappr/core'
+import { Events, Playback, PlayerError, UIContainerPlugin, template, Styler } from '@clappr/core'
 
 import posterHTML from './public/poster.html'
 import playIcon from '../../icons/01-play.svg'
-import './public/poster.scss'
+import posterStyle from './public/poster.scss'
 
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
@@ -139,7 +139,9 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (!this.shouldRender)
       return
 
+    const style = Styler.getStyleFor(posterStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template())
+    this.$el.append(style[0])
 
     const isRegularPoster = this.options.poster && this.options.poster.custom === undefined
 
