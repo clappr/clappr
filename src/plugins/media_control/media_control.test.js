@@ -158,6 +158,7 @@ describe('MediaControl', function() {
       this.core.activeContainer = container
 
       mediaControl.render()
+      mediaControl.$el.find('.clappr-style').remove()
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
       expect(mediaControl.$el.html()).to.be.equal(
