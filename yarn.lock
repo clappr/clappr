@@ -874,10 +874,10 @@
     "@babel/helper-validator-identifier" "^7.14.0"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.18":
-  version "0.4.18"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.18.tgz#7becc6c32f2a48a097d1ca158dbda0169f7979ce"
-  integrity sha512-MMZ6j2+pbtoo/dPi9nyo/dAfW3u0D3np7mpT0VHNNjy+K8qZZAlyF2kYNHjwqyj6pRY0kRWj4KMXA5SUMR7Zyg==
+"@clappr/core@^0.4.19":
+  version "0.4.19"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.19.tgz#e07fe99ce5c2655d781ce2c0773b47900babda1c"
+  integrity sha512-DMSlXOUbTnexrXxBMr0KBJqRD9VtaQijAr5YPIqdjnzVLs4qNkGtqWnFmkLscLFPlXCbIRTpD0FjCTyeUYmS0Q==
 
 "@clappr/hlsjs-playback@^0.6.0":
   version "0.6.0"

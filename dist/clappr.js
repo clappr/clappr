@@ -4308,6 +4308,8 @@
   Events.CONTAINER_CONTEXTMENU = 'container:contextmenu';
   Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter';
   Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
+  Events.CONTAINER_MOUSE_UP = 'container:mouseup';
+  Events.CONTAINER_MOUSE_DOWN = 'container:mousedown';
   /**
    * Fired when the container seeks the video
    *
@@ -5069,7 +5071,9 @@
           'touchend': 'dblTap',
           'contextmenu': 'onContextMenu',
           'mouseenter': 'mouseEnter',
-          'mouseleave': 'mouseLeave'
+          'mouseleave': 'mouseLeave',
+          'mouseup': 'onMouseUp',
+          'mousedown': 'onMouseDown'
         };
       }
       /**
@@ -5563,6 +5567,16 @@
       key: "mouseLeave",
       value: function mouseLeave() {
         if (!this.options.chromeless || this.options.allowUserInteraction) this.trigger(Events.CONTAINER_MOUSE_LEAVE);
+      }
+    }, {
+      key: "mouseUp",
+      value: function mouseUp() {
+        if (!this.options.chromeless || this.options.allowUserInteraction) this.trigger(Events.CONTAINER_MOUSE_UP);
+      }
+    }, {
+      key: "mouseDown",
+      value: function mouseDown() {
+        if (!this.options.chromeless || this.options.allowUserInteraction) this.trigger(Events.CONTAINER_MOUSE_DOWN);
       }
     }, {
       key: "settingsUpdate",
@@ -6823,7 +6837,7 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.18";
+    var currentVersion = "0.4.19";
     return /*#__PURE__*/function () {
       _createClass$2(Loader, null, [{
         key: "checkVersionSupport",
@@ -7994,7 +8008,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.18"
+          min: "0.4.19"
         };
       }
     }, {
@@ -8565,19 +8579,29 @@
     }, {
       key: "getDuration",
       value: function getDuration() {
-        var _this4 = this;
-
         if (this.isLive) {
-          try {
+          if (this.el.seekable.length > 0) {
             return this.el.seekable.end(0) - this.el.seekable.start(0);
-          } catch (e) {
-            setTimeout(function () {
-              return _this4._updateSettings();
-            }, 1000);
+          } else {
+            // `seekable` is not available; this is probably OK, but make sure we're
+            // updating the control bar to reflect it
+            this._scheduleUpdateSettingsCheck();
           }
         }
 
         return this.el.duration;
+      }
+    }, {
+      key: "_scheduleUpdateSettingsCheck",
+      value: function _scheduleUpdateSettingsCheck() {
+        var _this4 = this;
+
+        if (this._updateSettingsCheckInFlight) return;
+        this._updateSettingsCheckInFlight = setTimeout(function () {
+          _this4._updateSettings();
+
+          _this4._updateSettingsCheckInFlight = null;
+        }, 1000);
       }
     }, {
       key: "_onTimeUpdate",
@@ -8805,7 +8829,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.18"
+          min: "0.4.19"
         };
       }
     }, {
@@ -8854,7 +8878,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.18"
+          min: "0.4.19"
         };
       }
     }, {
@@ -8940,7 +8964,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.18"
+          min: "0.4.19"
         };
       }
     }, {
@@ -9090,7 +9114,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.18"
+          min: "0.4.19"
         };
       }
     }]);
@@ -9247,7 +9271,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.18"
+          min: "0.4.19"
         };
       }
     }]);
@@ -9256,7 +9280,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version$1 = "0.4.18"; // Built-in Plugins/Playbacks
+  var version$1 = "0.4.19"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlugin(SourcesPlugin);
@@ -12330,7 +12354,7 @@
     WaterMark: WaterMarkPlugin
   };
 
-  var version = "0.4.5";
+  var version = "0.4.6";
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
@@ -19824,7 +19848,7 @@
   /|#EXT-X-PROGRAM-DATE-TIME:(.+)/.source, // next segment's program date/time group 5 => the datetime spec
   /|#.*/.source // All other non-segment oriented tags will match with all groups empty
   ].join(''), 'g');
-  var LEVEL_PLAYLIST_REGEX_SLOW = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.+))|(?:#EXT-X-(MEDIA-SEQUENCE): *(\d+))|(?:#EXT-X-(TARGETDURATION): *(\d+))|(?:#EXT-X-(KEY):(.+))|(?:#EXT-X-(START):(.+))|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DISCONTINUITY-SEQ)UENCE:(\d+))|(?:#EXT-X-(DIS)CONTINUITY))|(?:#EXT-X-("0.4.5"):(\d+))|(?:#EXT-X-(MAP):(.+))|(?:(#)([^:]*):(.*))|(?:(#)(.*))(?:.*)\r?\n?/;
+  var LEVEL_PLAYLIST_REGEX_SLOW = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.+))|(?:#EXT-X-(MEDIA-SEQUENCE): *(\d+))|(?:#EXT-X-(TARGETDURATION): *(\d+))|(?:#EXT-X-(KEY):(.+))|(?:#EXT-X-(START):(.+))|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DISCONTINUITY-SEQ)UENCE:(\d+))|(?:#EXT-X-(DIS)CONTINUITY))|(?:#EXT-X-("0.4.6"):(\d+))|(?:#EXT-X-(MAP):(.+))|(?:(#)([^:]*):(.*))|(?:(#)(.*))(?:.*)\r?\n?/;
   var MP4_REGEX_SUFFIX = /\.(mp4|m4s|m4v|m4a)$/i;
 
   var m3u8_parser_M3U8Parser = /*#__PURE__*/function () {
@@ -20076,7 +20100,7 @@
               level.targetduration = parseFloat(value1);
               break;
 
-            case '"0.4.5"':
+            case '"0.4.6"':
               level.version = parseInt(value1);
               break;
 
