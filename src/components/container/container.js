@@ -131,6 +131,7 @@ export default class Container extends UIObject {
     this.dblTapHandler = new DoubleEventHandler(500)
     this.clickTimer = null
     this.clickDelay = 200  // FIXME: could be a player option
+    this.actionsMetadata = {}
     this.bindEvents()
   }
 
@@ -297,45 +298,51 @@ export default class Container extends UIObject {
   }
 
   playing() {
-    this.trigger(Events.CONTAINER_PLAY, this.name)
+    this.trigger(Events.CONTAINER_PLAY, this.name, this.actionsMetadata.playEvent || {})
   }
 
   paused() {
-    this.trigger(Events.CONTAINER_PAUSE, this.name)
+    this.trigger(Events.CONTAINER_PAUSE, this.name, this.actionsMetadata.pauseEvent || {})
+  }
+
+  stopped() {
+    this.trigger(Events.CONTAINER_STOP, this.actionsMetadata.stopEvent || {})
   }
 
   /**
    * plays the playback
    * @method play
+   * @param {Object} options
    */
-  play() {
-    this.playback.play()
+  play(options = {}) {
+    this.actionsMetadata.playEvent = options
+    this.playback.play(options)
   }
 
   /**
    * stops the playback
    * @method stop
+   * @param {Object} options
    */
-  stop() {
-    this.playback.stop()
+  stop(options = {}) {
+    this.actionsMetadata.stopEvent = options
+    this.playback.stop(options)
     this.currentTime = 0
   }
 
   /**
    * pauses the playback
    * @method pause
+   * @param {Object} options
    */
-  pause() {
-    this.playback.pause()
+  pause(options = {}) {
+    this.actionsMetadata.pauseEvent = options
+    this.playback.pause(options)
   }
 
   onEnded() {
     this.trigger(Events.CONTAINER_ENDED, this, this.name)
     this.currentTime = 0
-  }
-
-  stopped() {
-    this.trigger(Events.CONTAINER_STOP)
   }
 
   clicked() {
