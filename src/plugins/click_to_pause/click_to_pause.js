@@ -7,6 +7,7 @@ import { ContainerPlugin, Events, Playback } from '@clappr/core'
 export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
   get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
+  get config() { return this.container.options.clickToPauseConfig || {} }
 
   constructor(container) {
     super(container)
@@ -18,11 +19,13 @@ export default class ClickToPausePlugin extends ContainerPlugin {
   }
 
   click() {
+    const onClickPayload = this.config.onClickPayload
+
     if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()) {
       if (this.container.isPlaying())
-        this.container.pause()
+        this.container.pause(onClickPayload)
       else
-        this.container.play()
+        this.container.play(onClickPayload)
 
     }
   }
