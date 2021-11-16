@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 /* eslint-disable no-console */
 import mockConsole from 'jest-mock-console'
 
@@ -1014,6 +1017,22 @@ describe('HTML5TVsPlayback', function() {
           scope: 'playback',
         },
       )
+    })
+  })
+
+  describe('load method', () => {
+    test('calls _wipeUpMedia method', () => {
+      jest.spyOn(this.playback, '_wipeUpMedia')
+      this.playback.load(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback._wipeUpMedia).toHaveBeenCalledTimes(1)
+    })
+
+    test('calls _setupSource method with received source URL', () => {
+      jest.spyOn(this.playback, '_setupSource')
+      this.playback.load(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback._setupSource).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
     })
   })
 

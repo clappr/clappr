@@ -303,6 +303,11 @@ export default class HTML5TVsPlayback extends Playback {
       : this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
+  load(sourceURL) {
+    this._wipeUpMedia()
+    this._setupSource(sourceURL)
+  }
+
   play() {
     this._isStopped = false
     this._setupSource(this._src)
