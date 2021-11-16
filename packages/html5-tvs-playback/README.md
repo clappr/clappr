@@ -57,6 +57,7 @@ Group all DRM-related config. The currently available configs are:
 
 | instance method | arguments | description |
 |-----------------|-----------|-------------|
+| `playback.load` | `{String} - resourceUrl` | Loads the media on the video element creating one `<source>` element inside it with the received source URL. |
 | `playback.play` |  | Begins/resume playback of the media. |
 | `playback.pause` |  | Pauses the media playback. |
 | `playback.stop` | | Stops the media playback. This implies on the removing the src attribute from the video element and calling the load() method without a valid source to stop downloading the source that was removed. |
