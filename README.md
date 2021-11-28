@@ -124,7 +124,7 @@ Adds the possibility to toggle between the `play`/`pause` playback states by cli
 ```javascript
 var player = new Clappr.Player({
   source: "http://your.video/here.mp4",
-  // not mandatory, use only if you need it
+  // Optionally, send a payload upon the container's pausing with the `onClickPayload` parameter
   clickToPauseConfig: { 
     onClickPayload: { any: 'any' } // sends the payload to container when clicked
 });
