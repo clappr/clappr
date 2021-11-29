@@ -131,10 +131,6 @@ describe('HTML5TVsPlayback', function() {
     expect(`${this.playback.el.width}%`).toEqual(this.playback.attributes.width)
   })
 
-  test('have a getter called mediaType', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'mediaType').get).toBeTruthy()
-  })
-
   describe('mediaType getter', () => {
     test('returns Playback.LIVE if video.duration property is Infinity', () => {
       this.playback.el = { duration: Infinity }
@@ -149,10 +145,6 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
-  test('have a getter called isReady', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isReady').get).toBeTruthy()
-  })
-
   test('isReady getter returns the check if video.readyState is greater than or equal HAVE_CURRENT_DATA value', () => {
     jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_NOTHING)
 
@@ -161,10 +153,6 @@ describe('HTML5TVsPlayback', function() {
     jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_CURRENT_DATA)
 
     expect(this.playback.isReady).toBeTruthy()
-  })
-
-  test('have a getter called playing', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'playing').get).toBeTruthy()
   })
 
   test('playing getter returns if video it\'s not paused and it\'s not ended', () => {
@@ -184,16 +172,8 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.playing).toBeTruthy()
   })
 
-  test('have a getter called currentTime', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'currentTime').get).toBeTruthy()
-  })
-
   test('currentTime getter returns video.currentTime property', () => {
     expect(this.playback.currentTime).toEqual(this.playback.el.currentTime)
-  })
-
-  test('have a getter called duration', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'duration').get).toBeTruthy()
   })
 
   describe('duration getter', () => {
@@ -219,16 +199,8 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
-  test('have a getter called ended', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'ended').get).toBeTruthy()
-  })
-
   test('ended getter returns video.ended property', () => {
     expect(this.playback.ended).toEqual(this.playback.el.ended)
-  })
-
-  test('have a getter called buffering', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'buffering').get).toBeTruthy()
   })
 
   test('buffering getter returns _isBuffering flag value', () => {
@@ -326,10 +298,6 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.trigger).toHaveBeenCalledWith(Events.PLAYBACK_AUDIO_AVAILABLE, this.playback.audioTracks)
   })
 
-  test('have a getter called isLive', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'isLive').get).toBeTruthy()
-  })
-
   test('isLive getter returns the check if the mediaType getter returns the Playback.LIVE value', () => {
     jest.spyOn(this.playback, 'mediaType', 'get').mockReturnValueOnce(Playback.VOD)
 
@@ -338,10 +306,6 @@ describe('HTML5TVsPlayback', function() {
     jest.spyOn(this.playback, 'mediaType', 'get').mockReturnValueOnce(Playback.LIVE)
 
     expect(this.playback.isLive).toBeTruthy()
-  })
-
-  test('have a getter called minimumDvrSizeConfig', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'minimumDvrSizeConfig').get).toBeTruthy()
   })
 
   test('minimumDvrSizeConfig getter returns the value of a valid options.playback.minimumDvrSize config', () => {
@@ -358,10 +322,6 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.minimumDvrSizeConfig).toEqual(120)
   })
 
-  test('have a getter called dvrSize', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'dvrSize').get).toBeTruthy()
-  })
-
   describe('dvrSize getter', () => {
     test('returns the minimumDvrSizeConfig getter value if options.playback.minimumDvrSize is valid', () => {
       this.playback.options.playback = { minimumDvrSize: 120 }
@@ -374,10 +334,6 @@ describe('HTML5TVsPlayback', function() {
 
       expect(this.playback.dvrSize).toEqual(DEFAULT_MINIMUM_DVR_SIZE)
     })
-  })
-
-  test('have a getter called dvrEnabled', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'dvrEnabled').get).toBeTruthy()
   })
 
   test('dvrEnabled getter returns the check of the isLive is truthy and if the duration is greater or equal the dvrSize value', () => {
@@ -398,10 +354,6 @@ describe('HTML5TVsPlayback', function() {
     jest.spyOn(this.playback, 'dvrSize', 'get').mockReturnValueOnce(60)
 
     expect(this.playback.dvrEnabled).toBeTruthy()
-  })
-
-  test('have a getter called events', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'events').get).toBeTruthy()
   })
 
   describe('events getter', () => {
@@ -645,10 +597,6 @@ describe('HTML5TVsPlayback', function() {
         errorEvent,
       )
     })
-  })
-
-  test('have a getter called config', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.playback), 'config').get).toBeTruthy()
   })
 
   test('config getter returns the options.html5TvsPlayback value', () => {
