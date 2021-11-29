@@ -200,8 +200,6 @@ describe('Container', function() {
 
 
     expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PAUSE, this.container.name, parameter)
-    expect(this.container.actionsMetadata).toEqual({ pauseEvent: parameter })
-
   })
 
   test('trigger container:play with no parameters', () => {
@@ -219,7 +217,6 @@ describe('Container', function() {
     this.playback.trigger(Events.PLAYBACK_PLAY)
     
     expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PLAY, this.container.name, parameter)
-    expect(this.container.actionsMetadata).toEqual({ playEvent: parameter })
   })
 
   test('trigger container:stop with no parameters', () => {
@@ -237,7 +234,6 @@ describe('Container', function() {
     this.playback.trigger(Events.PLAYBACK_STOP)
     
     expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_STOP, parameter)
-    expect(this.container.actionsMetadata).toEqual({ stopEvent: parameter })
   })
 
   describe('#checkResize', () => {

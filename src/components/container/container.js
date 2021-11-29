@@ -299,14 +299,17 @@ export default class Container extends UIObject {
 
   playing() {
     this.trigger(Events.CONTAINER_PLAY, this.name, this.actionsMetadata.playEvent || {})
+    this.actionsMetadata.playEvent = {}
   }
 
   paused() {
     this.trigger(Events.CONTAINER_PAUSE, this.name, this.actionsMetadata.pauseEvent || {})
+    this.actionsMetadata.pauseEvent = {}
   }
 
   stopped() {
     this.trigger(Events.CONTAINER_STOP, this.actionsMetadata.stopEvent || {})
+    this.actionsMetadata.stopEvent = {}
   }
 
   /**
