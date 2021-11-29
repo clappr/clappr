@@ -138,4 +138,45 @@ describe('clickToPause', function() {
       this.container.trigger(Events.CONTAINER_SETTINGSUPDATE)
     })
   })
+
+  it('call container play with parameters when received from config', function(done) {
+    this.container = new Container({
+      playback: this.playback,
+      clickToPauseConfig: { onClickPayload: { testing: true } }
+    })
+    const plugin = new ClickToPause(this.container) // eslint-disable-line
+
+
+    sinon.stub(this.container, 'isPlaying').callsFake(() => false)
+    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
+    sinon.spy(this.container, 'play')
+
+    this.container.on(Events.CONTAINER_CLICK, () => {
+      this.container.play.should.have.been.calledWith({ testing: true })
+      done()
+    })
+
+    this.container.trigger(Events.CONTAINER_CLICK)
+  })
+
+  it('call container pause with parameters when received from config', function(done) {
+    this.container = new Container({
+      playback: this.playback,
+      clickToPauseConfig: { onClickPayload: { testing: true } }
+    })
+    const plugin = new ClickToPause(this.container) // eslint-disable-line
+
+
+    sinon.stub(this.container, 'isPlaying').callsFake(() => true)
+    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
+    sinon.spy(this.container, 'pause')
+
+    this.container.on(Events.CONTAINER_CLICK, () => {
+      this.container.pause.should.have.been.calledWith({ testing: true })
+      done()
+    })
+
+    this.container.trigger(Events.CONTAINER_CLICK)
+  })
+
 })

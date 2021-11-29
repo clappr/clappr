@@ -121,6 +121,14 @@ A plugin that renders the interface over the video container and add the possibi
 
 ### Click to pause
 Adds the possibility to toggle between the `play`/`pause` playback states by clicking on the container element.
+```javascript
+var player = new Clappr.Player({
+  source: "http://your.video/here.mp4",
+  // Optionally, send a payload upon the container's pausing with the `onClickPayload` parameter
+  clickToPauseConfig: { 
+    onClickPayload: { any: 'any' } // sends the payload to container when clicked
+});
+```
 
 ### Closed captions
 Adds the possibility to customize the label and title of the subtitles.
