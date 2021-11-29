@@ -659,11 +659,20 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('constructor', () => {
-    test('calls _setPrivateFlags method', () => {
-      jest.spyOn(HTML5TVsPlayback.prototype, '_setPrivateFlags')
+    test('sets the initial state for internal flags', () => {
+      expect(HTML5TVsPlayback.prototype._isReady).toBeUndefined()
+      expect(HTML5TVsPlayback.prototype._drmConfigured).toBeUndefined()
+      expect(HTML5TVsPlayback.prototype._isBuffering).toBeUndefined()
+      expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
+      expect(HTML5TVsPlayback.prototype._isDestroyed).toBeUndefined()
+
       setupTest()
 
-      expect(HTML5TVsPlayback.prototype._setPrivateFlags).toHaveBeenCalledTimes(1)
+      expect(this.playback._isReady).toBeFalsy()
+      expect(this.playback._drmConfigured).toBeFalsy()
+      expect(this.playback._isBuffering).toBeFalsy()
+      expect(this.playback._isStopped).toBeFalsy()
+      expect(this.playback._isDestroyed).toBeFalsy()
     })
 
     test('calls _setupSource with options.src', () => {
@@ -671,33 +680,6 @@ describe('HTML5TVsPlayback', function() {
       setupTest({ src: URL_VIDEO_MP4_EXAMPLE })
 
       expect(HTML5TVsPlayback.prototype._setupSource).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
-    })
-  })
-
-  describe('_setPrivateFlags method', () => {
-    test('sets _isReady flag with false value', () => {
-      expect(HTML5TVsPlayback.prototype._isReady).toBeUndefined()
-      expect(this.playback._isReady).toBeFalsy()
-    })
-
-    test('sets _drmConfigured flag with false value', () => {
-      expect(HTML5TVsPlayback.prototype._drmConfigured).toBeUndefined()
-      expect(this.playback._drmConfigured).toBeFalsy()
-    })
-
-    test('sets _isBuffering flag with false value', () => {
-      expect(HTML5TVsPlayback.prototype._isBuffering).toBeUndefined()
-      expect(this.playback._isBuffering).toBeFalsy()
-    })
-
-    test('sets _isStopped flag with false value', () => {
-      expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
-      expect(this.playback._isStopped).toBeFalsy()
-    })
-
-    test('sets _isDestroyed flag with false value', () => {
-      expect(HTML5TVsPlayback.prototype._isStopped).toBeUndefined()
-      expect(this.playback._isDestroyed).toBeFalsy()
     })
   })
 

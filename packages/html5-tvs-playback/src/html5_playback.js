@@ -107,17 +107,14 @@ export default class HTML5TVsPlayback extends Playback {
     super(options, i18n, playerError)
     this._onAudioTracksUpdated = this._onAudioTracksUpdated.bind(this)
 
-    this._setPrivateFlags()
-    this._setAudioTrackListeners()
-    this._setupSource(this.options.src)
-  }
-
-  _setPrivateFlags() {
     this._drmConfigured = false
     this._isReady = false
     this._isBuffering = false
     this._isStopped = false
     this._isDestroyed = false
+
+    this._setAudioTrackListeners()
+    this._setupSource(this.options.src)
   }
 
   _setupSource(sourceURL) {
