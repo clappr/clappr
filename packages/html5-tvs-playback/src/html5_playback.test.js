@@ -704,7 +704,6 @@ describe('HTML5TVsPlayback', function() {
   describe('_setupSource method', () => {
     test('avoids unnecessary video.src updates', () => {
       jest.spyOn(DRMHandler, 'sendLicenseRequest')
-      jest.spyOn(this.playback, '_setSourceOnVideoTag')
 
       this.playback.$sourceElement = document.createElement('source')
       this.playback.$sourceElement.src = URL_VIDEO_MP4_EXAMPLE
@@ -712,7 +711,32 @@ describe('HTML5TVsPlayback', function() {
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
       expect(DRMHandler.sendLicenseRequest).not.toHaveBeenCalled()
-      expect(this.playback._setSourceOnVideoTag).not.toHaveBeenCalled()
+    })
+
+    test('creates the $sourceElement reference', () => {
+      expect(this.playback.$sourceElement).toBeUndefined()
+
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.$sourceElement).toBeDefined()
+    })
+
+    test('sets received source URL extension as $sourceElement.type attribute', () => {
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.$sourceElement.type).toEqual('video/mp4')
+    })
+
+    test('sets received source URL as $sourceElement.src attribute', () => {
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.$sourceElement.src).toEqual(URL_VIDEO_MP4_EXAMPLE)
+    })
+
+    test('saves current $sourceElement.src value on internal reference', () => {
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback._src).toEqual(URL_VIDEO_MP4_EXAMPLE)
     })
 
     test('sets license server if config.drm exists and _drmConfigured flag is false', () => {
@@ -729,43 +753,8 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
-    test('calls _setSourceOnVideoTag method if no one license server URL is configured or _drmConfigured flag is true', () => {
-      jest.spyOn(this.playback, '_setSourceOnVideoTag')
+    test('appends $sourceElement into the playback.el if no one license server URL is configured or _drmConfigured flag is true', () => {
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
-
-      expect(this.playback._setSourceOnVideoTag).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
-    })
-  })
-
-  describe('_setSourceOnVideoTag method', () => {
-    test('creates the $sourceElement reference', () => {
-      expect(this.playback.$sourceElement).toBeUndefined()
-
-      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
-
-      expect(this.playback.$sourceElement).toBeDefined()
-    })
-
-    test('sets received source URL extension as $sourceElement.type attribute', () => {
-      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
-
-      expect(this.playback.$sourceElement.type).toEqual('video/mp4')
-    })
-
-    test('sets received source URL as $sourceElement.src attribute', () => {
-      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
-
-      expect(this.playback.$sourceElement.src).toEqual(URL_VIDEO_MP4_EXAMPLE)
-    })
-
-    test('saves current $sourceElement.src value on internal reference', () => {
-      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
-
-      expect(this.playback._src).toEqual(URL_VIDEO_MP4_EXAMPLE)
-    })
-
-    test('appends $sourceElement into the playback.el', () => {
-      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
 
       expect(this.playback.el.firstChild).toEqual(this.playback.$sourceElement)
     })
@@ -782,14 +771,12 @@ describe('HTML5TVsPlayback', function() {
       expect(container.playback._drmConfigured).toBeTruthy()
     })
 
-    test('calls _setSourceOnVideoTag method with options.src value', () => {
+    test('appends $sourceElement into the playback.el', () => {
       const { core, container } = setupTest({ src: URL_VIDEO_MP4_EXAMPLE })
       core.activeContainer = container
-      jest.spyOn(container.playback, '_setSourceOnVideoTag')
       container.playback._onDrmConfigured()
 
-      expect(container.playback._setSourceOnVideoTag).toHaveBeenCalledTimes(1)
-      expect(container.playback._setSourceOnVideoTag).toHaveBeenCalledWith(container.playback.options.src)
+      expect(container.playback.el.firstChild).toEqual(container.playback.$sourceElement)
     })
   })
 
@@ -1198,7 +1185,7 @@ describe('HTML5TVsPlayback', function() {
 
   describe('_wipeUpMedia method', () => {
     beforeEach(() => {
-      this.playback._setSourceOnVideoTag(URL_VIDEO_MP4_EXAMPLE)
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
     })
 
     test('sets _isReady flag with false value', () => {
