@@ -315,32 +315,32 @@ export default class Container extends UIObject {
   /**
    * plays the playback
    * @method play
-   * @param {Object} options
+   * @param {Object} customData
    */
-  play(options = {}) {
-    this.actionsMetadata.playEvent = options
-    this.playback.play(options)
+  play(customData = {}) {
+    this.actionsMetadata.playEvent = customData
+    this.playback.play(customData)
   }
 
   /**
    * stops the playback
    * @method stop
-   * @param {Object} options
+   * @param {Object} customData
    */
-  stop(options = {}) {
-    this.actionsMetadata.stopEvent = options
-    this.playback.stop(options)
+  stop(customData = {}) {
+    this.actionsMetadata.stopEvent = customData
+    this.playback.stop(customData)
     this.currentTime = 0
   }
 
   /**
    * pauses the playback
    * @method pause
-   * @param {Object} options
+   * @param {Object} customData
    */
-  pause(options = {}) {
-    this.actionsMetadata.pauseEvent = options
-    this.playback.pause(options)
+  pause(customData = {}) {
+    this.actionsMetadata.pauseEvent = customData
+    this.playback.pause(customData)
   }
 
   onEnded() {
