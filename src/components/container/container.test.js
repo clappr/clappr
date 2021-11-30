@@ -184,6 +184,58 @@ describe('Container', function() {
     expect(this.container.playing).toHaveBeenCalledTimes(1)
   })
 
+  test('trigger container:pause with no parameters', () => {
+    jest.spyOn(this.container, 'trigger')
+    this.container.pause()
+    this.playback.trigger(Events.PLAYBACK_PAUSE)
+
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PAUSE, this.container.name, {})
+  })
+
+  test('trigger container:pause with parameters', () => {
+    jest.spyOn(this.container, 'trigger')
+    const parameter = { anyParameter: 'parameter' }
+    this.container.pause(parameter)
+    this.playback.trigger(Events.PLAYBACK_PAUSE)
+
+
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PAUSE, this.container.name, parameter)
+  })
+
+  test('trigger container:play with no parameters', () => {
+    jest.spyOn(this.container, 'trigger')
+    this.container.pause()
+    this.playback.trigger(Events.PLAYBACK_PLAY)
+
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PLAY, this.container.name, {})
+  })
+
+  test('trigger container:play with parameters', () => {
+    jest.spyOn(this.container, 'trigger')
+    const parameter = { anyParameter: 'parameter' }
+    this.container.play(parameter)
+    this.playback.trigger(Events.PLAYBACK_PLAY)
+    
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PLAY, this.container.name, parameter)
+  })
+
+  test('trigger container:stop with no parameters', () => {
+    jest.spyOn(this.container, 'trigger')
+    this.container.stop()
+    this.playback.trigger(Events.PLAYBACK_STOP)
+
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_STOP, {})
+  })
+
+  test('trigger container:stop with parameters', () => {
+    jest.spyOn(this.container, 'trigger')
+    const parameter = { anyParameter: 'parameter' }
+    this.container.stop(parameter)
+    this.playback.trigger(Events.PLAYBACK_STOP)
+    
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_STOP, parameter)
+  })
+
   describe('#checkResize', () => {
     beforeEach(() => {
       this.container.el = { clientWidth: 640, clientHeight: 360 }
