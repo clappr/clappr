@@ -874,20 +874,20 @@
     "@babel/helper-validator-identifier" "^7.14.0"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.19":
-  version "0.4.19"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.19.tgz#e07fe99ce5c2655d781ce2c0773b47900babda1c"
-  integrity sha512-DMSlXOUbTnexrXxBMr0KBJqRD9VtaQijAr5YPIqdjnzVLs4qNkGtqWnFmkLscLFPlXCbIRTpD0FjCTyeUYmS0Q==
+"@clappr/core@^0.4.20":
+  version "0.4.20"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.20.tgz#4b1aed2e43e21aed8202d052bd5f70538f3125a3"
+  integrity sha512-KfdKTuc1vBrfJXB0s4U7TVr6Qu62s+lGwf4PGM99bz9ar8kEQCijEgVLM5Vb0ARqmdNrc/mcDvu9h/i5Bvopkg==
 
 "@clappr/hlsjs-playback@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-0.6.0.tgz#e4b19d66177f161b546171bd6ef3b70df6f2a13d"
   integrity sha512-aw56rTB1V5YiCryximSwSEKgvtISmrsMhRNUnsMshUoSGZi3mAxT1Wiab+ShHInPRtbu4HWgZzDJpIy+a/+i8w==
 
-"@clappr/plugins@^0.4.13":
-  version "0.4.13"
-  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.13.tgz#ff213efc317ba38c11c00a11fa26c9378573dff9"
-  integrity sha512-Fc5qwRzlvVItn8qYcHaGQqZhQVgSIgXaJAapWvofG+tyuav2H7zaFDCQ8xwXVleYJX3RM279KKBpb1vtPFSyxw==
+"@clappr/plugins@^0.4.16":
+  version "0.4.16"
+  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.16.tgz#4a682c89b8249c35e92ccbf37707847d4e4189d7"
+  integrity sha512-fiTGrOEmFzbhtJLHIWPfZ/Pt2uG3tzsXm1RVGQUi28aT1LnX6C7WpWROPev/vaULNV8ZoWcit3uBnw38amzZPQ==
 
 "@commitlint/execute-rule@^12.1.4":
   version "12.1.4"
