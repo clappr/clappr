@@ -16,7 +16,13 @@ labels: bug
 * then second step
 * I was expecting X but instead it shows Y
 
-Did you try to reproduce this issue at http://cdn.clappr.io/
+**Does it happen only in your streaming?**
+* If it does, please provide your streaming URL.
 
-ps: you can attach images, logs or whatever you think might be helpful.
-ps: feel free to clean this if your issue is different.
+**To consider:**
+* Did you try to reproduce this issue at http://cdn.clappr.io/?
+* Did you check if it's a CORS problem?
+
+**ps:** Please, attach images, logs or whatever you think might be helpful.
+
+**ps:** Feel free to clean this if your issue is different.
