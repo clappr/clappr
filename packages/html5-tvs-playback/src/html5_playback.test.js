@@ -31,41 +31,28 @@ const setupTest = (options = {}) => {
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioTrackList
 const createAudioTrackListStub = () => {
   const tracks = {}
-  const updateEnabledProperty = (trackId, value) => {
-    Object.values(tracks).forEach(track => {
-      if (track.id === trackId)
-        track._enabled = value
-      else
-        track._enabled = value ? false : this._enabled
-    })
-  }
-  const createAudioTrack = trackInfo => ({
-    ...trackInfo,
-    get enabled() { return this._enabled },
-    set enabled(value) { updateEnabledProperty(this.id, value) },
-  })
 
   Object.defineProperties(tracks, {
     addEventListener: { value: jest.fn() },
     getTrackById: { value: id => tracks[id] },
     0: {
-      value: createAudioTrack({
+      value: {
         id: '0',
         language: 'en',
         kind: 'description',
         label: 'English (describes video)',
-        _enabled: true,
-      }),
+        enabled: true,
+      },
       enumerable: true,
     },
     1: {
-      value: createAudioTrack({
+      value: {
         id: '1',
         language: 'en',
         kind: 'main',
         label: 'English',
-        _enabled: false,
-      }),
+        enabled: false,
+      },
       enumerable: true,
     },
     length: { value: 2 },
@@ -252,10 +239,18 @@ describe('HTML5TVsPlayback', function() {
       })
     })
 
-    test('returns null if audioTracks property doesn\'t exist on media element', () => {
+    test('does not return anything if no audio track is enabled', () => {
+      Object.values(this.playback.el.audioTracks).forEach(t => {
+        t.enabled = false
+      })
+
+      expect(this.playback.currentAudioTrack).toBeFalsy()
+    })
+
+    test('does not return anything if audioTracks property doesn\'t exist on media element', () => {
       delete window.HTMLMediaElement.prototype.audioTracks
 
-      expect(this.playback.currentAudioTrack).toBeNull()
+      expect(this.playback.currentAudioTrack).toBeFalsy()
     })
   })
 

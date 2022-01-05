@@ -60,7 +60,8 @@ export default class HTML5TVsPlayback extends Playback {
     if (!this.el.audioTracks) return null
 
     const track = Object.values(this.el.audioTracks).find(track => track.enabled)
-    return this._formatAudioTrack(track)
+
+    return track && this._formatAudioTrack(track)
   }
 
   get isLive() { return this.mediaType === Playback.LIVE }
@@ -331,7 +332,10 @@ export default class HTML5TVsPlayback extends Playback {
     const track = this.el.audioTracks?.getTrackById(id)
     if (!track || track.enabled) return
 
-    track.enabled = true
+    Object.values(this.el.audioTracks).forEach(track => {
+      track.enabled = track.id === id
+    })
+
     this.trigger(Events.PLAYBACK_AUDIO_CHANGED, this._formatAudioTrack(track))
   }
 
