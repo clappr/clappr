@@ -131,6 +131,10 @@ describe('HTML5TVsPlayback', function() {
     expect(`${this.playback.el.width}%`).toEqual(this.playback.attributes.width)
   })
 
+  test('attributes getter returns the height attribute that will be added on the plugin DOM element', () => {
+    expect(`${this.playback.el.height}%`).toEqual(this.playback.attributes.height)
+  })
+
   describe('mediaType getter', () => {
     test('returns Playback.LIVE if video.duration property is Infinity', () => {
       this.playback.el = { duration: Infinity }
