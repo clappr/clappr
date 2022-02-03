@@ -5,6 +5,16 @@ import ErrorMixin from '@/base/error_mixin'
 import $ from 'clappr-zepto'
 
 /**
+ * An object representing a single audio track.
+ * @typedef {Object} AudioTrack
+ * @property {string} id - A unique identifier for the track. Used to identify it among the others.
+ * @property {string} language - The language of the track (e.g., 'en', 'pt-BR').
+ * @property {string} [label] - An optional label to be used in the UI to describe the track.
+ * @property {('main'|'description')} kind - The category the audio track belongs to.
+ * The kind 'description' is applied to audio tracks that narrate or describe the visual content.
+ */
+
+/**
  * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
  * @class Playback
  * @constructor
@@ -173,6 +183,24 @@ export default class Playback extends UIObject {
    * @type {Number}
    */
   set closedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
+
+  /**
+   * returns a list of the available audio tracks for the playback.
+   * @type {AudioTrack[]} audio tracks
+   */
+  get audioTracks() { return [] }
+
+  /**
+   * returns the audio track currently in use by the playback.
+   * @type {AudioTrack} audio track
+   */
+  get currentAudioTrack() { return null }
+
+  /**
+   * switches the current audio track used by the playback.
+   * @param {string} id - id of the audio track to be set.
+   */
+  switchAudioTrack(id) {} // eslint-disable-line no-unused-vars
 
   /**
    * gets the playback type (`'vod', 'live', 'aod'`)
