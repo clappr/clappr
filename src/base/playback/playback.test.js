@@ -44,6 +44,14 @@ describe('Playback', function() {
       expect(isGetterProperty(this.basePlayback, 'isReady')).toBeTruthy()
       expect(isSetterProperty(this.basePlayback, 'isReady')).toBeFalsy()
     })
+    test('called audioTracks', () => {
+      expect(isGetterProperty(this.basePlayback, 'audioTracks')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'audioTracks')).toBeFalsy()
+    })
+    test('called currentAudioTracks', () => {
+      expect(isGetterProperty(this.basePlayback, 'currentAudioTrack')).toBeTruthy()
+      expect(isSetterProperty(this.basePlayback, 'currentAudioTrack')).toBeFalsy()
+    })
     test('called hasClosedCaptionsTracks', () => {
       expect(isGetterProperty(this.basePlayback, 'hasClosedCaptionsTracks')).toBeTruthy()
       expect(isSetterProperty(this.basePlayback, 'hasClosedCaptionsTracks')).toBeFalsy()
@@ -88,6 +96,14 @@ describe('Playback', function() {
 
   test('closedCaptionsTrackId getter returns default value', () => {
     expect(this.basePlayback.closedCaptionsTrackId).toEqual(-1)
+  })
+
+  test('audioTracks getter returns default value', () => {
+    expect(this.basePlayback.audioTracks).toEqual([])
+  })
+
+  test('currentAudioTrack getter returns default value', () => {
+    expect(this.basePlayback.currentAudioTrack).toBeNull()
   })
 
   test('i18n getter returns default value', () => {

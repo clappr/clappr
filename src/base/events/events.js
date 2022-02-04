@@ -552,6 +552,20 @@ Events.PLAYBACK_SUBTITLE_AVAILABLE = 'playback:subtitle:available'
  */
 Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed'
 
+/**
+ * Fired when audio tracks are available to be used on the playback
+ * @event PLAYBACK_AUDIO_AVAILABLE
+ * @param {import('../playback/playback').AudioTrack[]} tracks - list of available audio tracks
+ */
+Events.PLAYBACK_AUDIO_AVAILABLE = 'playback:audio:available'
+
+/**
+ * Fired whenever the current audio track has changed
+ * @event PLAYBACK_AUDIO_CHANGED
+ * @param {import('../playback/playback').AudioTrack} track - audio track active after change
+ */
+Events.PLAYBACK_AUDIO_CHANGED = 'playback:audio:changed'
+
 // Core Events
 /**
  * Fired when the containers are created
@@ -696,6 +710,20 @@ Events.CONTAINER_SUBTITLE_AVAILABLE = 'container:subtitle:available'
  * selected track id
  */
 Events.CONTAINER_SUBTITLE_CHANGED = 'container:subtitle:changed'
+
+/**
+ * Fired when audio tracks are available to be used on the container
+ * @event CONTAINER_AUDIO_AVAILABLE
+ * @param {import('../playback/playback').AudioTrack[]} tracks - list of available audio tracks
+ */
+Events.CONTAINER_AUDIO_AVAILABLE = 'container:audio:available'
+
+/**
+  * Fired whenever the current audio track has changed
+  * @event CONTAINER_AUDIO_CHANGED
+  * @param {import('../playback/playback').AudioTrack} track - audio track active after change
+  */
+Events.CONTAINER_AUDIO_CHANGED = 'container:audio:changed'
 
 /**
  * Fired when the time is updated on container

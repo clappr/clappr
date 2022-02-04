@@ -10,7 +10,6 @@ src/base/jst.js
 aws.json
 npm-debug.log
 yarn-error.log
-package-lock.json
 
 # bump
 *.bkp

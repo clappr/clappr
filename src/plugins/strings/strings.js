@@ -58,11 +58,21 @@ export default class Strings extends CorePlugin {
         'default_error_title': 'Não foi possível reproduzir o vídeo.',
         'default_error_message': 'Ocorreu um problema ao tentar carregar o vídeo.',
       },
-      'es': {
+      'es_am': {
         'live': 'vivo',
         'back_to_live': 'volver en vivo',
-        'disabled': 'Discapacitado',
-        'playback_not_supported': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
+        'disabled': 'No disponible',
+        'playback_not_supported': 'Su navegador no soporta la reproducción de este video. Por favor, utilice un navegador diferente.',
+        'default_error_title': 'No se puede reproducir el video.',
+        'default_error_message': 'Se ha producido un error al cargar el video.'
+      },
+      'es': {
+        'live': 'en directo',
+        'back_to_live': 'volver al directo',
+        'disabled': 'No disponible',
+        'playback_not_supported': 'Este navegador no es compatible para reproducir este vídeo. Utilice un navegador diferente.',
+        'default_error_title': 'No se puede reproducir el vídeo.',
+        'default_error_message': 'Se ha producido un problema al cargar el vídeo.'
       },
       'ru': {
         'live': 'прямой эфир',
@@ -112,8 +122,9 @@ export default class Strings extends CorePlugin {
     this._messages['de-DE'] = this._messages['de']
     this._messages['pt-BR'] = this._messages['pt']
     this._messages['en-US'] = this._messages['en']
-    this._messages['es-419'] = this._messages['es']
     this._messages['bg-BG'] = this._messages['bg']
+    this._messages['es-419'] = this._messages['es_am']
+    this._messages['es-ES'] = this._messages['es']
     this._messages['fr-FR'] = this._messages['fr']
     this._messages['tr-TR'] = this._messages['tr']
     this._messages['et-EE'] = this._messages['et']

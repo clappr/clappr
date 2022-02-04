@@ -453,12 +453,12 @@ describe('HTML5Video playback', function() {
       expect(html5Video.getDuration).toHaveReturnedWith(30)
     })
 
-    test('retry to get duration for live medias when occurs transient unavailability', () => {
+    test('retry to get duration for live media when there is no seekable range', () => {
       jest.useFakeTimers()
       let start = []
       let end = []
       let html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
-      html5Video.setElement({ get seekable() { return undefined } })
+      html5Video.setElement({ get seekable() { return { length: 0 } } })
 
       jest.spyOn(html5Video, 'getDuration')
       jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
