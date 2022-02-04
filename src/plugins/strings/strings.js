@@ -80,6 +80,14 @@ export default class Strings extends CorePlugin {
         'disabled': 'Отключено',
         'playback_not_supported': 'Ваш браузер не поддерживает воспроизведение этого видео. Пожалуйста, попробуйте другой браузер.',
       },
+      'bg': {
+        'live': 'на живо',
+        'back_to_live': 'Върни на живо',
+        'disabled': 'Изключено',
+        'playback_not_supported': 'Вашият браузър не поддържа възпроизвеждането на това видео. Моля, пробвайте с друг браузър.',
+        'default_error_title': 'Видеото не може да се възпроизведе.',
+        'default_error_message': 'Възникна проблем при зареждането на видеото.',
+      },
       'fr': {
         'live': 'en direct',
         'back_to_live': 'retour au direct',
@@ -114,6 +122,7 @@ export default class Strings extends CorePlugin {
     this._messages['de-DE'] = this._messages['de']
     this._messages['pt-BR'] = this._messages['pt']
     this._messages['en-US'] = this._messages['en']
+    this._messages['bg-BG'] = this._messages['bg']
     this._messages['es-419'] = this._messages['es_am']
     this._messages['es-ES'] = this._messages['es']
     this._messages['fr-FR'] = this._messages['fr']
