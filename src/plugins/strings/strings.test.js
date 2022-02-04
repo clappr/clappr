@@ -27,7 +27,7 @@ describe('Strings', function() {
     const fakeCore = { options: { language: 'es' } }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('live')).toEqual('vivo')
+    expect(strings.t('live')).toEqual('en directo')
   })
 
   it('translates based on user options', function() {
