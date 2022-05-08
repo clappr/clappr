@@ -184,7 +184,7 @@ https://github.com/clappr/clappr/issues/933#issuecomment-228540381
 Add this snippet before you instantiate the player `Clappr.Log.setLevel(0)`
 
 ### Common steps to verify issues
-Very often people open issues related to stream **not working, freezing, glitching, stopping, and so on**. You can try theese steps below, taking notes about the results:
+Very often people open issues related to stream **not working, freezing, glitching, stopping, and so on**. You can try these steps below, taking notes about the results:
 
 * try to run the same example at [CDN](http://cdn.clappr.io)
 * check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
