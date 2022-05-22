@@ -13,7 +13,7 @@
 
 Clappr is an extensible media player for the web. Your architecture is projected primarily into plugins, adding low accoupling by design to the project and the possibility to add infinitely features easily.
 
-Clappr uses by default the [HTMLVideoElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement) which guarantees support to many platforms. You have the possibility to extends the default HTML5 playback or the playback interface to create one new media support just like a plugin!
+Clappr uses [HTMLVideoElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement) by default, which guarantees support to many platforms. You have the possibility to extend the default HTML5 playback or the playback interface to create a new media support, just like a plugin!
 
 Clappr is a composition of two other projects: [@clappr/core](https://github.com/clappr/clappr-core) and [@clappr/plugins](https://github.com/clappr/clappr-plugins).
 
@@ -142,9 +142,9 @@ PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 
 Therefore, we're not able to execute play and unmute actions sequentially in every situation. There are a series of scenarios where the Browser blocks these actions based on it’s own policy.
 
-Each browser has their own different restrictions, and the usual behavior is to activate the sound only after an user interaction with the player.
+Each browser has their own different restrictions, and the usual behavior is to activate the sound only after a user interacts with the player.
 
-For more infos about auto play video policy, you can read these docs:
+For more info about the auto play video policy, you can read these docs:
 
 - [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes)
 - [WebKit Autoplay Policy](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/)
@@ -184,7 +184,7 @@ https://github.com/clappr/clappr/issues/933#issuecomment-228540381
 Add this snippet before you instantiate the player `Clappr.Log.setLevel(0)`
 
 ### Common steps to verify issues
-Very often people open issues related to stream **not working, freezing, glitching, stopping, and so on**. You can try the steps below, taking notes about the results:
+Very often people open issues related to stream **not working, freezing, glitching, stopping, and so on**. You can try these steps below, taking notes about the results:
 
 * try to run the same example at [CDN](http://cdn.clappr.io)
 * check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
@@ -218,7 +218,7 @@ var player = new Clappr.Player({
 });
 ```
 
-Note: the type of error event object depends on the type of the playback component resolved to play the video.
+Note: the type of error event object depends on the type of playback component resolved to play the video.
 
 #### Example
 This is a simple example using the `no_op` playback to display error messages.
@@ -272,7 +272,7 @@ player.attachTo(playerElement);
 ```
 
 #### Another example
-This example use a custom error container plugin to display error messages.
+This example uses a custom error container plugin to display error messages.
 
 You can try the following Javascript code on [Clappr demo page](http://clappr.io/demo/):
 
