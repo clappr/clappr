@@ -85,6 +85,12 @@ Group all DRM-related config. The currently available configs are:
 | `playback.minimumDvrSizeConfig` | Returns `options.playback.minimumDvrSize` if is configured and is a valid value. | `{Number}` |
 | `playback.dvrSize` | Returns `playback.minimumDvrSizeConfig` if is a valid value or one default value. (Currently, is 60 seconds) | `{Number}` |
 | `playback.dvrEnabled` | Indicates whether the live media is on DVR state. | `{Boolean}` |
+| `playback.playbackType` | Returns if the type of media when this property was not change the value is `live` or `vod`. | `{String}` |
+| `playback.sourceMedia` | Returns a media url in use. | `{String}` |
+
+| setter | description | parameter |
+|--------|-------------|----------|
+| `playback.playbackType` | Set the new value of playback.playbackType property. | `{String}` |
 
 ## Types
 #### `AudioTrack`

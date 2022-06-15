@@ -198,6 +198,22 @@ describe('HTML5TVsPlayback', function() {
     expect(this.playback.buffering).toEqual(this.playback._isBuffering)
   })
 
+  test('playbackType getter returns mediaType property when is not changed', () => {
+    this.playback.el = { duration: 0 }
+
+    expect(this.playback.playbackType).toEqual(this.playback.mediaType)
+  })
+
+  test('playbackType setter updates playbackType with new value', () => {
+    this.playback.playbackType = 'new value'
+
+    expect(this.playback.playbackType).toEqual('new value')
+  })
+
+  test('sourceMedia getter returns returns src property', () => {
+    expect(this.playback.sourceMedia).toBe(this.playback._src)
+  })
+
   test('adds event listeners to the audioTrack object of the media element', () => {
     expect(this.playback.el.audioTracks.addEventListener).toHaveBeenCalledWith('addtrack', this.playback._onAudioTracksUpdated)
     expect(this.playback.el.audioTracks.addEventListener).toHaveBeenCalledWith('removetrack', this.playback._onAudioTracksUpdated)

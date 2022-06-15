@@ -104,9 +104,22 @@ export default class HTML5TVsPlayback extends Playback {
     }
   }
 
+  get playbackType() {
+    return this._playbackType
+  }
+
+  set playbackType(newPlaybackType) {
+    this._playbackType = newPlaybackType
+  }
+
+  get sourceMedia() {
+    return this._src
+  }
+
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
     this._onAudioTracksUpdated = this._onAudioTracksUpdated.bind(this)
+    this._playbackType = this.mediaType
 
     this._drmConfigured = false
     this._isReady = false
