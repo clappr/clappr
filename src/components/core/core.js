@@ -325,10 +325,11 @@ export default class Core extends UIObject {
 
   toggleFullscreen() {
     if (this.isFullscreen()) {
-      Fullscreen.cancelFullscreen()
+      const fullscreenEl = Browser.isiOS ? this.activePlaybackEl : document
+      Fullscreen.cancelFullscreen(fullscreenEl)
       !Browser.isiOS && this.$el.removeClass('fullscreen nocursor')
     } else {
-      const fullscreenEl = Browser.isiOS ? this.activePlayback && this.activePlayback.el : this.el
+      const fullscreenEl = Browser.isiOS ? this.activePlaybackEl : this.el
       if (!fullscreenEl) return
 
       (Browser.isSafari || Browser.isiOS) // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
