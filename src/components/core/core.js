@@ -103,6 +103,15 @@ export default class Core extends UIObject {
     return this.activeContainer && this.activeContainer.playback
   }
 
+  /**
+   * gets the active playback's video element.
+   * @property activePlaybackEl
+   * @type {Object}
+   */
+  get activePlaybackEl() {
+    return this.activePlayback.$el.find('video')[0] || this.activePlayback.el
+  }
+
   constructor(options) {
     super(options)
     this.playerError = new PlayerError(options, this)
