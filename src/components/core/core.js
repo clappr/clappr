@@ -316,11 +316,11 @@ export default class Core extends UIObject {
   isFullscreen() {
     // Ensure current instance is in fullscreen mode by checking fullscreen element
     const fullscreenElement = Fullscreen.fullscreenElement()
-
-    if (!fullscreenElement) return false
-
-    const playbackEl = this.activePlayback && this.activePlayback.el
-    return (fullscreenElement === this.el) || (fullscreenElement === playbackEl)
+    const isElementInFullscreen = fullscreenElement && ((fullscreenElement === this.el) 
+    || (fullscreenElement === this.activePlaybackEl)) 
+    || this.activePlaybackEl.webkitDisplayingFullscreen
+    
+    return isElementInFullscreen 
   }
 
   toggleFullscreen() {
