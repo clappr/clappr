@@ -232,7 +232,7 @@ For example, the `CONTAINER_STATE_BUFFERING` event is triggered by the `containe
 player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function() { ... })
 ```
 
-See all existing events on Clappr [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
+See all existing events on Clappr [here](https://github.com/clappr/clappr-core/blob/master/src/base/events/events.js#L227).
 
 #### plugins
 An object used to config external plugins instances and plugins behaviors to Clappr.
