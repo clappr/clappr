@@ -103,6 +103,15 @@ export default class Core extends UIObject {
     return this.activeContainer && this.activeContainer.playback
   }
 
+  /**
+   * gets the active playback's video element.
+   * @property activePlaybackEl
+   * @type {Object}
+   */
+  get activePlaybackEl() {
+    return this.activePlayback.$el.find('video')[0] || this.activePlayback.el
+  }
+
   constructor(options) {
     super(options)
     this.playerError = new PlayerError(options, this)
@@ -307,19 +316,20 @@ export default class Core extends UIObject {
   isFullscreen() {
     // Ensure current instance is in fullscreen mode by checking fullscreen element
     const fullscreenElement = Fullscreen.fullscreenElement()
-
-    if (!fullscreenElement) return false
-
-    const playbackEl = this.activePlayback && this.activePlayback.el
-    return (fullscreenElement === this.el) || (fullscreenElement === playbackEl)
+    const isElementInFullscreen = fullscreenElement && ((fullscreenElement === this.el) 
+    || (fullscreenElement === this.activePlaybackEl)) 
+    || this.activePlaybackEl.webkitDisplayingFullscreen
+    
+    return isElementInFullscreen 
   }
 
   toggleFullscreen() {
     if (this.isFullscreen()) {
-      Fullscreen.cancelFullscreen()
+      const fullscreenEl = Browser.isiOS ? this.activePlaybackEl : document
+      Fullscreen.cancelFullscreen(fullscreenEl)
       !Browser.isiOS && this.$el.removeClass('fullscreen nocursor')
     } else {
-      const fullscreenEl = Browser.isiOS ? this.activePlayback && this.activePlayback.el : this.el
+      const fullscreenEl = Browser.isiOS ? this.activePlaybackEl : this.el
       if (!fullscreenEl) return
 
       (Browser.isSafari || Browser.isiOS) // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
