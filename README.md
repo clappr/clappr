@@ -180,6 +180,9 @@ https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0d
 ### How can I use clappr with ionic/angular?
 https://github.com/clappr/clappr/issues/933#issuecomment-228540381
 
+### How can I use clappr with Vue.js?
+https://github.com/vinayakkulkarni/v-clappr
+
 ### How can I Log messages with Clappr?
 Add this snippet before you instantiate the player `Clappr.Log.setLevel(0)`
 
