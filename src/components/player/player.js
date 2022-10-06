@@ -251,26 +251,19 @@ export default class Player extends BaseObject {
     }
     this._registerOptionEventListeners(this.options.events)
     this._coreFactory = new CoreFactory(this)
-    if (this.options.parentId)
-      this.setParentId(this.options.parentId)
-
-    else if (this.options.parent)
-      this.attachTo(this.options.parent)
-
+    const parentElement = this._getParentElement(this.options)
+    this.attachTo(parentElement)
   }
 
   /**
-   * Specify a `parentId` to the player.
-   * @method setParentId
-   * @param {String} parentId the element parent id.
-   * @return {Player} itself
+   * Returns the parent element
+   * @param {String} parentId
+   * @param {Object} parent
+   * @returns {Object} the parent element
    */
-  setParentId(parentId) {
-    const el = document.querySelector(parentId)
-    if (el)
-      this.attachTo(el)
-
-    return this
+  _getParentElement({ parentId, parent }) {
+    if (parentId) return document.querySelector(parent)
+    return parent
   }
 
   /**
