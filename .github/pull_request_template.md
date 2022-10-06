@@ -1,22 +1,34 @@
 ## Summary
 
-Please include a description of the change and also include relevant motivation and context
+This PR implements / updates / fixes...
+
+<!-- Add a description of the changes made to your PR, as well as the context and motivation behind them.
+
+Please add, if appropriate, external links that make the PR easier to understand.
+-->
 
 ## Changes
 
-- A List of changes
+- `archive_name1.js`:
+  - ...
+  - ...
+- `archive_name2.js`: ...
 
 ## How to test
 
-Please describe the tests that we should run to verify your changes
+1. ...
+1. ...
+1. ...
 
-## A picture/video tells a thousand words
+## Images
 
 ### Before this PR
 
-Please insert a media that describes the behavior previously
-N/A for new feature
+<!-- 
+Insert an image / gif / video showing hls.js playback's original behavior. 
+If PR is a new feature, it's unnecessary to add.
+-->
 
 ### After this PR
 
-Please insert a media that describes the behavior after the fix/feature
+<!-- Insert an image / gif / video showing the hls.js playback's behavior after the modifications -->
