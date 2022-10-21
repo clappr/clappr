@@ -9,7 +9,7 @@
 </p>
 <br>
 
-# <div align=center><img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png" height=100px></div>
+# <div align=center><a href="http://clappr.io"><img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png" height=100px></a></div>
 
 Clappr is an extensible media player for the web. Your architecture is projected primarily into plugins, adding low accoupling by design to the project and the possibility to add infinitely features easily.
 
