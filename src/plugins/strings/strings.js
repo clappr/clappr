@@ -116,6 +116,14 @@ export default class Strings extends CorePlugin {
         'default_error_title': 'غير قادر الى التشغيل.',
         'default_error_message': 'حدثت مشكلة أثناء تحميل الفيديو.',
       },
+      'zh': {
+        'live': '直播',
+        'back_to_live': '返回直播',
+        'disabled': '已禁用',
+        'playback_not_supported': '您的浏览器不支持该视频的播放。请尝试使用另一个浏览器。',
+        'default_error_title': '无法播放视频。',
+        'default_error_message': '在尝试加载视频时出现了问题。',
+      },
     }
 
     this._messages = $.extend(true, defaultMessages, this.core.options.strings || {})
@@ -129,5 +137,6 @@ export default class Strings extends CorePlugin {
     this._messages['tr-TR'] = this._messages['tr']
     this._messages['et-EE'] = this._messages['et']
     this._messages['ar-IQ'] = this._messages['ar']
+    this._messages['zh-CN'] = this._messages['zh']
   }
 }
