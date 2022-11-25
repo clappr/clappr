@@ -18,6 +18,9 @@
     "start": "DEV=true rollup --config --watch",
     "commitzen": "git-cz"
   },
+  "engines" : {
+    "node" : "^v14.0.0"
+  },
   "files": [
     "/dist",
     "/src"
@@ -71,12 +74,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.test.js",
-      "**/*.spec.js",
-      "node_modules"
-    ]
   }
 }
