@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 import { isNumber, Fullscreen, DomRecycler } from '@/utils'
-
 import Styler from '@/base/styler'
 import Events from '@/base/events'
 import UIObject from '@/base/ui_object'
@@ -12,9 +11,7 @@ import Browser from '@/components/browser'
 import ContainerFactory from '@/components/container_factory'
 import PlayerError from '@/components/error'
 import ErrorMixin from '@/base/error_mixin'
-
 import $ from 'clappr-zepto'
-
 import CoreStyle from './public/style.scss'
 import ResetStyle from './public/optional_reset.scss'
 
@@ -109,7 +106,10 @@ export default class Core extends UIObject {
    * @type {Object}
    */
   get activePlaybackEl() {
-    return this.activePlayback.$el.find('video')[0] || this.activePlayback.el
+    if (!this.activePlayback) return false
+    if (this.activePlayback.el)
+      return this.activePlayback.el
+    return this.activePlayback.$el.find('video')[0]
   }
 
   constructor(options) {
@@ -166,7 +166,7 @@ export default class Core extends UIObject {
   }
 
   resize(options) {
-    if (!isNumber(options.height) && !isNumber(options.width))  {
+    if (!isNumber(options.height) && !isNumber(options.width)) {
       this.el.style.height = `${options.height}`
       this.el.style.width = `${options.width}`
     } else {
@@ -314,13 +314,11 @@ export default class Core extends UIObject {
   }
 
   isFullscreen() {
-    // Ensure current instance is in fullscreen mode by checking fullscreen element
     const fullscreenElement = Fullscreen.fullscreenElement()
-    const isElementInFullscreen = fullscreenElement && ((fullscreenElement === this.el) 
-    || (fullscreenElement === this.activePlaybackEl)) 
-    || this.activePlaybackEl.webkitDisplayingFullscreen
-    
-    return isElementInFullscreen 
+    return fullscreenElement === this.el
+      || fullscreenElement === this.activePlaybackEl
+      || this.activePlaybackEl.webkitDisplayingFullscreen
+      || false
   }
 
   toggleFullscreen() {
