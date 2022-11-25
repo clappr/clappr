@@ -18,8 +18,8 @@
     "start": "DEV=true rollup --config --watch",
     "commitzen": "git-cz"
   },
-  "engines" : {
-    "node" : "^v14.0.0"
+  "engines": {
+    "node": "^v14.0.0"
   },
   "files": [
     "/dist",
