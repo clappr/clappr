@@ -313,9 +313,10 @@ export default class Core extends UIObject {
 
   isFullscreen() {
     const fullscreenElement = Fullscreen.fullscreenElement()
-    return fullscreenElement === this.el
-      || fullscreenElement === this.activePlaybackEl
-      || this.activePlaybackEl.webkitDisplayingFullscreen
+
+    return fullscreenElement && (fullscreenElement === this.el)
+      || fullscreenElement && (fullscreenElement === this.activePlaybackEl)
+      || this.activePlaybackEl && this.activePlaybackEl.webkitDisplayingFullscreen
       || false
   }
 
