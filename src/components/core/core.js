@@ -106,8 +106,8 @@ export default class Core extends UIObject {
    * @type {Object}
    */
   get activePlaybackEl() {
-    if (!this.activePlayback) return false
-    return (this.activePlayback.$el) ? this.activePlayback.$el.find('video')[0] : this.activePlayback.el
+    if (!this.activePlayback) return undefined
+    return this.activePlayback.$el ? this.activePlayback.$el.find('video')[0] : this.activePlayback.el
   }
 
   constructor(options) {
