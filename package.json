@@ -12,11 +12,14 @@
     "test": "jest /src --coverage --silent",
     "test:coverage": "open coverage/lcov-report/index.html",
     "test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
-    "test:watch": "NODE_ENV=test karma start --no-single-run --watch",
+    "test:watch": "jest /src --watch",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
     "start": "DEV=true rollup --config --watch",
     "commitzen": "git-cz"
+  },
+  "engines": {
+    "node": "^v14.0.0"
   },
   "files": [
     "/dist",
@@ -71,12 +74,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.test.js",
-      "**/*.spec.js",
-      "node_modules"
-    ]
   }
 }
