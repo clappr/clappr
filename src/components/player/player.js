@@ -352,16 +352,16 @@ export default class Player extends BaseObject {
     this.trigger(Events.PLAYER_RESIZE, size)
   }
 
-  _onPlay() {
-    this.trigger(Events.PLAYER_PLAY)
+  _onPlay(_, eventMetadata = {}) {
+    this.trigger(Events.PLAYER_PLAY, eventMetadata)
   }
 
-  _onPause() {
-    this.trigger(Events.PLAYER_PAUSE)
+  _onPause(_, eventMetadata = {}) {
+    this.trigger(Events.PLAYER_PAUSE, eventMetadata)
   }
 
-  _onStop() {
-    this.trigger(Events.PLAYER_STOP, this.getCurrentTime())
+  _onStop(eventMetadata = {}) {
+    this.trigger(Events.PLAYER_STOP, this.getCurrentTime(), eventMetadata)
   }
 
   _onEnded() {
@@ -444,30 +444,33 @@ export default class Player extends BaseObject {
   /**
    * plays the current video (`source`).
    * @method play
+   * @param {Object} customData
    * @return {Player} itself
    */
-  play() {
-    this.core.activeContainer.play()
+  play(customData = {}) {
+    this.core.activeContainer.play(customData)
     return this
   }
 
   /**
    * pauses the current video (`source`).
    * @method pause
+   * @param {Object} customData
    * @return {Player} itself
    */
-  pause() {
-    this.core.activeContainer.pause()
+  pause(customData = {}) {
+    this.core.activeContainer.pause(customData)
     return this
   }
 
   /**
    * stops the current video (`source`).
    * @method stop
+   * @param {Object} customData
    * @return {Player} itself
    */
-  stop() {
-    this.core.activeContainer.stop()
+  stop(customData = {}) {
+    this.core.activeContainer.stop(customData)
     return this
   }
 
