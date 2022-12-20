@@ -35,6 +35,7 @@
     "release": "MINIMIZE=true rollup --config",
     "prepublishOnly": "npm run release",
     "start": "DEV=true rollup --config --watch",
+    "watch": "rollup --config --watch",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "jest --coverage --silent",
