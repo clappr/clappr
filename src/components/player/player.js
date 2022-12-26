@@ -252,7 +252,7 @@ export default class Player extends BaseObject {
     this._registerOptionEventListeners(this.options.events)
     this._coreFactory = new CoreFactory(this)
     const parentElement = this._getParentElement(this.options)
-    this.attachTo(parentElement)
+    parentElement && this.attachTo(parentElement)
   }
 
   /**
