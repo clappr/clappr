@@ -370,7 +370,8 @@ export default class HTML5TVsPlayback extends Playback {
     this._isReady = false
     this._drmConfigured && DRMHandler.clearLicenseRequest.call(this, this._onDrmCleared, this._onDrmError)
     this.$sourceElement && this.$sourceElement.removeAttribute('src') // The src attribute will be added again in play().
-    this.$sourceElement && this.$sourceElement.remove()
+    this.$sourceElement && this.$sourceElement.parentNode && this.$sourceElement.parentNode.removeChild(this.$sourceElement)
+    this.$sourceElement = null
     this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.
   }
 
