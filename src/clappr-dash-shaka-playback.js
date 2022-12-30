@@ -78,8 +78,8 @@ class DashShakaPlayback extends HTML5Video {
 
   getCurrentTime() {
     if (!this.shakaPlayerInstance) return 0
-
-    return this.shakaPlayerInstance.getMediaElement().currentTime - this.seekRange.start
+    const shakaMediaElement = this.shakaPlayerInstance.getMediaElement()
+    return shakaMediaElement ? shakaMediaElement.currentTime - this.seekRange.start : 0
   }
 
   get _startTime() {
