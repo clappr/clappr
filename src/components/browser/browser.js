@@ -182,10 +182,10 @@ export const getDevice = function(ua) {
 
 const browserInfo = getBrowserInfo(navigator.userAgent)
 
-Browser.isEdge = /edge/i.test(navigator.userAgent)
-Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
-Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge
-Browser.isFirefox = /firefox/i.test(navigator.userAgent)
+Browser.isEdge = /Edg|EdgiOS|EdgA/i.test(navigator.userAgent)
+Browser.isChrome = /Chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
+Browser.isSafari = /Safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge
+Browser.isFirefox = /Firefox/i.test(navigator.userAgent)
 Browser.isLegacyIE = !!(window.ActiveXObject)
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
 Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent)
