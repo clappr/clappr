@@ -217,6 +217,11 @@ Browser.version = browserInfo.version
 Browser.userAgent = navigator.userAgent
 Browser.data = getBrowserData()
 Browser.os = getOsData()
+
+Browser.isWindows = /^Windows$/i.test(Browser.os.group)
+Browser.isMacOS = /^Mac OS$/i.test(Browser.os.group)
+Browser.isLinux = /^Linux$/i.test(Browser.os.group)
+
 Browser.viewport = getViewportSize()
 Browser.device = getDevice(Browser.userAgent)
 typeof window.orientation !== 'undefined' && setViewportOrientation()
