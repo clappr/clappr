@@ -262,7 +262,7 @@ export default class Player extends BaseObject {
    * @returns {Object} the parent element
    */
   _getParentElement({ parentId, parent }) {
-    if (parentId) return document.querySelector(parent)
+    if (parentId) return document.querySelector(parentId)
     return parent
   }
 
