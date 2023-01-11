@@ -16,7 +16,8 @@
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
     "start": "DEV=true rollup --config --watch",
-    "commitzen": "git-cz"
+    "commitzen": "git-cz",
+    "prepublishOnly": "npm run release"
   },
   "engines": {
     "node": "^v14.0.0"
