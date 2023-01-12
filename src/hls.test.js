@@ -164,14 +164,14 @@ describe('HlsjsPlayback', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: false } })
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
-      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
 
       expect(playback._hls.loadSource).not.toHaveBeenCalled()
 
       playback.options.hlsPlayback.preload = true
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
-      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED)
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
 
       expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
     })
@@ -182,7 +182,7 @@ describe('HlsjsPlayback', () => {
       expect(playback._manifestParsed).toBeUndefined()
 
       playback._setup()
-      playback._hls.trigger(HLSJS.Events.MANIFEST_PARSED)
+      playback._hls.trigger(HLSJS.Events.MANIFEST_PARSED, { levels: [] })
 
       expect(playback._manifestParsed).toBeTruthy()
     })
@@ -275,7 +275,7 @@ describe('HlsjsPlayback', () => {
 
       expect(cb).toHaveBeenCalledTimes(1)
 
-      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHING)
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHING, { media: playback.el })
 
       expect(cb).toHaveBeenCalledTimes(2)
     })
