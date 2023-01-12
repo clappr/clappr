@@ -930,7 +930,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@clappr/core@^0.4.18":
+"@clappr/core@^0.4.27":
   version "0.4.27"
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.27.tgz#7a073f6b8f21eda93e2769345429e33143a78ae5"
   integrity sha512-QjmQIBTZnc63q/w5dPvMDvqVG8tEAycVtoy/oBtvYpN1NKhVFFrgurRlOg+kgCVurQIXYT/Qn5XlXWsOfQIF3A==
