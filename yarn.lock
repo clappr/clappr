@@ -911,7 +911,7 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.20":
+"@clappr/core@^0.4.27":
   version "0.4.27"
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.27.tgz#7a073f6b8f21eda93e2769345429e33143a78ae5"
   integrity sha512-QjmQIBTZnc63q/w5dPvMDvqVG8tEAycVtoy/oBtvYpN1NKhVFFrgurRlOg+kgCVurQIXYT/Qn5XlXWsOfQIF3A==
@@ -921,10 +921,10 @@
   resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-1.0.1.tgz#533fa4f4e826f11b9591a014c3b3a24d39fa60ce"
   integrity sha512-d7Q70Je/Cf7XYtXlo7lW6ukfjYT8oEuX4aH4etRv3DIwufUTQopJ/PwBQNkTzFKlsYdaiEeydfFMLpI78+gIWA==
 
-"@clappr/plugins@^0.4.16":
-  version "0.4.16"
-  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.16.tgz#4a682c89b8249c35e92ccbf37707847d4e4189d7"
-  integrity sha512-fiTGrOEmFzbhtJLHIWPfZ/Pt2uG3tzsXm1RVGQUi28aT1LnX6C7WpWROPev/vaULNV8ZoWcit3uBnw38amzZPQ==
+"@clappr/plugins@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.5.0.tgz#4d3a7b67ad07fe52f46d9e9f0533bd86fb295238"
+  integrity sha512-ogKEvZSXhJ3vRdpe0Bq17p1FarOjHFWYOxu6TfR4ogy4xFKiwC9eDA15nJNnKc2f2OHeK/gkdVWiA4MqvVCgfA==
 
 "@commitlint/config-validator@^17.4.0":
   version "17.4.0"
