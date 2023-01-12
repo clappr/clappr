@@ -3,6 +3,7 @@ node_modules
 .env
 coverage
 build/
+dist/
 docs/
 src/base/jst.js
 *.cache
