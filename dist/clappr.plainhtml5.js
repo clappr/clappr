@@ -1,48 +1,34 @@
+
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Clappr = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   function ownKeys$1(object, enumerableOnly) {
     var keys = Object.keys(object);
-
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
-
-      if (enumerableOnly) {
-        symbols = symbols.filter(function (sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      }
-
-      keys.push.apply(keys, symbols);
+      enumerableOnly && (symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      })), keys.push.apply(keys, symbols);
     }
-
     return keys;
   }
-
   function _objectSpread2$1(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys$1(Object(source), true).forEach(function (key) {
-          _defineProperty$1(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys$1(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
+      var source = null != arguments[i] ? arguments[i] : {};
+      i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) {
+        _defineProperty$1(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
-
     return target;
   }
-
   function _defineProperty$1(obj, key, value) {
+    key = _toPropertyKey(key);
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value: value,
@@ -53,32 +39,58 @@
     } else {
       obj[key] = value;
     }
-
     return obj;
   }
+  function _toPrimitive(input, hint) {
+    if (typeof input !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+      var res = prim.call(input, hint || "default");
+      if (typeof res !== "object") return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
+  }
+  function _toPropertyKey(arg) {
+    var key = _toPrimitive(arg, "string");
+    return typeof key === "symbol" ? key : String(key);
+  }
 
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      enumerableOnly && (symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      })), keys.push.apply(keys, symbols);
+    }
+    return keys;
+  }
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = null != arguments[i] ? arguments[i] : {};
+      i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+    return target;
+  }
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
   }
-
   function _classCallCheck$1(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-
   function _defineProperties$1(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -88,13 +100,14 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-
   function _createClass$1(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$1(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties$1(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
-
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -106,49 +119,12 @@
     } else {
       obj[key] = value;
     }
-
     return obj;
   }
-
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-
-    return keys;
-  }
-
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
-    }
-
-    return target;
-  }
-
   function _inherits$1(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
-
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
         value: subClass,
@@ -156,134 +132,111 @@
         configurable: true
       }
     });
+    Object.defineProperty(subClass, "prototype", {
+      writable: false
+    });
     if (superClass) _setPrototypeOf$1(subClass, superClass);
   }
-
   function _getPrototypeOf$1(o) {
-    _getPrototypeOf$1 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    _getPrototypeOf$1 = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
     return _getPrototypeOf$1(o);
   }
-
   function _setPrototypeOf$1(o, p) {
-    _setPrototypeOf$1 = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    _setPrototypeOf$1 = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
-
     return _setPrototypeOf$1(o, p);
   }
-
   function _isNativeReflectConstruct$1() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
-
     try {
-      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
       return true;
     } catch (e) {
       return false;
     }
   }
-
   function _assertThisInitialized$1(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
-
     return self;
   }
-
   function _possibleConstructorReturn$1(self, call) {
     if (call && (typeof call === "object" || typeof call === "function")) {
       return call;
+    } else if (call !== void 0) {
+      throw new TypeError("Derived constructors may only return object or undefined");
     }
-
     return _assertThisInitialized$1(self);
   }
-
   function _createSuper$1(Derived) {
     var hasNativeReflectConstruct = _isNativeReflectConstruct$1();
-
     return function _createSuperInternal() {
       var Super = _getPrototypeOf$1(Derived),
-          result;
-
+        result;
       if (hasNativeReflectConstruct) {
         var NewTarget = _getPrototypeOf$1(this).constructor;
-
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
-
       return _possibleConstructorReturn$1(this, result);
     };
   }
-
   function _superPropBase$1(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
       object = _getPrototypeOf$1(object);
       if (object === null) break;
     }
-
     return object;
   }
-
-  function _get$1(target, property, receiver) {
+  function _get$1() {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get$1 = Reflect.get;
+      _get$1 = Reflect.get.bind();
     } else {
       _get$1 = function _get(target, property, receiver) {
         var base = _superPropBase$1(target, property);
-
         if (!base) return;
         var desc = Object.getOwnPropertyDescriptor(base, property);
-
         if (desc.get) {
-          return desc.get.call(receiver);
+          return desc.get.call(arguments.length < 3 ? target : receiver);
         }
-
         return desc.value;
       };
     }
-
-    return _get$1(target, property, receiver || target);
+    return _get$1.apply(this, arguments);
   }
-
   function _slicedToArray(arr, i) {
     return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
   }
-
   function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
-
   function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) return _arrayLikeToArray(arr);
   }
-
   function _arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
   }
-
   function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
-
   function _iterableToArrayLimit(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+    if (_i == null) return;
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _e = undefined;
-
+    var _s, _e;
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
-
         if (i && _arr.length === i) break;
       }
     } catch (err) {
@@ -296,10 +249,8 @@
         if (_d) throw _e;
       }
     }
-
     return _arr;
   }
-
   function _unsupportedIterableToArray(o, minLen) {
     if (!o) return;
     if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -308,33 +259,24 @@
     if (n === "Map" || n === "Set") return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
   }
-
   function _arrayLikeToArray(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
-
     for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
     return arr2;
   }
-
   function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-
   function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-
   function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it;
-
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+    if (!it) {
       if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it) o = it;
         var i = 0;
-
         var F = function () {};
-
         return {
           s: F,
           n: function () {
@@ -352,16 +294,14 @@
           f: F
         };
       }
-
       throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
-
     var normalCompletion = true,
-        didErr = false,
-        err;
+      didErr = false,
+      err;
     return {
       s: function () {
-        it = o[Symbol.iterator]();
+        it = it.call(o);
       },
       n: function () {
         var step = it.next();
@@ -401,69 +341,70 @@
       value: function value(predicate) {
         // 1. Let O be ? ToObject(this value).
         if (this == null) throw new TypeError('"this" is null or not defined');
-        var o = Object(this); // 2. Let len be ? ToLength(? Get(O, "length")).
+        var o = Object(this);
 
-        var len = o.length >>> 0; // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+        // 2. Let len be ? ToLength(? Get(O, "length")).
+        var len = o.length >>> 0;
 
-        if (typeof predicate !== 'function') throw new TypeError('predicate must be a function'); // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+        // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+        if (typeof predicate !== 'function') throw new TypeError('predicate must be a function');
 
-        var thisArg = arguments[1]; // 5. Let k be 0.
+        // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+        var thisArg = arguments[1];
 
-        var k = 0; // 6. Repeat, while k < len
+        // 5. Let k be 0.
+        var k = 0;
 
+        // 6. Repeat, while k < len
         while (k < len) {
           // a. Let Pk be ! ToString(k).
           // b. Let kValue be ? Get(O, Pk).
           // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
           // d. If testResult is true, return kValue.
           var kValue = o[k];
-          if (predicate.call(thisArg, kValue, k, o)) return kValue; // e. Increase k by 1.
+          if (predicate.call(thisArg, kValue, k, o)) return kValue;
 
+          // e. Increase k by 1.
           k++;
-        } // 7. Return undefined.
+        }
 
-
+        // 7. Return undefined.
         return undefined;
       }
     });
-  } // polyfills for smart TVs
+  }
 
+  // polyfills for smart TVs
 
   if (!Object.entries) {
     Object.entries = function (obj) {
       var ownProps = Object.keys(obj),
-          i = ownProps.length,
-          resArray = new Array(i); // preallocate the Array
-
+        i = ownProps.length,
+        resArray = new Array(i); // preallocate the Array
       while (i--) {
         resArray[i] = [ownProps[i], obj[ownProps[i]]];
       }
-
       return resArray;
     };
   }
-
   if (!Object.values) {
     Object.values = function (obj) {
       var ownProps = Object.keys(obj),
-          i = ownProps.length,
-          resArray = new Array(i); // preallocate the Array
-
+        i = ownProps.length,
+        resArray = new Array(i); // preallocate the Array
       while (i--) {
         resArray[i] = obj[ownProps[i]];
       }
-
       return resArray;
     };
   }
+
   /**
    * Object.assign
    * This polyfill doesn't support symbol properties, since ES5 doesn't have symbols anyway
    *
    * Original source : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
    */
-
-
   if (typeof Object.assign != 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, 'assign', {
@@ -474,12 +415,9 @@
           // TypeError if undefined or null
           throw new TypeError('Cannot convert undefined or null to object');
         }
-
         var to = Object(target);
-
         for (var index = 1; index < arguments.length; index++) {
           var nextSource = arguments[index];
-
           if (nextSource != null) {
             // Skip over if undefined or null
             for (var nextKey in nextSource) {
@@ -490,15 +428,14 @@
             }
           }
         }
-
         return to;
       },
       writable: true,
       configurable: true
     });
-  } // https://tc39.github.io/ecma262/#sec-array.prototype.findindex
+  }
 
-
+  // https://tc39.github.io/ecma262/#sec-array.prototype.findindex
   if (!Array.prototype.findIndex) {
     Object.defineProperty(Array.prototype, 'findIndex', {
       value: function value(predicate) {
@@ -506,36 +443,37 @@
         if (this == null) {
           throw new TypeError('"this" is null or not defined');
         }
+        var o = Object(this);
 
-        var o = Object(this); // 2. Let len be ? ToLength(? Get(O, "length")).
+        // 2. Let len be ? ToLength(? Get(O, "length")).
+        var len = o.length >>> 0;
 
-        var len = o.length >>> 0; // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-
+        // 3. If IsCallable(predicate) is false, throw a TypeError exception.
         if (typeof predicate !== 'function') {
           throw new TypeError('predicate must be a function');
-        } // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+        }
 
+        // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+        var thisArg = arguments[1];
 
-        var thisArg = arguments[1]; // 5. Let k be 0.
+        // 5. Let k be 0.
+        var k = 0;
 
-        var k = 0; // 6. Repeat, while k < len
-
+        // 6. Repeat, while k < len
         while (k < len) {
           // a. Let Pk be ! ToString(k).
           // b. Let kValue be ? Get(O, Pk).
           // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
           // d. If testResult is true, return k.
           var kValue = o[k];
-
           if (predicate.call(thisArg, kValue, k, o)) {
             return k;
-          } // e. Increase k by 1.
-
-
+          }
+          // e. Increase k by 1.
           k++;
-        } // 7. Return -1.
+        }
 
-
+        // 7. Return -1.
         return -1;
       },
       configurable: true,
@@ -553,151 +491,134 @@
   /* Zepto v1.2.0 - zepto ajax callbacks deferred event ie selector - zeptojs.com/license */
   var Zepto = function () {
     var undefined$1,
-        key,
-        $,
-        classList,
-        emptyArray = [],
-        concat = emptyArray.concat,
-        filter = emptyArray.filter,
-        slice = emptyArray.slice,
-        document = window.document,
-        elementDisplay = {},
-        classCache = {},
-        cssNumber = {
-      'column-count': 1,
-      'columns': 1,
-      'font-weight': 1,
-      'line-height': 1,
-      'opacity': 1,
-      'z-index': 1,
-      'zoom': 1
-    },
-        fragmentRE = /^\s*<(\w+|!)[^>]*>/,
-        singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
-        tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
-        rootNodeRE = /^(?:body|html)$/i,
-        capitalRE = /([A-Z])/g,
-        // special attributes that should be get/set via method calls
-    methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
-        adjacencyOperators = ['after', 'prepend', 'before', 'append'],
-        table = document.createElement('table'),
-        tableRow = document.createElement('tr'),
-        containers = {
-      'tr': document.createElement('tbody'),
-      'tbody': table,
-      'thead': table,
-      'tfoot': table,
-      'td': tableRow,
-      'th': tableRow,
-      '*': document.createElement('div')
-    },
-        readyRE = /complete|loaded|interactive/,
-        simpleSelectorRE = /^[\w-]*$/,
-        class2type = {},
-        toString = class2type.toString,
-        zepto = {},
-        camelize,
-        uniq,
-        tempParent = document.createElement('div'),
-        propMap = {
-      'tabindex': 'tabIndex',
-      'readonly': 'readOnly',
-      'for': 'htmlFor',
-      'class': 'className',
-      'maxlength': 'maxLength',
-      'cellspacing': 'cellSpacing',
-      'cellpadding': 'cellPadding',
-      'rowspan': 'rowSpan',
-      'colspan': 'colSpan',
-      'usemap': 'useMap',
-      'frameborder': 'frameBorder',
-      'contenteditable': 'contentEditable'
-    },
-        isArray = Array.isArray || function (object) {
-      return object instanceof Array;
-    };
-
+      key,
+      $,
+      classList,
+      emptyArray = [],
+      concat = emptyArray.concat,
+      filter = emptyArray.filter,
+      slice = emptyArray.slice,
+      document = window.document,
+      elementDisplay = {},
+      classCache = {},
+      cssNumber = {
+        'column-count': 1,
+        'columns': 1,
+        'font-weight': 1,
+        'line-height': 1,
+        'opacity': 1,
+        'z-index': 1,
+        'zoom': 1
+      },
+      fragmentRE = /^\s*<(\w+|!)[^>]*>/,
+      singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
+      tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+      rootNodeRE = /^(?:body|html)$/i,
+      capitalRE = /([A-Z])/g,
+      // special attributes that should be get/set via method calls
+      methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
+      adjacencyOperators = ['after', 'prepend', 'before', 'append'],
+      table = document.createElement('table'),
+      tableRow = document.createElement('tr'),
+      containers = {
+        'tr': document.createElement('tbody'),
+        'tbody': table,
+        'thead': table,
+        'tfoot': table,
+        'td': tableRow,
+        'th': tableRow,
+        '*': document.createElement('div')
+      },
+      readyRE = /complete|loaded|interactive/,
+      simpleSelectorRE = /^[\w-]*$/,
+      class2type = {},
+      toString = class2type.toString,
+      zepto = {},
+      camelize,
+      uniq,
+      tempParent = document.createElement('div'),
+      propMap = {
+        'tabindex': 'tabIndex',
+        'readonly': 'readOnly',
+        'for': 'htmlFor',
+        'class': 'className',
+        'maxlength': 'maxLength',
+        'cellspacing': 'cellSpacing',
+        'cellpadding': 'cellPadding',
+        'rowspan': 'rowSpan',
+        'colspan': 'colSpan',
+        'usemap': 'useMap',
+        'frameborder': 'frameBorder',
+        'contenteditable': 'contentEditable'
+      },
+      isArray = Array.isArray || function (object) {
+        return object instanceof Array;
+      };
     zepto.matches = function (element, selector) {
       if (!selector || !element || element.nodeType !== 1) return false;
       var matchesSelector = element.matches || element.webkitMatchesSelector || element.mozMatchesSelector || element.oMatchesSelector || element.matchesSelector;
-      if (matchesSelector) return matchesSelector.call(element, selector); // fall back to performing a selector:
-
+      if (matchesSelector) return matchesSelector.call(element, selector);
+      // fall back to performing a selector:
       var match,
-          parent = element.parentNode,
-          temp = !parent;
+        parent = element.parentNode,
+        temp = !parent;
       if (temp) (parent = tempParent).appendChild(element);
       match = ~zepto.qsa(parent, selector).indexOf(element);
       temp && tempParent.removeChild(element);
       return match;
     };
-
     function type(obj) {
       return obj == null ? String(obj) : class2type[toString.call(obj)] || "object";
     }
-
     function isFunction(value) {
       return type(value) == "function";
     }
-
     function isWindow(obj) {
       return obj != null && obj == obj.window;
     }
-
     function isDocument(obj) {
       return obj != null && obj.nodeType == obj.DOCUMENT_NODE;
     }
-
     function isObject(obj) {
       return type(obj) == "object";
     }
-
     function isPlainObject(obj) {
       return isObject(obj) && !isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype;
     }
-
     function likeArray(obj) {
       var length = !!obj && 'length' in obj && obj.length,
-          type = $.type(obj);
+        type = $.type(obj);
       return 'function' != type && !isWindow(obj) && ('array' == type || length === 0 || typeof length == 'number' && length > 0 && length - 1 in obj);
     }
-
     function compact(array) {
       return filter.call(array, function (item) {
         return item != null;
       });
     }
-
     function flatten(array) {
       return array.length > 0 ? $.fn.concat.apply([], array) : array;
     }
-
     camelize = function (str) {
       return str.replace(/-+(.)?/g, function (match, chr) {
         return chr ? chr.toUpperCase() : '';
       });
     };
-
     function dasherize(str) {
       return str.replace(/::/g, '/').replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2').replace(/([a-z\d])([A-Z])/g, '$1_$2').replace(/_/g, '-').toLowerCase();
     }
-
     uniq = function (array) {
       return filter.call(array, function (item, idx) {
         return array.indexOf(item) == idx;
       });
     };
-
     function classRE(name) {
       return name in classCache ? classCache[name] : classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)');
     }
-
     function maybeAddPx(name, value) {
       return typeof value == "number" && !cssNumber[dasherize(name)] ? value + "px" : value;
     }
-
     function defaultDisplay(nodeName) {
       var element, display;
-
       if (!elementDisplay[nodeName]) {
         element = document.createElement(nodeName);
         document.body.appendChild(element);
@@ -706,36 +627,31 @@
         display == "none" && (display = "block");
         elementDisplay[nodeName] = display;
       }
-
       return elementDisplay[nodeName];
     }
-
     function children(element) {
       return 'children' in element ? slice.call(element.children) : $.map(element.childNodes, function (node) {
         if (node.nodeType == 1) return node;
       });
     }
-
     function Z(dom, selector) {
       var i,
-          len = dom ? dom.length : 0;
-
+        len = dom ? dom.length : 0;
       for (i = 0; i < len; i++) this[i] = dom[i];
-
       this.length = len;
       this.selector = selector || '';
-    } // `$.zepto.fragment` takes a html string and an optional tag name
+    }
+
+    // `$.zepto.fragment` takes a html string and an optional tag name
     // to generate DOM nodes from the given html string.
     // The generated DOM nodes are returned as an array.
     // This function can be overridden in plugins for example to make
     // it compatible with browsers that don't support the DOM fully.
-
-
     zepto.fragment = function (html, name, properties) {
-      var dom, nodes, container; // A special case optimization for a single tag
+      var dom, nodes, container;
 
+      // A special case optimization for a single tag
       if (singleTagRE.test(html)) dom = $(document.createElement(RegExp.$1));
-
       if (!dom) {
         if (html.replace) html = html.replace(tagExpanderRE, "<$1></$2>");
         if (name === undefined$1) name = fragmentRE.test(html) && RegExp.$1;
@@ -746,109 +662,117 @@
           container.removeChild(this);
         });
       }
-
       if (isPlainObject(properties)) {
         nodes = $(dom);
         $.each(properties, function (key, value) {
           if (methodAttributes.indexOf(key) > -1) nodes[key](value);else nodes.attr(key, value);
         });
       }
-
       return dom;
-    }; // `$.zepto.Z` swaps out the prototype of the given `dom` array
+    };
+
+    // `$.zepto.Z` swaps out the prototype of the given `dom` array
     // of nodes with `$.fn` and thus supplying all the Zepto functions
     // to the array. This method can be overridden in plugins.
-
-
     zepto.Z = function (dom, selector) {
       return new Z(dom, selector);
-    }; // `$.zepto.isZ` should return `true` if the given object is a Zepto
+    };
+
+    // `$.zepto.isZ` should return `true` if the given object is a Zepto
     // collection. This method can be overridden in plugins.
-
-
     zepto.isZ = function (object) {
       return object instanceof zepto.Z;
-    }; // `$.zepto.init` is Zepto's counterpart to jQuery's `$.fn.init` and
+    };
+
+    // `$.zepto.init` is Zepto's counterpart to jQuery's `$.fn.init` and
     // takes a CSS selector and an optional context (and handles various
     // special cases).
     // This method can be overridden in plugins.
-
-
     zepto.init = function (selector, context) {
-      var dom; // If nothing given, return an empty Zepto collection
-
-      if (!selector) return zepto.Z(); // Optimize for string selectors
+      var dom;
+      // If nothing given, return an empty Zepto collection
+      if (!selector) return zepto.Z();
+      // Optimize for string selectors
       else if (typeof selector == 'string') {
-          selector = selector.trim(); // If it's a html fragment, create nodes from it
-          // Note: In both Chrome 21 and Firefox 15, DOM error 12
-          // is thrown if the fragment doesn't begin with <
-
-          if (selector[0] == '<' && fragmentRE.test(selector)) dom = zepto.fragment(selector, RegExp.$1, context), selector = null; // If there's a context, create a collection on that context first, and select
-          // nodes from there
-          else if (context !== undefined$1) return $(context).find(selector); // If it's a CSS selector, use it to select nodes.
-            else dom = zepto.qsa(document, selector);
-        } // If a function is given, call it when the DOM is ready
-        else if (isFunction(selector)) return $(document).ready(selector); // If a Zepto collection is given, just return it
-          else if (zepto.isZ(selector)) return selector;else {
-              // normalize array if an array of nodes is given
-              if (isArray(selector)) dom = compact(selector); // Wrap DOM nodes.
-              else if (isObject(selector)) dom = [selector], selector = null; // If it's a html fragment, create nodes from it
-                else if (fragmentRE.test(selector)) dom = zepto.fragment(selector.trim(), RegExp.$1, context), selector = null; // If there's a context, create a collection on that context first, and select
-                  // nodes from there
-                  else if (context !== undefined$1) return $(context).find(selector); // And last but no least, if it's a CSS selector, use it to select nodes.
-                    else dom = zepto.qsa(document, selector);
-            } // create a new Zepto collection from the nodes found
-
+        selector = selector.trim();
+        // If it's a html fragment, create nodes from it
+        // Note: In both Chrome 21 and Firefox 15, DOM error 12
+        // is thrown if the fragment doesn't begin with <
+        if (selector[0] == '<' && fragmentRE.test(selector)) dom = zepto.fragment(selector, RegExp.$1, context), selector = null;
+        // If there's a context, create a collection on that context first, and select
+        // nodes from there
+        else if (context !== undefined$1) return $(context).find(selector);
+        // If it's a CSS selector, use it to select nodes.
+        else dom = zepto.qsa(document, selector);
+      }
+      // If a function is given, call it when the DOM is ready
+      else if (isFunction(selector)) return $(document).ready(selector);
+      // If a Zepto collection is given, just return it
+      else if (zepto.isZ(selector)) return selector;else {
+        // normalize array if an array of nodes is given
+        if (isArray(selector)) dom = compact(selector);
+        // Wrap DOM nodes.
+        else if (isObject(selector)) dom = [selector], selector = null;
+        // If it's a html fragment, create nodes from it
+        else if (fragmentRE.test(selector)) dom = zepto.fragment(selector.trim(), RegExp.$1, context), selector = null;
+        // If there's a context, create a collection on that context first, and select
+        // nodes from there
+        else if (context !== undefined$1) return $(context).find(selector);
+        // And last but no least, if it's a CSS selector, use it to select nodes.
+        else dom = zepto.qsa(document, selector);
+      }
+      // create a new Zepto collection from the nodes found
       return zepto.Z(dom, selector);
-    }; // `$` will be the base `Zepto` object. When calling this
+    };
+
+    // `$` will be the base `Zepto` object. When calling this
     // function just call `$.zepto.init, which makes the implementation
     // details of selecting nodes and creating Zepto collections
     // patchable in plugins.
-
-
     $ = function (selector, context) {
       return zepto.init(selector, context);
     };
-
     function extend(target, source, deep) {
       for (key in source) if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
         if (isPlainObject(source[key]) && !isPlainObject(target[key])) target[key] = {};
         if (isArray(source[key]) && !isArray(target[key])) target[key] = [];
         extend(target[key], source[key], deep);
       } else if (source[key] !== undefined$1) target[key] = source[key];
-    } // Copy all but undefined properties from one or more
+    }
+
+    // Copy all but undefined properties from one or more
     // objects to the `target` object.
-
-
     $.extend = function (target) {
       var deep,
-          args = slice.call(arguments, 1);
-
+        args = slice.call(arguments, 1);
       if (typeof target == 'boolean') {
         deep = target;
         target = args.shift();
       }
-
       args.forEach(function (arg) {
         extend(target, arg, deep);
       });
       return target;
-    }; // `$.zepto.qsa` is Zepto's CSS selector implementation which
+    };
+
+    // `$.zepto.qsa` is Zepto's CSS selector implementation which
     // uses `document.querySelectorAll` and optimizes for some special cases, like `#id`.
     // This method can be overridden in plugins.
-
-
     zepto.qsa = function (element, selector) {
       var found,
-          maybeID = selector[0] == '#',
-          maybeClass = !maybeID && selector[0] == '.',
-          nameOnly = maybeID || maybeClass ? selector.slice(1) : selector,
-          // Ensure that a 1 char tag name still gets checked
-      isSimple = simpleSelectorRE.test(nameOnly);
-      return element.getElementById && isSimple && maybeID ? // Safari DocumentFragment doesn't have getElementById
-      (found = element.getElementById(nameOnly)) ? [found] : [] : element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11 ? [] : slice.call(isSimple && !maybeID && element.getElementsByClassName ? // DocumentFragment doesn't have getElementsByClassName/TagName
-      maybeClass ? element.getElementsByClassName(nameOnly) : // If it's simple, it could be a class
-      element.getElementsByTagName(selector) : // Or a tag
+        maybeID = selector[0] == '#',
+        maybeClass = !maybeID && selector[0] == '.',
+        nameOnly = maybeID || maybeClass ? selector.slice(1) : selector,
+        // Ensure that a 1 char tag name still gets checked
+        isSimple = simpleSelectorRE.test(nameOnly);
+      return element.getElementById && isSimple && maybeID ?
+      // Safari DocumentFragment doesn't have getElementById
+      (found = element.getElementById(nameOnly)) ? [found] : [] : element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11 ? [] : slice.call(isSimple && !maybeID && element.getElementsByClassName ?
+      // DocumentFragment doesn't have getElementsByClassName/TagName
+      maybeClass ? element.getElementsByClassName(nameOnly) :
+      // If it's simple, it could be a class
+      element.getElementsByTagName(selector) :
+      // Or a tag
       element.querySelectorAll(selector) // Or it's not simple, and we need to query all
       );
     };
@@ -856,30 +780,28 @@
     function filtered(nodes, selector) {
       return selector == null ? $(nodes) : $(nodes).filter(selector);
     }
-
     $.contains = document.documentElement.contains ? function (parent, node) {
       return parent !== node && parent.contains(node);
     } : function (parent, node) {
       while (node && (node = node.parentNode)) if (node === parent) return true;
-
       return false;
     };
-
     function funcArg(context, arg, idx, payload) {
       return isFunction(arg) ? arg.call(context, idx, payload) : arg;
     }
-
     function setAttribute(node, name, value) {
       value == null ? node.removeAttribute(name) : node.setAttribute(name, value);
-    } // access className property while respecting SVGAnimatedString
+    }
 
-
+    // access className property while respecting SVGAnimatedString
     function className(node, value) {
       var klass = node.className || '',
-          svg = klass && klass.baseVal !== undefined$1;
+        svg = klass && klass.baseVal !== undefined$1;
       if (value === undefined$1) return svg ? klass.baseVal : klass;
       svg ? klass.baseVal = value : node.className = value;
-    } // "true"  => true
+    }
+
+    // "true"  => true
     // "false" => false
     // "null"  => null
     // "42"    => 42
@@ -887,8 +809,6 @@
     // "08"    => "08"
     // JSON    => parse if valid
     // String  => self
-
-
     function deserializeValue(value) {
       try {
         return value ? value == "true" || (value == "false" ? false : value == "null" ? null : +value + "" == value ? +value : /^[\[\{]/.test(value) ? $.parseJSON(value) : value) : value;
@@ -896,49 +816,39 @@
         return value;
       }
     }
-
     $.type = type;
     $.isFunction = isFunction;
     $.isWindow = isWindow;
     $.isArray = isArray;
     $.isPlainObject = isPlainObject;
-
     $.isEmptyObject = function (obj) {
       var name;
-
       for (name in obj) return false;
-
       return true;
     };
-
     $.isNumeric = function (val) {
       var num = Number(val),
-          type = typeof val;
+        type = typeof val;
       return val != null && type != 'boolean' && (type != 'string' || val.length) && !isNaN(num) && isFinite(num) || false;
     };
-
     $.inArray = function (elem, array, i) {
       return emptyArray.indexOf.call(array, elem, i);
     };
-
     $.camelCase = camelize;
-
     $.trim = function (str) {
       return str == null ? "" : String.prototype.trim.call(str);
-    }; // plugin compatibility
+    };
 
-
+    // plugin compatibility
     $.uuid = 0;
     $.support = {};
     $.expr = {};
-
     $.noop = function () {};
-
     $.map = function (elements, callback) {
       var value,
-          values = [],
-          i,
-          key;
+        values = [],
+        i,
+        key;
       if (likeArray(elements)) for (i = 0; i < elements.length; i++) {
         value = callback(elements[i], i);
         if (value != null) values.push(value);
@@ -948,30 +858,27 @@
       }
       return flatten(values);
     };
-
     $.each = function (elements, callback) {
       var i, key;
-
       if (likeArray(elements)) {
         for (i = 0; i < elements.length; i++) if (callback.call(elements[i], i, elements[i]) === false) return elements;
       } else {
         for (key in elements) if (callback.call(elements[key], key, elements[key]) === false) return elements;
       }
-
       return elements;
     };
-
     $.grep = function (elements, callback) {
       return filter.call(elements, callback);
     };
+    if (window.JSON) $.parseJSON = JSON.parse;
 
-    if (window.JSON) $.parseJSON = JSON.parse; // Populate the class2type map
-
+    // Populate the class2type map
     $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function (i, name) {
       class2type["[object " + name + "]"] = name.toLowerCase();
-    }); // Define methods that will be available on all
-    // Zepto collections
+    });
 
+    // Define methods that will be available on all
+    // Zepto collections
     $.fn = {
       constructor: zepto.Z,
       length: 0,
@@ -985,14 +892,12 @@
       indexOf: emptyArray.indexOf,
       concat: function () {
         var i,
-            value,
-            args = [];
-
+          value,
+          args = [];
         for (i = 0; i < arguments.length; i++) {
           value = arguments[i];
           args[i] = zepto.isZ(value) ? value.toArray() : value;
         }
-
         return concat.apply(zepto.isZ(this) ? this.toArray() : this, args);
       },
       // `map` and `slice` in the jQuery API work differently
@@ -1075,7 +980,7 @@
       },
       find: function (selector) {
         var result,
-            $this = this;
+          $this = this;
         if (!selector) result = $();else if (typeof selector == 'object') result = $(selector).filter(function () {
           var node = this;
           return emptyArray.some.call($this, function (parent) {
@@ -1088,25 +993,22 @@
       },
       closest: function (selector, context) {
         var nodes = [],
-            collection = typeof selector == 'object' && $(selector);
+          collection = typeof selector == 'object' && $(selector);
         this.each(function (_, node) {
           while (node && !(collection ? collection.indexOf(node) >= 0 : zepto.matches(node, selector))) node = node !== context && !isDocument(node) && node.parentNode;
-
           if (node && nodes.indexOf(node) < 0) nodes.push(node);
         });
         return $(nodes);
       },
       parents: function (selector) {
         var ancestors = [],
-            nodes = this;
-
+          nodes = this;
         while (nodes.length > 0) nodes = $.map(nodes, function (node) {
           if ((node = node.parentNode) && !isDocument(node) && ancestors.indexOf(node) < 0) {
             ancestors.push(node);
             return node;
           }
         });
-
         return filtered(ancestors, selector);
       },
       parent: function (selector) {
@@ -1152,7 +1054,7 @@
       wrap: function (structure) {
         var func = isFunction(structure);
         if (this[0] && !func) var dom = $(structure).get(0),
-            clone = dom.parentNode || this.length > 1;
+          clone = dom.parentNode || this.length > 1;
         return this.each(function (index) {
           $(this).wrapAll(func ? structure.call(this, index) : clone ? dom.cloneNode(true) : dom);
         });
@@ -1160,21 +1062,19 @@
       wrapAll: function (structure) {
         if (this[0]) {
           $(this[0]).before(structure = $(structure));
-          var children; // drill down to the inmost element
-
+          var children;
+          // drill down to the inmost element
           while ((children = structure.children()).length) structure = children.first();
-
           $(structure).append(this);
         }
-
         return this;
       },
       wrapInner: function (structure) {
         var func = isFunction(structure);
         return this.each(function (index) {
           var self = $(this),
-              contents = self.contents(),
-              dom = func ? structure.call(this, index) : structure;
+            contents = self.contents(),
+            dom = func ? structure.call(this, index) : structure;
           contents.length ? contents.wrapAll(dom) : self.append(dom);
         });
       },
@@ -1262,12 +1162,12 @@
       offset: function (coordinates) {
         if (coordinates) return this.each(function (index) {
           var $this = $(this),
-              coords = funcArg(this, coordinates, index, $this.offset()),
-              parentOffset = $this.offsetParent().offset(),
-              props = {
-            top: coords.top - parentOffset.top,
-            left: coords.left - parentOffset.left
-          };
+            coords = funcArg(this, coordinates, index, $this.offset()),
+            parentOffset = $this.offsetParent().offset(),
+            props = {
+              top: coords.top - parentOffset.top,
+              left: coords.left - parentOffset.left
+            };
           if ($this.css('position') == 'static') props['position'] = 'relative';
           $this.css(props);
         });
@@ -1287,7 +1187,6 @@
       css: function (property, value) {
         if (arguments.length < 2) {
           var element = this[0];
-
           if (typeof property == 'string') {
             if (!element) return;
             return element.style[camelize(property)] || getComputedStyle(element, '').getPropertyValue(property);
@@ -1301,9 +1200,7 @@
             return props;
           }
         }
-
         var css = '';
-
         if (type(property) == 'string') {
           if (!value && value !== 0) this.each(function () {
             this.style.removeProperty(dasherize(property));
@@ -1313,7 +1210,6 @@
             this.style.removeProperty(dasherize(key));
           });else css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';';
         }
-
         return this.each(function () {
           this.style.cssText += ';' + css;
         });
@@ -1333,7 +1229,7 @@
           if (!('className' in this)) return;
           classList = [];
           var cls = className(this),
-              newName = funcArg(this, name, idx, cls);
+            newName = funcArg(this, name, idx, cls);
           newName.split(/\s+/g).forEach(function (klass) {
             if (!$(this).hasClass(klass)) classList.push(klass);
           }, this);
@@ -1355,7 +1251,7 @@
         if (!name) return this;
         return this.each(function (idx) {
           var $this = $(this),
-              names = funcArg(this, name, idx, className(this));
+            names = funcArg(this, name, idx, className(this));
           names.split(/\s+/g).forEach(function (klass) {
             (when === undefined$1 ? !$this.hasClass(klass) : when) ? $this.addClass(klass) : $this.removeClass(klass);
           });
@@ -1384,23 +1280,26 @@
       position: function () {
         if (!this.length) return;
         var elem = this[0],
-            // Get *real* offsetParent
-        offsetParent = this.offsetParent(),
-            // Get correct offsets
-        offset = this.offset(),
-            parentOffset = rootNodeRE.test(offsetParent[0].nodeName) ? {
-          top: 0,
-          left: 0
-        } : offsetParent.offset(); // Subtract element margins
+          // Get *real* offsetParent
+          offsetParent = this.offsetParent(),
+          // Get correct offsets
+          offset = this.offset(),
+          parentOffset = rootNodeRE.test(offsetParent[0].nodeName) ? {
+            top: 0,
+            left: 0
+          } : offsetParent.offset();
+
+        // Subtract element margins
         // note: when an element has margin: auto the offsetLeft and marginLeft
         // are the same in Safari causing offset.left to incorrectly be 0
-
         offset.top -= parseFloat($(elem).css('margin-top')) || 0;
-        offset.left -= parseFloat($(elem).css('margin-left')) || 0; // Add offsetParent borders
+        offset.left -= parseFloat($(elem).css('margin-left')) || 0;
 
+        // Add offsetParent borders
         parentOffset.top += parseFloat($(offsetParent[0]).css('border-top-width')) || 0;
-        parentOffset.left += parseFloat($(offsetParent[0]).css('border-left-width')) || 0; // Subtract the two offsets
+        parentOffset.left += parseFloat($(offsetParent[0]).css('border-left-width')) || 0;
 
+        // Subtract the two offsets
         return {
           top: offset.top - parentOffset.top,
           left: offset.left - parentOffset.left
@@ -1409,65 +1308,62 @@
       offsetParent: function () {
         return this.map(function () {
           var parent = this.offsetParent || document.body;
-
           while (parent && !rootNodeRE.test(parent.nodeName) && $(parent).css("position") == "static") parent = parent.offsetParent;
-
           return parent;
         });
       }
-    }; // for now
+    };
 
-    $.fn.detach = $.fn.remove // Generate the `width` and `height` functions
+    // for now
+    $.fn.detach = $.fn.remove
+
+    // Generate the `width` and `height` functions
     ;
     ['width', 'height'].forEach(function (dimension) {
       var dimensionProperty = dimension.replace(/./, function (m) {
         return m[0].toUpperCase();
       });
-
       $.fn[dimension] = function (value) {
         var offset,
-            el = this[0];
+          el = this[0];
         if (value === undefined$1) return isWindow(el) ? el['inner' + dimensionProperty] : isDocument(el) ? el.documentElement['scroll' + dimensionProperty] : (offset = this.offset()) && offset[dimension];else return this.each(function (idx) {
           el = $(this);
           el.css(dimension, funcArg(this, value, idx, el[dimension]()));
         });
       };
     });
-
     function traverseNode(node, fun) {
       fun(node);
-
       for (var i = 0, len = node.childNodes.length; i < len; i++) traverseNode(node.childNodes[i], fun);
-    } // Generate the `after`, `prepend`, `before`, `append`,
+    }
+
+    // Generate the `after`, `prepend`, `before`, `append`,
     // `insertAfter`, `insertBefore`, `appendTo`, and `prependTo` methods.
-
-
     adjacencyOperators.forEach(function (operator, operatorIndex) {
       var inside = operatorIndex % 2; //=> prepend, append
 
       $.fn[operator] = function () {
         // arguments can be nodes, arrays of nodes, Zepto objects and HTML strings
         var argType,
-            nodes = $.map(arguments, function (arg) {
-          var arr = [];
-          argType = type(arg);
-
-          if (argType == "array") {
-            arg.forEach(function (el) {
-              if (el.nodeType !== undefined$1) return arr.push(el);else if ($.zepto.isZ(el)) return arr = arr.concat(el.get());
-              arr = arr.concat(zepto.fragment(el));
-            });
-            return arr;
-          }
-
-          return argType == "object" || arg == null ? arg : zepto.fragment(arg);
-        }),
-            parent,
-            copyByClone = this.length > 1;
+          nodes = $.map(arguments, function (arg) {
+            var arr = [];
+            argType = type(arg);
+            if (argType == "array") {
+              arg.forEach(function (el) {
+                if (el.nodeType !== undefined$1) return arr.push(el);else if ($.zepto.isZ(el)) return arr = arr.concat(el.get());
+                arr = arr.concat(zepto.fragment(el));
+              });
+              return arr;
+            }
+            return argType == "object" || arg == null ? arg : zepto.fragment(arg);
+          }),
+          parent,
+          copyByClone = this.length > 1;
         if (nodes.length < 1) return this;
         return this.each(function (_, target) {
-          parent = inside ? target : target.parentNode; // convert all methods to a "before" operation
+          parent = inside ? target : target.parentNode;
 
+          // convert all methods to a "before" operation
           target = operatorIndex == 0 ? target.nextSibling : operatorIndex == 1 ? target.firstChild : operatorIndex == 2 ? target : null;
           var parentInDocument = $.contains(document.documentElement, parent);
           nodes.forEach(function (node) {
@@ -1481,147 +1377,133 @@
             });
           });
         });
-      }; // after    => insertAfter
+      };
+
+      // after    => insertAfter
       // prepend  => prependTo
       // before   => insertBefore
       // append   => appendTo
-
-
       $.fn[inside ? operator + 'To' : 'insert' + (operatorIndex ? 'Before' : 'After')] = function (html) {
         $(html)[operator](this);
         return this;
       };
     });
-    zepto.Z.prototype = Z.prototype = $.fn; // Export internal API functions in the `$.zepto` namespace
+    zepto.Z.prototype = Z.prototype = $.fn;
 
+    // Export internal API functions in the `$.zepto` namespace
     zepto.uniq = uniq;
     zepto.deserializeValue = deserializeValue;
     $.zepto = zepto;
     return $;
   }();
-
   window.Zepto = Zepto;
   window.$ === undefined && (window.$ = Zepto);
-
   (function ($) {
     var jsonpID = +new Date(),
-        document = window.document,
-        key,
-        name,
-        rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-        scriptTypeRE = /^(?:text|application)\/javascript/i,
-        xmlTypeRE = /^(?:text|application)\/xml/i,
-        jsonType = 'application/json',
-        htmlType = 'text/html',
-        blankRE = /^\s*$/,
-        originAnchor = document.createElement('a');
-    originAnchor.href = window.location.href; // trigger a custom event and return false if it was cancelled
+      document = window.document,
+      key,
+      name,
+      rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+      scriptTypeRE = /^(?:text|application)\/javascript/i,
+      xmlTypeRE = /^(?:text|application)\/xml/i,
+      jsonType = 'application/json',
+      htmlType = 'text/html',
+      blankRE = /^\s*$/,
+      originAnchor = document.createElement('a');
+    originAnchor.href = window.location.href;
 
+    // trigger a custom event and return false if it was cancelled
     function triggerAndReturn(context, eventName, data) {
       var event = $.Event(eventName);
       $(context).trigger(event, data);
       return !event.isDefaultPrevented();
-    } // trigger an Ajax "global" event
+    }
 
-
+    // trigger an Ajax "global" event
     function triggerGlobal(settings, context, eventName, data) {
       if (settings.global) return triggerAndReturn(context || document, eventName, data);
-    } // Number of active Ajax requests
+    }
 
-
+    // Number of active Ajax requests
     $.active = 0;
-
     function ajaxStart(settings) {
       if (settings.global && $.active++ === 0) triggerGlobal(settings, null, 'ajaxStart');
     }
-
     function ajaxStop(settings) {
       if (settings.global && ! --$.active) triggerGlobal(settings, null, 'ajaxStop');
-    } // triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
+    }
 
-
+    // triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
     function ajaxBeforeSend(xhr, settings) {
       var context = settings.context;
       if (settings.beforeSend.call(context, xhr, settings) === false || triggerGlobal(settings, context, 'ajaxBeforeSend', [xhr, settings]) === false) return false;
       triggerGlobal(settings, context, 'ajaxSend', [xhr, settings]);
     }
-
     function ajaxSuccess(data, xhr, settings, deferred) {
       var context = settings.context,
-          status = 'success';
+        status = 'success';
       settings.success.call(context, data, status, xhr);
       if (deferred) deferred.resolveWith(context, [data, status, xhr]);
       triggerGlobal(settings, context, 'ajaxSuccess', [xhr, settings, data]);
       ajaxComplete(status, xhr, settings);
-    } // type: "timeout", "error", "abort", "parsererror"
-
-
+    }
+    // type: "timeout", "error", "abort", "parsererror"
     function ajaxError(error, type, xhr, settings, deferred) {
       var context = settings.context;
       settings.error.call(context, xhr, type, error);
       if (deferred) deferred.rejectWith(context, [xhr, type, error]);
       triggerGlobal(settings, context, 'ajaxError', [xhr, settings, error || type]);
       ajaxComplete(type, xhr, settings);
-    } // status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
-
-
+    }
+    // status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
     function ajaxComplete(status, xhr, settings) {
       var context = settings.context;
       settings.complete.call(context, xhr, status);
       triggerGlobal(settings, context, 'ajaxComplete', [xhr, settings]);
       ajaxStop(settings);
     }
-
     function ajaxDataFilter(data, type, settings) {
       if (settings.dataFilter == empty) return data;
       var context = settings.context;
       return settings.dataFilter.call(context, data, type);
-    } // Empty function, used as default callback
+    }
 
-
+    // Empty function, used as default callback
     function empty() {}
-
     $.ajaxJSONP = function (options, deferred) {
       if (!('type' in options)) return $.ajax(options);
-
       var _callbackName = options.jsonpCallback,
-          callbackName = ($.isFunction(_callbackName) ? _callbackName() : _callbackName) || 'Zepto' + jsonpID++,
-          script = document.createElement('script'),
-          originalCallback = window[callbackName],
-          responseData,
-          abort = function (errorType) {
-        $(script).triggerHandler('error', errorType || 'abort');
-      },
-          xhr = {
-        abort: abort
-      },
-          abortTimeout;
-
+        callbackName = ($.isFunction(_callbackName) ? _callbackName() : _callbackName) || 'Zepto' + jsonpID++,
+        script = document.createElement('script'),
+        originalCallback = window[callbackName],
+        responseData,
+        abort = function (errorType) {
+          $(script).triggerHandler('error', errorType || 'abort');
+        },
+        xhr = {
+          abort: abort
+        },
+        abortTimeout;
       if (deferred) deferred.promise(xhr);
       $(script).on('load error', function (e, errorType) {
         clearTimeout(abortTimeout);
         $(script).off().remove();
-
         if (e.type == 'error' || !responseData) {
           ajaxError(null, errorType || 'error', xhr, options, deferred);
         } else {
           ajaxSuccess(responseData[0], xhr, options, deferred);
         }
-
         window[callbackName] = originalCallback;
         if (responseData && $.isFunction(originalCallback)) originalCallback(responseData[0]);
         originalCallback = responseData = undefined;
       });
-
       if (ajaxBeforeSend(xhr, options) === false) {
         abort('abort');
         return xhr;
       }
-
       window[callbackName] = function () {
         responseData = arguments;
       };
-
       script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName);
       document.head.appendChild(script);
       if (options.timeout > 0) abortTimeout = setTimeout(function () {
@@ -1629,7 +1511,6 @@
       }, options.timeout);
       return xhr;
     };
-
     $.ajaxSettings = {
       // Default type of request
       type: 'GET',
@@ -1671,89 +1552,74 @@
       //The sanitized response should be returned
       dataFilter: empty
     };
-
     function mimeToDataType(mime) {
       if (mime) mime = mime.split(';', 2)[0];
       return mime && (mime == htmlType ? 'html' : mime == jsonType ? 'json' : scriptTypeRE.test(mime) ? 'script' : xmlTypeRE.test(mime) && 'xml') || 'text';
     }
-
     function appendQuery(url, query) {
       if (query == '') return url;
       return (url + '&' + query).replace(/[&?]{1,2}/, '?');
-    } // serialize payload and append it to the URL for GET requests
+    }
 
-
+    // serialize payload and append it to the URL for GET requests
     function serializeData(options) {
       if (options.processData && options.data && $.type(options.data) != "string") options.data = $.param(options.data, options.traditional);
       if (options.data && (!options.type || options.type.toUpperCase() == 'GET' || 'jsonp' == options.dataType)) options.url = appendQuery(options.url, options.data), options.data = undefined;
     }
-
     $.ajax = function (options) {
       var settings = $.extend({}, options || {}),
-          deferred = $.Deferred && $.Deferred(),
-          urlAnchor,
-          hashIndex;
-
+        deferred = $.Deferred && $.Deferred(),
+        urlAnchor,
+        hashIndex;
       for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key];
-
       ajaxStart(settings);
-
       if (!settings.crossDomain) {
         urlAnchor = document.createElement('a');
-        urlAnchor.href = settings.url; // cleans up URL for .href (IE only), see https://github.com/madrobby/zepto/pull/1049
-
+        urlAnchor.href = settings.url;
+        // cleans up URL for .href (IE only), see https://github.com/madrobby/zepto/pull/1049
         urlAnchor.href = urlAnchor.href;
         settings.crossDomain = originAnchor.protocol + '//' + originAnchor.host !== urlAnchor.protocol + '//' + urlAnchor.host;
       }
-
       if (!settings.url) settings.url = window.location.toString();
       if ((hashIndex = settings.url.indexOf('#')) > -1) settings.url = settings.url.slice(0, hashIndex);
       serializeData(settings);
       var dataType = settings.dataType,
-          hasPlaceholder = /\?.+=\?/.test(settings.url);
+        hasPlaceholder = /\?.+=\?/.test(settings.url);
       if (hasPlaceholder) dataType = 'jsonp';
       if (settings.cache === false || (!options || options.cache !== true) && ('script' == dataType || 'jsonp' == dataType)) settings.url = appendQuery(settings.url, '_=' + Date.now());
-
       if ('jsonp' == dataType) {
         if (!hasPlaceholder) settings.url = appendQuery(settings.url, settings.jsonp ? settings.jsonp + '=?' : settings.jsonp === false ? '' : 'callback=?');
         return $.ajaxJSONP(settings, deferred);
       }
-
       var mime = settings.accepts[dataType],
-          headers = {},
-          setHeader = function (name, value) {
-        headers[name.toLowerCase()] = [name, value];
-      },
-          protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
-          xhr = settings.xhr(),
-          nativeSetHeader = xhr.setRequestHeader,
-          abortTimeout;
-
+        headers = {},
+        setHeader = function (name, value) {
+          headers[name.toLowerCase()] = [name, value];
+        },
+        protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
+        xhr = settings.xhr(),
+        nativeSetHeader = xhr.setRequestHeader,
+        abortTimeout;
       if (deferred) deferred.promise(xhr);
       if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest');
       setHeader('Accept', mime || '*/*');
-
       if (mime = settings.mimeType || mime) {
         if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0];
         xhr.overrideMimeType && xhr.overrideMimeType(mime);
       }
-
       if (settings.contentType || settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET') setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
       if (settings.headers) for (name in settings.headers) setHeader(name, settings.headers[name]);
       xhr.setRequestHeader = setHeader;
-
       xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
           xhr.onreadystatechange = empty;
           clearTimeout(abortTimeout);
           var result,
-              error = false;
-
+            error = false;
           if (xhr.status >= 200 && xhr.status < 300 || xhr.status == 304 || xhr.status == 0 && protocol == 'file:') {
             dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
             if (xhr.responseType == 'arraybuffer' || xhr.responseType == 'blob') result = xhr.response;else {
               result = xhr.responseText;
-
               try {
                 // http://perfectionkills.com/global-eval-what-are-the-options/
                 // sanitize response accordingly if data filter callback provided
@@ -1762,7 +1628,6 @@
               } catch (e) {
                 error = e;
               }
-
               if (error) return ajaxError(error, 'parsererror', xhr, settings, deferred);
             }
             ajaxSuccess(result, xhr, settings, deferred);
@@ -1771,30 +1636,27 @@
           }
         }
       };
-
       if (ajaxBeforeSend(xhr, settings) === false) {
         xhr.abort();
         ajaxError(null, 'abort', xhr, settings, deferred);
         return xhr;
       }
-
       var async = 'async' in settings ? settings.async : true;
       xhr.open(settings.type, settings.url, async, settings.username, settings.password);
       if (settings.xhrFields) for (name in settings.xhrFields) xhr[name] = settings.xhrFields[name];
-
       for (name in headers) nativeSetHeader.apply(xhr, headers[name]);
-
       if (settings.timeout > 0) abortTimeout = setTimeout(function () {
         xhr.onreadystatechange = empty;
         xhr.abort();
         ajaxError(null, 'timeout', xhr, settings, deferred);
-      }, settings.timeout); // avoid sending empty string (#319)
+      }, settings.timeout);
 
+      // avoid sending empty string (#319)
       xhr.send(settings.data ? settings.data : null);
       return xhr;
-    }; // handle optional data/success arguments
+    };
 
-
+    // handle optional data/success arguments
     function parseArguments(url, data, success, dataType) {
       if ($.isFunction(data)) dataType = success, success = data, data = undefined;
       if (!$.isFunction(success)) dataType = success, success = undefined;
@@ -1805,76 +1667,62 @@
         dataType: dataType
       };
     }
-
-    $.get = function ()
-    /* url, data, success, dataType */
-    {
+    $.get = function /* url, data, success, dataType */
+    () {
       return $.ajax(parseArguments.apply(null, arguments));
     };
-
-    $.post = function ()
-    /* url, data, success, dataType */
-    {
+    $.post = function /* url, data, success, dataType */
+    () {
       var options = parseArguments.apply(null, arguments);
       options.type = 'POST';
       return $.ajax(options);
     };
-
-    $.getJSON = function ()
-    /* url, data, success */
-    {
+    $.getJSON = function /* url, data, success */
+    () {
       var options = parseArguments.apply(null, arguments);
       options.dataType = 'json';
       return $.ajax(options);
     };
-
     $.fn.load = function (url, data, success) {
       if (!this.length) return this;
       var self = this,
-          parts = url.split(/\s/),
-          selector,
-          options = parseArguments(url, data, success),
-          callback = options.success;
+        parts = url.split(/\s/),
+        selector,
+        options = parseArguments(url, data, success),
+        callback = options.success;
       if (parts.length > 1) options.url = parts[0], selector = parts[1];
-
       options.success = function (response) {
         self.html(selector ? $('<div>').html(response.replace(rscript, "")).find(selector) : response);
         callback && callback.apply(self, arguments);
       };
-
       $.ajax(options);
       return this;
     };
-
     var escape = encodeURIComponent;
-
     function serialize(params, obj, traditional, scope) {
       var type,
-          array = $.isArray(obj),
-          hash = $.isPlainObject(obj);
+        array = $.isArray(obj),
+        hash = $.isPlainObject(obj);
       $.each(obj, function (key, value) {
         type = $.type(value);
-        if (scope) key = traditional ? scope : scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']'; // handle data in serializeArray() format
-
-        if (!scope && array) params.add(value.name, value.value); // recurse into nested objects
+        if (scope) key = traditional ? scope : scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']';
+        // handle data in serializeArray() format
+        if (!scope && array) params.add(value.name, value.value);
+        // recurse into nested objects
         else if (type == "array" || !traditional && type == "object") serialize(params, value, traditional, key);else params.add(key, value);
       });
     }
-
     $.param = function (obj, traditional) {
       var params = [];
-
       params.add = function (key, value) {
         if ($.isFunction(value)) value = value();
         if (value == null) value = "";
         this.push(escape(key) + '=' + escape(value));
       };
-
       serialize(params, obj, traditional);
       return params.join('&').replace(/%20/g, '+');
     };
   })(Zepto);
-
   (function ($) {
     // Create a collection of callbacks to be fired in a sequence, with configurable behaviour
     // Option flags:
@@ -1884,226 +1732,206 @@
     //   - unique: Permit adding at most one instance of the same callback
     $.Callbacks = function (options) {
       options = $.extend({}, options);
-
       var memory,
-          // Last fire value (for non-forgettable lists)
-      fired,
-          // Flag to know if list was already fired
-      firing,
-          // Flag to know if list is currently firing
-      firingStart,
-          // First callback to fire (used internally by add and fireWith)
-      firingLength,
-          // End of the loop when firing
-      firingIndex,
-          // Index of currently firing callback (modified by remove if needed)
-      list = [],
-          // Actual callback list
-      stack = !options.once && [],
-          // Stack of fire calls for repeatable lists
-      fire = function (data) {
-        memory = options.memory && data;
-        fired = true;
-        firingIndex = firingStart || 0;
-        firingStart = 0;
-        firingLength = list.length;
-        firing = true;
-
-        for (; list && firingIndex < firingLength; ++firingIndex) {
-          if (list[firingIndex].apply(data[0], data[1]) === false && options.stopOnFalse) {
-            memory = false;
-            break;
-          }
-        }
-
-        firing = false;
-
-        if (list) {
-          if (stack) stack.length && fire(stack.shift());else if (memory) list.length = 0;else Callbacks.disable();
-        }
-      },
-          Callbacks = {
-        add: function () {
-          if (list) {
-            var start = list.length,
-                add = function (args) {
-              $.each(args, function (_, arg) {
-                if (typeof arg === "function") {
-                  if (!options.unique || !Callbacks.has(arg)) list.push(arg);
-                } else if (arg && arg.length && typeof arg !== 'string') add(arg);
-              });
-            };
-
-            add(arguments);
-            if (firing) firingLength = list.length;else if (memory) {
-              firingStart = start;
-              fire(memory);
+        // Last fire value (for non-forgettable lists)
+        fired,
+        // Flag to know if list was already fired
+        firing,
+        // Flag to know if list is currently firing
+        firingStart,
+        // First callback to fire (used internally by add and fireWith)
+        firingLength,
+        // End of the loop when firing
+        firingIndex,
+        // Index of currently firing callback (modified by remove if needed)
+        list = [],
+        // Actual callback list
+        stack = !options.once && [],
+        // Stack of fire calls for repeatable lists
+        fire = function (data) {
+          memory = options.memory && data;
+          fired = true;
+          firingIndex = firingStart || 0;
+          firingStart = 0;
+          firingLength = list.length;
+          firing = true;
+          for (; list && firingIndex < firingLength; ++firingIndex) {
+            if (list[firingIndex].apply(data[0], data[1]) === false && options.stopOnFalse) {
+              memory = false;
+              break;
             }
           }
-
-          return this;
-        },
-        remove: function () {
+          firing = false;
           if (list) {
-            $.each(arguments, function (_, arg) {
-              var index;
-
-              while ((index = $.inArray(arg, list, index)) > -1) {
-                list.splice(index, 1); // Handle firing indexes
-
-                if (firing) {
-                  if (index <= firingLength) --firingLength;
-                  if (index <= firingIndex) --firingIndex;
-                }
+            if (stack) stack.length && fire(stack.shift());else if (memory) list.length = 0;else Callbacks.disable();
+          }
+        },
+        Callbacks = {
+          add: function () {
+            if (list) {
+              var start = list.length,
+                add = function (args) {
+                  $.each(args, function (_, arg) {
+                    if (typeof arg === "function") {
+                      if (!options.unique || !Callbacks.has(arg)) list.push(arg);
+                    } else if (arg && arg.length && typeof arg !== 'string') add(arg);
+                  });
+                };
+              add(arguments);
+              if (firing) firingLength = list.length;else if (memory) {
+                firingStart = start;
+                fire(memory);
               }
-            });
+            }
+            return this;
+          },
+          remove: function () {
+            if (list) {
+              $.each(arguments, function (_, arg) {
+                var index;
+                while ((index = $.inArray(arg, list, index)) > -1) {
+                  list.splice(index, 1);
+                  // Handle firing indexes
+                  if (firing) {
+                    if (index <= firingLength) --firingLength;
+                    if (index <= firingIndex) --firingIndex;
+                  }
+                }
+              });
+            }
+            return this;
+          },
+          has: function (fn) {
+            return !!(list && (fn ? $.inArray(fn, list) > -1 : list.length));
+          },
+          empty: function () {
+            firingLength = list.length = 0;
+            return this;
+          },
+          disable: function () {
+            list = stack = memory = undefined;
+            return this;
+          },
+          disabled: function () {
+            return !list;
+          },
+          lock: function () {
+            stack = undefined;
+            if (!memory) Callbacks.disable();
+            return this;
+          },
+          locked: function () {
+            return !stack;
+          },
+          fireWith: function (context, args) {
+            if (list && (!fired || stack)) {
+              args = args || [];
+              args = [context, args.slice ? args.slice() : args];
+              if (firing) stack.push(args);else fire(args);
+            }
+            return this;
+          },
+          fire: function () {
+            return Callbacks.fireWith(this, arguments);
+          },
+          fired: function () {
+            return !!fired;
           }
-
-          return this;
-        },
-        has: function (fn) {
-          return !!(list && (fn ? $.inArray(fn, list) > -1 : list.length));
-        },
-        empty: function () {
-          firingLength = list.length = 0;
-          return this;
-        },
-        disable: function () {
-          list = stack = memory = undefined;
-          return this;
-        },
-        disabled: function () {
-          return !list;
-        },
-        lock: function () {
-          stack = undefined;
-          if (!memory) Callbacks.disable();
-          return this;
-        },
-        locked: function () {
-          return !stack;
-        },
-        fireWith: function (context, args) {
-          if (list && (!fired || stack)) {
-            args = args || [];
-            args = [context, args.slice ? args.slice() : args];
-            if (firing) stack.push(args);else fire(args);
-          }
-
-          return this;
-        },
-        fire: function () {
-          return Callbacks.fireWith(this, arguments);
-        },
-        fired: function () {
-          return !!fired;
-        }
-      };
-
+        };
       return Callbacks;
     };
   })(Zepto);
-
   (function ($) {
     var slice = Array.prototype.slice;
-
     function Deferred(func) {
-      var tuples = [// action, add listener, listener list, final state
-      ["resolve", "done", $.Callbacks({
-        once: 1,
-        memory: 1
-      }), "resolved"], ["reject", "fail", $.Callbacks({
-        once: 1,
-        memory: 1
-      }), "rejected"], ["notify", "progress", $.Callbacks({
-        memory: 1
-      })]],
-          state = "pending",
-          promise = {
-        state: function () {
-          return state;
-        },
-        always: function () {
-          deferred.done(arguments).fail(arguments);
-          return this;
-        },
-        then: function ()
-        /* fnDone [, fnFailed [, fnProgress]] */
-        {
-          var fns = arguments;
-          return Deferred(function (defer) {
-            $.each(tuples, function (i, tuple) {
-              var fn = $.isFunction(fns[i]) && fns[i];
-              deferred[tuple[1]](function () {
-                var returned = fn && fn.apply(this, arguments);
-
-                if (returned && $.isFunction(returned.promise)) {
-                  returned.promise().done(defer.resolve).fail(defer.reject).progress(defer.notify);
-                } else {
-                  var context = this === promise ? defer.promise() : this,
+      var tuples = [
+        // action, add listener, listener list, final state
+        ["resolve", "done", $.Callbacks({
+          once: 1,
+          memory: 1
+        }), "resolved"], ["reject", "fail", $.Callbacks({
+          once: 1,
+          memory: 1
+        }), "rejected"], ["notify", "progress", $.Callbacks({
+          memory: 1
+        })]],
+        state = "pending",
+        promise = {
+          state: function () {
+            return state;
+          },
+          always: function () {
+            deferred.done(arguments).fail(arguments);
+            return this;
+          },
+          then: function /* fnDone [, fnFailed [, fnProgress]] */
+          () {
+            var fns = arguments;
+            return Deferred(function (defer) {
+              $.each(tuples, function (i, tuple) {
+                var fn = $.isFunction(fns[i]) && fns[i];
+                deferred[tuple[1]](function () {
+                  var returned = fn && fn.apply(this, arguments);
+                  if (returned && $.isFunction(returned.promise)) {
+                    returned.promise().done(defer.resolve).fail(defer.reject).progress(defer.notify);
+                  } else {
+                    var context = this === promise ? defer.promise() : this,
                       values = fn ? [returned] : arguments;
-                  defer[tuple[0] + "With"](context, values);
-                }
+                    defer[tuple[0] + "With"](context, values);
+                  }
+                });
               });
-            });
-            fns = null;
-          }).promise();
+              fns = null;
+            }).promise();
+          },
+          promise: function (obj) {
+            return obj != null ? $.extend(obj, promise) : promise;
+          }
         },
-        promise: function (obj) {
-          return obj != null ? $.extend(obj, promise) : promise;
-        }
-      },
-          deferred = {};
+        deferred = {};
       $.each(tuples, function (i, tuple) {
         var list = tuple[2],
-            stateString = tuple[3];
+          stateString = tuple[3];
         promise[tuple[1]] = list.add;
-
         if (stateString) {
           list.add(function () {
             state = stateString;
           }, tuples[i ^ 1][2].disable, tuples[2][2].lock);
         }
-
         deferred[tuple[0]] = function () {
           deferred[tuple[0] + "With"](this === deferred ? promise : this, arguments);
           return this;
         };
-
         deferred[tuple[0] + "With"] = list.fireWith;
       });
       promise.promise(deferred);
       if (func) func.call(deferred, deferred);
       return deferred;
     }
-
     $.when = function (sub) {
       var resolveValues = slice.call(arguments),
-          len = resolveValues.length,
-          i = 0,
-          remain = len !== 1 || sub && $.isFunction(sub.promise) ? len : 0,
-          deferred = remain === 1 ? sub : Deferred(),
-          progressValues,
-          progressContexts,
-          resolveContexts,
-          updateFn = function (i, ctx, val) {
-        return function (value) {
-          ctx[i] = this;
-          val[i] = arguments.length > 1 ? slice.call(arguments) : value;
-
-          if (val === progressValues) {
-            deferred.notifyWith(ctx, val);
-          } else if (! --remain) {
-            deferred.resolveWith(ctx, val);
-          }
+        len = resolveValues.length,
+        i = 0,
+        remain = len !== 1 || sub && $.isFunction(sub.promise) ? len : 0,
+        deferred = remain === 1 ? sub : Deferred(),
+        progressValues,
+        progressContexts,
+        resolveContexts,
+        updateFn = function (i, ctx, val) {
+          return function (value) {
+            ctx[i] = this;
+            val[i] = arguments.length > 1 ? slice.call(arguments) : value;
+            if (val === progressValues) {
+              deferred.notifyWith(ctx, val);
+            } else if (! --remain) {
+              deferred.resolveWith(ctx, val);
+            }
+          };
         };
-      };
-
       if (len > 1) {
         progressValues = new Array(len);
         progressContexts = new Array(len);
         resolveContexts = new Array(len);
-
         for (; i < len; ++i) {
           if (resolveValues[i] && $.isFunction(resolveValues[i].promise)) {
             resolveValues[i].promise().done(updateFn(i, resolveContexts, resolveValues)).fail(deferred.reject).progress(updateFn(i, progressContexts, progressValues));
@@ -2112,40 +1940,34 @@
           }
         }
       }
-
       if (!remain) deferred.resolveWith(resolveContexts, resolveValues);
       return deferred.promise();
     };
-
     $.Deferred = Deferred;
   })(Zepto);
-
   (function ($) {
     var _zid = 1,
-        undefined$1,
-        slice = Array.prototype.slice,
-        isFunction = $.isFunction,
-        isString = function (obj) {
-      return typeof obj == 'string';
-    },
-        handlers = {},
-        specialEvents = {},
-        focusinSupported = ('onfocusin' in window),
-        focus = {
-      focus: 'focusin',
-      blur: 'focusout'
-    },
-        hover = {
-      mouseenter: 'mouseover',
-      mouseleave: 'mouseout'
-    };
-
+      undefined$1,
+      slice = Array.prototype.slice,
+      isFunction = $.isFunction,
+      isString = function (obj) {
+        return typeof obj == 'string';
+      },
+      handlers = {},
+      specialEvents = {},
+      focusinSupported = ('onfocusin' in window),
+      focus = {
+        focus: 'focusin',
+        blur: 'focusout'
+      },
+      hover = {
+        mouseenter: 'mouseover',
+        mouseleave: 'mouseout'
+      };
     specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents';
-
     function zid(element) {
       return element._zid || (element._zid = _zid++);
     }
-
     function findHandlers(element, event, fn, selector) {
       event = parse(event);
       if (event.ns) var matcher = matcherFor(event.ns);
@@ -2153,7 +1975,6 @@
         return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || zid(handler.fn) === zid(fn)) && (!selector || handler.sel == selector);
       });
     }
-
     function parse(event) {
       var parts = ('' + event).split('.');
       return {
@@ -2161,35 +1982,30 @@
         ns: parts.slice(1).sort().join(' ')
       };
     }
-
     function matcherFor(ns) {
       return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)');
     }
-
     function eventCapture(handler, captureSetting) {
       return handler.del && !focusinSupported && handler.e in focus || !!captureSetting;
     }
-
     function realEvent(type) {
       return hover[type] || focusinSupported && focus[type] || type;
     }
-
     function add(element, events, fn, data, selector, delegator, capture) {
       var id = zid(element),
-          set = handlers[id] || (handlers[id] = []);
+        set = handlers[id] || (handlers[id] = []);
       events.split(/\s/).forEach(function (event) {
         if (event == 'ready') return $(document).ready(fn);
         var handler = parse(event);
         handler.fn = fn;
-        handler.sel = selector; // emulate mouseenter, mouseleave
-
+        handler.sel = selector;
+        // emulate mouseenter, mouseleave
         if (handler.e in hover) fn = function (e) {
           var related = e.relatedTarget;
           if (!related || related !== this && !$.contains(this, related)) return handler.fn.apply(this, arguments);
         };
         handler.del = delegator;
         var callback = delegator || fn;
-
         handler.proxy = function (e) {
           e = compatible(e);
           if (e.isImmediatePropagationStopped()) return;
@@ -2198,13 +2014,11 @@
           if (result === false) e.preventDefault(), e.stopPropagation();
           return result;
         };
-
         handler.i = set.length;
         set.push(handler);
         if ('addEventListener' in element) element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
       });
     }
-
     function remove(element, events, fn, selector, capture) {
       var id = zid(element);
       (events || '').split(/\s/).forEach(function (event) {
@@ -2214,20 +2028,16 @@
         });
       });
     }
-
     $.event = {
       add: add,
       remove: remove
     };
-
     $.proxy = function (fn, context) {
       var args = 2 in arguments && slice.call(arguments, 2);
-
       if (isFunction(fn)) {
         var proxyFn = function () {
           return fn.apply(context, args ? args.concat(slice.call(arguments)) : arguments);
         };
-
         proxyFn._zid = zid(fn);
         return proxyFn;
       } else if (isString(context)) {
@@ -2241,93 +2051,75 @@
         throw new TypeError("expected function");
       }
     };
-
     $.fn.bind = function (event, data, callback) {
       return this.on(event, data, callback);
     };
-
     $.fn.unbind = function (event, callback) {
       return this.off(event, callback);
     };
-
     $.fn.one = function (event, selector, data, callback) {
       return this.on(event, selector, data, callback, 1);
     };
-
     var returnTrue = function () {
-      return true;
-    },
-        returnFalse = function () {
-      return false;
-    },
-        ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
-        eventMethods = {
-      preventDefault: 'isDefaultPrevented',
-      stopImmediatePropagation: 'isImmediatePropagationStopped',
-      stopPropagation: 'isPropagationStopped'
-    };
-
+        return true;
+      },
+      returnFalse = function () {
+        return false;
+      },
+      ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
+      eventMethods = {
+        preventDefault: 'isDefaultPrevented',
+        stopImmediatePropagation: 'isImmediatePropagationStopped',
+        stopPropagation: 'isPropagationStopped'
+      };
     function compatible(event, source) {
       if (source || !event.isDefaultPrevented) {
         source || (source = event);
         $.each(eventMethods, function (name, predicate) {
           var sourceMethod = source[name];
-
           event[name] = function () {
             this[predicate] = returnTrue;
             return sourceMethod && sourceMethod.apply(source, arguments);
           };
-
           event[predicate] = returnFalse;
         });
         event.timeStamp || (event.timeStamp = Date.now());
         if (source.defaultPrevented !== undefined$1 ? source.defaultPrevented : 'returnValue' in source ? source.returnValue === false : source.getPreventDefault && source.getPreventDefault()) event.isDefaultPrevented = returnTrue;
       }
-
       return event;
     }
-
     function createProxy(event) {
       var key,
-          proxy = {
-        originalEvent: event
-      };
-
+        proxy = {
+          originalEvent: event
+        };
       for (key in event) if (!ignoreProperties.test(key) && event[key] !== undefined$1) proxy[key] = event[key];
-
       return compatible(proxy, event);
     }
-
     $.fn.delegate = function (selector, event, callback) {
       return this.on(event, selector, callback);
     };
-
     $.fn.undelegate = function (selector, event, callback) {
       return this.off(event, selector, callback);
     };
-
     $.fn.live = function (event, callback) {
       $(document.body).delegate(this.selector, event, callback);
       return this;
     };
-
     $.fn.die = function (event, callback) {
       $(document.body).undelegate(this.selector, event, callback);
       return this;
     };
-
     $.fn.on = function (event, selector, data, callback, one) {
       var autoRemove,
-          delegator,
-          $this = this;
-
+        delegator,
+        $this = this;
       if (event && !isString(event)) {
         $.each(event, function (type, fn) {
           $this.on(type, selector, data, fn, one);
         });
         return $this;
       }
-
       if (!isString(selector) && !isFunction(callback) && callback !== false) callback = data, data = selector, selector = undefined$1;
       if (callback === undefined$1 || data === false) callback = data, data = undefined$1;
       if (callback === false) callback = returnFalse;
@@ -2338,8 +2130,7 @@
         };
         if (selector) delegator = function (e) {
           var evt,
-              match = $(e.target).closest(selector, element).get(0);
-
+            match = $(e.target).closest(selector, element).get(0);
           if (match && match !== element) {
             evt = $.extend(createProxy(e), {
               currentTarget: match,
@@ -2351,36 +2142,33 @@
         add(element, event, callback, data, selector, delegator || autoRemove);
       });
     };
-
     $.fn.off = function (event, selector, callback) {
       var $this = this;
-
       if (event && !isString(event)) {
         $.each(event, function (type, fn) {
           $this.off(type, selector, fn);
         });
         return $this;
       }
-
       if (!isString(selector) && !isFunction(callback) && callback !== false) callback = selector, selector = undefined$1;
       if (callback === false) callback = returnFalse;
       return $this.each(function () {
         remove(this, event, callback, selector);
       });
     };
-
     $.fn.trigger = function (event, args) {
       event = isString(event) || $.isPlainObject(event) ? $.Event(event) : compatible(event);
       event._args = args;
       return this.each(function () {
         // handle focus(), blur() by calling them directly
-        if (event.type in focus && typeof this[event.type] == "function") this[event.type](); // items in the collection might not be DOM elements
+        if (event.type in focus && typeof this[event.type] == "function") this[event.type]();
+        // items in the collection might not be DOM elements
         else if ('dispatchEvent' in this) this.dispatchEvent(event);else $(this).triggerHandler(event, args);
       });
-    }; // triggers event handlers on current element just as if an event occurred,
+    };
+
+    // triggers event handlers on current element just as if an event occurred,
     // doesn't trigger an actual event, doesn't bubble
-
-
     $.fn.triggerHandler = function (event, args) {
       var e, result;
       this.each(function (i, element) {
@@ -2393,25 +2181,24 @@
         });
       });
       return result;
-    } // shortcut methods for `.bind(event, fn)` for each event type
-    ;
+    }
 
+    // shortcut methods for `.bind(event, fn)` for each event type
+    ;
     ('focusin focusout focus blur load resize scroll unload click dblclick ' + 'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave ' + 'change select keydown keypress keyup error').split(' ').forEach(function (event) {
       $.fn[event] = function (callback) {
         return 0 in arguments ? this.bind(event, callback) : this.trigger(event);
       };
     });
-
     $.Event = function (type, props) {
       if (!isString(type)) props = type, type = props.type;
       var event = document.createEvent(specialEvents[type] || 'Events'),
-          bubbles = true;
+        bubbles = true;
       if (props) for (var name in props) name == 'bubbles' ? bubbles = !!props[name] : event[name] = props[name];
       event.initEvent(type, bubbles, true);
       return compatible(event);
     };
   })(Zepto);
-
   (function () {
     // getComputedStyle shouldn't freak out when called
     // without a valid element as argument
@@ -2419,7 +2206,6 @@
       getComputedStyle(undefined);
     } catch (e) {
       var nativeGetComputedStyle = getComputedStyle;
-
       window.getComputedStyle = function (element, pseudoElement) {
         try {
           return nativeGetComputedStyle(element, pseudoElement);
@@ -2429,16 +2215,16 @@
       };
     }
   })();
-
   (function ($) {
     var zepto = $.zepto,
-        oldQsa = zepto.qsa,
-        oldMatches = zepto.matches;
-
+      oldQsa = zepto.qsa,
+      oldMatches = zepto.matches;
     function visible(elem) {
       elem = $(elem);
       return !!(elem.width() || elem.height()) && elem.css("display") !== "none";
-    } // Implements a subset from:
+    }
+
+    // Implements a subset from:
     // http://api.jquery.com/category/selectors/jquery-selector-extensions/
     //
     // Each filter function receives the current index, all nodes in the
@@ -2449,8 +2235,6 @@
     // Complex selectors are not supported:
     //   li:has(label:contains("foo")) + li:has(label:contains("bar"))
     //   ul.inner:first > li
-
-
     var filters = $.expr[':'] = {
       visible: function () {
         if (visible(this)) return this;
@@ -2484,34 +2268,30 @@
       }
     };
     var filterRe = new RegExp('(.*):(\\w+)(?:\\(([^)]+)\\))?$\\s*'),
-        childRe = /^\s*>/,
-        classTag = 'Zepto' + +new Date();
-
+      childRe = /^\s*>/,
+      classTag = 'Zepto' + +new Date();
     function process(sel, fn) {
       // quote the hash in `a[href^=#]` expression
       sel = sel.replace(/=#\]/g, '="#"]');
       var filter,
-          arg,
-          match = filterRe.exec(sel);
-
+        arg,
+        match = filterRe.exec(sel);
       if (match && match[2] in filters) {
         filter = filters[match[2]], arg = match[3];
         sel = match[1];
-
         if (arg) {
           var num = Number(arg);
           if (isNaN(num)) arg = arg.replace(/^["']|["']$/g, '');else arg = num;
         }
       }
-
       return fn(sel, filter, arg);
     }
-
     zepto.qsa = function (node, selector) {
       return process(selector, function (sel, filter, arg) {
         try {
           var taggedParent;
-          if (!sel && filter) sel = '*';else if (childRe.test(sel)) // support "> *" child queries by tagging the parent node with a
+          if (!sel && filter) sel = '*';else if (childRe.test(sel))
+            // support "> *" child queries by tagging the parent node with a
             // unique class and prepending that classname onto the selector
             taggedParent = $(node).addClass(classTag), sel = '.' + classTag + ' ' + sel;
           var nodes = oldQsa(node, sel);
@@ -2521,24 +2301,22 @@
         } finally {
           if (taggedParent) taggedParent.removeClass(classTag);
         }
-
         return !filter ? nodes : zepto.uniq($.map(nodes, function (n, i) {
           return filter.call(n, i, nodes, arg);
         }));
       });
     };
-
     zepto.matches = function (node, selector) {
       return process(selector, function (sel, filter, arg) {
         return (!sel || oldMatches(node, sel)) && (!filter || filter.call(node, null, arg) === node);
       });
     };
   })(Zepto);
-
   var zepto = Zepto;
 
   /* eslint-disable no-useless-escape */
   // The order of the following arrays is important, be careful if you change it.
+
   var BROWSER_DATA = [{
     name: 'Chromium',
     group: 'Chrome',
@@ -2604,6 +2382,7 @@
 
   /* eslint-disable no-useless-escape */
   // The order of the following arrays is important, be careful if you change it.
+
   var OS_DATA = [{
     name: 'Windows 2000',
     group: 'Windows',
@@ -2776,7 +2555,6 @@
   }];
 
   var Browser = {};
-
   var hasLocalstorage = function hasLocalstorage() {
     try {
       localStorage.setItem('clappr', 'clappr');
@@ -2786,7 +2564,6 @@
       return false;
     }
   };
-
   var hasFlash = function hasFlash() {
     try {
       var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
@@ -2795,11 +2572,9 @@
       return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
     }
   };
-
   var getBrowserInfo = function getBrowserInfo(ua) {
     var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
-        extra;
-
+      extra;
     if (/trident/i.test(parts[1])) {
       extra = /\brv[ :]+(\d+)/g.exec(ua) || [];
       return {
@@ -2821,31 +2596,31 @@
       parts.splice(1, 1, 'Android WebView');
       parts.splice(2, 1, extra[1]);
     }
-
     parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?'];
     return {
       name: parts[0],
       version: parseInt(parts[1])
     };
-  }; //  Get browser data
+  };
 
+  //  Get browser data
   var getBrowserData = function getBrowserData() {
     var browserObject = {};
-    var userAgent = Browser.userAgent.toLowerCase(); // Check browser type
+    var userAgent = Browser.userAgent.toLowerCase();
 
+    // Check browser type
     var _iterator = _createForOfIteratorHelper(BROWSER_DATA),
-        _step;
-
+      _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var browser = _step.value;
         var browserRegExp = new RegExp(browser.identifier.toLowerCase());
         var browserRegExpResult = browserRegExp.exec(userAgent);
-
         if (browserRegExpResult != null && browserRegExpResult[1]) {
           browserObject.name = browser.name;
-          browserObject.group = browser.group; // Check version
+          browserObject.group = browser.group;
 
+          // Check version
           if (browser.versionIdentifier) {
             var versionRegExp = new RegExp(browser.versionIdentifier.toLowerCase());
             var versionRegExpResult = versionRegExp.exec(userAgent);
@@ -2853,7 +2628,6 @@
           } else {
             setBrowserVersion(browserRegExpResult[1], browserObject);
           }
-
           break;
         }
       }
@@ -2862,47 +2636,52 @@
     } finally {
       _iterator.f();
     }
-
     return browserObject;
-  }; // Set browser version
+  };
 
+  // Set browser version
   var setBrowserVersion = function setBrowserVersion(version, browserObject) {
     var splitVersion = version.split('.', 2);
-    browserObject.fullVersion = version; // Major version
+    browserObject.fullVersion = version;
 
-    if (splitVersion[0]) browserObject.majorVersion = parseInt(splitVersion[0]); // Minor version
+    // Major version
+    if (splitVersion[0]) browserObject.majorVersion = parseInt(splitVersion[0]);
 
+    // Minor version
     if (splitVersion[1]) browserObject.minorVersion = parseInt(splitVersion[1]);
-  }; //  Get OS data
+  };
 
-
+  //  Get OS data
   var getOsData = function getOsData() {
     var osObject = {};
-    var userAgent = Browser.userAgent.toLowerCase(); // Check browser type
+    var userAgent = Browser.userAgent.toLowerCase();
 
+    // Check browser type
     var _iterator2 = _createForOfIteratorHelper(OS_DATA),
-        _step2;
-
+      _step2;
     try {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
         var os = _step2.value;
         var osRegExp = new RegExp(os.identifier.toLowerCase());
         var osRegExpResult = osRegExp.exec(userAgent);
-
         if (osRegExpResult != null) {
           osObject.name = os.name;
-          osObject.group = os.group; // Version defined
+          osObject.group = os.group;
 
+          // Version defined
           if (os.version) {
-            setOsVersion(os.version, os.versionSeparator ? os.versionSeparator : '.', osObject); // Version detected
+            setOsVersion(os.version, os.versionSeparator ? os.versionSeparator : '.', osObject);
+
+            // Version detected
           } else if (osRegExpResult[1]) {
-            setOsVersion(osRegExpResult[1], os.versionSeparator ? os.versionSeparator : '.', osObject); // Version identifier
+            setOsVersion(osRegExpResult[1], os.versionSeparator ? os.versionSeparator : '.', osObject);
+
+            // Version identifier
           } else if (os.versionIdentifier) {
             var versionRegExp = new RegExp(os.versionIdentifier.toLowerCase());
             var versionRegExpResult = versionRegExp.exec(userAgent);
             if (versionRegExpResult != null && versionRegExpResult[1]) setOsVersion(versionRegExpResult[1], os.versionSeparator ? os.versionSeparator : '.', osObject);
           }
-
           break;
         }
       }
@@ -2911,42 +2690,43 @@
     } finally {
       _iterator2.f();
     }
-
     return osObject;
-  }; // Set OS version
+  };
 
+  // Set OS version
   var setOsVersion = function setOsVersion(version, separator, osObject) {
     var finalSeparator = separator.substr(0, 1) == '[' ? new RegExp(separator, 'g') : separator;
     var splitVersion = version.split(finalSeparator, 2);
     if (separator != '.') version = version.replace(new RegExp(separator, 'g'), '.');
-    osObject.fullVersion = version; // Major version
+    osObject.fullVersion = version;
 
-    if (splitVersion && splitVersion[0]) osObject.majorVersion = parseInt(splitVersion[0]); // Minor version
+    // Major version
+    if (splitVersion && splitVersion[0]) osObject.majorVersion = parseInt(splitVersion[0]);
 
+    // Minor version
     if (splitVersion && splitVersion[1]) osObject.minorVersion = parseInt(splitVersion[1]);
-  }; // Set viewport size
+  };
 
-
+  // Set viewport size
   var getViewportSize = function getViewportSize() {
     var viewportObject = {};
     viewportObject.width = zepto(window).width();
     viewportObject.height = zepto(window).height();
     return viewportObject;
-  }; // Set viewport orientation
+  };
 
+  // Set viewport orientation
   var setViewportOrientation = function setViewportOrientation() {
     switch (window.orientation) {
       case -90:
       case 90:
         Browser.viewport.orientation = 'landscape';
         break;
-
       default:
         Browser.viewport.orientation = 'portrait';
         break;
     }
   };
-
   var getDevice = function getDevice(ua) {
     var platformRegExp = /\((iP(?:hone|ad|od))?(?:[^;]*; ){0,2}([^)]+(?=\)))/;
     var matches = platformRegExp.exec(ua);
@@ -2954,10 +2734,10 @@
     return device;
   };
   var browserInfo = getBrowserInfo(navigator.userAgent);
-  Browser.isEdge = /edge/i.test(navigator.userAgent);
-  Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge;
-  Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge;
-  Browser.isFirefox = /firefox/i.test(navigator.userAgent);
+  Browser.isEdge = /Edg|EdgiOS|EdgA/i.test(navigator.userAgent);
+  Browser.isChrome = /Chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge;
+  Browser.isSafari = /Safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge;
+  Browser.isFirefox = /Firefox/i.test(navigator.userAgent);
   Browser.isLegacyIE = !!window.ActiveXObject;
   Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
   Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent);
@@ -2971,23 +2751,26 @@
   Browser.isPS4 = /PlayStation 4/i.test(navigator.userAgent);
   Browser.hasLocalstorage = hasLocalstorage();
   Browser.hasFlash = hasFlash();
+
   /**
   * @deprecated
   * This parameter currently exists for retrocompatibility reasons.
   * Use Browser.data.name instead.
   */
-
   Browser.name = browserInfo.name;
+
   /**
   * @deprecated
   * This parameter currently exists for retrocompatibility reasons.
   * Use Browser.data.fullVersion instead.
   */
-
   Browser.version = browserInfo.version;
   Browser.userAgent = navigator.userAgent;
   Browser.data = getBrowserData();
   Browser.os = getOsData();
+  Browser.isWindows = /^Windows$/i.test(Browser.os.group);
+  Browser.isMacOS = /^Mac OS$/i.test(Browser.os.group);
+  Browser.isLinux = /^Linux$/i.test(Browser.os.group);
   Browser.viewport = getViewportSize();
   Browser.device = getDevice(Browser.userAgent);
   typeof window.orientation !== 'undefined' && setViewportOrientation();
@@ -3005,32 +2788,24 @@
         propDescriptor ? Object.defineProperty(obj, prop, propDescriptor) : obj[prop] = source[prop];
       }
     }
-
     return obj;
   }
   function extend$1(parent, properties) {
     var Surrogate = /*#__PURE__*/function (_parent) {
       _inherits$1(Surrogate, _parent);
-
       var _super = _createSuper$1(Surrogate);
-
       function Surrogate() {
         var _this;
-
         _classCallCheck$1(this, Surrogate);
-
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
         }
-
         _this = _super.call.apply(_super, [this].concat(args));
         if (properties.initialize) properties.initialize.apply(_assertThisInitialized$1(_this), args);
         return _this;
       }
-
-      return Surrogate;
+      return _createClass$1(Surrogate);
     }(parent);
-
     assign(Surrogate.prototype, properties);
     return Surrogate;
   }
@@ -3045,12 +2820,10 @@
     var hours = time % 24;
     var days = parseInt(time / 24);
     var out = '';
-
     if (days && days > 0) {
       out += days + ':';
       if (hours < 1) out += '00:';
     }
-
     if (hours && hours > 0 || paddedHours) out += ('0' + hours).slice(-2) + ':';
     out += ('0' + minutes).slice(-2) + ':';
     out += ('0' + seconds).slice(-2);
@@ -3088,7 +2861,6 @@
     function Config() {
       _classCallCheck$1(this, Config);
     }
-
     _createClass$1(Config, null, [{
       key: "_defaultConfig",
       value: function _defaultConfig() {
@@ -3132,60 +2904,50 @@
         }
       }
     }]);
-
     return Config;
   }();
   var QueryString = /*#__PURE__*/function () {
     function QueryString() {
       _classCallCheck$1(this, QueryString);
     }
-
     _createClass$1(QueryString, null, [{
-      key: "parse",
-      value: function parse(paramsString) {
-        var match;
-
-        var pl = /\+/g,
-            // Regex for replacing addition symbol with a space
-        search = /([^&=]+)=?([^&]*)/g,
-            decode = function decode(s) {
-          return decodeURIComponent(s.replace(pl, ' '));
-        },
-            params = {};
-
-        while (match = search.exec(paramsString)) {
-          // eslint-disable-line no-cond-assign
-          params[decode(match[1]).toLowerCase()] = decode(match[2]);
-        }
-
-        return params;
-      }
-    }, {
       key: "params",
       get: function get() {
         var query = window.location.search.substring(1);
-
         if (query !== this.query) {
           this._urlParams = this.parse(query);
           this.query = query;
         }
-
         return this._urlParams;
       }
     }, {
       key: "hashParams",
       get: function get() {
         var hash = window.location.hash.substring(1);
-
         if (hash !== this.hash) {
           this._hashParams = this.parse(hash);
           this.hash = hash;
         }
-
         return this._hashParams;
       }
+    }, {
+      key: "parse",
+      value: function parse(paramsString) {
+        var match;
+        var pl = /\+/g,
+          // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function decode(s) {
+            return decodeURIComponent(s.replace(pl, ' '));
+          },
+          params = {};
+        while (match = search.exec(paramsString)) {
+          // eslint-disable-line no-cond-assign
+          params[decode(match[1]).toLowerCase()] = decode(match[2]);
+        }
+        return params;
+      }
     }]);
-
     return QueryString;
   }();
   function seekStringToSeconds() {
@@ -3193,7 +2955,6 @@
     var seconds = 0;
     var seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || '';
     var parts = seekString.match(/[0-9]+[hms]+/g) || [];
-
     if (parts.length > 0) {
       var factor = {
         'h': 3600,
@@ -3210,7 +2971,6 @@
     } else if (seekString) {
       seconds = parseInt(seekString, 10);
     }
-
     return seconds;
   }
   function uniqueId(prefix) {
@@ -3231,20 +2991,23 @@
   function now() {
     if (window.performance && window.performance.now) return performance.now();
     return Date.now();
-  } // remove the item from the array if it exists in the array
+  }
 
+  // remove the item from the array if it exists in the array
   function removeArrayItem$1(arr, item) {
     var i = arr.indexOf(item);
     if (i >= 0) arr.splice(i, 1);
-  } // find an item regardless of its letter case
+  }
 
+  // find an item regardless of its letter case
   function listContainsIgnoreCase(item, items) {
     if (item === undefined || items === undefined) return false;
     return items.find(function (itemEach) {
       return item.toLowerCase() === itemEach.toLowerCase();
     }) !== undefined;
-  } // https://github.com/video-dev/can-autoplay
+  }
 
+  // https://github.com/video-dev/can-autoplay
   function canAutoPlayMedia(cb, options) {
     options = Object.assign({
       inline: false,
@@ -3263,13 +3026,11 @@
     var timeoutId = setTimeout(function () {
       setResult(false, new Error("Timeout ".concat(options.timeout, " ms has been reached")));
     }, options.timeout);
-
     var setResult = function setResult(result) {
       var error = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       clearTimeout(timeoutId);
       cb(result, error);
     };
-
     if (promise !== undefined) {
       promise.then(function () {
         return setResult(true);
@@ -3279,13 +3040,13 @@
     } else {
       setResult(true);
     }
-  } // Simple element factory with video recycle feature.
+  }
 
+  // Simple element factory with video recycle feature.
   var DomRecycler = /*#__PURE__*/function () {
     function DomRecycler() {
       _classCallCheck$1(this, DomRecycler);
     }
-
     _createClass$1(DomRecycler, null, [{
       key: "configure",
       value: function configure(options) {
@@ -3308,7 +3069,6 @@
         videoStack.push(el);
       }
     }]);
-
     return DomRecycler;
   }();
   DomRecycler.options = {
@@ -3317,13 +3077,10 @@
   var DoubleEventHandler = /*#__PURE__*/function () {
     function DoubleEventHandler() {
       var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
-
       _classCallCheck$1(this, DoubleEventHandler);
-
       this.delay = delay;
       this.lastTime = 0;
     }
-
     _createClass$1(DoubleEventHandler, [{
       key: "handle",
       value: function handle(event, cb) {
@@ -3331,16 +3088,13 @@
         // Based on http://jsfiddle.net/brettwp/J4djY/
         var currentTime = new Date().getTime();
         var diffTime = currentTime - this.lastTime;
-
         if (diffTime < this.delay && diffTime > 0) {
           cb();
           prevented && event.preventDefault();
         }
-
         this.lastTime = currentTime;
       }
     }]);
-
     return DoubleEventHandler;
   }();
   var Utils = {
@@ -3368,6 +3122,7 @@
 
   // Use of this source code is governed by a BSD-style
   // license that can be found in the LICENSE file.
+
   var BOLD = 'font-weight: bold; font-size: 13px;';
   var INFO = 'color: #006600;' + BOLD;
   var DEBUG = 'color: #0000ff;' + BOLD;
@@ -3380,8 +3135,16 @@
   var LEVEL_DISABLED = LEVEL_ERROR;
   var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
   var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
-
   var Log = /*#__PURE__*/function () {
+    function Log() {
+      var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
+      var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
+      _classCallCheck$1(this, Log);
+      this.EXCLUDE_LIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+      this.level = level;
+      this.previousLevel = this.level;
+      this.offLevel = offLevel;
+    }
     _createClass$1(Log, [{
       key: "level",
       get: function get() {
@@ -3390,21 +3153,7 @@
       set: function set(newLevel) {
         this._level = newLevel;
       }
-    }]);
-
-    function Log() {
-      var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
-      var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
-
-      _classCallCheck$1(this, Log);
-
-      this.EXCLUDE_LIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
-      this.level = level;
-      this.previousLevel = this.level;
-      this.offLevel = offLevel;
-    }
-
-    _createClass$1(Log, [{
+    }, {
       key: "debug",
       value: function debug(klass) {
         this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
@@ -3432,9 +3181,8 @@
         } else {
           this.previousLevel = this.level;
           this.level = this.offLevel;
-        } // handle instances where console.log is unavailable
-
-
+        }
+        // handle instances where console.log is unavailable
         window.console && window.console.log && window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
       }
     }, {
@@ -3442,88 +3190,73 @@
       value: function log(klass, level, message) {
         if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return;
         if (level < this.level) return;
-
         if (!message) {
           message = klass;
           klass = null;
         }
-
         var color = COLORS[level];
         var klassDescription = '';
         if (klass) klassDescription = '[' + klass + ']';
         window.console && window.console.log && window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
       }
     }]);
-
     return Log;
   }();
   Log.LEVEL_DEBUG = LEVEL_DEBUG;
   Log.LEVEL_INFO = LEVEL_INFO;
   Log.LEVEL_WARN = LEVEL_WARN;
   Log.LEVEL_ERROR = LEVEL_ERROR;
-
   Log.getInstance = function () {
     if (this._instance === undefined) this._instance = new this();
     return this._instance;
   };
-
   Log.setLevel = function (level) {
     this.getInstance().level = level;
   };
-
   Log.debug = function () {
     this.getInstance().debug.apply(this.getInstance(), arguments);
   };
-
   Log.info = function () {
     this.getInstance().info.apply(this.getInstance(), arguments);
   };
-
   Log.warn = function () {
     this.getInstance().warn.apply(this.getInstance(), arguments);
   };
-
   Log.error = function () {
     this.getInstance().error.apply(this.getInstance(), arguments);
   };
 
   var slice = Array.prototype.slice;
   var eventSplitter = /\s+/;
-
   var eventsApi = function eventsApi(obj, action, name, rest) {
-    if (!name) return true; // Handle event maps.
+    if (!name) return true;
 
+    // Handle event maps.
     if (_typeof(name) === 'object') {
       for (var key in name) {
         obj[action].apply(obj, [key, name[key]].concat(rest));
       }
-
-      return false;
-    } // Handle space separated event names.
-
-
-    if (eventSplitter.test(name)) {
-      var names = name.split(eventSplitter);
-
-      for (var i = 0, l = names.length; i < l; i++) {
-        obj[action].apply(obj, [names[i]].concat(rest));
-      }
-
       return false;
     }
 
+    // Handle space separated event names.
+    if (eventSplitter.test(name)) {
+      var names = name.split(eventSplitter);
+      for (var i = 0, l = names.length; i < l; i++) {
+        obj[action].apply(obj, [names[i]].concat(rest));
+      }
+      return false;
+    }
     return true;
   };
-
   var triggerEvents = function triggerEvents(events, args, klass, name) {
     var ev,
-        i = -1;
+      i = -1;
     var l = events.length,
-        a1 = args[0],
-        a2 = args[1],
-        a3 = args[2];
+      a1 = args[0],
+      a2 = args[1],
+      a3 = args[2];
     run();
-
     function run() {
       try {
         switch (args.length) {
@@ -3532,35 +3265,26 @@
             while (++i < l) {
               (ev = events[i]).callback.call(ev.ctx);
             }
-
             return;
-
           case 1:
             while (++i < l) {
               (ev = events[i]).callback.call(ev.ctx, a1);
             }
-
             return;
-
           case 2:
             while (++i < l) {
               (ev = events[i]).callback.call(ev.ctx, a1, a2);
             }
-
             return;
-
           case 3:
             while (++i < l) {
               (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
             }
-
             return;
-
           default:
             while (++i < l) {
               (ev = events[i]).callback.apply(ev.ctx, args);
             }
-
             return;
         }
       } catch (exception) {
@@ -3569,21 +3293,19 @@
       }
     }
   };
+
   /**
    * @class Events
    * @constructor
    * @module base
    */
-
-
   var Events = /*#__PURE__*/function () {
     function Events() {
       _classCallCheck$1(this, Events);
     }
-
     _createClass$1(Events, [{
       key: "on",
-
+      value:
       /**
        * listen to an event indefinitely, if you want to stop you need to call `off`
        * @method on
@@ -3591,7 +3313,7 @@
        * @param {Function} callback
        * @param {Object} context
        */
-      value: function on(name, callback, context) {
+      function on(name, callback, context) {
         if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
         this._events || (this._events = {});
         var events = this._events[name] || (this._events[name] = []);
@@ -3602,6 +3324,7 @@
         });
         return this;
       }
+
       /**
        * listen to an event only once
        * @method once
@@ -3609,27 +3332,22 @@
        * @param {Function} callback
        * @param {Object} context
        */
-
     }, {
       key: "once",
       value: function once(name, callback, context) {
         var _this = this;
-
         var _once;
-
         if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
-
         var off = function off() {
           return _this.off(name, _once);
         };
-
         _once = function once() {
           off();
           callback.apply(this, arguments);
         };
-
         return this.on(name, _once, context);
       }
+
       /**
        * stop listening to an event
        * @method off
@@ -3637,46 +3355,39 @@
        * @param {Function} callback
        * @param {Object} context
        */
-
     }, {
       key: "off",
       value: function off(name, callback, context) {
         var retain, ev, events, names, i, l, j, k;
         if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
-
         if (!name && !callback && !context) {
           this._events = void 0;
           return this;
         }
-
-        names = name ? [name] : Object.keys(this._events); // jshint maxdepth:5
-
+        names = name ? [name] : Object.keys(this._events);
+        // jshint maxdepth:5
         for (i = 0, l = names.length; i < l; i++) {
           name = names[i];
           events = this._events[name];
-
           if (events) {
             this._events[name] = retain = [];
-
             if (callback || context) {
               for (j = 0, k = events.length; j < k; j++) {
                 ev = events[j];
                 if (callback && callback !== ev.callback && callback !== ev.callback._callback || context && context !== ev.context) retain.push(ev);
               }
             }
-
             if (!retain.length) delete this._events[name];
           }
         }
-
         return this;
       }
+
       /**
        * triggers an event given its `name`
        * @method trigger
        * @param {String} name
        */
-
     }, {
       key: "trigger",
       value: function trigger(name) {
@@ -3691,6 +3402,7 @@
         if (allEvents) triggerEvents(allEvents, arguments, klass, name);
         return this;
       }
+
       /**
        * stop listening an event for a given object
        * @method stopListening
@@ -3698,7 +3410,6 @@
        * @param {String} name
        * @param {Function} callback
        */
-
     }, {
       key: "stopListening",
       value: function stopListening(obj, name, callback) {
@@ -3707,13 +3418,11 @@
         var remove = !name && !callback;
         if (!callback && _typeof(name) === 'object') callback = this;
         if (obj) (listeningTo = {})[obj._listenId] = obj;
-
         for (var id in listeningTo) {
           obj = listeningTo[id];
           obj.off(name, callback, this);
           if (remove || Object.keys(obj._events).length === 0) delete this._listeningTo[id];
         }
-
         return this;
       }
     }], [{
@@ -3721,7 +3430,6 @@
       value: function register(eventName) {
         Events.Custom || (Events.Custom = {});
         var property = typeof eventName === 'string' && eventName.toUpperCase().trim();
-
         if (property && !Events.Custom[property]) {
           Events.Custom[property] = property.toLowerCase().split('_').map(function (value, index) {
             return index === 0 ? value : value = value[0].toUpperCase() + value.slice(1);
@@ -3737,7 +3445,6 @@
         });
       }
     }]);
-
     return Events;
   }();
   var listenMethods = {
@@ -3753,14 +3460,14 @@
       obj[listenMethods[method]](name, callback, this);
       return this;
     };
-  }); // PLAYER EVENTS
+  });
 
+  // PLAYER EVENTS
   /**
    * Fired when the player is ready on startup
    *
    * @event PLAYER_READY
    */
-
   Events.PLAYER_READY = 'ready';
   /**
    * Fired when player resizes
@@ -3768,7 +3475,6 @@
    * @event PLAYER_RESIZE
    * @param {Object} currentSize an object with the current size
    */
-
   Events.PLAYER_RESIZE = 'resize';
   /**
    * Fired when player changes its fullscreen state
@@ -3776,35 +3482,30 @@
    * @event PLAYER_FULLSCREEN
    * @param {Boolean} whether or not the player is on fullscreen mode
    */
-
   Events.PLAYER_FULLSCREEN = 'fullscreen';
   /**
    * Fired when player starts to play
    *
    * @event PLAYER_PLAY
    */
-
   Events.PLAYER_PLAY = 'play';
   /**
    * Fired when player pauses
    *
    * @event PLAYER_PAUSE
    */
-
   Events.PLAYER_PAUSE = 'pause';
   /**
    * Fired when player stops
    *
    * @event PLAYER_STOP
    */
-
   Events.PLAYER_STOP = 'stop';
   /**
    * Fired when player ends the video
    *
    * @event PLAYER_ENDED
    */
-
   Events.PLAYER_ENDED = 'ended';
   /**
    * Fired when player seeks the video
@@ -3812,7 +3513,6 @@
    * @event PLAYER_SEEK
    * @param {Number} time the current time in seconds
    */
-
   Events.PLAYER_SEEK = 'seek';
   /**
    * Fired when player receives an error
@@ -3820,7 +3520,6 @@
    * @event PLAYER_ERROR
    * @param {Object} error the error
    */
-
   Events.PLAYER_ERROR = 'playererror';
   /**
    * Fired when there is an error
@@ -3841,7 +3540,6 @@
    * @param {String} [options.raw]
    * raw error: the initial error received
    */
-
   Events.ERROR = 'error';
   /**
    * Fired when the time is updated on player
@@ -3854,7 +3552,6 @@
    * @param {Number} [progress.total]
    * total time (in seconds)
    */
-
   Events.PLAYER_TIMEUPDATE = 'timeupdate';
   /**
    * Fired when player updates its volume
@@ -3862,16 +3559,16 @@
    * @event PLAYER_VOLUMEUPDATE
    * @param {Number} volume the current volume
    */
-
   Events.PLAYER_VOLUMEUPDATE = 'volumeupdate';
+
   /**
    * Fired when subtitle is available
    *
    * @event PLAYER_SUBTITLE_AVAILABLE
    */
+  Events.PLAYER_SUBTITLE_AVAILABLE = 'subtitleavailable';
 
-  Events.PLAYER_SUBTITLE_AVAILABLE = 'subtitleavailable'; // Playback Events
-
+  // Playback Events
   /**
    * Fired when the playback is downloading the media
    *
@@ -3887,7 +3584,6 @@
    * @param buffered {Array}
    * array of buffered segments ({start, end}). [Only for supported playbacks]
    */
-
   Events.PLAYBACK_PROGRESS = 'playback:progress';
   /**
    * Fired when the time is updated on playback
@@ -3900,14 +3596,12 @@
    * @param {Number} [progress.total]
    * total time (in seconds)
    */
-
   Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
   /**
    * Fired when playback is ready
    *
    * @event PLAYBACK_READY
    */
-
   Events.PLAYBACK_READY = 'playback:ready';
   /**
    * Fired when the playback starts having to buffer because
@@ -3918,7 +3612,6 @@
    *
    * @event PLAYBACK_BUFFERING
    */
-
   Events.PLAYBACK_BUFFERING = 'playback:buffering';
   /**
    * Fired when the playback has enough in the buffer to be
@@ -3930,14 +3623,12 @@
    *
    * @event PLAYBACK_BUFFERFULL
    */
-
   Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
   /**
    * Fired when playback changes any settings (volume, seek and etc)
    *
    * @event PLAYBACK_SETTINGSUPDATE
    */
-
   Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
   /**
    * Fired when playback loaded its metadata
@@ -3950,7 +3641,6 @@
    * @param {Object} [metadata.data]
    * extra meta data
    */
-
   Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
   /**
    * Fired when playback updates its video quality
@@ -3959,7 +3649,6 @@
    * @param {Boolean} isHD
    * true when is on HD, false otherwise
    */
-
   Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
   /**
    * Fired when playback updates its bitrate
@@ -3976,7 +3665,6 @@
    * @param {Number} [bitrate.level]
    * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
    */
-
   Events.PLAYBACK_BITRATE = 'playback:bitrate';
   /**
    * Fired when the playback has its levels
@@ -3987,7 +3675,6 @@
    * @param {Number} initial
    * the initial level otherwise -1 (AUTO)
    */
-
   Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available';
   /**
    * Fired when the playback starts to switch level
@@ -3995,7 +3682,6 @@
    * @event PLAYBACK_LEVEL_SWITCH_START
    *
    */
-
   Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start';
   /**
    * Fired when the playback ends the level switch
@@ -4003,8 +3689,8 @@
    * @event PLAYBACK_LEVEL_SWITCH_END
    *
    */
-
   Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end';
+
   /**
    * Fired when playback internal state changes
    *
@@ -4014,7 +3700,6 @@
    * @param {String} [state.type]
    * the playback type
    */
-
   Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
   /**
    * Fired when DVR becomes enabled/disabled.
@@ -4022,11 +3707,10 @@
    * @event PLAYBACK_DVR
    * @param {boolean} state true if dvr enabled
    */
-
-  Events.PLAYBACK_DVR = 'playback:dvr'; // TODO doc
-
-  Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'; // TODO doc
-
+  Events.PLAYBACK_DVR = 'playback:dvr';
+  // TODO doc
+  Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
+  // TODO doc
   Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
   /**
    * Fired when the media for a playback ends.
@@ -4034,14 +3718,12 @@
    * @event PLAYBACK_ENDED
    * @param {String} name the name of the playback
    */
-
   Events.PLAYBACK_ENDED = 'playback:ended';
   /**
    * Fired when user requests `play()`
    *
    * @event PLAYBACK_PLAY_INTENT
    */
-
   Events.PLAYBACK_PLAY_INTENT = 'playback:play:intent';
   /**
    * Fired when the media for a playback starts playing.
@@ -4052,35 +3734,30 @@
    *
    * @event PLAYBACK_PLAY
    */
-
   Events.PLAYBACK_PLAY = 'playback:play';
   /**
    * Fired when the media for a playback pauses.
    *
    * @event PLAYBACK_PAUSE
    */
-
   Events.PLAYBACK_PAUSE = 'playback:pause';
   /**
    * Fired when the media for a playback is seeking.
    *
    * @event PLAYBACK_SEEK
    */
-
   Events.PLAYBACK_SEEK = 'playback:seek';
   /**
    * Fired when the media for a playback is seeked.
    *
    * @event PLAYBACK_SEEKED
    */
-
   Events.PLAYBACK_SEEKED = 'playback:seeked';
   /**
    * Fired when the media for a playback is stopped.
    *
    * @event PLAYBACK_STOP
    */
-
   Events.PLAYBACK_STOP = 'playback:stop';
   /**
    * Fired if an error occurs in the playback.
@@ -4089,20 +3766,18 @@
    * @param {Object} error An object containing the error details
    * @param {String} name Playback name
    */
-
-  Events.PLAYBACK_ERROR = 'playback:error'; // TODO doc
-
-  Events.PLAYBACK_STATS_ADD = 'playback:stats:add'; // TODO doc
-
-  Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'; // TODO doc
-
+  Events.PLAYBACK_ERROR = 'playback:error';
+  // TODO doc
+  Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
+  // TODO doc
+  Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded';
+  // TODO doc
   Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch';
   /**
    * Fired when subtitle is available on playback for display
    *
    * @event PLAYBACK_SUBTITLE_AVAILABLE
    */
-
   Events.PLAYBACK_SUBTITLE_AVAILABLE = 'playback:subtitle:available';
   /**
    * Fired when playback subtitle track has changed
@@ -4113,22 +3788,34 @@
    * @param {Number} [track.id]
    * selected track id
    */
+  Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed';
 
-  Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed'; // Core Events
+  /**
+   * Fired when audio tracks are available to be used on the playback
+   * @event PLAYBACK_AUDIO_AVAILABLE
+   * @param {import('../playback/playback').AudioTrack[]} tracks - list of available audio tracks
+   */
+  Events.PLAYBACK_AUDIO_AVAILABLE = 'playback:audio:available';
 
+  /**
+   * Fired whenever the current audio track has changed
+   * @event PLAYBACK_AUDIO_CHANGED
+   * @param {import('../playback/playback').AudioTrack} track - audio track active after change
+   */
+  Events.PLAYBACK_AUDIO_CHANGED = 'playback:audio:changed';
+
+  // Core Events
   /**
    * Fired when the containers are created
    *
    * @event CORE_CONTAINERS_CREATED
    */
-
   Events.CORE_CONTAINERS_CREATED = 'core:containers:created';
   /**
    * Fired when the active container changed
    *
    * @event CORE_ACTIVE_CONTAINER_CHANGED
    */
-
   Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed';
   /**
    * Fired when the options were changed for the core
@@ -4136,14 +3823,12 @@
    * @event CORE_OPTIONS_CHANGE
    * @param {Object} new options provided to configure() method
    */
-
   Events.CORE_OPTIONS_CHANGE = 'core:options:change';
   /**
    * Fired after creating containers, when the core is ready
    *
    * @event CORE_READY
    */
-
   Events.CORE_READY = 'core:ready';
   /**
    * Fired when the fullscreen state change
@@ -4151,7 +3836,6 @@
    * @event CORE_FULLSCREEN
    * @param {Boolean} whether or not the player is on fullscreen mode
    */
-
   Events.CORE_FULLSCREEN = 'core:fullscreen';
   /**
    * Fired when core updates size
@@ -4159,7 +3843,6 @@
    * @event CORE_RESIZE
    * @param {Object} currentSize an object with the current size
    */
-
   Events.CORE_RESIZE = 'core:resize';
   /**
    * Fired when the screen orientation has changed.
@@ -4173,7 +3856,6 @@
    * @param {String} [screen.orientation]
    * screen orientation (ie: 'landscape' or 'portrait')
    */
-
   Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed';
   /**
    * Fired when occurs mouse move event on core element
@@ -4181,7 +3863,6 @@
    * @event CORE_MOUSE_MOVE
    * @param {Object} event a DOM event
    */
-
   Events.CORE_MOUSE_MOVE = 'core:mousemove';
   /**
    * Fired when occurs mouse leave event on core element
@@ -4189,9 +3870,9 @@
    * @event CORE_MOUSE_LEAVE
    * @param {Object} event a DOM event
    */
+  Events.CORE_MOUSE_LEAVE = 'core:mouseleave';
 
-  Events.CORE_MOUSE_LEAVE = 'core:mouseleave'; // Container Events
-
+  // Container Events
   /**
    * Fired when the container internal state changes
    *
@@ -4201,7 +3882,6 @@
    * @param {String} [state.type]
    * the playback type
    */
-
   Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
   Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
   /**
@@ -4219,7 +3899,6 @@
    * @param {Number} [bitrate.level]
    * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
    */
-
   Events.CONTAINER_BITRATE = 'container:bitrate';
   Events.CONTAINER_STATS_REPORT = 'container:stats:report';
   Events.CONTAINER_DESTROYED = 'container:destroyed';
@@ -4228,8 +3907,8 @@
    *
    * @event CONTAINER_READY
    */
-
   Events.CONTAINER_READY = 'container:ready';
+
   /**
    * Fired when the container was resized.
    *
@@ -4237,7 +3916,6 @@
    *
    * @event CONTAINER_RESIZE
    */
-
   Events.CONTAINER_RESIZE = 'container:resize';
   Events.CONTAINER_ERROR = 'container:error';
   /**
@@ -4251,14 +3929,13 @@
    * @param {Object} [metadata.data]
    * extra meta data
    */
-
   Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
+
   /**
    * Fired when subtitle is available on container for display
    *
    * @event CONTAINER_SUBTITLE_AVAILABLE
    */
-
   Events.CONTAINER_SUBTITLE_AVAILABLE = 'container:subtitle:available';
   /**
    * Fired when subtitle track has changed
@@ -4269,8 +3946,22 @@
    * @param {Number} [track.id]
    * selected track id
    */
-
   Events.CONTAINER_SUBTITLE_CHANGED = 'container:subtitle:changed';
+
+  /**
+   * Fired when audio tracks are available to be used on the container
+   * @event CONTAINER_AUDIO_AVAILABLE
+   * @param {import('../playback/playback').AudioTrack[]} tracks - list of available audio tracks
+   */
+  Events.CONTAINER_AUDIO_AVAILABLE = 'container:audio:available';
+
+  /**
+    * Fired whenever the current audio track has changed
+    * @event CONTAINER_AUDIO_CHANGED
+    * @param {import('../playback/playback').AudioTrack} track - audio track active after change
+    */
+  Events.CONTAINER_AUDIO_CHANGED = 'container:audio:changed';
+
   /**
    * Fired when the time is updated on container
    *
@@ -4282,7 +3973,6 @@
    * @param {Number} [progress.total]
    * total time (in seconds)
    */
-
   Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
   /**
    * Fired when the container is downloading the media
@@ -4297,7 +3987,6 @@
    * @param {Number} [progress.total]
    * total content to be downloaded
    */
-
   Events.CONTAINER_PROGRESS = 'container:progress';
   Events.CONTAINER_PLAY = 'container:play';
   Events.CONTAINER_STOP = 'container:stop';
@@ -4310,13 +3999,13 @@
   Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
   Events.CONTAINER_MOUSE_UP = 'container:mouseup';
   Events.CONTAINER_MOUSE_DOWN = 'container:mousedown';
+
   /**
    * Fired when the container seeks the video
    *
    * @event CONTAINER_SEEK
    * @param {Number} time the current time in seconds
    */
-
   Events.CONTAINER_SEEK = 'container:seek';
   /**
    * Fired when the container was finished the seek video
@@ -4324,7 +4013,6 @@
    * @event CONTAINER_SEEKED
    * @param {Number} time the current time in seconds
    */
-
   Events.CONTAINER_SEEKED = 'container:seeked';
   Events.CONTAINER_VOLUME = 'container:volume';
   Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
@@ -4333,21 +4021,18 @@
    *
    * @event CONTAINER_STATE_BUFFERING
    */
-
   Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
   /**
    * Fired when the container filled the buffer
    *
    * @event CONTAINER_STATE_BUFFERFULL
    */
-
   Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
   /**
    * Fired when the container changes any settings (volume, seek and etc)
    *
    * @event CONTAINER_SETTINGSUPDATE
    */
-
   Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
   /**
    * Fired when container updates its video quality
@@ -4356,21 +4041,19 @@
    * @param {Boolean} isHD
    * true when is on HD, false otherwise
    */
-
   Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
+
   /**
    * Fired when the media control shows
    *
    * @event CONTAINER_MEDIACONTROL_SHOW
    */
-
   Events.CONTAINER_MEDIACONTROL_SHOW = 'container:mediacontrol:show';
   /**
    * Fired when the media control hides
    *
    * @event CONTAINER_MEDIACONTROL_HIDE
    */
-
   Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide';
   Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
   Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
@@ -4380,30 +4063,27 @@
    *
    * @event CONTAINER_OPTIONS_CHANGE
    */
+  Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change';
 
-  Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'; // MediaControl Events
-
+  // MediaControl Events
   Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
   /**
    * Fired when the player enters/exit on fullscreen
    *
    * @event MEDIACONTROL_FULLSCREEN
    */
-
   Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
   /**
    * Fired when the media control shows
    *
    * @event MEDIACONTROL_SHOW
    */
-
   Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
   /**
    * Fired when the media control hides
    *
    * @event MEDIACONTROL_HIDE
    */
-
   Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
   /**
    * Fired when mouse enters on the seekbar
@@ -4412,7 +4092,6 @@
    * @param {Object} event
    * the javascript event
    */
-
   Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
   /**
    * Fired when mouse leaves the seekbar
@@ -4421,35 +4100,30 @@
    * @param {Object} event
    * the javascript event
    */
-
   Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
   /**
    * Fired when the media is being played
    *
    * @event MEDIACONTROL_PLAYING
    */
-
   Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
   /**
    * Fired when the media is not being played
    *
    * @event MEDIACONTROL_NOTPLAYING
    */
-
   Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
   /**
    * Fired when the container was changed
    *
    * @event MEDIACONTROL_CONTAINERCHANGED
    */
-
   Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
   /**
    * Fired when the options were changed for the mediacontrol
    *
    * @event MEDIACONTROL_OPTIONS_CHANGE
    */
-
   Events.MEDIACONTROL_OPTIONS_CHANGE = 'mediacontrol:options:change';
 
   /**
@@ -4458,37 +4132,17 @@
    * @extends Events
    * @module base
    */
-
   var BaseObject = /*#__PURE__*/function (_Events) {
     _inherits$1(BaseObject, _Events);
-
     var _super = _createSuper$1(BaseObject);
-
-    _createClass$1(BaseObject, [{
-      key: "options",
-
-      /**
-       * returns the object options
-       * @property options
-       * @type Object
-       */
-      get: function get() {
-        return this._options;
-      }
-      /**
-       * @method constructor
-       * @param {Object} options
-       */
-
-    }]);
-
+    /**
+     * @method constructor
+     * @param {Object} options
+     */
     function BaseObject() {
       var _this;
-
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
       _classCallCheck$1(this, BaseObject);
-
       _this = _super.call(this, options);
       _this._options = options;
       _this.uniqueId = uniqueId('o');
@@ -4500,8 +4154,18 @@
     * @property uniqueId
     * @type String
     */
-
-
+    _createClass$1(BaseObject, [{
+      key: "options",
+      get:
+      /**
+       * returns the object options
+       * @property options
+       * @type Object
+       */
+      function get() {
+        return this._options;
+      }
+    }]);
     return BaseObject;
   }(Events);
 
@@ -4510,19 +4174,22 @@
   // Paul Miller (http://paulmillr.com)
   // http://underscorejs.org
   // (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+
   // By default, Underscore uses ERB-style template delimiters, change the
   // following template settings to use alternative delimiters.
   var settings = {
     evaluate: /<%([\s\S]+?)%>/g,
     interpolate: /<%=([\s\S]+?)%>/g,
     escape: /<%-([\s\S]+?)%>/g
-  }; // When customizing `templateSettings`, if you don't want to define an
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
   // interpolation, evaluation or escaping regex, we need one that is
   // guaranteed not to match.
+  var noMatch = /(.)^/;
 
-  var noMatch = /(.)^/; // Certain characters need to be escaped so that they can be put into a
+  // Certain characters need to be escaped so that they can be put into a
   // string literal.
-
   var escapes = {
     '\'': '\'',
     '\\': '\\',
@@ -4532,8 +4199,9 @@
     "\u2028": 'u2028',
     "\u2029": 'u2029'
   };
-  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g; // List of HTML entities for escaping.
+  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
 
+  // List of HTML entities for escaping.
   var htmlEntities = {
     '&': '&amp;',
     '<': '&lt;',
@@ -4542,23 +4210,24 @@
     '\'': '&#x27;'
   };
   var entityRe = new RegExp('[&<>"\']', 'g');
-
   var escapeExpr = function escapeExpr(string) {
     if (string === null) return '';
     return ('' + string).replace(entityRe, function (match) {
       return htmlEntities[match];
     });
   };
+  var counter = 0;
 
-  var counter = 0; // JavaScript micro-templating, similar to John Resig's implementation.
+  // JavaScript micro-templating, similar to John Resig's implementation.
   // Underscore templating handles arbitrary delimiters, preserves whitespace,
   // and correctly escapes quotes within interpolated code.
-
   var tmpl = function tmpl(text, data) {
-    var render; // Combine delimiters into one regular expression via alternation.
+    var render;
 
-    var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g'); // Compile the template source, escaping string literals appropriately.
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g');
 
+    // Compile the template source, escaping string literals appropriately.
     var index = 0;
     var source = '__p+=\'';
     text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
@@ -4571,11 +4240,11 @@
       index = offset + match.length;
       return match;
     });
-    source += '\';\n'; // If a variable is not specified, place data values in local scope.
+    source += '\';\n';
 
+    // If a variable is not specified, place data values in local scope.
     if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
     source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
-
     try {
       /*jshint -W054 */
       // TODO: find a way to avoid eval
@@ -4584,18 +4253,15 @@
       e.source = source;
       throw e;
     }
-
     if (data) return render(data, escapeExpr);
-
     var template = function template(data) {
       return render.call(this, data, escapeExpr);
-    }; // Provide the compiled function source as a convenience for precompilation.
+    };
 
-
+    // Provide the compiled function source as a convenience for precompilation.
     template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
     return template;
   };
-
   tmpl.settings = settings;
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -4609,6 +4275,7 @@
   };
 
   var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+
   /**
    * A base class to create ui object.
    * @class UIObject
@@ -4616,29 +4283,52 @@
    * @extends BaseObject
    * @module base
    */
-
   var UIObject = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(UIObject, _BaseObject);
-
     var _super = _createSuper$1(UIObject);
+    /**
+     * it builds an ui component by:
+     *  * creating an id for the component `cid`
+     *  * making sure the element is created `$el`
+     *  * delegating all `events` to the element
+     * @method constructor
+     * @param {Object} options the options object
+     */
+    function UIObject(options) {
+      var _this;
+      _classCallCheck$1(this, UIObject);
+      _this = _super.call(this, options);
+      _this.cid = uniqueId('c');
+      _this._ensureElement();
+      _this.delegateEvents();
+      return _this;
+    }
 
+    /**
+     * selects within the component.
+     * @method $
+     * @param {String} selector a selector to find within the component.
+     * @return {HTMLElement} an element, if it exists.
+     * @example
+     * ```javascript
+     * fullScreenBarUIComponent.$('.button-full') //will return only `.button-full` within the component
+     * ```
+     */
     _createClass$1(UIObject, [{
       key: "tagName",
-
+      get:
       /**
        * a unique id prefixed with `'c'`, `c1, c232`
        *
        * @property cid
        * @type String
        */
-
       /**
        * the dom element itself
        *
        * @property el
        * @type HTMLElement
        */
-
       /**
        * the dom element wrapped by `$`
        *
@@ -4652,7 +4342,7 @@
        * @default div
        * @return {String} tag's name
        */
-      get: function get() {
+      function get() {
         return 'div';
       }
       /**
@@ -4675,7 +4365,6 @@
        * // when you click on MyButton the method `myClick` will be called
        *```
        */
-
     }, {
       key: "events",
       get: function get() {
@@ -4698,71 +4387,33 @@
        * // MyButton.el.className will be 'my-button'
        * ```
        */
-
     }, {
       key: "attributes",
       get: function get() {
         return {};
       }
-      /**
-       * it builds an ui component by:
-       *  * creating an id for the component `cid`
-       *  * making sure the element is created `$el`
-       *  * delegating all `events` to the element
-       * @method constructor
-       * @param {Object} options the options object
-       */
-
-    }]);
-
-    function UIObject(options) {
-      var _this;
-
-      _classCallCheck$1(this, UIObject);
-
-      _this = _super.call(this, options);
-      _this.cid = uniqueId('c');
-
-      _this._ensureElement();
-
-      _this.delegateEvents();
-
-      return _this;
-    }
-    /**
-     * selects within the component.
-     * @method $
-     * @param {String} selector a selector to find within the component.
-     * @return {HTMLElement} an element, if it exists.
-     * @example
-     * ```javascript
-     * fullScreenBarUIComponent.$('.button-full') //will return only `.button-full` within the component
-     * ```
-     */
-
-
-    _createClass$1(UIObject, [{
+    }, {
       key: "$",
       value: function $(selector) {
         return this.$el.find(selector);
       }
+
       /**
        * render the component, usually attach it to a real existent `element`
        * @method render
        * @return {UIObject} itself
        */
-
     }, {
       key: "render",
       value: function render() {
         return this;
       }
+
       /**
        * removes the ui component from DOM
        * @method destroy
        * @return {UIObject} itself
        */
-
     }, {
       key: "destroy",
       value: function destroy() {
@@ -4771,6 +4422,7 @@
         this.undelegateEvents();
         return this;
       }
+
       /**
        * set element to `el` and `$el`
        * @method setElement
@@ -4778,7 +4430,6 @@
        * @param {Boolean} delegate whether is delegate or not
        * @return {UIObject} itself
        */
-
     }, {
       key: "setElement",
       value: function setElement(element, delegate) {
@@ -4788,50 +4439,48 @@
         if (delegate !== false) this.delegateEvents();
         return this;
       }
+
       /**
        * delegates all the original `events` on `element` to its callbacks
        * @method delegateEvents
        * @param {Object} events
        * @return {UIObject} itself
        */
-
     }, {
       key: "delegateEvents",
       value: function delegateEvents(events) {
         if (!events) events = this.events;
         this.undelegateEvents();
-
         for (var key in events) {
           var method = events[key];
           if (method && method.constructor !== Function) method = this[events[key]];
           if (!method) continue;
           var match = key.match(delegateEventSplitter);
           var eventName = match[1],
-              selector = match[2];
+            selector = match[2];
           eventName += '.delegateEvents' + this.cid;
           if (selector === '') this.$el.on(eventName, method.bind(this));else this.$el.on(eventName, selector, method.bind(this));
         }
-
         return this;
       }
+
       /**
        * undelegats all the `events`
        * @method undelegateEvents
        * @return {UIObject} itself
        */
-
     }, {
       key: "undelegateEvents",
       value: function undelegateEvents() {
         this.$el.off('.delegateEvents' + this.cid);
         return this;
       }
+
       /**
        * ensures the creation of this ui component
        * @method _ensureElement
        * @private
        */
-
     }, {
       key: "_ensureElement",
       value: function _ensureElement() {
@@ -4846,7 +4495,6 @@
         }
       }
     }]);
-
     return UIObject;
   }(BaseObject);
 
@@ -4857,22 +4505,43 @@
    * @extends BaseObject
    * @module components
    */
-
   var PlayerError = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(PlayerError, _BaseObject);
-
     var _super = _createSuper$1(PlayerError);
+    function PlayerError() {
+      var _this;
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var core = arguments.length > 1 ? arguments[1] : undefined;
+      _classCallCheck$1(this, PlayerError);
+      _this = _super.call(this, options);
+      _this.core = core;
+      return _this;
+    }
 
+    /**
+     * creates and trigger an error.
+     * @method createError
+     * @param {Object} err should be an object with code, description, level, origin, scope and raw error.
+     */
     _createClass$1(PlayerError, [{
       key: "name",
       get: function get() {
         return 'error';
       }
+
       /**
        * @property Levels
        * @type {Object} object with error levels
        */
-
+    }, {
+      key: "createError",
+      value: function createError(err) {
+        if (!this.core) {
+          Log.warn(this.name, 'Core is not set. Error: ', err);
+          return;
+        }
+        this.core.trigger(Events.ERROR, err);
+      }
     }], [{
       key: "Levels",
       get: function get() {
@@ -4883,38 +4552,6 @@
         };
       }
     }]);
-
-    function PlayerError() {
-      var _this;
-
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var core = arguments.length > 1 ? arguments[1] : undefined;
-
-      _classCallCheck$1(this, PlayerError);
-
-      _this = _super.call(this, options);
-      _this.core = core;
-      return _this;
-    }
-    /**
-     * creates and trigger an error.
-     * @method createError
-     * @param {Object} err should be an object with code, description, level, origin, scope and raw error.
-     */
-
-
-    _createClass$1(PlayerError, [{
-      key: "createError",
-      value: function createError(err) {
-        if (!this.core) {
-          Log.warn(this.name, 'Core is not set. Error: ', err);
-          return;
-        }
-
-        this.core.trigger(Events.ERROR, err);
-      }
-    }]);
-
     return PlayerError;
   }(BaseObject);
 
@@ -4943,7 +4580,6 @@
       var errorData = Object.assign({}, defaultError, error, {
         code: options.useCodePrefix ? prefixedCode : error.code
       });
-
       if (i18n && errorData.level == PlayerError.Levels.FATAL && !errorData.UI) {
         var defaultUI = {
           title: i18n.t('default_error_title'),
@@ -4951,7 +4587,6 @@
         };
         errorData.UI = defaultUI;
       }
-
       this.playerError ? this.playerError.createError(errorData) : Log.warn(origin, 'PlayerError is not defined. Error: ', errorData);
       return errorData;
     }
@@ -4959,33 +4594,23 @@
 
   var UICorePlugin = /*#__PURE__*/function (_UIObject) {
     _inherits$1(UICorePlugin, _UIObject);
-
     var _super = _createSuper$1(UICorePlugin);
-
+    function UICorePlugin(core) {
+      var _this;
+      _classCallCheck$1(this, UICorePlugin);
+      _this = _super.call(this, core.options);
+      _this.core = core;
+      _this.enabled = true;
+      _this.bindEvents();
+      _this.render();
+      return _this;
+    }
     _createClass$1(UICorePlugin, [{
       key: "playerError",
       get: function get() {
         return this.core.playerError;
       }
-    }]);
-
-    function UICorePlugin(core) {
-      var _this;
-
-      _classCallCheck$1(this, UICorePlugin);
-
-      _this = _super.call(this, core.options);
-      _this.core = core;
-      _this.enabled = true;
-
-      _this.bindEvents();
-
-      _this.render();
-
-      return _this;
-    }
-
-    _createClass$1(UICorePlugin, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {}
     }, {
@@ -5015,18 +4640,15 @@
         return this;
       }
     }]);
-
     return UICorePlugin;
   }(UIObject);
   Object.assign(UICorePlugin.prototype, ErrorMixin);
-
   UICorePlugin.extend = function (properties) {
     return extend$1(UICorePlugin, properties);
   };
-
   UICorePlugin.type = 'core';
 
-  var css_248z$8 = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
+  var css_248z$5$1 = ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n";
 
   /**
    * An abstraction to represent a container for a given playback
@@ -5036,137 +4658,18 @@
    * @extends UIObject
    * @module base
    */
-
   var Container = /*#__PURE__*/function (_UIObject) {
     _inherits$1(Container, _UIObject);
-
     var _super = _createSuper$1(Container);
-
-    _createClass$1(Container, [{
-      key: "name",
-
-      /**
-       * container's name
-       * @method name
-       * @default Container
-       * @return {String} container's name
-       */
-      get: function get() {
-        return 'Container';
-      }
-    }, {
-      key: "attributes",
-      get: function get() {
-        return {
-          "class": 'container',
-          'data-container': ''
-        };
-      }
-    }, {
-      key: "events",
-      get: function get() {
-        return {
-          'click': 'clicked',
-          'dblclick': 'dblClicked',
-          'touchend': 'dblTap',
-          'contextmenu': 'onContextMenu',
-          'mouseenter': 'mouseEnter',
-          'mouseleave': 'mouseLeave',
-          'mouseup': 'onMouseUp',
-          'mousedown': 'onMouseDown'
-        };
-      }
-      /**
-       * Determine if the playback has ended.
-       * @property ended
-       * @type Boolean
-       */
-
-    }, {
-      key: "ended",
-      get: function get() {
-        return this.playback.ended;
-      }
-      /**
-       * Determine if the playback is having to buffer in order for
-       * playback to be smooth.
-       * (i.e if a live stream is playing smoothly, this will be false)
-       * @property buffering
-       * @type Boolean
-       */
-
-    }, {
-      key: "buffering",
-      get: function get() {
-        return this.playback.buffering;
-      }
-      /**
-       * The internationalization plugin.
-       * @property i18n
-       * @type {Strings}
-       */
-
-    }, {
-      key: "i18n",
-      get: function get() {
-        return this._i18n;
-      }
-      /**
-       * checks if has closed caption tracks.
-       * @property hasClosedCaptionsTracks
-       * @type {Boolean}
-       */
-
-    }, {
-      key: "hasClosedCaptionsTracks",
-      get: function get() {
-        return this.playback.hasClosedCaptionsTracks;
-      }
-      /**
-       * gets the available closed caption tracks.
-       * @property closedCaptionsTracks
-       * @type {Array} an array of objects with at least 'id' and 'name' properties
-       */
-
-    }, {
-      key: "closedCaptionsTracks",
-      get: function get() {
-        return this.playback.closedCaptionsTracks;
-      }
-      /**
-       * gets the selected closed caption track index. (-1 is disabled)
-       * @property closedCaptionsTrackId
-       * @type {Number}
-       */
-
-    }, {
-      key: "closedCaptionsTrackId",
-      get: function get() {
-        return this.playback.closedCaptionsTrackId;
-      }
-      /**
-       * sets the selected closed caption track index. (-1 is disabled)
-       * @property closedCaptionsTrackId
-       * @type {Number}
-       */
-      ,
-      set: function set(trackId) {
-        this.playback.closedCaptionsTrackId = trackId;
-      }
-      /**
-       * it builds a container
-       * @method constructor
-       * @param {Object} options the options object
-       * @param {Strings} i18n the internationalization component
-       */
-
-    }]);
-
+    /**
+     * it builds a container
+     * @method constructor
+     * @param {Object} options the options object
+     * @param {Strings} i18n the internationalization component
+     */
     function Container(options, i18n, playerError) {
       var _this;
-
       _classCallCheck$1(this, Container);
-
       _this = _super.call(this, options);
       _this._i18n = i18n;
       _this.currentTime = 0;
@@ -5180,13 +4683,11 @@
       _this.dblTapHandler = new DoubleEventHandler(500);
       _this.clickTimer = null;
       _this.clickDelay = 200; // FIXME: could be a player option
-
       _this.actionsMetadata = {};
-
       _this.bindEvents();
-
       return _this;
     }
+
     /**
      * binds playback events to the methods of the container.
      * it listens to playback's events and triggers them as container events.
@@ -5215,9 +4716,138 @@
      *
      * @method bindEvents
      */
-
-
     _createClass$1(Container, [{
+      key: "name",
+      get:
+      /**
+       * container's name
+       * @method name
+       * @default Container
+       * @return {String} container's name
+       */
+      function get() {
+        return 'Container';
+      }
+    }, {
+      key: "attributes",
+      get: function get() {
+        return {
+          "class": 'container',
+          'data-container': ''
+        };
+      }
+    }, {
+      key: "events",
+      get: function get() {
+        return {
+          'click': 'clicked',
+          'dblclick': 'dblClicked',
+          'touchend': 'dblTap',
+          'contextmenu': 'onContextMenu',
+          'mouseenter': 'mouseEnter',
+          'mouseleave': 'mouseLeave',
+          'mouseup': 'onMouseUp',
+          'mousedown': 'onMouseDown'
+        };
+      }
+
+      /**
+       * Determine if the playback has ended.
+       * @property ended
+       * @type Boolean
+       */
+    }, {
+      key: "ended",
+      get: function get() {
+        return this.playback.ended;
+      }
+
+      /**
+       * Determine if the playback is having to buffer in order for
+       * playback to be smooth.
+       * (i.e if a live stream is playing smoothly, this will be false)
+       * @property buffering
+       * @type Boolean
+       */
+    }, {
+      key: "buffering",
+      get: function get() {
+        return this.playback.buffering;
+      }
+
+      /**
+       * The internationalization plugin.
+       * @property i18n
+       * @type {Strings}
+       */
+    }, {
+      key: "i18n",
+      get: function get() {
+        return this._i18n;
+      }
+
+      /**
+       * checks if has closed caption tracks.
+       * @property hasClosedCaptionsTracks
+       * @type {Boolean}
+       */
+    }, {
+      key: "hasClosedCaptionsTracks",
+      get: function get() {
+        return this.playback.hasClosedCaptionsTracks;
+      }
+
+      /**
+       * gets the available closed caption tracks.
+       * @property closedCaptionsTracks
+       * @type {Array} an array of objects with at least 'id' and 'name' properties
+       */
+    }, {
+      key: "closedCaptionsTracks",
+      get: function get() {
+        return this.playback.closedCaptionsTracks;
+      }
+
+      /**
+       * gets the selected closed caption track index. (-1 is disabled)
+       * @property closedCaptionsTrackId
+       * @type {Number}
+       */
+    }, {
+      key: "closedCaptionsTrackId",
+      get: function get() {
+        return this.playback.closedCaptionsTrackId;
+      }
+
+      /**
+       * sets the selected closed caption track index. (-1 is disabled)
+       * @property closedCaptionsTrackId
+       * @type {Number}
+       */,
+      set: function set(trackId) {
+        this.playback.closedCaptionsTrackId = trackId;
+      }
+
+      /**
+       * returns a list of the available audio tracks.
+       * @type {import('../../base/playback/playback').AudioTrack[]} audio tracks
+       */
+    }, {
+      key: "audioTracks",
+      get: function get() {
+        return this.playback.audioTracks;
+      }
+
+      /**
+      * returns the audio track currently in use.
+      * @type {import('../../base/playback/playback').AudioTrack} audio track
+      */
+    }, {
+      key: "currentAudioTrack",
+      get: function get() {
+        return this.playback.currentAudioTrack;
+      }
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.onProgress);
@@ -5242,6 +4872,8 @@
         this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
         this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_AVAILABLE, this.subtitleAvailable);
         this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged);
+        this.listenTo(this.playback, Events.PLAYBACK_AUDIO_AVAILABLE, this.audioAvailable);
+        this.listenTo(this.playback, Events.PLAYBACK_AUDIO_CHANGED, this.audioChanged);
       }
     }, {
       key: "subtitleAvailable",
@@ -5252,6 +4884,16 @@
       key: "subtitleChanged",
       value: function subtitleChanged(track) {
         this.trigger(Events.CONTAINER_SUBTITLE_CHANGED, track);
+      }
+    }, {
+      key: "audioAvailable",
+      value: function audioAvailable(tracks) {
+        this.trigger(Events.CONTAINER_AUDIO_AVAILABLE, tracks);
+      }
+    }, {
+      key: "audioChanged",
+      value: function audioChanged(track) {
+        this.trigger(Events.CONTAINER_AUDIO_CHANGED, track);
       }
     }, {
       key: "playbackStateChanged",
@@ -5280,33 +4922,33 @@
       value: function getPlaybackType() {
         return this.playback.getPlaybackType();
       }
+
       /**
        * returns `true` if DVR is enable otherwise `false`.
        * @method isDvrEnabled
        * @return {Boolean}
        */
-
     }, {
       key: "isDvrEnabled",
       value: function isDvrEnabled() {
         return !!this.playback.dvrEnabled;
       }
+
       /**
        * returns `true` if DVR is in use otherwise `false`.
        * @method isDvrInUse
        * @return {Boolean}
        */
-
     }, {
       key: "isDvrInUse",
       value: function isDvrInUse() {
         return !!this.dvrInUse;
       }
+
       /**
        * destroys the container
        * @method destroy
        */
-
     }, {
       key: "destroy",
       value: function destroy() {
@@ -5377,7 +5019,6 @@
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
         }
-
         this.trigger.apply(this, [Events.CONTAINER_PROGRESS].concat(args, [this.name]));
       }
     }, {
@@ -5398,12 +5039,12 @@
         this.trigger(Events.CONTAINER_STOP, this.actionsMetadata.stopEvent || {});
         this.actionsMetadata.stopEvent = {};
       }
+
       /**
        * plays the playback
        * @method play
        * @param {Object} customData
        */
-
     }, {
       key: "play",
       value: function play() {
@@ -5411,12 +5052,12 @@
         this.actionsMetadata.playEvent = customData;
         this.playback.play(customData);
       }
+
       /**
        * stops the playback
        * @method stop
        * @param {Object} customData
        */
-
     }, {
       key: "stop",
       value: function stop() {
@@ -5425,12 +5066,17 @@
         this.playback.stop(customData);
         this.currentTime = 0;
       }
+    }, {
+      key: "switchAudioTrack",
+      value: function switchAudioTrack(id) {
+        this.playback.switchAudioTrack(id);
+      }
+
       /**
        * pauses the playback
        * @method pause
        * @param {Object} customData
        */
-
     }, {
       key: "pause",
       value: function pause() {
@@ -5448,7 +5094,6 @@
       key: "clicked",
       value: function clicked() {
         var _this2 = this;
-
         if (!this.options.chromeless || this.options.allowUserInteraction) {
           // The event is delayed because it can be canceled by a double-click event
           // An example of use is to prevent playback from pausing when switching to full screen
@@ -5475,11 +5120,9 @@
       key: "dblTap",
       value: function dblTap(evt) {
         var _this3 = this;
-
         if (!this.options.chromeless || this.options.allowUserInteraction) {
           this.dblTapHandler.handle(evt, function () {
             _this3.cancelClicked();
-
             _this3.trigger(Events.CONTAINER_DBLCLICK, _this3, _this3.name);
           });
         }
@@ -5508,7 +5151,6 @@
       key: "seekPercentage",
       value: function seekPercentage(percentage) {
         var duration = this.getDuration();
-
         if (percentage >= 0 && percentage <= 100) {
           var time = duration * (percentage / 100);
           this.seek(time);
@@ -5536,35 +5178,35 @@
       value: function bufferfull() {
         this.trigger(Events.CONTAINER_STATE_BUFFERFULL, this.name);
       }
+
       /**
        * adds plugin to the container
        * @method addPlugin
        * @param {Object} plugin
        */
-
     }, {
       key: "addPlugin",
       value: function addPlugin(plugin) {
         this.plugins.push(plugin);
       }
+
       /**
        * checks if a plugin, given its name, exist
        * @method hasPlugin
        * @param {String} name
        * @return {Boolean}
        */
-
     }, {
       key: "hasPlugin",
       value: function hasPlugin(name) {
         return !!this.getPlugin(name);
       }
+
       /**
        * get the plugin given its name
        * @method getPlugin
        * @param {String} name
        */
-
     }, {
       key: "getPlugin",
       value: function getPlugin(name) {
@@ -5633,7 +5275,6 @@
       key: "enableResizeObserver",
       value: function enableResizeObserver() {
         var _this4 = this;
-
         this.disableResizeObserver();
         this.resizeObserverInterval = setInterval(function () {
           return _this4.checkResize();
@@ -5651,24 +5292,21 @@
           width: this.el.clientWidth,
           height: this.el.clientHeight
         };
-
         var _ref = this.currentSize || {},
-            width = _ref.width,
-            height = _ref.height;
-
+          width = _ref.width,
+          height = _ref.height;
         var isResize = height !== newSize.height || width !== newSize.width;
-
         if (isResize) {
           this.currentSize = newSize;
           this.trigger(Events.CONTAINER_RESIZE, newSize);
         }
       }
+
       /**
        * enables to configure the container after its creation
        * @method configure
        * @param {Object} options all the options to change in form of a javascript object
        */
-
     }, {
       key: "configure",
       value: function configure(options) {
@@ -5680,7 +5318,7 @@
     }, {
       key: "render",
       value: function render() {
-        var style = Styler.getStyleFor(css_248z$8.toString(), {
+        var style = Styler.getStyleFor(css_248z$5$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -5691,10 +5329,19 @@
         return this;
       }
     }]);
-
     return Container;
   }(UIObject);
   Object.assign(Container.prototype, ErrorMixin);
+
+  /**
+   * An object representing a single audio track.
+   * @typedef {Object} AudioTrack
+   * @property {string} id - A unique identifier for the track. Used to identify it among the others.
+   * @property {string} language - The language of the track (e.g., 'en', 'pt-BR').
+   * @property {string} [label] - An optional label to be used in the UI to describe the track.
+   * @property {('main'|'description')} kind - The category the audio track belongs to.
+   * The kind 'description' is applied to audio tracks that narrate or describe the visual content.
+   */
 
   /**
    * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
@@ -5703,76 +5350,17 @@
    * @extends UIObject
    * @module base
    */
-
   var Playback = /*#__PURE__*/function (_UIObject) {
     _inherits$1(Playback, _UIObject);
-
     var _super = _createSuper$1(Playback);
-
-    _createClass$1(Playback, [{
-      key: "isAudioOnly",
-
-      /**
-      * Determine if the playback does not contain video/has video but video should be ignored.
-      * @property isAudioOnly
-      * @type Boolean
-      */
-      get: function get() {
-        return false;
-      }
-    }, {
-      key: "isAdaptive",
-      get: function get() {
-        return false;
-      }
-      /**
-       * Determine if the playback has ended.
-       * @property ended
-       * @type Boolean
-       */
-
-    }, {
-      key: "ended",
-      get: function get() {
-        return false;
-      }
-      /**
-       * The internationalization plugin.
-       * @property i18n
-       * @type {Strings}
-       */
-
-    }, {
-      key: "i18n",
-      get: function get() {
-        return this._i18n;
-      }
-      /**
-       * Determine if the playback is having to buffer in order for
-       * playback to be smooth.
-       * (i.e if a live stream is playing smoothly, this will be false)
-       * @property buffering
-       * @type Boolean
-       */
-
-    }, {
-      key: "buffering",
-      get: function get() {
-        return false;
-      }
-      /**
-       * @method constructor
-       * @param {Object} options the options object
-       * @param {Strings} i18n the internationalization component
-       */
-
-    }]);
-
+    /**
+     * @method constructor
+     * @param {Object} options the options object
+     * @param {Strings} i18n the internationalization component
+     */
     function Playback(options, i18n, playerError) {
       var _this;
-
       _classCallCheck$1(this, Playback);
-
       _this = _super.call(this, options);
       _this.settings = {};
       _this._i18n = i18n;
@@ -5780,48 +5368,98 @@
       _this._consented = false;
       return _this;
     }
+
     /**
      * Gives user consent to playback (mobile devices).
      * @method consent
      * @param {Function} callback function called when playback is consented
      */
-
-
     _createClass$1(Playback, [{
+      key: "isAudioOnly",
+      get:
+      /**
+      * Determine if the playback does not contain video/has video but video should be ignored.
+      * @property isAudioOnly
+      * @type Boolean
+      */
+      function get() {
+        return false;
+      }
+    }, {
+      key: "isAdaptive",
+      get: function get() {
+        return false;
+      }
+
+      /**
+       * Determine if the playback has ended.
+       * @property ended
+       * @type Boolean
+       */
+    }, {
+      key: "ended",
+      get: function get() {
+        return false;
+      }
+
+      /**
+       * The internationalization plugin.
+       * @property i18n
+       * @type {Strings}
+       */
+    }, {
+      key: "i18n",
+      get: function get() {
+        return this._i18n;
+      }
+
+      /**
+       * Determine if the playback is having to buffer in order for
+       * playback to be smooth.
+       * (i.e if a live stream is playing smoothly, this will be false)
+       * @property buffering
+       * @type Boolean
+       */
+    }, {
+      key: "buffering",
+      get: function get() {
+        return false;
+      }
+    }, {
       key: "consent",
       value: function consent(cb) {
         typeof cb === 'function' && cb();
       }
+
       /**
        * plays the playback.
        * @method play
        */
-
     }, {
       key: "play",
       value: function play() {}
+
       /**
        * pauses the playback.
        * @method pause
        */
-
     }, {
       key: "pause",
       value: function pause() {}
+
       /**
        * stops the playback.
        * @method stop
        */
-
     }, {
       key: "stop",
       value: function stop() {}
+
       /**
        * seeks the playback to a given `time` in seconds
        * @method seek
        * @param {Number} time should be a number between 0 and the video duration
        */
-
     }, {
       key: "seek",
       value: function seek(time) {} // eslint-disable-line no-unused-vars
@@ -5831,7 +5469,6 @@
        * @method seekPercentage
        * @param {Number} time should be a number between 0 and 100
        */
-
     }, {
       key: "seekPercentage",
       value: function seekPercentage(percentage) {} // eslint-disable-line no-unused-vars
@@ -5843,43 +5480,112 @@
        * @method getStartTimeOffset
        * @return {Number} time (in seconds) that time "0" represents.
        */
-
     }, {
       key: "getStartTimeOffset",
       value: function getStartTimeOffset() {
         return 0;
       }
+
       /**
        * gets the duration in seconds
        * @method getDuration
        * @return {Number} duration (in seconds) of the current source
        */
-
     }, {
       key: "getDuration",
       value: function getDuration() {
         return 0;
       }
+
       /**
        * checks if the playback is playing.
        * @method isPlaying
        * @return {Boolean} `true` if the current playback is playing, otherwise `false`
        */
-
     }, {
       key: "isPlaying",
       value: function isPlaying() {
         return false;
       }
+
       /**
        * checks if the playback is ready.
        * @property isReady
        * @type {Boolean} `true` if the current playback is ready, otherwise `false`
        */
-
     }, {
-      key: "getPlaybackType",
-      // eslint-disable-line no-unused-vars
+      key: "isReady",
+      get: function get() {
+        return false;
+      }
+
+      /**
+       * checks if the playback has closed caption tracks.
+       * @property hasClosedCaptionsTracks
+       * @type {Boolean}
+       */
+    }, {
+      key: "hasClosedCaptionsTracks",
+      get: function get() {
+        return this.closedCaptionsTracks.length > 0;
+      }
+
+      /**
+       * gets the playback available closed caption tracks.
+       * @property closedCaptionsTracks
+       * @type {Array} an array of objects with at least 'id' and 'name' properties
+       */
+    }, {
+      key: "closedCaptionsTracks",
+      get: function get() {
+        return [];
+      }
+
+      /**
+       * gets the selected closed caption track index. (-1 is disabled)
+       * @property closedCaptionsTrackId
+       * @type {Number}
+       */
+    }, {
+      key: "closedCaptionsTrackId",
+      get: function get() {
+        return -1;
+      }
+
+      /**
+       * sets the selected closed caption track index. (-1 is disabled)
+       * @property closedCaptionsTrackId
+       * @type {Number}
+       */,
+      set: function set(trackId) {} // eslint-disable-line no-unused-vars
+
+      /**
+       * returns a list of the available audio tracks for the playback.
+       * @type {AudioTrack[]} audio tracks
+       */
+    }, {
+      key: "audioTracks",
+      get: function get() {
+        return [];
+      }
+
+      /**
+       * returns the audio track currently in use by the playback.
+       * @type {AudioTrack} audio track
+       */
+    }, {
+      key: "currentAudioTrack",
+      get: function get() {
+        return null;
+      }
+
+      /**
+       * switches the current audio track used by the playback.
+       * @param {string} id - id of the audio track to be set.
+       */
+    }, {
+      key: "switchAudioTrack",
+      value: function switchAudioTrack(id) {} // eslint-disable-line no-unused-vars
 
       /**
        * gets the playback type (`'vod', 'live', 'aod'`)
@@ -5893,42 +5599,44 @@
        * flashHlsPlayback.getPlaybackType() //live
        * ```
        */
+    }, {
+      key: "getPlaybackType",
       value: function getPlaybackType() {
         return Playback.NO_OP;
       }
+
       /**
        * checks if the playback is in HD.
        * @method isHighDefinitionInUse
        * @return {Boolean} `true` if the playback is playing in HD, otherwise `false`
        */
-
     }, {
       key: "isHighDefinitionInUse",
       value: function isHighDefinitionInUse() {
         return false;
       }
+
       /**
        * mutes the playback
        * @method mute
        */
-
     }, {
       key: "mute",
       value: function mute() {}
+
       /**
        * restores the playback volume
        * @method unmute
        */
-
     }, {
       key: "unmute",
       value: function unmute() {}
+
       /**
        * sets the volume for the playback
        * @method volume
        * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
        */
-
     }, {
       key: "volume",
       value: function volume(value) {} // eslint-disable-line no-unused-vars
@@ -5938,92 +5646,44 @@
        * @method configure
        * @param {Object} options all the options to change in form of a javascript object
        */
-
     }, {
       key: "configure",
       value: function configure(options) {
         this._options = zepto.extend(true, this._options, options);
       }
+
       /**
        * attempt to autoplays the playback.
        * @method attemptAutoPlay
        */
-
     }, {
       key: "attemptAutoPlay",
       value: function attemptAutoPlay() {
         var _this2 = this;
-
         this.canAutoPlay(function (result, error) {
           // eslint-disable-line no-unused-vars
           result && _this2.play();
         });
       }
+
       /**
        * checks if the playback can autoplay.
        * @method canAutoPlay
        * @param {Function} callback function where first param is Boolean and second param is playback Error or null
        */
-
     }, {
       key: "canAutoPlay",
       value: function canAutoPlay(cb) {
         cb(true, null); // Assume playback can autoplay by default
       }
-    }, {
-      key: "isReady",
-      get: function get() {
-        return false;
-      }
-      /**
-       * checks if the playback has closed caption tracks.
-       * @property hasClosedCaptionsTracks
-       * @type {Boolean}
-       */
-
-    }, {
-      key: "hasClosedCaptionsTracks",
-      get: function get() {
-        return this.closedCaptionsTracks.length > 0;
-      }
-      /**
-       * gets the playback available closed caption tracks.
-       * @property closedCaptionsTracks
-       * @type {Array} an array of objects with at least 'id' and 'name' properties
-       */
-
-    }, {
-      key: "closedCaptionsTracks",
-      get: function get() {
-        return [];
-      }
-      /**
-       * gets the selected closed caption track index. (-1 is disabled)
-       * @property closedCaptionsTrackId
-       * @type {Number}
-       */
-
-    }, {
-      key: "closedCaptionsTrackId",
-      get: function get() {
-        return -1;
-      }
-      /**
-       * sets the selected closed caption track index. (-1 is disabled)
-       * @property closedCaptionsTrackId
-       * @type {Number}
-       */
-      ,
-      set: function set(trackId) {}
     }]);
-
     return Playback;
   }(UIObject);
   Object.assign(Playback.prototype, ErrorMixin);
-
   Playback.extend = function (properties) {
     return extend$1(Playback, properties);
   };
+
   /**
    * checks if the playback can play a given `source`
    * If a mimeType is provided then this will be used instead of inferring the mimetype
@@ -6034,12 +5694,11 @@
    * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
    * @return {Boolean} `true` if the playback is playable, otherwise `false`
    */
-
-
   Playback.canPlay = function (source, mimeType) {
     // eslint-disable-line no-unused-vars
     return false;
   };
+
   /**
    * a playback type for video on demand
    *
@@ -6047,8 +5706,6 @@
    * @static
    * @type String
    */
-
-
   Playback.VOD = 'vod';
   /**
    * a playback type for audio on demand
@@ -6057,7 +5714,6 @@
    * @static
    * @type String
    */
-
   Playback.AOD = 'aod';
   /**
    * a playback type for live video
@@ -6066,7 +5722,6 @@
    * @static
    * @type String
    */
-
   Playback.LIVE = 'live';
   /**
    * a default playback type
@@ -6075,7 +5730,6 @@
    * @static
    * @type String
    */
-
   Playback.NO_OP = 'no_op';
   /**
    * the plugin type
@@ -6084,14 +5738,20 @@
    * @static
    * @type String
    */
-
   Playback.type = 'playback';
 
   var ContainerFactory = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(ContainerFactory, _BaseObject);
-
     var _super = _createSuper$1(ContainerFactory);
-
+    function ContainerFactory(options, loader, i18n, playerError) {
+      var _this;
+      _classCallCheck$1(this, ContainerFactory);
+      _this = _super.call(this, options);
+      _this._i18n = i18n;
+      _this.loader = loader;
+      _this.playerError = playerError;
+      return _this;
+    }
     _createClass$1(ContainerFactory, [{
       key: "options",
       get: function get() {
@@ -6100,25 +5760,10 @@
       set: function set(options) {
         this._options = options;
       }
-    }]);
-
-    function ContainerFactory(options, loader, i18n, playerError) {
-      var _this;
-
-      _classCallCheck$1(this, ContainerFactory);
-
-      _this = _super.call(this, options);
-      _this._i18n = i18n;
-      _this.loader = loader;
-      _this.playerError = playerError;
-      return _this;
-    }
-
-    _createClass$1(ContainerFactory, [{
+    }, {
       key: "createContainers",
       value: function createContainers() {
         var _this2 = this;
-
         return zepto.Deferred(function (promise) {
           promise.resolve(_this2.options.sources.map(function (source) {
             return _this2.createContainer(source);
@@ -6137,23 +5782,20 @@
       value: function createContainer(source) {
         var resolvedSource = null;
         var mimeType = this.options.mimeType;
-
         if (_typeof(source) === 'object') {
           resolvedSource = source.source.toString();
           if (source.mimeType) mimeType = source.mimeType;
         } else {
           resolvedSource = source.toString();
         }
-
         if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
-
         var options = _objectSpread2(_objectSpread2({}, this.options), {}, {
           src: resolvedSource,
           mimeType: mimeType
         });
+        var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType);
 
-        var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType); // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
-
+        // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
         var playback = playbackPlugin ? new playbackPlugin(options, this._i18n, this.playerError) : new Playback();
         options = _objectSpread2(_objectSpread2({}, options), {}, {
           playback: playback
@@ -6175,13 +5817,12 @@
         });
       }
     }]);
-
     return ContainerFactory;
   }(BaseObject);
 
-  var css_248z$1$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
+  var css_248z$4$1 = "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    box-sizing: inherit; }\n  [data-player] > * {\n    float: none;\n    max-width: none; }\n  [data-player] > div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n";
 
-  var css_248z$2$1 = "[data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n[data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n[data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n[data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n[data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n[data-player] b, [data-player] u, [data-player] i, [data-player] center,\n[data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n[data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n[data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n[data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n[data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n[data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n[data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font: inherit;\n  font-size: 100%;\n  vertical-align: baseline; }\n\n[data-player] table {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n[data-player] caption, [data-player] th, [data-player] td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle; }\n\n[data-player] q, [data-player] blockquote {\n  quotes: none; }\n  [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n    content: \"\";\n    content: none; }\n\n[data-player] a img {\n  border: none; }\n";
+  var css_248z$3$1 = "[data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n[data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n[data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n[data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n[data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n[data-player] b, [data-player] u, [data-player] i, [data-player] center,\n[data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n[data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n[data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n[data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n[data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n[data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n[data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font: inherit;\n  font-size: 100%;\n  vertical-align: baseline; }\n\n[data-player] table {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n[data-player] caption, [data-player] th, [data-player] td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle; }\n\n[data-player] q, [data-player] blockquote {\n  quotes: none; }\n  [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n    content: \"\";\n    content: none; }\n\n[data-player] a img {\n  border: none; }\n";
 
   /**
    * The Core is responsible to manage Containers and the player state.
@@ -6190,12 +5831,30 @@
    * @extends UIObject
    * @module components
    */
-
   var Core = /*#__PURE__*/function (_UIObject) {
     _inherits$1(Core, _UIObject);
-
     var _super = _createSuper$1(Core);
-
+    function Core(options) {
+      var _this;
+      _classCallCheck$1(this, Core);
+      _this = _super.call(this, options);
+      _this.playerError = new PlayerError(options, _assertThisInitialized$1(_this));
+      _this.configureDomRecycler();
+      _this.firstResize = true;
+      _this.plugins = [];
+      _this.containers = [];
+      //FIXME fullscreen api sucks
+      _this._boundFullscreenHandler = function () {
+        return _this.handleFullscreenChange();
+      };
+      zepto(document).bind('fullscreenchange', _this._boundFullscreenHandler);
+      zepto(document).bind('MSFullscreenChange', _this._boundFullscreenHandler);
+      zepto(document).bind('mozfullscreenchange', _this._boundFullscreenHandler);
+      Browser.isMobile && zepto(window).bind('resize', function (o) {
+        _this.handleWindowResize(o);
+      });
+      return _this;
+    }
     _createClass$1(Core, [{
       key: "events",
       get: function get() {
@@ -6213,23 +5872,23 @@
           tabindex: 9999
         };
       }
+
       /**
        * checks if the core is ready.
        * @property isReady
        * @type {Boolean} `true` if the core is ready, otherwise `false`
        */
-
     }, {
       key: "isReady",
       get: function get() {
         return !!this.ready;
       }
+
       /**
        * The internationalization plugin.
        * @property i18n
        * @type {Strings}
        */
-
     }, {
       key: "i18n",
       get: function get() {
@@ -6239,13 +5898,13 @@
           }
         };
       }
+
       /**
        * @deprecated
        * This property currently exists for backward compatibility reasons.
        * If you need to access the media control instance, use the method getPlugin('media_control').
        * This approach is still not recommended.
        */
-
     }, {
       key: "mediaControl",
       get: function get() {
@@ -6258,68 +5917,51 @@
         this._dummyMediaControl = new UICorePlugin(this);
         return this._dummyMediaControl;
       }
+
       /**
        * gets the active container reference.
        * @property activeContainer
        * @type {Object}
        */
-
     }, {
       key: "activeContainer",
       get: function get() {
         return this._activeContainer;
       }
+
       /**
        * sets the active container reference and trigger a event with the new reference.
        * @property activeContainer
        * @type {Object}
-       */
-      ,
+       */,
       set: function set(container) {
         this._activeContainer = container;
         this.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this._activeContainer);
       }
+
       /**
        * gets the active playback reference.
        * @property activePlayback
        * @type {Object}
        */
-
     }, {
       key: "activePlayback",
       get: function get() {
         return this.activeContainer && this.activeContainer.playback;
       }
-    }]);
 
-    function Core(options) {
-      var _this;
-
-      _classCallCheck$1(this, Core);
-
-      _this = _super.call(this, options);
-      _this.playerError = new PlayerError(options, _assertThisInitialized$1(_this));
-
-      _this.configureDomRecycler();
-
-      _this.firstResize = true;
-      _this.plugins = [];
-      _this.containers = []; //FIXME fullscreen api sucks
-
-      _this._boundFullscreenHandler = function () {
-        return _this.handleFullscreenChange();
-      };
-
-      zepto(document).bind('fullscreenchange', _this._boundFullscreenHandler);
-      zepto(document).bind('MSFullscreenChange', _this._boundFullscreenHandler);
-      zepto(document).bind('mozfullscreenchange', _this._boundFullscreenHandler);
-      Browser.isMobile && zepto(window).bind('resize', function (o) {
-        _this.handleWindowResize(o);
-      });
-      return _this;
-    }
-
-    _createClass$1(Core, [{
+      /**
+       * gets the active playback's video element.
+       * @property activePlaybackEl
+       * @type {Object}
+       */
+    }, {
+      key: "activePlaybackEl",
+      get: function get() {
+        if (!this.activePlayback) return undefined;
+        return this.activePlayback.$el ? this.activePlayback.$el.find('video')[0] : this.activePlayback.el;
+      }
+    }, {
       key: "configureDomRecycler",
       value: function configureDomRecycler() {
         var recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo;
@@ -6339,7 +5981,6 @@
       key: "prepareContainers",
       value: function prepareContainers() {
         var _this2 = this;
-
         this.containerFactory.createContainers().then(function (containers) {
           return _this2.setupContainers(containers);
         }).then(function (containers) {
@@ -6388,7 +6029,6 @@
           this.el.style.height = "".concat(options.height, "px");
           this.el.style.width = "".concat(options.width, "px");
         }
-
         this.previousSize = {
           width: this.options.width,
           height: this.options.height
@@ -6402,23 +6042,19 @@
       key: "enableResizeObserver",
       value: function enableResizeObserver() {
         var _this3 = this;
-
         this.disableResizeObserver();
-
         var checkSizeCallback = function checkSizeCallback() {
           _this3.triggerResize({
             width: _this3.el.clientWidth,
             height: _this3.el.clientHeight
           });
         };
-
         this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
       }
     }, {
       key: "triggerResize",
       value: function triggerResize(newSize) {
         var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width;
-
         if (thereWasChange) {
           this.oldHeight = newSize.height;
           this.oldWidth = newSize.width;
@@ -6437,12 +6073,9 @@
       key: "resolveOnContainersReady",
       value: function resolveOnContainersReady(containers) {
         var _this4 = this;
-
         zepto.when.apply(zepto, containers).done(function () {
           _this4.defer.resolve(_this4);
-
           _this4.ready = true;
-
           _this4.trigger(Events.CORE_READY);
         });
       }
@@ -6543,7 +6176,6 @@
       key: "renderContainers",
       value: function renderContainers() {
         var _this5 = this;
-
         this.containers.forEach(function (container) {
           return _this5.el.appendChild(container.render().el);
         });
@@ -6556,23 +6188,23 @@
         this.el.appendChild(container.render().el);
         return container;
       }
+
       /**
        * @deprecated
        * This method currently exists for retrocompatibility reasons.
        * If you want the current container reference, use the activeContainer getter.
        */
-
     }, {
       key: "getCurrentContainer",
       value: function getCurrentContainer() {
         return this.activeContainer;
       }
+
       /**
        * @deprecated
        * This method currently exists for retrocompatibility reasons.
        * If you want the current playback reference, use the activePlayback getter.
        */
-
     }, {
       key: "getCurrentPlayback",
       value: function getCurrentPlayback() {
@@ -6586,25 +6218,22 @@
     }, {
       key: "isFullscreen",
       value: function isFullscreen() {
-        // Ensure current instance is in fullscreen mode by checking fullscreen element
         var fullscreenElement = Fullscreen$1.fullscreenElement();
-        if (!fullscreenElement) return false;
-        var playbackEl = this.activePlayback && this.activePlayback.el;
-        return fullscreenElement === this.el || fullscreenElement === playbackEl;
+        return fullscreenElement && fullscreenElement === this.el || fullscreenElement && fullscreenElement === this.activePlaybackEl || this.activePlaybackEl && this.activePlaybackEl.webkitDisplayingFullscreen || false;
       }
     }, {
       key: "toggleFullscreen",
       value: function toggleFullscreen() {
         var _this6 = this;
-
         if (this.isFullscreen()) {
-          Fullscreen$1.cancelFullscreen();
+          var fullscreenEl = Browser.isiOS ? this.activePlaybackEl : document;
+          Fullscreen$1.cancelFullscreen(fullscreenEl);
           !Browser.isiOS && this.$el.removeClass('fullscreen nocursor');
         } else {
-          var fullscreenEl = Browser.isiOS ? this.activePlayback && this.activePlayback.el : this.el;
-          if (!fullscreenEl) return;
-          Browser.isSafari || Browser.isiOS ? // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
-          Fullscreen$1.requestFullscreen(fullscreenEl) : Fullscreen$1.requestFullscreen(fullscreenEl).then(function (_) {
+          var _fullscreenEl = Browser.isiOS ? this.activePlaybackEl : this.el;
+          if (!_fullscreenEl) return;
+          Browser.isSafari || Browser.isiOS // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+          ? Fullscreen$1.requestFullscreen(_fullscreenEl) : Fullscreen$1.requestFullscreen(_fullscreenEl).then(function (_) {
             return _;
           }, function (error) {
             return setTimeout(function () {
@@ -6625,23 +6254,21 @@
       value: function onMouseLeave(event) {
         this.trigger(Events.CORE_MOUSE_LEAVE, event);
       }
+
       /**
        * enables to configure the container after its creation
        * @method configure
        * @param {Object} options all the options to change in form of a javascript object
        */
-
     }, {
       key: "configure",
       value: function configure(options) {
         var _this7 = this;
-
         this._options = zepto.extend(true, this._options, options);
         this.configureDomRecycler();
         var sources = options.source || options.sources;
         sources && this.load(sources, options.mimeType || this.options.mimeType);
         this.trigger(Events.CORE_OPTIONS_CHANGE, options); // Trigger with newly provided options
-
         this.containers.forEach(function (container) {
           return container.configure(_this7.options);
         });
@@ -6649,10 +6276,10 @@
     }, {
       key: "appendToParent",
       value: function appendToParent() {
-        var style = Styler.getStyleFor(css_248z$1$1.toString(), {
+        var style = Styler.getStyleFor(css_248z$4$1.toString(), {
           baseUrl: this.options.baseUrl
         });
-        var resetStyle = Styler.getStyleFor(css_248z$2$1.toString(), {
+        var resetStyle = Styler.getStyleFor(css_248z$3$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -6675,7 +6302,6 @@
         return this;
       }
     }]);
-
     return Core;
   }(UIObject);
   Object.assign(Core.prototype, ErrorMixin);
@@ -6687,42 +6313,33 @@
    * @extends BaseObject
    * @module components
    */
-
   var CoreFactory = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(CoreFactory, _BaseObject);
-
     var _super = _createSuper$1(CoreFactory);
-
-    _createClass$1(CoreFactory, [{
-      key: "loader",
-      get: function get() {
-        return this.player.loader;
-      }
-      /**
-       * it builds the core factory
-       * @method constructor
-       * @param {Player} player the player object
-       */
-
-    }]);
-
+    /**
+     * it builds the core factory
+     * @method constructor
+     * @param {Player} player the player object
+     */
     function CoreFactory(player) {
       var _this;
-
       _classCallCheck$1(this, CoreFactory);
-
       _this = _super.call(this, player.options);
       _this.player = player;
       return _this;
     }
+
     /**
      * creates a core and its plugins
      * @method create
      * @return {Core} created core
      */
-
-
     _createClass$1(CoreFactory, [{
+      key: "loader",
+      get: function get() {
+        return this.player.loader;
+      }
+    }, {
       key: "create",
       value: function create() {
         this.options.loader = this.loader;
@@ -6731,22 +6348,19 @@
         this.core.createContainers(this.options);
         return this.core;
       }
+
       /**
        * given the core plugins (`loader.corePlugins`) it builds each one
        * @method addCorePlugins
        * @return {Core} the core with all plugins
        */
-
     }, {
       key: "addCorePlugins",
       value: function addCorePlugins() {
         var _this2 = this;
-
         this.loader.corePlugins.forEach(function (Plugin) {
           var plugin = new Plugin(_this2.core);
-
           _this2.core.addPlugin(plugin);
-
           _this2.setupExternalInterface(plugin);
         });
         return this.core;
@@ -6755,43 +6369,22 @@
       key: "setupExternalInterface",
       value: function setupExternalInterface(plugin) {
         var externalFunctions = plugin.getExternalInterface();
-
         for (var key in externalFunctions) {
           this.player[key] = externalFunctions[key].bind(plugin);
         }
       }
     }]);
-
     return CoreFactory;
   }(BaseObject);
 
   var VERSION_REGEX = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/;
-
   var Version = /*#__PURE__*/function () {
-    _createClass$1(Version, null, [{
-      key: "parse",
-      value: function parse() {
-        var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-        var matches = str.match(VERSION_REGEX) || [];
-
-        var _matches = _slicedToArray(matches, 4),
-            major = _matches[1],
-            minor = _matches[2],
-            patch = _matches[3];
-
-        if (typeof major === 'undefined') return null;
-        return new Version(major, minor, patch);
-      }
-    }]);
-
     function Version(major, minor, patch) {
       _classCallCheck$1(this, Version);
-
       this.major = parseInt(major || 0, 10);
       this.minor = parseInt(minor || 0, 10);
       this.patch = parseInt(patch || 0, 10);
     }
-
     _createClass$1(Version, [{
       key: "compare",
       value: function compare(other) {
@@ -6817,8 +6410,19 @@
       value: function toString() {
         return "".concat(this.major, ".").concat(this.minor, ".").concat(this.patch);
       }
+    }], [{
+      key: "parse",
+      value: function parse() {
+        var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+        var matches = str.match(VERSION_REGEX) || [];
+        var _matches = _slicedToArray(matches, 4),
+          major = _matches[1],
+          minor = _matches[2],
+          patch = _matches[3];
+        if (typeof major === 'undefined') return null;
+        return new Version(major, minor, patch);
+      }
     }]);
-
     return Version;
   }();
 
@@ -6826,17 +6430,16 @@
     if (!plugins || !type) return {};
     return Object.entries(plugins).filter(function (_ref) {
       var _ref2 = _slicedToArray(_ref, 2),
-          value = _ref2[1];
-
+        value = _ref2[1];
       return value.type === type;
     }).reduce(function (obj, _ref3) {
       var _ref4 = _slicedToArray(_ref3, 2),
-          key = _ref4[0],
-          value = _ref4[1];
-
+        key = _ref4[0],
+        value = _ref4[1];
       return obj[key] = value, obj;
     }, {});
   };
+
   /**
    * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
    * @class Loader
@@ -6844,35 +6447,152 @@
    * @extends BaseObject
    * @module components
    */
-
-
   var Loader = (function () {
     var registry = {
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.20";
+    var currentVersion = "0.4.27";
     return /*#__PURE__*/function () {
-      _createClass$1(Loader, null, [{
+      /**
+       * builds the loader
+       * @method constructor
+       * @param {Object} externalPlugins the external plugins
+       * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
+       */
+      function Loader() {
+        var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        _classCallCheck$1(this, Loader);
+        this.playerId = playerId;
+        this.playbackPlugins = _toConsumableArray(registry.playbacks);
+        var _Loader$registeredPlu = Loader.registeredPlugins,
+          core = _Loader$registeredPlu.core,
+          container = _Loader$registeredPlu.container;
+        this.containerPlugins = Object.values(container);
+        this.corePlugins = Object.values(core);
+        if (!Array.isArray(externalPlugins)) this.validateExternalPluginsType(externalPlugins);
+        this.addExternalPlugins(externalPlugins);
+      }
+
+      /**
+       * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
+       * @method addExternalPlugins
+       * @private
+       * @param {Object} an config object or an array of plugins
+       * @return {Object} plugins the config object with the plugins separated by type
+       */
+      _createClass$1(Loader, [{
+        key: "groupPluginsByType",
+        value: function groupPluginsByType(plugins) {
+          if (Array.isArray(plugins)) {
+            plugins = plugins.reduce(function (memo, plugin) {
+              memo[plugin.type] || (memo[plugin.type] = []);
+              memo[plugin.type].push(plugin);
+              return memo;
+            }, {});
+          }
+          return plugins;
+        }
+      }, {
+        key: "removeDups",
+        value: function removeDups(list) {
+          var useReversePrecedence = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+          var groupUp = function groupUp(plugins, plugin) {
+            if (plugins[plugin.prototype.name] && useReversePrecedence) return plugins;
+            plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
+            plugins[plugin.prototype.name] = plugin;
+            return plugins;
+          };
+          var pluginsMap = list.reduceRight(groupUp, Object.create(null));
+          var plugins = [];
+          for (var key in pluginsMap) {
+            plugins.unshift(pluginsMap[key]);
+          }
+          return plugins;
+        }
+
+        /**
+         * adds all the external plugins that were passed through `options.plugins`
+         * @method addExternalPlugins
+         * @private
+         * @param {Object} plugins the config object with all plugins
+         */
+      }, {
+        key: "addExternalPlugins",
+        value: function addExternalPlugins(plugins) {
+          var loadExternalPluginsFirst = typeof plugins.loadExternalPluginsFirst === 'boolean' ? plugins.loadExternalPluginsFirst : true;
+          var loadExternalPlaybacksFirst = typeof plugins.loadExternalPlaybacksFirst === 'boolean' ? plugins.loadExternalPlaybacksFirst : true;
+          plugins = this.groupPluginsByType(plugins);
+          if (plugins.playback) {
+            var playbacks = plugins.playback.filter(function (playback) {
+              return Loader.checkVersionSupport(playback), true;
+            });
+            this.playbackPlugins = loadExternalPlaybacksFirst ? this.removeDups(playbacks.concat(this.playbackPlugins)) : this.removeDups(this.playbackPlugins.concat(playbacks), true);
+          }
+          if (plugins.container) {
+            var containerPlugins = plugins.container.filter(function (plugin) {
+              return Loader.checkVersionSupport(plugin), true;
+            });
+            this.containerPlugins = loadExternalPluginsFirst ? this.removeDups(containerPlugins.concat(this.containerPlugins)) : this.removeDups(this.containerPlugins.concat(containerPlugins), true);
+          }
+          if (plugins.core) {
+            var corePlugins = plugins.core.filter(function (plugin) {
+              return Loader.checkVersionSupport(plugin), true;
+            });
+            this.corePlugins = loadExternalPluginsFirst ? this.removeDups(corePlugins.concat(this.corePlugins)) : this.removeDups(this.corePlugins.concat(corePlugins), true);
+          }
+        }
+
+        /**
+         * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
+         * @method validateExternalPluginsType
+         * @private
+         * @param {Object} plugins the config object with all plugins
+         */
+      }, {
+        key: "validateExternalPluginsType",
+        value: function validateExternalPluginsType(plugins) {
+          var pluginTypes = ['playback', 'container', 'core'];
+          pluginTypes.forEach(function (type) {
+            (plugins[type] || []).forEach(function (el) {
+              var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
+              if (el.type !== type) throw new ReferenceError(errorMessage);
+            });
+          });
+        }
+      }], [{
+        key: "registeredPlaybacks",
+        get: function get() {
+          return _toConsumableArray(registry.playbacks);
+        }
+      }, {
+        key: "registeredPlugins",
+        get: function get() {
+          var plugins = registry.plugins;
+          var core = filterPluginsByType(plugins, 'core');
+          var container = filterPluginsByType(plugins, 'container');
+          return {
+            core: core,
+            container: container
+          };
+        }
+      }, {
         key: "checkVersionSupport",
         value: function checkVersionSupport(entry) {
           var _entry$prototype = entry.prototype,
-              supportedVersion = _entry$prototype.supportedVersion,
-              name = _entry$prototype.name;
-
+            supportedVersion = _entry$prototype.supportedVersion,
+            name = _entry$prototype.name;
           if (!supportedVersion || !supportedVersion.min) {
             Log.warn('Loader', "missing version information for ".concat(name));
             return false;
           }
-
           var maxVersion = supportedVersion.max ? Version.parse(supportedVersion.max) : Version.parse(supportedVersion.min).inc('minor');
           var minVersion = Version.parse(supportedVersion.min);
-
           if (!Version.parse(currentVersion).satisfies(minVersion, maxVersion)) {
             Log.warn('Loader', "unsupported plugin ".concat(name, ": Clappr version ").concat(currentVersion, " does not match required range [").concat(minVersion, ",").concat(maxVersion, ")"));
             return false;
           }
-
           return true;
         }
       }, {
@@ -6882,7 +6602,6 @@
             Log.warn('Loader', "missing information to register plugin: ".concat(pluginEntry));
             return false;
           }
-
           Loader.checkVersionSupport(pluginEntry);
           var pluginRegistry = registry.plugins;
           if (!pluginRegistry) return false;
@@ -6900,13 +6619,11 @@
           var previousEntryIdx = playbacks.findIndex(function (entry) {
             return entry.prototype.name === playbackEntry.prototype.name;
           });
-
           if (previousEntryIdx >= 0) {
             var previousEntry = playbacks[previousEntryIdx];
             playbacks.splice(previousEntryIdx, 1);
             Log.warn('Loader', "overriding playback entry: ".concat(previousEntry.name, " - ").concat(previousEntry));
           }
-
           registry.playbacks = [playbackEntry].concat(_toConsumableArray(playbacks));
           return true;
         }
@@ -6943,150 +6660,13 @@
         value: function clearPlaybacks() {
           registry.playbacks = [];
         }
-        /**
-         * builds the loader
-         * @method constructor
-         * @param {Object} externalPlugins the external plugins
-         * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
-         */
-
-      }, {
-        key: "registeredPlaybacks",
-        get: function get() {
-          return _toConsumableArray(registry.playbacks);
-        }
-      }, {
-        key: "registeredPlugins",
-        get: function get() {
-          var plugins = registry.plugins;
-          var core = filterPluginsByType(plugins, 'core');
-          var container = filterPluginsByType(plugins, 'container');
-          return {
-            core: core,
-            container: container
-          };
-        }
       }]);
-
-      function Loader() {
-        var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-        var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
-        _classCallCheck$1(this, Loader);
-
-        this.playerId = playerId;
-        this.playbackPlugins = _toConsumableArray(registry.playbacks);
-        var _Loader$registeredPlu = Loader.registeredPlugins,
-            core = _Loader$registeredPlu.core,
-            container = _Loader$registeredPlu.container;
-        this.containerPlugins = Object.values(container);
-        this.corePlugins = Object.values(core);
-        if (!Array.isArray(externalPlugins)) this.validateExternalPluginsType(externalPlugins);
-        this.addExternalPlugins(externalPlugins);
-      }
-      /**
-       * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
-       * @method addExternalPlugins
-       * @private
-       * @param {Object} an config object or an array of plugins
-       * @return {Object} plugins the config object with the plugins separated by type
-       */
-
-
-      _createClass$1(Loader, [{
-        key: "groupPluginsByType",
-        value: function groupPluginsByType(plugins) {
-          if (Array.isArray(plugins)) {
-            plugins = plugins.reduce(function (memo, plugin) {
-              memo[plugin.type] || (memo[plugin.type] = []);
-              memo[plugin.type].push(plugin);
-              return memo;
-            }, {});
-          }
-
-          return plugins;
-        }
-      }, {
-        key: "removeDups",
-        value: function removeDups(list) {
-          var useReversePrecedence = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-          var groupUp = function groupUp(plugins, plugin) {
-            if (plugins[plugin.prototype.name] && useReversePrecedence) return plugins;
-            plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
-            plugins[plugin.prototype.name] = plugin;
-            return plugins;
-          };
-
-          var pluginsMap = list.reduceRight(groupUp, Object.create(null));
-          var plugins = [];
-
-          for (var key in pluginsMap) {
-            plugins.unshift(pluginsMap[key]);
-          }
-
-          return plugins;
-        }
-        /**
-         * adds all the external plugins that were passed through `options.plugins`
-         * @method addExternalPlugins
-         * @private
-         * @param {Object} plugins the config object with all plugins
-         */
-
-      }, {
-        key: "addExternalPlugins",
-        value: function addExternalPlugins(plugins) {
-          var loadExternalPluginsFirst = typeof plugins.loadExternalPluginsFirst === 'boolean' ? plugins.loadExternalPluginsFirst : true;
-          var loadExternalPlaybacksFirst = typeof plugins.loadExternalPlaybacksFirst === 'boolean' ? plugins.loadExternalPlaybacksFirst : true;
-          plugins = this.groupPluginsByType(plugins);
-
-          if (plugins.playback) {
-            var playbacks = plugins.playback.filter(function (playback) {
-              return Loader.checkVersionSupport(playback), true;
-            });
-            this.playbackPlugins = loadExternalPlaybacksFirst ? this.removeDups(playbacks.concat(this.playbackPlugins)) : this.removeDups(this.playbackPlugins.concat(playbacks), true);
-          }
-
-          if (plugins.container) {
-            var containerPlugins = plugins.container.filter(function (plugin) {
-              return Loader.checkVersionSupport(plugin), true;
-            });
-            this.containerPlugins = loadExternalPluginsFirst ? this.removeDups(containerPlugins.concat(this.containerPlugins)) : this.removeDups(this.containerPlugins.concat(containerPlugins), true);
-          }
-
-          if (plugins.core) {
-            var corePlugins = plugins.core.filter(function (plugin) {
-              return Loader.checkVersionSupport(plugin), true;
-            });
-            this.corePlugins = loadExternalPluginsFirst ? this.removeDups(corePlugins.concat(this.corePlugins)) : this.removeDups(this.corePlugins.concat(corePlugins), true);
-          }
-        }
-        /**
-         * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
-         * @method validateExternalPluginsType
-         * @private
-         * @param {Object} plugins the config object with all plugins
-         */
-
-      }, {
-        key: "validateExternalPluginsType",
-        value: function validateExternalPluginsType(plugins) {
-          var pluginTypes = ['playback', 'container', 'core'];
-          pluginTypes.forEach(function (type) {
-            (plugins[type] || []).forEach(function (el) {
-              var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
-              if (el.type !== type) throw new ReferenceError(errorMessage);
-            });
-          });
-        }
-      }]);
-
       return Loader;
     }();
   })();
 
   var baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '');
+
   /**
    * @class Player
    * @constructor
@@ -7111,32 +6691,198 @@
    * </body>
    * ```
    */
-
   var Player = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(Player, _BaseObject);
-
     var _super = _createSuper$1(Player);
+    /**
+     * @typedef {Object} PlaybackConfig
+     * @prop {boolean} disableContextMenu
+     * disables the context menu (right click) on the video element if a HTML5Video playback is used.
+     * @prop {boolean} preload
+     * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+     * @prop {boolean} controls
+     * enabled/disables displaying controls
+     * @prop {boolean} crossOrigin
+     * enables cross-origin capability for media-resources
+     * @prop {boolean} playInline
+     * enables in-line video elements
+     * @prop {boolean} audioOnly
+     * enforce audio-only playback (when possible)
+     * @prop {Object} externalTracks
+     * pass externaly loaded track to playback
+     * @prop {Number} [maxBufferLength]
+     * The default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+     * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+     * To change this behavior use `maxBufferLength` where **value is in seconds**.
+     * @prop {Number} [maxBackBufferLength]
+     * After how much distance of the playhead data should be pruned from the buffer (influences memory consumption
+     * of adaptive media-engines like Hls.js or Shaka)
+     * @prop {Number} [minBufferLength]
+     * After how much data in the buffer at least we attempt to consume it (influences QoS-related behavior
+     * of adaptive media-engines like Hls.js or Shaka). If this is too low, and the available bandwidth is varying a lot
+     * and too close to the streamed bitrate, we may continuously hit under-runs.
+     * @prop {Number} [initialBandwidthEstimate]
+     * define an initial bandwidth "guess" (or previously stored/established value) for underlying adaptive-bitreate engines
+     * of adaptive playback implementations, like Hls.js or Shaka
+     * @prop {Number} [maxAdaptiveBitrate]
+     * Limits the streamed bitrate (for adaptive media-engines in underlying playback implementations)
+     * @prop {Object} [maxAdaptiveVideoDimensions]
+     * Limits the video dimensions in adaptive media-engines. Should be a literal object with `height` and `width`.
+     * @prop {Boolean}[enableAutomaticABR] **default**: `true`
+     * Allows to enable/disable automatic bitrate switching in adaptive media-engines
+     * @prop {String} [preferredTextLanguage] **default**: `'pt-BR'`
+     * Allows to set a preferred text language, that may be enabled by the media-engine if available.
+     * @prop {String} [preferredAudioLanguage] **default**: `'pt-BR'`
+     * Allows to set a preferred audio language, that may be enabled by the media-engine if available.
+     */
 
+    /**
+     * ## Player's constructor
+     *
+     * You might pass the options object to build the player.
+     * ```javascript
+     * var options = {source: "http://example.com/video.mp4", param1: "val1"};
+     * var player = new Clappr.Player(options);
+     * ```
+     *
+     * @method constructor
+     * @param {Object} options Data
+     * options to build a player instance
+     * @param {Number} [options.width]
+     * player's width **default**: `640`
+     * @param {Number} [options.height]
+     * player's height **default**: `360`
+     * @param {String} [options.parentId]
+     * the id of the element on the page that the player should be inserted into
+     * @param {Object} [options.parent]
+     * a reference to a dom element that the player should be inserted into
+     * @param {String} [options.source]
+     * The media source URL, or {source: <<source URL>>, mimeType: <<source mime type>>}
+     * @param {Object} [options.sources]
+     * An array of media source URL's, or an array of {source: <<source URL>>, mimeType: <<source mime type>>}
+     * @param {Boolean} [options.autoPlay]
+     * automatically play after page load **default**: `false`
+     * @param {Boolean} [options.loop]
+     * automatically replay after it ends **default**: `false`
+     * @param {Boolean} [options.chromeless]
+     * player acts in chromeless mode **default**: `false`
+     * @param {Boolean} [options.allowUserInteraction]
+     * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
+     * @param {Boolean} [options.disableKeyboardShortcuts]
+     * disable keyboard shortcuts. **default**: `false`. `true` if `allowUserInteraction` is `false`.
+     * @param {Boolean} [options.mute]
+     * start the video muted **default**: `false`
+     * @param {String} [options.mimeType]
+     * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
+     * @param {Boolean} [options.actualLiveTime]
+     * show duration and seek time relative to actual time.
+     * @param {String} [options.actualLiveServerTime]
+     * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
+     * @param {Boolean} [options.persistConfig]
+     * persist player's settings (volume) through the same domain **default**: `true`
+     * @param {String} [options.preload] @deprecated
+     * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+     * @param {Number} [options.maxBufferLength] @deprecated
+     * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+     * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+     * To change this behavior use `maxBufferLength` where **value is in seconds**.
+     * @param {String} [options.gaAccount]
+     * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
+     * @param {String} [options.gaTrackerName]
+     * besides `gaAccount` you can optionally, pass your favorite trackerName as `gaTrackerName`
+     * @param {Object} [options.mediacontrol]
+     * customize control bar colors, example: `mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}`
+     * @param {Boolean} [options.hideMediaControl]
+     * control media control auto hide **default**: `true`
+     * @param {Boolean} [options.hideVolumeBar]
+     * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
+     * @param {String} [options.watermark]
+     * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video.
+     * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+     * @param {String} [options.watermarkLink]
+     * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
+     * @param {Boolean} [options.disableVideoTagContextMenu] @deprecated
+     * disables the context menu (right click) on the video element if a HTML5Video playback is used.
+     * @param {Boolean} [options.autoSeekFromUrl]
+     * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
+     * @param {Boolean} [options.exitFullscreenOnEnd]
+     * Automatically exit full screen when the media finishes. **default**: `true`
+     * @param {String} [options.poster]
+     * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
+     * @param {String} [options.playbackNotSupportedMessage]
+     * define a custom message to be displayed when a playback is not supported.
+     * @param {Object} [options.events]
+     * Specify listeners which will be registered with their corresponding player events.
+     * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
+     * @param {PlaybackConfig} [options.playback]
+     * Generic `Playback` component related configuration
+     * @param {Boolean} [options.disableErrorScreen]
+     * disables the error screen plugin.
+     * @param {Number} [options.autoPlayTimeout]
+     * autoplay check timeout.
+     */
+
+    function Player(options) {
+      var _this;
+      _classCallCheck$1(this, Player);
+      _this = _super.call(this, options);
+      var playbackDefaultOptions = {
+        recycleVideo: true
+      };
+      var defaultOptions = {
+        playerId: uniqueId(''),
+        persistConfig: true,
+        width: 640,
+        height: 360,
+        baseUrl: baseUrl,
+        allowUserInteraction: Browser.isMobile,
+        includeResetStyle: true,
+        playback: playbackDefaultOptions
+      };
+      _this._options = zepto.extend(true, defaultOptions, options);
+      _this.options.sources = _this._normalizeSources(options);
+      if (!_this.options.chromeless) {
+        // "allowUserInteraction" cannot be false if not in chromeless mode.
+        _this.options.allowUserInteraction = true;
+      }
+      if (!_this.options.allowUserInteraction) {
+        // if user iteraction is not allowed ensure keyboard shortcuts are disabled
+        _this.options.disableKeyboardShortcuts = true;
+      }
+      _this._registerOptionEventListeners(_this.options.events);
+      _this._coreFactory = new CoreFactory(_assertThisInitialized$1(_this));
+      var parentElement = _this._getParentElement(_this.options);
+      parentElement && _this.attachTo(parentElement);
+      return _this;
+    }
+
+    /**
+     * Returns the parent element
+     * @param {String} parentId
+     * @param {Object} parent
+     * @returns {Object} the parent element
+     */
     _createClass$1(Player, [{
       key: "loader",
-      set: function set(loader) {
-        this._loader = loader;
-      },
       get: function get() {
         if (!this._loader) this._loader = new Loader(this.options.plugins || {}, this.options.playerId);
         return this._loader;
       }
+
       /**
        * Determine if the playback has ended.
        * @property ended
        * @type Boolean
-       */
-
+       */,
+      set: function set(loader) {
+        this._loader = loader;
+      }
     }, {
       key: "ended",
       get: function get() {
         return this.core.activeContainer.ended;
       }
+
       /**
        * Determine if the playback is having to buffer in order for
        * playback to be smooth.
@@ -7144,29 +6890,28 @@
        * @property buffering
        * @type Boolean
        */
-
     }, {
       key: "buffering",
       get: function get() {
         return this.core.activeContainer.buffering;
       }
+
       /*
        * determine if the player is ready.
        * @property isReady
        * @type {Boolean} `true` if the player is ready. ie PLAYER_READY event has fired
        */
-
     }, {
       key: "isReady",
       get: function get() {
         return !!this._ready;
       }
+
       /**
        * An events map that allows the user to add custom callbacks in player's options.
        * @property eventsMapping
        * @type {Object}
        */
-
     }, {
       key: "eventsMapping",
       get: function get() {
@@ -7184,204 +6929,27 @@
           onSubtitleAvailable: Events.PLAYER_SUBTITLE_AVAILABLE
         };
       }
-      /**
-       * @typedef {Object} PlaybackConfig
-       * @prop {boolean} disableContextMenu
-       * disables the context menu (right click) on the video element if a HTML5Video playback is used.
-       * @prop {boolean} preload
-       * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
-       * @prop {boolean} controls
-       * enabled/disables displaying controls
-       * @prop {boolean} crossOrigin
-       * enables cross-origin capability for media-resources
-       * @prop {boolean} playInline
-       * enables in-line video elements
-       * @prop {boolean} audioOnly
-       * enforce audio-only playback (when possible)
-       * @prop {Object} externalTracks
-       * pass externaly loaded track to playback
-       * @prop {Number} [maxBufferLength]
-       * The default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
-       * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
-       * To change this behavior use `maxBufferLength` where **value is in seconds**.
-       * @prop {Number} [maxBackBufferLength]
-       * After how much distance of the playhead data should be pruned from the buffer (influences memory consumption
-       * of adaptive media-engines like Hls.js or Shaka)
-       * @prop {Number} [minBufferLength]
-       * After how much data in the buffer at least we attempt to consume it (influences QoS-related behavior
-       * of adaptive media-engines like Hls.js or Shaka). If this is too low, and the available bandwidth is varying a lot
-       * and too close to the streamed bitrate, we may continuously hit under-runs.
-       * @prop {Number} [initialBandwidthEstimate]
-       * define an initial bandwidth "guess" (or previously stored/established value) for underlying adaptive-bitreate engines
-       * of adaptive playback implementations, like Hls.js or Shaka
-       * @prop {Number} [maxAdaptiveBitrate]
-       * Limits the streamed bitrate (for adaptive media-engines in underlying playback implementations)
-       * @prop {Object} [maxAdaptiveVideoDimensions]
-       * Limits the video dimensions in adaptive media-engines. Should be a literal object with `height` and `width`.
-       * @prop {Boolean}[enableAutomaticABR] **default**: `true`
-       * Allows to enable/disable automatic bitrate switching in adaptive media-engines
-       * @prop {String} [preferredTextLanguage] **default**: `'pt-BR'`
-       * Allows to set a preferred text language, that may be enabled by the media-engine if available.
-       * @prop {String} [preferredAudioLanguage] **default**: `'pt-BR'`
-       * Allows to set a preferred audio language, that may be enabled by the media-engine if available.
-       */
-
-      /**
-       * ## Player's constructor
-       *
-       * You might pass the options object to build the player.
-       * ```javascript
-       * var options = {source: "http://example.com/video.mp4", param1: "val1"};
-       * var player = new Clappr.Player(options);
-       * ```
-       *
-       * @method constructor
-       * @param {Object} options Data
-       * options to build a player instance
-       * @param {Number} [options.width]
-       * player's width **default**: `640`
-       * @param {Number} [options.height]
-       * player's height **default**: `360`
-       * @param {String} [options.parentId]
-       * the id of the element on the page that the player should be inserted into
-       * @param {Object} [options.parent]
-       * a reference to a dom element that the player should be inserted into
-       * @param {String} [options.source]
-       * The media source URL, or {source: <<source URL>>, mimeType: <<source mime type>>}
-       * @param {Object} [options.sources]
-       * An array of media source URL's, or an array of {source: <<source URL>>, mimeType: <<source mime type>>}
-       * @param {Boolean} [options.autoPlay]
-       * automatically play after page load **default**: `false`
-       * @param {Boolean} [options.loop]
-       * automatically replay after it ends **default**: `false`
-       * @param {Boolean} [options.chromeless]
-       * player acts in chromeless mode **default**: `false`
-       * @param {Boolean} [options.allowUserInteraction]
-       * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
-       * @param {Boolean} [options.disableKeyboardShortcuts]
-       * disable keyboard shortcuts. **default**: `false`. `true` if `allowUserInteraction` is `false`.
-       * @param {Boolean} [options.mute]
-       * start the video muted **default**: `false`
-       * @param {String} [options.mimeType]
-       * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
-       * @param {Boolean} [options.actualLiveTime]
-       * show duration and seek time relative to actual time.
-       * @param {String} [options.actualLiveServerTime]
-       * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
-       * @param {Boolean} [options.persistConfig]
-       * persist player's settings (volume) through the same domain **default**: `true`
-       * @param {String} [options.preload] @deprecated
-       * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
-       * @param {Number} [options.maxBufferLength] @deprecated
-       * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
-       * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
-       * To change this behavior use `maxBufferLength` where **value is in seconds**.
-       * @param {String} [options.gaAccount]
-       * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
-       * @param {String} [options.gaTrackerName]
-       * besides `gaAccount` you can optionally, pass your favorite trackerName as `gaTrackerName`
-       * @param {Object} [options.mediacontrol]
-       * customize control bar colors, example: `mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}`
-       * @param {Boolean} [options.hideMediaControl]
-       * control media control auto hide **default**: `true`
-       * @param {Boolean} [options.hideVolumeBar]
-       * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
-       * @param {String} [options.watermark]
-       * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video.
-       * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
-       * @param {String} [options.watermarkLink]
-       * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
-       * @param {Boolean} [options.disableVideoTagContextMenu] @deprecated
-       * disables the context menu (right click) on the video element if a HTML5Video playback is used.
-       * @param {Boolean} [options.autoSeekFromUrl]
-       * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
-       * @param {Boolean} [options.exitFullscreenOnEnd]
-       * Automatically exit full screen when the media finishes. **default**: `true`
-       * @param {String} [options.poster]
-       * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
-       * @param {String} [options.playbackNotSupportedMessage]
-       * define a custom message to be displayed when a playback is not supported.
-       * @param {Object} [options.events]
-       * Specify listeners which will be registered with their corresponding player events.
-       * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
-       * @param {PlaybackConfig} [options.playback]
-       * Generic `Playback` component related configuration
-       * @param {Boolean} [options.disableErrorScreen]
-       * disables the error screen plugin.
-       * @param {Number} [options.autoPlayTimeout]
-       * autoplay check timeout.
-       */
-
-    }]);
-
-    function Player(options) {
-      var _this;
-
-      _classCallCheck$1(this, Player);
-
-      _this = _super.call(this, options);
-      var playbackDefaultOptions = {
-        recycleVideo: true
-      };
-      var defaultOptions = {
-        playerId: uniqueId(''),
-        persistConfig: true,
-        width: 640,
-        height: 360,
-        baseUrl: baseUrl,
-        allowUserInteraction: Browser.isMobile,
-        includeResetStyle: true,
-        playback: playbackDefaultOptions
-      };
-      _this._options = zepto.extend(true, defaultOptions, options);
-      _this.options.sources = _this._normalizeSources(options);
-
-      if (!_this.options.chromeless) {
-        // "allowUserInteraction" cannot be false if not in chromeless mode.
-        _this.options.allowUserInteraction = true;
+    }, {
+      key: "_getParentElement",
+      value: function _getParentElement(_ref) {
+        var parentId = _ref.parentId,
+          parent = _ref.parent;
+        if (parentId) return document.querySelector(parentId);
+        return parent;
       }
 
-      if (!_this.options.allowUserInteraction) {
-        // if user iteraction is not allowed ensure keyboard shortcuts are disabled
-        _this.options.disableKeyboardShortcuts = true;
-      }
-
-      _this._registerOptionEventListeners(_this.options.events);
-
-      _this._coreFactory = new CoreFactory(_assertThisInitialized$1(_this));
-      if (_this.options.parentId) _this.setParentId(_this.options.parentId);else if (_this.options.parent) _this.attachTo(_this.options.parent);
-      return _this;
-    }
-    /**
-     * Specify a `parentId` to the player.
-     * @method setParentId
-     * @param {String} parentId the element parent id.
-     * @return {Player} itself
-     */
-
-
-    _createClass$1(Player, [{
-      key: "setParentId",
-      value: function setParentId(parentId) {
-        var el = document.querySelector(parentId);
-        if (el) this.attachTo(el);
-        return this;
-      }
       /**
        * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
        * @method attachTo
        * @param {Object} element a given element.
        * @return {Player} itself
        */
-
     }, {
       key: "attachTo",
       value: function attachTo(element) {
         this.options.parentElement = element;
         this.core = this._coreFactory.create();
-
         this._addEventListeners();
-
         return this;
       }
     }, {
@@ -7397,7 +6965,6 @@
       key: "_addContainerEventListeners",
       value: function _addContainerEventListeners() {
         var container = this.core.activeContainer;
-
         if (container) {
           this.listenTo(container, Events.CONTAINER_PLAY, this._onPlay);
           this.listenTo(container, Events.CONTAINER_PAUSE, this._onPause);
@@ -7409,14 +6976,12 @@
           this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate);
           this.listenTo(container, Events.CONTAINER_SUBTITLE_AVAILABLE, this._onSubtitleAvailable);
         }
-
         return this;
       }
     }, {
       key: "_registerOptionEventListeners",
       value: function _registerOptionEventListeners() {
         var _this2 = this;
-
         var newEvents = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var events = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var hasNewEvents = Object.keys(newEvents).length > 0;
@@ -7426,7 +6991,6 @@
         });
         Object.keys(newEvents).forEach(function (userEvent) {
           var eventType = _this2.eventsMapping[userEvent];
-
           if (eventType) {
             var eventFunction = newEvents[userEvent];
             eventFunction = typeof eventFunction === 'function' && eventFunction;
@@ -7439,16 +7003,13 @@
       key: "_containerChanged",
       value: function _containerChanged() {
         this.stopListening();
-
         this._addEventListeners();
       }
     }, {
       key: "_onReady",
       value: function _onReady() {
         this._ready = true;
-
         this._addContainerEventListeners();
-
         this.trigger(Events.PLAYER_READY);
       }
     }, {
@@ -7473,18 +7034,21 @@
       }
     }, {
       key: "_onPlay",
-      value: function _onPlay() {
-        this.trigger(Events.PLAYER_PLAY);
+      value: function _onPlay(_) {
+        var eventMetadata = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        this.trigger(Events.PLAYER_PLAY, eventMetadata);
       }
     }, {
       key: "_onPause",
-      value: function _onPause() {
-        this.trigger(Events.PLAYER_PAUSE);
+      value: function _onPause(_) {
+        var eventMetadata = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        this.trigger(Events.PLAYER_PAUSE, eventMetadata);
       }
     }, {
       key: "_onStop",
       value: function _onStop() {
-        this.trigger(Events.PLAYER_STOP, this.getCurrentTime());
+        var eventMetadata = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        this.trigger(Events.PLAYER_STOP, this.getCurrentTime(), eventMetadata);
       }
     }, {
       key: "_onEnded",
@@ -7515,6 +7079,7 @@
           mimeType: ''
         }] : sources;
       }
+
       /**
        * resizes the current player canvas.
        * @method resize
@@ -7525,13 +7090,13 @@
        * player.resize({height: 360, width: 640})
        * ```
        */
-
     }, {
       key: "resize",
       value: function resize(size) {
         this.core.resize(size);
         return this;
       }
+
       /**
        * loads a new source.
        * @method load
@@ -7541,7 +7106,6 @@
        * @param {Boolean} [autoPlay=false] whether playing should be started immediately
        * @return {Player} itself
        */
-
     }, {
       key: "load",
       value: function load(sources, mimeType, autoPlay) {
@@ -7551,12 +7115,12 @@
         this.core.load(sources, mimeType);
         return this;
       }
+
       /**
        * destroys the current player and removes it from the DOM.
        * @method destroy
        * @return {Player} itself
        */
-
     }, {
       key: "destroy",
       value: function destroy() {
@@ -7564,6 +7128,7 @@
         this.core.destroy();
         return this;
       }
+
       /**
        * Gives user consent to playback. Required by mobile device after a click event before Player.load().
        * @method consent
@@ -7573,148 +7138,152 @@
        * player.consent(function() { doSomethingNext(); });
        * ```
        */
-
     }, {
       key: "consent",
       value: function consent(cb) {
         this.core.getCurrentPlayback().consent(cb);
       }
+
       /**
        * plays the current video (`source`).
        * @method play
+       * @param {Object} customData
        * @return {Player} itself
        */
-
     }, {
       key: "play",
       value: function play() {
-        this.core.activeContainer.play();
+        var customData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        this.core.activeContainer.play(customData);
         return this;
       }
+
       /**
        * pauses the current video (`source`).
        * @method pause
+       * @param {Object} customData
        * @return {Player} itself
        */
-
     }, {
       key: "pause",
       value: function pause() {
-        this.core.activeContainer.pause();
+        var customData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        this.core.activeContainer.pause(customData);
         return this;
       }
+
       /**
        * stops the current video (`source`).
        * @method stop
+       * @param {Object} customData
        * @return {Player} itself
        */
-
     }, {
       key: "stop",
       value: function stop() {
-        this.core.activeContainer.stop();
+        var customData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        this.core.activeContainer.stop(customData);
         return this;
       }
+
       /**
        * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
        * @method seek
        * @param {Number} time should be a number between 0 and the video duration.
        * @return {Player} itself
        */
-
     }, {
       key: "seek",
       value: function seek(time) {
         this.core.activeContainer.seek(time);
         return this;
       }
+
       /**
        * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
        * @method seekPercentage
        * @param {Number} time should be a number between 0 and 100.
        * @return {Player} itself
        */
-
     }, {
       key: "seekPercentage",
       value: function seekPercentage(percentage) {
         this.core.activeContainer.seekPercentage(percentage);
         return this;
       }
+
       /**
        * mutes the current video (`source`).
        * @method mute
        * @return {Player} itself
        */
-
     }, {
       key: "mute",
       value: function mute() {
         this.core.activePlayback.mute();
         return this;
       }
+
       /**
        * unmutes the current video (`source`).
        * @method unmute
        * @return {Player} itself
        */
-
     }, {
       key: "unmute",
       value: function unmute() {
         this.core.activePlayback.unmute();
         return this;
       }
+
       /**
        * checks if the player is playing.
        * @method isPlaying
        * @return {Boolean} `true` if the current source is playing, otherwise `false`
        */
-
     }, {
       key: "isPlaying",
       value: function isPlaying() {
         return this.core.activeContainer.isPlaying();
       }
+
       /**
        * returns `true` if DVR is enable otherwise `false`.
        * @method isDvrEnabled
        * @return {Boolean}
        */
-
     }, {
       key: "isDvrEnabled",
       value: function isDvrEnabled() {
         return this.core.activeContainer.isDvrEnabled();
       }
+
       /**
        * returns `true` if DVR is in use otherwise `false`.
        * @method isDvrInUse
        * @return {Boolean}
        */
-
     }, {
       key: "isDvrInUse",
       value: function isDvrInUse() {
         return this.core.activeContainer.isDvrInUse();
       }
+
       /**
        * enables to configure a player after its creation
        * @method configure
        * @param {Object} options all the options to change in form of a javascript object
        * @return {Player} itself
        */
-
     }, {
       key: "configure",
       value: function configure() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
         this._registerOptionEventListeners(options.events, this.options.events);
-
         this.core.configure(options);
         return this;
       }
+
       /**
        * get a plugin by its name.
        * @method getPlugin
@@ -7726,7 +7295,6 @@
        * poster.hidePlayButton();
        * ```
        */
-
     }, {
       key: "getPlugin",
       value: function getPlugin(name) {
@@ -7735,17 +7303,18 @@
           return plugin.name === name;
         })[0];
       }
+
       /**
        * the current time in seconds.
        * @method getCurrentTime
        * @return {Number} current time (in seconds) of the current source
        */
-
     }, {
       key: "getCurrentTime",
       value: function getCurrentTime() {
         return this.core.activeContainer.getCurrentTime();
       }
+
       /**
        * The time that "0" now represents relative to when playback started.
        * For a stream with a sliding window this will increase as content is
@@ -7753,25 +7322,23 @@
        * @method getStartTimeOffset
        * @return {Number} time (in seconds) that time "0" represents.
        */
-
     }, {
       key: "getStartTimeOffset",
       value: function getStartTimeOffset() {
         return this.core.activeContainer.getStartTimeOffset();
       }
+
       /**
        * the duration time in seconds.
        * @method getDuration
        * @return {Number} duration time (in seconds) of the current source
        */
-
     }, {
       key: "getDuration",
       value: function getDuration() {
         return this.core.activeContainer.getDuration();
       }
     }]);
-
     return Player;
   }(BaseObject);
   Object.assign(Player.prototype, ErrorMixin);
@@ -7783,34 +7350,24 @@
    * @extends BaseObject
    * @module base
    */
-
   var ContainerPlugin = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(ContainerPlugin, _BaseObject);
-
     var _super = _createSuper$1(ContainerPlugin);
-
+    function ContainerPlugin(container) {
+      var _this;
+      _classCallCheck$1(this, ContainerPlugin);
+      _this = _super.call(this, container.options);
+      _this.container = container;
+      _this.enabled = true;
+      _this.bindEvents();
+      return _this;
+    }
     _createClass$1(ContainerPlugin, [{
       key: "playerError",
       get: function get() {
         return this.container.playerError;
       }
-    }]);
-
-    function ContainerPlugin(container) {
-      var _this;
-
-      _classCallCheck$1(this, ContainerPlugin);
-
-      _this = _super.call(this, container.options);
-      _this.container = container;
-      _this.enabled = true;
-
-      _this.bindEvents();
-
-      return _this;
-    }
-
-    _createClass$1(ContainerPlugin, [{
+    }, {
       key: "enable",
       value: function enable() {
         if (!this.enabled) {
@@ -7835,44 +7392,32 @@
         this.stopListening();
       }
     }]);
-
     return ContainerPlugin;
   }(BaseObject);
   Object.assign(ContainerPlugin.prototype, ErrorMixin);
-
   ContainerPlugin.extend = function (properties) {
     return extend$1(ContainerPlugin, properties);
   };
-
   ContainerPlugin.type = 'container';
 
   var CorePlugin = /*#__PURE__*/function (_BaseObject) {
     _inherits$1(CorePlugin, _BaseObject);
-
     var _super = _createSuper$1(CorePlugin);
-
+    function CorePlugin(core) {
+      var _this;
+      _classCallCheck$1(this, CorePlugin);
+      _this = _super.call(this, core.options);
+      _this.core = core;
+      _this.enabled = true;
+      _this.bindEvents();
+      return _this;
+    }
     _createClass$1(CorePlugin, [{
       key: "playerError",
       get: function get() {
         return this.core.playerError;
       }
-    }]);
-
-    function CorePlugin(core) {
-      var _this;
-
-      _classCallCheck$1(this, CorePlugin);
-
-      _this = _super.call(this, core.options);
-      _this.core = core;
-      _this.enabled = true;
-
-      _this.bindEvents();
-
-      return _this;
-    }
-
-    _createClass$1(CorePlugin, [{
+    }, {
       key: "bindEvents",
       value: function bindEvents() {}
     }, {
@@ -7902,15 +7447,12 @@
         this.stopListening();
       }
     }]);
-
     return CorePlugin;
   }(BaseObject);
   Object.assign(CorePlugin.prototype, ErrorMixin);
-
   CorePlugin.extend = function (properties) {
     return extend$1(CorePlugin, properties);
   };
-
   CorePlugin.type = 'core';
 
   /**
@@ -7920,34 +7462,24 @@
    * @extends UIObject
    * @module base
    */
-
   var UIContainerPlugin = /*#__PURE__*/function (_UIObject) {
     _inherits$1(UIContainerPlugin, _UIObject);
-
     var _super = _createSuper$1(UIContainerPlugin);
-
+    function UIContainerPlugin(container) {
+      var _this;
+      _classCallCheck$1(this, UIContainerPlugin);
+      _this = _super.call(this, container.options);
+      _this.container = container;
+      _this.enabled = true;
+      _this.bindEvents();
+      return _this;
+    }
     _createClass$1(UIContainerPlugin, [{
       key: "playerError",
       get: function get() {
         return this.container.playerError;
       }
-    }]);
-
-    function UIContainerPlugin(container) {
-      var _this;
-
-      _classCallCheck$1(this, UIContainerPlugin);
-
-      _this = _super.call(this, container.options);
-      _this.container = container;
-      _this.enabled = true;
-
-      _this.bindEvents();
-
-      return _this;
-    }
-
-    _createClass$1(UIContainerPlugin, [{
+    }, {
       key: "enable",
       value: function enable() {
         if (!this.enabled) {
@@ -7967,20 +7499,17 @@
       key: "bindEvents",
       value: function bindEvents() {}
     }]);
-
     return UIContainerPlugin;
   }(UIObject);
   Object.assign(UIContainerPlugin.prototype, ErrorMixin);
-
   UIContainerPlugin.extend = function (properties) {
     return extend$1(UIContainerPlugin, properties);
   };
-
   UIContainerPlugin.type = 'container';
 
   var tracksHTML = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\">\n<% }; %>\n";
 
-  var css_248z$3$1 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
+  var css_248z$2$1 = "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n";
 
   var MIMETYPES = {
     'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
@@ -8006,13 +7535,64 @@
   var UNKNOWN_ERROR = {
     code: 'unknown',
     message: 'unknown'
-  }; // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
+  };
 
+  // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
   var HTML5Video = /*#__PURE__*/function (_Playback) {
     _inherits$1(HTML5Video, _Playback);
-
     var _super = _createSuper$1(HTML5Video);
+    function HTML5Video() {
+      var _this;
+      _classCallCheck$1(this, HTML5Video);
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      _this = _super.call.apply(_super, [this].concat(args));
+      _this._destroyed = false;
+      _this._loadStarted = false;
+      _this._isBuffering = false;
+      _this._playheadMoving = false;
+      _this._playheadMovingTimer = null;
+      _this._stopped = false;
+      _this._ccTrackId = -1;
+      _this._setupSrc(_this.options.src);
+      // backwards compatibility (TODO: remove on 0.3.0)
+      _this.options.playback || (_this.options.playback = _this.options || {});
+      _this.options.playback.disableContextMenu = _this.options.playback.disableContextMenu || _this.options.disableVideoTagContextMenu;
+      _this._minDvrSize = _this.isValidMinimumDVRSizeConfig ? _this.minimumDVRSizeConfig : 60;
+      var playbackConfig = _this.options.playback;
+      var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : _this.options.preload);
+      var posterUrl; // FIXME: poster plugin should always convert poster to object with expected properties ?
+      if (_this.options.poster) {
+        if (typeof _this.options.poster === 'string') posterUrl = _this.options.poster;else if (typeof _this.options.poster.url === 'string') posterUrl = _this.options.poster.url;
+      }
+      zepto.extend(true, _this.el, {
+        muted: _this.options.mute,
+        defaultMuted: _this.options.mute,
+        loop: _this.options.loop,
+        poster: posterUrl,
+        preload: preload || 'metadata',
+        crossOrigin: playbackConfig.crossOrigin,
+        'x-webkit-playsinline': playbackConfig.playInline
+      });
+      if (playbackConfig.controls || _this.options.useVideoTagDefaultControls) _this.$el.attr('controls', '');
+      playbackConfig.playInline && _this.$el.attr({
+        playsinline: 'playsinline'
+      });
+      playbackConfig.crossOrigin && _this.$el.attr({
+        crossorigin: playbackConfig.crossOrigin
+      });
 
+      // TODO should settings be private?
+      _this.settings = {
+        "default": ['seekbar']
+      };
+      _this.settings.left = ['playpause', 'position', 'duration'];
+      _this.settings.right = ['fullscreen', 'volume', 'hd-indicator'];
+      playbackConfig.externalTracks && _this._setupExternalTracks(playbackConfig.externalTracks);
+      _this.options.autoPlay && _this.attemptAutoPlay();
+      return _this;
+    }
     _createClass$1(HTML5Video, [{
       key: "name",
       get: function get() {
@@ -8022,7 +7602,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.20"
+          min: "0.4.27"
         };
       }
     }, {
@@ -8034,9 +7614,7 @@
       key: "isAudioOnly",
       get: function get() {
         var resourceUrl = this.options.src;
-
         var mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, AUDIO_MIMETYPES, this.options.mimeType);
-
         return this.options.playback && this.options.playback.audioOnly || this.options.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) >= 0;
       }
     }, {
@@ -8067,17 +7645,18 @@
           'waiting': '_onWaiting'
         };
       }
+
       /**
        * Determine if the playback has ended.
        * @property ended
        * @type Boolean
        */
-
     }, {
       key: "ended",
       get: function get() {
         return this.el.ended;
       }
+
       /**
        * Determine if the playback is having to buffer in order for
        * playback to be smooth.
@@ -8085,7 +7664,6 @@
        * @property buffering
        * @type Boolean
        */
-
     }, {
       key: "buffering",
       get: function get() {
@@ -8111,92 +7689,32 @@
       get: function get() {
         return typeof this.minimumDVRSizeConfig !== 'undefined' && typeof this.minimumDVRSizeConfig === 'number';
       }
-    }]);
-
-    function HTML5Video() {
-      var _this;
-
-      _classCallCheck$1(this, HTML5Video);
-
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      _this = _super.call.apply(_super, [this].concat(args));
-      _this._destroyed = false;
-      _this._loadStarted = false;
-      _this._isBuffering = false;
-      _this._playheadMoving = false;
-      _this._playheadMovingTimer = null;
-      _this._stopped = false;
-      _this._ccTrackId = -1;
-
-      _this._setupSrc(_this.options.src); // backwards compatibility (TODO: remove on 0.3.0)
-
-
-      _this.options.playback || (_this.options.playback = _this.options || {});
-      _this.options.playback.disableContextMenu = _this.options.playback.disableContextMenu || _this.options.disableVideoTagContextMenu;
-      _this._minDvrSize = _this.isValidMinimumDVRSizeConfig ? _this.minimumDVRSizeConfig : 60;
-      var playbackConfig = _this.options.playback;
-      var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : _this.options.preload);
-      var posterUrl; // FIXME: poster plugin should always convert poster to object with expected properties ?
-
-      if (_this.options.poster) {
-        if (typeof _this.options.poster === 'string') posterUrl = _this.options.poster;else if (typeof _this.options.poster.url === 'string') posterUrl = _this.options.poster.url;
-      }
-
-      zepto.extend(true, _this.el, {
-        muted: _this.options.mute,
-        defaultMuted: _this.options.mute,
-        loop: _this.options.loop,
-        poster: posterUrl,
-        preload: preload || 'metadata',
-        crossOrigin: playbackConfig.crossOrigin,
-        'x-webkit-playsinline': playbackConfig.playInline
-      });
-      if (playbackConfig.controls || _this.options.useVideoTagDefaultControls) _this.$el.attr('controls', '');
-      playbackConfig.playInline && _this.$el.attr({
-        playsinline: 'playsinline'
-      });
-      playbackConfig.crossOrigin && _this.$el.attr({
-        crossorigin: playbackConfig.crossOrigin
-      }); // TODO should settings be private?
-
-      _this.settings = {
-        "default": ['seekbar']
-      };
-      _this.settings.left = ['playpause', 'position', 'duration'];
-      _this.settings.right = ['fullscreen', 'volume', 'hd-indicator'];
-      playbackConfig.externalTracks && _this._setupExternalTracks(playbackConfig.externalTracks);
-      _this.options.autoPlay && _this.attemptAutoPlay();
-      return _this;
-    }
-
-    _createClass$1(HTML5Video, [{
+    }, {
       key: "configure",
       value: function configure(options) {
         _get$1(_getPrototypeOf$1(HTML5Video.prototype), "configure", this).call(this, options);
-
         this.el.loop = !!options.loop;
-      } // See Playback.attemptAutoPlay()
+      }
 
+      // See Playback.attemptAutoPlay()
     }, {
       key: "attemptAutoPlay",
       value: function attemptAutoPlay() {
         var _this2 = this;
-
         this.canAutoPlay(function (result, error) {
           error && Log.warn(_this2.name, 'autoplay error.', {
             result: result,
             error: error
-          }); // https://github.com/clappr/clappr/issues/1076
+          });
 
+          // https://github.com/clappr/clappr/issues/1076
           result && setTimeout(function () {
             return !_this2._destroyed && _this2.play();
           }, 0);
         });
-      } // See Playback.canAutoPlay()
+      }
 
+      // See Playback.canAutoPlay()
     }, {
       key: "canAutoPlay",
       value: function canAutoPlay(cb) {
@@ -8204,18 +7722,18 @@
           cb(true, null);
           return;
         }
-
         var opts = {
           timeout: this.options.autoPlayTimeout || 500,
           inline: this.options.playback.playInline || false,
           muted: this.options.mute || false // Known issue: mediacontrols may asynchronously mute video
+        };
 
-        }; // Use current video element if recycling feature enabled with mobile devices
+        // Use current video element if recycling feature enabled with mobile devices
+        if (Browser.isMobile && DomRecycler.options.recycleVideo) opts.element = this.el;
 
-        if (Browser.isMobile && DomRecycler.options.recycleVideo) opts.element = this.el; // Desktop browser autoplay policy may require user action
+        // Desktop browser autoplay policy may require user action
         // Mobile browser autoplay require user consent and video recycling feature enabled
         // It may returns a false positive with source-less player consent
-
         canAutoPlayMedia(cb, opts);
       }
     }, {
@@ -8231,13 +7749,13 @@
           };
         });
       }
+
       /**
        * Sets the source url on the <video> element, and also the 'src' property.
        * @method setupSrc
        * @private
        * @param {String} srcUrl The source URL.
        */
-
     }, {
       key: "_setupSrc",
       value: function _setupSrc(srcUrl) {
@@ -8250,14 +7768,11 @@
       key: "_onLoadedMetadata",
       value: function _onLoadedMetadata(e) {
         this._handleBufferingEvents();
-
         this.trigger(Events.PLAYBACK_LOADEDMETADATA, {
           duration: e.target.duration,
           data: e
         });
-
         this._updateSettings();
-
         var autoSeekFromUrl = typeof this._options.autoSeekFromUrl === 'undefined' || this._options.autoSeekFromUrl;
         if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) this._checkInitialSeek();
       }
@@ -8265,10 +7780,8 @@
       key: "_onDurationChange",
       value: function _onDurationChange() {
         this._updateSettings();
-
-        this._onTimeUpdate(); // onProgress uses the duration
-
-
+        this._onTimeUpdate();
+        // onProgress uses the duration
         this._onProgress();
       }
     }, {
@@ -8295,27 +7808,23 @@
       key: "isHighDefinitionInUse",
       value: function isHighDefinitionInUse() {
         return false;
-      } // On mobile device, HTML5 video element "retains" user action consent if
-      // load() method is called. See Player.consent().
+      }
 
+      // On mobile device, HTML5 video element "retains" user action consent if
+      // load() method is called. See Player.consent().
     }, {
       key: "consent",
       value: function consent(cb) {
         var _this3 = this;
-
         if (this.isPlaying() || this.el._consented) {
           _get$1(_getPrototypeOf$1(HTML5Video.prototype), "consent", this).call(this, cb);
         } else {
           var eventHandler = function eventHandler() {
             _this3.el.removeEventListener('loadedmetadata', eventHandler, false);
-
             _this3.el.removeEventListener('error', eventHandler, false);
-
             _this3.el._consented = true; // Flag to call load() only once
-
             _get$1(_getPrototypeOf$1(HTML5Video.prototype), "consent", _this3).call(_this3, cb);
           };
-
           this.el.addEventListener('loadedmetadata', eventHandler, false);
           this.el.addEventListener('error', eventHandler, false);
           this.el.load();
@@ -8326,13 +7835,10 @@
       value: function play() {
         this.trigger(Events.PLAYBACK_PLAY_INTENT);
         this._stopped = false;
-
         this._setupSrc(this._src);
-
         this._handleBufferingEvents();
-
-        var promise = this.el.play(); // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
-
+        var promise = this.el.play();
+        // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
         if (promise && promise["catch"]) promise["catch"](function () {});
       }
     }, {
@@ -8345,15 +7851,12 @@
       key: "stop",
       value: function stop() {
         this.pause();
-        this._stopped = true; // src will be added again in play()
-
+        this._stopped = true;
+        // src will be added again in play()
         this.el.removeAttribute('src');
         this.el.load(); // load with no src to stop loading of the previous source and avoid leaks
-
         this._stopPlayheadMovingChecks();
-
         this._handleBufferingEvents();
-
         this.trigger(Events.PLAYBACK_STOP);
       }
     }, {
@@ -8372,21 +7875,21 @@
           this.el.volume = value / 100;
         }
       }
+
       /**
        * @deprecated
        * @private
        */
-
     }, {
       key: "mute",
       value: function mute() {
         this.el.muted = true;
       }
+
       /**
        * @deprecated
        * @private
        */
-
     }, {
       key: "unmute",
       value: function unmute() {
@@ -8403,13 +7906,16 @@
         return !this.el.paused && !this.el.ended;
       }
     }, {
+      key: "isReady",
+      get: function get() {
+        return this._isReadyState;
+      }
+    }, {
       key: "_startPlayheadMovingChecks",
       value: function _startPlayheadMovingChecks() {
         if (this._playheadMovingTimer !== null) return;
         this._playheadMovingTimeOnCheck = null;
-
         this._determineIfPlayheadMoving();
-
         this._playheadMovingTimer = setInterval(this._determineIfPlayheadMoving.bind(this), 500);
       }
     }, {
@@ -8427,9 +7933,10 @@
         var now = this.el.currentTime;
         this._playheadMoving = before !== now;
         this._playheadMovingTimeOnCheck = now;
-
         this._handleBufferingEvents();
-      } // this seems to happen when the user is having to wait
+      }
+
+      // this seems to happen when the user is having to wait
       // for something to happen AFTER A USER INTERACTION
       // e.g the player might be buffering, but when `play()` is called
       // only at this point will this be called.
@@ -8438,28 +7945,27 @@
       // On devices where playing is blocked until requested with a user action,
       // buffering may start, but never finish until the user initiates a play,
       // but this only happens when play is actually requested
-
     }, {
       key: "_onWaiting",
       value: function _onWaiting() {
         this._loadStarted = true;
-
         this._handleBufferingEvents();
-      } // called after the first frame has loaded
+      }
+
+      // called after the first frame has loaded
       // note this doesn't fire on ios before the user has requested play
       // ideally the "loadstart" event would be used instead, but this fires
       // before a user has requested play on iOS, and also this is always fired
       // even if the preload setting is "none". In both these cases this causes
       // infinite buffering until the user does something which isn't great.
-
     }, {
       key: "_onLoadedData",
       value: function _onLoadedData() {
         this._loadStarted = true;
-
         this._handleBufferingEvents();
-      } // note this doesn't fire on ios before user has requested play
+      }
 
+      // note this doesn't fire on ios before user has requested play
     }, {
       key: "_onCanPlay",
       value: function _onCanPlay() {
@@ -8469,54 +7975,46 @@
       key: "_onPlaying",
       value: function _onPlaying() {
         this._checkForClosedCaptions();
-
         this._startPlayheadMovingChecks();
-
         this._handleBufferingEvents();
-
         this.trigger(Events.PLAYBACK_PLAY);
       }
     }, {
       key: "_onPause",
       value: function _onPause() {
         this._stopPlayheadMovingChecks();
-
         this._handleBufferingEvents();
-
         this.trigger(Events.PLAYBACK_PAUSE);
       }
     }, {
       key: "_onSeeking",
       value: function _onSeeking() {
         this.trigger(Events.PLAYBACK_SEEK, this.getCurrentTime());
-
         this._handleBufferingEvents();
       }
     }, {
       key: "_onSeeked",
       value: function _onSeeked() {
         this._handleBufferingEvents();
-
         this.trigger(Events.PLAYBACK_SEEKED);
       }
     }, {
       key: "_onEnded",
       value: function _onEnded() {
         this._handleBufferingEvents();
-
         this.trigger(Events.PLAYBACK_ENDED, this.name);
-      } // The playback should be classed as buffering if the following are true:
+      }
+
+      // The playback should be classed as buffering if the following are true:
       // - the ready state is less then HAVE_FUTURE_DATA or the playhead isn't moving and it should be
       // - the media hasn't "ended",
       // - the media hasn't been stopped
       // - loading has started
-
     }, {
       key: "_handleBufferingEvents",
       value: function _handleBufferingEvents() {
         var playheadShouldBeMoving = !this.el.ended && !this.el.paused;
         var buffering = this._loadStarted && !this.el.ended && !this._stopped && (playheadShouldBeMoving && !this._playheadMoving || this.el.readyState < this.el.HAVE_FUTURE_DATA);
-
         if (this._isBuffering !== buffering) {
           this._isBuffering = buffering;
           if (buffering) this.trigger(Events.PLAYBACK_BUFFERING, this.name);else this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
@@ -8526,9 +8024,8 @@
       key: "_onError",
       value: function _onError() {
         var _ref = this.el.error || UNKNOWN_ERROR,
-            code = _ref.code,
-            message = _ref.message;
-
+          code = _ref.code,
+          message = _ref.message;
         var isUnknownError = code === UNKNOWN_ERROR.code;
         var formattedError = this.createError({
           code: code,
@@ -8543,12 +8040,9 @@
       value: function destroy() {
         this._destroyed = true;
         this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange);
-
         _get$1(_getPrototypeOf$1(HTML5Video.prototype), "destroy", this).call(this);
-
         this.el.removeAttribute('src');
         this.el.load(); // load with no src to stop loading of the previous source and avoid leaks
-
         this._src = null;
         DomRecycler.garbage(this.el);
       }
@@ -8566,9 +8060,8 @@
         if (time < 0) {
           Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
           time = this.getDuration();
-        } // assume live if time within 3 seconds of end of stream
-
-
+        }
+        // assume live if time within 3 seconds of end of stream
         this.dvrEnabled && this._updateDvr(time < this.getDuration() - 3);
         time += this.el.seekable.start(0);
         this.el.currentTime = time;
@@ -8602,18 +8095,15 @@
             this._scheduleUpdateSettingsCheck();
           }
         }
-
         return this.el.duration;
       }
     }, {
       key: "_scheduleUpdateSettingsCheck",
       value: function _scheduleUpdateSettingsCheck() {
         var _this4 = this;
-
         if (this._updateSettingsCheckInFlight) return;
         this._updateSettingsCheckInFlight = setTimeout(function () {
           _this4._updateSettings();
-
           _this4._updateSettingsCheckInFlight = null;
         }, 1000);
       }
@@ -8632,7 +8122,6 @@
         if (!this.el.buffered.length) return;
         var buffered = [];
         var bufferedPos = 0;
-
         for (var i = 0; i < this.el.buffered.length; i++) {
           buffered = [].concat(_toConsumableArray(buffered), [{
             start: this.el.buffered.start(i),
@@ -8640,7 +8129,6 @@
           }]);
           if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) bufferedPos = i;
         }
-
         var progress = {
           start: buffered[bufferedPos].start,
           current: buffered[bufferedPos].end,
@@ -8652,7 +8140,6 @@
       key: "_typeFor",
       value: function _typeFor(src) {
         var mimeTypes = HTML5Video._mimeTypesForUrl(src, MIMETYPES, this.options.mimeType);
-
         if (mimeTypes.length === 0) mimeTypes = HTML5Video._mimeTypesForUrl(src, AUDIO_MIMETYPES, this.options.mimeType);
         var mimeType = mimeTypes[0] || '';
         return mimeType.split(';')[0];
@@ -8676,7 +8163,6 @@
             this.handleTextTrackChange = this._handleTextTrackChange.bind(this);
             this.el.textTracks.addEventListener('change', this.handleTextTrackChange);
           }
-
           this._ccIsSetup = true;
         }
       }
@@ -8689,41 +8175,12 @@
         }) || {
           id: -1
         };
-
         if (this._ccTrackId !== track.id) {
           this._ccTrackId = track.id;
           this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
             id: track.id
           });
         }
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        if (this.options.playback.disableContextMenu) {
-          this.$el.on('contextmenu', function () {
-            return false;
-          });
-        }
-
-        if (this._externalTracks && this._externalTracks.length > 0) {
-          this.$el.html(this.template({
-            tracks: this._externalTracks
-          }));
-        }
-
-        this._ready();
-
-        var style = Styler.getStyleFor(css_248z$3$1.toString(), {
-          baseUrl: this.options.baseUrl
-        });
-        this.$el.append(style[0]);
-        return this;
-      }
-    }, {
-      key: "isReady",
-      get: function get() {
-        return this._isReadyState;
       }
     }, {
       key: "isHTML5Video",
@@ -8734,11 +8191,9 @@
       key: "closedCaptionsTracks",
       get: function get() {
         var id = 0;
-
         var trackId = function trackId() {
           return id++;
         };
-
         var textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : [];
         return textTracks.filter(function (track) {
           return track.kind === 'subtitles' || track.kind === 'captions';
@@ -8758,8 +8213,9 @@
       set: function set(trackId) {
         if (!isNumber(trackId)) return;
         var tracks = this.closedCaptionsTracks;
-        var showingTrack; // Note: -1 is for hide all tracks
+        var showingTrack;
 
+        // Note: -1 is for hide all tracks
         if (trackId !== -1) {
           showingTrack = tracks.find(function (track) {
             return track.id === trackId;
@@ -8767,10 +8223,10 @@
           if (!showingTrack) return; // Track id not found
 
           if (showingTrack.track.mode === 'showing') return; // Track already showing
-        } // Since it is possible to display multiple tracks,
+        }
+
+        // Since it is possible to display multiple tracks,
         // ensure that all tracks are hidden.
-
-
         tracks.filter(function (track) {
           return track.track.mode !== 'hidden';
         }).forEach(function (track) {
@@ -8787,54 +8243,54 @@
       get: function get() {
         return tmpl(tracksHTML);
       }
+    }, {
+      key: "render",
+      value: function render() {
+        if (this.options.playback.disableContextMenu) {
+          this.$el.on('contextmenu', function () {
+            return false;
+          });
+        }
+        if (this._externalTracks && this._externalTracks.length > 0) {
+          this.$el.html(this.template({
+            tracks: this._externalTracks
+          }));
+        }
+        this._ready();
+        var style = Styler.getStyleFor(css_248z$2$1.toString(), {
+          baseUrl: this.options.baseUrl
+        });
+        this.$el.append(style[0]);
+        return this;
+      }
     }]);
-
     return HTML5Video;
   }(Playback);
-
   HTML5Video._mimeTypesForUrl = function (resourceUrl, mimeTypesByExtension, mimeType) {
     var extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1];
     var mimeTypes = mimeType || extension && mimeTypesByExtension[extension.toLowerCase()] || [];
     return mimeTypes.constructor === Array ? mimeTypes : [mimeTypes];
   };
-
   HTML5Video._canPlay = function (type, mimeTypesByExtension, resourceUrl, mimeType) {
     var mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType);
-
     var media = document.createElement(type);
     return !!mimeTypes.filter(function (mediaType) {
       return !!media.canPlayType(mediaType).replace(/no/, '');
     })[0];
   };
-
   HTML5Video.canPlay = function (resourceUrl, mimeType) {
     return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) || HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType);
   };
 
+  // TODO: remove this playback and change HTML5Video to HTML5Playback (breaking change, only after 0.3.0)
   var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
     _inherits$1(HTML5Audio, _HTML5Video);
-
     var _super = _createSuper$1(HTML5Audio);
-
     function HTML5Audio() {
       _classCallCheck$1(this, HTML5Audio);
-
       return _super.apply(this, arguments);
     }
-
     _createClass$1(HTML5Audio, [{
-      key: "updateSettings",
-      value: function updateSettings() {
-        this.settings.left = ['playpause', 'position', 'duration'];
-        this.settings.seekEnabled = this.isSeekEnabled();
-        this.trigger(Events.PLAYBACK_SETTINGSUPDATE);
-      }
-    }, {
-      key: "getPlaybackType",
-      value: function getPlaybackType() {
-        return Playback.AOD;
-      }
-    }, {
       key: "name",
       get: function get() {
         return 'html5_audio';
@@ -8843,7 +8299,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.20"
+          min: "0.4.27"
         };
       }
     }, {
@@ -8856,11 +8312,21 @@
       get: function get() {
         return true;
       }
+    }, {
+      key: "updateSettings",
+      value: function updateSettings() {
+        this.settings.left = ['playpause', 'position', 'duration'];
+        this.settings.seekEnabled = this.isSeekEnabled();
+        this.trigger(Events.PLAYBACK_SETTINGSUPDATE);
+      }
+    }, {
+      key: "getPlaybackType",
+      value: function getPlaybackType() {
+        return Playback.AOD;
+      }
     }]);
-
     return HTML5Audio;
   }(HTML5Video);
-
   HTML5Audio.canPlay = function (resourceUrl, mimeType) {
     var mimetypes = {
       'wav': ['audio/wav'],
@@ -8871,19 +8337,19 @@
     return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType);
   };
 
-  var css_248z$4$1 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
+  var css_248z$1$1 = "[data-html-img] {\n  max-width: 100%;\n  max-height: 100%; }\n";
 
   var HTMLImg = /*#__PURE__*/function (_Playback) {
     _inherits$1(HTMLImg, _Playback);
-
     var _super = _createSuper$1(HTMLImg);
-
+    function HTMLImg(params) {
+      var _this;
+      _classCallCheck$1(this, HTMLImg);
+      _this = _super.call(this, params);
+      _this.el.src = params.src;
+      return _this;
+    }
     _createClass$1(HTMLImg, [{
-      key: "getPlaybackType",
-      value: function getPlaybackType() {
-        return Playback.NO_OP;
-      }
-    }, {
       key: "name",
       get: function get() {
         return 'html_img';
@@ -8892,7 +8358,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.20"
+          min: "0.4.27"
         };
       }
     }, {
@@ -8916,22 +8382,15 @@
           'error': '_onError'
         };
       }
-    }]);
-
-    function HTMLImg(params) {
-      var _this;
-
-      _classCallCheck$1(this, HTMLImg);
-
-      _this = _super.call(this, params);
-      _this.el.src = params.src;
-      return _this;
-    }
-
-    _createClass$1(HTMLImg, [{
+    }, {
+      key: "getPlaybackType",
+      value: function getPlaybackType() {
+        return Playback.NO_OP;
+      }
+    }, {
       key: "render",
       value: function render() {
-        var style = Styler.getStyleFor(css_248z$4$1.toString(), {
+        var style = Styler.getStyleFor(css_248z$1$1.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -8952,23 +8411,29 @@
         }, this.name);
       }
     }]);
-
     return HTMLImg;
   }(Playback);
-
   HTMLImg.canPlay = function (resource) {
     return /\.(png|jpg|jpeg|gif|bmp|tiff|pgm|pnm|webp)(|\?.*)$/i.test(resource);
   };
 
   var noOpHTML = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%></p><p>\n</p>";
 
-  var css_248z$5$1 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
+  var css_248z$8 = "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n";
 
   var NoOp = /*#__PURE__*/function (_Playback) {
     _inherits$1(NoOp, _Playback);
-
     var _super = _createSuper$1(NoOp);
-
+    function NoOp() {
+      var _this;
+      _classCallCheck$1(this, NoOp);
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      _this = _super.call.apply(_super, [this].concat(args));
+      _this._noiseFrameNum = -1;
+      return _this;
+    }
     _createClass$1(NoOp, [{
       key: "name",
       get: function get() {
@@ -8978,7 +8443,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.20"
+          min: "0.4.27"
         };
       }
     }, {
@@ -8993,27 +8458,11 @@
           'data-no-op': ''
         };
       }
-    }]);
-
-    function NoOp() {
-      var _this;
-
-      _classCallCheck$1(this, NoOp);
-
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      _this = _super.call.apply(_super, [this].concat(args));
-      _this._noiseFrameNum = -1;
-      return _this;
-    }
-
-    _createClass$1(NoOp, [{
+    }, {
       key: "render",
       value: function render() {
         var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
-        var style = Styler.getStyleFor(css_248z$5$1.toString(), {
+        var style = Styler.getStyleFor(css_248z$8.toString(), {
           baseUrl: this.options.baseUrl
         });
         this.$el.append(style[0]);
@@ -9029,53 +8478,42 @@
       key: "_noise",
       value: function _noise() {
         this._noiseFrameNum = (this._noiseFrameNum + 1) % 5;
-
         if (this._noiseFrameNum) {
           // only update noise every 5 frames to save cpu
           return;
         }
-
         var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
         var buffer32;
-
         try {
           buffer32 = new Uint32Array(idata.data.buffer);
         } catch (err) {
           buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
           var data = idata.data;
-
           for (var i = 0; i < data.length; i++) {
             buffer32[i] = data[i];
           }
         }
-
         var len = buffer32.length,
-            m = Math.random() * 6 + 4;
+          m = Math.random() * 6 + 4;
         var run = 0,
-            color = 0;
-
+          color = 0;
         for (var _i = 0; _i < len;) {
           if (run < 0) {
             run = m * Math.random();
             var p = Math.pow(Math.random(), 0.4);
             color = 255 * p << 24;
           }
-
           run -= 1;
           buffer32[_i++] = color;
         }
-
         this.context.putImageData(idata, 0, 0);
       }
     }, {
       key: "_loop",
       value: function _loop() {
         var _this2 = this;
-
         if (this._stop) return;
-
         this._noise();
-
         this._animationHandle = requestAnimationFrame(function () {
           return _this2._loop();
         });
@@ -9093,14 +8531,11 @@
       value: function _animate() {
         this.canvas = this.$el.find('canvas[data-no-op-canvas]')[0];
         this.context = this.canvas.getContext('2d');
-
         this._loop();
       }
     }]);
-
     return NoOp;
   }(Playback);
-
   NoOp.canPlay = function (source) {
     // eslint-disable-line no-unused-vars
     return true;
@@ -9113,12 +8548,22 @@
    * @extends CorePlugin
    * @module plugins
    */
-
   var Strings = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(Strings, _CorePlugin);
-
     var _super = _createSuper$1(Strings);
-
+    function Strings(core) {
+      var _this;
+      _classCallCheck$1(this, Strings);
+      _this = _super.call(this, core);
+      _this._initializeMessages();
+      return _this;
+    }
+    /**
+     * Gets a translated string for the given key.
+     * @method t
+     * @param {String} key the key to all messages
+     * @return {String} translated label
+     */
     _createClass$1(Strings, [{
       key: "name",
       get: function get() {
@@ -9128,35 +8573,13 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.20"
+          min: "0.4.27"
         };
       }
-    }]);
-
-    function Strings(core) {
-      var _this;
-
-      _classCallCheck$1(this, Strings);
-
-      _this = _super.call(this, core);
-
-      _this._initializeMessages();
-
-      return _this;
-    }
-    /**
-     * Gets a translated string for the given key.
-     * @method t
-     * @param {String} key the key to all messages
-     * @return {String} translated label
-     */
-
-
-    _createClass$1(Strings, [{
+    }, {
       key: "t",
       value: function t(key) {
         var lang = this._language();
-
         var fallbackLang = this._messages['en'];
         var i18n = lang && this._messages[lang] || fallbackLang;
         return i18n[key] || fallbackLang[key] || key;
@@ -9194,17 +8617,35 @@
             'default_error_title': 'Não foi possível reproduzir o vídeo.',
             'default_error_message': 'Ocorreu um problema ao tentar carregar o vídeo.'
           },
-          'es': {
+          'es_am': {
             'live': 'vivo',
             'back_to_live': 'volver en vivo',
-            'disabled': 'Discapacitado',
-            'playback_not_supported': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.'
+            'disabled': 'No disponible',
+            'playback_not_supported': 'Su navegador no soporta la reproducción de este video. Por favor, utilice un navegador diferente.',
+            'default_error_title': 'No se puede reproducir el video.',
+            'default_error_message': 'Se ha producido un error al cargar el video.'
+          },
+          'es': {
+            'live': 'en directo',
+            'back_to_live': 'volver al directo',
+            'disabled': 'No disponible',
+            'playback_not_supported': 'Este navegador no es compatible para reproducir este vídeo. Utilice un navegador diferente.',
+            'default_error_title': 'No se puede reproducir el vídeo.',
+            'default_error_message': 'Se ha producido un problema al cargar el vídeo.'
           },
           'ru': {
             'live': 'прямой эфир',
             'back_to_live': 'к прямому эфиру',
             'disabled': 'Отключено',
             'playback_not_supported': 'Ваш браузер не поддерживает воспроизведение этого видео. Пожалуйста, попробуйте другой браузер.'
+          },
+          'bg': {
+            'live': 'на живо',
+            'back_to_live': 'Върни на живо',
+            'disabled': 'Изключено',
+            'playback_not_supported': 'Вашият браузър не поддържа възпроизвеждането на това видео. Моля, пробвайте с друг браузър.',
+            'default_error_title': 'Видеото не може да се възпроизведе.',
+            'default_error_message': 'Възникна проблем при зареждането на видеото.'
           },
           'fr': {
             'live': 'en direct',
@@ -9233,35 +8674,53 @@
             'playback_not_supported': 'المتصفح الذي تستخدمه لا يدعم تشغيل هذا الفيديو. الرجاء إستخدام متصفح آخر.',
             'default_error_title': 'غير قادر الى التشغيل.',
             'default_error_message': 'حدثت مشكلة أثناء تحميل الفيديو.'
+          },
+          'zh': {
+            'live': '直播',
+            'back_to_live': '返回直播',
+            'disabled': '已禁用',
+            'playback_not_supported': '您的浏览器不支持该视频的播放。请尝试使用另一个浏览器。',
+            'default_error_title': '无法播放视频。',
+            'default_error_message': '在尝试加载视频时出现了问题。'
           }
         };
         this._messages = zepto.extend(true, defaultMessages, this.core.options.strings || {});
         this._messages['de-DE'] = this._messages['de'];
         this._messages['pt-BR'] = this._messages['pt'];
         this._messages['en-US'] = this._messages['en'];
-        this._messages['es-419'] = this._messages['es'];
+        this._messages['bg-BG'] = this._messages['bg'];
+        this._messages['es-419'] = this._messages['es_am'];
+        this._messages['es-ES'] = this._messages['es'];
         this._messages['fr-FR'] = this._messages['fr'];
         this._messages['tr-TR'] = this._messages['tr'];
         this._messages['et-EE'] = this._messages['et'];
         this._messages['ar-IQ'] = this._messages['ar'];
+        this._messages['zh-CN'] = this._messages['zh'];
       }
     }]);
-
     return Strings;
   }(CorePlugin);
 
   var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
     _inherits$1(SourcesPlugin, _CorePlugin);
-
     var _super = _createSuper$1(SourcesPlugin);
-
     function SourcesPlugin() {
       _classCallCheck$1(this, SourcesPlugin);
-
       return _super.apply(this, arguments);
     }
-
     _createClass$1(SourcesPlugin, [{
+      key: "name",
+      get: function get() {
+        return 'sources';
+      }
+    }, {
+      key: "supportedVersion",
+      get: function get() {
+        return {
+          min: "0.4.27"
+        };
+      }
+    }, {
       key: "bindEvents",
       value: function bindEvents() {
         this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated);
@@ -9276,25 +8735,14 @@
           if (container !== firstValidSource) container.destroy();
         });
       }
-    }, {
-      key: "name",
-      get: function get() {
-        return 'sources';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.20"
-        };
-      }
     }]);
-
     return SourcesPlugin;
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version$1 = "0.4.20"; // Built-in Plugins/Playbacks
+  var version$1 = "0.4.27";
+
+  // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlugin(SourcesPlugin);
@@ -12371,27 +11819,26 @@
     WaterMark: WaterMarkPlugin
   };
 
-  var version = "0.4.6";
-
+  var version = "0.4.7";
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
     Loader.registerPlugin(plugin);
-  } // TODO: remove on 0.5.x (backward-compatibility only)
+  }
 
-
+  // TODO: remove on 0.5.x (backward-compatibility only)
   var ClickToPause = Plugins.ClickToPause,
-      ClosedCaptions = Plugins.ClosedCaptions,
-      DVRControls = Plugins.DVRControls,
-      EndVideo = Plugins.EndVideo,
-      ErrorScreen = Plugins.ErrorScreen,
-      Favicon = Plugins.Favicon,
-      GoogleAnalytics = Plugins.GoogleAnalytics,
-      MediaControl = Plugins.MediaControl,
-      Poster = Plugins.Poster,
-      SeekTime = Plugins.SeekTime,
-      SpinnerThreeBounce = Plugins.SpinnerThreeBounce,
-      Stats = Plugins.Stats,
-      WaterMark = Plugins.WaterMark;
+    ClosedCaptions = Plugins.ClosedCaptions,
+    DVRControls = Plugins.DVRControls,
+    EndVideo = Plugins.EndVideo,
+    ErrorScreen = Plugins.ErrorScreen,
+    Favicon = Plugins.Favicon,
+    GoogleAnalytics = Plugins.GoogleAnalytics,
+    MediaControl = Plugins.MediaControl,
+    Poster = Plugins.Poster,
+    SeekTime = Plugins.SeekTime,
+    SpinnerThreeBounce = Plugins.SpinnerThreeBounce,
+    Stats = Plugins.Stats,
+    WaterMark = Plugins.WaterMark;
   var base_bundle = _objectSpread2$1(_objectSpread2$1({}, main), {}, {
     ClickToPause: ClickToPause,
     ClosedCaptions: ClosedCaptions,
@@ -12413,5 +11860,5 @@
 
   return base_bundle;
 
-})));
+}));
 //# sourceMappingURL=clappr.plainhtml5.js.map
