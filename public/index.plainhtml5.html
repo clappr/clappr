@@ -99,7 +99,7 @@ player.attachTo(playerElement);
     window.onload = function () {
 
       if (window.location.hash) {
-        var editorContent = atob(window.location.hash.substr(1))
+        var editorContent = atob(window.location.hash.slice(1))
         document.getElementById("editor").innerHTML = editorContent
         setTimeout(run, 0)
       } else {
