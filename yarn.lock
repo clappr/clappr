@@ -911,7 +911,7 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.20":
+"@clappr/core@^0.4.27":
   version "0.4.27"
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.27.tgz#7a073f6b8f21eda93e2769345429e33143a78ae5"
   integrity sha512-QjmQIBTZnc63q/w5dPvMDvqVG8tEAycVtoy/oBtvYpN1NKhVFFrgurRlOg+kgCVurQIXYT/Qn5XlXWsOfQIF3A==
