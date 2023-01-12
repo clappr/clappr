@@ -879,10 +879,10 @@
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.20.tgz#4b1aed2e43e21aed8202d052bd5f70538f3125a3"
   integrity sha512-KfdKTuc1vBrfJXB0s4U7TVr6Qu62s+lGwf4PGM99bz9ar8kEQCijEgVLM5Vb0ARqmdNrc/mcDvu9h/i5Bvopkg==
 
-"@clappr/hlsjs-playback@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-0.6.0.tgz#e4b19d66177f161b546171bd6ef3b70df6f2a13d"
-  integrity sha512-aw56rTB1V5YiCryximSwSEKgvtISmrsMhRNUnsMshUoSGZi3mAxT1Wiab+ShHInPRtbu4HWgZzDJpIy+a/+i8w==
+"@clappr/hlsjs-playback@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-1.0.1.tgz#533fa4f4e826f11b9591a014c3b3a24d39fa60ce"
+  integrity sha512-d7Q70Je/Cf7XYtXlo7lW6ukfjYT8oEuX4aH4etRv3DIwufUTQopJ/PwBQNkTzFKlsYdaiEeydfFMLpI78+gIWA==
 
 "@clappr/plugins@^0.4.16":
   version "0.4.16"
