@@ -266,7 +266,7 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   _onProgress(e) {
-    Log.debug(this.name, 'The HTMLMediaElement timeupdate event is triggered: ', e) // Preferring to debug level because of the high frequency of calls.
+    Log.debug(this.name, 'The HTMLMediaElement progress event is triggered: ', e) // Preferring to debug level because of the high frequency of calls.
   }
 
   _onTimeUpdate(e) {
