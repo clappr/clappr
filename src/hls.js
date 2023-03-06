@@ -5,7 +5,7 @@
 import { Events, HTML5Video, Log, Playback, PlayerError, Utils } from '@clappr/core'
 import HLSJS from 'hls.js'
 
-const { now, assign, listContainsIgnoreCase } = Utils
+const { now, listContainsIgnoreCase } = Utils
 
 const AUTO = -1
 
@@ -167,11 +167,32 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _setup() {
+    this._destroyHLSInstance()
+    this._createHLSInstance()
+    this._listenHLSEvents()
+    this._attachHLSMedia()
+  }
+
+  _destroyHLSInstance() {
+    if (!this._hls) return
     this._manifestParsed = false
     this._ccIsSetup = false
     this._ccTracksUpdated = false
-    this._hls && this._hls.destroy()
-    this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
+    this._hls.destroy()
+  }
+
+  _createHLSInstance() {
+    const config = { ...this.options.playback.hlsjsConfig }
+    this._hls = new HLSJS(config)
+  }
+
+  _attachHLSMedia() {
+    if (!this._hls) return
+    this._hls.attachMedia(this.el)
+  }
+
+  _listenHLSEvents() {
+    if (!this._hls) return
     this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => { this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src) })
     this._hls.on(HLSJS.Events.MANIFEST_PARSED, () => this._manifestParsed = true)
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
@@ -183,10 +204,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
-
     this.bindCustomListeners()
-
-    this._hls.attachMedia(this.el)
   }
 
   bindCustomListeners() {
@@ -253,7 +271,6 @@ export default class HlsjsPlayback extends HTML5Video {
 
   _stopTimeUpdateTimer() {
     if (!this._timeUpdateTimer) return
-
     clearInterval(this._timeUpdateTimer)
     this._timeUpdateTimer = null
   }
@@ -405,10 +422,9 @@ export default class HlsjsPlayback extends HTML5Video {
     let update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
     let isSame = this._lastTimeUpdate && (
       update.current === this._lastTimeUpdate.current &&
-      update.total === this._lastTimeUpdate.total)
+      update.total === this._lastTimeUpdate.total)    
     if (isSame)
       return
-
     this._lastTimeUpdate = update
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
@@ -417,7 +433,6 @@ export default class HlsjsPlayback extends HTML5Video {
     let duration = this.getDuration()
     if (this._lastDuration === duration)
       return
-
     this._lastDuration = duration
     super._onDurationChange()
   }
@@ -446,10 +461,15 @@ export default class HlsjsPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered)
   }
 
+
+  load(url) {   
+    this.options.src = url
+    this._setup()
+  }
+
   play() {
     !this._hls && this._setup()
     !this._manifestParsed && !this.options.hlsPlayback.preload && this._hls.loadSource(this.options.src)
-
     super.play()
     this._startTimeUpdateTimer()
   }
@@ -462,19 +482,13 @@ export default class HlsjsPlayback extends HTML5Video {
 
   stop() {
     this._stopTimeUpdateTimer()
-    if (this._hls) {
-      super.stop()
-      this._hls.destroy()
-      delete this._hls
-    }
+    if (this._hls) super.stop()
+    this._destroyHLSInstance()
   }
 
   destroy() {
     this._stopTimeUpdateTimer()
-    if (this._hls) {
-      this._hls.destroy()
-      delete this._hls
-    }
+    this._destroyHLSInstance()
     super.destroy()
   }
 

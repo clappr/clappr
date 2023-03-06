@@ -262,6 +262,18 @@ describe('HlsjsPlayback', () => {
     })
   })
 
+  describe('load method', () => {
+    test('loads a new source when called', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: true } })
+      const url = 'http://clappr.io/foo2.m3u8'
+      playback.load(url)
+      jest.spyOn(playback._hls, 'loadSource')
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
+      expect(playback.options.src).toBe(url)
+      expect(playback._hls.loadSource).toHaveBeenCalledWith(url)
+    })
+  })
+
   describe('bindCustomListeners method', () => {
     test('creates listeners for each item configured on customListeners array', () => {
       const cb = jest.fn()
