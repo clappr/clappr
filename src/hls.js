@@ -121,8 +121,6 @@ export default class HlsjsPlayback extends HTML5Video {
 
   constructor(...args) {
     super(...args)
-    // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback = { ...this.options, ...this.options.playback }
     this.options.hlsPlayback = { ...this.defaultOptions, ...this.options.hlsPlayback }
     this._setInitialState()
   }
