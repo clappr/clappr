@@ -69,9 +69,9 @@ export default class HlsjsPlayback extends HTML5Video {
   get _extrapolatedEndTime() {
     let actualEndTime = this._playableRegionStartTime + this._playableRegionDuration
     if (!this._localEndTimeCorrelation) return actualEndTime
-    let correlation = this._localEndTimeCorrelation
-    let timePassed = this._now - correlation.local
-    let extrapolatedEndTime = (correlation.remote + timePassed) / 1000
+    const correlation = this._localEndTimeCorrelation
+    const timePassed = this._now - correlation.local
+    const extrapolatedEndTime = (correlation.remote + timePassed) / 1000
     return Math.max(actualEndTime - this._extrapolatedWindowDuration, Math.min(extrapolatedEndTime, actualEndTime))
   }
 
