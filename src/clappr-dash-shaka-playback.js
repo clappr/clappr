@@ -132,19 +132,20 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   play () {
-    if (!this._player) {
-      this._setup()
-    }
-
+    if (!this._player) this.load()
     if (!this.isReady) {
       this.once(DashShakaPlayback.Events.SHAKA_READY, this.play)
       return
     }
-
-    this._stopped = false
-    this._src = this.el.src
     super.play()
     this._startTimeUpdateTimer()
+    this._stopped = false
+    this._src = this.el.src
+  }
+
+  load(source) {
+    this._options.src = source || this._options.src
+    this._setup()
   }
 
   _onPlaying() {
