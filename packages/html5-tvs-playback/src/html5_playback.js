@@ -150,7 +150,10 @@ export default class HTML5TVsPlayback extends Playback {
     this.$sourceElement.type = MIME_TYPES_BY_EXTENSION[getExtension(sourceURL)]
     this.$sourceElement.src = sourceURL
     this._src = this.$sourceElement.src
+    this._appendSourceElement()
+  }
 
+  _appendSourceElement() {
     this.config && this.config.drm && !this._drmConfigured
       ? DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured, this._onDrmError)
       : this.el.appendChild(this.$sourceElement)
@@ -158,7 +161,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   _onDrmConfigured() {
     this._drmConfigured = true
-    this.el.appendChild(this.$sourceElement)
+    this._appendSourceElement()
   }
 
   _onDrmCleared() {

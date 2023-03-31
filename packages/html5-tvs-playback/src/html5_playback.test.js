@@ -1149,10 +1149,9 @@ describe('HTML5TVsPlayback', function() {
       expect(DRMHandler.clearLicenseRequest).toHaveBeenCalledWith(this.playback._onDrmCleared, this.playback._onDrmError)
     })
 
-    test('removes src attribute from the $sourceElement', () => {
+    test('sets $sourceElement to null', () => {
       this.playback._wipeUpMedia()
-
-      expect(this.playback.$sourceElement.src).toEqual('')
+      expect(this.playback.$sourceElement).toBe(null)
     })
 
     test('removes $sourceElement the DOM', () => {

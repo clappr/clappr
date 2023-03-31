@@ -39,6 +39,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "jest --coverage --silent",
+    "test:watch": "jest ./test --watch",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "test:coverage": "open coverage/lcov-report/index.html"
   },
