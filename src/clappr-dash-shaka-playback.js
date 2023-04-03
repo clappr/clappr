@@ -144,7 +144,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   load(source) {
-    this._options.src = source || this._options.src
+    if (source) this._options.src = source
     this._setup()
   }
 
