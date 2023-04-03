@@ -97,6 +97,10 @@ class DashShakaPlayback extends HTML5Video {
     return this.shakaPlayerInstance.getStats().estimatedBandwidth
   }
 
+  get sourceMedia() {
+    return this._options.src
+  }
+
   constructor (...args) {
     super(...args)
     this._levels = []
