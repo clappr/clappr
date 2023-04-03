@@ -115,6 +115,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return this.options.hlsPlayback && this.options.hlsPlayback.customListeners || []
   }
 
+  get sourceMedia() {
+    return this.options.src
+  }
+
   static get HLSJS() {
     return HLSJS
   }
