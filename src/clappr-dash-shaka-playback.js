@@ -97,6 +97,10 @@ class DashShakaPlayback extends HTML5Video {
     return this.shakaPlayerInstance.getStats().estimatedBandwidth
   }
 
+  get sourceMedia() {
+    return this._options.src
+  }
+
   constructor (...args) {
     super(...args)
     this._levels = []
@@ -132,19 +136,20 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   play () {
-    if (!this._player) {
-      this._setup()
-    }
-
+    if (!this._player) this.load()
     if (!this.isReady) {
       this.once(DashShakaPlayback.Events.SHAKA_READY, this.play)
       return
     }
-
-    this._stopped = false
-    this._src = this.el.src
     super.play()
     this._startTimeUpdateTimer()
+    this._stopped = false
+    this._src = this.el.src
+  }
+
+  load(source) {
+    if (source) this._options.src = source
+    this._setup()
   }
 
   _onPlaying() {
