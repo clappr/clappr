@@ -184,6 +184,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._ccTracksUpdated = false
     this._setInitialState()
     this._hls.destroy()
+    this._hls = null
   }
 
   _createHLSInstance() {
