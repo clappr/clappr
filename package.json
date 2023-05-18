@@ -15,7 +15,8 @@
     "test:debug": "node --inspect node_modules/.bin/jest ./src --runInBand",
     "test:watch": "jest ./src --watch",
     "lint": "eslint *.js ./src",
-    "lint:fix": "yarn lint -- --fix"
+    "lint:fix": "yarn lint -- --fix",
+    "prepublishOnly": "npm run release"
   },
   "files": [
     "/dist",
