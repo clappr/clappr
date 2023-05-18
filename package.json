@@ -13,7 +13,7 @@
     "start": "webpack-dev-server",
     "release": "webpack",
     "lint": "eslint src/",
-    "prepublishOnly": "yarn release"
+    "prepublishOnly": "yarn dist"
   },
   "files": [
     "/dist",
