@@ -12,7 +12,8 @@
     "dist": "yarn lint && yarn build && yarn release",
     "start": "webpack-dev-server",
     "release": "webpack",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "prepublishOnly": "yarn release"
   },
   "files": [
     "/dist",
