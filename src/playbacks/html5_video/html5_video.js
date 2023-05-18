@@ -112,6 +112,10 @@ export default class HTML5Video extends Playback {
     return typeof (this.minimumDVRSizeConfig) !== 'undefined' && typeof (this.minimumDVRSizeConfig) === 'number'
   }
 
+  get sourceMedia() {
+    return this._src
+  }
+
   constructor(...args) {
     super(...args)
     this._destroyed = false
@@ -216,6 +220,16 @@ export default class HTML5Video extends Playback {
 
   /**
    * Sets the source url on the <video> element, and also the 'src' property.
+   * @method load
+   * @public
+   * @param {String} srcUrl The source URL.
+   */
+  load(srcUrl) {
+    this._setupSrc(srcUrl)
+  }
+
+  /**
+   * Sets the source url on the <video> element, and also the 'src' property.
    * @method setupSrc
    * @private
    * @param {String} srcUrl The source URL.
@@ -298,8 +312,8 @@ export default class HTML5Video extends Playback {
     let promise = this.el.play()
     // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
     if (promise && promise.catch)
-      promise.catch(() => {})
-
+      promise.catch(error => Log.warn(this.name, 'HTML5 play failed', error))
+    return promise
   }
 
   pause() {
