@@ -298,8 +298,8 @@ export default class HTML5Video extends Playback {
     let promise = this.el.play()
     // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
     if (promise && promise.catch)
-      promise.catch(() => {})
-
+      promise.catch(error => Log.warn(this.name, 'HTML5 play failed', error))
+    return promise
   }
 
   pause() {
