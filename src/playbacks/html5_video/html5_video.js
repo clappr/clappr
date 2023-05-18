@@ -112,6 +112,10 @@ export default class HTML5Video extends Playback {
     return typeof (this.minimumDVRSizeConfig) !== 'undefined' && typeof (this.minimumDVRSizeConfig) === 'number'
   }
 
+  get sourceMedia() {
+    return this._src
+  }
+
   constructor(...args) {
     super(...args)
     this._destroyed = false
