@@ -216,6 +216,16 @@ export default class HTML5Video extends Playback {
 
   /**
    * Sets the source url on the <video> element, and also the 'src' property.
+   * @method load
+   * @public
+   * @param {String} srcUrl The source URL.
+   */
+  load(srcUrl) {
+    this._setupSrc(srcUrl)
+  }
+
+  /**
+   * Sets the source url on the <video> element, and also the 'src' property.
    * @method setupSrc
    * @private
    * @param {String} srcUrl The source URL.
