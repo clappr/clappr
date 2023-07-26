@@ -304,8 +304,8 @@ export default class HTML5TVsPlayback extends Playback {
 
   _onEnded(e) {
     Log.info(this.name, 'The HTMLMediaElement ended event is triggered: ', e)
-    this.trigger(Events.PLAYBACK_ENDED, this.name)
     this._wipeUpMedia()
+    this.trigger(Events.PLAYBACK_ENDED, this.name)
   }
 
   _onError(e) {

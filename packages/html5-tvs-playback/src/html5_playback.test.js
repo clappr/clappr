@@ -918,6 +918,15 @@ describe('HTML5TVsPlayback', function() {
       expect(cb).toHaveBeenCalledTimes(1)
     })
 
+    test('calls _wipeUpMedia method before notifying PLAYBACK_ENDED event', done => {
+      jest.spyOn(this.playback, '_wipeUpMedia')
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_ENDED, () => {
+        expect(this.playback._wipeUpMedia).toHaveBeenCalledTimes(1)
+        done()
+      })
+      this.playback._onEnded()
+    })
+
     test('calls _wipeUpMedia method', () => {
       jest.spyOn(this.playback, '_wipeUpMedia')
       this.playback._onEnded()
