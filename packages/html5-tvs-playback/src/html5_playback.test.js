@@ -136,12 +136,12 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
-  test('isReady getter returns the check if video.readyState is greater than or equal HAVE_CURRENT_DATA value', () => {
+  test('isReady getter returns the check if video.readyState is greater than or equal HAVE_FUTURE_DATA value', () => {
     jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_NOTHING)
 
     expect(this.playback.isReady).toBeFalsy()
 
-    jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_CURRENT_DATA)
+    jest.spyOn(this.playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_FUTURE_DATA)
 
     expect(this.playback.isReady).toBeTruthy()
   })
@@ -820,13 +820,13 @@ describe('HTML5TVsPlayback', function() {
     })
   })
 
-  describe('_onLoadedData callback', () => {
+  describe('_onCanPlay callback', () => {
     test('calls _signalizeReadyState method if _isReady flag has a falsy value', () => {
       jest.spyOn(this.playback, '_signalizeReadyState')
       this.playback._isReady = true
-      this.playback._onLoadedData()
+      this.playback._onCanPlay()
       this.playback._isReady = false
-      this.playback._onLoadedData()
+      this.playback._onCanPlay()
 
       expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(1)
     })

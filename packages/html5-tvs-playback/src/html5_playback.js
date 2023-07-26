@@ -33,7 +33,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   get mediaType() { return this.el.duration === Infinity ? Playback.LIVE : Playback.VOD }
 
-  get isReady() { return this.el.readyState >= READY_STATE_STAGES.HAVE_CURRENT_DATA }
+  get isReady() { return this.el.readyState >= READY_STATE_STAGES.HAVE_FUTURE_DATA }
 
   get playing() { return !this.el.paused && !this.el.ended }
 
@@ -210,6 +210,7 @@ export default class HTML5TVsPlayback extends Playback {
 
   _onCanPlay(e) {
     Log.info(this.name, 'The HTMLMediaElement canplay event is triggered: ', e)
+    !this._isReady && this._signalizeReadyState()
     if (this._isBuffering) {
       this._isBuffering = false
       this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
@@ -231,7 +232,6 @@ export default class HTML5TVsPlayback extends Playback {
 
   _onLoadedData(e) {
     Log.info(this.name, 'The HTMLMediaElement loadeddata event is triggered: ', e)
-    !this._isReady && this._signalizeReadyState()
   }
 
   _onWaiting(e) {
