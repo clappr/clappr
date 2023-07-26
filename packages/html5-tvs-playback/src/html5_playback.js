@@ -20,7 +20,7 @@ export default class HTML5TVsPlayback extends Playback {
     const sourceExtension = getExtension(resourceUrl)
     const isSourceExtensionSupported = MIME_TYPES_BY_EXTENSION[sourceExtension]
 
-    return isSupportedMimetype || isSourceExtensionSupported
+    return !!(isSupportedMimetype || isSourceExtensionSupported)
   }
 
   get name() { return 'html5_tvs_playback' }
