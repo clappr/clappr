@@ -1203,6 +1203,17 @@ describe('HTML5TVsPlayback', function() {
       expect(this.playback._signalizeReadyState).toHaveBeenCalledTimes(5)
     })
 
+    test('sets _isReady flag with true value before triggering PLAYBACK_READY', done => {
+      jest.spyOn(this.playback, 'isReady', 'get').mockReturnValueOnce(true)
+      this.playback._isReady = false
+      this.playback.listenToOnce(this.playback, Events.PLAYBACK_READY, () => {
+        expect(this.playback._isReady).toBeTruthy()
+        done()
+      })
+
+      this.playback._signalizeReadyState()
+    })
+
     test('sets _isReady flag with true value', () => {
       jest.spyOn(this.playback, 'isReady', 'get').mockReturnValueOnce(true)
       this.playback._isReady = false

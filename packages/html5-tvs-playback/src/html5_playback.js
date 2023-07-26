@@ -405,8 +405,8 @@ export default class HTML5TVsPlayback extends Playback {
   _signalizeReadyState(backOff = 100) {
     if (!this.isReady) return setTimeout(() => { this._signalizeReadyState(backOff * 2) }, backOff)
 
-    this.trigger(Events.PLAYBACK_READY, this.name)
     this._isReady = true
+    this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
   /**
