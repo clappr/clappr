@@ -936,25 +936,6 @@ describe('HTML5TVsPlayback', function() {
   })
 
   describe('_onError callback', () => {
-    test('logs warn message if is an unknown error', () => {
-      this.playback._onError()
-
-      expect(console.log).toHaveBeenNthCalledWith(
-        3,
-        LOG_WARN_HEAD_MESSAGE,
-        LOG_WARN_STYLE,
-        'HTML5 unknown error: ',
-        {
-          code: 'html5_tvs_playback:unknown',
-          description: 'unknown',
-          level: 'WARN',
-          origin: 'html5_tvs_playback',
-          raw: undefined,
-          scope: 'playback',
-        },
-      )
-    })
-
     test('triggers PLAYBACK_ERROR event with formatted error object', () => {
       const cb = jest.fn()
 
