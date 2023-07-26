@@ -606,8 +606,22 @@ describe('HTML5TVsPlayback', function() {
 
       expect(console.log).toHaveBeenNthCalledWith(
         1,
-        LOG_INFO_HEAD_MESSAGE,
-        LOG_INFO_STYLE,
+        LOG_WARN_HEAD_MESSAGE,
+        LOG_WARN_STYLE,
+        'The HTMLMediaElement error event is triggered: ',
+        errorEvent,
+      )
+    })
+
+    test('maps _onError method as error event callback on source element', () => {
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+      const errorEvent = new Event('error')
+      this.playback.$sourceElement.dispatchEvent(errorEvent)
+
+      expect(console.log).toHaveBeenNthCalledWith(
+        1,
+        LOG_WARN_HEAD_MESSAGE,
+        LOG_WARN_STYLE,
         'The HTMLMediaElement error event is triggered: ',
         errorEvent,
       )

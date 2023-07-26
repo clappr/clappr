@@ -130,6 +130,7 @@ export default class HTML5TVsPlayback extends Playback {
   constructor(options, i18n, playerError) {
     super(options, i18n, playerError)
     this._onAudioTracksUpdated = this._onAudioTracksUpdated.bind(this)
+    this._sourceElementErrorHandler = this._onError.bind(this)
     this._playbackType = this.mediaType
 
     this._drmConfigured = false
@@ -149,6 +150,7 @@ export default class HTML5TVsPlayback extends Playback {
     this.$sourceElement = document.createElement('source')
     this.$sourceElement.type = MIME_TYPES_BY_EXTENSION[getExtension(sourceURL)]
     this.$sourceElement.src = sourceURL
+    this.$sourceElement.addEventListener('error', this._sourceElementErrorHandler)
     this._src = this.$sourceElement.src
     this._appendSourceElement()
   }
@@ -307,8 +309,8 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   _onError(e) {
-    Log.info(this.name, 'The HTMLMediaElement error event is triggered: ', e)
-    const { code, message } = this.el.error || UNKNOWN_ERROR
+    Log.warn(this.name, 'The HTMLMediaElement error event is triggered: ', e)
+    const { code, message } = this.$sourceElement?.error || this.el.error || UNKNOWN_ERROR
     const isUnknownError = code === UNKNOWN_ERROR.code
 
     const formattedError = this.createError({
@@ -383,9 +385,12 @@ export default class HTML5TVsPlayback extends Playback {
   _wipeUpMedia() {
     this._isReady = false
     this._drmConfigured && DRMHandler.clearLicenseRequest.call(this, this._onDrmCleared, this._onDrmError)
-    this.$sourceElement && this.$sourceElement.removeAttribute('src') // The src attribute will be added again in play().
-    this.$sourceElement && this.$sourceElement.parentNode && this.$sourceElement.parentNode.removeChild(this.$sourceElement)
-    this.$sourceElement = null
+    if (this.$sourceElement) {
+      this.$sourceElement.removeEventListener('error', this._sourceElementErrorHandler)
+      this.$sourceElement.removeAttribute('src') // The src attribute will be added again in play().
+      this.$sourceElement.parentNode && this.$sourceElement.parentNode.removeChild(this.$sourceElement)
+      this.$sourceElement = null
+    }
     this.el.load() // Loads with no src attribute to stop the loading of the previous source and avoid leaks.
   }
 
