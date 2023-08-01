@@ -1,6 +1,6 @@
 {
   "name": "@clappr/clappr-html5-tvs-playback",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A Clappr HTML5 playback for smart TVs based on HbbTV 2.0.1 specs.",
   "keywords": [
     "clappr",
