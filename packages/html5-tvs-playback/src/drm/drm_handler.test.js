@@ -1,14 +1,20 @@
 import mockConsole from 'jest-mock-console'
 
-import DRMHandler, {
+import DRMHandler, { DRMFunctions } from './drm_handler'
+
+const {
   getFullChallengeMessageTemplate,
   getLicenseOverrideMessageTemplate,
   getClearMessageTemplate,
   createDrmAgent,
+} = DRMFunctions
+
+const {
   sendLicenseRequest,
   clearLicenseRequest,
-} from './drm_handler'
+} = DRMHandler
 
+let oipfdrmagent
 const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][DRMHandler]'
 
@@ -16,6 +22,10 @@ describe('DRMHandler', function() {
   beforeEach(() => {
     this.restoreConsole = mockConsole()
     jest.clearAllMocks()
+
+    oipfdrmagent = createDrmAgent()
+    oipfdrmagent.sendDRMMessage = () => {}
+    jest.spyOn(DRMFunctions, 'createDrmAgent').mockReturnValue(oipfdrmagent)
   })
   afterEach(() => this.restoreConsole())
 
@@ -70,14 +80,14 @@ describe('DRMHandler', function() {
 
   describe('createDrmAgent method', () => {
     test('returns a DOM element with a specific type to handle with the DRM license request', () => {
-      const drmElement = createDrmAgent()
+      const drmElement = DRMFunctions.createDrmAgent()
 
       expect(drmElement.tagName).toEqual('OBJECT')
       expect(drmElement.type).toEqual('application/oipfdrmagent')
     })
 
     test('returns a DOM element with properties that avoids showing it on the screen', () => {
-      const drmElement = createDrmAgent()
+      const drmElement = DRMFunctions.createDrmAgent()
 
       expect(drmElement.id).toEqual('oipfdrmagent')
       expect(drmElement.style.visibility).toEqual('hidden')
@@ -99,7 +109,7 @@ describe('DRMHandler', function() {
     })
 
     test('reuses drmAgent element if already exists', () => {
-      document.body.appendChild(createDrmAgent())
+      document.body.appendChild(DRMFunctions.createDrmAgent())
       sendLicenseRequest(this.config)
 
       const duplicateIds = document.querySelectorAll('[id=\'oipfdrmagent\']')
@@ -120,27 +130,27 @@ describe('DRMHandler', function() {
       expect(document.body.firstChild.id).toEqual('oipfdrmagent')
     })
 
-    test('calls the errorCallback if the sendDRMMessage call fails', () => {
+    test('calls the successCallback if the sendDRMMessage is not available', () => {
       const successCb = jest.fn()
       const errorCb = jest.fn()
+      oipfdrmagent.sendDRMMessage = undefined
       sendLicenseRequest(this.config, successCb, errorCb)
 
       /* eslint-disable-next-line no-console */
       expect(console.log).toHaveBeenCalledWith(
-        '%c[error][DRMHandler]',
-        'color: #ff0000;font-weight: bold; font-size: 13px;',
+        '%c[warn][DRMHandler]',
+        'color: #ff8000;font-weight: bold; font-size: 13px;',
         'Error at sendDRMMessage call',
         'oipfdrmagent.sendDRMMessage is not a function',
       )
 
-      expect(errorCb).toHaveBeenCalledTimes(1)
+      expect(successCb).toHaveBeenCalledTimes(1)
     })
 
     describe('at onDRMRightsError callback', () => {
       test('don\'t calls the errorCallback if the received code number is greater o equal 2', () => {
-        document.body.appendChild(createDrmAgent())
+        document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
-        drmAgentElement.sendDRMMessage = () => {}
 
         const successCb = jest.fn()
         const errorCb = jest.fn()
@@ -151,9 +161,8 @@ describe('DRMHandler', function() {
       })
 
       test('returns one error if the received code number is below 2', () => {
-        document.body.appendChild(createDrmAgent())
+        document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
-        drmAgentElement.sendDRMMessage = () => {}
 
         const successCb = jest.fn()
         const errorCb = jest.fn()
@@ -166,9 +175,8 @@ describe('DRMHandler', function() {
 
     describe('at onDRMMessageResult callback', () => {
       test('calls the errorCallback if the received result code is nonzero', () => {
-        document.body.appendChild(createDrmAgent())
+        document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
-        drmAgentElement.sendDRMMessage = () => {}
 
         const successCb = jest.fn()
         const errorCb = jest.fn()
@@ -180,9 +188,8 @@ describe('DRMHandler', function() {
       })
 
       test('calls the successCallback if the received result code is 0', () => {
-        document.body.appendChild(createDrmAgent())
+        document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
-        drmAgentElement.sendDRMMessage = () => {}
 
         const cb = jest.fn()
         sendLicenseRequest(this.config, cb)
@@ -210,10 +217,19 @@ describe('DRMHandler', function() {
       )
     })
 
+    test('calls successCallback if no drmAgent element exists', () => {
+      const successCb = jest.fn()
+      const errorCb = jest.fn()
+      clearLicenseRequest(successCb, errorCb)
+
+      expect(successCb).toHaveBeenCalledTimes(1)
+    })
+
     test('calls the errorCallback if the sendDRMMessage call fails', () => {
       const successCb = jest.fn()
       const errorCb = jest.fn()
-      document.body.appendChild(createDrmAgent())
+      oipfdrmagent.sendDRMMessage = undefined
+      document.body.appendChild(DRMFunctions.createDrmAgent())
       clearLicenseRequest(successCb, errorCb)
 
       /* eslint-disable-next-line no-console */
@@ -229,7 +245,7 @@ describe('DRMHandler', function() {
 
     describe('at onDRMMessageResult callback', () => {
       test('removes drmAgentElement from DOM', () => {
-        document.body.appendChild(createDrmAgent())
+        document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 
@@ -241,7 +257,7 @@ describe('DRMHandler', function() {
       })
 
       test('calls the successCallback', () => {
-        document.body.appendChild(createDrmAgent())
+        document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 

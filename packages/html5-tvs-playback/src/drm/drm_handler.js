@@ -3,7 +3,7 @@ import { Log } from '@clappr/core'
 const MESSAGE_TYPE = 'application/vnd.ms-playready.initiator+xml'
 const DRM_SYSTEM_ID = 'urn:dvb:casystemid:19219'
 
-export const getFullChallengeMessageTemplate = header => {
+const getFullChallengeMessageTemplate = header => {
   const template = '<?xml version="1.0" encoding="utf-8"?>'
   + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
   + '<LicenseAcquisition>'
@@ -15,7 +15,7 @@ export const getFullChallengeMessageTemplate = header => {
   return template
 }
 
-export const getLicenseOverrideMessageTemplate = licenseServerURL => {
+const getLicenseOverrideMessageTemplate = licenseServerURL => {
   const template = '<?xml version="1.0" encoding="utf-8"?>'
   + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
   + '<LicenseServerUriOverride>'
@@ -25,14 +25,14 @@ export const getLicenseOverrideMessageTemplate = licenseServerURL => {
   return template
 }
 
-export const getClearMessageTemplate = () => {
+const getClearMessageTemplate = () => {
   const template = '<?xml version="1.0" encoding="utf-8"?>'
   + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
   + '</PlayReadyInitiator>'
   return template
 }
 
-export const createDrmAgent = () => {
+const createDrmAgent = () => {
   const drmElement = document.createElement('object')
 
   drmElement.id = 'oipfdrmagent'
@@ -47,6 +47,13 @@ export const createDrmAgent = () => {
   return drmElement
 }
 
+const DRMFunctions = {
+  getFullChallengeMessageTemplate,
+  getLicenseOverrideMessageTemplate,
+  getClearMessageTemplate,
+  createDrmAgent,
+}
+
 /* eslint-disable-next-line func-style */
 export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = () => {}) {
   const successCallback = onSuccess.bind(this)
@@ -54,15 +61,15 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
   let oipfdrmagent = document.getElementById('oipfdrmagent')
 
   if (!oipfdrmagent) {
-    oipfdrmagent = createDrmAgent()
+    oipfdrmagent = DRMFunctions.createDrmAgent()
     this && this.el
       ? this.el.appendChild(oipfdrmagent)
       : document.body.appendChild(oipfdrmagent)
   }
 
   const xmlLicenceAcquisition = config.xmlLicenceAcquisition
-    ? getFullChallengeMessageTemplate(config.xmlLicenceAcquisition)
-    : getLicenseOverrideMessageTemplate(config.licenseServerURL)
+    ? DRMFunctions.getFullChallengeMessageTemplate(config.xmlLicenceAcquisition)
+    : DRMFunctions.getLicenseOverrideMessageTemplate(config.licenseServerURL)
 
   const drmRightsErrorHandler = resultCode => {
     const errorMessage = {
@@ -103,8 +110,10 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
     oipfdrmagent.onDRMMessageResult = drmMessageResultHandler
     oipfdrmagent.sendDRMMessage(MESSAGE_TYPE, xmlLicenceAcquisition, DRM_SYSTEM_ID)
   } catch (error) {
-    Log.error('DRMHandler', 'Error at sendDRMMessage call', error.message)
-    return errorCallback(error.message)
+    Log.warn('DRMHandler', 'Error at sendDRMMessage call', error.message)
+    // Some TVs handles the DRM license request automatically, so we can consider it as a success to allow the TV to setup the DRM license
+    oipfdrmagent.parentNode && oipfdrmagent.parentNode.removeChild(oipfdrmagent)
+    return successCallback()
   }
 }
 
@@ -116,16 +125,16 @@ export function clearLicenseRequest(onSuccess = () => {}, onFail = () => {}) {
 
   if (!oipfdrmagent) {
     Log.warn('DRMHandler', 'No one DRM license has been configured before. It\'s not necessary to clear any license server.')
-    return
+    return successCallback()
   }
 
-  const xmlLicenceAcquisition = getClearMessageTemplate()
+  const xmlLicenceAcquisition = DRMFunctions.getClearMessageTemplate()
 
   try {
     oipfdrmagent.onDRMRightsError = successCallback
 
     oipfdrmagent.onDRMMessageResult = () => {
-      oipfdrmagent.remove()
+      oipfdrmagent.parentNode && oipfdrmagent.parentNode.removeChild(oipfdrmagent)
       successCallback()
     }
 
@@ -141,4 +150,4 @@ const DRMHandler = {
   clearLicenseRequest,
 }
 
-export default DRMHandler
+export { DRMFunctions, DRMHandler as default }
