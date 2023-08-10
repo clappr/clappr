@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkclappr_docs=self.webpackChunkclappr_docs||[]).push([[498],{2106:e=>{e.exports=JSON.parse('{"title":"Guides","slug":"/category/guides","permalink":"/docs/category/guides","navigation":{"previous":{"title":"Playground","permalink":"/docs/getting-started/playground"},"next":{"title":"Events","permalink":"/docs/guides/events"}}}')}}]);

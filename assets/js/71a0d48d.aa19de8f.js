@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkclappr_docs=self.webpackChunkclappr_docs||[]).push([[941],{2486:s=>{s.exports=JSON.parse('{"title":"Plugins","slug":"/category/plugins","permalink":"/docs/category/plugins","navigation":{"previous":{"title":"Playbacks","permalink":"/docs/guides/playbacks"},"next":{"title":"Introduction to Plugins","permalink":"/docs/guides/plugins/intro"}}}')}}]);
