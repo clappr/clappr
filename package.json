@@ -19,9 +19,6 @@
     "commitzen": "git-cz",
     "prepublishOnly": "npm run release"
   },
-  "engines": {
-    "node": "^v14.0.0"
-  },
   "files": [
     "/dist",
     "/src"
