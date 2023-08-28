@@ -374,7 +374,7 @@ export default class HTML5Video extends Playback {
   }
 
   _startPlayheadMovingChecks() {
-    if (this._playheadMovingTimer !== null && !this._playheadMovingCheckEnabled)
+    if (this._playheadMovingTimer !== null || !this._playheadMovingCheckEnabled)
       return
 
     this._playheadMovingTimeOnCheck = null
