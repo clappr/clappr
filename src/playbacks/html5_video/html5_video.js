@@ -127,6 +127,7 @@ export default class HTML5Video extends Playback {
     this._ccTrackId = -1
     this._playheadMovingCheckEnabled = !this.options.disablePlayheadMovingCheck
     this._setupSrc(this.options.src)
+    this._playheadMovingCheckInterval = this.options.playheadMovingCheckInterval || 500
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
     this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
@@ -378,7 +379,7 @@ export default class HTML5Video extends Playback {
 
     this._playheadMovingTimeOnCheck = null
     this._determineIfPlayheadMoving()
-    this._playheadMovingTimer = setInterval(this._determineIfPlayheadMoving.bind(this), 500)
+    this._playheadMovingTimer = setInterval(this._determineIfPlayheadMoving.bind(this), this._playheadMovingCheckInterval)
   }
 
   _stopPlayheadMovingChecks() {
