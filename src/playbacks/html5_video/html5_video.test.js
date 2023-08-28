@@ -9,6 +9,7 @@ describe('HTML5Video playback', function() {
   })
 
   test('checks if it can play a resource', () => {
+    expect(HTML5Video.canPlay()).toBeFalsy()
     expect(HTML5Video.canPlay('')).toBeFalsy()
     expect(HTML5Video.canPlay('resource_without_dots')).toBeFalsy()
     // expect(HTML5Video.canPlay('http://domain.com/video.ogv')).toBeTruthy()
