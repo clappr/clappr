@@ -125,6 +125,7 @@ export default class HTML5Video extends Playback {
     this._playheadMovingTimer = null
     this._stopped = false
     this._ccTrackId = -1
+    this._playheadMovingCheckEnabled = !this.options.disablePlayheadMovingCheck
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
@@ -372,7 +373,7 @@ export default class HTML5Video extends Playback {
   }
 
   _startPlayheadMovingChecks() {
-    if (this._playheadMovingTimer !== null)
+    if (this._playheadMovingTimer !== null && !this._playheadMovingCheckEnabled)
       return
 
     this._playheadMovingTimeOnCheck = null
@@ -461,15 +462,18 @@ export default class HTML5Video extends Playback {
   // - the media hasn't been stopped
   // - loading has started
   _handleBufferingEvents() {
-    const playheadShouldBeMoving = !this.el.ended && !this.el.paused
-    const buffering = this._loadStarted && !this.el.ended && !this._stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
+    const isLoading = this._loadStarted && !this.el.ended && !this._stopped
+    const isMissingMediaDataToPlay = this.el.readyState < this.el.HAVE_FUTURE_DATA
+    const playheadShouldBeMoving = !this.el.ended && !this.el.paused && !this._playheadMoving
+    let buffering = isLoading && isMissingMediaDataToPlay
+    if (this._playheadMovingCheckEnabled) buffering = buffering || isLoading && playheadShouldBeMoving
+
     if (this._isBuffering !== buffering) {
       this._isBuffering = buffering
       if (buffering)
         this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       else
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
-
     }
   }
 
