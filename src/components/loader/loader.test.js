@@ -18,7 +18,7 @@ describe('Loader', () => {
   describe('checkVersionSupport function', () => {
     let corePlugin, containerPlugin
     beforeEach(() => {
-      corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0' } })
+      corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
       containerPlugin = ContainerPlugin.extend({ name: 'container-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
     })
 

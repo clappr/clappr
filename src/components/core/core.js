@@ -115,6 +115,7 @@ export default class Core extends UIObject {
     this.playerError = new PlayerError(options, this)
     this.configureDomRecycler()
     this.firstResize = true
+    this.styleRendered = false
     this.plugins = []
     this.containers = []
     //FIXME fullscreen api sucks
@@ -367,16 +368,24 @@ export default class Core extends UIObject {
   }
 
   appendToParent() {
-    const style = Styler.getStyleFor(CoreStyle.toString(), { baseUrl: this.options.baseUrl })
-    const resetStyle = Styler.getStyleFor(ResetStyle.toString(), { baseUrl: this.options.baseUrl })
-    this.$el.append(style[0])
-    this.options.includeResetStyle && this.$el.append(resetStyle[0])
-
     const hasCoreParent = this.$el.parent() && this.$el.parent().length
     !hasCoreParent && this.$el.appendTo(this.options.parentElement)
   }
 
+  appendStyles() {
+    if (this.styleRendered) return
+
+    const style = Styler.getStyleFor(CoreStyle.toString(), { baseUrl: this.options.baseUrl })
+    this.$el.append(style[0])
+    if (this.options.includeResetStyle) {
+      const resetStyle = Styler.getStyleFor(ResetStyle.toString(), { baseUrl: this.options.baseUrl })
+      this.$el.append(resetStyle[0])
+    }
+    this.styleRendered = true
+  }
+
   render() {
+    this.appendStyles()
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
     const size = { width: this.options.width, height: this.options.height }

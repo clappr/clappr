@@ -285,4 +285,38 @@ describe('Core', function() {
       })
     })
   })
+
+  describe('when rendering', () => {
+    beforeEach(() => {
+      this.core = new Core({})
+    })
+
+    test('append default style element', () => {
+      this.core.render()
+
+      expect(this.core.el.children.length).toEqual(1)
+      expect(this.core.el.children[0].tagName).toEqual('STYLE')
+    })
+
+    test('append default and reset style elements with includeResetStyle set', () => {
+      const newOptions = {
+        includeResetStyle: true,
+      }
+      this.core.configure(newOptions)
+
+      this.core.render()
+
+      expect(this.core.el.children.length).toEqual(2)
+      expect(this.core.el.children[0].tagName).toEqual('STYLE')
+      expect(this.core.el.children[1].tagName).toEqual('STYLE')
+    })
+
+    test('does append style elements twice', () => {
+      this.core.render()
+      this.core.render()
+
+      expect(this.core.el.children.length).toEqual(1)
+      expect(this.core.el.children[0].tagName).toEqual('STYLE')
+    })
+  })
 })
