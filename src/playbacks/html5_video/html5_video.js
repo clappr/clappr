@@ -700,7 +700,7 @@ export default class HTML5Video extends Playback {
   }
 }
 
-HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeType) {
+HTML5Video._mimeTypesForUrl = function(resourceUrl = '', mimeTypesByExtension, mimeType) {
   const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
   let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
   return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
