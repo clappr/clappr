@@ -68,13 +68,11 @@ a:hover {
 }
 
 .external-js {
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid #dcdcdc;
   color: #dcdcdc;
-  font-size: 10px;
+  font: 10px monospace;
   padding: 2px;
   margin-right: 2px;
-  font-family: monospace;
 }
 
 #player-wrapper {
