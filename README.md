@@ -142,7 +142,7 @@ PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 
 Therefore, we're not able to execute play and unmute actions sequentially in every situation. There are a series of scenarios where the Browser blocks these actions based on it’s own policy.
 
-Each browser has their own different restrictions, and the usual behavior is to activate the sound only after a user interacts with the player.
+Each browser has their own different restrictions, and the usual behaviour is to activate the sound only after a user interacts with the player.
 
 For more info about the auto play video policy, you can read these docs:
 
