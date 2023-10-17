@@ -11,7 +11,6 @@
     "node": "14.21.3",
     "yarn": "1.22.19"
   },
-  "dependencies": {},
   "devDependencies": {
     "lerna": "^7.2.0"
   }
