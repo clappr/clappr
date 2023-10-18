@@ -2,6 +2,7 @@
   "name": "clappr-project",
   "private": true,
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "volta": {

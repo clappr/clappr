@@ -1,10 +1,10 @@
 node_modules
 .DS_Store
 .env
+.docusaurus
 coverage
 build/
 dist/
-docs/
 src/base/jst.js
 *.cache
 aws.json
