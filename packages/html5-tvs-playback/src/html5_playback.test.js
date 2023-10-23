@@ -717,6 +717,13 @@ describe('HTML5TVsPlayback', function() {
 
       expect(this.playback.el.firstChild).toEqual(this.playback.$sourceElement)
     })
+
+    test('calls load on playback.el after setting up source', () => {
+      jest.spyOn(this.playback.el, 'load')
+      this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(this.playback.el.load).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('_onDrmConfigured callback', () => {

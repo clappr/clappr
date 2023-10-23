@@ -156,9 +156,11 @@ export default class HTML5TVsPlayback extends Playback {
   }
 
   _appendSourceElement() {
-    this.config && this.config.drm && !this._drmConfigured
-      ? DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured, this._onDrmError)
-      : this.el.appendChild(this.$sourceElement)
+    const shouldConfigureDRM = this.config && this.config.drm && !this._drmConfigured
+    if (shouldConfigureDRM) return DRMHandler.sendLicenseRequest.call(this, this.config.drm, this._onDrmConfigured, this._onDrmError)
+
+    this.el.appendChild(this.$sourceElement)
+    this.el.load()
   }
 
   _onDrmConfigured() {
