@@ -34,6 +34,7 @@ const createAudioTrackListStub = () => {
 
   Object.defineProperties(tracks, {
     addEventListener: { value: jest.fn() },
+    removeEventListener: { value: jest.fn() },
     getTrackById: { value: id => tracks[id] },
     0: {
       value: {
@@ -1138,6 +1139,15 @@ describe('HTML5TVsPlayback', function() {
       this.playback.destroy()
 
       expect(this.playback._src).toBeNull()
+    })
+
+    test('removes event listeners from audio tracks', () => {
+      this.playback._src = URL_VIDEO_MP4_EXAMPLE
+      this.playback.destroy()
+
+      expect(this.playback.el.audioTracks.removeEventListener).toHaveBeenCalledTimes(2)
+      expect(this.playback.el.audioTracks.removeEventListener).toHaveBeenCalledWith('addtrack', this.playback._onAudioTracksUpdated)
+      expect(this.playback.el.audioTracks.removeEventListener).toHaveBeenCalledWith('removetrack', this.playback._onAudioTracksUpdated)
     })
   })
 

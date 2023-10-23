@@ -378,6 +378,9 @@ export default class HTML5TVsPlayback extends Playback {
     this._isDestroyed = true
     super.destroy()
     this._wipeUpMedia()
+    const { audioTracks } = this.el
+    audioTracks?.removeEventListener('addtrack', this._onAudioTracksUpdated)
+    audioTracks?.removeEventListener('removetrack', this._onAudioTracksUpdated)
     this._src = null
   }
 
