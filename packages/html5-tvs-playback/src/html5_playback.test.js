@@ -996,13 +996,15 @@ describe('HTML5TVsPlayback', function() {
     })
 
     test('logs video.play promise problems', () => {
-      window.HTMLMediaElement.prototype.play = () => new Promise(() => { throw new Error('Uh-oh!') })
+      const error = new Error('Uh-oh!')
+      window.HTMLMediaElement.prototype.play = () => new Promise(() => { throw error })
 
       this.playback.play()
       this.playback.el.play().catch(() => expect(console.log).toHaveBeenCalledWith(
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
-        'The play promise throws one error: Uh-oh!',
+        'The play promise throws one error: ',
+        error,
       ))
     })
   })
