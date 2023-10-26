@@ -4,36 +4,30 @@ import Events from '../../base/events'
 import $ from 'clappr-zepto'
 
 describe('HTML5Video playback', function() {
+  let options
   beforeEach(() => {
-    this.options = { src: 'http://example.com/dash.ogg' }
+    options = { src: 'http://example.com/dash.ogg' }
   })
 
   test('checks if it can play a resource', () => {
     expect(HTML5Video.canPlay()).toBeFalsy()
     expect(HTML5Video.canPlay('')).toBeFalsy()
     expect(HTML5Video.canPlay('resource_without_dots')).toBeFalsy()
-    // expect(HTML5Video.canPlay('http://domain.com/video.ogv')).toBeTruthy()
-    // expect(HTML5Video.canPlay('http://domain.com/video.ogv?query_string=here')).toBeTruthy()
-    // expect(HTML5Video.canPlay('/relative/video.ogv')).toBeTruthy()
   })
 
-  // test('checks if it can play a resource with mime-type', () => {
-  //   expect(HTML5Video.canPlay('resource_without_dots', 'video/ogg; codecs="theora, vorbis"')).toBeTruthy()
-  // })
-
   test('does set a valid src to video element', () => {
-    const playback = new HTML5Video(this.options)
+    const playback = new HTML5Video(options)
     expect(playback._src).toEqual('http://example.com/dash.ogg')
   })
 
   test('starts not ready', () => {
-    const playback = new HTML5Video(this.options)
+    const playback = new HTML5Video(options)
 
     expect(playback.isReady).toBeUndefined()
   })
 
   test('can be ready', () => {
-    const playback = new HTML5Video(this.options)
+    const playback = new HTML5Video(options)
     playback._ready()
 
     expect(playback.isReady).toBeTruthy()
@@ -43,7 +37,7 @@ describe('HTML5Video playback', function() {
     window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
 
     const callback = jest.fn()
-    const playback = new HTML5Video(this.options)
+    const playback = new HTML5Video(options)
 
     playback.on(Events.PLAYBACK_PLAY_INTENT, callback)
     playback.play()
@@ -102,17 +96,8 @@ describe('HTML5Video playback', function() {
     playback.el.dispatchEvent(new Event('loadedmetadata'))
   })
 
-  // test('isPlaying() is true after constructor when autoPlay is true', done => {
-  //   const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true, disableCanAutoPlay: true })
-
-  //   playback.on(Events.PLAYBACK_PLAY_INTENT, () => {
-  //     expect(playback.isPlaying()).toBeTruthy()
-  //     done()
-  //   })
-  // })
-
   test('setup crossorigin attribute', () => {
-    const options = $.extend({ playback: { crossOrigin: 'use-credentials' } }, this.options)
+    const options = $.extend({ playback: { crossOrigin: 'use-credentials' } }, options)
     const playback = new HTML5Video(options)
 
     expect(playback.el.crossOrigin).toEqual('use-credentials')
@@ -120,7 +105,7 @@ describe('HTML5Video playback', function() {
   })
 
   test('enables inline playback for webviews when playInline flag is set', () => {
-    const options = $.extend({ playback: { playInline: true } }, this.options)
+    const options = $.extend({ playback: { playInline: true } }, options)
     const playback = new HTML5Video(options)
 
     expect(playback.el['x-webkit-playsinline']).toBeTruthy()
@@ -128,21 +113,21 @@ describe('HTML5Video playback', function() {
   })
 
   test('allows displaying default video tag controls', () => {
-    const options1 = { ...this.options }
+    const options1 = { ...options }
     const playback1 = new HTML5Video(options1)
     expect(playback1.el.hasAttribute('controls')).toBeFalsy()
 
-    const options2 = Object.assign({ playback: { controls: 'controls' } }, this.options)
+    const options2 = Object.assign({ playback: { controls: 'controls' } }, options)
     const playback2 = new HTML5Video(options2)
     expect(playback2.el.hasAttribute('controls')).toBeTruthy()
 
-    const options3 = Object.assign({ playback: { controls: false } }, this.options)
+    const options3 = Object.assign({ playback: { controls: false } }, options)
     const playback3 = new HTML5Video(options3)
     expect(playback3.el.hasAttribute('controls')).toBeFalsy()
   })
 
   test('mute or unmute video element when volume is changed', () => {
-    const playback = new HTML5Video(this.options)
+    const playback = new HTML5Video(options)
 
     expect(playback.el.getAttribute('muted')).toBeNull()
     expect(playback.el.muted).toBeFalsy()
@@ -156,64 +141,8 @@ describe('HTML5Video playback', function() {
     expect(playback.el.muted).toBeFalsy()
   })
 
-  // test('setup external tracks', () => {
-  //   let newTrackUrl = () => { URL.createObjectURL(new Blob([], { type: 'text/vtt' })) }
-  //   const options = $.extend({ playback: {
-  //     externalTracks: [
-  //       { lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles' },
-  //       { lang: 'fr', label: 'French', src: newTrackUrl() }
-  //     ]
-  //   } }, this.options)
-  //   const playback = new HTML5Video(options)
-  //   playback.render()
-  //   const $tracks = playback.$el.find('track[data-html5-video-track]')
-
-  //   expect($tracks[0].getAttribute('data-html5-video-track')).toEqual('0')
-  //   expect($tracks[0].getAttribute('kind')).toEqual('subtitles')
-  //   expect($tracks[0].getAttribute('label')).toEqual('English')
-  //   expect($tracks[0].getAttribute('srclang')).toEqual('en')
-
-  //   expect($tracks[1].getAttribute('data-html5-video-track')).toEqual('1')
-  //   expect($tracks[1].getAttribute('kind')).toEqual('subtitles')
-  //   expect($tracks[1].getAttribute('label')).toEqual('French')
-  //   expect($tracks[1].getAttribute('srclang')).toEqual('fr')
-  // })
-
-  // test('can switch text tracks', () => {
-  //   let newTrackUrl = () => { URL.createObjectURL(new Blob([], { type: 'text/vtt' })) }
-  //   const options = $.extend({ playback: {
-  //     externalTracks: [
-  //       { lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles' },
-  //       { lang: 'fr', label: 'French', src: newTrackUrl() }
-  //     ]
-  //   } }, this.options)
-  //   const playback = new HTML5Video(options)
-  //   playback.render()
-
-  //   expect(playback.hasClosedCaptionsTracks).toBeTruthy()
-  //   expect(playback.closedCaptionsTracks.length).equal(2)
-  //   expect(playback.closedCaptionsTrackId).equal(-1)
-  //   expect(playback.closedCaptionsTracks[0].track.mode).to.not.equal('showing')
-  //   expect(playback.closedCaptionsTracks[1].track.mode).to.not.equal('showing')
-
-  //   playback.closedCaptionsTrackId = 0
-  //   expect(playback.closedCaptionsTrackId).equal(0)
-  //   expect(playback.closedCaptionsTracks[0].track.mode).equal('showing')
-  //   expect(playback.closedCaptionsTracks[1].track.mode).to.not.equal('showing')
-
-  //   playback.closedCaptionsTrackId = 1
-  //   expect(playback.closedCaptionsTrackId).equal(1)
-  //   expect(playback.closedCaptionsTracks[0].track.mode).to.not.equal('showing')
-  //   expect(playback.closedCaptionsTracks[1].track.mode).equal('showing')
-
-  //   playback.closedCaptionsTrackId = -1
-  //   expect(playback.closedCaptionsTrackId).equal(-1)
-  //   expect(playback.closedCaptionsTracks[0].track.mode).to.not.equal('showing')
-  //   expect(playback.closedCaptionsTracks[1].track.mode).to.not.equal('showing')
-  // })
-
   describe('progress', () => {
-    let start, end, currentTime, playback
+    let start, end, currentTime, playback, callback
     const duration = 300
     const fakeEl = {
       get currentTime() { return currentTime },
@@ -226,15 +155,15 @@ describe('HTML5Video playback', function() {
       start = [0]
       end = [30]
 
-      this.callback = jest.fn()
-      playback = new HTML5Video(this.options)
+      callback = jest.fn()
+      playback = new HTML5Video(options)
       playback.setElement(fakeEl)
-      playback.on(Events.PLAYBACK_PROGRESS, this.callback)
+      playback.on(Events.PLAYBACK_PROGRESS, callback)
     })
 
     test('should trigger PLAYBACK_PROGRESS with current buffer position', () => {
       playback._onProgress() // cannot trigger event on fake element (improve later?)
-      let currentProgress = this.callback.mock.calls[0][0]
+      let currentProgress = callback.mock.calls[0][0]
 
       expect(currentProgress.start).toEqual(start[0])
       expect(currentProgress.current).toEqual(end[0])
@@ -247,17 +176,14 @@ describe('HTML5Video playback', function() {
       currentTime = 75 // this should be located at index 1
 
       playback._onProgress() // cannot trigger event on fake element (improve later?)
-      let progress = this.callback.mock.calls[0][0]
+      let progress = callback.mock.calls[0][0]
 
       expect(progress.start).toEqual(start[1])
       expect(progress.current).toEqual(end[1])
     })
 
     test('does not trigger buffer event when the playback is initialized', () => {
-      /*
-        Only trigger buffer events when buffer state change.
-        The default value for _bufferState is false.
-      */
+
 
       let builtInEvents = ['loadedmetadata', 'progress', 'timeupdate'].map(
         function(label) {
@@ -266,7 +192,7 @@ describe('HTML5Video playback', function() {
       )
 
       let callback = jest.fn()
-      let playback = new HTML5Video(this.options)
+      let playback = new HTML5Video(options)
 
       playback.on(Events.PLAYBACK_BUFFERING, callback)
       playback.on(Events.PLAYBACK_BUFFERFULL, callback)
@@ -280,7 +206,7 @@ describe('HTML5Video playback', function() {
       end = [30, 90, 280]
 
       playback._onProgress() // cannot trigger event on fake element (improve later?)
-      let buffered = this.callback.mock.calls[0][1]
+      let buffered = callback.mock.calls[0][1]
 
       expect(buffered.length).toEqual(start.length)
       expect(buffered[0]).toEqual({ start: start[0], end: end[0] })
@@ -288,11 +214,6 @@ describe('HTML5Video playback', function() {
       expect(buffered[2]).toEqual({ start: start[2], end: end[2] })
     })
   })
-
-  // test('should be able to identify it can play resources independently of the file extension case', () => {
-  //   expect(HTML5Video.canPlay('/relative/video.ogg')).toBeTruthy()
-  //   expect(HTML5Video.canPlay('/relative/VIDEO.OGG')).toBeTruthy()
-  // })
 
   describe('options', () => {
     test('should use the playback object within player options', () => {
@@ -363,13 +284,6 @@ describe('HTML5Video playback', function() {
   })
 
   describe('audio resources', () => {
-    // test('should be able to play audio resources', () => {
-    //   expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).toBeTruthy()
-    //   expect(HTML5Video.canPlay('http://domain.com/Audio.oga?query_string=here')).toBeTruthy()
-    //   expect(HTML5Video.canPlay('/relative/Audio.oga')).toBeTruthy()
-    //   expect(HTML5Video.canPlay('/relative/Audio.wav')).toBeTruthy()
-    // })
-
     test('should play audio resources on an audio tag', () => {
       const options = { src: 'http://example.com/dash.oga' }
       const playback = new HTML5Video(options)
@@ -413,7 +327,7 @@ describe('HTML5Video playback', function() {
   })
 
   test('can configure loop', () => {
-    const options = $.extend({ loop: true }, this.options)
+    const options = $.extend({ loop: true }, options)
     const playback = new HTML5Video(options)
 
     expect(playback.el.loop).toEqual(true)
