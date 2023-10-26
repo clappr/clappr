@@ -3,10 +3,11 @@ import PlayerError from './error'
 import Events from '@/base/events'
 
 describe('PlayerError', function() {
+  let core, playerError, errorData
   beforeEach(() => {
-    this.core = new Core({})
-    this.playerError = this.core.playerError
-    this.errorData = {
+    core = new Core({})
+    playerError = core.playerError
+    errorData = {
       code: 'test_01',
       description: 'test error',
       level: PlayerError.Levels.FATAL,
@@ -31,19 +32,19 @@ describe('PlayerError', function() {
 
   describe('when error method is called', () => {
     test('triggers ERROR event', () => {
-      jest.spyOn(this.core, 'trigger')
-      this.playerError.createError(this.errorData)
+      jest.spyOn(core, 'trigger')
+      playerError.createError(errorData)
 
-      expect(this.core.trigger).toHaveBeenCalledWith(Events.ERROR, this.errorData)
+      expect(core.trigger).toHaveBeenCalledWith(Events.ERROR, errorData)
     })
 
     describe('when core is not set', () => {
       test('does not trigger ERROR event', () => {
-        jest.spyOn(this.core, 'trigger')
-        this.playerError.core = undefined
-        this.playerError.createError(this.errorData)
+        jest.spyOn(core, 'trigger')
+        playerError.core = undefined
+        playerError.createError(errorData)
 
-        expect(this.core.trigger).not.toHaveBeenCalledWith(Events.ERROR, this.errorData)
+        expect(core.trigger).not.toHaveBeenCalledWith(Events.ERROR, errorData)
       })
     })
   })

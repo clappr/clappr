@@ -9,8 +9,9 @@ import Playback from '@/base/playback'
 import Events from '@/base/events'
 
 describe('ErrorMixin', function() {
+  let errorExample
   beforeEach(() => {
-    this.errorExample = { code: 'TEST_ERROR', description: 'A error example.', level: PlayerError.Levels.FATAL }
+    errorExample = { code: 'TEST_ERROR', description: 'A error example.', level: PlayerError.Levels.FATAL }
   })
 
   test('is used on all plugins base classes', () => {
@@ -30,7 +31,7 @@ describe('ErrorMixin', function() {
   describe('creates a error', () => {
 
     test('with default values', () => {
-      expect(ErrorMixin.createError(this.errorExample)).toEqual({
+      expect(ErrorMixin.createError(errorExample)).toEqual({
         code: ':TEST_ERROR',
         description: 'A error example.',
         level: 'FATAL',
@@ -52,7 +53,7 @@ describe('ErrorMixin', function() {
     })
 
     test('owns option to not manipulate error code', () => {
-      expect(ErrorMixin.createError(this.errorExample, { useCodePrefix: false })).toEqual({
+      expect(ErrorMixin.createError(errorExample, { useCodePrefix: false })).toEqual({
         description: 'A error example.',
         level: 'FATAL',
         origin: '',
@@ -67,7 +68,7 @@ describe('ErrorMixin', function() {
       const plugin1 = new CorePlugin({})
       const plugin2 = new ContainerPlugin({})
 
-      expect(playback.createError(this.errorExample)).toEqual({
+      expect(playback.createError(errorExample)).toEqual({
         description: 'A error example.',
         level: 'FATAL',
         origin: 'playback',
@@ -76,7 +77,7 @@ describe('ErrorMixin', function() {
         code: 'playback:TEST_ERROR'
       })
 
-      expect(plugin1.createError(this.errorExample)).toEqual({
+      expect(plugin1.createError(errorExample)).toEqual({
         description: 'A error example.',
         level: 'FATAL',
         origin: 'core',
@@ -85,7 +86,7 @@ describe('ErrorMixin', function() {
         code: 'core:TEST_ERROR'
       })
 
-      expect(plugin2.createError(this.errorExample)).toEqual({
+      expect(plugin2.createError(errorExample)).toEqual({
         description: 'A error example.',
         level: 'FATAL',
         origin: 'container',
@@ -102,7 +103,7 @@ describe('ErrorMixin', function() {
         }
       })
 
-      expect(plugin.createError(this.errorExample)).toEqual({
+      expect(plugin.createError(errorExample)).toEqual({
         description: 'A error example.',
         level: 'FATAL',
         origin: 'container',
@@ -119,7 +120,7 @@ describe('ErrorMixin', function() {
     const plugin = new UICorePlugin(new Core({}))
 
     plugin.listenTo(plugin.core, Events.ERROR, callback)
-    plugin.createError(this.errorExample)
+    plugin.createError(errorExample)
 
     expect(callback).toHaveBeenCalledWith({
       description: 'A error example.',
