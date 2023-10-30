@@ -40,6 +40,14 @@ export default class HlsjsPlayback extends HTML5Video {
       this._hls.currentLevel = this._currentLevel
   }
 
+  get latency() {
+    return this._hls.latency
+  }
+
+  get currentProgramDateTime() {
+    return this._hls.playingDate
+  }
+
   get _startTime() {
     if (this._playbackType === Playback.LIVE && this._playlistType !== 'EVENT')
       return this._extrapolatedStartTime
