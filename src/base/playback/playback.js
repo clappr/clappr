@@ -65,6 +65,26 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * The estimated time (in seconds) of a video's live edge plus time sync playlist advanced.
+   * (i.e if first playlist hasn't been loaded, will return 0)
+   * @property latency
+   * @type {Number}
+   */
+  get latency() {
+    return 0
+  }
+
+  /**
+   * The datetime value relative for a video's active level Program Date Time, if present.
+   * (i.e if first playlist hasn't been loaded, will return null)
+   * @property currentProgramDateTime
+   * @return {Date}
+   */
+  get currentProgramDateTime() {
+    return null
+  }
+
+  /**
    * @method constructor
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
