@@ -66,6 +66,16 @@ class DashShakaPlayback extends HTML5Video {
     return this._duration >= this._minDvrSize && this.getPlaybackType() === 'live'
   }
 
+  get latency() {
+    if (!this.shakaPlayerInstance) return 0
+    return this.shakaPlayerInstance.getStats().liveLatency
+  }
+
+  get currentProgramDateTime() {
+    if (!this.shakaPlayerInstance) return null
+    return this.shakaPlayerInstance.getPlayheadTimeAsDate()
+  }
+
   getDuration() {
     return this._duration
   }
