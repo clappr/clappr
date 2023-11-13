@@ -72,7 +72,9 @@ export default class HTML5Video extends Playback {
       'seeked': '_onSeeked',
       'stalled': '_handleBufferingEvents',
       'timeupdate': '_onTimeUpdate',
-      'waiting': '_onWaiting'
+      'waiting': '_onWaiting',
+      'enterpictureinpicture': '_onEnterPiP',
+      'leavepictureinpicture': '_onExitPiP'
     }
   }
 
@@ -455,6 +457,30 @@ export default class HTML5Video extends Playback {
   _onEnded() {
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_ENDED, this.name)
+  }
+
+  _onEnterPIP() {
+    this.trigger(Events.PLAYBACK_ENTER_PIP, this.name)
+  }
+
+  _onExitPIP() {
+    this.trigger(Events.PLAYBACK_EXIT_PIP, this.name)
+  }
+
+  enterPIP() {
+    this.el.requestPictureInPicture().then(() => {
+      this._onEnterPIP()
+    }).catch(e => {
+      Log.warn('enter PIP failed', e)
+    })
+  }
+
+  exitPIP() {
+    document.exitPictureInPicture().then(() => {
+      this._onExitPIP()
+    }).catch(e => {
+      Log.warn('exit PIP failed', e)
+    })
   }
 
   // The playback should be classed as buffering if the following are true:
