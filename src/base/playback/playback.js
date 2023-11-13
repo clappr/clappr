@@ -23,10 +23,10 @@ import $ from 'clappr-zepto'
  */
 export default class Playback extends UIObject {
   /**
-  * Determine if the playback does not contain video/has video but video should be ignored.
-  * @property isAudioOnly
-  * @type Boolean
-  */
+   * Determine if the playback does not contain video/has video but video should be ignored.
+   * @property isAudioOnly
+   * @type Boolean
+   */
   get isAudioOnly() {
     return false
   }
@@ -121,6 +121,18 @@ export default class Playback extends UIObject {
    * @method stop
    */
   stop() {}
+
+  /**
+   * enter in picture in picture mode
+   * @method enterPiP
+   */
+  enterPiP() {}
+
+  /**
+   * exit from picture in picture mode
+   * @method exitPiP
+   */
+  exitPiP() {}
 
   /**
    * seeks the playback to a given `time` in seconds
