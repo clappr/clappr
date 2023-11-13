@@ -713,6 +713,16 @@ describe('HTML5TVsPlayback', function() {
       )
     })
 
+    test('does not setup license server if config.disableDRMSetup is set', () => {
+      const { core, container } = setupTest({ src: URL_VIDEO_MP4_EXAMPLE, html5TvsPlayback: { disableDRMSetup: true, drm: { licenseServerURL: 'http://fake-domain.com/license_server/playready' } } })
+      core.activeContainer = container
+
+      jest.spyOn(DRMHandler, 'sendLicenseRequest')
+      container.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
+
+      expect(DRMHandler.sendLicenseRequest).not.toHaveBeenCalled()
+    })
+
     test('appends $sourceElement into the playback.el if no one license server URL is configured or _drmConfigured flag is true', () => {
       this.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
