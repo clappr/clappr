@@ -73,8 +73,8 @@ export default class HTML5Video extends Playback {
       'stalled': '_handleBufferingEvents',
       'timeupdate': '_onTimeUpdate',
       'waiting': '_onWaiting',
-      'enterpictureinpicture': '_onEnterPiP',
-      'leavepictureinpicture': '_onExitPiP'
+      'enterpictureinpicture': '_onEnterPIP',
+      'leavepictureinpicture': '_onExitPIP'
     }
   }
 
@@ -126,6 +126,7 @@ export default class HTML5Video extends Playback {
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false
+    this.pipEventHandler = false
     this._ccTrackId = -1
     this._playheadMovingCheckEnabled = !this.options.disablePlayheadMovingCheck
     this._setupSrc(this.options.src)
@@ -460,11 +461,19 @@ export default class HTML5Video extends Playback {
   }
 
   _onEnterPIP() {
+    if (this.pipEventHandler) return
     this.trigger(Events.PLAYBACK_ENTER_PIP, this.name)
+    this.pipEventHandler = true
   }
 
   _onExitPIP() {
+    if (!this.pipEventHandler) return
     this.trigger(Events.PLAYBACK_EXIT_PIP, this.name)
+    this.pipEventHandler = false
+  }
+
+  togglePIP() {
+    document.pictureInPictureElement ? this.exitPIP() : this.enterPIP()
   }
 
   enterPIP() {
@@ -721,6 +730,15 @@ export default class HTML5Video extends Playback {
     }
 
     this._ready()
+
+    // Note: Example of Picture-in-Picture
+    // const pipButton = document.createElement('button', { class: 'pip-button' })
+    // document.body.appendChild(pipButton)
+    // pipButton.innerHTML = 'Picture-in-Picture'
+    // pipButton.addEventListener('click', () => {
+    //   this.togglePIP()
+    // })
+
     const style = Styler.getStyleFor(HTML5VideoStyle.toString(), { baseUrl: this.options.baseUrl })
     this.$el.append(style[0])
     return this
