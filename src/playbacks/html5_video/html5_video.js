@@ -73,8 +73,8 @@ export default class HTML5Video extends Playback {
       'stalled': '_handleBufferingEvents',
       'timeupdate': '_onTimeUpdate',
       'waiting': '_onWaiting',
-      'enterpictureinpicture': '_onEnterPIP',
-      'leavepictureinpicture': '_onExitPIP'
+      'enterpictureinpicture': '_onEnterPiP',
+      'leavepictureinpicture': '_onExitPiP'
     }
   }
 
@@ -459,31 +459,31 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_ENDED, this.name)
   }
 
-  _onEnterPIP() {
+  _onEnterPiP() {
     this.trigger(Events.PLAYBACK_ENTER_PIP, this.name)
   }
 
-  _onExitPIP() {
+  _onExitPiP() {
     this.trigger(Events.PLAYBACK_EXIT_PIP, this.name)
   }
 
-  togglePIP() {
+  togglePiP() {
     document.pictureInPictureElement ? this.exitPIP() : this.enterPIP()
   }
 
-  enterPIP() {
+  enterPiP() {
     this.el.requestPictureInPicture().then(() => {
-      Log.info('enter PIP success')
+      Log.info(this.name, 'enter PIP success')
     }).catch(e => {
-      Log.warn('enter PIP failed', e)
+      Log.warn(this.name, 'enter PIP failed', e)
     })
   }
 
-  exitPIP() {
+  exitPiP() {
     document.exitPictureInPicture().then(() => {
-      Log.info('exit PIP success')
+      Log.info(this.name, 'exit PIP success')
     }).catch(e => {
-      Log.warn('exit PIP failed', e)
+      Log.warn(this.name, 'exit PIP failed', e)
     })
   }
 
