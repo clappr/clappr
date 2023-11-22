@@ -206,8 +206,8 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged)
     this.listenTo(this.playback, Events.PLAYBACK_AUDIO_AVAILABLE, this.audioAvailable)
     this.listenTo(this.playback, Events.PLAYBACK_AUDIO_CHANGED, this.audioChanged)
-    this.listenTo(this.playback, Events.PLAYBACK_ENTER_PIP, this.enterPiP)
-    this.listenTo(this.playback, Events.PLAYBACK_EXIT_PIP, this.exitPiP)
+    this.listenTo(this.playback, Events.PLAYBACK_ENTER_PIP, this.onEnterPiP)
+    this.listenTo(this.playback, Events.PLAYBACK_EXIT_PIP, this.onExitPiP)
   }
 
   subtitleAvailable() {
@@ -457,11 +457,11 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_STATE_BUFFERFULL, this.name)
   }
 
-  enterPiP() {
+  onEnterPiP() {
     this.trigger(Events.CONTAINER_ENTER_PIP, this.name)
   }
 
-  exitPiP() {
+  onExitPiP() {
     this.trigger(Events.CONTAINER_EXIT_PIP, this.name)
   }
 
@@ -513,6 +513,14 @@ export default class Container extends UIObject {
   mouseDown() {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_DOWN)
+  }
+
+  enterPiP() {
+    this.playback.enterPiP()
+  }
+
+  exitPiP() {
+    this.playback.exitPiP()
   }
 
   settingsUpdate() {
