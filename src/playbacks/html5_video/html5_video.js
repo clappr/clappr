@@ -468,7 +468,7 @@ export default class HTML5Video extends Playback {
   }
 
   togglePiP() {
-    document.pictureInPictureElement ? this.exitPIP() : this.enterPIP()
+    document.pictureInPictureElement ? this.exitPiP() : this.enterPiP()
   }
 
   enterPiP() {
