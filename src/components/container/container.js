@@ -128,6 +128,14 @@ export default class Container extends UIObject {
   }
 
   /**
+  * returns the picture-in-picture state.
+  * @type {Boolean}
+  */
+  get isPiPActive() {
+    return this.playback.isPiPActive
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
