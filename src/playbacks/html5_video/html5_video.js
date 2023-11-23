@@ -464,11 +464,11 @@ export default class HTML5Video extends Playback {
   }
 
   _onEnterPiP() {
-    this.trigger(Events.PLAYBACK_ENTER_PIP, this.name)
+    this.trigger(Events.PLAYBACK_PIP_ENTER, this.name)
   }
 
   _onExitPiP() {
-    this.trigger(Events.PLAYBACK_EXIT_PIP, this.name)
+    this.trigger(Events.PLAYBACK_PIP_EXIT, this.name)
   }
 
   togglePiP() {

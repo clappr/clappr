@@ -182,8 +182,8 @@ export default class Container extends UIObject {
    * | play |
    * | pause |
    * | error |
-   * | enter_pip |
-   * | exit_pip |
+   * | pip_enter |
+   * | pip_exit |
    *
    * ps: the events usually translate from PLABACK_x to CONTAINER_x, you can check all the events at `Event` class.
    *
@@ -214,8 +214,8 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged)
     this.listenTo(this.playback, Events.PLAYBACK_AUDIO_AVAILABLE, this.audioAvailable)
     this.listenTo(this.playback, Events.PLAYBACK_AUDIO_CHANGED, this.audioChanged)
-    this.listenTo(this.playback, Events.PLAYBACK_ENTER_PIP, this.onEnterPiP)
-    this.listenTo(this.playback, Events.PLAYBACK_EXIT_PIP, this.onExitPiP)
+    this.listenTo(this.playback, Events.PLAYBACK_PIP_ENTER, this.onEnterPiP)
+    this.listenTo(this.playback, Events.PLAYBACK_PIP_EXIT, this.onExitPiP)
   }
 
   subtitleAvailable() {
@@ -466,11 +466,11 @@ export default class Container extends UIObject {
   }
 
   onEnterPiP() {
-    this.trigger(Events.CONTAINER_ENTER_PIP, this.name)
+    this.trigger(Events.CONTAINER_PIP_ENTER, this.name)
   }
 
   onExitPiP() {
-    this.trigger(Events.CONTAINER_EXIT_PIP, this.name)
+    this.trigger(Events.CONTAINER_PIP_EXIT, this.name)
   }
 
   /**
