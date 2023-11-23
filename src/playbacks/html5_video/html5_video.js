@@ -471,10 +471,6 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_PIP_EXIT, this.name)
   }
 
-  togglePiP() {
-    document.pictureInPictureElement ? this.exitPiP() : this.enterPiP()
-  }
-
   enterPiP() {
     this.el.requestPictureInPicture().then(() => {
       Log.info(this.name, 'enter PIP success')
