@@ -331,6 +331,16 @@ Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 Events.PLAYER_SUBTITLE_AVAILABLE = 'subtitleavailable'
 
 // Playback Events
+/** Fired when picture-in-picture mode is entered
+ *
+ * @event PLAYBACK_PIP_ENTER
+ */
+Events.PLAYBACK_PIP_ENTER = 'playback:picture-in-picture:enter'
+/** Fired when picture-in-picture mode is exited
+ *
+ * @event PLAYBACK_PIP_EXIT
+ */
+Events.PLAYBACK_PIP_EXIT = 'playback:picture-in-picture:exit'
 /**
  * Fired when the playback is downloading the media
  *
@@ -762,6 +772,17 @@ Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter'
 Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave'
 Events.CONTAINER_MOUSE_UP = 'container:mouseup'
 Events.CONTAINER_MOUSE_DOWN = 'container:mousedown'
+
+/**
+ *  Fired when the container enters on Picture-in-Picture mode
+ * @event CONTAINER_PIP_ENTER
+ */
+Events.CONTAINER_PIP_ENTER = 'container:picture-in-picture:enter'
+/**
+ * Fired when the container exits from Picture-in-Picture mode
+ * @event CONTAINER_PIP_EXIT
+ */
+Events.CONTAINER_PIP_EXIT = 'container:picture-in-picture:exit'
 
 /**
  * Fired when the container seeks the video

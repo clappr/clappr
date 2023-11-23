@@ -128,6 +128,14 @@ export default class Container extends UIObject {
   }
 
   /**
+  * returns the picture-in-picture state.
+  * @type {Boolean}
+  */
+  get isPiPActive() {
+    return this.playback.isPiPActive
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
@@ -174,6 +182,8 @@ export default class Container extends UIObject {
    * | play |
    * | pause |
    * | error |
+   * | pip_enter |
+   * | pip_exit |
    *
    * ps: the events usually translate from PLABACK_x to CONTAINER_x, you can check all the events at `Event` class.
    *
@@ -204,6 +214,8 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged)
     this.listenTo(this.playback, Events.PLAYBACK_AUDIO_AVAILABLE, this.audioAvailable)
     this.listenTo(this.playback, Events.PLAYBACK_AUDIO_CHANGED, this.audioChanged)
+    this.listenTo(this.playback, Events.PLAYBACK_PIP_ENTER, this.onEnterPiP)
+    this.listenTo(this.playback, Events.PLAYBACK_PIP_EXIT, this.onExitPiP)
   }
 
   subtitleAvailable() {
@@ -453,6 +465,14 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_STATE_BUFFERFULL, this.name)
   }
 
+  onEnterPiP() {
+    this.trigger(Events.CONTAINER_PIP_ENTER, this.name)
+  }
+
+  onExitPiP() {
+    this.trigger(Events.CONTAINER_PIP_EXIT, this.name)
+  }
+
   /**
    * adds plugin to the container
    * @method addPlugin
@@ -501,6 +521,14 @@ export default class Container extends UIObject {
   mouseDown() {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_DOWN)
+  }
+
+  enterPiP() {
+    this.playback.enterPiP()
+  }
+
+  exitPiP() {
+    this.playback.exitPiP()
   }
 
   settingsUpdate() {

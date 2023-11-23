@@ -72,7 +72,9 @@ export default class HTML5Video extends Playback {
       'seeked': '_onSeeked',
       'stalled': '_handleBufferingEvents',
       'timeupdate': '_onTimeUpdate',
-      'waiting': '_onWaiting'
+      'waiting': '_onWaiting',
+      'enterpictureinpicture': '_onEnterPiP',
+      'leavepictureinpicture': '_onExitPiP'
     }
   }
 
@@ -94,6 +96,10 @@ export default class HTML5Video extends Playback {
    */
   get buffering() {
     return this._isBuffering
+  }
+
+  get isPiPActive() {
+    return this.el === document.pictureInPictureElement
   }
 
   get isLive() {
@@ -457,6 +463,30 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_ENDED, this.name)
   }
 
+  _onEnterPiP() {
+    this.trigger(Events.PLAYBACK_PIP_ENTER, this.name)
+  }
+
+  _onExitPiP() {
+    this.trigger(Events.PLAYBACK_PIP_EXIT, this.name)
+  }
+
+  enterPiP() {
+    this.el.requestPictureInPicture().then(() => {
+      Log.info(this.name, 'enter PIP success')
+    }).catch(e => {
+      Log.warn(this.name, 'enter PIP failed', e)
+    })
+  }
+
+  exitPiP() {
+    document.exitPictureInPicture().then(() => {
+      Log.info(this.name, 'exit PIP success')
+    }).catch(e => {
+      Log.warn(this.name, 'exit PIP failed', e)
+    })
+  }
+
   // The playback should be classed as buffering if the following are true:
   // - the ready state is less then HAVE_FUTURE_DATA or the playhead isn't moving and it should be
   // - the media hasn't "ended",
@@ -499,6 +529,7 @@ export default class HTML5Video extends Playback {
     this._destroyed = true
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     this.$el.off('contextmenu')
+    this.isPiPActive && this.exitPiP()
     super.destroy()
     this.el.removeAttribute('src')
     this.el.load() // load with no src to stop loading of the previous source and avoid leaks

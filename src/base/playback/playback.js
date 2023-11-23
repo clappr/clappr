@@ -85,6 +85,15 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * checks if picture in picture mode is active.
+   * @property isPiPActive
+   * @type {Boolean} `true` if the current playback is in picture in picture mode, otherwise `false`
+   */
+  get isPiPActive() { 
+    return false 
+  }
+
+  /**
    * @method constructor
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
@@ -121,6 +130,18 @@ export default class Playback extends UIObject {
    * @method stop
    */
   stop() {}
+
+  /**
+   * enter in picture in picture mode
+   * @method enterPiP
+   */
+  enterPiP() {}
+
+  /**
+   * exit from picture in picture mode
+   * @method exitPiP
+   */
+  exitPiP() {}
 
   /**
    * seeks the playback to a given `time` in seconds
