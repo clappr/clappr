@@ -529,7 +529,6 @@ export default class HTML5Video extends Playback {
     this._destroyed = true
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     this.$el.off('contextmenu')
-    this.isPiPActive && this.exitPiP()
     super.destroy()
     this.el.removeAttribute('src')
     this.el.load() // load with no src to stop loading of the previous source and avoid leaks
