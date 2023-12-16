@@ -24,11 +24,11 @@ Please add, if appropriate, external links that make the PR easier to understand
 
 ### Before this PR
 
-<!-- 
-Insert an image / gif / video showing the Player's original behavior. 
+<!--
+Insert an image / gif / video showing hls.js playback's original behavior.
 If PR is a new feature, it's unnecessary to add.
 -->
 
 ### After this PR
 
-<!-- Insert an image / gif / video showing the Player's behavior after the modifications -->
+<!-- Insert an image / gif / video showing the hls.js playback's behavior after the modifications -->
