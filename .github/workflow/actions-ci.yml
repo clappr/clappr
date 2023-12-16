@@ -1,4 +1,4 @@
-name: CI
+name: player-plugins CI
 
 on:
   push:
@@ -13,22 +13,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install Node
+      - name: install node
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
           cache: 'yarn'
 
-      - name: Install dependencies
+      - name: install dependencies
         run: yarn
 
-      - name: Run lint
+      - name: run lint
         run: yarn lint
 
-      - name: Run Unit tests
+      - name: run unit tests
         run: yarn test
 
-      - name: Coveralls
+      - name: coveralls
         uses: coverallsapp/github-action@1.1.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
