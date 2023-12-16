@@ -1,6 +1,7 @@
 #!/bin/bash
 
-CDN_PATH="npm/@clappr/player@latest/dist/clappr.min.js"
+PROJECT_NAME='clappr-core'
+CDN_PATH="npm/@clappr/core@latest/dist/$PROJECT_NAME.min.js"
 
 update_dependencies() {
   echo 'updating dependencies' &&
@@ -14,9 +15,7 @@ update_version() {
 }
 
 build() {
-  echo "building clappr.js" &&
-  yarn build &&
-  echo "building clappr.min.js" &&
+  echo "building RELEASE version $1" &&
   yarn release
 }
 
@@ -26,16 +25,13 @@ run_tests() {
 }
 
 make_release_commit() {
-  git add package.json yarn.lock dist &&
+  git add package.json yarn.lock &&
   git commit -m 'chore(package): bump to '$1 &&
-  git flow release finish $1
+  git tag -m "$1" $1
 }
 
 git_push() {
   echo 'pushing to github'
-  git checkout dev
-  git push origin dev
-  git checkout master
   git push origin master --tags
 }
 
@@ -54,10 +50,9 @@ main() {
     echo "you are not logged into npm"
     exit 1
   fi
-  git flow release start $1 &&
   update_dependencies &&
   update_version $1 &&
-  build
+  build $1
   if (("$?" != "0")); then
     echo "something failed during dependency update, version update, or build"
     exit 1

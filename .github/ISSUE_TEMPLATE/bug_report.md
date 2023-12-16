@@ -4,11 +4,25 @@ about: Create a report to help us improve
 labels: bug
 ---
 
-**Browser**: FILL WITH YOUR BROWSER (ex: Chrome Version 46.0.2490.80, Firefox Version 3.5.6, IE 11)
+Please, try to follow this to open new bugs (questions, suggestions and others are welcome)
 
-**OS**: FILL WITH YOUR OS (ex: Mac OS 10.11.1, iOS9, android4.5)
+Before you open the bug please follow the [common steps to verify issues]( https://github.com/clappr/clappr/blob/master/doc/TROUBLESHOOTING.md#common-steps-to-verify-issues)
 
-**Clappr Version**: 0.3.8
+For the **issue title**: A **meaningful title** (like: HLS doesn't work at windows 10). Try to **avoid helpless title** (like: it doesn't work, IE10, bug, problem)
+
+**Be sure to**:
+
+* Reproduce the bug at http://cdn.clappr.io/
+* Search for similar open/closed issues on this matter before open a new one.
+
+For the **issue body**:
+<hr>
+
+**Browser**: YOUR BROWSER (ex: Chrome Version 46.0.2490.80, Firefox, IE)
+
+**OS**: YOUR OS (ex: Mac OS 10.11.1, iOS9, android4.5)
+
+**Clappr Version**: x.x.x
 
 **Steps to reproduce**:
 
@@ -16,13 +30,5 @@ labels: bug
 * then second step
 * I was expecting X but instead it shows Y
 
-**Does it happen only in your streaming?**
-* If it does, please provide your streaming URL.
-
-**To consider:**
-* Did you try to reproduce this issue at http://cdn.clappr.io/?
-* Did you check if it's a CORS problem?
-
-**ps:** Please, attach images, logs or whatever you think might be helpful.
-
-**ps:** Feel free to clean this if your issue is different.
+ps: you can attach images, logs or whatever you think might be helpful.
+<hr>
