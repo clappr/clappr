@@ -1,0 +1,14 @@
+{
+  "name": "clappr-project",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "volta": {
+    "node": "14.21.3",
+    "yarn": "1.22.19"
+  },
+  "devDependencies": {
+    "lerna": "^6.4.0"
+  }
+}

@@ -1,0 +1,24 @@
+language: node_js
+sudo: false
+node_js: "10"
+cache: yarn
+dist: xenial
+
+services:
+  - xvfb
+
+addons:
+  chrome: "stable"
+  firefox: "latest"
+
+env:
+  - COVERALLS_SERVICE_NAME="travis-ci" COVERALLS_REPO_TOKEN="sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl"
+
+notifications:
+  email:
+    - videos5@corp.globo.com
+  slack: globo:F1iVlyrzR4iX8OS7h8fwMcqx
+
+before_script: "npm run lint"
+
+after_script: "cat coverage/C*/lcov.info | ./node_modules/coveralls/bin/coveralls.js"

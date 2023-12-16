@@ -1,0 +1,85 @@
+#!/bin/bash
+
+CDN_PATH="npm/@clappr/player@latest/dist/clappr.min.js"
+
+update_dependencies() {
+  echo 'updating dependencies' &&
+  yarn install
+}
+
+update_version() {
+  current_tag=$(git describe --abbrev=0 --tags master) &&
+  echo 'bump from '$current_tag' to '$1 &&
+  sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" package.json
+}
+
+build() {
+  echo "building clappr.js" &&
+  yarn build &&
+  echo "building clappr.min.js" &&
+  yarn release
+}
+
+run_tests() {
+  yarn lint
+  yarn test
+}
+
+make_release_commit() {
+  git add package.json yarn.lock dist &&
+  git commit -m 'chore(package): bump to '$1 &&
+  git flow release finish $1
+}
+
+git_push() {
+  echo 'pushing to github'
+  git checkout dev
+  git push origin dev
+  git checkout master
+  git push origin master --tags
+}
+
+npm_publish() {
+  npm publish
+}
+
+purge_cdn_cache() {
+  echo 'purging cdn cache'
+  curl -q "http://purge.jsdelivr.net/$CDN_PATH"
+}
+
+main() {
+  npm whoami
+  if (("$?" != "0")); then
+    echo "you are not logged into npm"
+    exit 1
+  fi
+  git flow release start $1 &&
+  update_dependencies &&
+  update_version $1 &&
+  build
+  if (("$?" != "0")); then
+    echo "something failed during dependency update, version update, or build"
+    exit 1
+  fi
+  run_tests
+  if (("$?" == "0")); then
+    make_release_commit $1 &&
+    git_push &&
+    npm_publish &&
+    purge_cdn_cache &&
+    exit 0
+
+    echo "something failed"
+    exit 1
+  else
+    echo "you broke the tests. fix it before bumping another version."
+    exit 1
+  fi
+}
+
+if [ "$1" != "" ]; then
+  main $1
+else
+  echo "Usage: bump [new_version]"
+fi
