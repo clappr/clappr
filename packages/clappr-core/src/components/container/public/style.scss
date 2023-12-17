@@ -1,0 +1,15 @@
+.container[data-container] {
+  position: absolute;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  
+  .chromeless {
+    cursor: default;
+  }
+}
+
+[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {
+	cursor: pointer;
+}

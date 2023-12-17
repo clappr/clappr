@@ -1,0 +1,10 @@
+<button type="button" class="cc-button media-control-button media-control-icon" data-cc-button aria-label="<%= ariaLabel %>"></button>
+<ul>
+  <% if (title) { %>
+  <li data-title><%= title %></li>
+  <% }; %>
+  <li><a href="#" data-cc-select="-1"><%= disabledLabel %></a></li>
+  <% for (var i = 0; i < tracks.length; i++) { %>
+    <li><a href="#" data-cc-select="<%= tracks[i].id %>"><%= tracks[i].label %></a></li>
+  <% }; %>
+</ul>

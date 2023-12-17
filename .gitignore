@@ -1,9 +1,9 @@
+dist/
 node_modules
 .DS_Store
 .env
 coverage
 build/
-dist/
 docs/
 src/base/jst.js
 *.cache
@@ -22,4 +22,3 @@ package-lock.json
 
 # PhpStorm
 .idea
-

@@ -9,6 +9,6 @@
     "yarn": "1.22.19"
   },
   "devDependencies": {
-    "lerna": "^7.2.0"
+    "lerna": "^6.4.0"
   }
 }

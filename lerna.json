@@ -1,5 +1,11 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
   "version": "independent",
-  "npmClient": "yarn"
+  "command": {
+    "version": {
+      "message": "chore(release): publish"
+    }
+  }
 }

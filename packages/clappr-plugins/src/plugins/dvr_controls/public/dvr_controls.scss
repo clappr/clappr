@@ -1,0 +1,94 @@
+$live-color: #ff0101;
+$dvr-color: #fff;
+$vod-color: #005aff;
+
+$disabled-opacity: 0.3;
+
+$control-height: 32px;
+$circle-radius: 3.5px;
+
+.dvr-controls[data-dvr-controls] {
+  display: inline-block;
+  float: left;
+  color: $dvr-color;
+  line-height: 32px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-left: 6px;
+
+  .live-info {
+    cursor: default;
+    font-family: "Roboto", "Open Sans", Arial, sans-serif;
+    text-transform: uppercase;
+    &:before {
+      content: "";
+      display: inline-block;
+      position: relative;
+      width: $circle-radius*2;
+      height: $circle-radius*2;
+      border-radius: $circle-radius;
+      margin-right: $circle-radius;
+      background-color: $live-color;
+    }
+    &.disabled {
+      opacity: $disabled-opacity;
+      &:before {
+        background-color: $dvr-color;
+      }
+    }
+  }
+
+  .live-button {
+    cursor: pointer;
+    outline: none;
+    display: none;
+    border: 0;
+    color: $dvr-color;
+    background-color: transparent;
+    height: 32px;
+    padding: 0;
+    opacity: 0.7;
+    font-family: "Roboto", "Open Sans", Arial, sans-serif;
+    text-transform: uppercase;
+    transition: all 0.1s ease;
+
+    &:before {
+      content: "";
+      display: inline-block;
+      position: relative;
+      width: $circle-radius*2;
+      height: $circle-radius*2;
+      border-radius: $circle-radius;
+      margin-right: $circle-radius;
+      background-color: $dvr-color;
+    }
+
+    &:hover {
+      opacity: 1;
+      text-shadow: rgba(255,255,255,.75) 0 0 5px;
+    }
+  }
+}
+
+.dvr {
+  .dvr-controls[data-dvr-controls] {
+    .live-info {
+      display: none;
+    }
+    .live-button {
+      display: block;
+    }
+  }
+
+  &.media-control.live[data-media-control] {
+    .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+      background-color: $vod-color;
+    }
+  }
+}
+
+.media-control.live[data-media-control] {
+  .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+    background-color: $live-color;
+  }
+}
