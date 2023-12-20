@@ -14,48 +14,49 @@ const isGetterProperty = (obj, prop) => {
 
 describe('AdaptivePlayback', () => {
   describe('have a getter', function() {
+    let playback
     beforeEach(() => {
-      this.playback = new AdaptivePlayback()
+      playback = new AdaptivePlayback()
     })
 
     test('called isAdaptive', () => {
-      expect(isGetterProperty(this.playback, 'isAdaptive')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'isAdaptive')).toBeFalsy()
+      expect(isGetterProperty(playback, 'isAdaptive')).toBeTruthy()
+      expect(isSetterProperty(playback, 'isAdaptive')).toBeFalsy()
     })
 
     test('called isAutoAdaptive and a setter too', () => {
-      expect(isGetterProperty(this.playback, 'isAutoAdaptive')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'isAutoAdaptive')).toBeTruthy()
+      expect(isGetterProperty(playback, 'isAutoAdaptive')).toBeTruthy()
+      expect(isSetterProperty(playback, 'isAutoAdaptive')).toBeTruthy()
     })
 
     test('called activeVideoQualityLevels', () => {
-      expect(isGetterProperty(this.playback, 'activeVideoQualityLevels')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'activeVideoQualityLevels')).toBeFalsy()
+      expect(isGetterProperty(playback, 'activeVideoQualityLevels')).toBeTruthy()
+      expect(isSetterProperty(playback, 'activeVideoQualityLevels')).toBeFalsy()
     })
 
     test('called videoQualityLevels', () => {
-      expect(isGetterProperty(this.playback, 'videoQualityLevels')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'videoQualityLevels')).toBeFalsy()
+      expect(isGetterProperty(playback, 'videoQualityLevels')).toBeTruthy()
+      expect(isSetterProperty(playback, 'videoQualityLevels')).toBeFalsy()
     })
 
     test('called availableAudioOptions', () => {
-      expect(isGetterProperty(this.playback, 'availableAudioOptions')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'availableAudioOptions')).toBeFalsy()
+      expect(isGetterProperty(playback, 'availableAudioOptions')).toBeTruthy()
+      expect(isSetterProperty(playback, 'availableAudioOptions')).toBeFalsy()
     })
 
     test('called audioOptions', () => {
-      expect(isGetterProperty(this.playback, 'audioOptions')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'audioOptions')).toBeFalsy()
+      expect(isGetterProperty(playback, 'audioOptions')).toBeTruthy()
+      expect(isSetterProperty(playback, 'audioOptions')).toBeFalsy()
     })
 
     test('called availableClosedCaptions', () => {
-      expect(isGetterProperty(this.playback, 'availableClosedCaptions')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'availableClosedCaptions')).toBeFalsy()
+      expect(isGetterProperty(playback, 'availableClosedCaptions')).toBeTruthy()
+      expect(isSetterProperty(playback, 'availableClosedCaptions')).toBeFalsy()
     })
 
     test('called closedCaptions', () => {
-      expect(isGetterProperty(this.playback, 'closedCaptions')).toBeTruthy()
-      expect(isSetterProperty(this.playback, 'closedCaptions')).toBeFalsy()
+      expect(isGetterProperty(playback, 'closedCaptions')).toBeTruthy()
+      expect(isSetterProperty(playback, 'closedCaptions')).toBeFalsy()
     })
   })
 

@@ -11,7 +11,7 @@ import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
 import filesize from 'rollup-plugin-filesize'
 import size from 'rollup-plugin-sizes'
-import visualize from 'rollup-plugin-visualizer'
+const { visualizer } = require('rollup-plugin-visualizer')
 import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
@@ -28,7 +28,7 @@ const postcssOptions = {
   inject: false,
 }
 const aliasPluginOptions = { entries: { 'clappr-zepto': 'node_modules/clappr-zepto/zepto.js', '@': __dirname + '/src' } }
-const replacePluginOptions = { VERSION: JSON.stringify(pkg.version) }
+const replacePluginOptions = { VERSION: JSON.stringify(pkg.version), preventAssignment: true }
 const babelPluginOptions = { babelHelpers: 'bundled', exclude: 'node_modules/**' }
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
@@ -48,7 +48,7 @@ const plugins = [
   filesize(),
   dev && serve(servePluginOptions),
   dev && livereload(livereloadPluginOptions),
-  analyzeBundle && visualize(visualizePluginOptions)
+  analyzeBundle && visualizer(visualizePluginOptions)
 ]
 
 const mainBundle = {

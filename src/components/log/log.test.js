@@ -61,8 +61,11 @@ describe('Log', () => {
   })
 
   describe('prints log', function() {
-    beforeEach(() => { this.restoreConsole = mockConsole() })
-    afterEach(() => this.restoreConsole())
+
+    let restoreConsole
+    
+    beforeEach(() => { restoreConsole = mockConsole() })
+    afterEach(() => { restoreConsole() })
 
     test('indicating level and class with the message', () => {
       const logger = new Log()
@@ -108,8 +111,10 @@ describe('Log', () => {
   })
 
   describe('don\'t print log', function() {
-    beforeEach(() => { this.restoreConsole = mockConsole() })
-    afterEach(() => this.restoreConsole())
+    let restoreConsole
+    
+    beforeEach(() => { restoreConsole = mockConsole() })
+    afterEach(() => { restoreConsole() })
 
     test('without the level attribute', () => {
       const logger = new Log()
@@ -127,8 +132,10 @@ describe('Log', () => {
   })
 
   describe('have a static method', function() {
-    beforeEach(() => { this.restoreConsole = mockConsole() })
-    afterEach(() => this.restoreConsole())
+    let restoreConsole
+    
+    beforeEach(() => { restoreConsole = mockConsole() })
+    afterEach(() => { restoreConsole() })
 
     test('to get one Log instance', () => {
       const logger = Log.getInstance()

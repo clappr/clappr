@@ -15,95 +15,96 @@ const isSetterProperty = (obj, prop) => {
 }
 
 describe('Playback', function() {
+  let basePlayback
   beforeEach(() => {
-    this.basePlayback = new Playback({})
+    basePlayback = new Playback({})
   })
 
   describe('have a getter', () => {
     test('called isAudioOnly', () => {
-      expect(isGetterProperty(this.basePlayback, 'isAudioOnly')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'isAudioOnly')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'isAudioOnly')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'isAudioOnly')).toBeFalsy()
     })
     test('called isAdaptive', () => {
-      expect(isGetterProperty(this.basePlayback, 'isAdaptive')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'isAdaptive')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'isAdaptive')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'isAdaptive')).toBeFalsy()
     })
     test('called ended', () => {
-      expect(isGetterProperty(this.basePlayback, 'ended')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'ended')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'ended')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'ended')).toBeFalsy()
     })
     test('called i18n', () => {
-      expect(isGetterProperty(this.basePlayback, 'i18n')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'i18n')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'i18n')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'i18n')).toBeFalsy()
     })
     test('called buffering', () => {
-      expect(isGetterProperty(this.basePlayback, 'buffering')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'buffering')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'buffering')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'buffering')).toBeFalsy()
     })
     test('called isReady', () => {
-      expect(isGetterProperty(this.basePlayback, 'isReady')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'isReady')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'isReady')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'isReady')).toBeFalsy()
     })
     test('called audioTracks', () => {
-      expect(isGetterProperty(this.basePlayback, 'audioTracks')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'audioTracks')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'audioTracks')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'audioTracks')).toBeFalsy()
     })
     test('called currentAudioTracks', () => {
-      expect(isGetterProperty(this.basePlayback, 'currentAudioTrack')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'currentAudioTrack')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'currentAudioTrack')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'currentAudioTrack')).toBeFalsy()
     })
     test('called hasClosedCaptionsTracks', () => {
-      expect(isGetterProperty(this.basePlayback, 'hasClosedCaptionsTracks')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'hasClosedCaptionsTracks')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'hasClosedCaptionsTracks')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'hasClosedCaptionsTracks')).toBeFalsy()
     })
     test('called closedCaptionsTracks', () => {
-      expect(isGetterProperty(this.basePlayback, 'closedCaptionsTracks')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'closedCaptionsTracks')).toBeFalsy()
+      expect(isGetterProperty(basePlayback, 'closedCaptionsTracks')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'closedCaptionsTracks')).toBeFalsy()
     })
     test('called closedCaptionsTrackId and a setter too', () => {
-      expect(isGetterProperty(this.basePlayback, 'closedCaptionsTrackId')).toBeTruthy()
-      expect(isSetterProperty(this.basePlayback, 'closedCaptionsTrackId')).toBeTruthy()
+      expect(isGetterProperty(basePlayback, 'closedCaptionsTrackId')).toBeTruthy()
+      expect(isSetterProperty(basePlayback, 'closedCaptionsTrackId')).toBeTruthy()
     })
   })
 
   test('isAudioOnly getter returns default value', () => {
-    expect(this.basePlayback.isAudioOnly).toBeFalsy()
+    expect(basePlayback.isAudioOnly).toBeFalsy()
   })
 
   test('isAdaptive getter returns default value', () => {
-    expect(this.basePlayback.isAdaptive).toBeFalsy()
+    expect(basePlayback.isAdaptive).toBeFalsy()
   })
 
   test('ended getter returns default value', () => {
-    expect(this.basePlayback.ended).toBeFalsy()
+    expect(basePlayback.ended).toBeFalsy()
   })
 
   test('buffering getter returns default value', () => {
-    expect(this.basePlayback.buffering).toBeFalsy()
+    expect(basePlayback.buffering).toBeFalsy()
   })
 
   test('isReady getter returns default value', () => {
-    expect(this.basePlayback.isReady).toBeFalsy()
+    expect(basePlayback.isReady).toBeFalsy()
   })
 
   test('closedCaptionsTracks getter returns default value', () => {
-    expect(this.basePlayback.closedCaptionsTracks).toEqual([])
+    expect(basePlayback.closedCaptionsTracks).toEqual([])
   })
 
   test('hasClosedCaptionsTracks getter returns default value', () => {
-    expect(this.basePlayback.hasClosedCaptionsTracks).toBeFalsy()
+    expect(basePlayback.hasClosedCaptionsTracks).toBeFalsy()
   })
 
   test('closedCaptionsTrackId getter returns default value', () => {
-    expect(this.basePlayback.closedCaptionsTrackId).toEqual(-1)
+    expect(basePlayback.closedCaptionsTrackId).toEqual(-1)
   })
 
   test('audioTracks getter returns default value', () => {
-    expect(this.basePlayback.audioTracks).toEqual([])
+    expect(basePlayback.audioTracks).toEqual([])
   })
 
   test('currentAudioTrack getter returns default value', () => {
-    expect(this.basePlayback.currentAudioTrack).toBeNull()
+    expect(basePlayback.currentAudioTrack).toBeNull()
   })
 
   test('i18n getter returns default value', () => {
@@ -114,11 +115,11 @@ describe('Playback', function() {
   })
 
   test('has default duration', () => {
-    expect(this.basePlayback.getDuration()).toEqual(0)
+    expect(basePlayback.getDuration()).toEqual(0)
   })
 
   test('has default getStartTimeOffset', () => {
-    expect(this.basePlayback.getStartTimeOffset()).toEqual(0)
+    expect(basePlayback.getStartTimeOffset()).toEqual(0)
   })
 
   test('has static method to check if playback implementation can play one source', () => {
@@ -126,19 +127,19 @@ describe('Playback', function() {
   })
 
   test('is not playing by default', () => {
-    expect(this.basePlayback.isPlaying()).toBeFalsy()
+    expect(basePlayback.isPlaying()).toBeFalsy()
   })
 
   test('is not ready by default', () => {
-    expect(this.basePlayback.isReady).toBeFalsy()
+    expect(basePlayback.isReady).toBeFalsy()
   })
 
   test('has NO_OP as playback type', () => {
-    expect(this.basePlayback.getPlaybackType()).toEqual(Playback.NO_OP)
+    expect(basePlayback.getPlaybackType()).toEqual(Playback.NO_OP)
   })
 
   test('is not on high definition by default', () => {
-    expect(this.basePlayback.isHighDefinitionInUse()).toBeFalsy()
+    expect(basePlayback.isHighDefinitionInUse()).toBeFalsy()
   })
 
   test('can be consented', (done) => {
@@ -146,28 +147,28 @@ describe('Playback', function() {
       expect(callback).toHaveBeenCalledTimes(1)
       done()
     })
-    this.basePlayback.consent(callback)
+    basePlayback.consent(callback)
   })
 
   test('consider auto play is available as default', () => {
     const spy = jest.fn()
-    this.basePlayback.canAutoPlay(spy)
+    basePlayback.canAutoPlay(spy)
 
     expect(spy).toHaveBeenCalledWith(true, null)
   })
 
   test('can checks if auto play is available', () => {
-    jest.spyOn(this.basePlayback, 'play')
-    this.basePlayback.attemptAutoPlay()
+    jest.spyOn(basePlayback, 'play')
+    basePlayback.attemptAutoPlay()
 
-    expect(this.basePlayback.play).toHaveBeenCalledTimes(1)
+    expect(basePlayback.play).toHaveBeenCalledTimes(1)
   })
 
   test('destroys by removing element from DOM', () => {
     const spy = jest.fn()
-    this.basePlayback.$el = { remove: spy, off: () => {} }
+    basePlayback.$el = { remove: spy, off: () => {} }
 
-    this.basePlayback.destroy()
+    basePlayback.destroy()
 
     expect(spy).toHaveBeenCalledTimes(1)
   })
@@ -175,9 +176,9 @@ describe('Playback', function() {
   test('can be configured after your creation', () => {
     const newOptions = { test: 'test' }
 
-    this.basePlayback.configure(newOptions)
+    basePlayback.configure(newOptions)
 
-    expect(this.basePlayback.options).toEqual({ ...this.basePlayback.options, ...newOptions })
+    expect(basePlayback.options).toEqual({ ...basePlayback.options, ...newOptions })
   })
 
   test('can be created via extends method', () => {
@@ -187,10 +188,12 @@ describe('Playback', function() {
   })
 
   describe('error', () => {
+    let defaultError
+    let core
     beforeEach(() => {
-      this.core = new Core({})
-      this.basePlayback = new Playback({}, null, this.core.playerError)
-      this.defaultError = {
+      core = new Core({})
+      basePlayback = new Playback({}, null, core.playerError)
+      defaultError = {
         description: '',
         level: PlayerError.Levels.FATAL,
         origin: 'playback',
@@ -203,22 +206,22 @@ describe('Playback', function() {
     describe('when no data is given', () => {
 
       test('creates a default error', () => {
-        const errorData = this.basePlayback.createError()
+        const errorData = basePlayback.createError()
 
-        expect(errorData).toEqual(this.defaultError)
+        expect(errorData).toEqual(defaultError)
       })
 
       test('has default error level equals to FATAL', () => {
-        const errorData = this.basePlayback.createError()
+        const errorData = basePlayback.createError()
 
         expect(errorData.level).toEqual(PlayerError.Levels.FATAL)
       })
 
       describe('when i18n is defined', () => {
         test('creates a default error with UI data', () => {
-          const basePlayback = new Playback({}, this.core.i18n, this.core.playerError)
+          const basePlayback = new Playback({}, core.i18n, core.playerError)
           const errorData = basePlayback.createError()
-          const defaultError = { ...this.defaultError, UI: { title: 'default_error_title', message: 'default_error_message' } }
+          const defaultError = { ...defaultError, UI: { title: 'default_error_title', message: 'default_error_message' } }
           expect(errorData.UI).toEqual(defaultError.UI)
         })
       })
@@ -226,7 +229,7 @@ describe('Playback', function() {
 
     describe('when some data is given', () => {
       test('creates a code error on the following format: name:code', () => {
-        const basePlayback = new Playback({}, null, this.core.playerError)
+        const basePlayback = new Playback({}, null, core.playerError)
         basePlayback.name = 'test'
         const error = { code: '42' }
         const errorData = basePlayback.createError(error)
@@ -236,7 +239,7 @@ describe('Playback', function() {
 
       test('does not overwrite level when it is not equal to default', () => {
         const error = { level: PlayerError.Levels.WARN }
-        const errorData = this.basePlayback.createError(error)
+        const errorData = basePlayback.createError(error)
 
         expect(errorData.level).toEqual(PlayerError.Levels.WARN)
       })
@@ -244,23 +247,24 @@ describe('Playback', function() {
       test('does not overwrite code when useCodePrefix is false', () => {
         const error = { code: 'MY_CODE' }
         const options = { useCodePrefix: false }
-        const errorData = this.basePlayback.createError(error, options)
+        const errorData = basePlayback.createError(error, options)
 
         expect(errorData.code).toEqual(error.code)
       })
 
       describe('when i18n is defined', () => {
-        beforeEach(() => { this.defaultPlayback = new Playback({}, this.core.i18n, this.core.playerError) })
+        
+        beforeEach(() => { new Playback({}, core.i18n, core.playerError) })
 
         test('does not overwrite UI when it is defined', () => {
           const UIData = { title: 'my_title', message: 'my_message' }
-          const errorData = this.basePlayback.createError({ UI: UIData })
+          const errorData = basePlayback.createError({ UI: UIData })
           expect(errorData.UI).toEqual(UIData)
         })
 
         test('does not add UI data if level is not FATAL', () => {
           const error = { level: PlayerError.Levels.WARN }
-          const errorData = this.basePlayback.createError(error)
+          const errorData = basePlayback.createError(error)
 
           expect(errorData.UI).toBeUndefined()
         })
@@ -268,10 +272,10 @@ describe('Playback', function() {
     })
 
     test('always calls error method to trigger ERROR event', () => {
-      const spy = jest.spyOn(this.basePlayback.playerError, 'createError')
-      this.basePlayback.createError()
+      const spy = jest.spyOn(basePlayback.playerError, 'createError')
+      basePlayback.createError()
 
-      expect(spy).toHaveBeenCalledWith(this.defaultError)
+      expect(spy).toHaveBeenCalledWith(defaultError)
     })
   })
 })

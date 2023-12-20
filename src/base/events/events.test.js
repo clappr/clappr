@@ -2,69 +2,72 @@ import Events from './events'
 import Log from '@/components/log'
 
 describe('Events', function() {
+  let events
+  let callback
+  
   beforeEach(() => {
-    this.events = new Events()
-    this.callback = jest.fn()
+    events = new Events()
+    callback = jest.fn()
     Events.Custom = {}
   })
 
   it('on method needs one event name to register one listener', () => {
-    this.events.on()
+    events.on()
 
-    expect(this.events._events).toBeUndefined()
+    expect(events._events).toBeUndefined()
   })
 
   it('listenTo method needs one event name to register one listener', () => {
-    this.events.listenTo(this.events)
+    events.listenTo(events)
 
-    expect(this.events._events).toBeUndefined()
+    expect(events._events).toBeUndefined()
   })
   it('listenToOnce method needs one event name to register one listener', () => {
-    this.events.listenToOnce(this.events)
+    events.listenToOnce(events)
 
-    expect(this.events._events).toBeUndefined()
+    expect(events._events).toBeUndefined()
   })
 
   it('once method needs one event name to register one listener', () => {
-    this.events.once()
+    events.once()
 
-    expect(this.events._events).toBeUndefined()
+    expect(events._events).toBeUndefined()
   })
 
   it('off method needs one event name to unregister one listener', () => {
-    this.events.off()
+    events.off()
 
-    expect(this.events._events).toBeUndefined()
+    expect(events._events).toBeUndefined()
   })
 
   it('stopListening method needs one event name to unregister one listener', () => {
-    this.events.stopListening()
+    events.stopListening()
 
-    expect(this.events._events).toBeUndefined()
+    expect(events._events).toBeUndefined()
   })
 
   it('subscribes to a given event', () => {
-    this.events.on('clappr.any.event', this.callback)
-    expect(this.callback).not.toHaveBeenCalled()
+    events.on('clappr.any.event', callback)
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('subscribes to a list of events separated by spaces', () => {
-    this.events.on('clappr.any.event clappr.my.event', this.callback)
-    expect(this.callback).not.toHaveBeenCalled()
+    events.on('clappr.any.event clappr.my.event', callback)
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.my.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger('clappr.my.event')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('subscribes to a given event using an object', () => {
-    this.events.on({ 'clappr.any.event': this.callback })
-    expect(this.callback).not.toHaveBeenCalled()
+    events.on({ 'clappr.any.event': callback })
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('subscribes to a given event with context', () => {
@@ -73,125 +76,125 @@ describe('Events', function() {
       this.counter += 1
     }
 
-    this.events.on('clappr.any.event', eventsCounter, context)
+    events.on('clappr.any.event', eventsCounter, context)
     expect(context.counter).toEqual(9)
 
-    this.events.trigger('clappr.any.event')
+    events.trigger('clappr.any.event')
     expect(context.counter).toEqual(10)
   })
 
   it('can unsubscribe an event', () => {
-    this.events.on('clappr.any.event', this.callback)
-    expect(this.callback).not.toHaveBeenCalled()
+    events.on('clappr.any.event', callback)
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.off()
-    this.events.trigger('clappr.any.event')
+    events.off()
+    events.trigger('clappr.any.event')
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.on('clappr.any.event', this.callback)
-    this.events.off('clappr.any.event')
-    this.events.trigger('clappr.any.event')
+    events.on('clappr.any.event', callback)
+    events.off('clappr.any.event')
+    events.trigger('clappr.any.event')
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.on('clappr.any.event', this.callback)
-    this.events.off(null, this.callback)
-    this.events.trigger('clappr.any.event')
+    events.on('clappr.any.event', callback)
+    events.off(null, callback)
+    events.trigger('clappr.any.event')
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
   })
 
   it('can trigger multiple times', () => {
-    this.events.on('clappr.any.event', this.callback)
-    expect(this.callback).not.toHaveBeenCalled()
+    events.on('clappr.any.event', callback)
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    this.events.trigger('clappr.any.event', 1)
-    this.events.trigger('clappr.any.event', 1, 2)
-    this.events.trigger('clappr.any.event', 1, 2, 3)
-    this.events.trigger('clappr.any.event', 1, 2, 3, 4)
-    expect(this.callback).toHaveBeenCalledTimes(5)
+    events.trigger('clappr.any.event')
+    events.trigger('clappr.any.event', 1)
+    events.trigger('clappr.any.event', 1, 2)
+    events.trigger('clappr.any.event', 1, 2, 3)
+    events.trigger('clappr.any.event', 1, 2, 3, 4)
+    expect(callback).toHaveBeenCalledTimes(5)
   })
 
   it('can trigger dictionary { event: callback }', () => {
-    this.events.listenTo(this.events, 'clappr.any.event', this.callback)
+    events.listenTo(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger({ 'clappr.any.event': this.callback })
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger({ 'clappr.any.event': callback })
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('restricts to trigger only once', () => {
-    this.events.once('clappr.any.event', this.callback)
-    expect(this.callback).not.toHaveBeenCalled()
+    events.once('clappr.any.event', callback)
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger('clappr.any.event')
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('permits to listen events in other objects', () => {
     const myEvents = new Events()
 
-    this.events.on('clappr.any.event', this.callback)
-    myEvents.listenTo(this.events, 'clappr.any.event', this.callback)
+    events.on('clappr.any.event', callback)
+    myEvents.listenTo(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(2)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(2)
   })
 
   it('permits to stop listen all events from one reference', () => {
     const myEvents = new Events()
 
-    this.events.on('clappr.any.event', this.callback)
-    myEvents.listenTo(this.events, 'clappr.any.event', this.callback)
+    events.on('clappr.any.event', callback)
+    myEvents.listenTo(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(2)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(2)
 
     myEvents.stopListening()
     myEvents.trigger('clappr.any.event')
 
-    expect(this.callback).toHaveBeenCalledTimes(2)
+    expect(callback).toHaveBeenCalledTimes(2)
   })
 
   it('permits to listen events as dictionary { event: callback } in other objects', () => {
     const myEvents = new Events()
 
-    myEvents.listenTo(this.events, { 'clappr.any.event': this.callback })
+    myEvents.listenTo(events, { 'clappr.any.event': callback })
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('permits to stop listen events from one dictionary { event: callback }', () => {
     const myEvents = new Events()
 
-    myEvents.listenTo(this.events, 'clappr.any.event', this.callback)
+    myEvents.listenTo(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(1)
 
-    myEvents.stopListening(this.events, { 'clappr.any.event': this.callback })
+    myEvents.stopListening(events, { 'clappr.any.event': callback })
     myEvents.trigger('clappr.any.event')
 
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('don\'t allow to bind the element itself as callback when the listen events in other objects', () => {
     const myEvents = new Events()
 
-    myEvents.listenTo(this.events, 'clappr.any.event')
+    myEvents.listenTo(events, 'clappr.any.event')
     myEvents.trigger('clappr.any.event')
 
     expect(myEvents._events).toBeUndefined()
@@ -200,41 +203,41 @@ describe('Events', function() {
   it('permits to listen once events in other objects', () => {
     const myEvents = new Events()
 
-    this.events.on('clappr.any.event', this.callback)
-    myEvents.listenToOnce(this.events, 'clappr.any.event', this.callback)
+    events.on('clappr.any.event', callback)
+    myEvents.listenToOnce(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event')
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(3)
+    events.trigger('clappr.any.event')
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(3)
   })
 
   it('permits to listen once events in other objects', () => {
     const myEvents = new Events()
 
-    this.events.on('clappr.any.event', this.callback)
-    myEvents.listenToOnce(this.events, 'clappr.any.event', this.callback)
+    events.on('clappr.any.event', callback)
+    myEvents.listenToOnce(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    this.events.trigger('clappr.any.event', 42, 'some string')
-    this.events.trigger('clappr.any.event', 42, 'some string')
-    expect(this.callback).toHaveBeenCalledWith(42, 'some string')
-    expect(this.callback).toHaveBeenCalledTimes(3)
+    events.trigger('clappr.any.event', 42, 'some string')
+    events.trigger('clappr.any.event', 42, 'some string')
+    expect(callback).toHaveBeenCalledWith(42, 'some string')
+    expect(callback).toHaveBeenCalledTimes(3)
   })
 
   it('permits to stop listening events in other objects', () => {
     const myEvents = new Events()
 
-    this.events.on('clappr.any.event', this.callback)
-    myEvents.listenTo(this.events, 'clappr.any.event', this.callback)
+    events.on('clappr.any.event', callback)
+    myEvents.listenTo(events, 'clappr.any.event', callback)
 
-    expect(this.callback).not.toHaveBeenCalled()
+    expect(callback).not.toHaveBeenCalled()
 
-    myEvents.stopListening(this.events, 'clappr.any.event', this.callback)
-    this.events.trigger('clappr.any.event')
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    myEvents.stopListening(events, 'clappr.any.event', callback)
+    events.trigger('clappr.any.event')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('calls handlers in the order they were registered', () => {
@@ -245,10 +248,10 @@ describe('Events', function() {
       }
     }
 
-    this.events.on('clappr.any.event', new Handler(1))
-    this.events.on('clappr.any.event', new Handler(2))
-    this.events.on('clappr.any.event', new Handler(3))
-    this.events.trigger('clappr.any.event')
+    events.on('clappr.any.event', new Handler(1))
+    events.on('clappr.any.event', new Handler(2))
+    events.on('clappr.any.event', new Handler(3))
+    events.trigger('clappr.any.event')
 
     expect(calls).toEqual([1, 2, 3])
   })
@@ -258,21 +261,21 @@ describe('Events', function() {
       throw new Error('Whoops')
     }
 
-    this.events.on('clappr.any.event', handlerThatThrows)
-    this.events.on('clappr.any.event', this.callback)
-    this.events.trigger('clappr.any.event')
+    events.on('clappr.any.event', handlerThatThrows)
+    events.on('clappr.any.event', callback)
+    events.trigger('clappr.any.event')
 
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('trigger custom event when registered', () => {
     const eventName = 'PLUGIN_CUSTOM_EVENT'
 
     Events.register(eventName)
-    this.events.on(Events.Custom[eventName], this.callback)
-    this.events.trigger(Events.Custom[eventName])
+    events.on(Events.Custom[eventName], callback)
+    events.trigger(Events.Custom[eventName])
 
-    expect(this.callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('put the label of custom event in camel case', () => {
@@ -311,21 +314,22 @@ describe('Events', function() {
   })
 
   describe('does not register an event when eventName is', () => {
-    beforeEach(() => { this.stubLogError = jest.spyOn(Log.getInstance(), 'error') })
-    afterEach(() => { this.stubLogError.mockClear() })
+    let stubLogError
+    beforeEach(() => { stubLogError = jest.spyOn(Log.getInstance(), 'error') })
+    afterEach(() => { stubLogError.mockClear() })
 
     it('an empty string', () => {
       Events.register('')
       Events.register('      ')
 
-      expect(this.stubLogError).toHaveBeenCalledTimes(2)
+      expect(stubLogError).toHaveBeenCalledTimes(2)
     })
 
     it('not a string', () => {
       for (let arg of [() => {}, {}, [], null, undefined])
         Events.register(arg)
 
-      expect(this.stubLogError.mock.calls.length).toEqual(5)
+      expect(stubLogError.mock.calls.length).toEqual(5)
     })
   })
 })

@@ -66,21 +66,22 @@ describe('Player', function() {
   })
 
   describe('register options event listeners', () => {
+    let player
     beforeEach(() => {
-      this.player = new Player({ source: '/video.mp4' })
+      player = new Player({ source: '/video.mp4' })
       const element = document.createElement('div')
-      this.player.attachTo(element)
-      jest.spyOn(this.player, '_registerOptionEventListeners')
+      player.attachTo(element)
+      jest.spyOn(player, '_registerOptionEventListeners')
     })
 
     test('should register on configure', () => {
-      this.player.configure({
+      player.configure({
         events: {
           onPlay: () => {}
         }
       })
 
-      expect(this.player._registerOptionEventListeners).toHaveBeenCalledTimes(1)
+      expect(player._registerOptionEventListeners).toHaveBeenCalledTimes(1)
     })
 
     test('should call only last registered callback', () => {
@@ -88,19 +89,19 @@ describe('Player', function() {
         callbackA: jest.fn(),
         callbackB: jest.fn(),
       }
-      this.player.configure({
+      player.configure({
         events: {
           onPlay: callbacks.callbackA
         }
       })
 
-      this.player.configure({
+      player.configure({
         events: {
           onPlay: callbacks.callbackB
         }
       })
 
-      this.player._onPlay()
+      player._onPlay()
 
       expect(callbacks.callbackA).not.toHaveBeenCalled()
       expect(callbacks.callbackB).toHaveBeenCalledTimes(1)
@@ -110,17 +111,17 @@ describe('Player', function() {
       const callbacks = {
         callbackC: jest.fn()
       }
-      this.player.configure({
+      player.configure({
         events: {}
       })
 
-      this.player.configure({
+      player.configure({
         events: {
           onPause: callbacks.callbackC,
         }
       })
 
-      this.player._onPause()
+      player._onPause()
 
       expect(callbacks.callbackC).toHaveBeenCalledTimes(1)
     })
@@ -130,20 +131,20 @@ describe('Player', function() {
         callbackA: jest.fn(),
         callbackB: jest.fn()
       }
-      this.player.configure({
+      player.configure({
         events: {
           onPlay: callbacks.callbackA,
         }
       })
 
-      this.player.configure({
+      player.configure({
         events: {
           onPause: callbacks.callbackB,
         }
       })
 
-      this.player._onPlay()
-      this.player._onPause()
+      player._onPlay()
+      player._onPause()
 
       expect(callbacks.callbackA).not.toHaveBeenCalled()
       expect(callbacks.callbackB).toHaveBeenCalledTimes(1)
@@ -153,17 +154,17 @@ describe('Player', function() {
       const callbacks = {
         callbackA: jest.fn()
       }
-      this.player.configure({
+      player.configure({
         events: {
           onPause: callbacks.callbackA,
         }
       })
 
-      this.player.configure({
+      player.configure({
         someOtherOption: true
       })
 
-      this.player._onPause()
+      player._onPause()
 
       expect(callbacks.callbackA).toHaveBeenCalledTimes(1)
     })
@@ -174,15 +175,15 @@ describe('Player', function() {
         callbackB: jest.fn(),
       }
 
-      this.player.on(Events.PLAYER_PAUSE, callbacks.callbackB)
+      player.on(Events.PLAYER_PAUSE, callbacks.callbackB)
 
-      this.player.configure({
+      player.configure({
         events: {
           onPause: callbacks.callbackA,
         }
       })
 
-      this.player._onPause()
+      player._onPause()
 
       expect(callbacks.callbackA).toHaveBeenCalledTimes(1)
       expect(callbacks.callbackB).toHaveBeenCalledTimes(1)
@@ -190,12 +191,12 @@ describe('Player', function() {
   })
 
   describe('when a core event is fired', () => {
-    let onResizeSpy
+    let onResizeSpy, player
 
     beforeEach(() => {
       onResizeSpy = jest.fn()
 
-      this.player = new Player({
+      player = new Player({
         source: 'http://video.mp4',
         events: {
           onResize: onResizeSpy
@@ -203,13 +204,13 @@ describe('Player', function() {
       })
 
       const element = document.createElement('div')
-      this.player.attachTo(element)
+      player.attachTo(element)
     })
 
     describe('on Events.CORE_RESIZE', () => {
       test('calls onResize callback with width and height', () => {
         const newSize = { width: '50%', height: '50%' }
-        this.player.core.trigger(Events.CORE_RESIZE, newSize)
+        player.core.trigger(Events.CORE_RESIZE, newSize)
         expect(onResizeSpy).toHaveBeenCalledWith(newSize)
       })
     })

@@ -1,6 +1,7 @@
 const pkg = require('./package.json')
 
 module.exports = {
+  'testEnvironment': 'jsdom',
   'globals': {
     'VERSION': pkg.version
   },
