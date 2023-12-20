@@ -13,10 +13,14 @@
 
 # Clappr Monorepo
 
-Look for Clappr and related packages under the [/packages](/packages/) directory.
+Look for Clappr and related packages under the [/packages](/packages/) directory. Applications like the [clappr.io](http://clappr.io/) documentation site are under the [/apps](/apps/) directory.
 
-## Development
+## Documentation
 
-1. `cd` to the repository root
-2. `yarn install` to install all dependencies
-4. `yarn lerna run start --scope=@clappr/player` will start the clappr player watcher
+Visit [https://clappr.github.io](https://clappr.github.io) to view the full documentation.
+
+## Run the Development Server
+
+1. Run `yarn install` to install all dependencies
+2. Run `yarn dev` will start the development server.
+3. Visit http://localhost:8080 to view your application.

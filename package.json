@@ -2,10 +2,14 @@
   "name": "clappr-project",
   "private": true,
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "dev": "lerna run start --scope=@clappr/player"
+  },
   "volta": {
-    "node": "14.21.3",
+    "node": "18.18.2",
     "yarn": "1.22.19"
   },
   "devDependencies": {
