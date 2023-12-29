@@ -23,7 +23,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'pt-BR'],
   },
 
   presets: [
@@ -55,20 +55,24 @@ const config = {
         },
         items: [
           {
-            to: '/docs/intro', 
-            label: 'Docs', 
-            position: 
+            to: '/docs/intro',
+            label: 'Docs',
+            position:
             'left'
           },
           {
-            to: 'http://clappr.github.io/', 
-            label: 'API', 
-            position: 
+            to: 'http://clappr.github.io/',
+            label: 'API',
+            position:
             'left'
           },
           {
             href: 'https://github.com/clappr/clappr',
             label: 'GitHub',
+            position: 'right',
+          },
+          {
+            type: 'localeDropdown',
             position: 'right',
           },
         ],
