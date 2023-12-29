@@ -92,11 +92,7 @@ class GA4 extends ContainerPlugin {
 
 `this.options` can be accessed from any plugin
 
-...
-
 ## 5. Using the plugin
-
-...
 
 ```js
 new Player({
@@ -115,9 +111,3 @@ new Player({
   // highlight-end
 });
 ```
-
-<!-- Custom component -->
-
-import GA4 from '@site/src/components/GA4PluginSample';
-
-<GA4 />
