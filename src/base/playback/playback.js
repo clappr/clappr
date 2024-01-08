@@ -71,7 +71,7 @@ export default class Playback extends UIObject {
    * @type {Number}
    */
   get latency() {
-    return 0
+    return null
   }
 
   /**
