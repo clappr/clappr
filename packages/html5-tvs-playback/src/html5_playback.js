@@ -312,12 +312,13 @@ export default class HTML5TVsPlayback extends Playback {
 
   _onError(e) {
     Log.warn(this.name, 'The HTMLMediaElement error event is triggered: ', e)
-    const { code, message } = this.$sourceElement?.error || this.el.error || UNKNOWN_ERROR
+    const rawError = this.$sourceElement?.error || this.el.error || UNKNOWN_ERROR
+    const { code, message } = rawError
 
     const formattedError = this.createError({
       code,
       description: message,
-      raw: this.el.error,
+      raw: rawError,
       level: PlayerError.Levels.FATAL,
     })
 
