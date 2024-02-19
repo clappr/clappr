@@ -189,6 +189,24 @@ describe('HTML5TVsPlayback', function() {
 
       expect(this.playback.duration).toEqual(1000)
     })
+
+    test('handle exception if TimeRange access throws error', () => {
+      const startTimeChunks = [0, 11, 101]
+      const endTimeChunks = [10, 100, 1000]
+
+      jest.spyOn(this.playback, 'isLive', 'get').mockImplementation(() => true)
+
+      this.playback.el = {
+        seekable: {
+          start: index => startTimeChunks[index],
+          end: index => { throw new Error('IndexSizeError') },
+          length: 3,
+        },
+        duration: Infinity
+      }
+
+      expect(this.playback.duration).toEqual(Infinity)
+    })
   })
 
   test('ended getter returns video.ended property', () => {
