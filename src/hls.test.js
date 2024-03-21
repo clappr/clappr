@@ -346,4 +346,27 @@ describe('HlsjsPlayback', () => {
       expect(cb).not.toHaveBeenCalled()
     })
   })
+
+  describe('currentTimestamp', () => {
+    it('returns the fragment time plus the current playback time', () => {
+      const fragmentMock = {
+        frag: {
+          programDateTime: 1556663040000, // 'Tue Apr 30 2019 19:24:00'
+          start: 0,
+        }
+      }
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      playback.el.currentTime = 5
+      playback._setup()
+      playback.unbindCustomListeners()
+      playback._hls.trigger(HLSJS.Events.FRAG_CHANGED, fragmentMock)
+      expect(playback.currentTimestamp).toBe(1556663045) // 'Tue Apr 30 2019 19:24:05'
+    })
+
+    it('returns null if the playback does not have a fragment', () => {
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+      playback._setup()
+      expect(playback.currentTimestamp).toBe(null)
+    })
+  })
 })

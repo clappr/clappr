@@ -127,6 +127,15 @@ export default class HlsjsPlayback extends HTML5Video {
     return this.options.src
   }
 
+  get currentTimestamp() {
+    if (!this._currentFragment) return null
+    const startTime = this._currentFragment.programDateTime
+    const playbackTime = this.el.currentTime
+    const playTimeOffSet = playbackTime - this._currentFragment.start
+    const currentTimestampInMs = startTime + playTimeOffSet * 1000
+    return currentTimestampInMs / 1000
+  }
+
   static get HLSJS() {
     return HLSJS
   }
@@ -635,6 +644,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _onFragmentChanged(evt, data) {
+    this._currentFragment = data.frag
     this.trigger(Events.Custom.PLAYBACK_FRAGMENT_CHANGED, data)
   }
 
