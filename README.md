@@ -175,3 +175,17 @@ Starting a local server:
 `yarn start`
 
 This command will start an HTTP Server on port 8080. You can check a sample page with Clappr-core using the HlsjsPlayback on http://localhost:8080/
+
+## Release
+
+To release a new version, first create a new tag by running:
+
+`npm version [patch | minor | major]`
+
+Choose between `patch`, `minor`, or `major` according to the changes for the new version.
+
+After that, publish the new version to NPM by running:
+
+`npm publish`
+
+Check the new version on [npmjs @clappr/hlsjs-playback](https://www.npmjs.com/package/@clappr/hlsjs-playback).
