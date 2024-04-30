@@ -34,12 +34,12 @@
   },
   "homepage": "https://github.com/clappr/clappr-plugins",
   "peerDependencies": {
-    "@clappr/core": "^0.4.27"
+    "@clappr/core": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.22.17",
     "@babel/preset-env": "^7.22.15",
-    "@clappr/core": "^0.6.1",
+    "@clappr/core": "*",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.2",

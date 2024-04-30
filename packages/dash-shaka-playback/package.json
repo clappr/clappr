@@ -22,7 +22,7 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "peerDependencies": {
-    "@clappr/core": "^0.4.17"
+    "@clappr/core": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
