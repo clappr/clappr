@@ -1,0 +1,51 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>clappr dash shaka</title>
+</head>
+<body>
+    <div id="player"></div>
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function () {
+            var onBeforeLoad = function (shaka_player) {
+                shaka_player.getNetworkingEngine().registerRequestFilter(function (type, request) {
+                    if (type == 2) { // shaka.net.NetworkingEngine.RequestType.LICENSE
+                        // do something
+                    }
+                });
+                shaka_player.getNetworkingEngine().registerResponseFilter(function (type, response) {
+                    if (type == 2) { // shaka.net.NetworkingEngine.RequestType.LICENSE
+                        // do something
+                    }
+                });
+            }
+
+            var player = new Clappr.Player({
+                parentId: '#player', autoPlay: true,
+                plugins: [DashShakaPlayback, LevelSelector],
+                shakaConfiguration: {
+                    preferredAudioLanguage: 'pt-BR',
+                    streaming: {
+                        rebufferingGoal: 15
+                    }
+                },
+                shakaOnBeforeLoad: onBeforeLoad,
+                //source: 'http://live.unified-streaming.com/loop/loop.isml/loop.mpd?format=mp4&session_id=25020', //LIVE
+                source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd', //multi audio, sub
+                //source: 'http://dash.edgesuite.net/dash264/TestCases/2c/qualcomm/2/MultiRes.mpd', //VOD multiple qualities
+                //source: 'http://rdmedia.bbc.co.uk/dash/ondemand/elephants_dream/1/client_manifest-all.mpd', //SUB
+                //source: 'http://dash.edgesuite.net/dash264/TestCases/3b/fraunhofer/heaac_stereo_with_video/ElephantsDream/elephants_dream_480p_heaac_stereo_sidx.mpd', //VOD multiple audios
+                //source: 'http://dash.edgesuite.net/dash264/TestCases/4b/qualcomm/2/TearsOfSteel_onDem5secSegSubTitles.mpd', //VOD subtitle
+                //source: 'http://dash.edgesuite.net/akamai/streamroot/050714/Spring_4Ktest.mpd', //4K
+                // for more examples go to: http://dashif.org/reference/players/javascript/v1.5.1/samples/dash-if-reference-player/index.html and https://shaka-player-demo.appspot.com/
+                height: 360,
+                width: 640
+            })
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/clappr/clappr@latest/dist/clappr.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./dist/dash-shaka-playback.js"> </script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/clappr.level-selector/latest/level-selector.min.js"></script>
+</body>
+</html>
