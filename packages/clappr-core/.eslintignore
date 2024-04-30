@@ -1,0 +1,3 @@
+dist/
+public/
+src/base/polyfills.js
