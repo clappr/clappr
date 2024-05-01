@@ -23,7 +23,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'node_modules/@clappr/core/dist/clappr-core.js', served: true, included: true },
+      { pattern: '../../node_modules/@clappr/core/dist/clappr-core.js', served: true, included: true },
       { pattern: 'src/**/*.test.js', watched: true },
     ],
 

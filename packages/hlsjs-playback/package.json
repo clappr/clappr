@@ -65,5 +65,14 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "nx": {
+    "targets": {
+      "test": {
+        "dependsOn": [
+          "^release"
+        ]
+      }
+    }
   }
 }
