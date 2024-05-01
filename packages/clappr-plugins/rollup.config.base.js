@@ -16,7 +16,7 @@ const postcssOptions = {
   use: [
     ['sass', {
       includePaths: [
-        path.resolve('node_modules/@clappr/core/src/base/scss')
+        path.resolve('../../node_modules/@clappr/core/src/base/scss')
       ]
     }]
   ],
