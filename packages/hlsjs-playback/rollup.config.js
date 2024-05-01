@@ -18,7 +18,7 @@ const reloadEnabled = !!process.env.RELOAD
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const minimize = !!process.env.MINIMIZE
 
-const babelOptionsPlugins = { exclude: 'node_modules/**', babelHelpers: 'bundled' }
+const babelOptionsPlugins = { exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled' }
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
 const replacePluginOptions = { CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion), preventAssignment: false }

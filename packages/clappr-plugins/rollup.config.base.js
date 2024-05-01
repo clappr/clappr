@@ -46,7 +46,7 @@ const baseConfig = {
     nodeResolve(),
     namedDirectory(),
     babel({
-      exclude: 'node_modules/**'
+      exclude: ['node_modules/**', '../../node_modules/**']
     }),
     html(),
     svg(),

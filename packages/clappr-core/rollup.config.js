@@ -29,7 +29,7 @@ const postcssOptions = {
 }
 const aliasPluginOptions = { entries: { 'clappr-zepto': __dirname + '/../../node_modules/clappr-zepto/zepto.js', '@': __dirname + '/src' } }
 const replacePluginOptions = { VERSION: JSON.stringify(pkg.version), preventAssignment: true }
-const babelPluginOptions = { babelHelpers: 'bundled', exclude: 'node_modules/**' }
+const babelPluginOptions = { babelHelpers: 'bundled', exclude: ['node_modules/**', '../../node_modules/**'] }
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
 const visualizePluginOptions = { open: true, filename: './public/stats.html' }
