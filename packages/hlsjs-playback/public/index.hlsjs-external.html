@@ -1,0 +1,65 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="hlsjs-playback.external.js"></script>
+  <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
+  <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
+  <script type="text/javascript" charset="utf-8" src="j/add-external.js"></script>
+  <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="shortcut icon" type="image/png" href="i/favico.png">
+</head>
+
+<body>
+  <header class="header">
+    <span>Clappr</span>
+    <ul>
+      <li>
+        <a href="http://clappr.github.io/">docs</a>
+      </li>
+    </ul>
+  </header>
+  <section class="container">
+    <div class="main">
+      <p id='external-js-panel'>
+        Add external plugins:
+        <input id="js-link" type="url" placeholder="http://clappr.io/ex-plugin.js" style="width: 200px;">
+        <button id="btn-link" onclick="addExternal()">+</button>
+      </p>
+      <div id="output">
+        <div id="player-wrapper" class="player"></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div id="editor">var playerElement = document.getElementById("player-wrapper");
+
+var player = new Clappr.Player({
+  source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+  poster: '../i/poster.jpg',
+  mute: true,
+  height: 360,
+  width: 640,
+  playback: {
+    controls: true,
+  },
+  plugins: [HlsjsPlayback],
+});
+
+player.attachTo(playerElement);
+      </div>
+      <button class="run btn btn-primary">Run</button>
+      <div id="console"> </div>
+    </div>
+    <p>
+      <a href="index.html">Load hlsjs-playback.js version</a>
+    </p>
+  </section>
+  <footer class="footer"></footer>
+  <script type="text/javascript" charset="utf-8" src="j/clappr-config.js"></script>
+</body>
+
+</html>

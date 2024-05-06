@@ -31,7 +31,7 @@ const plugins = [
   }),
   resolve(),
   commonjs(),
-  babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' }),
+  babel({ exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled', compact: false }),
   html(),
   postcss(),
   size(),
