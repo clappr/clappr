@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Playback from '@/base/playback'
-import Events from '@/base/events'
-import Styler from '@/base/styler'
+import Playback from '../../base/playback/playback'
+import Events from '../../base/events/events'
+import Styler from '../../base/styler/styler'
 import HTMLImgStyle from './public/style.scss'
 
 export default class HTMLImg extends Playback {

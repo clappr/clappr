@@ -5,7 +5,7 @@
 
 import '../base/polyfills'
 import Media from '../base/media'
-import Browser from '../components/browser'
+import Browser from '../components/browser/browser'
 import $ from 'clappr-zepto'
 
 const idsCounter = {}

@@ -1,6 +1,6 @@
-import { extend } from '@/utils'
-import UIObject from '@/base/ui_object'
-import ErrorMixin from '@/base/error_mixin'
+import { extend } from '../../utils/utils'
+import UIObject from '../ui_object/ui_object'
+import ErrorMixin from '../error_mixin/error_mixin'
 
 import $ from 'clappr-zepto'
 
@@ -89,8 +89,8 @@ export default class Playback extends UIObject {
    * @property isPiPActive
    * @type {Boolean} `true` if the current playback is in picture in picture mode, otherwise `false`
    */
-  get isPiPActive() { 
-    return false 
+  get isPiPActive() {
+    return false
   }
 
   /**

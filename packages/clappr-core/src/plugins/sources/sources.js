@@ -1,5 +1,5 @@
-import CorePlugin from '@/base/core_plugin'
-import Events from '@/base/events'
+import CorePlugin from '../../base/core_plugin/core_plugin'
+import Events from '../../base/events/events'
 
 export default class SourcesPlugin extends CorePlugin {
   get name() { return 'sources' }
