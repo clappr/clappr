@@ -7,10 +7,10 @@
  */
 
 import $ from 'clappr-zepto'
-import BaseObject from '@/base/base_object'
-import Events from '@/base/events'
-import Container from '@/components/container'
-import Playback from '@/base/playback'
+import BaseObject from '../../base/base_object/base_object'
+import Events from '../../base/events/events'
+import Container from '../container/container'
+import Playback from '../../base/playback/playback'
 
 export default class ContainerFactory extends BaseObject {
   get options() { return this._options }

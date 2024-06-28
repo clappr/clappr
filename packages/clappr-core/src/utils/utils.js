@@ -5,7 +5,7 @@
 
 import '../base/polyfills'
 import Media from '../base/media'
-import Browser from '../components/browser'
+import Browser from '../components/browser/browser'
 import $ from 'clappr-zepto'
 
 const idsCounter = {}
@@ -44,6 +44,12 @@ export function extend(parent, properties) {
   return Surrogate
 }
 
+/**
+ *
+ * @param {number} time
+ * @param {*=} paddedHours
+ * @returns
+ */
 export function formatTime(time, paddedHours) {
   if (!isFinite(time)) return '--:--'
 

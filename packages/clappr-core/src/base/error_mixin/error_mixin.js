@@ -1,5 +1,5 @@
-import Log from '@/components/log'
-import PlayerError from '@/components/error'
+import Log from '../../components/log/log'
+import PlayerError from '../../components/error/error'
 
 const ErrorMixin = {
   /**

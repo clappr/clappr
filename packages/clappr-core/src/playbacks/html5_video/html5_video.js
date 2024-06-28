@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../utils'
+import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../utils/utils'
 
-import Events from '@/base/events'
-import Playback from '@/base/playback'
-import Browser from '@/components/browser'
-import Log from '@/components/log'
-import PlayerError from '@/components/error'
+import Events from '../../base/events/events'
+import Playback from '../../base/playback/playback'
+import Browser from '../../components/browser/browser'
+import Log from '../../components/log/log'
+import PlayerError from '../../components/error/error'
 import $ from 'clappr-zepto'
-import template from '@/base/template'
+import template from '../../base/template'
 import tracksHTML from './public/tracks.html'
-import Styler from '@/base/styler'
+import Styler from '../../base/styler/styler'
 import HTML5VideoStyle from './public/style.scss'
 
 const MIMETYPES = {

@@ -1,6 +1,6 @@
-import Events from '@/base/events'
-import BaseObject from '@/base/base_object'
-import Log from '@/components/log'
+import Events from '../../base/events/events'
+import BaseObject from '../../base/base_object/base_object'
+import Log from '../log/log'
 
 /**
  * The PlayerError is responsible to receive and propagate errors.

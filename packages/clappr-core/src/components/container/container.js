@@ -6,11 +6,11 @@
  * Container is responsible for the video rendering and state
  */
 
-import Events from '@/base/events'
-import UIObject from '@/base/ui_object'
-import ErrorMixin from '@/base/error_mixin'
-import Styler from '@/base/styler'
-import { DoubleEventHandler } from '@/utils'
+import Events from '../../base/events/events'
+import UIObject from '../../base/ui_object/ui_object'
+import ErrorMixin from '../../base/error_mixin/error_mixin'
+import Styler from '../../base/styler/styler'
+import { DoubleEventHandler } from '../../utils/utils'
 
 import ContainerStyle from './public/style.scss'
 
