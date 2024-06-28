@@ -3,6 +3,7 @@
   "version": "0.0.7",
   "description": "Clappr's zepto custom build",
   "main": "zepto.min.js",
+  "types": "./main.d.ts",
   "scripts": {
     "build": "./scripts/build-clappr-zepto -c=v1.2.0 -o=./",
     "test": "echo \"Error: no test specified\" && exit 1"
