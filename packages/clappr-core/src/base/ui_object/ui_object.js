@@ -17,25 +17,6 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/
  */
 export default class UIObject extends BaseObject {
   /**
-   * a unique id prefixed with `'c'`, `c1, c232`
-   *
-   * @property cid
-   * @type String
-   */
-  /**
-   * the dom element itself
-   *
-   * @property el
-   * @type HTMLElement
-   */
-  /**
-   * the dom element wrapped by `$`
-   *
-   * @property $el
-   * @type HTMLElement
-   */
-
-  /**
    * gets the tag name for the ui component
    * @method tagName
    * @default div
@@ -92,6 +73,12 @@ export default class UIObject extends BaseObject {
    */
   constructor(options) {
     super(options)
+    /**
+     * a unique id prefixed with `'c'`, `c1, c232`
+     *
+     * @property cid
+     * @type String
+     */
     this.cid = uniqueId('c')
     this._ensureElement()
     this.delegateEvents()
@@ -141,7 +128,19 @@ export default class UIObject extends BaseObject {
    */
   setElement(element, delegate) {
     if (this.$el) this.undelegateEvents()
+    /**
+     * the dom element wrapped by `$`
+     *
+     * @property $el
+     * @type import("clappr-zepto").ZeptoCollection
+     */
     this.$el = $.zepto.isZ(element) ? element : $(element)
+    /**
+     * the dom element itself
+     *
+     * @property el
+     * @type HTMLElement
+     */
     this.el = this.$el[0]
     if (delegate !== false) this.delegateEvents()
     return this

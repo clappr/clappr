@@ -44,6 +44,12 @@ export function extend(parent, properties) {
   return Surrogate
 }
 
+/**
+ *
+ * @param {number} time
+ * @param {*=} paddedHours
+ * @returns
+ */
 export function formatTime(time, paddedHours) {
   if (!isFinite(time)) return '--:--'
 
