@@ -151,13 +151,13 @@ describe('HlsjsPlayback', () => {
   })
 
   describe('_setup method', () => {
-    test('sets _manifestParsed flag to false', () => {
+    test('sets _manifestLoading flag to false', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
-      expect(playback._manifestParsed).toBeUndefined()
+      expect(playback._manifestLoading).toBeUndefined()
 
       playback._setup()
 
-      expect(playback._manifestParsed).toBeFalsy()
+      expect(playback._manifestLoading).toBeFalsy()
     })
 
     test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.preload is true', () => {
@@ -176,15 +176,16 @@ describe('HlsjsPlayback', () => {
       expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
     })
 
-    test('updates _manifestParsed flag value to true if MANIFEST_PARSED event is triggered', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
+    test('updates _manifestLoading flag value to true if MANIFEST_LOADING event is triggered', () => {
+      const src = 'http://clappr.io/foo.m3u8'
+      const playback = new HlsjsPlayback({ src })
 
-      expect(playback._manifestParsed).toBeUndefined()
+      expect(playback._manifestLoading).toBeUndefined()
 
       playback._setup()
-      playback._hls.trigger(HLSJS.Events.MANIFEST_PARSED, { levels: [] })
+      playback._hls.trigger(HLSJS.Events.MANIFEST_LOADING, { url: src })
 
-      expect(playback._manifestParsed).toBeTruthy()
+      expect(playback._manifestLoading).toBeTruthy()
     })
 
     test('calls bindCustomListeners method', () => {
@@ -241,24 +242,29 @@ describe('HlsjsPlayback', () => {
   })
 
   describe('play method', () => {
-    test('calls this._hls.loadSource if _manifestParsed flag and options.hlsPlayback.preload are falsy', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: true } })
+    test('calls this._hls.loadSource once if _manifestLoading flag and options.hlsPlayback.preload are falsy', () => {
+      jest.spyOn(HLSJS.prototype, 'loadSource').mockImplementation()
+      const src = 'http://clappr.io/foo.m3u8'
+      const playback = new HlsjsPlayback({ src, hlsPlayback: { preload: false } })
       playback._setup()
-      jest.spyOn(playback._hls, 'loadSource')
-      playback.play()
+      playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
 
       expect(playback._hls.loadSource).not.toHaveBeenCalled()
 
-      playback.options.hlsPlayback.preload = false
-      playback._manifestParsed = true
       playback.play()
-
-      expect(playback._hls.loadSource).not.toHaveBeenCalled()
-
-      playback._manifestParsed = false
-      playback.play()
+      playback._hls.trigger(HLSJS.Events.MANIFEST_LOADING, { url: src })
 
       expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+
+      // do not call loadSource again while loading a manifest
+      playback.play()
+      expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
+
+      playback._manifestLoading = false
+      playback.play()
+
+      expect(playback._hls.loadSource).toHaveBeenCalledTimes(2)
+      HLSJS.prototype.loadSource.mockRestore()
     })
   })
 
