@@ -13104,6 +13104,10 @@ loader-runner@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.4.0.tgz#ed47066bfe534d7e84c4c7b9998c2a75607d9357"
   integrity sha512-Jsmr89RcXGIwivFY21FcRrisYZfvLMTWx5kOLc+JTxtpBOG6xML0vzbc6SEQG2FO9/4Fc3wW4LVcB5DmGflaRw==
+load-script-promise@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/load-script-promise/-/load-script-promise-1.0.4.tgz#85adbd40e6d940217394400c077f28f577a3f0d1"
+  integrity sha512-WCa5M0rkixFb0LRJsE96lpzB638arOWHsafFuJFybhvMzUo/ijQCNK/Cd0njCBn7BCJNYaTzhV4FzofRvRIR7Q==
 
 loader-runner@^4.2.0:
   version "4.3.0"

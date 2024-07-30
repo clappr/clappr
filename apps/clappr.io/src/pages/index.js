@@ -1,29 +1,26 @@
-import React from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import React from 'react'
+import Translate from '@docusaurus/Translate'
+import clsx from 'clsx'
+import Link from '@docusaurus/Link'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+import Layout from '@theme/Layout'
+import HomepageFeatures from '@site/src/components/HomepageFeatures'
 
-import styles from './index.module.css';
+import styles from './index.module.css'
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext()
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <p className="hero__subtitle"><Translate>An extensible media player for web applications</Translate></p>
         <div className={styles.buttons}>
-          <Link
-            className="button button--secondary"
-            to="/docs/intro">
-            Get Started
+          <Link className="button button--secondary" to="/docs/intro">
+            <Translate>Get Started</Translate>
           </Link>
-          <Link
-            className="button button--info"
-            href="http://clappr.io/demo">
-            Try a Demo
+          <Link className="button button--info" href="http://clappr.io/demo">
+            <Translate>Try a Demo</Translate>
           </Link>
           <span className={styles.indexCtasGitHubButtonWrapper}>
             <iframe
@@ -37,17 +34,16 @@ function HomepageHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }
 
 export default function Home() {
   return (
-    <Layout
-      description="Description will go into a meta tag in <head />">
+    <Layout description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
       </main>
     </Layout>
-  );
+  )
 }
