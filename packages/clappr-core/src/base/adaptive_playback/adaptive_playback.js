@@ -1,5 +1,5 @@
 /* eslint-disable getter-return */
-import Playback from '@/base/playback'
+import Playback from '../playback/playback'
 
 /**
  * @typedef {Function} AdaptiveMediaActivatorFunction

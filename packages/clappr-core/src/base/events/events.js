@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Log from '../../components/log'
-import { uniqueId } from '../../utils'
+import Log from '../../components/log/log'
+import { uniqueId } from '../../utils/utils'
 
 const slice = Array.prototype.slice
 
@@ -199,6 +199,15 @@ export default class Events {
  * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
  * ```
  */
+Events.prototype.listenTo = function(obj, name, callback) {
+  const listeningTo = this._listeningTo || (this._listeningTo = {})
+  const id = obj._listenId || (obj._listenId = uniqueId('l'))
+  listeningTo[id] = obj
+  if (!callback && typeof name === 'object') callback = this
+  obj.on(name, callback, this)
+  return this
+}
+
 /**
  * listen to an event once for a given `obj`
  * @method listenToOnce
@@ -211,18 +220,14 @@ export default class Events {
  * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
  * ```
  */
-const listenMethods = { listenTo: 'on', listenToOnce: 'once' }
-
-Object.keys(listenMethods).forEach(function(method) {
-  Events.prototype[method] = function(obj, name, callback) {
-    const listeningTo = this._listeningTo || (this._listeningTo = {})
-    const id = obj._listenId || (obj._listenId = uniqueId('l'))
-    listeningTo[id] = obj
-    if (!callback && typeof name === 'object') callback = this
-    obj[listenMethods[method]](name, callback, this)
-    return this
-  }
-})
+Events.prototype.listenToOnce = function(obj, name, callback) {
+  const listeningTo = this._listeningTo || (this._listeningTo = {})
+  const id = obj._listenId || (obj._listenId = uniqueId('l'))
+  listeningTo[id] = obj
+  if (!callback && typeof name === 'object') callback = this
+  obj.once(name, callback, this)
+  return this
+}
 
 // PLAYER EVENTS
 /**

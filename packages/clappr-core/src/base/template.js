@@ -51,9 +51,14 @@ var escapeExpr = function(string) {
 
 var counter = 0
 
-// JavaScript micro-templating, similar to John Resig's implementation.
-// Underscore templating handles arbitrary delimiters, preserves whitespace,
-// and correctly escapes quotes within interpolated code.
+/**
+ * JavaScript micro-templating, similar to John Resig's implementation.
+ * Underscore templating handles arbitrary delimiters, preserves whitespace,
+ * and correctly escapes quotes within interpolated code.
+ * @param {string} text
+ * @param {*=} data
+ * @returns
+ */
 var tmpl = function(text, data) {
   var render
 

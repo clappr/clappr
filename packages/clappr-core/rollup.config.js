@@ -5,7 +5,6 @@ import jsonReader from '@rollup/plugin-json'
 import replace from '@rollup/plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
 import html from 'rollup-plugin-html'
-import namedDirectory from 'rollup-plugin-named-directory'
 import postcss from 'rollup-plugin-postcss'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
@@ -41,7 +40,6 @@ const plugins = [
   resolve(),
   commonjs(),
   babel(babelPluginOptions),
-  namedDirectory(),
   html(),
   postcss(postcssOptions),
   size(),

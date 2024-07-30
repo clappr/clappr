@@ -1,6 +1,6 @@
-import { getBrowserLanguage } from '../../utils'
 import $ from 'clappr-zepto'
-import CorePlugin from '../../base/core_plugin'
+import { getBrowserLanguage } from '../../utils/utils'
+import CorePlugin from '../../base/core_plugin/core_plugin'
 
 /**
  * The internationalization (i18n) plugin

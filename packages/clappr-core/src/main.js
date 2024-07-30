@@ -2,33 +2,37 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Player from './components/player'
-import Utils from './utils'
-import Events from './base/events'
-import Playback from './base/playback'
-import ContainerPlugin from './base/container_plugin'
-import CorePlugin from './base/core_plugin'
-import UICorePlugin from './base/ui_core_plugin'
-import UIContainerPlugin from './base/ui_container_plugin'
-import BaseObject from './base/base_object'
-import UIObject from './base/ui_object'
-import Browser from './components/browser'
-import Container from './components/container'
-import Core from './components/core'
-import PlayerError from './components/error'
-import Loader from './components/loader'
-import Log from './components/log'
-import HTML5Audio from './playbacks/html5_audio'
-import HTML5Video from './playbacks/html5_video'
-import HTMLImg from './playbacks/html_img'
-import NoOp from './playbacks/no_op'
-import Styler from './base/styler'
+import Player from './components/player/player'
+import Utils from './utils/utils'
+import Events from './base/events/events'
+import Playback from './base/playback/playback'
+import ContainerPlugin from './base/container_plugin/container_plugin'
+import CorePlugin from './base/core_plugin/core_plugin'
+import UICorePlugin from './base/ui_core_plugin/ui_core_plugin'
+import UIContainerPlugin from './base/ui_container_plugin/ui_container_plugin'
+import BaseObject from './base/base_object/base_object'
+import UIObject from './base/ui_object/ui_object'
+import Browser from './components/browser/browser'
+import Container from './components/container/container'
+import Core from './components/core/core'
+import PlayerError from './components/error/error'
+import Loader from './components/loader/loader'
+import Log from './components/log/log'
+import HTML5Audio from './playbacks/html5_audio/html5_audio'
+import HTML5Video from './playbacks/html5_video/html5_video'
+import HTMLImg from './playbacks/html_img/html_img'
+import NoOp from './playbacks/no_op/no_op'
+import Styler from './base/styler/styler'
 import template from './base/template'
-import Strings from './plugins/strings'
-import SourcesPlugin from './plugins/sources'
+import Strings from './plugins/strings/strings'
+import SourcesPlugin from './plugins/sources/sources'
 
 import $ from 'clappr-zepto'
 
+/** @constant
+    @type {string}
+    @default
+*/
 const version = VERSION
 
 // Built-in Plugins/Playbacks

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { extend } from '@/utils'
-import UIObject from '@/base/ui_object'
-import ErrorMixin from '@/base/error_mixin'
+import { extend } from '../../utils/utils'
+import UIObject from '../ui_object/ui_object'
+import ErrorMixin from '../error_mixin/error_mixin'
 
 /**
  * The base class for an ui container plugin
