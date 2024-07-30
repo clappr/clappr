@@ -1,0 +1,34 @@
+.seek-time[data-seek-time] {
+  position: absolute;
+  white-space: nowrap;
+  height: 20px;
+  line-height: 20px;
+  font-size: 0;
+  left: -100%;
+  bottom: 55px;
+  background-color: rgba(2, 2, 2, 0.5);
+  z-index: 9999;
+  transition: opacity 0.1s ease;
+
+  &.hidden[data-seek-time] {
+    opacity: 0;
+  }
+
+  [data-seek-time] {
+    display: inline-block;
+    color: white;
+    font-size: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+    vertical-align: top;
+  }
+
+  [data-duration] {
+    display: inline-block;
+    color: rgba(255,255,255,.5);
+    font-size: 10px;
+    padding-right: 7px;
+    vertical-align: top;
+    &:before { content: "|"; margin-right: 7px; }
+  }
+}

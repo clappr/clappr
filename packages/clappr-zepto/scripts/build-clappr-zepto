@@ -1,0 +1,201 @@
+#!/bin/bash
+
+export NOAMD="true"
+CURRENT_DIR=$(pwd)
+SCRIPT_FILE=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/`basename "${BASH_SOURCE[0]}"`
+SCRIPT_DIR=$(dirname "${SCRIPT_FILE}")
+SCRIPT_NAME=$(basename "$SCRIPT_FILE")
+
+if [[ -z "$ZEPTO_MODULES" ]]; then
+   ZEPTO_MODULES="zepto ajax callbacks deferred event ie selector"
+fi
+
+OUTPUT_PATH=$CURRENT_DIR    # Default is current folder
+COMMIT=""
+
+TMP_PATH="/tmp/zepto-build" # Temporary build path
+REQUIREMENTS="git npm"      # Required commands
+
+usage()
+{
+  cat <<EOF
+Usage: $SCRIPT_NAME <OPTIONS>
+
+  OPTIONS:
+
+    -c=COMMIT, --commit=COMMIT
+        Set Zepto git repository commit SHA1 hash, branch name or tag name.
+
+    -o=PATH, --output=PATH
+        Set build output path. Default is current path.
+
+EOF
+  exit 3
+}
+
+read_args()
+{
+  for i in "$@"; do
+    case $i in
+      -c=*|--commit=*)
+        set_commit "${i#*=}"
+        shift
+      ;;
+      -o=*|--output=*)
+        set_output_path "${i#*=}"
+        shift
+      ;;
+      *)
+        usage
+      ;;
+    esac
+  done
+}
+
+info()
+{
+  echo "$*"
+}
+
+error()
+{
+  echo "Error: $*" >&2
+  exit 1
+}
+
+check_cmd()
+{
+  if ! which $1 &>/dev/null; then
+    error "$1 command not found"
+  fi
+}
+
+set_output_path()
+{
+  if [ ! -d "$1" ]; then
+    error "incorrect output path value"
+  fi
+  OUTPUT_PATH=$1
+}
+
+set_commit()
+{
+  COMMIT=$1
+}
+
+check_requirements()
+{
+  for cmd in $REQUIREMENTS
+  do
+    check_cmd $cmd
+  done
+}
+
+cleanup_tmp_folder()
+{
+  if [ -d "$TMP_PATH" ]; then
+    info "Cleanup temporary folder"
+    if ! rm -rf $TMP_PATH; then
+      error "cleanup temporary folder failed"
+    fi
+  fi
+}
+
+create_tmp_folder()
+{
+  cleanup_tmp_folder
+  if ! mkdir $TMP_PATH; then
+    error "failed to create $TMP_PATH folder"
+  fi
+}
+
+cd_tmp_folder()
+{
+  if ! cd $TMP_PATH; then
+    error "failed to change directory $TMP_PATH"
+  fi
+}
+
+cd_git_folder()
+{
+  if ! cd ${TMP_PATH}/zepto; then
+    error "failed to change directory to Zepto repository"
+  fi
+}
+
+clone_zepto_repository()
+{
+  cd_tmp_folder
+  info "Clone Zepto repository, please wait..."
+  if ! git clone https://github.com/madrobby/zepto.git zepto &>/dev/null; then
+    error "failed to clone Zepto repository"
+  fi
+  cd_git_folder
+  info "Set Zepto repository to [ $COMMIT ]"
+  if ! git checkout $COMMIT &>/dev/null; then
+    error "failed to set Zepto repository to [ $COMMIT ]"
+  fi
+}
+
+install_zepto_dependencies()
+{
+  cd_git_folder
+  info "Install Zepto [ $COMMIT ] dependencies"
+  if ! npm install &>/dev/null; then
+    error "failed to install Zepto dependencies"
+  fi
+}
+
+build_zepto()
+{
+  cd_git_folder
+  info "Build Zepto [ $COMMIT ] with modules [ $ZEPTO_MODULES ]"
+  if ! MODULES="$ZEPTO_MODULES" npm run dist &>/dev/null; then
+    error "failed to build Zepto"
+  fi
+}
+
+patch_zepto()
+{
+  info "Patch zepto.js file"
+  # Allow node module import
+  if ! echo "module.exports = Zepto" >> dist/zepto.js; then
+    error "failed to patch zepto.js"
+  fi
+}
+
+copy_zepto()
+{
+  info "Copy Zepto files to $OUTPUT_PATH"
+  # OUTPUT_PATH may be relative, change to current folder
+  if ! cd $CURRENT_DIR; then
+    error "failed to change directory to $CURRENT_DIR"
+  fi
+  if ! cp ${TMP_PATH}/zepto/dist/zepto.js $OUTPUT_PATH; then
+    error "failed to copy zepto.js to $OUTPUT_PATH"
+  fi
+  if ! cp ${TMP_PATH}/zepto/dist/zepto.min.js $OUTPUT_PATH; then
+    error "failed to copy zepto.min.js to $OUTPUT_PATH"
+  fi
+}
+
+main()
+{
+  if [ -z $COMMIT ]; then
+    usage
+  fi
+
+  check_requirements
+  create_tmp_folder
+  clone_zepto_repository
+  install_zepto_dependencies
+  build_zepto
+  patch_zepto
+  copy_zepto
+  cleanup_tmp_folder
+
+  info "Zepto build success!"
+}
+
+read_args $@
+main
