@@ -243,6 +243,7 @@ export default class Core extends UIObject {
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
     Browser.isMobile && $(window).unbind('resize', this._boundHandleWindowResize)
     this.stopListening()
+    this.undelegateEvents()
   }
 
   handleFullscreenChange() {
@@ -263,6 +264,7 @@ export default class Core extends UIObject {
 
   removeContainer(container) {
     this.stopListening(container)
+    this.containerFactory.stopListening(container)
     this.containers = this.containers.filter((c) => c !== container)
   }
 

@@ -284,6 +284,7 @@ export default class Container extends UIObject {
     this.stopListening()
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
+    this.undelegateEvents()
   }
 
   setStyle(style) {
