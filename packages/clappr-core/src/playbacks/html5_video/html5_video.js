@@ -527,6 +527,7 @@ export default class HTML5Video extends Playback {
 
   destroy() {
     this._destroyed = true
+    this._stopPlayheadMovingChecks()
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     this.$el.off('contextmenu')
     super.destroy()
