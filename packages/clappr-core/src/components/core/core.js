@@ -120,10 +120,11 @@ export default class Core extends UIObject {
     this.containers = []
     //FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
+    this._boundHandleWindowResize = (o) => this.handleWindowResize(o)
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
-    Browser.isMobile && $(window).bind('resize', (o) => { this.handleWindowResize(o) })
+    Browser.isMobile && $(window).bind('resize', this._boundHandleWindowResize)
   }
 
   configureDomRecycler() {
@@ -240,6 +241,7 @@ export default class Core extends UIObject {
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
+    Browser.isMobile && $(window).unbind('resize', this._boundHandleWindowResize)
     this.stopListening()
   }
 
