@@ -1,6 +1,6 @@
 {
   "name": "clappr-zepto",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Clappr's zepto custom build",
   "main": "zepto.min.js",
   "types": "./main.d.ts",
@@ -17,6 +17,5 @@
   "bugs": {
     "url": "https://github.com/thiagopnts/clappr-zepto/issues"
   },
-  "homepage": "https://github.com/thiagopnts/clappr-zepto",
-  "devDependencies": {}
+  "homepage": "https://github.com/thiagopnts/clappr-zepto"
 }
