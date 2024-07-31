@@ -4,7 +4,7 @@ import Log from '@/components/log'
 describe('Events', function() {
   let events
   let callback
-  
+
   beforeEach(() => {
     events = new Events()
     callback = jest.fn()
@@ -225,6 +225,16 @@ describe('Events', function() {
     events.trigger('clappr.any.event', 42, 'some string')
     expect(callback).toHaveBeenCalledWith(42, 'some string')
     expect(callback).toHaveBeenCalledTimes(3)
+  })
+
+  it('permits to stop listening with callback argument a listen once event', () => {
+    const myEvents = new Events()
+
+    myEvents.listenToOnce(events, 'clappr.any.event', callback)
+    myEvents.stopListening(events, 'clappr.any.event', callback)
+    events.trigger('clappr.any.event')
+
+    expect(callback).not.toHaveBeenCalled()
   })
 
   it('permits to stop listening events in other objects', () => {
