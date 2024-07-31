@@ -90,6 +90,7 @@ export default class Events {
       off(name, once)
       callback.apply(this, arguments)
     }
+    once._callback = callback
     return this.on(name, once, context)
   }
 
