@@ -37,6 +37,7 @@ const sidebars = {
           collapsed: false,
           items: [
             'guides/plugins/intro',
+            'guides/plugins/metrics',
             'guides/plugins/built-in',
             'guides/plugins/external',
             'guides/plugins/building',

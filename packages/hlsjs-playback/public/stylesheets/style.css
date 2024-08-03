@@ -1,0 +1,113 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  position: relative;
+  margin: 0;
+  right: 0;
+  left: 0;
+  padding: 0 4%;
+  top: 0;
+  background-color: rgba(116, 116, 116, 1);
+  color: #eee;
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+}
+
+.header span {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.header img {
+  height: 45px;
+}
+
+.header ul {
+  right: 7%;
+}
+
+.header ul, .header li, .header a {
+  position: relative;
+  display: inline;
+  float: right;
+  color: #ddd;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+a:hover {
+  color: #aaa;
+  text-decoration: none;
+}
+
+.header a:visited, a:active, a:link {
+  color: #ddd;
+  text-decoration: none;
+}
+
+.run {
+  display: block;
+  float: right;
+  margin: 20px 0;
+}
+
+.container {
+  text-align: center;
+}
+
+.main {
+  display: inline-block;
+  margin: 0;
+  padding: 0px 20px 0 20px;
+  border: 0;
+}
+
+.external-js {
+  border-style: solid;
+  border-width: 1px;
+  color: #dcdcdc;
+  font-size: 10px;
+  padding: 2px;
+  margin-right: 2px;
+  font-family: monospace;
+}
+
+#player-wrapper {
+  min-width: 320px;
+  min-height: 180px;
+}
+
+.sidebar {
+  display: inline-block;
+  text-align: left;
+  width: 680px;
+  margin: 0;
+  padding: 40px 20px 0 20px;
+  border: 0;
+}
+
+#editor {
+  border: 1px solid #c0c0EE;
+  min-height: 360px;
+}
+
+#console {
+  position: relative;
+  color: red;
+  left: 2%;
+  top: 65px;
+}
+
+.btn:focus { outline: none; }
+
+.player {
+  display: inline-block;
+  margin: 0 auto;
+  height: auto;
+  width: auto;
+}

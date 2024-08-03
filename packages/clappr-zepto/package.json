@@ -1,0 +1,21 @@
+{
+  "name": "clappr-zepto",
+  "version": "0.1.0",
+  "description": "Clappr's zepto custom build",
+  "main": "zepto.min.js",
+  "types": "./main.d.ts",
+  "scripts": {
+    "build": "./scripts/build-clappr-zepto -c=v1.2.0 -o=./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thiagopnts/clappr-zepto"
+  },
+  "author": "Thiago Pontes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thiagopnts/clappr-zepto/issues"
+  },
+  "homepage": "https://github.com/thiagopnts/clappr-zepto"
+}
