@@ -116,6 +116,9 @@ class DashShakaPlayback extends HTML5Video {
     this._levels = []
     this._pendingAdaptationEvent = false
     this._isShakaReadyState = false
+    this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
+    this._timeUpdateFiringRate = 0.2
+    this._durationChangeMinOffset = 0.5
 
     this._minDvrSize = typeof (this.options.shakaMinimumDvrSize) === 'undefined' ? 60 : this.options.shakaMinimumDvrSize
   }
@@ -225,6 +228,7 @@ class DashShakaPlayback extends HTML5Video {
     if (this._player) {
       this._sendStats()
 
+      this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
       this._player.unload().then(() => {
         super.stop()
         this._player = null
@@ -410,17 +414,12 @@ class DashShakaPlayback extends HTML5Video {
   _onTimeUpdate() {
     if (!this.shakaPlayerInstance) return
 
-    let update = {
-      current: this.getCurrentTime(),
-      total: this.getDuration(),
-      firstFragDateTime: this.getProgramDateTime()
-    }
-    let isSame = this._lastTimeUpdate && (
-      update.current === this._lastTimeUpdate.current &&
-      update.total === this._lastTimeUpdate.total)
-    if (isSame)
-      return
-
+    const update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
+    const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
+    const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
+    const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
+    const isSame = isSameTime && isSameDuration && isSameFirstFragDateTime
+    if (isSame) return
     this._lastTimeUpdate = update
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
