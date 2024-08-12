@@ -124,25 +124,17 @@ class DashShakaPlayback extends HTML5Video {
     return this.presentationStartTimeAsDate
   }
 
-  _updateDvr(status) {
-    this.trigger(Events.PLAYBACK_DVR, status)
-    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
-  }
-
   seek(time) {
     if (time < 0) {
       Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this._duration
     }
-    // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this._updateDvr(time < this._duration-3)
     time += this._startTime
     this.el.currentTime = time
   }
 
   pause() {
     this.el.pause()
-    this.dvrEnabled && this._updateDvr(true)
   }
 
   play () {

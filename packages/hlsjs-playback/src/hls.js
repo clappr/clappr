@@ -333,19 +333,12 @@ export default class HlsjsPlayback extends HTML5Video {
       Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this.getDuration()
     }
-    // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
     time += this._startTime
     this.el.currentTime = time
   }
 
   seekToLivePoint() {
     this.seek(this.getDuration())
-  }
-
-  _updateDvr(status) {
-    this.trigger(Events.PLAYBACK_DVR, status)
-    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
   }
 
   _updateSettings() {
@@ -494,7 +487,6 @@ export default class HlsjsPlayback extends HTML5Video {
   pause() {
     if (!this._hls) return
     this.el.pause()
-    if (this.dvrEnabled) this._updateDvr(true)
   }
 
   stop() {
