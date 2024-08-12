@@ -30,7 +30,8 @@ export default class Log {
       'playback:progress',
       'container:hover',
       'container:timeupdate',
-      'container:progress'
+      'container:progress',
+      'core:mousemove',
     ]
     this.level = level
     this.previousLevel = this.level
