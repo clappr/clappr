@@ -265,10 +265,12 @@ export default class HlsjsPlayback extends HTML5Video {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
       this._hls.recoverMediaError()
+      this.play()
     } else if (!this._recoveredAudioCodecError) {
       this._recoveredAudioCodecError = true
       this._hls.swapAudioCodec()
       this._hls.recoverMediaError()
+      this.play()
     } else {
       Log.error('hlsjs: failed to recover', { evt, data })
       error.level = PlayerError.Levels.FATAL
