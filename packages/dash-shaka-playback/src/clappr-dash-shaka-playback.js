@@ -227,7 +227,7 @@ class DashShakaPlayback extends HTML5Video {
 
   stop () {
     this._stopTimeUpdateTimer()
-    clearInterval(this.sendStatsId)
+    this._stopToSendStats()
     this._stopped = true
 
     if (this._player) {
@@ -364,7 +364,7 @@ class DashShakaPlayback extends HTML5Video {
 
   destroy () {
     this._stopTimeUpdateTimer()
-    clearInterval(this.sendStatsId)
+    this._stopToSendStats()
 
     if (this._player) {
       this._player.destroy()
@@ -383,6 +383,7 @@ class DashShakaPlayback extends HTML5Video {
   _setup() {
     this._isShakaReadyState = false
     this._ccIsSetup = false
+    this._stopToSendStats()
 
     let runAllSteps = () => {
       this._player = this._createPlayer()
@@ -467,8 +468,14 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _startToSendStats () {
+    this._stopToSendStats()
     const intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS
     this.sendStatsId = setInterval(() => this._sendStats(), intervalMs)
+  }
+
+  _stopToSendStats() {
+    this.sendStatsId && clearInterval(this.sendStatsId)
+    this.sendStatsId = null
   }
 
   _sendStats () {
