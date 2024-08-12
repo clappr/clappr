@@ -54,8 +54,8 @@ export default class Log {
   }
 
   log(klass, level, message) {
-    if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return
     if (level < this.level) return
+    if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return
 
     if (!message) {
       message = klass
