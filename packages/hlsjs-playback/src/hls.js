@@ -143,6 +143,8 @@ export default class HlsjsPlayback extends HTML5Video {
   constructor(...args) {
     super(...args)
     this.options.hlsPlayback = { ...this.defaultOptions, ...this.options.hlsPlayback }
+    this._timeUpdateFiringRate = 0.2
+    this._durationChangeMinOffset = 0.5
     this._setInitialState()
   }
 
@@ -155,7 +157,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
 
     this._playbackType = Playback.VOD
-    this._lastTimeUpdate = { current: 0, total: 0 }
+    this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
     this._lastDuration = null
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
@@ -265,10 +267,12 @@ export default class HlsjsPlayback extends HTML5Video {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
       this._hls.recoverMediaError()
+      this.play()
     } else if (!this._recoveredAudioCodecError) {
       this._recoveredAudioCodecError = true
       this._hls.swapAudioCodec()
       this._hls.recoverMediaError()
+      this.play()
     } else {
       Log.error('hlsjs: failed to recover', { evt, data })
       error.level = PlayerError.Levels.FATAL
@@ -333,19 +337,12 @@ export default class HlsjsPlayback extends HTML5Video {
       Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this.getDuration()
     }
-    // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
     time += this._startTime
     this.el.currentTime = time
   }
 
   seekToLivePoint() {
     this.seek(this.getDuration())
-  }
-
-  _updateDvr(status) {
-    this.trigger(Events.PLAYBACK_DVR, status)
-    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
   }
 
   _updateSettings() {
@@ -441,9 +438,10 @@ export default class HlsjsPlayback extends HTML5Video {
 
   _onTimeUpdate() {
     const update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
-    const isSame = this._lastTimeUpdate && (
-      update.current === this._lastTimeUpdate.current &&
-      update.total === this._lastTimeUpdate.total)    
+    const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
+    const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
+    const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
+    const isSame = isSameTime && isSameDuration && isSameFirstFragDateTime
     if (isSame) return
     this._lastTimeUpdate = update
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
@@ -451,7 +449,8 @@ export default class HlsjsPlayback extends HTML5Video {
 
   _onDurationChange() {
     const duration = this.getDuration()
-    if (this._lastDuration === duration) return
+    const isSameDuration = Math.abs(this._lastDuration - duration) < this._durationChangeMinOffset
+    if (isSameDuration) return
     this._lastDuration = duration
     super._onDurationChange()
   }
@@ -494,7 +493,6 @@ export default class HlsjsPlayback extends HTML5Video {
   pause() {
     if (!this._hls) return
     this.el.pause()
-    if (this.dvrEnabled) this._updateDvr(true)
   }
 
   stop() {

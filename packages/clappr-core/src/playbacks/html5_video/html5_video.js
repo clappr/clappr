@@ -326,7 +326,6 @@ export default class HTML5Video extends Playback {
 
   pause() {
     this.el.pause()
-    this.dvrEnabled && this._updateDvr(true)
   }
 
   stop() {
@@ -443,13 +442,17 @@ export default class HTML5Video extends Playback {
   }
 
   _onPause() {
+    this.dvrEnabled && this._updateDvr(true)
     this._stopPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PAUSE)
   }
 
   _onSeeking() {
-    this.trigger(Events.PLAYBACK_SEEK, this.getCurrentTime())
+    const currentTime = this.getCurrentTime()
+    // assume live if time within 3 seconds of end of stream
+    this.dvrEnabled && this._updateDvr(currentTime < this.getDuration() - 3)
+    this.trigger(Events.PLAYBACK_SEEK, currentTime)
     this._handleBufferingEvents()
   }
 
@@ -547,8 +550,6 @@ export default class HTML5Video extends Playback {
       Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this.getDuration()
     }
-    // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
     time += this.el.seekable.start(0)
 
     this.el.currentTime = time

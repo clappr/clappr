@@ -30,7 +30,8 @@ export default class Log {
       'playback:progress',
       'container:hover',
       'container:timeupdate',
-      'container:progress'
+      'container:progress',
+      'core:mousemove',
     ]
     this.level = level
     this.previousLevel = this.level
@@ -54,8 +55,8 @@ export default class Log {
   }
 
   log(klass, level, message) {
-    if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return
     if (level < this.level) return
+    if (this.EXCLUDE_LIST.indexOf(message[0]) >= 0) return
 
     if (!message) {
       message = klass
