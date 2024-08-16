@@ -5,7 +5,7 @@
 import ClapprCore, { Loader } from '@clappr/core'
 import { Plugins, Vendor } from '@clappr/plugins'
 
-const version = VERSION
+const version = CLAPPR_VERSION
 
 for (let plugin of Object.values(Plugins))
   Loader.registerPlugin(plugin)

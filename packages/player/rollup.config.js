@@ -25,7 +25,7 @@ const plugins = [
   replace({
     preventAssignment: true,
     values: {
-      VERSION: JSON.stringify(pkg.version),
+      CLAPPR_VERSION: JSON.stringify(pkg.version),
       CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
     }
   }),

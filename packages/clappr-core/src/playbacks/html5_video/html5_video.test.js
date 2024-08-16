@@ -516,10 +516,12 @@ describe('HTML5Video playback', function() {
         }
       })
       html5Video.seek(html5Video.el.seekable.end(0))
+      html5Video._onSeeking()
 
       expect(html5Video._updateDvr).toHaveBeenCalledWith(false)
 
       html5Video.seek(96)
+      html5Video._onSeeking()
 
       expect(html5Video._updateDvr).toHaveBeenCalledWith(true)
     })

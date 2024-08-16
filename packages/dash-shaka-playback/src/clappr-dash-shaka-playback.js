@@ -116,6 +116,9 @@ class DashShakaPlayback extends HTML5Video {
     this._levels = []
     this._pendingAdaptationEvent = false
     this._isShakaReadyState = false
+    this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
+    this._timeUpdateFiringRate = 0.2
+    this._durationChangeMinOffset = 0.5
 
     this._minDvrSize = typeof (this.options.shakaMinimumDvrSize) === 'undefined' ? 60 : this.options.shakaMinimumDvrSize
   }
@@ -124,25 +127,17 @@ class DashShakaPlayback extends HTML5Video {
     return this.presentationStartTimeAsDate
   }
 
-  _updateDvr(status) {
-    this.trigger(Events.PLAYBACK_DVR, status)
-    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
-  }
-
   seek(time) {
     if (time < 0) {
       Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this._duration
     }
-    // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this._updateDvr(time < this._duration-3)
     time += this._startTime
     this.el.currentTime = time
   }
 
   pause() {
     this.el.pause()
-    this.dvrEnabled && this._updateDvr(true)
   }
 
   play () {
@@ -227,12 +222,13 @@ class DashShakaPlayback extends HTML5Video {
 
   stop () {
     this._stopTimeUpdateTimer()
-    clearInterval(this.sendStatsId)
+    this._stopToSendStats()
     this._stopped = true
 
     if (this._player) {
       this._sendStats()
 
+      this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
       this._player.unload().then(() => {
         super.stop()
         this._player = null
@@ -364,7 +360,7 @@ class DashShakaPlayback extends HTML5Video {
 
   destroy () {
     this._stopTimeUpdateTimer()
-    clearInterval(this.sendStatsId)
+    this._stopToSendStats()
 
     if (this._player) {
       this._player.destroy()
@@ -383,6 +379,7 @@ class DashShakaPlayback extends HTML5Video {
   _setup() {
     this._isShakaReadyState = false
     this._ccIsSetup = false
+    this._stopToSendStats()
 
     let runAllSteps = () => {
       this._player = this._createPlayer()
@@ -417,17 +414,12 @@ class DashShakaPlayback extends HTML5Video {
   _onTimeUpdate() {
     if (!this.shakaPlayerInstance) return
 
-    let update = {
-      current: this.getCurrentTime(),
-      total: this.getDuration(),
-      firstFragDateTime: this.getProgramDateTime()
-    }
-    let isSame = this._lastTimeUpdate && (
-      update.current === this._lastTimeUpdate.current &&
-      update.total === this._lastTimeUpdate.total)
-    if (isSame)
-      return
-
+    const update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
+    const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
+    const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
+    const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
+    const isSame = isSameTime && isSameDuration && isSameFirstFragDateTime
+    if (isSame) return
     this._lastTimeUpdate = update
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
@@ -467,8 +459,14 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _startToSendStats () {
+    this._stopToSendStats()
     const intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS
     this.sendStatsId = setInterval(() => this._sendStats(), intervalMs)
+  }
+
+  _stopToSendStats() {
+    this.sendStatsId && clearInterval(this.sendStatsId)
+    this.sendStatsId = null
   }
 
   _sendStats () {
@@ -485,14 +483,20 @@ class DashShakaPlayback extends HTML5Video {
       videoError: this.el.error
     }
 
-    let { category, code, severity } = error.shakaError.detail || error.shakaError
+    let { category, code, severity, data } = error.shakaError.detail || error.shakaError
 
     if (error.videoError || !code && !category) return super._onError()
 
+    let shakaErrorData = ''
+    try {
+      shakaErrorData = JSON.stringify(data)
+    } catch (error) {
+      Log.warn('Fail to parse shaka error data', error)
+    }
     const isCritical = severity === shaka.util.Error.Severity.CRITICAL
     const errorData = {
       code: `${category}_${code}`,
-      description: `Category: ${category}, code: ${code}, severity: ${severity}`,
+      description: `Category: ${category}, code: ${code}, severity: ${severity}, data: ${shakaErrorData}`,
       level: isCritical ? PlayerError.Levels.FATAL : PlayerError.Levels.WARN,
       raw: err
     }
