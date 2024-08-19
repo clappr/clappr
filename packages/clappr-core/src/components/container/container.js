@@ -135,6 +135,15 @@ export default class Container extends UIObject {
     return this.playback.isPiPActive
   }
 
+  set initialSize({ width, height }) {
+    if (width === 0 || height === 0 || this._initialSize) return
+    this._initialSize = { width, height }
+  }
+
+  get initialSize() {
+    return this._initialSize
+  }
+
   /**
    * it builds a container
    * @method constructor
@@ -572,14 +581,26 @@ export default class Container extends UIObject {
   }
 
   checkResize() {
+    this.currentSize = this.currentSize || { scale: 1 }
     const newSize = { width: this.el.clientWidth, height: this.el.clientHeight }
-    const { width, height } = this.currentSize || {}
+    const { width, height } = this.currentSize
     const isResize = height !== newSize.height || width !== newSize.width
     if (isResize) {
-      this.currentSize = newSize
+      this.currentSize = { ...newSize, scale: this.currentSize.scale }
+      this.initialSize = newSize
       this.trigger(Events.CONTAINER_RESIZE, newSize)
     }
   }
+
+  resize({ scale = 1, transitionSeconds }) {
+    const widthScaled = this.initialSize.width * scale
+    const heightScaled = this.initialSize.height * scale
+    const transition = transitionSeconds ? { transition: `all ${transitionSeconds}s ease` } : {}
+    const styles = { ...transition, width: widthScaled, height: heightScaled }
+    this.$el.css(styles)
+    this.currentSize.scale = scale
+  }
+
 
   /**
    * enables to configure the container after its creation
