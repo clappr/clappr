@@ -341,4 +341,15 @@ describe('Core', function() {
       expect(core.el.children[0].tagName).toEqual('STYLE')
     })
   })
+
+  test('resize', () => {
+    const data = { width: 100, height: 100 }
+    let callback = jest.fn()
+    const core = new Core({})
+    jest.spyOn(core, 'onResize')
+    core.on(Events.CORE_RESIZE, callback)
+    core.resize(data)
+    expect(core.onResize).toHaveBeenCalledWith(data)
+    expect(callback).toHaveBeenCalledWith(data)
+  })
 })

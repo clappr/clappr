@@ -165,19 +165,19 @@ export default class Core extends UIObject {
     this.resize(this.currentSize)
   }
 
-  resize(options) {
-    if (!isNumber(options.height) && !isNumber(options.width)) {
-      this.el.style.height = `${options.height}`
-      this.el.style.width = `${options.width}`
-    } else {
-      this.el.style.height = `${options.height}px`
-      this.el.style.width = `${options.width}px`
-    }
+  /**
+   * method called before resize the element
+   * @method onResize
+   * @param {Object} options the options object
+   * @return {UIObject} itself
+   */
+  onResize(options) {
     this.previousSize = { width: this.options.width, height: this.options.height }
     this.options.width = options.width
     this.options.height = options.height
     this.currentSize = options
     this.triggerResize(this.currentSize)
+    return this
   }
 
   enableResizeObserver() {
@@ -190,13 +190,12 @@ export default class Core extends UIObject {
 
   triggerResize(newSize) {
     const thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
-    if (thereWasChange) {
-      this.oldHeight = newSize.height
-      this.oldWidth = newSize.width
-      this.computedSize = newSize
-      this.firstResize = false
-      this.trigger(Events.CORE_RESIZE, newSize)
-    }
+    if (!thereWasChange) return
+    this.oldHeight = newSize.height
+    this.oldWidth = newSize.width
+    this.computedSize = newSize
+    this.firstResize = false
+    this.trigger(Events.CORE_RESIZE, newSize)
   }
 
   disableResizeObserver() {
