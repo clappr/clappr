@@ -1,7 +1,7 @@
 import { extend } from '../../utils/utils'
 import UIObject from '../ui_object/ui_object'
 import ErrorMixin from '../error_mixin/error_mixin'
-
+import Events from '../../base/events/events'
 import $ from 'clappr-zepto'
 
 /**
@@ -313,6 +313,17 @@ export default class Playback extends UIObject {
    */
   canAutoPlay(cb) {
     cb(true, null) // Assume playback can autoplay by default
+  }
+
+  /**
+   * method called before resize the element
+   * @method onResize
+   * @param {Object} options the options object
+   * @return {UIObject} itself
+   */
+  onResize(options) {
+    this.trigger(Events.PLAYBACK_RESIZE, options)
+    return this
   }
 }
 

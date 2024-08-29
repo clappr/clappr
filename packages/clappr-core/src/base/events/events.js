@@ -582,6 +582,13 @@ Events.PLAYBACK_AUDIO_AVAILABLE = 'playback:audio:available'
  */
 Events.PLAYBACK_AUDIO_CHANGED = 'playback:audio:changed'
 
+/**
+ * Fired when the playback was resized.
+ *
+ * @event PLAYBACK_RESIZE
+ */
+Events.PLAYBACK_RESIZE = 'playback:resize'
+
 // Core Events
 /**
  * Fired when the containers are created
