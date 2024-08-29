@@ -11,9 +11,7 @@ import UIObject from '../../base/ui_object/ui_object'
 import ErrorMixin from '../../base/error_mixin/error_mixin'
 import Styler from '../../base/styler/styler'
 import { DoubleEventHandler } from '../../utils/utils'
-
 import ContainerStyle from './public/style.scss'
-
 import $ from 'clappr-zepto'
 
 /**
@@ -581,26 +579,24 @@ export default class Container extends UIObject {
   }
 
   checkResize() {
-    this.currentSize = this.currentSize || { scale: 1 }
     const newSize = { width: this.el.clientWidth, height: this.el.clientHeight }
-    const { width, height } = this.currentSize
+    const { width, height } = this.currentSize || {}
     const isResize = height !== newSize.height || width !== newSize.width
-    if (isResize) {
-      this.currentSize = { ...newSize, scale: this.currentSize.scale }
-      this.initialSize = newSize
-      this.trigger(Events.CONTAINER_RESIZE, newSize)
-    }
+    if (!isResize) return
+    this.currentSize = newSize
+    this.trigger(Events.CONTAINER_RESIZE, newSize)
   }
 
-  resize({ scale = 1, transitionSeconds }) {
-    const widthScaled = this.initialSize.width * scale
-    const heightScaled = this.initialSize.height * scale
-    const transition = transitionSeconds ? { transition: `all ${transitionSeconds}s ease` } : {}
-    const styles = { ...transition, width: widthScaled, height: heightScaled }
-    this.$el.css(styles)
-    this.currentSize.scale = scale
+  /**
+   * method called before resize the element
+   * @method onResize
+   * @param {Object} options the options object
+   * @return {UIObject} itself
+   */
+  onResize(options) {
+    this.playback.resize(options)
+    return this
   }
-
 
   /**
    * enables to configure the container after its creation
