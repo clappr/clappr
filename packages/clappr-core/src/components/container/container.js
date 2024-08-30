@@ -133,15 +133,6 @@ export default class Container extends UIObject {
     return this.playback.isPiPActive
   }
 
-  set initialSize({ width, height }) {
-    if (width === 0 || height === 0 || this._initialSize) return
-    this._initialSize = { width, height }
-  }
-
-  get initialSize() {
-    return this._initialSize
-  }
-
   /**
    * it builds a container
    * @method constructor
