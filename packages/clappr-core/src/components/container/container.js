@@ -291,10 +291,6 @@ export default class Container extends UIObject {
     this.$el.css(style)
   }
 
-  animate(style, duration) {
-    return this.$el.animate(style, duration).promise()
-  }
-
   ready() {
     this.isReady = true
     this.trigger(Events.CONTAINER_READY, this.name)
