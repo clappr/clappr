@@ -242,7 +242,7 @@ describe('Container', function() {
     const parameter = { anyParameter: 'parameter' }
     container.play(parameter)
     playback.trigger(Events.PLAYBACK_PLAY)
-    
+
     expect(container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PLAY, container.name, parameter)
   })
 
@@ -259,7 +259,7 @@ describe('Container', function() {
     const parameter = { anyParameter: 'parameter' }
     container.stop(parameter)
     playback.trigger(Events.PLAYBACK_STOP)
-    
+
     expect(container.trigger).toHaveBeenCalledWith(Events.CONTAINER_STOP, parameter)
   })
 
@@ -314,5 +314,14 @@ describe('Container', function() {
 
       expect(container.trigger).not.toHaveBeenCalled()
     })
+  })
+
+  test('resize', () => {
+    const data = { width: 100, height: 100 }
+    jest.spyOn(container, 'onResize')
+    jest.spyOn(playback, 'resize')
+    container.resize(data)
+    expect(container.onResize).toHaveBeenCalledWith(data)
+    expect(playback.resize).toHaveBeenCalledWith(data)
   })
 })
