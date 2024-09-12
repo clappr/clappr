@@ -143,6 +143,7 @@ export default class HlsjsPlayback extends HTML5Video {
   constructor(...args) {
     super(...args)
     this.options.hlsPlayback = { ...this.defaultOptions, ...this.options.hlsPlayback }
+    this._timeUpdateThrottleDelay = 200
     this._timeUpdateFiringRate = 0.2
     this._durationChangeMinOffset = 0.5
     this._setInitialState()
@@ -158,6 +159,7 @@ export default class HlsjsPlayback extends HTML5Video {
 
     this._playbackType = Playback.VOD
     this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
+    this._lastTimeUpdateFiredTime = 0
     this._lastDuration = null
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
@@ -438,13 +440,21 @@ export default class HlsjsPlayback extends HTML5Video {
 
   _onTimeUpdate() {
     const update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
+    const shouldThrottle = this._shouldThrottleTimeUpdate(update)
+    if (shouldThrottle) return
+    this._lastTimeUpdate = update
+    this._lastTimeUpdateFiredTime = this._now
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
+  }
+
+  _shouldThrottleTimeUpdate(update) {
     const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
     const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
     const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
-    const isSame = isSameTime && isSameDuration && isSameFirstFragDateTime
-    if (isSame) return
-    this._lastTimeUpdate = update
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
+    const isSameEventPayload = isSameTime && isSameDuration && isSameFirstFragDateTime
+    const isThrottled = this._now - this._lastTimeUpdateFiredTime < this._timeUpdateThrottleDelay
+
+    return isSameEventPayload && isThrottled
   }
 
   _onDurationChange() {

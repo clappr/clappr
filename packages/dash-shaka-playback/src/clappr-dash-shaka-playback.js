@@ -1,8 +1,9 @@
-import {HTML5Video, Log, Events, PlayerError} from 'clappr'
+import { HTML5Video, Log, Events, PlayerError, Utils } from 'clappr'
 import shaka from 'shaka-player'
 
 const SEND_STATS_INTERVAL_MS = 30 * 1e3
 const DEFAULT_LEVEL_AUTO = -1
+const { now } = Utils
 
 class DashShakaPlayback extends HTML5Video {
   static get Events () {
@@ -111,14 +112,20 @@ class DashShakaPlayback extends HTML5Video {
     return this._options.src
   }
 
+  get _now() {
+    return now()
+  }
+
   constructor (...args) {
     super(...args)
     this._levels = []
     this._pendingAdaptationEvent = false
     this._isShakaReadyState = false
     this._lastTimeUpdate = { current: 0, total: 0, firstFragDateTime: 0 }
+    this._timeUpdateThrottleDelay = 200
     this._timeUpdateFiringRate = 0.2
     this._durationChangeMinOffset = 0.5
+    this._lastTimeUpdateFiredTime = 0
 
     this._minDvrSize = typeof (this.options.shakaMinimumDvrSize) === 'undefined' ? 60 : this.options.shakaMinimumDvrSize
   }
@@ -415,13 +422,21 @@ class DashShakaPlayback extends HTML5Video {
     if (!this.shakaPlayerInstance) return
 
     const update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
+    const shouldThrottle = this._shouldThrottleTimeUpdate(update)
+    if (shouldThrottle) return
+    this._lastTimeUpdate = update
+    this._lastTimeUpdateFiredTime = this._now
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
+  }
+
+  _shouldThrottleTimeUpdate(update) {
     const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
     const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
     const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
-    const isSame = isSameTime && isSameDuration && isSameFirstFragDateTime
-    if (isSame) return
-    this._lastTimeUpdate = update
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
+    const isSameEventPayload = isSameTime && isSameDuration && isSameFirstFragDateTime
+    const isThrottled = this._now - this._lastTimeUpdateFiredTime < this._timeUpdateThrottleDelay
+
+    return isSameEventPayload && isThrottled
   }
 
   // skipping HTML5 `_handleBufferingEvents` in favor of shaka buffering events
