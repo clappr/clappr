@@ -438,13 +438,19 @@ export default class HlsjsPlayback extends HTML5Video {
 
   _onTimeUpdate() {
     const update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
-    const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
-    const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
-    const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
-    const isSame = isSameTime && isSameDuration && isSameFirstFragDateTime
+    const isSame = this._isSameTimeUpdate(update)
     if (isSame) return
     this._lastTimeUpdate = update
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
+  }
+
+  _isSameTimeUpdate(update) {
+    const isSameTime = Math.abs(update.current - this._lastTimeUpdate.current) < this._timeUpdateFiringRate
+    const isSameDuration = Math.abs(update.total - this._lastTimeUpdate.total) < this._durationChangeMinOffset
+    const isSameFirstFragDateTime = update.firstFragDateTime === this._lastTimeUpdate.firstFragDateTime
+    const isSameEventPayload = isSameTime && isSameDuration && isSameFirstFragDateTime
+
+    return isSameEventPayload
   }
 
   _onDurationChange() {
