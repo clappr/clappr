@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import $ from 'clappr-zepto'
-import { uniqueId, DomRecycler } from '../../utils/utils'
+import { uniqueId, DomRecycler, isNumber } from '../../utils/utils'
 import BaseObject from '../base_object/base_object'
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/
@@ -196,5 +196,29 @@ export default class UIObject extends BaseObject {
       this.setElement($el, false)
     } else { this.setElement(this.el, false) }
 
+  }
+
+  /**
+   * method called before resize the element
+   * @method onResize
+   * @return {UIObject} itself
+   */
+  onResize() {
+    return this
+  }
+
+  /**
+   * resize current element
+   * @method resize
+   * @param {Object} options the options object
+   * @return {UIObject} itself
+   */
+  resize(options) {
+    const newWidth = isNumber(options.width) ? `${options.width}px` : `${options.width}`
+    const newHeight = isNumber(options.height) ? `${options.height}px` : `${options.height}`
+    this.el.style.width = newWidth
+    this.el.style.height = newHeight
+    this.onResize(options)
+    return this
   }
 }

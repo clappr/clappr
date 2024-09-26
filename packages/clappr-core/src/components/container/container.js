@@ -11,9 +11,7 @@ import UIObject from '../../base/ui_object/ui_object'
 import ErrorMixin from '../../base/error_mixin/error_mixin'
 import Styler from '../../base/styler/styler'
 import { DoubleEventHandler } from '../../utils/utils'
-
 import ContainerStyle from './public/style.scss'
-
 import $ from 'clappr-zepto'
 
 /**
@@ -289,10 +287,6 @@ export default class Container extends UIObject {
 
   setStyle(style) {
     this.$el.css(style)
-  }
-
-  animate(style, duration) {
-    return this.$el.animate(style, duration).promise()
   }
 
   ready() {
@@ -579,10 +573,20 @@ export default class Container extends UIObject {
     const newSize = { width: this.el.clientWidth, height: this.el.clientHeight }
     const { width, height } = this.currentSize || {}
     const isResize = height !== newSize.height || width !== newSize.width
-    if (isResize) {
-      this.currentSize = newSize
-      this.trigger(Events.CONTAINER_RESIZE, newSize)
-    }
+    if (!isResize) return
+    this.currentSize = newSize
+    this.trigger(Events.CONTAINER_RESIZE, newSize)
+  }
+
+  /**
+   * method called before resize the element
+   * @method onResize
+   * @param {Object} options the options object
+   * @return {UIObject} itself
+   */
+  onResize(options) {
+    this.playback.resize(options)
+    return this
   }
 
   /**

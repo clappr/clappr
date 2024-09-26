@@ -1,5 +1,6 @@
 import Playback from './playback'
 import Core from '@/components/core'
+import Events from '../../base/events'
 import PlayerError from '@/components/error'
 
 const getProperty = (obj, prop) => {
@@ -253,7 +254,7 @@ describe('Playback', function() {
       })
 
       describe('when i18n is defined', () => {
-        
+
         beforeEach(() => { new Playback({}, core.i18n, core.playerError) })
 
         test('does not overwrite UI when it is defined', () => {
@@ -277,5 +278,15 @@ describe('Playback', function() {
 
       expect(spy).toHaveBeenCalledWith(defaultError)
     })
+  })
+
+  test('resize', () => {
+    const data = { width: 100, height: 100 }
+    let callback = jest.fn()
+    jest.spyOn(basePlayback, 'onResize')
+    basePlayback.on(Events.PLAYBACK_RESIZE, callback)
+    basePlayback.resize(data)
+    expect(basePlayback.onResize).toHaveBeenCalledWith(data)
+    expect(callback).toHaveBeenCalledWith(data)
   })
 })

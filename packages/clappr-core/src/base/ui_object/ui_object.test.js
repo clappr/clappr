@@ -202,4 +202,32 @@ describe('UIObject', () => {
 
     expect(myButton.myId).toEqual(1)
   })
+
+  describe('resize', () => {
+    let uiObject
+
+    beforeEach(() => {
+      uiObject = new UIObject()
+      jest.spyOn(uiObject,'onResize')
+    })
+
+    afterEach(() => {
+      uiObject.destroy()
+      jest.clearAllMocks()
+    })
+
+    test('should convert to pixels if parameters are numbers', () => {
+      uiObject.resize({ width: 100, height: 100 })
+      expect(uiObject.el.style.width).toEqual('100px')
+      expect(uiObject.el.style.height).toEqual('100px')
+      expect(uiObject.onResize).toHaveBeenCalledWith({ width: 100, height: 100 })
+    })
+
+    test('should remain as string if string was passed', () => {
+      uiObject.resize({ width: '100%', height: '100%' })
+      expect(uiObject.el.style.width).toEqual('100%')
+      expect(uiObject.el.style.height).toEqual('100%')
+      expect(uiObject.onResize).toHaveBeenCalledWith({ width: '100%', height: '100%' })
+    })
+  })
 })
