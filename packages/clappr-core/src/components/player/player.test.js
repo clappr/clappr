@@ -65,6 +65,293 @@ describe('Player', function() {
     })
   })
 
+  describe('attachTo', () => {
+    test('attaches the player to a given element', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      expect(player.options.parentElement).toBe(element)
+    })
+  })
+
+  describe('resize', () => {
+    test('resizes the player', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const newSize = { width: 800, height: 600 }
+      jest.spyOn(player.core, 'resize')
+      player.resize(newSize)
+      expect(player.core.resize).toHaveBeenCalledTimes(1)
+      expect(player.core.resize).toHaveBeenCalledWith(newSize)
+    })
+  })
+
+  describe('load', () => {
+    test('loads a new source', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const newSource = 'http://new-video.mp4'
+      const loadSpy = jest.spyOn(player.core, 'load')
+      player.load(newSource)
+      expect(loadSpy).toHaveBeenCalledTimes(1)
+      expect(loadSpy.mock.calls[0][0]).toBe(newSource)
+    })
+  })
+
+  describe('destroy', () => {
+    test('destroys the player and removes it from the DOM', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const destroySpy = jest.spyOn(player.core, 'destroy')
+      player.destroy()
+      expect(destroySpy).toHaveBeenCalledTimes(1)
+      expect(element.children.length).toBe(0)
+    })
+  })
+
+  describe('consent', () => {
+    test('gives user consent to playback', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const consentCallback = jest.fn()
+      const getCurrentPlaybackMock = {
+        consent: jest.fn(),
+      }
+      player.core.getCurrentPlayback = jest.fn(() => getCurrentPlaybackMock)
+      player.consent(consentCallback)
+      expect(getCurrentPlaybackMock.consent).toHaveBeenCalledTimes(1)
+      expect(getCurrentPlaybackMock.consent).toHaveBeenCalledWith(consentCallback)
+    })
+  })
+
+  describe('play', () => {
+    test('plays the current video', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const activeContainerMock = {
+        play: jest.fn(),
+      }
+      player.core.activeContainer = activeContainerMock
+      player.play()
+      expect(activeContainerMock.play).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('pause', () => {
+    test('pauses the current video', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const activeContainerMock = {
+        pause: jest.fn(),
+      }
+      player.core.activeContainer = activeContainerMock
+      player.pause()
+      expect(activeContainerMock.pause).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('stop', () => {
+    test('stops the current video', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const activeContainerMock = {
+        stop: jest.fn(),
+      }
+      player.core.activeContainer = activeContainerMock
+      player.stop()
+      expect(activeContainerMock.stop).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('seek', () => {
+    test('seeks the current video', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const activeContainerMock = {
+        seek: jest.fn(),
+      }
+      player.core.activeContainer = activeContainerMock
+      const time = 10
+      player.seek(time)
+      expect(activeContainerMock.seek).toHaveBeenCalledTimes(1)
+      expect(activeContainerMock.seek).toHaveBeenCalledWith(time)
+    })
+  })
+
+  describe('seekPercentage', () => {
+    test('seeks the current video by percentage', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const activeContainerMock = {
+        seekPercentage: jest.fn(),
+      }
+      player.core.activeContainer = activeContainerMock
+      const percentage = 50
+      player.seekPercentage(percentage)
+      expect(activeContainerMock.seekPercentage).toHaveBeenCalledTimes(1)
+      expect(activeContainerMock.seekPercentage).toHaveBeenCalledWith(percentage)
+    })
+  })
+
+  describe('mute', () => {
+    test('mutes the current video', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const coreMock = {
+        activePlayback: {
+          mute: jest.fn(),
+        },
+      }
+      player.core = coreMock
+      player.mute()
+      expect(coreMock.activePlayback.mute).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('unmute', () => {
+    test('unmutes the current video', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const coreMock = {
+        activePlayback: {
+          unmute: jest.fn(),
+        },
+      }
+      player.core = coreMock
+      player.unmute()
+      expect(coreMock.activePlayback.unmute).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('isPlaying', () => {
+    test('returns true if the current video is playing', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.isPlaying = jest.fn(() => true)
+      expect(player.isPlaying()).toBe(true)
+    })
+
+    test('returns false if the current video is not playing', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.isPlaying = jest.fn(() => false)
+      expect(player.isPlaying()).toBe(false)
+    })
+  })
+
+  describe('isDvrEnabled', () => {
+    test('returns true if DVR is enabled', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.isDvrEnabled = jest.fn(() => true)
+      expect(player.isDvrEnabled()).toBe(true)
+    })
+
+    test('returns false if DVR is not enabled', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.isDvrEnabled = jest.fn(() => false)
+      expect(player.isDvrEnabled()).toBe(false)
+    })
+  })
+
+  describe('isDvrInUse', () => {
+    test('returns true if DVR is in use', () => {
+      const player = new Player({ source: ' http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.isDvrInUse = jest.fn(() => true)
+      expect(player.isDvrInUse()).toBe(true)
+    })
+
+    test('returns false if DVR is not in use', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.isDvrInUse = jest.fn(() => false)
+      expect(player.isDvrInUse()).toBe(false)
+    })
+  })
+
+  describe('configure', () => {
+    test('updates the player options', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const coreMock = {
+        configure: jest.fn(),
+      }
+      player.core = coreMock
+      const newOptions = { autoPlay: true }
+      player.configure(newOptions)
+      expect(coreMock.configure).toHaveBeenCalledTimes(1)
+      expect(coreMock.configure).toHaveBeenCalledWith(newOptions)
+    })
+  })
+
+  describe('getPlugin', () => {
+    test('returns a plugin instance', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      const plugin = { name: 'fake' }
+      player.core.plugins = [plugin]
+      expect(player.getPlugin('fake')).toBe(plugin)
+    })
+
+    test('returns undefined if plugin is not found', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      expect(player.getPlugin('non-existent')).toBeUndefined()
+    })
+  })
+
+  describe('getCurrentTime', () => {
+    test('returns the current time', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.getCurrentTime = jest.fn(() => 10)
+      expect(player.getCurrentTime()).toBe(10)
+    })
+  })
+
+  describe('getStartTimeOffset', () => {
+    test('returns the start time offset', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.getStartTimeOffset = jest.fn(() => 10)
+      expect(player.getStartTimeOffset()).toBe(10)
+    })
+  })
+
+  describe('getDuration', () => {
+    test('returns the duration', () => {
+      const player = new Player({ source: 'http://video.mp4' })
+      const element = document.createElement('div')
+      player.attachTo(element)
+      player.core.activeContainer.getDuration = jest.fn(() => 10)
+      expect(player.getDuration()).toBe(10)
+    })
+  })
+
   describe('register options event listeners', () => {
     let player
     beforeEach(() => {
