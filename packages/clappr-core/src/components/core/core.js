@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import $ from 'clappr-zepto'
-import { isNumber, Fullscreen, DomRecycler } from '../../utils/utils'
+import { Fullscreen, DomRecycler } from '../../utils/utils'
 import Styler from '../../base/styler/styler'
 import Events from '../../base/events/events'
 import UIObject from '../../base/ui_object/ui_object'

@@ -16,6 +16,7 @@ describe('Loader', () => {
   })
 
   describe('checkVersionSupport function', () => {
+    // eslint-disable-next-line no-unused-vars
     let corePlugin, containerPlugin
     beforeEach(() => {
       corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
@@ -37,7 +38,7 @@ describe('Loader', () => {
     test('uses min version to stipulate the not informed max version', () => {
       const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
       const isClapprVersionSupported = Loader.checkVersionSupport(plugin)
-      
+
       expect(isClapprVersionSupported).toBeTruthy()
     })
 
