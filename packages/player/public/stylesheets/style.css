@@ -5,47 +5,42 @@ body {
 
 .header {
   position: relative;
-  margin: 0;
-  right: 0;
-  left: 0;
-  padding: 0 4%;
-  top: 0;
+  padding: 0 2rem;
   background-color: rgba(116, 116, 116, 1);
   color: #eee;
-  height: 50px;
+  height: 6rem;
   line-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
-.header span {
-  font-size: 30px;
-  font-weight: bold;
+.header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
 }
 
-.header img {
-  height: 45px;
+.header .logo {
+  height: 3rem;
+  width: fit-content;
 }
 
-.header ul {
-  right: 7%;
+.header .logo img {
+  height: 100%;
+  width: auto;
 }
 
-.header ul, .header li, .header a {
-  position: relative;
-  display: inline;
-  float: right;
-  color: #ddd;
-  margin: 0;
-  padding: 0;
-  outline: none;
+
+.header nav a:hover {
+  color: white;
+  text-decoration: underline;
+  
 }
 
-a:hover {
-  color: #aaa;
-  text-decoration: none;
-}
-
-.header a:visited, a:active, a:link {
+.header nav a:visited, a:active, a:link {
   color: #ddd;
   text-decoration: none;
 }
