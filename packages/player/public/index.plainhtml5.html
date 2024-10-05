@@ -36,7 +36,9 @@
 
 <body>
   <header class="header">
-    <span>Clappr</span>
+    <figure>
+      <img src="./i/clappr_logo_white.png" alt="Logo Clappr">
+    </figure>
     <ul>
       <li>
         <a href="http://clappr.github.io/">docs</a>
@@ -57,15 +59,15 @@
     <div class="sidebar">
       <div id="editor">var playerElement = document.getElementById("player-wrapper");
 
-var player = new Clappr.Player({
-  source: 'http://clappr.io/highline.mp4',
-  poster: 'http://clappr.io/poster.png',
-  mute: true,
-  height: 360,
-  width: 640
-});
+        var player = new Clappr.Player({
+        source: 'http://clappr.io/highline.mp4',
+        poster: 'http://clappr.io/poster.png',
+        mute: true,
+        height: 360,
+        width: 640
+        });
 
-player.attachTo(playerElement);
+        player.attachTo(playerElement);
       </div>
       <button class="run btn btn-primary">Run</button>
       <div id="console"> </div>
