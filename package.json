@@ -6,7 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "lerna run start --scope=@clappr/player"
+    "dev": "lerna run start --scope=@clappr/player",
+    "release": "lerna publish --yes"
   },
   "volta": {
     "node": "18.18.2",
