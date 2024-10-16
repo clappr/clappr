@@ -227,6 +227,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._hls.on(HLSJS.Events.LEVEL_SWITCHED, (evt,data) => this._onLevelSwitch(evt, data))
     this._hls.on(HLSJS.Events.FRAG_CHANGED, (evt, data) => this._onFragmentChanged(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
+    this._hls.on(HLSJS.Events.FRAG_BUFFERED, (evt, data) => this._onFragmentBuffered(evt, data))
     this._hls.on(HLSJS.Events.FRAG_PARSING_METADATA, (evt, data) => this._onFragmentParsingMetadata(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
@@ -658,6 +659,10 @@ export default class HlsjsPlayback extends HTML5Video {
 
   _onFragmentLoaded(evt, data) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
+  }
+
+  _onFragmentBuffered(evt, data) {
+    this.trigger(Events.PLAYBACK_FRAGMENT_BUFFERED, data)
   }
 
   _onSubtitleLoaded() {
