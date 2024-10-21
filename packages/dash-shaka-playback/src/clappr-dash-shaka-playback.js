@@ -404,6 +404,7 @@ class DashShakaPlayback extends HTML5Video {
     player.addEventListener('error', this._onError.bind(this))
     player.addEventListener('adaptation', this._onAdaptation.bind(this))
     player.addEventListener('buffering', this._handleShakaBufferingEvents.bind(this))
+    player.addEventListener('segmentappended', this._onFragmentBuffered.bind(this))
     return player
   }
 
@@ -457,6 +458,10 @@ class DashShakaPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_BUFFERFULL)
     if (this._isSeeking) this._onSeeked()
     if (this.isPlaying()) this._onPlaying()
+  }
+
+  _onFragmentBuffered() {
+    this.trigger(Events.PLAYBACK_FRAGMENT_BUFFERED)
   }
 
   _loaded () {
