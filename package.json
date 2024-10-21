@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "lerna run start --scope=@clappr/player",
-    "release": "lerna publish --yes",
+    "release": "lerna publish --include-merged-tags --yes",
     "prepare": "husky"
   },
   "volta": {
