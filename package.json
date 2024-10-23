@@ -7,8 +7,10 @@
   ],
   "scripts": {
     "dev": "lerna run start --scope=@clappr/player",
+    "lint": "lerna run lint --scope=@clappr/{core,plugins}",
     "release": "lerna publish --include-merged-tags --yes",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "lerna run test --scope=@clappr/core"
   },
   "volta": {
     "node": "18.18.2",
