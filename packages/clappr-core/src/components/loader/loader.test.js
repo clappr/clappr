@@ -16,9 +16,9 @@ describe('Loader', () => {
   })
 
   describe('checkVersionSupport function', () => {
-    let corePlugin, containerPlugin
+    let containerPlugin
     beforeEach(() => {
-      corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
+      CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
       containerPlugin = ContainerPlugin.extend({ name: 'container-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
     })
 
@@ -37,7 +37,7 @@ describe('Loader', () => {
     test('uses min version to stipulate the not informed max version', () => {
       const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
       const isClapprVersionSupported = Loader.checkVersionSupport(plugin)
-      
+
       expect(isClapprVersionSupported).toBeTruthy()
     })
 
