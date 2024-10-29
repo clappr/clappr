@@ -2423,16 +2423,6 @@
     "@commitlint/types" "^19.5.0"
     conventional-changelog-conventionalcommits "^7.0.2"
 
-"@commitlint/config-lerna-scopes@^19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/config-lerna-scopes/-/config-lerna-scopes-19.5.0.tgz#83762dce983274b89443c93fab742c5f430cdc7b"
-  integrity sha512-h89BuwLVinacPOu2hzBKJ4t/L/HOA7rUuzbS10k26Lzq2/OKpi/KEhNfphJJLizfeqOzjqh1/V3ILbePtaBUtg==
-  dependencies:
-    "@lerna/project" "^6.0.0"
-    glob "^10.3.10"
-    import-from "^4.0.0"
-    semver "^7.6.0"
-
 "@commitlint/config-validator@^17.6.7":
   version "17.6.7"
   resolved "https://registry.yarnpkg.com/@commitlint/config-validator/-/config-validator-17.6.7.tgz#c664d42a1ecf5040a3bb0843845150f55734df41"
@@ -3714,41 +3704,6 @@
     write-pkg "4.0.0"
     yargs "17.7.2"
     yargs-parser "21.1.1"
-
-"@lerna/package@6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@lerna/package/-/package-6.4.1.tgz#ebbd4c5f58f4b6cf77019271a686be9585272a3b"
-  integrity sha512-TrOah58RnwS9R8d3+WgFFTu5lqgZs7M+e1dvcRga7oSJeKscqpEK57G0xspvF3ycjfXQwRMmEtwPmpkeEVLMzA==
-  dependencies:
-    load-json-file "^6.2.0"
-    npm-package-arg "8.1.1"
-    write-pkg "^4.0.0"
-
-"@lerna/project@^6.0.0":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@lerna/project/-/project-6.4.1.tgz#0519323aa8bde5b73fc0bf1c428385a556a445f0"
-  integrity sha512-BPFYr4A0mNZ2jZymlcwwh7PfIC+I6r52xgGtJ4KIrIOB6mVKo9u30dgYJbUQxmSuMRTOnX7PJZttQQzSda4gEg==
-  dependencies:
-    "@lerna/package" "6.4.1"
-    "@lerna/validation-error" "6.4.1"
-    cosmiconfig "^7.0.0"
-    dedent "^0.7.0"
-    dot-prop "^6.0.1"
-    glob-parent "^5.1.1"
-    globby "^11.0.2"
-    js-yaml "^4.1.0"
-    load-json-file "^6.2.0"
-    npmlog "^6.0.2"
-    p-map "^4.0.0"
-    resolve-from "^5.0.0"
-    write-json-file "^4.3.0"
-
-"@lerna/validation-error@6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@lerna/validation-error/-/validation-error-6.4.1.tgz#2cab92c2be395158c3d65fa57ddb73892617d7e8"
-  integrity sha512-fxfJvl3VgFd7eBfVMRX6Yal9omDLs2mcGKkNYeCEyt4Uwlz1B5tPAXyk/sNMfkKV2Aat/mlK5tnY13vUrMKkyA==
-  dependencies:
-    npmlog "^6.0.2"
 
 "@mdx-js/mdx@^1.6.22":
   version "1.6.22"
@@ -7994,7 +7949,7 @@ cosmiconfig@^6.0.0:
     path-type "^4.0.0"
     yaml "^1.7.2"
 
-cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
+cosmiconfig@^7.0.1:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-7.1.0.tgz#1443b9afa596b670082ea46cbd8f6a62b84635f6"
   integrity sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==
@@ -8462,7 +8417,7 @@ decompress-response@^3.3.0:
   dependencies:
     mimic-response "^1.0.0"
 
-dedent@0.7.0, dedent@^0.7.0:
+dedent@0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
   integrity sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==
@@ -8664,7 +8619,7 @@ detect-file@^1.0.0:
   resolved "https://registry.yarnpkg.com/detect-file/-/detect-file-1.0.0.tgz#f0d66d03672a825cb1b73bdb3fe62310c8e552b7"
   integrity sha512-DtCOLG98P007x7wiiOmfI0fi3eIKyWiLTGJ2MDnVi/E04lWGbf+JzrRHMm0rgIIZJGtHpKpbVgLWHrv8xXpc3Q==
 
-detect-indent@6.1.0, detect-indent@^6.0.0:
+detect-indent@6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-6.1.0.tgz#592485ebbbf6b3b1ab2be175c8393d04ca0d57e6"
   integrity sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==
@@ -8890,13 +8845,6 @@ dot-prop@^5.1.0, dot-prop@^5.2.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-5.3.0.tgz#90ccce708cd9cd82cc4dc8c3ddd9abdd55b20e88"
   integrity sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
-  dependencies:
-    is-obj "^2.0.0"
-
-dot-prop@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-6.0.1.tgz#fc26b3cf142b9e59b74dbd39ed66ce620c681083"
-  integrity sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==
   dependencies:
     is-obj "^2.0.0"
 
@@ -10650,7 +10598,7 @@ glob-parent@^3.1.0:
     is-glob "^3.1.0"
     path-dirname "^1.0.0"
 
-glob-parent@^5.1.1, glob-parent@^5.1.2, glob-parent@~5.1.2:
+glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
   integrity sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==
@@ -10825,7 +10773,7 @@ globalthis@^1.0.3:
     define-properties "^1.2.1"
     gopd "^1.0.1"
 
-globby@11.1.0, globby@^11.0.1, globby@^11.0.2, globby@^11.0.4, globby@^11.1.0:
+globby@11.1.0, globby@^11.0.1, globby@^11.0.4, globby@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/globby/-/globby-11.1.0.tgz#bd4be98bb042f83d796f7e3811991fbe82a0d34b"
   integrity sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==
@@ -11213,13 +11161,6 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
   integrity sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
 
-hosted-git-info@^3.0.6:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-3.0.8.tgz#6e35d4cc87af2c5f816e4cb9ce350ba87a3f370d"
-  integrity sha512-aXpmwoOhRBrw6X3j0h5RloK4x1OzsxMPyxqIHyNfSe2pypkVTZFpEiRoSipPEPlMrh0HW/XsjkJ5WgnCirpNUw==
-  dependencies:
-    lru-cache "^6.0.0"
-
 hosted-git-info@^4.0.0, hosted-git-info@^4.0.1:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-4.1.0.tgz#827b82867e9ff1c8d0c4d9d53880397d2c86d224"
@@ -11594,11 +11535,6 @@ import-from@^3.0.0:
   integrity sha512-CiuXOFFSzkU5x/CR0+z7T91Iht4CXgfCxVOFRhh2Zyhg5wOpWvvDLQUsWl+gcN+QscYBjez8hDCt85O7RLDttQ==
   dependencies:
     resolve-from "^5.0.0"
-
-import-from@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/import-from/-/import-from-4.0.0.tgz#2710b8d66817d232e16f4166e319248d3d5492e2"
-  integrity sha512-P9J71vT5nLlDeV8FHs5nNxaLbrpfAV5cF5srvbZfpwpcJoM/xZR3hiv+q+SAnuSmuGbXMWud063iIMx/V/EWZQ==
 
 import-lazy@^2.1.0:
   version "2.1.0"
@@ -13787,7 +13723,7 @@ livereload@^0.9.1:
     opts ">= 1.2.0"
     ws "^7.4.3"
 
-load-json-file@6.2.0, load-json-file@^6.2.0:
+load-json-file@6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-6.2.0.tgz#5c7770b42cafa97074ca2848707c61662f4251a1"
   integrity sha512-gUD/epcRms75Cw8RT1pUdHugZYM5ce64ucs2GEISABwkRsOQr0q2wm/MV2TKThycIe5e0ytRweW2RZxclogCdQ==
@@ -15246,15 +15182,6 @@ npm-package-arg@11.0.2:
     semver "^7.3.5"
     validate-npm-package-name "^5.0.0"
 
-npm-package-arg@8.1.1:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/npm-package-arg/-/npm-package-arg-8.1.1.tgz#00ebf16ac395c63318e67ce66780a06db6df1b04"
-  integrity sha512-CsP95FhWQDwNqiYS+Q0mZ7FAEDytDZAkNxQqea6IaAFJTAY9Lhhqyl0irU/6PMc7BGfUmnsbHcqxJD7XuVM/rg==
-  dependencies:
-    hosted-git-info "^3.0.6"
-    semver "^7.0.0"
-    validate-npm-package-name "^3.0.0"
-
 npm-package-arg@^10.0.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/npm-package-arg/-/npm-package-arg-10.1.0.tgz#827d1260a683806685d17193073cc152d3c7e9b1"
@@ -15401,7 +15328,7 @@ npmlog@^4.1.2:
     gauge "~2.7.3"
     set-blocking "~2.0.0"
 
-npmlog@^6.0.0, npmlog@^6.0.2:
+npmlog@^6.0.0:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-6.0.2.tgz#c8166017a42f2dea92d6453168dd865186a70830"
   integrity sha512-/vBvz5Jfr9dT/aFWd0FIRf+T/Q2WBsLENygUaFUqstqsycmZAP/t5BvFJTK0viFmSUxiUKTUplWy5vt+rvKIxg==
@@ -18625,13 +18552,6 @@ sort-keys@^2.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
-sort-keys@^4.0.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-4.2.0.tgz#6b7638cee42c506fff8c1cecde7376d21315be18"
-  integrity sha512-aUYIEU/UviqPgc8mHR6IW1EGxkAXpeRETYcrzg8cLAvUPZcpAlleSXHV2mY7G12GphSH6Gzv+4MMVSSkbdteHg==
-  dependencies:
-    is-plain-obj "^2.0.0"
-
 source-list-map@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
@@ -20886,19 +20806,7 @@ write-json-file@^3.2.0:
     sort-keys "^2.0.0"
     write-file-atomic "^2.4.2"
 
-write-json-file@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/write-json-file/-/write-json-file-4.3.0.tgz#908493d6fd23225344af324016e4ca8f702dd12d"
-  integrity sha512-PxiShnxf0IlnQuMYOPPhPkhExoCQuTUNPOa/2JWCYTmBquU9njyyDuwRKN26IZBlp4yn1nt+Agh2HOOBl+55HQ==
-  dependencies:
-    detect-indent "^6.0.0"
-    graceful-fs "^4.1.15"
-    is-plain-obj "^2.0.0"
-    make-dir "^3.0.0"
-    sort-keys "^4.0.0"
-    write-file-atomic "^3.0.0"
-
-write-pkg@4.0.0, write-pkg@^4.0.0:
+write-pkg@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/write-pkg/-/write-pkg-4.0.0.tgz#675cc04ef6c11faacbbc7771b24c0abbf2a20039"
   integrity sha512-v2UQ+50TNf2rNHJ8NyWttfm/EJUBWMJcx6ZTYZr6Qp52uuegWw/lBkCtCbnYZEmPRNL61m+u67dAmGxo+HTULA==
