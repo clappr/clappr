@@ -14,7 +14,8 @@
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
     "start": "rollup -c rollup.config.dev.js --watch",
-    "commitzen": "git-cz"
+    "commitzen": "git-cz",
+    "prepublishOnly": "npm run release"
   },
   "files": [
     "/dist",
