@@ -22,7 +22,8 @@
   },
   "files": [
     "/dist",
-    "/src"
+    "/src",
+    "/types"
   ],
   "publishConfig": {
     "access": "public"
