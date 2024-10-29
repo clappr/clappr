@@ -21,6 +21,6 @@
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/config-lerna-scopes": "^19.5.0",
     "husky": "^9.1.6",
-    "lerna": "^7.2.0"
+    "lerna": "^8.1.8"
   }
 }
