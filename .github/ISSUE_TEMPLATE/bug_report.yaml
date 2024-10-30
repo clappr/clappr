@@ -1,0 +1,59 @@
+name: Bug Report
+description: Create a report to help us improve
+labels: [bug]
+title: "[BUG]: "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: What version of Clappr are you using?
+      placeholder: e.g. X.Y.Z
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: What browser (including version) are you using?
+      placeholder: e.g. Chrome 91.0.4472.106 (Official Build) (x86_64)
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: What OS (including version) are you using?
+      placeholder: e.g. Windows 10
+    validations:
+      required: true
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Configuration
+      description: Please provide the player configuration.
+      placeholder: |
+        {
+          source: 'http://clappr.io/bad_highline.mp4',
+          height: 360,
+          width: 640,
+        }
+      render: JavaScript
+    validations:
+      required: true
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Please provide clear steps to reproduce your problem.  If the bug is intermittent, give a rough frequency.
+      value: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: The issue occurs in the latest clappr main branch and not just on my page
+          required: true
+        - label: The issue observed is not already reported by searching on Github under https://github.com/clappr/clappr/issues
+          required: true
