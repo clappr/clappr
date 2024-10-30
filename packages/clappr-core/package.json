@@ -1,13 +1,13 @@
 {
   "name": "@clappr/core",
-  "version": "0.10.0",
+  "version": "0.11.3",
   "description": "Core components of the extensible media player for the web",
   "main": "./dist/clappr-core.js",
   "module": "./dist/clappr-core.esm.js",
   "types": "./types/main.d.ts",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs && tsc",
     "build": "rollup --config --bundleConfigAsCjs && tsc",
     "watch": "rollup --config --watch --bundleConfigAsCjs",
     "test": "jest /src --coverage --silent",
@@ -22,7 +22,8 @@
   },
   "files": [
     "/dist",
-    "/src"
+    "/src",
+    "/types"
   ],
   "publishConfig": {
     "access": "public"

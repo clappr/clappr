@@ -549,6 +549,14 @@ Events.PLAYBACK_ERROR = 'playback:error'
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 // TODO doc
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
+/**
+ *  Fired when a fragment has been appended into buffer
+ *
+ * @event PLAYBACK_FRAGMENT_BUFFERED
+ * @param {Object} data Data
+ * 
+ */
+Events.PLAYBACK_FRAGMENT_BUFFERED = 'playback:fragment:buffered'
 // TODO doc
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 /**

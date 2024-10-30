@@ -6,13 +6,20 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "lerna run start --scope=@clappr/player"
+    "dev": "lerna run start --scope=@clappr/player",
+    "lint": "lerna run lint --scope=@clappr/{core,plugins}",
+    "release": "lerna publish --include-merged-tags --yes",
+    "prepare": "husky",
+    "test": "lerna run test --scope=@clappr/core"
   },
   "volta": {
     "node": "18.18.2",
     "yarn": "1.22.19"
   },
   "devDependencies": {
-    "lerna": "^7.2.0"
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "husky": "^9.1.6",
+    "lerna": "^8.1.8"
   }
 }

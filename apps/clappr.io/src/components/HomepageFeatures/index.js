@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Translate from '@docusaurus/Translate'
 import clsx from 'clsx'
 import styles from './styles.module.css'
@@ -39,11 +39,11 @@ const FeatureList = [
   },
 ]
 
-function Feature({ Svg, title, description }) {
+const Feature = memo(function Feature ({ Svg, title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <Svg className={styles.featureSvg} role="img" aria-label={typeof title === 'string' ? title : 'Feature icon'} />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
@@ -51,15 +51,18 @@ function Feature({ Svg, title, description }) {
       </div>
     </div>
   )
-}
+})
 
 export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
+          {/* {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
+          ))} */}
+          {FeatureList.map(({ Svg, title, description }, idx) => (
+            <Feature key={idx} Svg={Svg} title={title} description={description} />
           ))}
         </div>
       </div>

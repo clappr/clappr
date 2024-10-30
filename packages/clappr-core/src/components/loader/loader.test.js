@@ -16,10 +16,9 @@ describe('Loader', () => {
   })
 
   describe('checkVersionSupport function', () => {
-    // eslint-disable-next-line no-unused-vars
-    let corePlugin, containerPlugin
+    let containerPlugin
     beforeEach(() => {
-      corePlugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
+      CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
       containerPlugin = ContainerPlugin.extend({ name: 'container-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
     })
 
