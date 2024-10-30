@@ -3,7 +3,7 @@
 <p align=center>
   <a href="https://badge.fury.io/js/%40clappr%2Fplayer"><img src="https://badge.fury.io/js/%40clappr%2Fplayer.svg"></a>
   <a href="https://bundlephobia.com/result?p=@clappr/player@latest"><img src="https://img.shields.io/bundlephobia/min/@clappr/player"></a>
-  <a href="https://app.travis-ci.com/github/clappr/clappr"><img src="https://travis-ci.com/clappr/clappr.svg?branch=dev"></a>
+  <a href="https://app.travis-ci.com/github/clappr/clappr"><img src="https://api.travis-ci.com/clappr/clappr.svg?branch=dev"></a>
   <a href="https://github.com/clappr/clappr/blob/dev/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
   <a href="https://www.jsdelivr.com/package/npm/@clappr/player"><img alt="jsDelivr hits (npm scoped)" src="https://img.shields.io/jsdelivr/npm/hm/@clappr/player?color=orange"></a>
 </p>
