@@ -79,12 +79,12 @@ describe('Utils', () => {
 
   describe('formatTime module', () => {
     test('converts seconds to time string format', () => {
-      expect(utils.formatTime(1)).toEqual('00:01')
-      expect(utils.formatTime(10)).toEqual('00:10')
-      expect(utils.formatTime(60 * 10 + 15)).toEqual('10:15')
-      expect(utils.formatTime(60 * 60 * 12)).toEqual('12:00:00')
-      expect(utils.formatTime(60 * 60 * 24)).toEqual('1:00:00:00')
-      expect(utils.formatTime(60 * 60 * 27)).toEqual('1:03:00:00')
+      expect(utils.formatTime(1)).toEqual('00:01.00')
+      expect(utils.formatTime(10)).toEqual('00:10.00')
+      expect(utils.formatTime(60 * 10 + 15)).toEqual('10:15.00')
+      expect(utils.formatTime(60 * 60 * 12)).toEqual('12:00:00.00')
+      expect(utils.formatTime(60 * 60 * 24)).toEqual('1:00:00:00.00')
+      expect(utils.formatTime(60 * 60 * 27)).toEqual('1:03:00:00.00')
       expect(utils.formatTime(1000/0)).toEqual('--:--')
     })
   })

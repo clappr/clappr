@@ -54,8 +54,8 @@ export function formatTime(time, paddedHours) {
   if (!isFinite(time)) return '--:--'
 
   time = time * 1000
-  time = parseInt(time/1000)
-  const seconds = time % 60
+  time = parseFloat(time/1000)
+  const seconds = (time % 60).toFixed(2)
   time = parseInt(time/60)
   const minutes = time % 60
   time = parseInt(time/60)
@@ -68,7 +68,7 @@ export function formatTime(time, paddedHours) {
   }
   if (hours && hours > 0 || paddedHours) out += ('0' + hours).slice(-2) + ':'
   out += ('0' + minutes).slice(-2) + ':'
-  out += ('0' + seconds).slice(-2)
+  out += ('0' + seconds).slice(-5)
   return out.trim()
 }
 
