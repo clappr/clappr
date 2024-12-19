@@ -154,10 +154,12 @@ Kibo.prototype.initialize = function() {
 
   Kibo.registerEvent(this.element, 'keydown', this.downHandler);
   Kibo.registerEvent(this.element, 'keyup', this.upHandler);
-  Kibo.registerEvent(window, 'unload', function unloader() {
+
+  var unloadEvent = typeof window.onbeforeunload === 'object' ? 'beforeunload' : 'unload'
+  Kibo.registerEvent(window, unloadEvent, function unloader() {
     Kibo.unregisterEvent(that.element, 'keydown', that.downHandler);
     Kibo.unregisterEvent(that.element, 'keyup', that.upHandler);
-    Kibo.unregisterEvent(window, 'unload', unloader);
+    Kibo.unregisterEvent(window, unloadEvent, unloader);
   });
 };
 
