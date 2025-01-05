@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.4](https://github.com/clappr/clappr-core/compare/@clappr/core@0.11.3...@clappr/core@0.11.4) (2025-01-05)
+
+
+### Bug Fixes
+
+* **core:** use playback element when no inner video tag is available ([c7fcec9](https://github.com/clappr/clappr-core/commit/c7fcec9bfda181095e4af88eed882498aafe38fb))
+
+
+
+
+
 ## [0.11.3](https://github.com/clappr/clappr-core/compare/@clappr/core@0.11.2...@clappr/core@0.11.3) (2024-10-29)
 
 **Note:** Version bump only for package @clappr/core
