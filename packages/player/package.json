@@ -13,7 +13,7 @@
     "start": "DEV=true rollup --config --watch",
     "test": "echo 'No tests configured. This project is only for bundling the player components.'",
     "watch": "rollup --config --watch",
-    "prepublishOnly": "npm run release"
+    "prepublishOnly": "lerna run release --scope=@clappr/player"
   },
   "files": [
     "/dist",
