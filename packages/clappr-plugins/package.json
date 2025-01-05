@@ -15,7 +15,7 @@
     "lint:fix": "npm run lint -- --fix",
     "start": "rollup -c rollup.config.dev.js --watch",
     "commitzen": "git-cz",
-    "prepublishOnly": "npm run release"
+    "prepublishOnly": "lerna run release --scope=@clappr/plugins"
   },
   "files": [
     "/dist",
