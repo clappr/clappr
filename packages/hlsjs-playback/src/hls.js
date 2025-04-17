@@ -44,6 +44,10 @@ export default class HlsjsPlayback extends HTML5Video {
     return this._hls.latency
   }
 
+  get liveSyncPosition() {
+    return this._hls.liveSyncPosition
+  }
+
   get currentProgramDateTime() {
     return this._hls.playingDate
   }
