@@ -256,8 +256,8 @@ export default class Core extends UIObject {
     const orientation = (window.innerWidth > window.innerHeight) ? 'landscape' : 'portrait'
     if (this._screenOrientation === orientation) return
     this._screenOrientation = orientation
-    const width = this.el.clientWidth || this.options.width;
-    const height = this.el.clientHeight || this.options.height;
+    const width = this.el.clientWidth || this.options.width
+    const height = this.el.clientHeight || this.options.height
     this.triggerResize({ width: width, height: height })
     this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
