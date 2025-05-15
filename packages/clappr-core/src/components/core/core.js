@@ -183,7 +183,9 @@ export default class Core extends UIObject {
   enableResizeObserver() {
     this.disableResizeObserver()
     const checkSizeCallback = () => {
-      this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
+      const width = this.el.clientWidth ?? this.options.width
+      const height = this.el.clientHeight ?? this.options.height
+      this.triggerResize({ width, height })
     }
     this.resizeObserverInterval = setInterval(checkSizeCallback, 500)
   }
@@ -254,7 +256,9 @@ export default class Core extends UIObject {
     const orientation = (window.innerWidth > window.innerHeight) ? 'landscape' : 'portrait'
     if (this._screenOrientation === orientation) return
     this._screenOrientation = orientation
-    this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
+    const width = this.el.clientWidth ?? this.options.width
+    const height = this.el.clientHeight ?? this.options.height
+    this.triggerResize({ width, height })
     this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
       orientation: this._screenOrientation
