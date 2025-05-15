@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.5](https://github.com/clappr/clappr-core/compare/@clappr/core@0.11.4...@clappr/core@0.11.5) (2025-05-15)
+
+**Note:** Version bump only for package @clappr/core
+
+
+
+
+
 ## [0.11.4](https://github.com/clappr/clappr-core/compare/@clappr/core@0.11.3...@clappr/core@0.11.4) (2025-01-05)
 
 
