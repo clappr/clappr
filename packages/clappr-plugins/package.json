@@ -1,6 +1,6 @@
 {
   "name": "@clappr/plugins",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Main plugins for the Clappr project",
   "main": "./dist/clappr-plugins.js",
   "module": "./dist/clappr-plugins.esm.js",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.17",
     "@babel/preset-env": "^7.22.15",
-    "@clappr/core": "^0.11.4",
+    "@clappr/core": "^0.11.5",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.2",
