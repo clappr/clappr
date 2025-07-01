@@ -610,6 +610,15 @@ Events.CORE_CONTAINERS_CREATED = 'core:containers:created'
  * @event CORE_ACTIVE_CONTAINER_CHANGED
  */
 Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed'
+
+/**
+   * Fired before options are changed in core
+   *
+   * @event CORE_OPTIONS_WILL_CHANGE
+   * @param {Object} current options before change
+   */
+Events.CORE_OPTIONS_WILL_CHANGE = 'core:options:will:change'
+
 /**
  * Fired when the options were changed for the core
  *

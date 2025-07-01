@@ -364,6 +364,9 @@ export default class Core extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
+    const oldOptions = $.extend(true, {}, this._options)
+    this.trigger(Events.CORE_OPTIONS_WILL_CHANGE, oldOptions) // Trigger with oldOptions
+
     this._options = $.extend(true, this._options, options)
     this.configureDomRecycler()
 
