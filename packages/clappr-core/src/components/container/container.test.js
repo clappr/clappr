@@ -86,6 +86,34 @@ describe('Container', function() {
     expect(playback.options.foo).toEqual(fakeOptions.foo)
   })
 
+  test('should trigger options will change event', () => {
+    let callback = jest.fn()
+    container.on(Events.CONTAINER_OPTIONS_WILL_CHANGE, callback)
+
+    const newOptions = {
+      autoPlay: false
+    }
+    container.configure(newOptions)
+  
+    expect(callback).toHaveBeenCalled()
+  })
+  
+  test('should trigger both events in correct order', () => {
+    const eventOrder = []
+
+    container.on(Events.CONTAINER_OPTIONS_WILL_CHANGE, () => {
+      eventOrder.push('will_change')
+    })
+
+    container.on(Events.CONTAINER_OPTIONS_CHANGE, () => {
+      eventOrder.push('change')
+    })
+
+    container.configure({ autoPlay: false })
+
+    expect(eventOrder).toEqual(['will_change', 'change'])
+  })
+
   test('listens to playback:progress event', () => {
     jest.spyOn(container, 'onProgress')
 
