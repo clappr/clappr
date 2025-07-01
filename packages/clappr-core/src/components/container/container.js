@@ -593,8 +593,11 @@ export default class Container extends UIObject {
    * enables to configure the container after its creation
    * @method configure
    * @param {Object} options all the options to change in form of a javascript object
+   * @param {Object} oldOptions previous options
    */
-  configure(options) {
+  configure(options, oldOptions) {
+    this.trigger(Events.CONTAINER_OPTIONS_WILL_CHANGE, oldOptions)
+
     this._options = $.extend(true, this._options, options)
     this.updateStyle()
     this.playback.configure(this.options)

@@ -874,6 +874,14 @@ Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
 Events.CONTAINER_STATS_ADD = 'container:stats:add'
 /**
+ * Fired before options are changed in container
+ *
+ * @event CONTAINER_OPTIONS_WILL_CHANGE
+ * @param {Object} current options before change
+ */
+Events.CONTAINER_OPTIONS_WILL_CHANGE = 'container:options:will:change'
+
+/**
  * Fired when the options were changed for the container
  *
  * @event CONTAINER_OPTIONS_CHANGE
