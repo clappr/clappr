@@ -43,6 +43,34 @@ describe('Core', function() {
       expect(callback).toHaveBeenCalled()
       expect(core.options.autoPlay).toEqual(newOptions.autoPlay)
     })
+
+    test('should trigger options will change event', () => {
+      let callback = jest.fn()
+      core.on(Events.CORE_OPTIONS_WILL_CHANGE, callback)
+
+      const newOptions = {
+        autoPlay: false
+      }
+      core.configure(newOptions)
+
+      expect(callback).toHaveBeenCalled()
+    })
+
+    test('should trigger both events in correct order', () => {
+      const eventOrder = []
+      
+      core.on(Events.CORE_OPTIONS_WILL_CHANGE, () => {
+        eventOrder.push('will_change')
+      })
+      
+      core.on(Events.CORE_OPTIONS_CHANGE, () => {
+        eventOrder.push('change')
+      })
+
+      core.configure({ autoPlay: false })
+
+      expect(eventOrder).toEqual(['will_change', 'change'])
+    })
   })
 
   describe('#isFullscreen', () => {
