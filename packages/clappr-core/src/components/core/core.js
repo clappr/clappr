@@ -365,7 +365,7 @@ export default class Core extends UIObject {
    */
   configure(options) {
     const oldOptions = $.extend(true, {}, this._options)
-    this.trigger(Events.CORE_OPTIONS_WILL_CHANGE, oldOptions) // Trigger with oldOptions
+    this.trigger(Events.CORE_OPTIONS_WILL_CHANGE, oldOptions)
 
     this._options = $.extend(true, this._options, options)
     this.configureDomRecycler()
@@ -373,7 +373,7 @@ export default class Core extends UIObject {
     const sources = options.source || options.sources
     sources && this.load(sources, options.mimeType || this.options.mimeType)
 
-    this.trigger(Events.CORE_OPTIONS_CHANGE, options) // Trigger with newly provided options
+    this.trigger(Events.CORE_OPTIONS_CHANGE, options)
     this.containers.forEach((container) => container.configure(this.options, oldOptions))
   }
 
