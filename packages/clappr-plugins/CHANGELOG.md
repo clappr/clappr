@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.7](https://github.com/clappr/clappr-plugins/compare/@clappr/plugins@0.8.6...@clappr/plugins@0.8.7) (2025-07-02)
+
+**Note:** Version bump only for package @clappr/plugins
+
+
+
+
+
 ## [0.8.6](https://github.com/clappr/clappr-plugins/compare/@clappr/plugins@0.8.5...@clappr/plugins@0.8.6) (2025-05-15)
 
 **Note:** Version bump only for package @clappr/plugins

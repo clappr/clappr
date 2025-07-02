@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/clappr/clappr-core/compare/@clappr/core@0.11.5...@clappr/core@0.12.0) (2025-07-02)
+
+
+### Features
+
+* add CONTAINER_OPTIONS_WILL_CHANGE event to notify before options change ([4dbeac5](https://github.com/clappr/clappr-core/commit/4dbeac5ebcba6f2ff12a93a43e70e9cda7ae982f))
+* add CORE_OPTIONS_WILL_CHANGE event to track configuration changes ([a355c50](https://github.com/clappr/clappr-core/commit/a355c50f2db1ad146fa73a067e404f64fde57f34))
+
+
+
+
+
 ## [0.11.5](https://github.com/clappr/clappr-core/compare/@clappr/core@0.11.4...@clappr/core@0.11.5) (2025-05-15)
 
 **Note:** Version bump only for package @clappr/core
