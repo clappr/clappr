@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+public/
+
+# Package files
+*.min.js
+*.min.css
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Cache
+.cache/
+
+# Lerna
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
