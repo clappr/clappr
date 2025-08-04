@@ -9,6 +9,8 @@
     "dev": "lerna run start --scope=@clappr/player",
     "lint": "eslint packages/*/src/",
     "lint:fix": "eslint packages/*/src/ --fix",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
     "release": "lerna publish --include-merged-tags --yes",
     "prepare": "husky",
     "test": "lerna run test --scope=@clappr/core"
@@ -21,6 +23,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "husky": "^9.1.6",
-    "lerna": "^8.1.8"
+    "lerna": "^8.1.8",
+    "prettier": "^3.6.2"
   }
 }
