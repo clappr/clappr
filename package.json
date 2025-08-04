@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "dev": "lerna run start --scope=@clappr/player",
-    "lint": "lerna run lint --scope=@clappr/{core,plugins}",
+    "lint": "eslint packages/*/src/",
+    "lint:fix": "eslint packages/*/src/ --fix",
     "release": "lerna publish --include-merged-tags --yes",
     "prepare": "husky",
     "test": "lerna run test --scope=@clappr/core"
