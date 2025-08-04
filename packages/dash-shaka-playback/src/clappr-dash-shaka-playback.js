@@ -38,7 +38,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get seekRange() {
-    if (!this.shakaPlayerInstance) return { start: 0, end: 0}
+    if (!this.shakaPlayerInstance) return { start: 0, end: 0 }
 
     return this.shakaPlayerInstance.seekRange()
   }
@@ -49,12 +49,11 @@ class DashShakaPlayback extends HTML5Video {
 
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
     if (!isAuto) {
-      this._player.configure({abr: {enabled: false}})
+      this._player.configure({ abr: { enabled: false } })
       this._pendingAdaptationEvent = true
       this.selectTrack(this.videoTracks.filter((t) => t.id === this._currentLevelId)[0])
-    }
-    else {
-      this._player.configure({abr: {enabled: true}})
+    } else {
+      this._player.configure({ abr: { enabled: true } })
       this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     }
   }
@@ -289,7 +288,7 @@ class DashShakaPlayback extends HTML5Video {
 
     return tracks
       .filter(track => track.kind === 'subtitle')
-      .map(track => { return {id: trackId(), name: track.label || track.language, track: track} })
+      .map(track => { return { id: trackId(), name: track.label || track.language, track: track } })
   }
 
   /**
@@ -303,9 +302,9 @@ class DashShakaPlayback extends HTML5Video {
    * @override
    */
   set closedCaptionsTrackId(trackId) {
-    if (!this._player) {
+    if (!this._player) 
       return
-    }
+    
 
     let tracks = this.closedCaptionsTracks
     let showingTrack
@@ -341,9 +340,9 @@ class DashShakaPlayback extends HTML5Video {
   _enableShakaTextTrack(isEnable) {
     // Shaka player use only one TextTrack object with video element to handle all text tracks
     // It must be enabled or disabled in addition to call selectTextTrack()
-    if (!this.el.textTracks) {
+    if (!this.el.textTracks) 
       return
-    }
+    
 
     this._shakaTTVisible = isEnable
 
@@ -353,9 +352,9 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _checkForClosedCaptions() {
-    if (this._ccIsSetup) {
+    if (this._ccIsSetup) 
       return
-    }
+    
 
     if (this.hasClosedCaptionsTracks) {
       this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
@@ -473,7 +472,7 @@ class DashShakaPlayback extends HTML5Video {
 
   _fillLevels () {
     if (this._levels.length === 0) {
-      this._levels = this.videoTracks.map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`} }).reverse()
+      this._levels = this.videoTracks.map((videoTrack) => { return { id: videoTrack.id, label: `${videoTrack.height}p` } }).reverse()
       this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
     }
   }
