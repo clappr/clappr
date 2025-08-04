@@ -1,3 +1,13 @@
+eslint.config.js
 dist/
 public/
 clappr-zepto/
+node_modules/
+coverage/
+*.min.js
+webpack.config.js
+rollup.config.js
+# Package-specific ignores
+packages/clappr-core/src/base/polyfills.js
+packages/clappr-zepto/
+packages/*/webpack.config.js
