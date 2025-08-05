@@ -17,7 +17,7 @@ describe('UI Container Plugin', () => {
         }
       }
 
-      new Plugin({})
+      new Plugin({}) // eslint-disable-line
 
       expect(bind).toBeTruthy()
     })

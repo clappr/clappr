@@ -2,7 +2,7 @@ import { Core, Container, Events, Playback, PlayerError } from '@clappr/core'
 
 import ErrorScreen from './error_screen'
 
-describe('ErrorScreen', function() {
+describe('ErrorScreen', function () {
   beforeEach(() => {
     this.core = new Core({})
     this.errorScreen = new ErrorScreen(this.core)
@@ -31,7 +31,7 @@ describe('ErrorScreen', function() {
           level: PlayerError.Levels.FATAL,
           UI: {
             title: 'tigle',
-            message: 'message',
+            message: 'message'
           }
         }
         this.playback = new Playback()

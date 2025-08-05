@@ -13,7 +13,7 @@ export default class ClosedCaptions extends UICorePlugin {
   get events() {
     return {
       'click [data-cc-button]': 'toggleContextMenu',
-      'click [data-cc-select]': 'onTrackSelect',
+      'click [data-cc-select]': 'onTrackSelect'
     }
   }
 
@@ -92,7 +92,7 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   contextMenuElement(id) {
-    return this.$el.find('ul a'+(!isNaN(id) ? '[data-cc-select="'+id+'"]' : '')).parent()
+    return this.$el.find('ul a' + (!isNaN(id) ? '[data-cc-select="' + id + '"]' : '')).parent()
   }
 
   setCurrentContextMenuElement(trackId) {
@@ -106,10 +106,8 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   renderCcButton() {
-    let tracks = this.container ? this.container.closedCaptionsTracks : []
-    for (let i = 0; i < tracks.length; i++)
-      tracks[i].label = this._labelCb(tracks[i])
-
+    const tracks = this.container ? this.container.closedCaptionsTracks : []
+    for (let i = 0; i < tracks.length; i++) { tracks[i].label = this._labelCb(tracks[i]) }
 
     const style = Styler.getStyleFor(ccStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template({
@@ -128,11 +126,7 @@ export default class ClosedCaptions extends UICorePlugin {
     this.renderCcButton()
 
     const $fullscreen = this.core.mediaControl.$el.find('button[data-fullscreen]')
-    if ($fullscreen[0])
-      this.$el.insertAfter($fullscreen)
-    else
-      this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').prepend(this.$el)
-
+    if ($fullscreen[0]) { this.$el.insertAfter($fullscreen) } else { this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').prepend(this.$el) }
 
     return this
   }

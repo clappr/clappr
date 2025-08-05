@@ -4,10 +4,10 @@ import MediaControl from './media_control'
 
 const { Config } = Utils
 
-describe('MediaControl', function() {
-  beforeEach(function() {
+describe('MediaControl', function () {
+  beforeEach(function () {
     this.playback = new Playback()
-    this.playback.getPlaybackType = function() {
+    this.playback.getPlaybackType = function () {
       return Playback.VOD
     }
     this.container = new Container({ playback: this.playback })
@@ -17,8 +17,8 @@ describe('MediaControl', function() {
     localStorage.removeItem('clappr.localhost.volume')
   })
 
-  describe('#constructor', function() {
-    it('can be built muted', function() {
+  describe('#constructor', function () {
+    it('can be built muted', function () {
       const container = new Container({ playback: this.playback, mute: true })
       const mediaControl = new MediaControl(this.core)
       this.core.activeContainer = container
@@ -26,7 +26,7 @@ describe('MediaControl', function() {
       expect(mediaControl.volume).to.be.equal(0)
     })
 
-    it('restores saved volume', function() {
+    it('restores saved volume', function () {
       Config.persist('volume', 42)
       Object.assign(this.core.options, { persistConfig: true })
       const mediaControl = new MediaControl(this.core)
@@ -34,9 +34,8 @@ describe('MediaControl', function() {
     })
   })
 
-  describe('#setVolume', function() {
-
-    it('sets the volume', function() {
+  describe('#setVolume', function () {
+    it('sets the volume', function () {
       sinon.spy(this.container, 'setVolume')
       sinon.spy(this.mediaControl, 'updateVolumeUI')
 
@@ -49,7 +48,7 @@ describe('MediaControl', function() {
       expect(this.mediaControl.updateVolumeUI).to.have.been.called
     })
 
-    it('limits volume to an integer between 0 and 100', function() {
+    it('limits volume to an integer between 0 and 100', function () {
       this.mediaControl.setVolume(1000)
       expect(this.mediaControl.volume).to.be.equal(100)
 
@@ -66,7 +65,7 @@ describe('MediaControl', function() {
       expect(this.mediaControl.volume).to.be.equal(0)
     })
 
-    it('mutes when volume is 0 or less than 0', function() {
+    it('mutes when volume is 0 or less than 0', function () {
       this.mediaControl.setVolume(10)
       expect(this.mediaControl.muted).to.be.equal(false)
 
@@ -74,7 +73,7 @@ describe('MediaControl', function() {
       expect(this.mediaControl.muted).to.be.equal(true)
     })
 
-    it('persists volume when persistence is on', function() {
+    it('persists volume when persistence is on', function () {
       // expected to be default value (100)
       expect(Config.restore('volume')).to.be.equal(100)
 
@@ -106,7 +105,7 @@ describe('MediaControl', function() {
 
       const container = new Container({ playback: this.playback, mute: false })
 
-      new MediaControl(this.core)
+      MediaControl(this.core)
 
       this.core.activeContainer = container
 
@@ -114,7 +113,7 @@ describe('MediaControl', function() {
     })
   })
 
-  it('can appear when playback type is not NO_OP', function() {
+  it('can appear when playback type is not NO_OP', function () {
     const mediaControl = new MediaControl(this.core)
     this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this.container)
     mediaControl.enable()
@@ -122,9 +121,9 @@ describe('MediaControl', function() {
     expect(mediaControl.disabled).to.be.false
   })
 
-  describe('never appears when', function() {
-    it('playback type is NO_OP', function() {
-      this.container.getPlaybackType = function() {
+  describe('never appears when', function () {
+    it('playback type is NO_OP', function () {
+      this.container.getPlaybackType = function () {
         return Playback.NO_OP
       }
       const mediaControl = new MediaControl(this.core)
@@ -135,7 +134,7 @@ describe('MediaControl', function() {
       expect(mediaControl.disabled).to.be.true
     })
 
-    it('option chromeless has value true', function() {
+    it('option chromeless has value true', function () {
       this.core.options.chromeless = true
       this.core.activeContainer = this.container
       const mediaControl = new MediaControl(this.core)
@@ -145,11 +144,12 @@ describe('MediaControl', function() {
     })
   })
 
-  describe('custom media control', function() {
-    it('can be extend the base mediacontrol with a custom template', function() {
+  describe('custom media control', function () {
+    it('can be extend the base mediacontrol with a custom template', function () {
       class MyMediaControl extends MediaControl {
-        get template() { return template('<div>My HTML here</div>') }
-        constructor(options) { super(options) }
+        get template() {
+          return template('<div>My HTML here</div>')
+        }
       }
 
       const container = new Container({ playback: this.playback, mute: true })
@@ -161,17 +161,18 @@ describe('MediaControl', function() {
       mediaControl.$el.find('.clappr-style').remove()
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
-      expect(mediaControl.$el.html()).to.be.equal(
-        '<div>My HTML here</div>'
-      )
+      expect(mediaControl.$el.html()).to.be.equal('<div>My HTML here</div>')
     })
   })
 
-  it('can be configured after its creation', function() {
+  it('can be configured after its creation', function () {
     expect(this.mediaControl._options.hideMediaControl).to.be.undefined
     expect(this.mediaControl._options.mediacontrol).to.be.undefined
 
-    this.core.configure({ hideMediaControl: false, mediacontrol: { seekbar: '#E113D3', buttons: '#66B2FF' } })
+    this.core.configure({
+      hideMediaControl: false,
+      mediacontrol: { seekbar: '#E113D3', buttons: '#66B2FF' }
+    })
     expect(this.mediaControl._options.hideMediaControl).to.be.false
     expect(this.mediaControl._options.mediacontrol).not.to.be.undefined
 

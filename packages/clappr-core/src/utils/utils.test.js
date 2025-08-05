@@ -1,7 +1,7 @@
 import * as utils from './utils'
 
 const pushUrl = (path) => {
-  window.history.pushState({},'', path)
+  window.history.pushState({}, '', path)
 }
 
 describe('Utils', () => {
@@ -60,7 +60,7 @@ describe('Utils', () => {
       expect(d.prop3).toEqual(42)
     })
 
-    it ('should support overriding methods', () => {
+    it('should support overriding methods', () => {
       const Derived = utils.extend(Base, {
         test() { return true }
       })
@@ -68,7 +68,7 @@ describe('Utils', () => {
       expect(d.test()).toBeTruthy()
     })
 
-    it ('should support overriding read-only properties', () => {
+    it('should support overriding read-only properties', () => {
       const Derived = utils.extend(Base, {
         get name() { return 'derived' }
       })
@@ -85,7 +85,7 @@ describe('Utils', () => {
       expect(utils.formatTime(60 * 60 * 12)).toEqual('12:00:00')
       expect(utils.formatTime(60 * 60 * 24)).toEqual('1:00:00:00')
       expect(utils.formatTime(60 * 60 * 27)).toEqual('1:03:00:00')
-      expect(utils.formatTime(1000/0)).toEqual('--:--')
+      expect(utils.formatTime(1000 / 0)).toEqual('--:--')
     })
   })
 
@@ -154,7 +154,6 @@ describe('Utils', () => {
   })
 
   test('seekStringToSeconds module should convert seek regex in seconds', () => {
-
     pushUrl('/some/path/?t=1h10m30s')
     expect(utils.seekStringToSeconds()).toEqual(4230)
 
@@ -424,7 +423,7 @@ describe('Utils', () => {
         handler.handle(evt, spy)
         expect(spy).toHaveBeenCalledTimes(1)
         done()
-      }, 500/2)
+      }, 500 / 2)
     })
   })
 })

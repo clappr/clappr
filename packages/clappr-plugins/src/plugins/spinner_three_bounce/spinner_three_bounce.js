@@ -12,7 +12,7 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get attributes() {
     return {
-      'data-spinner':'',
+      'data-spinner': '',
       'class': 'spinner-three-bounce'
     }
   }
@@ -42,9 +42,7 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 
   show() {
-    if (this.showTimeout === null)
-      this.showTimeout = setTimeout(() => this.$el.show(), 300)
-
+    if (this.showTimeout === null) { this.showTimeout = setTimeout(() => this.$el.show(), 300) }
   }
 
   hide() {
@@ -61,8 +59,7 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
     this.$el.append(style[0])
     this.container.$el.append(this.$el)
     this.$el.hide()
-    if (this.container.buffering)
-      this.onBuffering()
+    if (this.container.buffering) { this.onBuffering() }
 
     return this
   }

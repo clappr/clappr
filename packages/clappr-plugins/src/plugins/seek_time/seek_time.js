@@ -33,10 +33,7 @@ export default class SeekTime extends UICorePlugin {
     this.firstFragDateTime = null
     this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     if (this.actualLiveTime) {
-      if (this.mediaControl.options.actualLiveServerTime)
-        this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime()
-      else
-        this.actualLiveServerTimeDiff = 0
+      if (this.mediaControl.options.actualLiveServerTime) { this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime() } else { this.actualLiveServerTimeDiff = 0 }
     }
   }
 
@@ -76,7 +73,7 @@ export default class SeekTime extends UICorePlugin {
   calculateHoverPosition(event) {
     const offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
     // proportion into the seek bar that the mouse is hovered over 0-1
-    this.hoverPosition = Math.min(1, Math.max(offset/this.mediaControl.$seekBarContainer.width(), 0))
+    this.hoverPosition = Math.min(1, Math.max(offset / this.mediaControl.$seekBarContainer.width(), 0))
   }
 
   getSeekTime() {
@@ -85,17 +82,15 @@ export default class SeekTime extends UICorePlugin {
       if (this.firstFragDateTime) {
         e = new Date(this.firstFragDateTime)
         d = new Date(this.firstFragDateTime)
-        d.setHours(0,0,0,0)
+        d.setHours(0, 0, 0, 0)
         secondsSinceMidnight = ((e.getTime() - d.getTime()) / 1000) + this.duration
       } else {
         d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff)
         e = new Date(d)
-        secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
+        secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000
       }
       seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
-      if (seekTime < 0)
-        seekTime += 86400
-
+      if (seekTime < 0) { seekTime += 86400 }
     } else { seekTime = this.hoverPosition * this.duration }
 
     return { seekTime, secondsSinceMidnight }
@@ -126,7 +121,6 @@ export default class SeekTime extends UICorePlugin {
           this.displayedDuration = currentDuration
         }
       } else { this.$durationEl.hide() }
-
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
       this.$el.show()

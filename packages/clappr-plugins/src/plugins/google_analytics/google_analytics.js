@@ -27,7 +27,6 @@ export default class GoogleAnalytics extends ContainerPlugin {
       script.onload = () => this.addEventListeners()
       document.body.appendChild(script)
     } else { this.addEventListeners() }
-
   }
 
   addEventListeners() {
@@ -48,8 +47,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
       this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR)
     }
     _gaq.push([this.trackerName + '_setAccount', this.account])
-    if (this.domainName)
-      _gaq.push([this.trackerName + '_setDomainName', this.domainName])
+    if (this.domainName) { _gaq.push([this.trackerName + '_setDomainName', this.domainName]) }
   }
 
   onReady() {
@@ -81,7 +79,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onHD(isHD) {
-    const status = isHD ? 'ON': 'OFF'
+    const status = isHD ? 'ON' : 'OFF'
     if (status !== this.currentHDState) {
       this.currentHDState = status
       this.push(['Video', 'HD - ' + status, this.container.playback.src])
@@ -89,13 +87,11 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onPlaybackChanged(playbackState) {
-    if (playbackState.type !== null)
-      this.push(['Video', 'Playback Type - ' + playbackState.type, this.container.playback.src])
-
+    if (playbackState.type !== null) { this.push(['Video', 'Playback Type - ' + playbackState.type, this.container.playback.src]) }
   }
 
   onDVR(dvrInUse) {
-    const status = dvrInUse? 'ON': 'OFF'
+    const status = dvrInUse ? 'ON' : 'OFF'
     this.push(['Interaction', 'DVR - ' + status, this.container.playback.src])
   }
 
@@ -115,10 +111,8 @@ export default class GoogleAnalytics extends ContainerPlugin {
     this.push(['Interaction', 'Fullscreen', this.container.playback.src])
   }
 
-
   push(array) {
     const res = [this.trackerName + '_trackEvent'].concat(array)
     _gaq.push(res)
   }
-
 }

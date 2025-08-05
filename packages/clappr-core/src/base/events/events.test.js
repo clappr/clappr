@@ -1,7 +1,7 @@
 import Events from './events'
 import Log from '@/components/log'
 
-describe('Events', function() {
+describe('Events', function () {
   let events
   let callback
 
@@ -72,7 +72,7 @@ describe('Events', function() {
 
   it('subscribes to a given event with context', () => {
     const context = { counter: 9 }
-    const eventsCounter = function() {
+    const eventsCounter = function () {
       this.counter += 1
     }
 
@@ -251,8 +251,8 @@ describe('Events', function() {
   })
 
   it('calls handlers in the order they were registered', () => {
-    let calls = []
-    const Handler = function(id) {
+    const calls = []
+    const Handler = function (id) {
       return () => {
         calls.push(id)
       }
@@ -303,7 +303,7 @@ describe('Events', function() {
   })
 
   it('list all available custom events', () => {
-    let eventName = 'PLUGIN_CUSTOM_EVENT'
+    const eventName = 'PLUGIN_CUSTOM_EVENT'
     let events
 
     Events.Custom = null
@@ -336,8 +336,7 @@ describe('Events', function() {
     })
 
     it('not a string', () => {
-      for (let arg of [() => {}, {}, [], null, undefined])
-        Events.register(arg)
+      for (const arg of [() => {}, {}, [], null, undefined]) { Events.register(arg) }
 
       expect(stubLogError.mock.calls.length).toEqual(5)
     })

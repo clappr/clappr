@@ -2,7 +2,7 @@ import Core from '@/components/core'
 import PlayerError from './error'
 import Events from '@/base/events'
 
-describe('PlayerError', function() {
+describe('PlayerError', function () {
   let core, playerError, errorData
   beforeEach(() => {
     core = new Core({})
@@ -13,7 +13,7 @@ describe('PlayerError', function() {
       level: PlayerError.Levels.FATAL,
       origin: 'test',
       scope: 'it',
-      raw: {},
+      raw: {}
     }
   })
 

@@ -1,9 +1,8 @@
 import Player from '../player'
 import Events from '../../base/events'
 
-describe('Player', function() {
+describe('Player', function () {
   describe('constructor', () => {
-
     test('has unique sequential id', () => {
       const player1 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
       const player2 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
@@ -87,7 +86,7 @@ describe('Player', function() {
     test('should call only last registered callback', () => {
       const callbacks = {
         callbackA: jest.fn(),
-        callbackB: jest.fn(),
+        callbackB: jest.fn()
       }
       player.configure({
         events: {
@@ -117,7 +116,7 @@ describe('Player', function() {
 
       player.configure({
         events: {
-          onPause: callbacks.callbackC,
+          onPause: callbacks.callbackC
         }
       })
 
@@ -133,13 +132,13 @@ describe('Player', function() {
       }
       player.configure({
         events: {
-          onPlay: callbacks.callbackA,
+          onPlay: callbacks.callbackA
         }
       })
 
       player.configure({
         events: {
-          onPause: callbacks.callbackB,
+          onPause: callbacks.callbackB
         }
       })
 
@@ -156,7 +155,7 @@ describe('Player', function() {
       }
       player.configure({
         events: {
-          onPause: callbacks.callbackA,
+          onPause: callbacks.callbackA
         }
       })
 
@@ -172,14 +171,14 @@ describe('Player', function() {
     test('does not interfere with event listeners added through Player.on', () => {
       const callbacks = {
         callbackA: jest.fn(),
-        callbackB: jest.fn(),
+        callbackB: jest.fn()
       }
 
       player.on(Events.PLAYER_PAUSE, callbacks.callbackB)
 
       player.configure({
         events: {
-          onPause: callbacks.callbackA,
+          onPause: callbacks.callbackA
         }
       })
 

@@ -18,7 +18,7 @@ describe('Core Plugin', () => {
         }
       }
 
-      new Plugin({})
+      new Plugin({}) // eslint-disable-line
 
       expect(bind).toBeTruthy()
     })
@@ -60,7 +60,7 @@ describe('Core Plugin', () => {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  test('doesn\'t stops listening when disable a disabled plugin', () => {
+  test("doesn't stops listening when disable a disabled plugin", () => {
     const plugin = new CorePlugin({})
     const spy = jest.spyOn(plugin, 'stopListening')
 

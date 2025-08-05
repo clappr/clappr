@@ -3,7 +3,7 @@ import Events from '../../base/events'
 
 import $ from 'clappr-zepto'
 
-describe('HTML5Video playback', function() {
+describe('HTML5Video playback', function () {
   let options
   beforeEach(() => {
     options = { src: 'http://example.com/dash.ogg' }
@@ -163,7 +163,7 @@ describe('HTML5Video playback', function() {
 
     test('should trigger PLAYBACK_PROGRESS with current buffer position', () => {
       playback._onProgress() // cannot trigger event on fake element (improve later?)
-      let currentProgress = callback.mock.calls[0][0]
+      const currentProgress = callback.mock.calls[0][0]
 
       expect(currentProgress.start).toEqual(start[0])
       expect(currentProgress.current).toEqual(end[0])
@@ -176,28 +176,26 @@ describe('HTML5Video playback', function() {
       currentTime = 75 // this should be located at index 1
 
       playback._onProgress() // cannot trigger event on fake element (improve later?)
-      let progress = callback.mock.calls[0][0]
+      const progress = callback.mock.calls[0][0]
 
       expect(progress.start).toEqual(start[1])
       expect(progress.current).toEqual(end[1])
     })
 
     test('does not trigger buffer event when the playback is initialized', () => {
-
-
-      let builtInEvents = ['loadedmetadata', 'progress', 'timeupdate'].map(
-        function(label) {
+      const builtInEvents = ['loadedmetadata', 'progress', 'timeupdate'].map(
+        function (label) {
           return new Event(label)
         }
       )
 
-      let callback = jest.fn()
-      let playback = new HTML5Video(options)
+      const callback = jest.fn()
+      const playback = new HTML5Video(options)
 
       playback.on(Events.PLAYBACK_BUFFERING, callback)
       playback.on(Events.PLAYBACK_BUFFERFULL, callback)
 
-      builtInEvents.map(function(event) { playback.el.dispatchEvent(event) })
+      builtInEvents.map(function (event) { playback.el.dispatchEvent(event) })
       expect(callback).not.toHaveBeenCalled()
     })
 
@@ -206,7 +204,7 @@ describe('HTML5Video playback', function() {
       end = [30, 90, 280]
 
       playback._onProgress() // cannot trigger event on fake element (improve later?)
-      let buffered = callback.mock.calls[0][1]
+      const buffered = callback.mock.calls[0][1]
 
       expect(buffered.length).toEqual(start.length)
       expect(buffered[0]).toEqual({ start: start[0], end: end[0] })
@@ -307,8 +305,8 @@ describe('HTML5Video playback', function() {
     })
 
     test('should play on audio tag if audioOnly flag is not set and the mime-type specified is audio only', () => {
-      let options = { src: 'http://example.com/audio?some_parameter=value', mimeType: 'audio/ogg' },
-        playback = new HTML5Video(options)
+      let options = { src: 'http://example.com/audio?some_parameter=value', mimeType: 'audio/ogg' }
+      let playback = new HTML5Video(options)
       expect(playback.isAudioOnly).toBeTruthy()
       expect(playback.tagName).toEqual('audio')
 
@@ -343,8 +341,8 @@ describe('HTML5Video playback', function() {
 
   describe('getDuration', () => {
     test('return distinct duration references for different playback types', () => {
-      let start = [0]
-      let end = [30]
+      const start = [0]
+      const end = [30]
       let html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
       html5Video.setElement({
         get duration() { return 10 },
@@ -354,7 +352,6 @@ describe('HTML5Video playback', function() {
 
       html5Video.getDuration()
       expect(html5Video.getDuration).toHaveReturnedWith(10)
-
 
       html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
       html5Video.setElement({
@@ -372,7 +369,7 @@ describe('HTML5Video playback', function() {
       jest.useFakeTimers()
       let start = []
       let end = []
-      let html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
       html5Video.setElement({ get seekable() { return { length: 0 } } })
 
       jest.spyOn(html5Video, 'getDuration')

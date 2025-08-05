@@ -152,7 +152,7 @@ export default class Container extends UIObject {
     this.plugins = [this.playback]
     this.dblTapHandler = new DoubleEventHandler(500)
     this.clickTimer = null
-    this.clickDelay = 200  // FIXME: could be a player option
+    this.clickDelay = 200 // FIXME: could be a player option
     this.actionsMetadata = {}
     this.bindEvents()
   }
@@ -311,8 +311,7 @@ export default class Container extends UIObject {
   }
 
   error(error) {
-    if (!this.isReady)
-      this.ready()
+    if (!this.isReady) { this.ready() }
 
     this.trigger(Events.CONTAINER_ERROR, error, this.name)
   }
@@ -417,9 +416,7 @@ export default class Container extends UIObject {
   }
 
   onContextMenu(event) {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name)
-
+    if (!this.options.chromeless || this.options.allowUserInteraction) { this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name) }
   }
 
   seek(time) {
@@ -497,25 +494,19 @@ export default class Container extends UIObject {
   }
 
   mouseEnter() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_MOUSE_ENTER)
-
+    if (!this.options.chromeless || this.options.allowUserInteraction) { this.trigger(Events.CONTAINER_MOUSE_ENTER) }
   }
 
   mouseLeave() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_MOUSE_LEAVE)
-
+    if (!this.options.chromeless || this.options.allowUserInteraction) { this.trigger(Events.CONTAINER_MOUSE_LEAVE) }
   }
 
   mouseUp() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_MOUSE_UP)
+    if (!this.options.chromeless || this.options.allowUserInteraction) { this.trigger(Events.CONTAINER_MOUSE_UP) }
   }
 
   mouseDown() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_MOUSE_DOWN)
+    if (!this.options.chromeless || this.options.allowUserInteraction) { this.trigger(Events.CONTAINER_MOUSE_DOWN) }
   }
 
   enterPiP() {
@@ -554,10 +545,7 @@ export default class Container extends UIObject {
   }
 
   updateStyle() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.$el.removeClass('chromeless')
-    else
-      this.$el.addClass('chromeless')
+    if (!this.options.chromeless || this.options.allowUserInteraction) { this.$el.removeClass('chromeless') } else { this.$el.addClass('chromeless') }
   }
 
   enableResizeObserver() {

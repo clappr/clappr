@@ -6,7 +6,10 @@ const simplePlaybackMock = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8
 
 describe('HlsjsPlayback', () => {
   test('have a getter called defaultOptions', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'defaultOptions').get).toBeTruthy()
+    expect(
+      Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'defaultOptions')
+        .get
+    ).toBeTruthy()
   })
 
   test('defaultOptions getter returns all the default options values into one object', () => {
@@ -14,7 +17,10 @@ describe('HlsjsPlayback', () => {
   })
 
   test('have a getter called customListeners', () => {
-    expect(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'customListeners').get).toBeTruthy()
+    expect(
+      Object.getOwnPropertyDescriptor(Object.getPrototypeOf(simplePlaybackMock), 'customListeners')
+        .get
+    ).toBeTruthy()
   })
 
   test('customListeners getter returns all configured custom listeners for each hls.js event', () => {
@@ -33,19 +39,34 @@ describe('HlsjsPlayback', () => {
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
     expect(HlsjsPlayback.canPlay('/relative/VIDEO.M3U8')).toBeTruthy()
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8?foobarQuery=1234#somefragment')).toBeTruthy()
-    expect(HlsjsPlayback.canPlay('whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegURL' )).toBeTruthy()
-    expect(HlsjsPlayback.canPlay('//whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegURL' )).toBeTruthy()
+    expect(
+      HlsjsPlayback.canPlay(
+        'whatever_no_extension?foobarQuery=1234#somefragment',
+        'application/x-mpegURL'
+      )
+    ).toBeTruthy()
+    expect(
+      HlsjsPlayback.canPlay(
+        '//whatever_no_extension?foobarQuery=1234#somefragment',
+        'application/x-mpegURL'
+      )
+    ).toBeTruthy()
   })
 
   test('can play regardless of any mime type letter case', () => {
     jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
-    expect(HlsjsPlayback.canPlay('/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL' )).toBeTruthy()
-    expect(HlsjsPlayback.canPlay('whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegurl' )).toBeTruthy()
+    expect(HlsjsPlayback.canPlay('/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL')).toBeTruthy()
+    expect(
+      HlsjsPlayback.canPlay(
+        'whatever_no_extension?foobarQuery=1234#somefragment',
+        'application/x-mpegurl'
+      )
+    ).toBeTruthy()
   })
 
   test('should ensure it does not create an audio tag if audioOnly is not set', () => {
-    let options = { src: 'http://clappr.io/video.m3u8' },
-      playback = new HlsjsPlayback(options)
+    let options = { src: 'http://clappr.io/video.m3u8' }
+    let playback = new HlsjsPlayback(options)
     expect(playback.tagName).toEqual('video')
     options = { src: 'http://clappr.io/video.m3u8', mimeType: 'application/x-mpegurl' }
     playback = new HlsjsPlayback(options)
@@ -53,18 +74,18 @@ describe('HlsjsPlayback', () => {
   })
 
   test('should play on an audio tag if audioOnly is set', () => {
-    let options = { src: 'http://clappr.io/video.m3u8', playback: { audioOnly: true } },
-      playback = new HlsjsPlayback(options)
+    const options = { src: 'http://clappr.io/video.m3u8', playback: { audioOnly: true } }
+    const playback = new HlsjsPlayback(options)
     expect(playback.tagName).toEqual('audio')
   })
 
   test('should trigger a playback error if source load failed', () => {
     jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => {})
-    let resolveFn = undefined
-    const promise = new Promise((resolve) => {
+    let resolveFn
+    const promise = new Promise(resolve => {
       resolveFn = resolve
     })
-    let options = {
+    const options = {
       src: 'http://clappr.io/notfound.m3u8',
       hlsRecoverAttempts: 0,
       mute: true
@@ -72,10 +93,10 @@ describe('HlsjsPlayback', () => {
 
     const core = new Core({})
     const playback = new HlsjsPlayback(options, null, core.playerError)
-    playback.on(Events.PLAYBACK_ERROR, (e) => resolveFn(e))
+    playback.on(Events.PLAYBACK_ERROR, e => resolveFn(e))
     playback.play()
 
-    promise.then((e) => {
+    promise.then(e => {
       expect(e.raw.type).toEqual(HLSJS.ErrorTypes.NETWORK_ERROR)
       expect(e.raw.details).toEqual(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
     })
@@ -86,13 +107,14 @@ describe('HlsjsPlayback', () => {
   })
 
   test('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', () => {
-    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
+    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual(
+      'playbackFragmentParsingMetadata'
+    )
   })
 
   test('levels supports specifying the level', () => {
-    let playback
     const options = { src: 'http://clappr.io/foo.m3u8' }
-    playback = new HlsjsPlayback(options)
+    const playback = new HlsjsPlayback(options)
     playback._setup()
     // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place
     playback._hls = { levels: [] }
@@ -143,10 +165,13 @@ describe('HlsjsPlayback', () => {
     test('merges defaultOptions with received options.hlsPlayback', () => {
       const options = {
         src: 'http://clappr.io/foo.m3u8',
-        hlsPlayback: { foo: 'bar' },
+        hlsPlayback: { foo: 'bar' }
       }
       const playback = new HlsjsPlayback(options)
-      expect(playback.options.hlsPlayback).toEqual({ ...options.hlsPlayback, ...playback.defaultOptions })
+      expect(playback.options.hlsPlayback).toEqual({
+        ...options.hlsPlayback,
+        ...playback.defaultOptions
+      })
     })
   })
 
@@ -161,7 +186,10 @@ describe('HlsjsPlayback', () => {
     })
 
     test('calls this._hls.loadSource when MEDIA_ATTACHED event is triggered and hlsPlayback.preload is true', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: false } })
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: { preload: false }
+      })
       playback._setup()
       jest.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
@@ -207,7 +235,7 @@ describe('HlsjsPlayback', () => {
       expect(playback._setup).not.toHaveBeenCalled()
     })
 
-    test('call _setup method if HLS.JS internal don\'t exists', () => {
+    test("call _setup method if HLS.JS internal don't exists", () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
       jest.spyOn(playback, '_setup')
       playback._ready()
@@ -270,7 +298,10 @@ describe('HlsjsPlayback', () => {
 
   describe('load method', () => {
     test('loads a new source when called', () => {
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8', hlsPlayback: { preload: true } })
+      const playback = new HlsjsPlayback({
+        src: 'http://clappr.io/foo.m3u8',
+        hlsPlayback: { preload: true }
+      })
       const url = 'http://clappr.io/foo2.m3u8'
       playback.load(url)
       jest.spyOn(playback._hls, 'loadSource')
@@ -298,7 +329,7 @@ describe('HlsjsPlayback', () => {
       expect(cb).toHaveBeenCalledTimes(2)
     })
 
-    test('don\'t add one listener without a valid configuration', () => {
+    test("don't add one listener without a valid configuration", () => {
       const cb = jest.fn()
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
       playback._setup()
@@ -313,7 +344,9 @@ describe('HlsjsPlayback', () => {
 
       expect(cb).not.toHaveBeenCalled()
 
-      playback.options.hlsPlayback.customListeners.push([{ eventName: 'invalid_name', callback: cb }])
+      playback.options.hlsPlayback.customListeners.push([
+        { eventName: 'invalid_name', callback: cb }
+      ])
 
       expect(cb).not.toHaveBeenCalled()
     })
@@ -358,7 +391,7 @@ describe('HlsjsPlayback', () => {
       const fragmentMock = {
         frag: {
           programDateTime: 1556663040000, // 'Tue Apr 30 2019 19:24:00'
-          start: 0,
+          start: 0
         }
       }
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })

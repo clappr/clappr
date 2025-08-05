@@ -8,8 +8,7 @@ import Events from '@/base/events'
 const createContainersArray = (options, quantity) => {
   const containers = []
 
-  for (let i = 0; i < quantity; i++)
-    containers.push(new Container(options))
+  for (let i = 0; i < quantity; i++) { containers.push(new Container(options)) }
 
   return containers
 }

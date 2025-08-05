@@ -15,7 +15,7 @@ const isSetterProperty = (obj, prop) => {
   return getProperty(obj, prop).set
 }
 
-describe('Playback', function() {
+describe('Playback', function () {
   let basePlayback
   beforeEach(() => {
     basePlayback = new Playback({})
@@ -109,7 +109,7 @@ describe('Playback', function() {
   })
 
   test('i18n getter returns default value', () => {
-    const i18n = { t: (key) => key }
+    const i18n = { t: key => key }
     const playback = new Playback({}, i18n)
 
     expect(playback.i18n).toEqual(i18n)
@@ -143,7 +143,7 @@ describe('Playback', function() {
     expect(basePlayback.isHighDefinitionInUse()).toBeFalsy()
   })
 
-  test('can be consented', (done) => {
+  test('can be consented', done => {
     const callback = jest.fn(() => {
       expect(callback).toHaveBeenCalledTimes(1)
       done()
@@ -200,12 +200,11 @@ describe('Playback', function() {
         origin: 'playback',
         scope: 'playback',
         raw: {},
-        code: 'playback:unknown',
+        code: 'playback:unknown'
       }
     })
 
     describe('when no data is given', () => {
-
       test('creates a default error', () => {
         const errorData = basePlayback.createError()
 
@@ -222,7 +221,10 @@ describe('Playback', function() {
         test('creates a default error with UI data', () => {
           const basePlayback = new Playback({}, core.i18n, core.playerError)
           const errorData = basePlayback.createError()
-          const defaultError = { ...defaultError, UI: { title: 'default_error_title', message: 'default_error_message' } }
+          const defaultError = {
+            ...defaultError,
+            UI: { title: 'default_error_title', message: 'default_error_message' }
+          }
           expect(errorData.UI).toEqual(defaultError.UI)
         })
       })
@@ -254,8 +256,9 @@ describe('Playback', function() {
       })
 
       describe('when i18n is defined', () => {
-
-        beforeEach(() => { new Playback({}, core.i18n, core.playerError) })
+        beforeEach(() => {
+          new Playback({}, core.i18n, core.playerError) // eslint-disable-line
+        })
 
         test('does not overwrite UI when it is defined', () => {
           const UIData = { title: 'my_title', message: 'my_message' }
@@ -282,7 +285,7 @@ describe('Playback', function() {
 
   test('resize', () => {
     const data = { width: 100, height: 100 }
-    let callback = jest.fn()
+    const callback = jest.fn()
     jest.spyOn(basePlayback, 'onResize')
     basePlayback.on(Events.PLAYBACK_RESIZE, callback)
     basePlayback.resize(data)

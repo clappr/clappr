@@ -3,7 +3,7 @@ import Browser from '../browser'
 import Events from '../../base/events'
 import { Fullscreen } from '../../utils'
 
-describe('Core', function() {
+describe('Core', function () {
   describe('When configure', () => {
     let core
     beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Core', function() {
     })
 
     test('shoud trigger options change event', () => {
-      let callback = jest.fn()
+      const callback = jest.fn()
       core.on(Events.CORE_OPTIONS_CHANGE, callback)
 
       const newOptions = {
@@ -45,7 +45,7 @@ describe('Core', function() {
     })
 
     test('should trigger options will change event', () => {
-      let callback = jest.fn()
+      const callback = jest.fn()
       core.on(Events.CORE_OPTIONS_WILL_CHANGE, callback)
 
       const newOptions = {
@@ -58,11 +58,11 @@ describe('Core', function() {
 
     test('should trigger both events in correct order', () => {
       const eventOrder = []
-      
+
       core.on(Events.CORE_OPTIONS_WILL_CHANGE, () => {
         eventOrder.push('will_change')
       })
-      
+
       core.on(Events.CORE_OPTIONS_CHANGE, () => {
         eventOrder.push('change')
       })
@@ -246,7 +246,7 @@ describe('Core', function() {
 
         setTimeout(() => {
           expect(core.triggerResize).toHaveBeenCalledTimes(2)
-        },500)
+        }, 500)
       }, 500)
     })
 
@@ -263,7 +263,7 @@ describe('Core', function() {
     test('sets the properties oldHeight and oldWidth with the new one', () => {
       const newSize = { width: '50%', height: '50%' }
 
-      let core = new Core({})
+      const core = new Core({})
 
       expect(core.oldHeight).toEqual(undefined)
       expect(core.oldWidth).toEqual(undefined)
@@ -276,7 +276,7 @@ describe('Core', function() {
 
     test('sets the property computedSize with the new one', () => {
       const newSize = { width: '50%', height: '50%' }
-      let core = new Core({})
+      const core = new Core({})
 
       expect(core.computedSize).toEqual(undefined)
 
@@ -287,7 +287,7 @@ describe('Core', function() {
 
     test('triggers on an event Events.CORE_RESIZE', () => {
       const newSize = { width: '50%', height: '50%' }
-      let core = new Core({})
+      const core = new Core({})
       jest.spyOn(core, 'trigger')
       core.triggerResize(newSize)
 
@@ -350,7 +350,7 @@ describe('Core', function() {
 
     test('append default and reset style elements with includeResetStyle set', () => {
       const newOptions = {
-        includeResetStyle: true,
+        includeResetStyle: true
       }
       core.configure(newOptions)
 
@@ -372,7 +372,7 @@ describe('Core', function() {
 
   test('resize', () => {
     const data = { width: 100, height: 100 }
-    let callback = jest.fn()
+    const callback = jest.fn()
     const core = new Core({})
     jest.spyOn(core, 'onResize')
     core.on(Events.CORE_RESIZE, callback)

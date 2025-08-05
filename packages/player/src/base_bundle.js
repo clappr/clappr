@@ -7,8 +7,7 @@ import { Plugins, Vendor } from '@clappr/plugins'
 
 const version = CLAPPR_VERSION
 
-for (let plugin of Object.values(Plugins))
-  Loader.registerPlugin(plugin)
+for (const plugin of Object.values(Plugins)) { Loader.registerPlugin(plugin) }
 
 // TODO: remove on 0.5.x (backward-compatibility only)
 const {
@@ -24,7 +23,7 @@ const {
   SeekTime,
   SpinnerThreeBounce,
   Stats,
-  WaterMark,
+  WaterMark
 } = Plugins
 
 export default {
@@ -44,5 +43,5 @@ export default {
   WaterMark,
   Vendor,
   Plugins,
-  version,
+  version
 }

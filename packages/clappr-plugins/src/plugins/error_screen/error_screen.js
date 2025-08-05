@@ -12,7 +12,7 @@ export default class ErrorScreen extends UICorePlugin {
   get attributes() {
     return {
       'class': 'player-error-screen',
-      'data-error-screen': '',
+      'data-error-screen': ''
     }
   }
 
@@ -75,7 +75,7 @@ export default class ErrorScreen extends UICorePlugin {
       message: this.err.UI.message,
       code: this.err.code,
       icon: this.err.UI.icon || '',
-      reloadIcon,
+      reloadIcon
     }))
     this.$el.append(style[0])
 

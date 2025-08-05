@@ -18,10 +18,9 @@ const COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
-
   get level() { return this._level }
 
-  set level(newLevel) {  this._level = newLevel }
+  set level(newLevel) { this._level = newLevel }
 
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
     this.EXCLUDE_LIST = [
@@ -31,7 +30,7 @@ export default class Log {
       'container:hover',
       'container:timeupdate',
       'container:progress',
-      'core:mousemove',
+      'core:mousemove'
     ]
     this.level = level
     this.previousLevel = this.level
@@ -64,8 +63,7 @@ export default class Log {
     }
     const color = COLORS[level]
     let klassDescription = ''
-    if (klass)
-      klassDescription = '[' + klass + ']'
+    if (klass) { klassDescription = '[' + klass + ']' }
 
     window.console && window.console.log && window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
   }
@@ -76,15 +74,14 @@ Log.LEVEL_INFO = LEVEL_INFO
 Log.LEVEL_WARN = LEVEL_WARN
 Log.LEVEL_ERROR = LEVEL_ERROR
 
-Log.getInstance = function() {
-  if (this._instance === undefined)
-    this._instance = new this()
+Log.getInstance = function () {
+  if (this._instance === undefined) { this._instance = new this() }
   return this._instance
 }
 
-Log.setLevel = function(level) { this.getInstance().level = level }
+Log.setLevel = function (level) { this.getInstance().level = level }
 
-Log.debug = function() { this.getInstance().debug.apply(this.getInstance(), arguments) }
-Log.info = function() { this.getInstance().info.apply(this.getInstance(), arguments) }
-Log.warn = function() { this.getInstance().warn.apply(this.getInstance(), arguments) }
-Log.error = function() { this.getInstance().error.apply(this.getInstance(), arguments) }
+Log.debug = function () { this.getInstance().debug.apply(this.getInstance(), arguments) }
+Log.info = function () { this.getInstance().info.apply(this.getInstance(), arguments) }
+Log.warn = function () { this.getInstance().warn.apply(this.getInstance(), arguments) }
+Log.error = function () { this.getInstance().error.apply(this.getInstance(), arguments) }

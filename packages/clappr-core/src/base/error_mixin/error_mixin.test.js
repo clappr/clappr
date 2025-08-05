@@ -8,7 +8,7 @@ import Core from '@/components/core'
 import Playback from '@/base/playback'
 import Events from '@/base/events'
 
-describe('ErrorMixin', function() {
+describe('ErrorMixin', function () {
   let errorExample
   beforeEach(() => {
     errorExample = { code: 'TEST_ERROR', description: 'A error example.', level: PlayerError.Levels.FATAL }
@@ -29,7 +29,6 @@ describe('ErrorMixin', function() {
   })
 
   describe('creates a error', () => {
-
     test('with default values', () => {
       expect(ErrorMixin.createError(errorExample)).toEqual({
         code: ':TEST_ERROR',
@@ -37,7 +36,7 @@ describe('ErrorMixin', function() {
         level: 'FATAL',
         origin: '',
         raw: {},
-        scope: '',
+        scope: ''
       })
 
       const err = { description: 'A error example.', level: PlayerError.Levels.FATAL }
@@ -48,7 +47,7 @@ describe('ErrorMixin', function() {
         origin: '',
         scope: '',
         raw: {},
-        code: ':unknown',
+        code: ':unknown'
       })
     })
 
@@ -110,7 +109,7 @@ describe('ErrorMixin', function() {
         scope: 'container',
         raw: {},
         code: 'container:TEST_ERROR',
-        UI: { title: 'default_error_title', message: 'default_error_message' },
+        UI: { title: 'default_error_title', message: 'default_error_message' }
       })
     })
   })
@@ -129,7 +128,7 @@ describe('ErrorMixin', function() {
       scope: 'core',
       raw: {},
       code: 'core:TEST_ERROR',
-      UI: { title: 'default_error_title', message: 'default_error_message' },
+      UI: { title: 'default_error_title', message: 'default_error_message' }
     })
   })
 })
