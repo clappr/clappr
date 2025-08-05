@@ -264,8 +264,8 @@ export default (() => {
     validateExternalPluginsType(plugins) {
       const pluginTypes = ['playback', 'container', 'core']
       pluginTypes.forEach(type => {
-        const plugins = plugins[type] || []
-        plugins.forEach(el => {
+        const pluginsByType = plugins[type] || []
+        pluginsByType.forEach(el => {
           const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
           if (el.type !== type) throw new ReferenceError(errorMessage)
         })
