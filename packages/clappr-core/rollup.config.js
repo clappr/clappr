@@ -20,15 +20,26 @@ const minimize = !!process.env.MINIMIZE
 
 const postcssOptions = {
   use: [
-    ['sass', {
-      includePaths: ['src/base/scss']
-    }]
+    [
+      'sass',
+      {
+        includePaths: ['src/base/scss']
+      }
+    ]
   ],
-  inject: false,
+  inject: false
 }
-const aliasPluginOptions = { entries: { 'clappr-zepto': __dirname + '/../../node_modules/clappr-zepto/zepto.js', '@': __dirname + '/src' } }
+const aliasPluginOptions = {
+  entries: {
+    'clappr-zepto': `${__dirname}/../../node_modules/clappr-zepto/zepto.js`,
+    '@': `${__dirname}/src`
+  }
+}
 const replacePluginOptions = { VERSION: JSON.stringify(pkg.version), preventAssignment: true }
-const babelPluginOptions = { babelHelpers: 'bundled', exclude: ['node_modules/**', '../../node_modules/**'] }
+const babelPluginOptions = {
+  babelHelpers: 'bundled',
+  exclude: ['node_modules/**', '../../node_modules/**']
+}
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
 const visualizePluginOptions = { open: true, filename: './public/stats.html' }
@@ -57,7 +68,7 @@ const mainBundle = {
       name: 'Clappr',
       file: pkg.main,
       format: 'umd',
-      sourcemap: true,
+      sourcemap: true
     },
     minimize && {
       exports: 'named',
@@ -65,10 +76,10 @@ const mainBundle = {
       file: 'dist/clappr-core.min.js',
       format: 'iife',
       sourcemap: true,
-      plugins: terser(),
+      plugins: terser()
     }
   ],
-  plugins,
+  plugins
 }
 
 const esmBundle = {
@@ -77,9 +88,9 @@ const esmBundle = {
     exports: 'named',
     name: 'Clappr',
     file: pkg.module,
-    format: 'esm',
+    format: 'esm'
   },
-  plugins,
+  plugins
 }
 
 export default [mainBundle, esmBundle]
