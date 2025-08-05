@@ -175,7 +175,6 @@ export default (() => {
     /**
      * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
      * @method addExternalPlugins
-     * @private
      * @param {Object} an config object or an array of plugins
      * @return {Object} plugins the config object with the plugins separated by type
      */
@@ -209,7 +208,6 @@ export default (() => {
     /**
      * adds all the external plugins that were passed through `options.plugins`
      * @method addExternalPlugins
-     * @private
      * @param {Object} plugins the config object with all plugins
      */
     addExternalPlugins(plugins) {
@@ -258,7 +256,6 @@ export default (() => {
     /**
      * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
      * @method validateExternalPluginsType
-     * @private
      * @param {Object} plugins the config object with all plugins
      */
     validateExternalPluginsType(plugins) {
