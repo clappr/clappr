@@ -37,7 +37,7 @@ export default class CorePlugin extends BaseObject {
 
 Object.assign(CorePlugin.prototype, ErrorMixin)
 
-CorePlugin.extend = function(properties) {
+CorePlugin.extend = function (properties) {
   return extend(CorePlugin, properties)
 }
 

@@ -39,9 +39,7 @@ export default class StatsPlugin extends ContainerPlugin {
   onPlay() {
     this.state = 'PLAYING'
     this.watchingTimeInit = Date.now()
-    if (!this.intervalId)
-      this.intervalId = setInterval(this.report.bind(this), this.reportInterval)
-
+    if (!this.intervalId) { this.intervalId = setInterval(this.report.bind(this), this.reportInterval) }
   }
 
   onStop() {
@@ -52,10 +50,7 @@ export default class StatsPlugin extends ContainerPlugin {
   }
 
   onBuffering() {
-    if (this.firstPlay)
-      this.startupTimeInit = Date.now()
-    else
-      this.rebufferingTimeInit = Date.now()
+    if (this.firstPlay) { this.startupTimeInit = Date.now() } else { this.rebufferingTimeInit = Date.now() }
 
     this.state = 'BUFFERING'
     this.rebuffers++
@@ -91,10 +86,10 @@ export default class StatsPlugin extends ContainerPlugin {
 
   getStats() {
     const metrics = {
-      startupTime:     this.startupTime,
-      rebuffers:       this.rebuffers,
-      rebufferingTime: this.isRebuffering()? this.rebufferingTime + this.getRebufferingTime(): this.rebufferingTime,
-      watchingTime:    this.isRebuffering()? this.getWatchingTime() - this.getRebufferingTime(): this.getWatchingTime()
+      startupTime: this.startupTime,
+      rebuffers: this.rebuffers,
+      rebufferingTime: this.isRebuffering() ? this.rebufferingTime + this.getRebufferingTime() : this.rebufferingTime,
+      watchingTime: this.isRebuffering() ? this.getWatchingTime() - this.getRebufferingTime() : this.getWatchingTime()
     }
     $.extend(metrics, this.externalMetrics)
     return metrics

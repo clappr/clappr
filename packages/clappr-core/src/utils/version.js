@@ -3,8 +3,8 @@ const VERSION_REGEX = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/
 export default class Version {
   static parse(str = '') {
     const matches = str.match(VERSION_REGEX) || []
-    const [,major, minor, patch] = matches
-    if (typeof(major) === 'undefined') return null
+    const [, major, minor, patch] = matches
+    if (typeof (major) === 'undefined') return null
 
     return new Version(major, minor, patch)
   }
@@ -23,7 +23,7 @@ export default class Version {
   }
 
   inc(type = 'patch') {
-    typeof(this[type]) !== 'undefined' && (this[type] += 1)
+    typeof (this[type]) !== 'undefined' && (this[type] += 1)
     return this
   }
 

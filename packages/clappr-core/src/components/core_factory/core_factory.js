@@ -13,7 +13,6 @@ import Core from '../core/core'
  * @module components
  */
 export default class CoreFactory extends BaseObject {
-
   get loader() { return this.player.loader }
 
   /**
@@ -55,8 +54,6 @@ export default class CoreFactory extends BaseObject {
 
   setupExternalInterface(plugin) {
     const externalFunctions = plugin.getExternalInterface()
-    for (const key in externalFunctions)
-      this.player[key] = externalFunctions[key].bind(plugin)
-
+    for (const key in externalFunctions) { this.player[key] = externalFunctions[key].bind(plugin) }
   }
 }

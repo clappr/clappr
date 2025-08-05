@@ -70,15 +70,13 @@ export default class Favicon extends CorePlugin {
   }
 
   setPlayIcon() {
-    if (!this.playIcon)
-      this.playIcon = this.createIcon(playIcon)
+    if (!this.playIcon) { this.playIcon = this.createIcon(playIcon) }
 
     this.changeIcon(this.playIcon)
   }
 
   setPauseIcon() {
-    if (!this.pauseIcon)
-      this.pauseIcon = this.createIcon(pauseIcon)
+    if (!this.pauseIcon) { this.pauseIcon = this.createIcon(pauseIcon) }
 
     this.changeIcon(this.pauseIcon)
   }

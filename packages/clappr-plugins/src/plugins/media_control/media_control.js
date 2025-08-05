@@ -28,7 +28,7 @@ export default class MediaControl extends UICorePlugin {
   get name() { return 'media_control' }
   get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get disabled() {
-    let playbackIsNOOP = this.container && this.container.getPlaybackType() === Playback.NO_OP
+    const playbackIsNOOP = this.container && this.container.getPlaybackType() === Playback.NO_OP
     return this.userDisabled || playbackIsNOOP
   }
 
@@ -88,15 +88,13 @@ export default class MediaControl extends UICorePlugin {
     this.bindKeyEvents()
 
     if (this.container) {
-      if (!$.isEmptyObject(this.container.settings))
-        this.settings = $.extend({}, this.container.settings)
+      if (!$.isEmptyObject(this.container.settings)) { this.settings = $.extend({}, this.container.settings) }
     } else {
       this.settings = {}
     }
 
     this.userDisabled = false
-    if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless)
-      this.disable()
+    if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless) { this.disable() }
 
     this.stopDragHandler = (event) => this.stopDrag(event)
     this.updateDragHandler = (event) => this.updateDrag(event)
@@ -107,7 +105,7 @@ export default class MediaControl extends UICorePlugin {
   getExternalInterface() {
     return {
       setVolume: this.setVolume,
-      getVolume: () => this.volume,
+      getVolume: () => this.volume
     }
   }
 
@@ -181,7 +179,7 @@ export default class MediaControl extends UICorePlugin {
   }
 
   onLoadedMetadataOnVideoTag() {
-    let video = this.playback && this.playback.el
+    const video = this.playback && this.playback.el
     // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
     // see https://github.com/clappr/clappr/issues/1127
     if (!Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
@@ -257,7 +255,7 @@ export default class MediaControl extends UICorePlugin {
 
   playerResize(size) {
     this.$fullscreenToggle.html('')
-    let icon = this.core.isFullscreen() ? exitFullscreenIcon : fullscreenIcon
+    const icon = this.core.isFullscreen() ? exitFullscreenIcon : fullscreenIcon
     this.$fullscreenToggle.append(icon)
     this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320')
@@ -339,11 +337,7 @@ export default class MediaControl extends UICorePlugin {
       }
     }
 
-    if (!this.container)
-      this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => setWhenContainerReady())
-    else
-      setWhenContainerReady()
-
+    if (!this.container) { this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => setWhenContainerReady()) } else { setWhenContainerReady() }
   }
 
   toggleFullscreen() {
@@ -407,8 +401,7 @@ export default class MediaControl extends UICorePlugin {
 
     // default to 100%
     this.currentSeekBarPercentage = 100
-    if (this.container && (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse()))
-      this.currentSeekBarPercentage = (this.currentPositionValue / this.currentDurationValue) * 100
+    if (this.container && (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse())) { this.currentSeekBarPercentage = (this.currentPositionValue / this.currentDurationValue) * 100 }
 
     this.setSeekPercentage(this.currentSeekBarPercentage)
 
@@ -458,7 +451,7 @@ export default class MediaControl extends UICorePlugin {
     if (this.disabled) return
 
     const timeout = 2000
-    let mousePointerMoved = event && (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY)
+    const mousePointerMoved = event && (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY)
     if (!event || mousePointerMoved || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
       this.$el.show()
@@ -482,8 +475,8 @@ export default class MediaControl extends UICorePlugin {
     clearTimeout(this.hideId)
     if (!this.disabled && this.options.hideMediaControl === false) return
 
-    let hasKeepVisibleRequested = this.userKeepVisible || this.keepVisible
-    let hasDraggingAction = this.draggingSeekBar || this.draggingVolumeBar
+    const hasKeepVisibleRequested = this.userKeepVisible || this.keepVisible
+    const hasDraggingAction = this.draggingSeekBar || this.draggingVolumeBar
 
     if (!this.disabled && (delay || hasKeepVisibleRequested || hasDraggingAction)) {
       this.hideId = setTimeout(() => this.hide(), timeout)
@@ -498,10 +491,7 @@ export default class MediaControl extends UICorePlugin {
   }
 
   updateCursorStyle(showing) {
-    if (showing)
-      this.core.$el.removeClass('nocursor')
-    else if (this.core.isFullscreen())
-      this.core.$el.addClass('nocursor')
+    if (showing) { this.core.$el.removeClass('nocursor') } else if (this.core.isFullscreen()) { this.core.$el.addClass('nocursor') }
   }
 
   settingsUpdate() {
@@ -610,7 +600,7 @@ export default class MediaControl extends UICorePlugin {
     this.bindKeyAndShow('shift right', () => this.seekRelative(10))
     this.bindKeyAndShow('shift ctrl left', () => this.seekRelative(-15))
     this.bindKeyAndShow('shift ctrl right', () => this.seekRelative(15))
-    const keys = ['1','2','3','4','5','6','7','8','9','0']
+    const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     keys.forEach((i) => {
       this.bindKeyAndShow(i, () => {
         this.settings.seekEnabled && this.container && this.container.seekPercentage(i * 10)
@@ -627,7 +617,7 @@ export default class MediaControl extends UICorePlugin {
       this.kibo.off('shift right')
       this.kibo.off('shift ctrl left')
       this.kibo.off('shift ctrl right')
-      this.kibo.off(['1','2','3','4','5','6','7','8','9','0'])
+      this.kibo.off(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
     }
   }
 
@@ -660,10 +650,7 @@ export default class MediaControl extends UICorePlugin {
    */
   configure(options) {
     // Check if chromeless mode or if configure is called with new source(s)
-    if (this.options.chromeless || options.source || options.sources)
-      this.disable()
-    else
-      this.enable()
+    if (this.options.chromeless || options.source || options.sources) { this.disable() } else { this.enable() }
 
     this.trigger(Events.MEDIACONTROL_OPTIONS_CHANGE)
   }
@@ -687,19 +674,14 @@ export default class MediaControl extends UICorePlugin {
     // Video volume cannot be changed with Safari on mobile devices
     // Display mute/unmute icon only if Safari version >= 10
     if (Browser.isSafari && Browser.isMobile) {
-      if (Browser.version < 10)
-        this.$volumeContainer.css('display','none')
-      else
-        this.$volumeBarContainer.css('display','none')
-
+      if (Browser.version < 10) { this.$volumeContainer.css('display', 'none') } else { this.$volumeBarContainer.css('display', 'none') }
     }
 
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
 
     let previousSeekPercentage = 0
-    if (this.displayedSeekBarPercentage)
-      previousSeekPercentage = this.displayedSeekBarPercentage
+    if (this.displayedSeekBarPercentage) { previousSeekPercentage = this.displayedSeekBarPercentage }
 
     this.displayedSeekBarPercentage = null
     this.setSeekPercentage(previousSeekPercentage)
@@ -723,6 +705,6 @@ export default class MediaControl extends UICorePlugin {
   }
 }
 
-MediaControl.extend = function(properties) {
+MediaControl.extend = function (properties) {
   return extend(MediaControl, properties)
 }

@@ -6,5 +6,5 @@ BaseExports.Loader.registerPlayback(HLS)
 
 export default {
   ...BaseExports,
-  HLS,
+  HLS
 }

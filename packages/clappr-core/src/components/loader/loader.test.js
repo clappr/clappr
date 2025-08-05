@@ -19,7 +19,10 @@ describe('Loader', () => {
     let containerPlugin
     beforeEach(() => {
       CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.5.0' } })
-      containerPlugin = ContainerPlugin.extend({ name: 'container-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
+      containerPlugin = ContainerPlugin.extend({
+        name: 'container-plugin',
+        supportedVersion: { min: '0.4.0', max: '9.9.9' }
+      })
     })
 
     afterEach(() => {
@@ -35,14 +38,20 @@ describe('Loader', () => {
     })
 
     test('uses min version to stipulate the not informed max version', () => {
-      const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0', max: '9.9.9' } })
+      const plugin = CorePlugin.extend({
+        name: 'core-plugin',
+        supportedVersion: { min: '0.4.0', max: '9.9.9' }
+      })
       const isClapprVersionSupported = Loader.checkVersionSupport(plugin)
 
       expect(isClapprVersionSupported).toBeTruthy()
     })
 
     test('inform the version incompatibility', () => {
-      const plugin = CorePlugin.extend({ name: 'core-plugin', supportedVersion: { min: '0.4.0', max: '0.4.1' } })
+      const plugin = CorePlugin.extend({
+        name: 'core-plugin',
+        supportedVersion: { min: '0.4.0', max: '0.4.1' }
+      })
 
       const hasPluginMinimumSupportedVersion = Loader.checkVersionSupport(plugin)
 
@@ -232,7 +241,6 @@ describe('Loader', () => {
       expect(registered).toBeTruthy()
       expect(Loader.registeredPlaybacks[0]).toEqual(playback)
 
-
       const unregistered = Loader.unregisterPlayback('some-playback')
 
       expect(unregistered).toBeTruthy()
@@ -254,7 +262,7 @@ describe('Loader', () => {
 
       loader.addExternalPlugins({ playback: [playbackPlugin] })
       expect(loader.playbackPlugins.length).toEqual(nativePlaybackPluginsCount + 1)
-      const selected = loader.playbackPlugins.filter((p) => p.canPlay('source'))[0]
+      const selected = loader.playbackPlugins.filter(p => p.canPlay('source'))[0]
       expect(selected.prototype.name).toEqual('playbackPlugin')
 
       loader.addExternalPlugins({ container: [containerPlugin] })
@@ -292,10 +300,17 @@ describe('Loader', () => {
       const externalContainerPlugin = ContainerPlugin.extend({ name: 'external_container_plugin' })
       const externalCorePlugin = CorePlugin.extend({ name: 'external_core_plugin' })
 
-      loader.addExternalPlugins({ core: [externalCorePlugin], container: [externalContainerPlugin] })
+      loader.addExternalPlugins({
+        core: [externalCorePlugin],
+        container: [externalContainerPlugin]
+      })
 
-      expect(loader.containerPlugins[0].prototype.name).toEqual(externalContainerPlugin.prototype.name)
-      expect(loader.containerPlugins[1].prototype.name).toEqual(defaultContainerPlugin.prototype.name)
+      expect(loader.containerPlugins[0].prototype.name).toEqual(
+        externalContainerPlugin.prototype.name
+      )
+      expect(loader.containerPlugins[1].prototype.name).toEqual(
+        defaultContainerPlugin.prototype.name
+      )
 
       expect(loader.corePlugins[0].prototype.name).toEqual(externalCorePlugin.prototype.name)
       expect(loader.corePlugins[1].prototype.name).toEqual(defaultCorePlugin.prototype.name)
@@ -315,7 +330,9 @@ describe('Loader', () => {
 
       loader.addExternalPlugins({ playback: [externalPlaybackPlugin] })
 
-      expect(loader.playbackPlugins[0].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+      expect(loader.playbackPlugins[0].prototype.name).toEqual(
+        externalPlaybackPlugin.prototype.name
+      )
       expect(loader.playbackPlugins[1].prototype.name).toEqual(defaultPlaybackPlugin.prototype.name)
 
       Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
@@ -333,7 +350,11 @@ describe('Loader', () => {
       const externalContainerPlugin = ContainerPlugin.extend({ name: 'external_container_plugin' })
       const externalCorePlugin = CorePlugin.extend({ name: 'external_core_plugin' })
 
-      loader.addExternalPlugins({ loadExternalPluginsFirst: false, core: [externalCorePlugin], container: [externalContainerPlugin] })
+      loader.addExternalPlugins({
+        loadExternalPluginsFirst: false,
+        core: [externalCorePlugin],
+        container: [externalContainerPlugin]
+      })
 
       expect(loader.containerPlugins[0].prototype.name).toEqual('default_container_plugin')
       expect(loader.containerPlugins[1].prototype.name).toEqual('external_container_plugin')
@@ -354,10 +375,15 @@ describe('Loader', () => {
 
       const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'external_playback_plugin' })
 
-      loader.addExternalPlugins({ loadExternalPlaybacksFirst: false, playback: [externalPlaybackPlugin] })
+      loader.addExternalPlugins({
+        loadExternalPlaybacksFirst: false,
+        playback: [externalPlaybackPlugin]
+      })
 
       expect(loader.playbackPlugins[0].prototype.name).toEqual(defaultPlaybackPlugin.prototype.name)
-      expect(loader.playbackPlugins[1].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+      expect(loader.playbackPlugins[1].prototype.name).toEqual(
+        externalPlaybackPlugin.prototype.name
+      )
 
       Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
     })
@@ -374,11 +400,17 @@ describe('Loader', () => {
       })
 
       test('prioritizes external plugins if their names collide', () => {
-        const spinnerPlugin = ContainerPlugin.extend({ container: {}, name: 'spinner', myprop: 'myvalue' })
+        const spinnerPlugin = ContainerPlugin.extend({
+          container: {},
+          name: 'spinner',
+          myprop: 'myvalue'
+        })
 
-        expect(loader.containerPlugins.filter((plugin) => {
-          return plugin.prototype.name === 'spinner'
-        })[0]).not.toEqual(spinnerPlugin)
+        expect(
+          loader.containerPlugins.filter(plugin => {
+            return plugin.prototype.name === 'spinner'
+          })[0]
+        ).not.toEqual(spinnerPlugin)
 
         loader.addExternalPlugins({ container: [spinnerPlugin] })
 
@@ -390,27 +422,33 @@ describe('Loader', () => {
       test('allows only one plugin with a given name', () => {
         const spinnerPlugin = ContainerPlugin.extend({ container: {}, name: 'spinner' })
 
-        expect(loader.containerPlugins.filter((plugin) => {
-          return plugin.prototype.name === 'spinner'
-        }).length).toEqual(1)
+        expect(
+          loader.containerPlugins.filter(plugin => {
+            return plugin.prototype.name === 'spinner'
+          }).length
+        ).toEqual(1)
 
         loader.addExternalPlugins({ container: [spinnerPlugin] })
 
-        expect(loader.containerPlugins.filter((plugin) => {
-          return plugin.prototype.name === 'spinner'
-        }).length).toEqual(1)
+        expect(
+          loader.containerPlugins.filter(plugin => {
+            return plugin.prototype.name === 'spinner'
+          }).length
+        ).toEqual(1)
       })
 
       // TODO: this behavior will change from 0.5.x on, preventing plugins from loading
       test('accepts plugins with missing version information', () => {
-        const SomePlugin = ContainerPlugin.extend({ container: {},  name: 'plugin' })
+        const SomePlugin = ContainerPlugin.extend({ container: {}, name: 'plugin' })
         const loader = new Loader()
 
         loader.addExternalPlugins({ container: [SomePlugin] })
 
-        expect(loader.containerPlugins.filter((plugin) => {
-          return plugin.prototype.name === 'plugin'
-        }).length).toEqual(1)
+        expect(
+          loader.containerPlugins.filter(plugin => {
+            return plugin.prototype.name === 'plugin'
+          }).length
+        ).toEqual(1)
       })
     })
 
@@ -426,10 +464,16 @@ describe('Loader', () => {
       const externalContainerPlugin = ContainerPlugin.extend({ name: 'container_plugin' })
       const externalCorePlugin = CorePlugin.extend({ name: 'core_plugin' })
 
-      loader.addExternalPlugins({ loadExternalPluginsFirst: false, core: [externalCorePlugin], container: [externalContainerPlugin] })
+      loader.addExternalPlugins({
+        loadExternalPluginsFirst: false,
+        core: [externalCorePlugin],
+        container: [externalContainerPlugin]
+      })
 
       expect(loader.containerPlugins.length).toEqual(1)
-      expect(loader.containerPlugins[0].prototype.name).toEqual(externalContainerPlugin.prototype.name)
+      expect(loader.containerPlugins[0].prototype.name).toEqual(
+        externalContainerPlugin.prototype.name
+      )
 
       expect(loader.corePlugins.length).toEqual(1)
       expect(loader.corePlugins[0].prototype.name).toEqual(externalCorePlugin.prototype.name)
@@ -447,30 +491,51 @@ describe('Loader', () => {
 
       const externalPlaybackPlugin = PlaybackPlugin.extend({ name: 'playback_plugin' })
 
-      loader.addExternalPlugins({ loadExternalPlaybacksFirst: false, playback: [externalPlaybackPlugin] })
+      loader.addExternalPlugins({
+        loadExternalPlaybacksFirst: false,
+        playback: [externalPlaybackPlugin]
+      })
 
       expect(loader.playbackPlugins.length).toEqual(1)
-      expect(loader.playbackPlugins[0].prototype.name).toEqual(externalPlaybackPlugin.prototype.name)
+      expect(loader.playbackPlugins[0].prototype.name).toEqual(
+        externalPlaybackPlugin.prototype.name
+      )
 
       Loader.unregisterPlayback(defaultPlaybackPlugin.prototype.name)
     })
   })
 
   describe('validateExternalPluginsType function', () => {
-    test('throws an exception if plugin type does not match where it\'s being added', () => {
+    test("throws an exception if plugin type does not match where it's being added", () => {
       const loader = new Loader()
 
-      expect(() => { loader.validateExternalPluginsType({ core: [PlaybackPlugin] }) }).toThrow('external playback plugin on core array')
-      expect(() => { loader.validateExternalPluginsType({ container: [PlaybackPlugin] }) }).toThrow('external playback plugin on container array')
+      expect(() => {
+        loader.validateExternalPluginsType({ core: [PlaybackPlugin] })
+      }).toThrow('external playback plugin on core array')
+      expect(() => {
+        loader.validateExternalPluginsType({ container: [PlaybackPlugin] })
+      }).toThrow('external playback plugin on container array')
 
-      expect(() => { loader.validateExternalPluginsType({ core: [ContainerPlugin] }) }).toThrow('external container plugin on core array')
-      expect(() => { loader.validateExternalPluginsType({ playback: [ContainerPlugin] }) }).toThrow('external container plugin on playback array')
+      expect(() => {
+        loader.validateExternalPluginsType({ core: [ContainerPlugin] })
+      }).toThrow('external container plugin on core array')
+      expect(() => {
+        loader.validateExternalPluginsType({ playback: [ContainerPlugin] })
+      }).toThrow('external container plugin on playback array')
 
-      expect(() => { loader.validateExternalPluginsType({ container: [CorePlugin] }) }).toThrow('external core plugin on container array')
-      expect(() => { loader.validateExternalPluginsType({ playback: [CorePlugin] }) }).toThrow('external core plugin on playback array')
+      expect(() => {
+        loader.validateExternalPluginsType({ container: [CorePlugin] })
+      }).toThrow('external core plugin on container array')
+      expect(() => {
+        loader.validateExternalPluginsType({ playback: [CorePlugin] })
+      }).toThrow('external core plugin on playback array')
 
-      expect(() => { loader.validateExternalPluginsType({ core: [UIContainerPlugin] }) }).toThrow('external container plugin on core array')
-      expect(() => { loader.validateExternalPluginsType({ playback: [UIContainerPlugin] }) }).toThrow('external container plugin on playback array')
+      expect(() => {
+        loader.validateExternalPluginsType({ core: [UIContainerPlugin] })
+      }).toThrow('external container plugin on core array')
+      expect(() => {
+        loader.validateExternalPluginsType({ playback: [UIContainerPlugin] })
+      }).toThrow('external container plugin on playback array')
 
       const core = CorePlugin.extend({ name: 'core-plugin' })
       const container = ContainerPlugin.extend({ name: 'container-plugin' })
@@ -479,7 +544,7 @@ describe('Loader', () => {
       const loader1 = new Loader({
         core: [core],
         container: [container],
-        playback: [playback],
+        playback: [playback]
       })
 
       expect(loader1.corePlugins[0]).toEqual(core)

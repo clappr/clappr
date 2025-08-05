@@ -23,7 +23,7 @@ export default class BaseObject extends Events {
    * @method constructor
    * @param {Object} options
    */
-  constructor(options={}) {
+  constructor(options = {}) {
     super(options)
     this._options = options
     this.uniqueId = uniqueId('o')

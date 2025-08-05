@@ -33,7 +33,7 @@ const Plugins = {
   SeekTime,
   SpinnerThreeBounce,
   Stats,
-  WaterMark,
+  WaterMark
 }
 
 export {
@@ -52,5 +52,5 @@ export {
   WaterMark,
   Vendor,
   Plugins,
-  version,
+  version
 }

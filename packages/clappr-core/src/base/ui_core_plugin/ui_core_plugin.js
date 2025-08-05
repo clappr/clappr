@@ -38,7 +38,7 @@ export default class UICorePlugin extends UIObject {
 
 Object.assign(UICorePlugin.prototype, ErrorMixin)
 
-UICorePlugin.extend = function(properties) {
+UICorePlugin.extend = function (properties) {
   return extend(UICorePlugin, properties)
 }
 

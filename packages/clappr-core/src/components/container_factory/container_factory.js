@@ -13,8 +13,12 @@ import Container from '../container/container'
 import Playback from '../../base/playback/playback'
 
 export default class ContainerFactory extends BaseObject {
-  get options() { return this._options }
-  set options(options) { this._options = options }
+  get options() {
+    return this._options
+  }
+  set options(options) {
+    this._options = options
+  }
 
   constructor(options, loader, i18n, playerError) {
     super(options)
@@ -24,10 +28,12 @@ export default class ContainerFactory extends BaseObject {
   }
 
   createContainers() {
-    return $.Deferred((promise) => {
-      promise.resolve(this.options.sources.map((source) => {
-        return this.createContainer(source)
-      }))
+    return $.Deferred(promise => {
+      promise.resolve(
+        this.options.sources.map(source => {
+          return this.createContainer(source)
+        })
+      )
     })
   }
 
@@ -53,7 +59,9 @@ export default class ContainerFactory extends BaseObject {
     const playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
 
     // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
-    const playback = playbackPlugin ? new playbackPlugin(options, this._i18n, this.playerError) : new Playback()
+    const playback = playbackPlugin
+      ? new playbackPlugin(options, this._i18n, this.playerError) // eslint-disable-line
+      : new Playback()
 
     options = { ...options, playback: playback }
 
@@ -66,7 +74,7 @@ export default class ContainerFactory extends BaseObject {
   }
 
   addContainerPlugins(container) {
-    this.loader.containerPlugins.forEach((Plugin) => {
+    this.loader.containerPlugins.forEach(Plugin => {
       container.addPlugin(new Plugin(container))
     })
   }

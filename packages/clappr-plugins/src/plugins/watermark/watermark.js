@@ -30,12 +30,10 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
       this.imageLink = this.options.watermarkLink
       this.render()
     } else { this.$el.remove() }
-
   }
 
   onPlay() {
-    if (!this.hidden)
-      this.$el.show()
+    if (!this.hidden) { this.$el.show() }
   }
 
   onStop() {

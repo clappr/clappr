@@ -1,4 +1,4 @@
-//Copyright 2014 Globo.com Player authors. All rights reserved.
+// Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -74,10 +74,7 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   updatePlayButton(show) {
-    if (show && (!this.options.chromeless || this.options.allowUserInteraction))
-      this.showPlayButton()
-    else
-      this.hidePlayButton()
+    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) { this.showPlayButton() } else { this.hidePlayButton() }
   }
 
   showPlayButton() {
@@ -94,7 +91,7 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   clicked() {
     // Let "click_to_pause" plugin handle click event if media has started playing
-    if (! this.hasStartedPlaying) {
+    if (!this.hasStartedPlaying) {
       if (!this.options.chromeless || this.options.allowUserInteraction) {
         this.playRequested = true
         this.update()
@@ -111,10 +108,9 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   update() {
-    if (!this.shouldRender)
-      return
+    if (!this.shouldRender) { return }
 
-    let showPlayButton = !this.playRequested  && !this.hasStartedPlaying && !this.container.buffering
+    const showPlayButton = !this.playRequested && !this.hasStartedPlaying && !this.container.buffering
     this.updatePlayButton(showPlayButton)
     this.updatePoster()
   }
@@ -131,13 +127,11 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   hidePoster() {
     this.container.enableMediaControl()
-    if (this.shouldHideOnPlay())
-      this.$el.hide()
+    if (this.shouldHideOnPlay()) { this.$el.hide() }
   }
 
   render() {
-    if (!this.shouldRender)
-      return
+    if (!this.shouldRender) { return }
 
     const style = Styler.getStyleFor(posterStyle, { baseUrl: this.options.baseUrl })
     this.$el.html(this.template())
@@ -162,8 +156,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$playButton.attr('data-poster', '')
 
     let buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
-    if (buttonsColor)
-      this.$el.find('svg path').css('fill', buttonsColor)
+    if (buttonsColor) { this.$el.find('svg path').css('fill', buttonsColor) }
 
     if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
       buttonsColor = this.options.mediacontrol.buttons

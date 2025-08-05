@@ -1,5 +1,5 @@
 import UIObject from './ui_object'
-import  $ from 'clappr-zepto'
+import $ from 'clappr-zepto'
 
 describe('UIObject', () => {
   test('is a div tag by default', () => {
@@ -14,7 +14,11 @@ describe('UIObject', () => {
   })
 
   test('can be any tag', () => {
-    class MyButton extends UIObject { get tagName() { return 'button' } }
+    class MyButton extends UIObject {
+      get tagName() {
+        return 'button'
+      }
+    }
     const myButton = new MyButton()
     expect(myButton.tagName).toEqual('button')
   })
@@ -43,8 +47,9 @@ describe('UIObject', () => {
 
   test('creates an element with attributes', () => {
     class MyButton extends UIObject {
-      constructor(options) { super(options) }
-      get attributes() { return { class: 'my-button' } }
+      get attributes() {
+        return { class: 'my-button' }
+      }
     }
 
     const myButton = new MyButton()
@@ -54,9 +59,12 @@ describe('UIObject', () => {
 
   test('creates an element with only id/className attributes', () => {
     class MyButton extends UIObject {
-      constructor(options) { super(options) }
-      get id() { return 'id-example' }
-      get className() { return 'class__example' }
+      get id() {
+        return 'id-example'
+      }
+      get className() {
+        return 'class__example'
+      }
     }
 
     const myButton = new MyButton()
@@ -71,8 +79,12 @@ describe('UIObject', () => {
         super(options)
         this.myId = 0
       }
-      get events() { return { 'click': 'myClick' } }
-      myClick() { this.myId = 42 }
+      get events() {
+        return { click: 'myClick' }
+      }
+      myClick() {
+        this.myId = 42
+      }
     }
 
     const myButton = new MyButton()
@@ -90,12 +102,14 @@ describe('UIObject', () => {
         super(options)
         this.myId = 0
       }
-      myClick() { this.myId = 42 }
+      myClick() {
+        this.myId = 42
+      }
     }
 
     const myButton = new MyButton()
 
-    myButton.delegateEvents({ 'click': 'myClick' })
+    myButton.delegateEvents({ click: 'myClick' })
 
     expect(myButton.myId).toEqual(0)
 
@@ -105,7 +119,9 @@ describe('UIObject', () => {
   })
 
   test('binds events of an element with specific selectors to methods', () => {
-    class MyButton extends UIObject { myClick() {} }
+    class MyButton extends UIObject {
+      myClick() {}
+    }
     const myButton = new MyButton()
     jest.spyOn(myButton, 'myClick')
 
@@ -121,13 +137,15 @@ describe('UIObject', () => {
   })
 
   test('only bind events whit correct dictionary { event: callback } input', () => {
-    class MyButton extends UIObject { myClick() {} }
+    class MyButton extends UIObject {
+      myClick() {}
+    }
     const myButton = new MyButton()
     jest.spyOn(myButton, 'myClick')
 
-    myButton.delegateEvents({ 'click': null })
-    myButton.delegateEvents({ 'click': 'test' })
-    myButton.delegateEvents({ 'click': 'myClick' })
+    myButton.delegateEvents({ click: null })
+    myButton.delegateEvents({ click: 'test' })
+    myButton.delegateEvents({ click: 'myClick' })
 
     myButton.$el.trigger('click')
 
@@ -137,10 +155,9 @@ describe('UIObject', () => {
   test('selects elements within the component', () => {
     const insideComponent = $('<p id="special-id">here</p>')[0]
     class MySpecialButton extends UIObject {
-      constructor(options) {
-        super(options)
+      render() {
+        this.$el.append(insideComponent)
       }
-      render() { this.$el.append(insideComponent) }
     }
 
     const myButton = new MySpecialButton()
@@ -150,7 +167,11 @@ describe('UIObject', () => {
   })
 
   test('uses the existent element if _ensureElement method is called after one component is created', () => {
-    class MyButton extends UIObject { get tagName() { return 'button' } }
+    class MyButton extends UIObject {
+      get tagName() {
+        return 'button'
+      }
+    }
     const myButton = new MyButton()
     const component = $('<button></button>')
 
@@ -165,10 +186,9 @@ describe('UIObject', () => {
 
   test('removes it from DOM', () => {
     class FullscreenButton extends UIObject {
-      constructor(options) {
-        super(options)
+      get attributes() {
+        return { id: 'my-0-button' }
       }
-      get attributes() { return { id: 'my-0-button' } }
     }
 
     const myButton = new FullscreenButton()
@@ -187,8 +207,12 @@ describe('UIObject', () => {
         super(options)
         this.myId = 0
       }
-      get events() { return { 'click': 'myClick' } }
-      myClick() { this.myId += 1 }
+      get events() {
+        return { click: 'myClick' }
+      }
+      myClick() {
+        this.myId += 1
+      }
     }
 
     const myButton = new FullscreenButton()
@@ -208,7 +232,7 @@ describe('UIObject', () => {
 
     beforeEach(() => {
       uiObject = new UIObject()
-      jest.spyOn(uiObject,'onResize')
+      jest.spyOn(uiObject, 'onResize')
     })
 
     afterEach(() => {

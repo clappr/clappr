@@ -53,7 +53,6 @@ import Playback from '../playback/playback'
  */
 
 export default class AdaptivePlayback extends Playback {
-
   /**
    * @returns {Boolean}
    */
