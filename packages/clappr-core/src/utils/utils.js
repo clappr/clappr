@@ -1,7 +1,7 @@
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-/*jshint -W079 */
+/* jshint -W079 */
 
 import '../base/polyfills'
 import Media from '../base/media'
@@ -14,7 +14,7 @@ const videoStack = []
 export const requestAnimationFrame = (window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
-  function(fn) { window.setTimeout(fn, 1000/60) }).bind(window)
+  function (fn) { window.setTimeout(fn, 1000 / 60) }).bind(window)
 
 export const cancelAnimationFrame = (window.cancelAnimationFrame ||
  window.mozCancelAnimationFrame ||
@@ -35,9 +35,7 @@ export function extend(parent, properties) {
   class Surrogate extends parent {
     constructor(...args) {
       super(...args)
-      if (properties.initialize)
-        properties.initialize.apply(this, args)
-
+      if (properties.initialize) { properties.initialize.apply(this, args) }
     }
   }
   assign(Surrogate.prototype, properties)
@@ -54,13 +52,13 @@ export function formatTime(time, paddedHours) {
   if (!isFinite(time)) return '--:--'
 
   time = time * 1000
-  time = parseInt(time/1000)
+  time = parseInt(time / 1000)
   const seconds = time % 60
-  time = parseInt(time/60)
+  time = parseInt(time / 60)
   const minutes = time % 60
-  time = parseInt(time/60)
+  time = parseInt(time / 60)
   const hours = time % 24
-  const days = parseInt(time/24)
+  const days = parseInt(time / 24)
   let out = ''
   if (days && days > 0) {
     out += days + ':'
@@ -73,13 +71,13 @@ export function formatTime(time, paddedHours) {
 }
 
 export const Fullscreen = {
-  fullscreenElement: function() {
+  fullscreenElement: function () {
     return document.fullscreenElement ||
       document.webkitFullscreenElement ||
       document.mozFullScreenElement ||
       document.msFullscreenElement
   },
-  requestFullscreen: function(el) {
+  requestFullscreen: function (el) {
     if (el.requestFullscreen) {
       return el.requestFullscreen()
     } else if (el.webkitRequestFullscreen) {
@@ -95,20 +93,10 @@ export const Fullscreen = {
       el.webkitEnterFullScreen()
     }
   },
-  cancelFullscreen: function(el=document) {
-    if (el.exitFullscreen)
-      el.exitFullscreen()
-    else if (el.webkitCancelFullScreen)
-      el.webkitCancelFullScreen()
-    else if (el.webkitExitFullscreen)
-      el.webkitExitFullscreen()
-    else if (el.mozCancelFullScreen)
-      el.mozCancelFullScreen()
-    else if (el.msExitFullscreen)
-      el.msExitFullscreen()
-
+  cancelFullscreen: function (el = document) {
+    if (el.exitFullscreen) { el.exitFullscreen() } else if (el.webkitCancelFullScreen) { el.webkitCancelFullScreen() } else if (el.webkitExitFullscreen) { el.webkitExitFullscreen() } else if (el.mozCancelFullScreen) { el.mozCancelFullScreen() } else if (el.msExitFullscreen) { el.msExitFullscreen() }
   },
-  fullscreenEnabled: function() {
+  fullscreenEnabled: function () {
     return !!(
       document.fullscreenEnabled ||
       document.webkitFullscreenEnabled ||
@@ -119,7 +107,6 @@ export const Fullscreen = {
 }
 
 export class Config {
-
   static _defaultConfig() {
     return {
       volume: {
@@ -142,8 +129,7 @@ export class Config {
   }
 
   static restore(key) {
-    if (Browser.hasLocalstorage && localStorage[this._createKeyspace(key)])
-      return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)])
+    if (Browser.hasLocalstorage && localStorage[this._createKeyspace(key)]) { return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)]) }
 
     return this._defaultValueFor(key)
   }
@@ -181,10 +167,10 @@ export class QueryString {
 
   static parse(paramsString) {
     let match
-    const pl = /\+/g,  // Regex for replacing addition symbol with a space
-      search = /([^&=]+)=?([^&]*)/g,
-      decode = (s) => decodeURIComponent(s.replace(pl, ' ')),
-      params = {}
+    const pl = /\+/g // Regex for replacing addition symbol with a space
+    const search = /([^&=]+)=?([^&]*)/g
+    const decode = (s) => decodeURIComponent(s.replace(pl, ' '))
+    const params = {}
     while (match = search.exec(paramsString)) { // eslint-disable-line no-cond-assign
       params[decode(match[1]).toLowerCase()] = decode(match[2])
     }
@@ -198,7 +184,7 @@ export function seekStringToSeconds(paramName = 't') {
   const parts = seekString.match(/[0-9]+[hms]+/g) || []
   if (parts.length > 0) {
     const factor = { 'h': 3600, 'm': 60, 's': 1 }
-    parts.forEach(function(el) {
+    parts.forEach(function (el) {
       if (el) {
         const suffix = el[el.length - 1]
         const time = parseInt(el.slice(0, el.length - 1), 10)
@@ -230,8 +216,7 @@ export function getBrowserLanguage() {
 }
 
 export function now() {
-  if (window.performance && window.performance.now)
-    return performance.now()
+  if (window.performance && window.performance.now) { return performance.now() }
 
   return Date.now()
 }
@@ -239,9 +224,7 @@ export function now() {
 // remove the item from the array if it exists in the array
 export function removeArrayItem(arr, item) {
   const i = arr.indexOf(item)
-  if (i >= 0)
-    arr.splice(i, 1)
-
+  if (i >= 0) { arr.splice(i, 1) }
 }
 
 // find an item regardless of its letter case
@@ -261,24 +244,22 @@ export function canAutoPlayMedia(cb, options) {
     element: null
   }, options)
 
-  let element = options.element ? options.element : document.createElement(options.type)
+  const element = options.element ? options.element : document.createElement(options.type)
 
   element.muted = options.muted
-  if (options.muted === true)
-    element.setAttribute('muted', 'muted')
+  if (options.muted === true) { element.setAttribute('muted', 'muted') }
 
-  if (options.inline === true)
-    element.setAttribute('playsinline', 'playsinline')
+  if (options.inline === true) { element.setAttribute('playsinline', 'playsinline') }
 
   element.src = options.source
 
-  let promise = element.play()
+  const promise = element.play()
 
-  let timeoutId = setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     setResult(false, new Error(`Timeout ${options.timeout} ms has been reached`))
   }, options.timeout)
 
-  let setResult = (result, error = null) => {
+  const setResult = (result, error = null) => {
     clearTimeout(timeoutId)
     cb(result, error)
   }
@@ -299,8 +280,7 @@ export class DomRecycler {
   }
 
   static create(name) {
-    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0)
-      return videoStack.shift()
+    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) { return videoStack.shift() }
 
     return document.createElement(name)
   }
@@ -323,8 +303,8 @@ export class DoubleEventHandler {
 
   handle(event, cb, prevented = true) {
     // Based on http://jsfiddle.net/brettwp/J4djY/
-    let currentTime = new Date().getTime()
-    let diffTime = currentTime - this.lastTime
+    const currentTime = new Date().getTime()
+    const diffTime = currentTime - this.lastTime
 
     if (diffTime < this.delay && diffTime > 0) {
       cb()
@@ -355,5 +335,5 @@ export default {
   listContainsIgnoreCase,
   canAutoPlayMedia,
   Media,
-  DoubleEventHandler,
+  DoubleEventHandler
 }

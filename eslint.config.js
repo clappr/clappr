@@ -124,6 +124,23 @@ const STANDARDJS_RULES = {
 }
 
 module.exports = [
+  {
+    ignores: [
+      'eslint.config.js',
+      'dist/',
+      'public/',
+      'clappr-zepto/',
+      'node_modules/',
+      'coverage/',
+      '*.min.js',
+      'webpack.config.js',
+      'rollup.config.js',
+      '# Package-specific ignores',
+      'packages/clappr-core/src/base/polyfills.js',
+      'packages/clappr-zepto/',
+      'packages/clappr-core/src/base/template.js'
+    ]
+  },
   js.configs.recommended,
   {
     languageOptions: {

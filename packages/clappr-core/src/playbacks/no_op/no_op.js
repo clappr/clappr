@@ -4,7 +4,7 @@ import Playback from '../../base/playback/playback'
 import template from '../../base/template'
 import Events from '../../base/events/events'
 import noOpHTML from './public/error.html'
-import noOpStyle from  './public/style.scss'
+import noOpStyle from './public/style.scss'
 
 export default class NoOp extends Playback {
   get name() { return 'no_op' }
@@ -26,14 +26,13 @@ export default class NoOp extends Playback {
     this.$el.html(this.template({ message: playbackNotSupported }))
     this.trigger(Events.PLAYBACK_READY, this.name)
     const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp)
-    if (this.options.autoPlay || !showForNoOp)
-      this._animate()
+    if (this.options.autoPlay || !showForNoOp) { this._animate() }
 
     return this
   }
 
   _noise() {
-    this._noiseFrameNum = (this._noiseFrameNum+1)%5
+    this._noiseFrameNum = (this._noiseFrameNum + 1) % 5
     if (this._noiseFrameNum) {
       // only update noise every 5 frames to save cpu
       return
@@ -45,16 +44,14 @@ export default class NoOp extends Playback {
       buffer32 = new Uint32Array(idata.data.buffer)
     } catch (err) {
       buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
-      const data=idata.data
-      for (let i = 0; i < data.length; i++)
-        buffer32[i]=data[i]
-
+      const data = idata.data
+      for (let i = 0; i < data.length; i++) { buffer32[i] = data[i] }
     }
 
-    const len = buffer32.length,
-      m = Math.random() * 6 + 4
-    let run = 0,
-      color = 0
+    const len = buffer32.length
+    const m = Math.random() * 6 + 4
+    let run = 0
+    let color = 0
     for (let i = 0; i < len;) {
       if (run < 0) {
         run = m * Math.random()
@@ -68,8 +65,7 @@ export default class NoOp extends Playback {
   }
 
   _loop() {
-    if (this._stop)
-      return
+    if (this._stop) { return }
 
     this._noise()
     this._animationHandle = requestAnimationFrame(() => this._loop())

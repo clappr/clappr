@@ -20,7 +20,7 @@ class PlayerError extends BaseObject {
     return {
       FATAL: 'FATAL',
       WARN: 'WARN',
-      INFO: 'INFO',
+      INFO: 'INFO'
     }
   }
 

@@ -161,13 +161,9 @@ export default class UIObject extends BaseObject {
       if (!method) continue
 
       const match = key.match(delegateEventSplitter)
-      let eventName = match[1], selector = match[2]
+      let eventName = match[1]; const selector = match[2]
       eventName += '.delegateEvents' + this.cid
-      if (selector === '')
-        this.$el.on(eventName, method.bind(this))
-      else
-        this.$el.on(eventName, selector, method.bind(this))
-
+      if (selector === '') { this.$el.on(eventName, method.bind(this)) } else { this.$el.on(eventName, selector, method.bind(this)) }
     }
     return this
   }
@@ -191,11 +187,10 @@ export default class UIObject extends BaseObject {
     if (!this.el) {
       const attrs = $.extend(true, {}, this.attributes)
       if (this.id) attrs.id = this.id
-      if (this.className) attrs['class'] = this.className
+      if (this.className) attrs.class = this.className
       const $el = $(DomRecycler.create(this.tagName)).attr(attrs)
       this.setElement($el, false)
     } else { this.setElement(this.el, false) }
-
   }
 
   /**

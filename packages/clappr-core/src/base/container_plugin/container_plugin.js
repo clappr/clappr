@@ -42,7 +42,7 @@ export default class ContainerPlugin extends BaseObject {
 
 Object.assign(ContainerPlugin.prototype, ErrorMixin)
 
-ContainerPlugin.extend = function(properties) {
+ContainerPlugin.extend = function (properties) {
   return extend(ContainerPlugin, properties)
 }
 

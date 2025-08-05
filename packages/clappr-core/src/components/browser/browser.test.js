@@ -2,7 +2,7 @@ import Browser from './browser'
 
 import { getBrowserData, getBrowserInfo, getDevice, getOsData } from './browser'
 
-describe('Browser', function() {
+describe('Browser', function () {
   test('checks localstorage support', () => {
     expect(Browser.hasLocalstorage).toEqual(true)
   })

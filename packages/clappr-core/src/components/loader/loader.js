@@ -9,7 +9,10 @@ const filterPluginsByType = (plugins, type) => {
 
   return Object.entries(plugins)
     .filter(([, value]) => value.type === type)
-    .reduce((obj, [key, value]) => (obj[key] = value, obj), {})
+    .reduce((obj, [key, value]) => {
+      obj[key] = value
+      return obj
+    }, {})
 }
 
 /**
@@ -20,7 +23,6 @@ const filterPluginsByType = (plugins, type) => {
  * @module components
  */
 export default (() => {
-
   const registry = {
     plugins: {},
     playbacks: []
@@ -29,7 +31,6 @@ export default (() => {
   const currentVersion = VERSION
 
   return class Loader {
-
     static get registeredPlaybacks() {
       return [...registry.playbacks]
     }
@@ -40,7 +41,7 @@ export default (() => {
       const container = filterPluginsByType(plugins, 'container')
       return {
         core,
-        container,
+        container
       }
     }
 
@@ -52,11 +53,16 @@ export default (() => {
         return false
       }
 
-      const maxVersion = supportedVersion.max ? Version.parse(supportedVersion.max) : Version.parse(supportedVersion.min).inc('minor')
+      const maxVersion = supportedVersion.max
+        ? Version.parse(supportedVersion.max)
+        : Version.parse(supportedVersion.min).inc('minor')
       const minVersion = Version.parse(supportedVersion.min)
 
       if (!Version.parse(currentVersion).satisfies(minVersion, maxVersion)) {
-        Log.warn('Loader', `unsupported plugin ${name}: Clappr version ${currentVersion} does not match required range [${minVersion},${maxVersion})`)
+        Log.warn(
+          'Loader',
+          `unsupported plugin ${name}: Clappr version ${currentVersion} does not match required range [${minVersion},${maxVersion})`
+        )
         return false
       }
 
@@ -77,7 +83,12 @@ export default (() => {
 
       const previousEntry = pluginRegistry[pluginEntry.prototype.name]
 
-      if (previousEntry) Log.warn('Loader', `overriding plugin entry: ${pluginEntry.prototype.name} - ${previousEntry}`)
+      if (previousEntry) {
+        Log.warn(
+          'Loader',
+          `overriding plugin entry: ${pluginEntry.prototype.name} - ${previousEntry}`
+        )
+      }
 
       pluginRegistry[pluginEntry.prototype.name] = pluginEntry
 
@@ -89,9 +100,11 @@ export default (() => {
 
       Loader.checkVersionSupport(playbackEntry)
 
-      let { playbacks } = registry
+      const { playbacks } = registry
 
-      const previousEntryIdx = playbacks.findIndex((entry) => entry.prototype.name === playbackEntry.prototype.name)
+      const previousEntryIdx = playbacks.findIndex(
+        entry => entry.prototype.name === playbackEntry.prototype.name
+      )
 
       if (previousEntryIdx >= 0) {
         const previousEntry = playbacks[previousEntryIdx]
@@ -119,9 +132,9 @@ export default (() => {
     static unregisterPlayback(name) {
       if (!name) return false
 
-      let { playbacks } = registry
+      const { playbacks } = registry
 
-      const index = playbacks.findIndex((entry) => entry.prototype.name === name)
+      const index = playbacks.findIndex(entry => entry.prototype.name === name)
 
       if (index < 0) return false
 
@@ -154,8 +167,7 @@ export default (() => {
       this.containerPlugins = Object.values(container)
       this.corePlugins = Object.values(core)
 
-      if (!Array.isArray(externalPlugins))
-        this.validateExternalPluginsType(externalPlugins)
+      if (!Array.isArray(externalPlugins)) this.validateExternalPluginsType(externalPlugins)
 
       this.addExternalPlugins(externalPlugins)
     }
@@ -189,8 +201,7 @@ export default (() => {
       const pluginsMap = list.reduceRight(groupUp, Object.create(null))
 
       const plugins = []
-      for (let key in pluginsMap)
-        plugins.unshift(pluginsMap[key])
+      for (const key in pluginsMap) plugins.unshift(pluginsMap[key])
 
       return plugins
     }
@@ -202,31 +213,42 @@ export default (() => {
      * @param {Object} plugins the config object with all plugins
      */
     addExternalPlugins(plugins) {
-      const loadExternalPluginsFirst = typeof plugins.loadExternalPluginsFirst === 'boolean'
-        ? plugins.loadExternalPluginsFirst
-        : true
-      const loadExternalPlaybacksFirst = typeof plugins.loadExternalPlaybacksFirst === 'boolean'
-        ? plugins.loadExternalPlaybacksFirst
-        : true
+      const loadExternalPluginsFirst =
+        typeof plugins.loadExternalPluginsFirst === 'boolean'
+          ? plugins.loadExternalPluginsFirst
+          : true
+      const loadExternalPlaybacksFirst =
+        typeof plugins.loadExternalPlaybacksFirst === 'boolean'
+          ? plugins.loadExternalPlaybacksFirst
+          : true
 
       plugins = this.groupPluginsByType(plugins)
 
       if (plugins.playback) {
-        const playbacks = plugins.playback.filter((playback) => (Loader.checkVersionSupport(playback), true))
+        const playbacks = plugins.playback.filter(playback => {
+          Loader.checkVersionSupport(playback)
+          return true
+        })
         this.playbackPlugins = loadExternalPlaybacksFirst
           ? this.removeDups(playbacks.concat(this.playbackPlugins))
           : this.removeDups(this.playbackPlugins.concat(playbacks), true)
       }
 
       if (plugins.container) {
-        const containerPlugins = plugins.container.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
+        const containerPlugins = plugins.container.filter(plugin => {
+          Loader.checkVersionSupport(plugin)
+          return true
+        })
         this.containerPlugins = loadExternalPluginsFirst
           ? this.removeDups(containerPlugins.concat(this.containerPlugins))
           : this.removeDups(this.containerPlugins.concat(containerPlugins), true)
       }
 
       if (plugins.core) {
-        const corePlugins = plugins.core.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
+        const corePlugins = plugins.core.filter(plugin => {
+          Loader.checkVersionSupport(plugin)
+          return true
+        })
         this.corePlugins = loadExternalPluginsFirst
           ? this.removeDups(corePlugins.concat(this.corePlugins))
           : this.removeDups(this.corePlugins.concat(corePlugins), true)
@@ -241,8 +263,9 @@ export default (() => {
      */
     validateExternalPluginsType(plugins) {
       const pluginTypes = ['playback', 'container', 'core']
-      pluginTypes.forEach((type) => {
-        (plugins[type] || []).forEach((el) => {
+      pluginTypes.forEach(type => {
+        const plugins = plugins[type] || []
+        plugins.forEach(el => {
           const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
           if (el.type !== type) throw new ReferenceError(errorMessage)
         })

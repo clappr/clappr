@@ -38,12 +38,11 @@ export default class UIContainerPlugin extends UIObject {
   }
 
   bindEvents() {}
-
 }
 
 Object.assign(UIContainerPlugin.prototype, ErrorMixin)
 
-UIContainerPlugin.extend = function(properties) {
+UIContainerPlugin.extend = function (properties) {
   return extend(UIContainerPlugin, properties)
 }
 

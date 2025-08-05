@@ -118,7 +118,7 @@ export default class Core extends UIObject {
     this.styleRendered = false
     this.plugins = []
     this.containers = []
-    //FIXME fullscreen api sucks
+    // FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
     this._boundHandleWindowResize = (o) => this.handleWindowResize(o)
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
@@ -128,7 +128,7 @@ export default class Core extends UIObject {
   }
 
   configureDomRecycler() {
-    let recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo
+    const recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo
     DomRecycler.configure({ recycleVideo })
   }
 
@@ -322,10 +322,10 @@ export default class Core extends UIObject {
   isFullscreen() {
     const fullscreenElement = Fullscreen.fullscreenElement()
 
-    return fullscreenElement && (fullscreenElement === this.el)
-      || fullscreenElement && (fullscreenElement === this.activePlaybackEl)
-      || this.activePlaybackEl && this.activePlaybackEl.webkitDisplayingFullscreen
-      || false
+    return fullscreenElement && (fullscreenElement === this.el) ||
+      fullscreenElement && (fullscreenElement === this.activePlaybackEl) ||
+      this.activePlaybackEl && this.activePlaybackEl.webkitDisplayingFullscreen ||
+      false
   }
 
   toggleFullscreen() {
@@ -341,9 +341,9 @@ export default class Core extends UIObject {
         ? Fullscreen.requestFullscreen(fullscreenEl)
         : Fullscreen.requestFullscreen(fullscreenEl).then(
           _ => _,
-          error => setTimeout(() => {  // fixes the issue https://github.com/clappr/clappr/issues/1860
+          error => setTimeout(() => { // fixes the issue https://github.com/clappr/clappr/issues/1860
             if (!this.isFullscreen()) throw new ReferenceError(error)
-          }, 600),
+          }, 600)
         )
 
       !Browser.isiOS && this.$el.addClass('fullscreen')

@@ -5,7 +5,7 @@ import Events from '../../base/events'
 
 const FakePlayback = Playback
 
-describe('Container', function() {
+describe('Container', function () {
   let playback
   let container
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('Container', function() {
   })
 
   test('uses settings from playback', () => {
-    expect(container.settings).toEqual((new FakePlayback).settings)
+    expect(container.settings).toEqual((new FakePlayback()).settings)
   })
 
   test('gets playback type', () => {
@@ -28,7 +28,7 @@ describe('Container', function() {
   test('gets a plugin by name', () => {
     const plugin = { name: 'fake' }
     container.addPlugin(plugin)
-    expect( container.getPlugin('fake')).toEqual(plugin)
+    expect(container.getPlugin('fake')).toEqual(plugin)
   })
 
   test('delegates audioTracks calls to playback', () => {
@@ -87,17 +87,17 @@ describe('Container', function() {
   })
 
   test('should trigger options will change event', () => {
-    let callback = jest.fn()
+    const callback = jest.fn()
     container.on(Events.CONTAINER_OPTIONS_WILL_CHANGE, callback)
 
     const newOptions = {
       autoPlay: false
     }
     container.configure(newOptions)
-  
+
     expect(callback).toHaveBeenCalled()
   })
-  
+
   test('should trigger both events in correct order', () => {
     const eventOrder = []
 
@@ -132,9 +132,9 @@ describe('Container', function() {
   })
 
   test('listens to playback:seek event', () => {
-    let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
-    let container = new Container({ playback: playback })
-    let callback = jest.fn()
+    const playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    const container = new Container({ playback: playback })
+    const callback = jest.fn()
 
     container.bindEvents()
     container.on(Events.CONTAINER_SEEK, callback)
@@ -146,9 +146,9 @@ describe('Container', function() {
   })
 
   test('listens to playback:seeked event', () => {
-    let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
-    let container = new Container({ playback: playback })
-    let callback = jest.fn()
+    const playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    const container = new Container({ playback: playback })
+    const callback = jest.fn()
 
     container.bindEvents()
     container.on(Events.CONTAINER_SEEKED, callback)
@@ -252,7 +252,6 @@ describe('Container', function() {
     const parameter = { anyParameter: 'parameter' }
     container.pause(parameter)
     playback.trigger(Events.PLAYBACK_PAUSE)
-
 
     expect(container.trigger).toHaveBeenCalledWith(Events.CONTAINER_PAUSE, container.name, parameter)
   })

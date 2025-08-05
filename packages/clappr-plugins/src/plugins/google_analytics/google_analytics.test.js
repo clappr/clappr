@@ -4,9 +4,9 @@ import GoogleAnalytics from './google_analytics'
 
 const FakePlayback = Playback
 
-describe('GoogleAnalytics', function() {
-  describe('constructor without gaAccount', function() {
-    it('no trackerName by default', function() {
+describe('GoogleAnalytics', function () {
+  describe('constructor without gaAccount', function () {
+    it('no trackerName by default', function () {
       const fakePlayback = new FakePlayback()
       const container = new Container({ playback: fakePlayback })
       const gaControl = new GoogleAnalytics(container)
@@ -15,18 +15,18 @@ describe('GoogleAnalytics', function() {
     })
   })
 
-  describe('constructor with gaAccount', function() {
-    beforeEach(function() {
+  describe('constructor with gaAccount', function () {
+    beforeEach(function () {
       window._gaq = []
     })
-    it('trackerName equals to Clappr. by default', function() {
+    it('trackerName equals to Clappr. by default', function () {
       const fakePlayback = new FakePlayback()
       const container = new Container({ playback: fakePlayback, gaAccount: 'UA-XXXXX-X' })
       const gaControl = new GoogleAnalytics(container)
 
       expect(gaControl.trackerName).to.equal('Clappr.')
     })
-    it('tracks data with Clappr. as trackerName', function() {
+    it('tracks data with Clappr. as trackerName', function () {
       const fakePlayback = new FakePlayback()
       const container = new Container({ playback: fakePlayback, gaAccount: 'UA-XXXXX-X' })
       const gaControl = new GoogleAnalytics(container)
@@ -40,12 +40,12 @@ describe('GoogleAnalytics', function() {
     })
   })
 
-  describe('constructor with gaAccount, gaDomainName and gaTrackerName', function() {
-    beforeEach(function() {
+  describe('constructor with gaAccount, gaDomainName and gaTrackerName', function () {
+    beforeEach(function () {
       window._gat = {}
       window._gaq = []
     })
-    it('trackerName equals to gaTrackerName parameter', function() {
+    it('trackerName equals to gaTrackerName parameter', function () {
       const fakePlayback = new FakePlayback()
       const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
@@ -53,7 +53,7 @@ describe('GoogleAnalytics', function() {
 
       expect(gaControl.trackerName).to.equal('MyPlayerInstance.')
     })
-    it('sets the account to gaAccount value', function() {
+    it('sets the account to gaAccount value', function () {
       const fakePlayback = new FakePlayback()
       const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
@@ -62,7 +62,7 @@ describe('GoogleAnalytics', function() {
       expect(window._gaq[0][0]).to.equal('MyPlayerInstance._setAccount')
       expect(window._gaq[0][1]).to.equal('UA-XXXXX-X')
     })
-    it('sets the domain name to gaDomainName value', function() {
+    it('sets the domain name to gaDomainName value', function () {
       const fakePlayback = new FakePlayback()
       const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
@@ -71,7 +71,7 @@ describe('GoogleAnalytics', function() {
       expect(window._gaq[1][0]).to.equal('MyPlayerInstance._setDomainName')
       expect(window._gaq[1][1]).to.equal('some.domain.com')
     })
-    it('tracks data with gaTrackerName parameter as trackerName', function() {
+    it('tracks data with gaTrackerName parameter as trackerName', function () {
       const fakePlayback = new FakePlayback()
       const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)

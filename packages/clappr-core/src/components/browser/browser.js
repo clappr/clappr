@@ -4,7 +4,7 @@ import OS_DATA from './os_data'
 
 const Browser = {}
 
-const hasLocalstorage = function() {
+const hasLocalstorage = function () {
   try {
     localStorage.setItem('clappr', 'clappr')
     localStorage.removeItem('clappr')
@@ -14,19 +14,24 @@ const hasLocalstorage = function() {
   }
 }
 
-const hasFlash = function() {
+const hasFlash = function () {
   try {
     const fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash')
     return !!fo
   } catch (e) {
-    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
-      navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin)
+    return !!(
+      navigator.mimeTypes &&
+      navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
+      navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin
+    )
   }
 }
 
-export const getBrowserInfo = function(ua) {
-  let parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
-    extra
+export const getBrowserInfo = function (ua) {
+  let parts =
+    ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) ||
+    []
+  let extra
   if (/trident/i.test(parts[1])) {
     extra = /\brv[ :]+(\d+)/g.exec(ua) || []
     return {
@@ -39,7 +44,6 @@ export const getBrowserInfo = function(ua) {
 
     extra = ua.match(/\bEdge\/(\d+)/)
     if (extra != null) return { name: 'Edge', version: parseInt(extra[1]) }
-
   } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
     parts.splice(1, 1, 'Android WebView')
     parts.splice(2, 1, extra[1])
@@ -53,14 +57,14 @@ export const getBrowserInfo = function(ua) {
 }
 
 //  Get browser data
-export const getBrowserData = function() {
-  let browserObject = {}
-  let userAgent = Browser.userAgent.toLowerCase()
+export const getBrowserData = function () {
+  const browserObject = {}
+  const userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
-  for (let browser of BROWSER_DATA) {
-    let browserRegExp = new RegExp(browser.identifier.toLowerCase())
-    let browserRegExpResult = browserRegExp.exec(userAgent)
+  for (const browser of BROWSER_DATA) {
+    const browserRegExp = new RegExp(browser.identifier.toLowerCase())
+    const browserRegExpResult = browserRegExp.exec(userAgent)
 
     if (browserRegExpResult != null && browserRegExpResult[1]) {
       browserObject.name = browser.name
@@ -68,12 +72,12 @@ export const getBrowserData = function() {
 
       // Check version
       if (browser.versionIdentifier) {
-        let versionRegExp = new RegExp(browser.versionIdentifier.toLowerCase())
-        let versionRegExpResult = versionRegExp.exec(userAgent)
+        const versionRegExp = new RegExp(browser.versionIdentifier.toLowerCase())
+        const versionRegExpResult = versionRegExp.exec(userAgent)
 
-        if (versionRegExpResult != null && versionRegExpResult[1])
+        if (versionRegExpResult != null && versionRegExpResult[1]) {
           setBrowserVersion(versionRegExpResult[1], browserObject)
-
+        }
       } else {
         setBrowserVersion(browserRegExpResult[1], browserObject)
       }
@@ -84,8 +88,8 @@ export const getBrowserData = function() {
 }
 
 // Set browser version
-const setBrowserVersion = function(version, browserObject) {
-  let splitVersion = version.split('.', 2)
+const setBrowserVersion = function (version, browserObject) {
+  const splitVersion = version.split('.', 2)
   browserObject.fullVersion = version
 
   // Major version
@@ -96,14 +100,14 @@ const setBrowserVersion = function(version, browserObject) {
 }
 
 //  Get OS data
-export const getOsData = function() {
-  let osObject = {}
-  let userAgent = Browser.userAgent.toLowerCase()
+export const getOsData = function () {
+  const osObject = {}
+  const userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
-  for (let os of OS_DATA) {
-    let osRegExp = new RegExp(os.identifier.toLowerCase())
-    let osRegExpResult = osRegExp.exec(userAgent)
+  for (const os of OS_DATA) {
+    const osRegExp = new RegExp(os.identifier.toLowerCase())
+    const osRegExpResult = osRegExp.exec(userAgent)
 
     if (osRegExpResult != null) {
       osObject.name = os.name
@@ -111,20 +115,24 @@ export const getOsData = function() {
 
       // Version defined
       if (os.version) {
-        setOsVersion(os.version, (os.versionSeparator) ? os.versionSeparator : '.', osObject)
+        setOsVersion(os.version, os.versionSeparator ? os.versionSeparator : '.', osObject)
 
         // Version detected
       } else if (osRegExpResult[1]) {
-        setOsVersion(osRegExpResult[1], (os.versionSeparator) ? os.versionSeparator : '.', osObject)
+        setOsVersion(osRegExpResult[1], os.versionSeparator ? os.versionSeparator : '.', osObject)
 
         // Version identifier
       } else if (os.versionIdentifier) {
-        let versionRegExp = new RegExp(os.versionIdentifier.toLowerCase())
-        let versionRegExpResult = versionRegExp.exec(userAgent)
+        const versionRegExp = new RegExp(os.versionIdentifier.toLowerCase())
+        const versionRegExpResult = versionRegExp.exec(userAgent)
 
-        if (versionRegExpResult != null && versionRegExpResult[1])
-          setOsVersion(versionRegExpResult[1], (os.versionSeparator) ? os.versionSeparator : '.', osObject)
-
+        if (versionRegExpResult != null && versionRegExpResult[1]) {
+          setOsVersion(
+            versionRegExpResult[1],
+            os.versionSeparator ? os.versionSeparator : '.',
+            osObject
+          )
+        }
       }
       break
     }
@@ -133,26 +141,28 @@ export const getOsData = function() {
 }
 
 // Set OS version
-const setOsVersion = function(version, separator, osObject) {
-  let finalSeparator = separator.substr(0, 1) == '[' ? new RegExp(separator, 'g') : separator
+const setOsVersion = function (version, separator, osObject) {
+  const finalSeparator = separator.substr(0, 1) === '[' ? new RegExp(separator, 'g') : separator
   const splitVersion = version.split(finalSeparator, 2)
 
-  if (separator != '.') version = version.replace(new RegExp(separator, 'g'), '.')
+  if (separator !== '.') version = version.replace(new RegExp(separator, 'g'), '.')
 
   osObject.fullVersion = version
 
   // Major version
-  if (splitVersion && splitVersion[0])
+  if (splitVersion && splitVersion[0]) {
     osObject.majorVersion = parseInt(splitVersion[0])
+  }
 
   // Minor version
-  if (splitVersion && splitVersion[1])
+  if (splitVersion && splitVersion[1]) {
     osObject.minorVersion = parseInt(splitVersion[1])
+  }
 }
 
 // Set viewport size
-export const getViewportSize = function() {
-  let viewportObject = {}
+export const getViewportSize = function () {
+  const viewportObject = {}
 
   viewportObject.width = $(window).width()
   viewportObject.height = $(window).height()
@@ -161,22 +171,22 @@ export const getViewportSize = function() {
 }
 
 // Set viewport orientation
-const setViewportOrientation = function() {
+const setViewportOrientation = function () {
   switch (window.orientation) {
-  case -90:
-  case 90:
-    Browser.viewport.orientation = 'landscape'
-    break
-  default:
-    Browser.viewport.orientation = 'portrait'
-    break
+    case -90:
+    case 90:
+      Browser.viewport.orientation = 'landscape'
+      break
+    default:
+      Browser.viewport.orientation = 'portrait'
+      break
   }
 }
 
-export const getDevice = function(ua) {
-  let platformRegExp = /\((iP(?:hone|ad|od))?(?:[^;]*; ){0,2}([^)]+(?=\)))/
-  let matches = platformRegExp.exec(ua)
-  let device = matches && (matches[1] || matches[2]) || ''
+export const getDevice = function (ua) {
+  const platformRegExp = /\((iP(?:hone|ad|od))?(?:[^;]*; ){0,2}([^)]+(?=\)))/
+  const matches = platformRegExp.exec(ua)
+  const device = (matches && (matches[1] || matches[2])) || ''
   return device
 }
 
@@ -186,11 +196,14 @@ Browser.isEdge = /Edg|EdgiOS|EdgA/i.test(navigator.userAgent)
 Browser.isChrome = /Chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
 Browser.isSafari = /Safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge
 Browser.isFirefox = /Firefox/i.test(navigator.userAgent)
-Browser.isLegacyIE = !!(window.ActiveXObject)
+Browser.isLegacyIE = !!window.ActiveXObject
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
 Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent)
 Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent)
-Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(navigator.userAgent)
+Browser.isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(
+    navigator.userAgent
+  )
 Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent)
 Browser.isAndroid = /Android/i.test(navigator.userAgent)
 Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent)
@@ -201,17 +214,17 @@ Browser.hasLocalstorage = hasLocalstorage()
 Browser.hasFlash = hasFlash()
 
 /**
-* @deprecated
-* This parameter currently exists for retrocompatibility reasons.
-* Use Browser.data.name instead.
-*/
+ * @deprecated
+ * This parameter currently exists for retrocompatibility reasons.
+ * Use Browser.data.name instead.
+ */
 Browser.name = browserInfo.name
 
 /**
-* @deprecated
-* This parameter currently exists for retrocompatibility reasons.
-* Use Browser.data.fullVersion instead.
-*/
+ * @deprecated
+ * This parameter currently exists for retrocompatibility reasons.
+ * Use Browser.data.fullVersion instead.
+ */
 Browser.version = browserInfo.version
 
 Browser.userAgent = navigator.userAgent

@@ -60,10 +60,9 @@ describe('Log', () => {
     expect(logger.level).toEqual(Log.LEVEL_INFO)
   })
 
-  describe('prints log', function() {
-
+  describe('prints log', function () {
     let restoreConsole
-    
+
     beforeEach(() => { restoreConsole = mockConsole() })
     afterEach(() => { restoreConsole() })
 
@@ -110,9 +109,9 @@ describe('Log', () => {
     })
   })
 
-  describe('don\'t print log', function() {
+  describe('don\'t print log', function () {
     let restoreConsole
-    
+
     beforeEach(() => { restoreConsole = mockConsole() })
     afterEach(() => { restoreConsole() })
 
@@ -131,9 +130,9 @@ describe('Log', () => {
     })
   })
 
-  describe('have a static method', function() {
+  describe('have a static method', function () {
     let restoreConsole
-    
+
     beforeEach(() => { restoreConsole = mockConsole() })
     afterEach(() => { restoreConsole() })
 
@@ -144,7 +143,7 @@ describe('Log', () => {
 
       logger.testReference = true
 
-      let anotherLogger = Log.getInstance()
+      const anotherLogger = Log.getInstance()
 
       expect(anotherLogger).toEqual(logger)
       expect(anotherLogger.testReference).toBeTruthy()

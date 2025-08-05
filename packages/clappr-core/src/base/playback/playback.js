@@ -329,7 +329,7 @@ export default class Playback extends UIObject {
 
 Object.assign(Playback.prototype, ErrorMixin)
 
-Playback.extend = function(properties) {
+Playback.extend = function (properties) {
   return extend(Playback, properties)
 }
 

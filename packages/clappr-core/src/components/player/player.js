@@ -38,11 +38,9 @@ const baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '')
  * ```
  */
 export default class Player extends BaseObject {
-
   set loader(loader) { this._loader = loader }
   get loader() {
-    if (!this._loader)
-      this._loader = new Loader(this.options.plugins || {}, this.options.playerId)
+    if (!this._loader) { this._loader = new Loader(this.options.plugins || {}, this.options.playerId) }
 
     return this._loader
   }
@@ -227,7 +225,7 @@ export default class Player extends BaseObject {
 
   constructor(options) {
     super(options)
-    const playbackDefaultOptions = { recycleVideo : true }
+    const playbackDefaultOptions = { recycleVideo: true }
     const defaultOptions = {
       playerId: uniqueId(''),
       persistConfig: true,
@@ -279,10 +277,7 @@ export default class Player extends BaseObject {
   }
 
   _addEventListeners() {
-    if (!this.core.isReady)
-      this.listenToOnce(this.core, Events.CORE_READY, this._onReady)
-    else
-      this._onReady()
+    if (!this.core.isReady) { this.listenToOnce(this.core, Events.CORE_READY, this._onReady) } else { this._onReady() }
 
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
@@ -380,8 +375,8 @@ export default class Player extends BaseObject {
   }
 
   _normalizeSources(options) {
-    const sources = options.sources || (options.source !== undefined? [options.source] : [])
-    return sources.length === 0 ? [{ source:'', mimeType:'' }] : sources
+    const sources = options.sources || (options.source !== undefined ? [options.source] : [])
+    return sources.length === 0 ? [{ source: '', mimeType: '' }] : sources
   }
 
   /**
@@ -409,8 +404,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   load(sources, mimeType, autoPlay) {
-    if (autoPlay !== undefined)
-      this.configure({ autoPlay: !!autoPlay })
+    if (autoPlay !== undefined) { this.configure({ autoPlay: !!autoPlay }) }
 
     this.core.load(sources, mimeType)
     return this
@@ -472,7 +466,6 @@ export default class Player extends BaseObject {
     this.core.activeContainer.stop(customData)
     return this
   }
-
 
   /**
    * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.

@@ -13,7 +13,7 @@ const isGetterProperty = (obj, prop) => {
 }
 
 describe('AdaptivePlayback', () => {
-  describe('have a getter', function() {
+  describe('have a getter', function () {
     let playback
     beforeEach(() => {
       playback = new AdaptivePlayback()
