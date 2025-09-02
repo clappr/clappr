@@ -47,7 +47,7 @@
     "@babel/core": "^7.13.14",
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/preset-env": "^7.13.12",
-    "@clappr/core": "^0.4.18",
+    "@clappr/core": "^0.12.0",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
@@ -64,7 +64,7 @@
     "rollup-plugin-visualizer": "^5.3.0"
   },
   "peerDependencies": {
-    "@clappr/core": "^0.4.18"
+    "@clappr/core": "^0.12.0"
   },
   "engines": {
     "node": ">=12.0.0"
