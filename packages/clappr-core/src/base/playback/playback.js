@@ -174,6 +174,15 @@ export default class Playback extends UIObject {
   getDuration() { return 0 }
 
   /**
+   * gets the frame rate of the current source
+   * @method getFrameRate
+   * @return {Number|null} frame rate (fps) of the current source, or null if unavailable
+   */
+  getFrameRate() {
+    return null
+  }
+
+  /**
    * checks if the playback is playing.
    * @method isPlaying
    * @return {Boolean} `true` if the current playback is playing, otherwise `false`
