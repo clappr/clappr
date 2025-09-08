@@ -347,6 +347,16 @@ export default class HlsjsPlayback extends HTML5Video {
     return this._duration
   }
 
+  // the frame rate should be retrieved from the HLS.js level information
+  // as it is not necessarily exposed directly by the video element
+  getFrameRate() {
+    if (this._hls && this._hls.levels && this._hls.currentLevel >= 0) {
+      const level = this._hls.levels[this._hls.currentLevel]
+      return level && level.frameRate ? level.frameRate : null
+    }
+    return null
+  }
+
   getCurrentTime() {
     // e.g. can be < 0 if user pauses near the start
     // eventually they will then be kicked to the end by hlsjs if they run out of buffer
