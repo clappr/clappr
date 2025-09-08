@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/clappr/hlsjs-playback/compare/@clappr/hlsjs-playback@1.8.5...@clappr/hlsjs-playback@1.9.0) (2025-09-08)
+
+### Features
+
+- **hls:** add video source frame rate getter ([4a6a9a7](https://github.com/clappr/hlsjs-playback/commit/4a6a9a71786caeda5f0d894140e25553fdbeb0a8))
+
 ## [1.8.5](https://github.com/clappr/hlsjs-playback/compare/@clappr/hlsjs-playback@1.8.4...@clappr/hlsjs-playback@1.8.5) (2025-09-08)
 
 **Note:** Version bump only for package @clappr/hlsjs-playback
