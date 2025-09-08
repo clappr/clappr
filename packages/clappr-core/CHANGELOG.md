@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/clappr/clappr-core/compare/@clappr/core@0.12.1...@clappr/core@0.13.0) (2025-09-08)
+
+### Features
+
+- **playback:** add video source frame rate getter ([cbcfc7a](https://github.com/clappr/clappr-core/commit/cbcfc7a5c1b3ae6179b795dcfc6e98d49c7cc981))
+
 ## [0.12.1](https://github.com/clappr/clappr-core/compare/@clappr/core@0.12.0...@clappr/core@0.12.1) (2025-08-05)
 
 ### Bug Fixes
