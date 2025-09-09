@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.2](https://github.com/clappr/hlsjs-playback/compare/@clappr/hlsjs-playback@1.9.1...@clappr/hlsjs-playback@1.9.2) (2025-09-09)
+
+### Bug Fixes
+
+- **playbacks:** add eslint as dev dependencies ([fe9ce5e](https://github.com/clappr/hlsjs-playback/commit/fe9ce5e5ab0177f4745991c8d279c5bce5c6760b))
+
 ## [1.9.1](https://github.com/clappr/hlsjs-playback/compare/@clappr/hlsjs-playback@1.9.0...@clappr/hlsjs-playback@1.9.1) (2025-09-09)
 
 **Note:** Version bump only for package @clappr/hlsjs-playback
