@@ -133,41 +133,6 @@ classDiagram
     Container "1" *-- "0..1" Playback : composition
 ```
 
-### We favor event based components communication, both internally as well as for external interface. Thus all Clappr classes shall be derived from the BaseObject classes:
-
-```mermaid
-classDiagram
-    direction LR
-    
-    class BaseObject {
-        + uniqueId: String
-        + options: Object
-        + on(name, callback, context)
-        + once(name, callback, context)
-        + off(name, callback, context)
-        + trigger(name)
-        + listenTo(obj, name, callback)
-        + stopListening(obj, name, callback)
-    }
-    
-    class UIObject {
-        + cid: String
-        + el: HTMLElement
-        + $el: ZeptoCollection
-        + tagName: String
-        + events: Object
-        + attributes: Object
-        + render()
-        + destroy()
-        + setElement(element, delegate)
-        + delegateEvents(events)
-        + undelegateEvents()
-        + resize(options)
-        + onResize()
-    }
-    
-    UIObject <|-- BaseObject : extends
-```
 
 ## Clappr is Plugin Oriented
 
