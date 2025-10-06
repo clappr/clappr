@@ -38,6 +38,28 @@ graph TD
     CORE --> MEDIACONTROL
 ```
 
+## Architecture
+
+Component | Role | Related Components
+-- | -- | --
+Player | Entry point and public API of Clappr. Manages the Player's top-level state. | `Core`
+Core | Manages the Player's main components: containers, plugins, etc. | `CorePlugin`, `UICorePlugin`, `Container`
+Container | Wraps a `Playback` instance and manages `Container`-level plugins. | `ContainerPlugin`, `UIContainerPlugin`, `Playback`
+Playback | Abstraction layer that controls the actual media element or wrapper (hls.js, dash-shaka-playback, html5, `<video>` tag, etc). | –
+MediaControl | `UICorePlugin` that provides the UI controls for playback (play/pause, seek, volume, etc.). | –
+
+---
+
+## Media Format and Component Architecture
+
+Plugin Type | Description | Example Use
+-- | -- | --
+CorePlugin | Has access to all components of the Player. Typically used for features that need a global view or to collect information. | User statistics tracking
+UICorePlugin | Same as `CorePlugin`, but can also render UI elements. | [Chromecast integration](https://github.com/clappr/clappr-chromecast-plugin), [thumbnails](https://github.com/tjenkinson/clappr-thumbnails-plugin)
+ContainerPlugin | Interacts with the `Playback` layer, allowing you to control or modify playback behavior. | [Speech control](https://github.com/clappr/clappr-speech-control-plugin)
+UIContainerPlugin | Same as `ContainerPlugin`, but can also render UI elements. | [Watermark overlay](https://github.com/clappr/watermark)
+Playback | A module that defines how the Player handles specific playback types. | [360-degrees playback](https://github.com/thiagopnts/video-360), [Shaka Player integration](https://github.com/clappr/dash-shaka-playback).
+MediaControl | Provides and manages the Player's main control interface (buttons, timeline, volume, etc.) | Default player UI
 
 **You can create plugins around these abstractions. Here's the kinds of available plugins:**
 
