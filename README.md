@@ -31,16 +31,16 @@ yarn add @clappr/player
 
 This repository uses a monorepo layout:
 
-| Directory | Description |
-| ---------- | ------------ |
-| [`/apps`](/apps/) | Applications such as [clappr.io](http://clappr.io/) and documentation site |
-| [`/packages`](/packages/) | Core packages (e.g. `@clappr/player`, plugins, utilities) |
-| [`/packages/player`](/packages/player) | The main **Clappr Player** package. Exposes the public API and serves as the entry point for embedding the player in web apps. |
-| [`/packages/clappr-core`](/packages/clappr-core) | Contains the **core architecture** of the player — including components such as `Core`, `Container`, and `Playback` abstractions. |
-| [`/packages/clappr-plugins`](/packages/clappr-plugins) | Official **plugin collection**, providing ready-to-use extensions (e.g., UI features, analytics integrations). |
-| [`/packages/clappr-zepto`](/packages/clappr-zepto) | Lightweight **DOM utility layer**, a modernized fork of Zepto tailored for Clappr’s internal UI rendering. |
-| [`/packages/hlsjs-playback`](/packages/hlsjs-playback) | Playback module that adds support for **HLS streams** using [hls.js](https://github.com/video-dev/hls.js). |
-| [`/packages/dash-shaka-playback`](/packages/dash-shaka-playback) | Playback module that enables **MPEG-DASH** streaming via [Shaka Player](https://github.com/google/shaka-player). |
+| Directory                                                        | Description                                                                                                                       |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| [`/apps`](/apps/)                                                | Applications such as [clappr.io](http://clappr.io/) and documentation site                                                        |
+| [`/packages`](/packages/)                                        | Core packages (e.g. `@clappr/player`, plugins, utilities)                                                                         |
+| [`/packages/player`](/packages/player)                           | The main **Clappr Player** package. Exposes the public API and serves as the entry point for embedding the player in web apps.    |
+| [`/packages/clappr-core`](/packages/clappr-core)                 | Contains the **core architecture** of the player — including components such as `Core`, `Container`, and `Playback` abstractions. |
+| [`/packages/clappr-plugins`](/packages/clappr-plugins)           | Official **plugin collection**, providing ready-to-use extensions (e.g., UI features, analytics integrations).                    |
+| [`/packages/clappr-zepto`](/packages/clappr-zepto)               | Lightweight **DOM utility layer**, a modernized fork of Zepto tailored for Clappr’s internal UI rendering.                        |
+| [`/packages/hlsjs-playback`](/packages/hlsjs-playback)           | Playback module that adds support for **HLS streams** using [hls.js](https://github.com/video-dev/hls.js).                        |
+| [`/packages/dash-shaka-playback`](/packages/dash-shaka-playback) | Playback module that enables **MPEG-DASH** streaming via [Shaka Player](https://github.com/google/shaka-player).                  |
 
 ## 📚 Documentation
 
@@ -48,13 +48,14 @@ For the latest guides, examples, and architecture overviews, visit the resources
 
 - [**Getting Started**](./apps/clappr.io/docs/getting_started.md): quick setup and integration examples.
 - [**Architecture Overview**](./apps/clappr.io/docs/architecture.md): explains how the player, core, containers, and plugins interact.
+- [**Player API Reference**](./API.md): complete reference of all available Player methods and properties.
 - [**Plugin Development Guide**](./apps/clappr.io/docs/PLUGIN_GUIDE.md): how to create and register custom plugins.
 - [**Changelog**](https://github.com/clappr/clappr/releases): highlights of each version and breaking changes.
 
 Legacy references:
 
 - [**API Docs (v0.2.x)**](https://clappr.github.io/): auto-generated class documentation for older versions.  
-  *Note: this API reference is outdated and mainly useful for historical context.*
+  _Note: this API reference is outdated and mainly useful for historical context._
 
 ## 🧑‍💻 Local Development
 
@@ -69,3 +70,4 @@ yarn dev
 
 # Open in your browser
 http://localhost:8080
+```
