@@ -38,9 +38,13 @@ const baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '')
  * ```
  */
 export default class Player extends BaseObject {
-  set loader(loader) { this._loader = loader }
+  set loader(loader) {
+    this._loader = loader
+  }
   get loader() {
-    if (!this._loader) { this._loader = new Loader(this.options.plugins || {}, this.options.playerId) }
+    if (!this._loader) {
+      this._loader = new Loader(this.options.plugins || {}, this.options.playerId)
+    }
 
     return this._loader
   }
@@ -277,7 +281,11 @@ export default class Player extends BaseObject {
   }
 
   _addEventListeners() {
-    if (!this.core.isReady) { this.listenToOnce(this.core, Events.CORE_READY, this._onReady) } else { this._onReady() }
+    if (!this.core.isReady) {
+      this.listenToOnce(this.core, Events.CORE_READY, this._onReady)
+    } else {
+      this._onReady()
+    }
 
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
@@ -303,12 +311,13 @@ export default class Player extends BaseObject {
 
   _registerOptionEventListeners(newEvents = {}, events = {}) {
     const hasNewEvents = Object.keys(newEvents).length > 0
-    hasNewEvents && Object.keys(events).forEach((userEvent) => {
-      const eventType = this.eventsMapping[userEvent]
-      eventType && this.off(eventType, events[userEvent])
-    })
+    hasNewEvents &&
+      Object.keys(events).forEach(userEvent => {
+        const eventType = this.eventsMapping[userEvent]
+        eventType && this.off(eventType, events[userEvent])
+      })
 
-    Object.keys(newEvents).forEach((userEvent) => {
+    Object.keys(newEvents).forEach(userEvent => {
       const eventType = this.eventsMapping[userEvent]
       if (eventType) {
         let eventFunction = newEvents[userEvent]
@@ -404,7 +413,9 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   load(sources, mimeType, autoPlay) {
-    if (autoPlay !== undefined) { this.configure({ autoPlay: !!autoPlay }) }
+    if (autoPlay !== undefined) {
+      this.configure({ autoPlay: !!autoPlay })
+    }
 
     this.core.load(sources, mimeType)
     return this
@@ -506,6 +517,17 @@ export default class Player extends BaseObject {
    */
   unmute() {
     this.core.activePlayback.unmute()
+    return this
+  }
+
+  /**
+   * sets the volume for the current video (`source`).
+   * @method setVolume
+   * @param {Number} value should be a number between 0 and 100, 0 being mute and 100 the max volume.
+   * @return {Player} itself
+   */
+  setVolume(value) {
+    this.core.activeContainer.setVolume(value)
     return this
   }
 

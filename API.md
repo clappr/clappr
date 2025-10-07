@@ -7,7 +7,7 @@
 Create an instance:
 
 ```javascript
-var player = new Clappr.Player({source: "http://your.video/here.mp4", parentId: "#player"});
+var player = new Clappr.Player({ source: 'http://your.video/here.mp4', parentId: '#player' })
 ```
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.attachTo(element);
@@ -18,51 +18,91 @@ You can use this method to attach the player to a given `element`. You don't nee
 
 Plays the current source.
 
-
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.pause();
 
 Pauses the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.stop();
+
 Stops the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seek(value);
-The `value` should be a number between 0 and 100. For example, `player.seek(50)` will seek to the middle of the current source.
+
+The `value` should be a number between 0 and the video duration in seconds. For example, `player.seek(120)` will seek to second 120 (2 minutes) of the current source.
+
+## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seekPercentage(percentage);
+
+The `percentage` should be a number between 0 and 100. For example, `player.seekPercentage(50)` will seek to the middle of the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.setVolume(value);
+
 The `value` should be a number between 0 and 100, 0 being mute and 100 the max volume.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.mute();
+
 Mute the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.unmute();
+
 Unmute the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.isPlaying();
+
 Returns `true` if the current source is playing, otherwise returns `false`.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getPlugin(pluginName);
+
 Returns the plugin instance. Example:
+
 ```javascript
-var poster = player.getPlugin('poster');
-poster.hidePlayButton();
+var poster = player.getPlugin('poster')
+poster.hidePlayButton()
 ```
+
 This search the `Core` and `Container` plugins by name, and returns the first one found.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getCurrentTime();
+
 Returns the current time(in seconds) of the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getDuration();
+
 Returns the duration(in seconds) of the current source.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.resize(size);
+
 Resizes the current player canvas. The `size` parameter should be a literal object with `height` and `width`. Example:
+
 ```javascript
-player.resize({height: 360, width: 640});
+player.resize({ height: 360, width: 640 })
 ```
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.destroy();
+
 Destroy the current player and removes it from the DOM.
 
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.load(source);
+
 Loads a new source.
+
+## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.consent(callback);
+
+Gives user consent to playback. Required by mobile devices after a click event before Player.load(). Example:
+
+```javascript
+player.consent(function () {
+  doSomethingNext()
+})
+```
+
+## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.isDvrEnabled();
+
+Returns `true` if DVR is enabled, otherwise returns `false`.
+
+## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.configure(options);
+
+Enables to configure a player after its creation. The `options` parameter should be a javascript object with the options to change. Example:
+
+```javascript
+player.configure({ autoPlay: true, mute: false })
+```
