@@ -25,8 +25,6 @@ Install via npm or yarn:
 
 ```bash
 yarn add @clappr/player
-# or
-npm install @clappr/player
 ```
 
 ## 📦 Project Structure
