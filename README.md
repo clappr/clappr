@@ -50,6 +50,7 @@ For the latest guides, examples, and architecture overviews, visit the resources
 - [**Architecture Overview**](./apps/clappr.io/docs/architecture.md): explains how the player, core, containers, and plugins interact.
 - [**Player API Reference**](./API.md): complete reference of all available Player methods and properties.
 - [**Plugin Development Guide**](./apps/clappr.io/docs/PLUGIN_GUIDE.md): how to create and register custom plugins.
+- [**Frequently Asked Questions**](./apps/clappr.io/docs/faq.md): answers to commonly asked questions about setup, configuration, and troubleshooting.
 - [**Changelog**](https://github.com/clappr/clappr/releases): highlights of each version and breaking changes.
 
 Legacy references:
