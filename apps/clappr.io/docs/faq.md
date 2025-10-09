@@ -3,8 +3,7 @@
 
 ## How do I create a plugin?
 
-Check out the documentation’s How to Build a Plugin section
- for a step-by-step guide.
+Check out the documentation’s [How to Build a Plugin](./guides/how_to_build_plugins.md) section for a step-by-step guide.
 
 ## How can I disable a plugin?
 
