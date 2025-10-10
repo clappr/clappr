@@ -151,4 +151,3 @@ By creating plugins, you can:
 For more details, check out:
 
 - [Architecture Overview](./architecture.md)
-- [Plugin API Reference](./PLUGIN_GUIDE.md)
