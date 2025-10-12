@@ -72,3 +72,16 @@ yarn dev
 # Open in your browser
 http://localhost:8080
 ```
+
+## ✨ Contributors
+
+Thanks to all our amazing contributors! 🎉
+
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
+
+See the full list on our [contributors page](https://github.com/clappr/clappr/graphs/contributors).
+
+## 📄 License
+
+[BSD-3-Clause](LICENSE) © Globo.com
