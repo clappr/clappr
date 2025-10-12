@@ -1,8 +1,8 @@
-<div align=center>
-<img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png">
-</div>
+---
+sidebar_position: 6
+---
 
-## Player API
+# Player API
 
 Create an instance:
 
@@ -10,47 +10,47 @@ Create an instance:
 var player = new Clappr.Player({ source: 'http://your.video/here.mp4', parentId: '#player' })
 ```
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.attachTo(element);
+## player.attachTo(element)
 
 You can use this method to attach the player to a given `element`. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.play();
+## player.play()
 
 Plays the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.pause();
+## player.pause()
 
 Pauses the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.stop();
+## player.stop()
 
 Stops the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seek(value);
+## player.seek(value)
 
 The `value` should be a number between 0 and the video duration in seconds. For example, `player.seek(120)` will seek to second 120 (2 minutes) of the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seekPercentage(percentage);
+## player.seekPercentage(percentage)
 
 The `percentage` should be a number between 0 and 100. For example, `player.seekPercentage(50)` will seek to the middle of the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.setVolume(value);
+## player.setVolume(value)
 
 The `value` should be a number between 0 and 100, 0 being mute and 100 the max volume.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.mute();
+## player.mute()
 
 Mute the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.unmute();
+## player.unmute()
 
 Unmute the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.isPlaying();
+## player.isPlaying()
 
 Returns `true` if the current source is playing, otherwise returns `false`.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getPlugin(pluginName);
+## player.getPlugin(pluginName)
 
 Returns the plugin instance. Example:
 
@@ -61,15 +61,15 @@ poster.hidePlayButton()
 
 This search the `Core` and `Container` plugins by name, and returns the first one found.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getCurrentTime();
+## player.getCurrentTime()
 
 Returns the current time(in seconds) of the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getDuration();
+## player.getDuration()
 
 Returns the duration(in seconds) of the current source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.resize(size);
+## player.resize(size)
 
 Resizes the current player canvas. The `size` parameter should be a literal object with `height` and `width`. Example:
 
@@ -77,15 +77,15 @@ Resizes the current player canvas. The `size` parameter should be a literal obje
 player.resize({ height: 360, width: 640 })
 ```
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.destroy();
+## player.destroy()
 
 Destroy the current player and removes it from the DOM.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.load(source);
+## player.load(source)
 
 Loads a new source.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.consent(callback);
+## player.consent(callback)
 
 Gives user consent to playback. Required by mobile devices after a click event before Player.load(). Example:
 
@@ -95,14 +95,15 @@ player.consent(function () {
 })
 ```
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.isDvrEnabled();
+## player.isDvrEnabled()
 
 Returns `true` if DVR is enabled, otherwise returns `false`.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.configure(options);
+## player.configure(options)
 
 Enables to configure a player after its creation. The `options` parameter should be a javascript object with the options to change. Example:
 
 ```javascript
 player.configure({ autoPlay: true, mute: false })
 ```
+
