@@ -47,6 +47,7 @@ const sidebars = {
     },
     'supported_formats',
     'architecture',
+    'api',
     'faq',
   ],
 };
