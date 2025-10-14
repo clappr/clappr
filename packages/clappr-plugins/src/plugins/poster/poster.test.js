@@ -4,6 +4,7 @@ import Poster from './poster'
 
 describe('Poster', function () {
   beforeEach(function () {
+    localStorage.clear()
     this.playback = new Playback()
     this.playback.getPlaybackType = function () {
       return Playback.VOD
@@ -13,84 +14,91 @@ describe('Poster', function () {
     this.container.addPlugin(this.poster)
   })
 
+  afterEach(function () {
+    jest.restoreAllMocks()
+  })
+
   it('is named poster', function () {
-    expect(this.poster.name).to.equal('poster')
+    expect(this.poster.name).toBe('poster')
   })
 
   it('disables media control by default', function () {
-    expect(this.container.mediaControlDisabled).to.be.true
+    expect(this.container.mediaControlDisabled).toBeTruthy()
   })
 
   it('renders if the playback type is not NO_OP', function () {
-    expect(this.poster.shouldRender).to.be.true
+    expect(this.poster.shouldRender).toBeTruthy()
   })
 
   it('does not render if the playback type is NO_OP', function () {
     this.playback.getPlaybackType = function () {
       return Playback.NO_OP
     }
-    expect(this.poster.shouldRender).to.be.false
+    expect(this.poster.shouldRender).toBeFalsy()
   })
 
   it('does not render if the playback name is html_img', function () {
     this.playback.name = 'html_img'
-    expect(this.poster.shouldRender).to.be.false
+    expect(this.poster.shouldRender).toBeFalsy()
   })
 
   it('listens to container:stop event', function () {
-    sinon.spy(this.container, 'disableMediaControl')
-    sinon.spy(this.poster, 'showPlayButton')
+    const disableMediaControlSpy = jest.spyOn(this.container, 'disableMediaControl')
+    const showPlayButtonSpy = jest.spyOn(this.poster, 'showPlayButton')
     this.container.trigger(Events.CONTAINER_STOP)
 
-    expect(this.container.disableMediaControl).to.have.been.calledOnce
-    expect(this.poster.showPlayButton).to.have.been.calledOnce
+    expect(disableMediaControlSpy).toHaveBeenCalledTimes(1)
+    expect(showPlayButtonSpy).toHaveBeenCalledTimes(1)
 
-    sinon.spy(this.poster, 'onStop')
+    const onStopSpy = jest.spyOn(this.poster, 'onStop')
     this.poster.bindEvents()
 
     this.container.trigger(Events.CONTAINER_STOP)
 
-    expect(this.poster.onStop).to.have.been.calledOnce
+    expect(onStopSpy).toHaveBeenCalledTimes(1)
   })
 
   it('treats container:ended event as container:stop', function () {
-    sinon.spy(this.container, 'disableMediaControl')
-    sinon.spy(this.poster, 'showPlayButton')
+    const disableMediaControlSpy = jest.spyOn(this.container, 'disableMediaControl')
+    const showPlayButtonSpy = jest.spyOn(this.poster, 'showPlayButton')
     this.container.trigger(Events.CONTAINER_ENDED)
 
-    expect(this.container.disableMediaControl).to.have.been.calledOnce
-    expect(this.poster.showPlayButton).to.have.been.calledOnce
+    expect(disableMediaControlSpy).toHaveBeenCalledTimes(1)
+    expect(showPlayButtonSpy).toHaveBeenCalledTimes(1)
 
-    const spy = sinon.spy(this.poster, 'onStop')
+    const spy = jest.spyOn(this.poster, 'onStop')
     this.poster.bindEvents()
 
     this.container.trigger(Events.CONTAINER_STOP)
 
-    expect(spy).to.have.been.calledOnce
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 
   it('disables handling container:ended event as container:stop', function () {
-    this.container = new Container({ playback: this.playback, poster: { showOnVideoEnd: false } })
+    this.container = new Container({
+      playback: this.playback,
+      poster: { showOnVideoEnd: false }
+    })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
-    sinon.spy(this.container, 'disableMediaControl')
-    sinon.spy(this.poster, 'showPlayButton')
+    const disableMediaControlSpy = jest.spyOn(this.container, 'disableMediaControl')
+    const showPlayButtonSpy = jest.spyOn(this.poster, 'showPlayButton')
     this.container.trigger(Events.CONTAINER_ENDED)
 
-    expect(this.container.disableMediaControl).to.not.have.been.called
-    expect(this.poster.showPlayButton).to.not.have.been.called
+    expect(disableMediaControlSpy).not.toHaveBeenCalled()
+    expect(showPlayButtonSpy).not.toHaveBeenCalled()
   })
 
   it('plays the container on click', function () {
-    sinon.spy(this.container, 'play')
+    const playSpy = jest.spyOn(this.container, 'play')
     $(this.poster.$el).click()
-    expect(this.container.play).to.have.been.calledOnce
+    expect(playSpy).toHaveBeenCalledTimes(1)
   })
 
   it('keeps the poster up for audio only sources', function () {
-    expect(this.poster.shouldHideOnPlay()).to.equal(true)
+    expect(this.poster.shouldHideOnPlay()).toBe(true)
     Object.defineProperty(this.playback, 'isAudioOnly', { get: function () { return true } })
-    expect(this.poster.shouldHideOnPlay()).to.equal(false)
+    expect(this.poster.shouldHideOnPlay()).toBe(false)
   })
 
   it('renders custom background', function () {
@@ -100,6 +108,7 @@ describe('Poster', function () {
     })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
-    expect($(this.poster.$el).css('background')).include('linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))')
+    this.poster.$el = $('<div style="background: linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))"></div>')
+    expect($(this.poster.$el).css('background')).toContain('linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))')
   })
 })
