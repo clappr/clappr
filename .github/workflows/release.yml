@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ['CI']
     branches: [main]
     types:
       - completed
@@ -10,14 +10,19 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: git config user.name github-actions[bot]
-      - run: git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -26,8 +31,44 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: 'yarn'
 
-      - run: yarn --frozen-lockfile
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
 
-      - run: yarn release
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git fetch --tags
+          set +e
+          OUTPUT=$(lerna changed 2>&1)
+          EXIT_CODE=$?
+          set -e
+
+          if echo "$OUTPUT" | grep -q "No changed packages found"; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No packages to publish"
+          elif [ $EXIT_CODE -eq 0 ] && [ -n "$OUTPUT" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Found packages to publish:"
+            echo "$OUTPUT"
+          elif [ $EXIT_CODE -eq 0 ] && [ -z "$OUTPUT" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No packages to publish (empty output)"
+          else
+            echo "Error running lerna changed (exit code: $EXIT_CODE):"
+            echo "$OUTPUT"
+            exit 1
+          fi
+
+      - name: Release packages
+        id: release
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: yarn release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: true
+
+      - name: Publish from git tags
+        if: steps.check_changes.outputs.has_changes == 'true' && steps.release.outcome == 'failure'
+        run: lerna publish from-git --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
