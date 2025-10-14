@@ -3,29 +3,34 @@ import { Core, Container, Events, Playback, PlayerError } from '@clappr/core'
 import ErrorScreen from './error_screen'
 
 describe('ErrorScreen', function () {
-  beforeEach(() => {
+  beforeEach(function () {
+    localStorage.clear()
     this.core = new Core({})
     this.errorScreen = new ErrorScreen(this.core)
     this.core.addPlugin(this.errorScreen)
   })
 
-  it('is named error_screen', () => {
-    expect(this.errorScreen.name).to.equal('error_screen')
+  afterEach(function () {
+    jest.restoreAllMocks()
   })
 
-  describe('on ERROR event', () => {
-    it('calls onError', () => {
-      const spy = sinon.spy(this.errorScreen, 'onError')
+  it('is named error_screen', function () {
+    expect(this.errorScreen.name).toBe('error_screen')
+  })
+
+  describe('on ERROR event', function () {
+    it('calls onError', function () {
+      const spy = jest.spyOn(this.errorScreen, 'onError')
 
       this.errorScreen.stopListening()
       this.errorScreen.bindEvents()
       this.core.trigger(Events.ERROR, {})
 
-      expect(spy).to.have.been.called
+      expect(spy).toHaveBeenCalled()
     })
 
-    describe('when error level is fatal', () => {
-      beforeEach(() => {
+    describe('when error level is fatal', function () {
+      beforeEach(function () {
         this.fakeError = {
           code: '42',
           level: PlayerError.Levels.FATAL,
@@ -39,58 +44,58 @@ describe('ErrorScreen', function () {
         this.core.setupContainers([this.container])
       })
 
-      it('disables media control', () => {
-        const containerStopSpy = sinon.spy(this.container, 'stop')
+      it('disables media control', function () {
+        const containerStopSpy = jest.spyOn(this.container, 'stop')
 
         this.errorScreen.onError(this.fakeError)
 
-        expect(containerStopSpy).to.have.been.called
+        expect(containerStopSpy).toHaveBeenCalled()
       })
 
-      it('stops media', () => {
-        const containerDisableMediaControlSpy = sinon.spy(this.container, 'disableMediaControl')
+      it('stops media', function () {
+        const containerDisableMediaControlSpy = jest.spyOn(this.container, 'disableMediaControl')
 
         this.errorScreen.onError(this.fakeError)
 
-        expect(containerDisableMediaControlSpy).to.have.been.called
+        expect(containerDisableMediaControlSpy).toHaveBeenCalled()
       })
 
-      it('shows component', () => {
-        const pluginShowSpy = sinon.spy(this.errorScreen, 'show')
-        const pluginRenderSpy = sinon.spy(this.errorScreen, 'render')
+      it('shows component', function () {
+        const pluginShowSpy = jest.spyOn(this.errorScreen, 'show')
+        const pluginRenderSpy = jest.spyOn(this.errorScreen, 'render')
 
         this.errorScreen.onError(this.fakeError)
 
-        expect(pluginShowSpy).to.have.been.called
-        expect(pluginRenderSpy).to.have.been.called
+        expect(pluginShowSpy).toHaveBeenCalled()
+        expect(pluginRenderSpy).toHaveBeenCalled()
       })
 
-      it('bind method to reload player', () => {
-        const pluginReloadSpy = sinon.spy(this.errorScreen, 'bindReload')
+      it('bind method to reload player', function () {
+        const pluginReloadSpy = jest.spyOn(this.errorScreen, 'bindReload')
 
         this.errorScreen.onError(this.fakeError)
 
-        expect(pluginReloadSpy).to.have.been.called
+        expect(pluginReloadSpy).toHaveBeenCalled()
       })
 
-      describe('when reload is clicked', () => {
-        it('loads media again', () => {
-          this.core.load = sinon.spy()
+      describe('when reload is clicked', function () {
+        it('loads media again', function () {
+          this.core.load = jest.fn()
 
           this.errorScreen.reload()
 
-          expect(this.core.load).to.have.been.called
+          expect(this.core.load).toHaveBeenCalled()
         })
 
-        it('plays when core is ready', () => {
+        it('plays when core is ready', function () {
           this.core.load = () => {}
-          const playSpy = sinon.spy()
+          const playSpy = jest.fn()
           this.core.getCurrentContainer = () => ({ play: playSpy })
 
           this.errorScreen.reload()
           this.core.trigger(Events.CORE_READY)
 
-          expect(this.errorScreen.container.play).to.have.been.called
+          expect(this.errorScreen.container.play).toHaveBeenCalled()
         })
       })
     })
