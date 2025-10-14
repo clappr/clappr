@@ -4,22 +4,27 @@ import ClickToPause from './click_to_pause'
 
 describe('clickToPause', function () {
   beforeEach(function () {
+    localStorage.clear()
     this.playback = new Playback()
     this.container = new Container({ playback: this.playback })
     this.plugin = new ClickToPause(this.container)
   })
 
+  afterEach(function () {
+    jest.restoreAllMocks()
+  })
+
   it('has name', function () {
-    expect(this.plugin.name).to.be.equal('click_to_pause')
+    expect(this.plugin.name).toBe('click_to_pause')
   })
 
   it('call pause when playing and dvr is enabled', function (done) {
-    sinon.stub(this.container, 'isPlaying').callsFake(() => true)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
-    sinon.spy(this.container, 'pause')
+    jest.spyOn(this.container, 'isPlaying').mockImplementation(() => true)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => true)
+    const pauseSpy = jest.spyOn(this.container, 'pause')
 
     this.container.on(Events.CONTAINER_CLICK, () => {
-      this.container.pause.should.have.been.calledOnce
+      expect(pauseSpy).toHaveBeenCalledTimes(1)
       done()
     })
 
@@ -27,12 +32,12 @@ describe('clickToPause', function () {
   })
 
   it('call play when not playing and dvr is enabled', function (done) {
-    sinon.stub(this.container, 'isPlaying').callsFake(() => false)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
-    sinon.spy(this.container, 'play')
+    jest.spyOn(this.container, 'isPlaying').mockImplementation(() => false)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => true)
+    const playSpy = jest.spyOn(this.container, 'play')
 
     this.container.on(Events.CONTAINER_CLICK, () => {
-      this.container.play.should.have.been.calledOnce
+      expect(playSpy).toHaveBeenCalledTimes(1)
       done()
     })
 
@@ -40,14 +45,14 @@ describe('clickToPause', function () {
   })
 
   it('not call play nor pause when playback type is live and dvr is disable', function (done) {
-    sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.LIVE)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => false)
-    sinon.spy(this.container, 'play')
-    sinon.spy(this.container, 'pause')
+    jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.LIVE)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => false)
+    const playSpy = jest.spyOn(this.container, 'play')
+    const pauseSpy = jest.spyOn(this.container, 'pause')
 
     this.container.on(Events.CONTAINER_CLICK, () => {
-      this.container.play.should.not.have.been.called
-      this.container.pause.should.not.have.been.called
+      expect(playSpy).not.toHaveBeenCalled()
+      expect(pauseSpy).not.toHaveBeenCalled()
       done()
     })
 
@@ -55,11 +60,11 @@ describe('clickToPause', function () {
   })
 
   it('not show cursor pointer when playback is live and drv is disable', function (done) {
-    sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.LIVE)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => false)
+    jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.LIVE)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => false)
 
     this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
-      expect(this.container.$el.hasClass('pointer-enabled')).to.be.false
+      expect(this.container.$el.hasClass('pointer-enabled')).toBeFalsy()
       done()
     })
 
@@ -67,11 +72,11 @@ describe('clickToPause', function () {
   })
 
   it('show cursor pointer when playback is live and drv is enable', function (done) {
-    sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.LIVE)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
+    jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.LIVE)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => true)
 
     this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
-      expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
+      expect(this.container.$el.hasClass('pointer-enabled')).toBeTruthy()
       done()
     })
 
@@ -80,10 +85,10 @@ describe('clickToPause', function () {
 
   describe('show cursor pointer when playback is not live and', function () {
     it('playback is VOD', function (done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.VOD)
+      jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.VOD)
 
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
-        expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
+        expect(this.container.$el.hasClass('pointer-enabled')).toBeTruthy()
         done()
       })
 
@@ -91,10 +96,10 @@ describe('clickToPause', function () {
     })
 
     it('playback is AOD', function (done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.AOD)
+      jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.AOD)
 
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
-        expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
+        expect(this.container.$el.hasClass('pointer-enabled')).toBeTruthy()
         done()
       })
 
@@ -102,10 +107,10 @@ describe('clickToPause', function () {
     })
 
     it('playback is NO_OP', function (done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.NO_OP)
+      jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.NO_OP)
 
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
-        expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
+        expect(this.container.$el.hasClass('pointer-enabled')).toBeTruthy()
         done()
       })
 
@@ -115,23 +120,23 @@ describe('clickToPause', function () {
 
   describe('on playback live and dvr enabled', function () {
     beforeEach(function (done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.LIVE)
-      sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
-      sinon.spy(this.container.$el, 'addClass')
-      sinon.spy(this.container.$el, 'removeClass')
+      jest.spyOn(this.container, 'getPlaybackType').mockImplementation(() => Playback.LIVE)
+      jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => true)
+      this.addClassSpy = jest.spyOn(this.container.$el, 'addClass')
+      this.removeClassSpy = jest.spyOn(this.container.$el, 'removeClass')
 
       this.container.once(Events.CONTAINER_SETTINGSUPDATE, done)
       this.container.trigger(Events.CONTAINER_SETTINGSUPDATE)
     })
 
     it('add css class when state changes', function () {
-      this.container.$el.addClass.should.have.been.calledOnce
+      expect(this.addClassSpy).toHaveBeenCalledTimes(1)
     })
 
     it('do not toggle when state do not changes', function (done) {
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
-        this.container.$el.removeClass.should.not.have.been.called
-        this.container.$el.addClass.should.have.been.calledOnce
+        expect(this.removeClassSpy).not.toHaveBeenCalled()
+        expect(this.addClassSpy).toHaveBeenCalledTimes(1)
         done()
       })
       this.container.trigger(Events.CONTAINER_SETTINGSUPDATE)
@@ -145,12 +150,12 @@ describe('clickToPause', function () {
     })
     const plugin = new ClickToPause(this.container) // eslint-disable-line
 
-    sinon.stub(this.container, 'isPlaying').callsFake(() => false)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
-    sinon.spy(this.container, 'play')
+    jest.spyOn(this.container, 'isPlaying').mockImplementation(() => false)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => true)
+    const playSpy = jest.spyOn(this.container, 'play')
 
     this.container.on(Events.CONTAINER_CLICK, () => {
-      this.container.play.should.have.been.calledWith({ testing: true })
+      expect(playSpy).toHaveBeenCalledWith({ testing: true })
       done()
     })
 
@@ -164,12 +169,12 @@ describe('clickToPause', function () {
     })
     const plugin = new ClickToPause(this.container) // eslint-disable-line
 
-    sinon.stub(this.container, 'isPlaying').callsFake(() => true)
-    sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
-    sinon.spy(this.container, 'pause')
+    jest.spyOn(this.container, 'isPlaying').mockImplementation(() => true)
+    jest.spyOn(this.container, 'isDvrEnabled').mockImplementation(() => true)
+    const pauseSpy = jest.spyOn(this.container, 'pause')
 
     this.container.on(Events.CONTAINER_CLICK, () => {
-      this.container.pause.should.have.been.calledWith({ testing: true })
+      expect(pauseSpy).toHaveBeenCalledWith({ testing: true })
       done()
     })
 
