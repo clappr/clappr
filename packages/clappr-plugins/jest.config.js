@@ -10,7 +10,8 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js',
-    '\\.(scss|svg)$': '<rootDir>/src/__mocks__/styleMock.js',
+    '\\.(scss)$': '<rootDir>/src/__mocks__/styleMock.js',
+    '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.js',
     '^clappr-zepto$': 'clappr-zepto/zepto.js'
   },
   collectCoverageFrom: ['src/*.js', 'src/**/*.js', 'src/**/**/*.js'],
