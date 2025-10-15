@@ -66,12 +66,8 @@ jobs:
         id: release
         if: steps.check_changes.outputs.has_changes == 'true'
         run: yarn release
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         continue-on-error: true
 
       - name: Publish from git tags
         if: steps.check_changes.outputs.has_changes == 'true' && steps.release.outcome == 'failure'
         run: lerna publish from-git --yes
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
