@@ -19,6 +19,9 @@
     "/dist",
     "/src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "peerDependencies": {
