@@ -11,7 +11,7 @@
     "lint:fix": "eslint packages/*/src/ --fix",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
-    "release": "lerna publish --include-merged-tags --yes",
+    "release": "lerna publish --include-merged-tags --provenance --yes",
     "prepare": "husky",
     "test": "lerna run test --scope=@clappr/core"
   },
