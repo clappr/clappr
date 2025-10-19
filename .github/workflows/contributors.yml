@@ -23,7 +23,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           readme_path: 'README.md'
-          columns_per_row: 10
+          columns_per_row: 8
           image_size: 40
           use_username: true
           committer_username: 'github-actions[bot]'
