@@ -13,6 +13,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Apps: Docusaurus documentation site
   - package-ecosystem: 'npm'
@@ -28,6 +31,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Packages: clappr-core
   - package-ecosystem: 'npm'
@@ -43,6 +49,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Packages: clappr-plugins
   - package-ecosystem: 'npm'
@@ -58,6 +67,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Packages: clappr-zepto
   - package-ecosystem: 'npm'
@@ -73,6 +85,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Packages: dash-shaka-playback
   - package-ecosystem: 'npm'
@@ -88,6 +103,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Packages: hlsjs-playback
   - package-ecosystem: 'npm'
@@ -103,6 +121,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Packages: player
   - package-ecosystem: 'npm'
@@ -118,6 +139,9 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
       prefix-development: 'chore(deps-dev)'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # GitHub Actions
   - package-ecosystem: 'github-actions'
