@@ -40,7 +40,7 @@
     "@clappr/plugins": "^0.8.10",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^28.0.8",
-    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^2.4.2",
     "coveralls": "^3.1.0",
     "cz-conventional-changelog": "^3.3.0",
