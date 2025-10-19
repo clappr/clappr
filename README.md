@@ -1,25 +1,15 @@
-<p align="center">
-  <a href="https://badge.fury.io/js/%40clappr%2Fplayer"><img src="https://badge.fury.io/js/%40clappr%2Fplayer.svg"></a>
-  <a href="https://bundlephobia.com/result?p=@clappr/player@latest"><img src="https://img.shields.io/bundlephobia/min/@clappr/player"></a>
-  <a href="https://app.travis-ci.com/github/clappr/clappr"><img src="https://api.travis-ci.com/clappr/clappr.svg?branch=dev"></a>
-  <a href="https://github.com/clappr/clappr/blob/dev/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
-  <a href="https://www.jsdelivr.com/package/npm/@clappr/player"><img src="https://img.shields.io/jsdelivr/npm/hm/@clappr/player?color=orange" alt="jsDelivr hits"></a>
-</p>
+# Clappr
 
-<h1 align="center">
-  <a href="http://clappr.io">
-    <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png" height="100">
-  </a>
-  <br>
-  Clappr
-</h1>
+An extensible, plugin-oriented, HTML5-first media player for the web.  
+It provides a modular architecture to build powerful playback experiences with ease.
 
-<p align="center">
-  <b>Clappr</b> is an extensible, plugin-oriented, HTML5-first media player for the web.  
-  It provides a modular architecture to build powerful playback experiences with ease.
-</p>
+[![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
+[![Player Version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/player/package.json&query=$.version&label=Player%20Version&color=blue)](https://raw.githubusercontent.com/clappr/clappr/main/packages/player/package.json)
+[![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
+[![minified size](https://img.shields.io/bundlephobia/min/@clappr/player)](https://bundlephobia.com/package/@clappr/player)
+[![jsDelivr monthly downloads](https://img.shields.io/jsdelivr/npm/hm/@clappr/player)](https://www.jsdelivr.com/package/npm/@clappr/player)
 
-## 🚀 Getting Started
+## Getting Started
 
 Install via npm or yarn:
 
@@ -27,7 +17,7 @@ Install via npm or yarn:
 yarn add @clappr/player
 ```
 
-## 📦 Project Structure
+## Project Structure
 
 This repository uses a monorepo layout:
 
@@ -42,7 +32,7 @@ This repository uses a monorepo layout:
 | [`/packages/hlsjs-playback`](/packages/hlsjs-playback)           | Playback module that adds support for **HLS streams** using [hls.js](https://github.com/video-dev/hls.js).                        |
 | [`/packages/dash-shaka-playback`](/packages/dash-shaka-playback) | Playback module that enables **MPEG-DASH** streaming via [Shaka Player](https://github.com/google/shaka-player).                  |
 
-## 📚 Documentation
+## Documentation
 
 For the latest guides, examples, and architecture overviews, visit the resources below:
 
@@ -53,12 +43,7 @@ For the latest guides, examples, and architecture overviews, visit the resources
 - [**Frequently Asked Questions**](./apps/clappr.io/docs/faq.md): answers to commonly asked questions about setup, configuration, and troubleshooting.
 - [**Changelog**](https://github.com/clappr/clappr/releases): highlights of each version and breaking changes.
 
-Legacy references:
-
-- [**API Docs (v0.2.x)**](https://clappr.github.io/): auto-generated class documentation for older versions.  
-  _Note: this API reference is outdated and mainly useful for historical context._
-
-## 🧑‍💻 Local Development
+## Local Development
 
 Clone the repository and run:
 
@@ -73,7 +58,7 @@ yarn dev
 http://localhost:8080
 ```
 
-## ✨ Contributors
+## Contributors
 
 Thanks to all our amazing contributors! 🎉
 
@@ -844,6 +829,6 @@ Thanks to all our amazing contributors! 🎉
 
 See the full list on our [contributors page](https://github.com/clappr/clappr/graphs/contributors).
 
-## 📄 License
+## License
 
 [BSD-3-Clause](LICENSE) © Globo.com
