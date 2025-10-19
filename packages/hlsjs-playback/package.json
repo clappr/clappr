@@ -46,7 +46,7 @@
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^15.2.1",
-    "@rollup/plugin-replace": "^2.4.2",
+    "@rollup/plugin-replace": "^6.0.2",
     "babel-jest": "^26.6.3",
     "coveralls": "^3.1.0",
     "cz-conventional-changelog": "^3.3.0",
