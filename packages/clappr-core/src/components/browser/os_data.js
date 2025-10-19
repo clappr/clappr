@@ -88,53 +88,53 @@ const OS_DATA = [{
 }, {
   name: 'Mac OS X El Capitan',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])11([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])11([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Yosemite',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])10([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])10([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Mavericks',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])9([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])9([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Mountain Lion',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])8([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])8([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Lion',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])7([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])7([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Snow Leopard',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])6([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])6([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Leopard',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])5([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])5([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Tiger',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])4([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])4([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Panther',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])3([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])3([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Jaguar',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])2([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])2([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS X Puma',
   group: 'Mac OS',
@@ -143,8 +143,8 @@ const OS_DATA = [{
 }, {
   name: 'Mac OS X Cheetah',
   group: 'Mac OS',
-  identifier: 'Mac OS X (10([_|\.])0([0-9_\.]*))',
-  versionSeparator: '[_|\.]'
+  identifier: 'Mac OS X (10([_|\\.])0([0-9_\\.]*) )',
+  versionSeparator: '[_|\\.]'
 }, {
   name: 'Mac OS',
   group: 'Mac OS',
