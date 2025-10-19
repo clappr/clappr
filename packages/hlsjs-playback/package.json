@@ -53,7 +53,7 @@
     "eslint": "8.49.0",
     "hls.js": "1.6.2",
     "jest": "^26.6.3",
-    "rollup": "^2.47.0",
+    "rollup": "^4.52.5",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-serve": "^1.1.0",
