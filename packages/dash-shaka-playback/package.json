@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^10.0.0",
     "babel-plugin-add-module-exports": "^1.0.4",
     "eslint": "8.49.0",
     "eslint-config-standard": "^16.0.2",
