@@ -1,0 +1,133 @@
+version: 2
+updates:
+  # Root workspace dependencies (Lerna, Husky, Prettier, etc.)
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Apps: Docusaurus documentation site
+  - package-ecosystem: 'npm'
+    directory: '/apps/clappr.io'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'docs'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Packages: clappr-core
+  - package-ecosystem: 'npm'
+    directory: '/packages/clappr-core'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'core'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Packages: clappr-plugins
+  - package-ecosystem: 'npm'
+    directory: '/packages/clappr-plugins'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'plugins'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Packages: clappr-zepto
+  - package-ecosystem: 'npm'
+    directory: '/packages/clappr-zepto'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'zepto'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Packages: dash-shaka-playback
+  - package-ecosystem: 'npm'
+    directory: '/packages/dash-shaka-playback'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'playback'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Packages: hlsjs-playback
+  - package-ecosystem: 'npm'
+    directory: '/packages/hlsjs-playback'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'playback'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # Packages: player
+  - package-ecosystem: 'npm'
+    directory: '/packages/player'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'dependencies'
+      - 'player'
+    commit-message:
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependabot'
+      - 'github-actions'
+    commit-message:
+      prefix: 'chore(deps)'
