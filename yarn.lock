@@ -16988,9 +16988,9 @@ rollup-plugin-serve@^2.0.2:
     opener "1"
 
 rollup-plugin-sizes@^1.0.4, rollup-plugin-sizes@^1.0.5:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-sizes/-/rollup-plugin-sizes-1.0.6.tgz#dae5efb5caac9c06934f5dbf54bc4e9cf3aea128"
-  integrity sha512-TQlfd2Ef+1BQjsDIuXyoBPAFFJfA9q4DXSCT5/jsUEtsyn99CzwGH98StQOg+sriq9+j8VgCxPO4yodMbvynPg==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-sizes/-/rollup-plugin-sizes-1.1.0.tgz#a63a9bf97e21550997a82c17039eb9fe3bd41a20"
+  integrity sha512-AEYZTYlWfPEIKpjOyL3wxhGZkdVkgmheHatW2xiMNet1MrGws5NszWSKXyiGi2fK0kSbx/X1f3sZqdc1laK1dA==
   dependencies:
     filesize "^9.0.0"
     module-details-from-path "^1.0.3"
