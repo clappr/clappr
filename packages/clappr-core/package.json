@@ -68,7 +68,7 @@
     "rollup-plugin-serve": "^2.0.2",
     "rollup-plugin-sizes": "^1.0.5",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-visualizer": "^5.9.2",
+    "rollup-plugin-visualizer": "^6.0.5",
     "typescript": "^5.5.2"
   },
   "config": {
