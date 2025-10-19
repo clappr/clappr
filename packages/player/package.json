@@ -55,7 +55,7 @@
     "rollup-plugin-sizes": "^1.0.4",
     "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-visualizer": "^5.5.0"
+    "rollup-plugin-visualizer": "^6.0.5"
   },
   "config": {
     "commitizen": {
