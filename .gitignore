@@ -13,6 +13,10 @@ yarn-error.log
 package-lock.json
 .nx/
 
+# Generated documentation and types in packages
+packages/**/docs/
+packages/**/types/
+
 # bump
 *.bkp
 
