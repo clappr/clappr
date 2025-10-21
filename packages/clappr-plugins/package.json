@@ -54,7 +54,6 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "jest-mock-console": "^2.0.0",
-    "node-sass": "^9.0.0",
     "postcss": "^8.4.29",
     "postcss-url": "^10.1.3",
     "rollup": "^3.29.1",
@@ -66,7 +65,8 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-serve": "^2.0.2",
     "rollup-plugin-svg": "^2.0.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.93.2"
   },
   "config": {
     "commitizen": {
