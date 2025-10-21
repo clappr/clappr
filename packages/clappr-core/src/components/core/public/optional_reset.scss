@@ -1,5 +1,5 @@
-@import 'reset';
+@use 'reset' as r;
 
 [data-player] {
-  @include nested-reset;
+  @include r.nested-reset;
 }
