@@ -1,9 +1,9 @@
-@import 'noselect';
-@import 'fontsmoothing';
+@use 'noselect' as ns;
+@use 'fontsmoothing' as fs;
 
 [data-player] {
-  @include no-select;
-  @include font-smoothing;
+  @include ns.no-select;
+  @include fs.font-smoothing;
   transform: translate3d(0,0,0);
   position: relative;
   margin: 0;

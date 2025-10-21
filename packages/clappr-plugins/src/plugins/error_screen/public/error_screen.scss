@@ -1,8 +1,8 @@
-@import 'fontsmoothing';
+@use 'fontsmoothing' as fs;
 
 
 [data-player] .player-error-screen {
-  @include font-smoothing(antialiased);
+  @include fs.font-smoothing(antialiased);
   color: #CCCACA;
   position: absolute;
   top: 0;
