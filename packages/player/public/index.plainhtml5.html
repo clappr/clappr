@@ -3,6 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" charset="utf-8" src="clappr.plainhtml5.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
   <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
@@ -13,24 +14,193 @@
     window.clappr = window.clappr || {}
     window.clappr.externals = []
 
+    // Plugin Manager Class
+    class PluginManager {
+      // Map to hold selected plugins
+      constructor() {
+        this.selectedPlugins = new Map();
+        this.init();
+      }
+
+      // Initialize the plugin manager
+      init() {
+        const selector = document.getElementById('pluginSelector');
+
+        // Handle selection changes
+        if (selector) {
+          selector.addEventListener('change', this.handleSelectorChange.bind(this));
+        }
+
+        this.updateDisplay();
+      }
+
+      // Handle changes in the plugin selection dropdown
+      handleSelectorChange(event) {
+        const selector = event.target;
+        const selectedOptions = Array.from(selector.selectedOptions);
+
+        // Temporarily store custom plugins
+        const customPlugins = new Map();
+        this.selectedPlugins.forEach((plugin, key) => {
+          if (plugin.type === 'custom') {
+            customPlugins.set(key, plugin);
+          }
+        });
+
+        // Clear all previously selected plugins
+        this.selectedPlugins.clear();
+        window.clappr.externals = [];
+
+        // Re-add custom plugins
+        customPlugins.forEach((plugin, key) => {
+          this.selectedPlugins.set(key, plugin);
+          window.clappr.externals.push(plugin.url);
+        });
+
+        // Add newly selected CDN plugins
+        selectedOptions.forEach(option => {
+          const url = option.value;
+          if (!this.selectedPlugins.has(url)) { // Previne duplicatas (caso um custom tenha a msm url)
+            this.selectedPlugins.set(url, { name: option.text, url: url, type: 'cdn' });
+            window.clappr.externals.push(url);
+          }
+        });
+
+        this.updateDisplay();
+      }
+
+      // Add a custom plugin by URL
+      addCustomPlugin(url) {
+        if (!url) {
+          alert('Please enter a URL');
+          return false;
+        }
+
+        // Basic URL validation
+        if (!url.startsWith('http')) {
+          alert('Please enter a valid URL starting with http:// or https://');
+          return false;
+        }
+
+        // Use the URL itself as the key to prevent duplicates
+        if (this.selectedPlugins.has(url)) {
+          alert('This plugin has already been added.');
+          return false;
+        }
+
+        this.selectedPlugins.set(url, {
+          name: url.length > 40 ? url.substring(0, 40) + '...' : url,
+          url: url,
+          type: 'custom'
+        });
+
+        // Add to externals array
+        window.clappr.externals.push(url);
+
+        this.updateDisplay();
+        return true;
+      }
+
+      // Remove a plugin by its identifier
+      removePlugin(pluginId) {
+        const plugin = this.selectedPlugins.get(pluginId);
+
+        // Só faz algo se o plugin for 'custom'
+        if (plugin && plugin.type === 'custom') {
+          // Remove do array externals
+          const index = window.clappr.externals.indexOf(plugin.url);
+          if (index > -1) {
+            window.clappr.externals.splice(index, 1);
+          }
+          // Remove do map
+          this.selectedPlugins.delete(pluginId);
+        }
+
+        // Se for CDN, não faz nada, pois o usuário deve desmarcar no dropdown
+
+        this.updateDisplay();
+      }
+
+      // **FUNÇÃO CORRIGIDA**
+      // Agora só mostra o botão 'x' para plugins customizados
+      updateDisplay() {
+        const display = document.getElementById('selectedPlugins');
+        if (!display) return;
+
+        const plugins = Array.from(this.selectedPlugins.entries());
+
+        if (plugins.length === 0) {
+          display.innerHTML = '<small class="text-muted">No plugins selected.</small>';
+          return;
+        }
+
+        const pluginTags = plugins.map(([pluginId, plugin]) => {
+          const badgeClass = plugin.type === 'cdn' ? '' : 'custom';
+          const icon = plugin.type === 'cdn' ? 'web |' : 'link |';
+          const displayName = plugin.name.length > 20 ? plugin.name.substring(0, 20) + '...' : plugin.name;
+
+          // **LÓGICA DO BOTÃO CORRIGIDA**
+          // Só adiciona o botão 'x' se for do tipo 'custom'
+          let removeButton = '';
+          if (plugin.type === 'custom') {
+            removeButton = `
+              <button type="button" class="remove-btn" 
+                      data-plugin-id="${pluginId}">
+                ×
+              </button>
+            `;
+          }
+
+          return `
+            <span class="plugin-badge ${badgeClass}">
+              ${icon} ${displayName}
+              ${removeButton}
+            </span>
+          `;
+        }).join('');
+
+        display.innerHTML = `
+          <div style="display: flex; flex-wrap: wrap; align-items: center;">
+            ${pluginTags}
+          </div>
+          <div style="margin-top: 5px; font-size: 10px; color: #6c757d;">
+            <strong>${plugins.length}</strong> plugin(s) selected
+          </div>
+        `;
+
+        // Adiciona funcionalidade de remover
+        display.querySelectorAll('.remove-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pluginId = btn.getAttribute('data-plugin-id');
+            this.removePlugin(pluginId);
+          });
+        });
+      }
+    }
+
+    // Initialize Plugin Manager
+    let pluginManager;
+
+    // Enhanced addExternal function - integrates with plugin manager
     function addExternal() {
-      var url = document.getElementById('js-link')
-      window.clappr.externals.push(url.value)
-      addTag(url.value)
-      url.value = ''
+      var urlInput = document.getElementById('js-link');
+      var url = urlInput.value.trim();
+
+      if (!url) return;
+
+      // Add to the plugin manager
+      if (pluginManager.addCustomPlugin(url)) {
+        // Clear input
+        urlInput.value = '';
+      }
     }
 
-    function addTag(url) {
-      var colors = ["aliceblue", "antiquewhite", "azure", "black", "blue", "brown", "yellow", "teal"]
-      var color = colors[Math.floor(Math.random() * colors.length)]
-      var span = document.createElement('span')
-
-      span.style.backgroundColor = color
-      span.className = "external-js"
-      span.innerText = url.split(/\//).pop().split(/\./)[0]
-
-      document.getElementById('external-js-panel').appendChild(span)
-    }
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+      pluginManager = new PluginManager();
+      console.log('Plugin Manager initialized');
+    });
   </script>
 </head>
 
@@ -45,19 +215,77 @@
   </header>
   <section class="container">
     <div class="main">
-      <p id='external-js-panel'>
-        Add external plugins:
-        <input id="js-link" type="url" placeholder="http://clappr.io/ex-plugin.js" style="width: 200px;">
-        <button id="btn-link" onclick="addExternal()">+</button>
-      </p>
       <div id="output">
         <div id="player-wrapper" class="player"></div>
       </div>
+
+      <p class="version-link">
+        <a href="/">Load Full Clappr Version</a>
+      </p>
     </div>
+
     <div class="sidebar">
+      <!-- Plugin System Panel -->
+      <div id="external-js-panel" class="plugin-system">
+        <h5>Add external plugins:</h5>
+
+        <!-- Plugin Selection Dropdown -->
+        <div class="form-group">
+          <label for="pluginSelector"><strong>Select plugins:</strong></label>
+          <select name="pluginSelector" id="pluginSelector" multiple class="form-control plugin-selector">
+            <!-- Available plugins -->
+            <optgroup label="Official Clapper Plugins (CDN)">
+              <option value="https://cdn.jsdelivr.net/npm/@clappr/stats-plugin@latest/dist/clappr-stats.min.js">
+                @clappr/Stats (Official playback analytics)</option>
+              <option
+                value="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js">
+                Level Selector Plugin (Quality selector)
+              </option>
+              <option
+                value="https://cdn.jsdelivr.net/npm/clappr-chromecast-plugin@latest/dist/clappr-chromecast-plugin.min.js">
+                Chromecast Plugin (Google Chromecast)
+              </option>
+              <option
+                value="https://cdn.jsdelivr.net/npm/clappr-markers-plugin@latest/dist/clappr-markers-plugin.min.js">
+                Markers Plugin (Timeline markers)
+              </option>
+              <option
+                value="https://cdn.jsdelivr.net/npm/clappr-thumbnails-plugin@latest/dist/clappr-thumbnails-plugin.min.js">
+                Thumbnails Plugin (Preview thumbnails)
+              </option>
+            </optgroup>
+          </select>
+          <small class="text-muted" style="display: block; margin-bottom: 15px;">Hold down the Ctrl (Windows) / Command
+            (Mac) button to select multiple options.</small>
+        </div>
+
+        <!-- Custom Plugin URL -->
+        <div class="form-group">
+          <label for="js-link"><strong>Add Custom Plugin URL:</strong></label>
+          <div class="input-group input-group-sm">
+            <input id="js-link" type="url" class="form-control" placeholder="https://cdn.example.com/plugin.js">
+            <div class="input-group-append">
+              <button id="btn-link" class="btn btn-success" onclick="addExternal()" type="button">
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selected Plugins Display -->
+        <div class="form-group">
+          <label><strong>Selected Plugins:</strong></label>
+          <div id="selectedPlugins" class="selected-plugins-container"
+            style="min-height: 50px; max-height: 100px; overflow-y: auto; background-color: #f8f9fa; border-radius: 4px; padding: 8px; border: 1px solid #dee2e6;">
+            <small class="text-muted">No plugins selected</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Editor -->
       <div id="editor">var playerElement = document.getElementById("player-wrapper");
 
-var player = new Clappr.Player({
+player = new Clappr.Player({
   source: 'http://clappr.io/highline.mp4',
   poster: 'http://clappr.io/poster.png',
   mute: true,
@@ -67,12 +295,11 @@ var player = new Clappr.Player({
 
 player.attachTo(playerElement);
       </div>
+
+      <!-- Run Button -->
       <button class="run btn btn-primary">Run</button>
       <div id="console"> </div>
     </div>
-    <p>
-      <a href="/">Load Full Clappr Version</a>
-    </p>
   </section>
   <footer class="footer"></footer>
   <script>
@@ -125,24 +352,45 @@ player.attachTo(playerElement);
       session.setTabSize(2);
       session.setUseSoftTabs(true);
 
-      var parser = new Parser($('#output'));
       var load = function (fn) {
         if (window.clappr.externals.length > 0) {
-          var lastScript = window.clappr.externals.length
-          window.clappr.externals.forEach(function (url, index) {
-            var script = document.createElement('script')
+          let loadedCount = 0;
+          const totalToLoad = window.clappr.externals.length;
 
-            script.setAttribute("type", "text/javascript")
-            script.setAttribute("src", url)
-            if (index === (lastScript - 1)) {
-              script.onload = fn
-            }
-            script.onerror = function (e) { alert('we cant load ' + url + ': e' + e) }
+          console.log(`Loading ${totalToLoad} plugin(s)...`);
 
-            document.body.appendChild(script)
-          })
+          window.clappr.externals.forEach(function (url) {
+            var script = document.createElement('script');
+            script.setAttribute("type", "text/javascript");
+            script.setAttribute("src", url);
+
+            // Function to run when a script loads successfully
+            script.onload = function () {
+              loadedCount++;
+              console.log(`Loaded: ${url} (${loadedCount}/${totalToLoad})`);
+              // If all scripts are loaded, call the final function
+              if (loadedCount === totalToLoad) {
+                console.log('All plugins loaded successfully.');
+                fn();
+              }
+            };
+
+            // Function to run if a script fails to load
+            script.onerror = function () {
+              loadedCount++; // Also increment on error to not block forever
+              alert('Could not load plugin: ' + url);
+              console.error(`Failed to load: ${url} (${loadedCount}/${totalToLoad})`);
+              if (loadedCount === totalToLoad) {
+                console.log('Attempting to run player despite plugin error.');
+                fn();
+              }
+            };
+
+            document.body.appendChild(script);
+          });
         } else {
-          fn()
+          // If there are no plugins, just run the function
+          fn();
         }
       }
 
@@ -151,10 +399,33 @@ player.attachTo(playerElement);
       });
 
       function run() {
+        if (player) {
+          player.destroy();
+        }
+
         var code = ace.edit('editor').getSession().getValue();
         var b64EncodedCode = btoa(code)
         window.location.hash = b64EncodedCode
-        load(function () { parser.parse(code) })
+
+        console.log('=== RUN FUNCTION DEBUG ===');
+        console.log('Plugins to load:', window.clappr.externals);
+        console.log('Plugins count:', window.clappr.externals.length);
+
+        load(function () {
+          try {
+            console.log('Parsing and executing player code');
+            eval(code);
+          } catch (error) {
+            // If there was an error
+            alert('An error occurred while executing your code. It may be a typo or an incompatible plugin.\n\nError: ' + error.message);
+
+            // Try to recreate the default player so there isn't a gap
+            player = new Clappr.Player({
+              source: 'http://clappr.io/highline.mp4',
+              parentId: '#player-wrapper'
+            });
+          }
+        });
       }
     }
   </script>

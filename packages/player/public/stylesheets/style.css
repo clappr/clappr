@@ -30,7 +30,9 @@ body {
   right: 7%;
 }
 
-.header ul, .header li, .header a {
+.header ul,
+.header li,
+.header a {
   position: relative;
   display: inline;
   float: right;
@@ -45,36 +47,180 @@ a:hover {
   text-decoration: none;
 }
 
-.header a:visited, a:active, a:link {
+.header a:visited,
+a:active,
+a:link {
   color: #ddd;
   text-decoration: none;
 }
 
-.run {
-  display: block;
-  float: right;
-  margin: 20px 0;
-}
-
 .container {
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .main {
-  display: inline-block;
+  flex: 1;
+  min-width: 400px;
+  max-width: 800px;
   margin: 0;
-  padding: 0px 20px 0 20px;
-  border: 0;
+  padding: 0;
 }
 
-.external-js {
-  border-style: solid;
-  border-width: 1px;
-  color: #dcdcdc;
+.sidebar {
+  flex: 1;
+  min-width: 400px;
+  max-width: 600px;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* Plugin System Styles */
+.plugin-system {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.plugin-system h5 {
+  color: #495057;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e9ecef;
+  font-size: 16px;
+}
+
+.plugin-selector {
+  height: 120px;
+  margin-bottom: 10px;
+}
+
+/* Plugin Badges */
+.plugin-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #007bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin: 2px;
+  line-height: 1;
+}
+
+.plugin-badge.custom {
+  background: #6c757d;
+}
+
+.plugin-badge .remove-btn {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   font-size: 10px;
-  padding: 2px;
-  margin-right: 2px;
-  font-family: monospace;
+  line-height: 1;
+}
+
+.plugin-badge .remove-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.selected-plugins-container {
+  min-height: 50px;
+  max-height: 100px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  font-size: 12px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-group-sm .form-control {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.input-group-sm .btn {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+select.form-control {
+  font-size: 12px;
+}
+
+.text-muted {
+  font-size: 11px;
+}
+
+.badge {
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+  margin: 4px !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-close {
+  cursor: pointer !important;
+  margin-left: 8px !important;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+.custom-plugins-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+optgroup {
+  font-weight: bold;
+}
+
+optgroup option {
+  font-weight: normal;
+  padding-left: 10px;
 }
 
 #player-wrapper {
@@ -82,32 +228,45 @@ a:hover {
   min-height: 180px;
 }
 
-.sidebar {
-  display: inline-block;
-  text-align: left;
-  width: 680px;
-  margin: 0;
-  padding: 40px 20px 0 20px;
-  border: 0;
-}
-
 #editor {
   border: 1px solid #c0c0EE;
-  min-height: 360px;
+  min-height: 300px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.run {
+  display: block;
+  width: 100%;
+  margin: 15px 0;
 }
 
 #console {
-  position: relative;
   color: red;
-  left: 2%;
-  top: 65px;
+  font-size: 12px;
+  min-height: 20px;
 }
 
-.btn:focus { outline: none; }
+.btn:focus {
+  outline: none;
+}
 
 .player {
   display: inline-block;
   margin: 0 auto;
   height: auto;
   width: auto;
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .main, .sidebar {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
