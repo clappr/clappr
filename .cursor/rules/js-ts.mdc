@@ -1,5 +1,6 @@
 ---
-applyTo: '**/*.js,**/*.jsx,**/*.mjs,**/*.cjs,**/*.ts,**/*.tsx'
+alwaysApply: false
+globs: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx']
 ---
 
 # Javascript
