@@ -60,7 +60,7 @@
         // Add newly selected CDN plugins
         selectedOptions.forEach(option => {
           const url = option.value;
-          if (!this.selectedPlugins.has(url)) { // Previne duplicatas (caso um custom tenha a msm url)
+          if (!this.selectedPlugins.has(url)) { // Prevents duplicates (in case a custom has the same url)
             this.selectedPlugins.set(url, { name: option.text, url: url, type: 'cdn' });
             window.clappr.externals.push(url);
           }
@@ -105,24 +105,21 @@
       removePlugin(pluginId) {
         const plugin = this.selectedPlugins.get(pluginId);
 
-        // Só faz algo se o plugin for 'custom'
+        // Only does something if the plugin is custom
         if (plugin && plugin.type === 'custom') {
-          // Remove do array externals
+          // Remove from array externals
           const index = window.clappr.externals.indexOf(plugin.url);
           if (index > -1) {
             window.clappr.externals.splice(index, 1);
           }
-          // Remove do map
+          // Remove from map
           this.selectedPlugins.delete(pluginId);
         }
 
-        // Se for CDN, não faz nada, pois o usuário deve desmarcar no dropdown
-
+        // If it's CDN, does nothing, as the user must uncheck in the dropdown
         this.updateDisplay();
       }
 
-      // **FUNÇÃO CORRIGIDA**
-      // Agora só mostra o botão 'x' para plugins customizados
       updateDisplay() {
         const display = document.getElementById('selectedPlugins');
         if (!display) return;
@@ -139,8 +136,7 @@
           const icon = plugin.type === 'cdn' ? 'web |' : 'link |';
           const displayName = plugin.name.length > 20 ? plugin.name.substring(0, 20) + '...' : plugin.name;
 
-          // **LÓGICA DO BOTÃO CORRIGIDA**
-          // Só adiciona o botão 'x' se for do tipo 'custom'
+          // Only add the ‘x’ button if it is of the ‘custom’ type
           let removeButton = '';
           if (plugin.type === 'custom') {
             removeButton = `
@@ -168,7 +164,7 @@
           </div>
         `;
 
-        // Adiciona funcionalidade de remover
+        // Adds remove functionality
         display.querySelectorAll('.remove-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.preventDefault();
