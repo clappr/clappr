@@ -55,7 +55,7 @@ const config = {
         },
         items: [
           {
-            to: '/docs/intro',
+            to: '/docs/getting_started',
             label: 'Docs',
             position:
             'left'
