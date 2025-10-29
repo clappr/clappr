@@ -3,21 +3,7 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   docs: [
-    'intro',
-    {
-      type: 'category',
-      label: 'Getting Started',
-      link: {
-        type: 'generated-index',
-      },
-      collapsed: false,
-      items: [
-        'getting-started/installation',
-        'getting-started/configuration',
-        'getting-started/development',
-        'getting-started/playground',
-      ],
-    },
+    'getting_started',
     {
       type: 'category',
       label: 'Guides',
@@ -27,22 +13,7 @@ const sidebars = {
       collapsed: false,
       items: [
         'guides/events',
-        'guides/playbacks',
-        {
-          type: 'category',
-          label: 'Plugins',
-          link: {
-            type: 'generated-index',
-          },
-          collapsed: false,
-          items: [
-            'guides/plugins/intro',
-            'guides/plugins/metrics',
-            'guides/plugins/built-in',
-            'guides/plugins/external',
-            'guides/plugins/building',
-          ],
-        },
+        'guides/how_to_build_plugins',
       ],
     },
     'supported_formats',
