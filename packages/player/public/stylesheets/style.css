@@ -30,6 +30,10 @@ body {
   right: 7%;
 }
 
+.header li a {
+  margin-left: 15px;
+}
+
 .header ul, .header li, .header a {
   position: relative;
   display: inline;
@@ -40,7 +44,7 @@ body {
   outline: none;
 }
 
-a:hover {
+.header li a:hover {
   color: #aaa;
   text-decoration: none;
 }
