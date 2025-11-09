@@ -214,4 +214,55 @@ describe('Player', function () {
       })
     })
   })
+
+  describe('destroy', () => {
+    let player
+    let callbacks
+
+    beforeEach(() => {
+      callbacks = {
+        onPlay: jest.fn(),
+        onPause: jest.fn(),
+        onError: jest.fn()
+      }
+      player = new Player({
+        source: '/video.mp4',
+        events: callbacks
+      })
+      const element = document.createElement('div')
+      player.attachTo(element)
+    })
+
+    test('should remove event listeners registered via options.events', () => {
+      player.destroy()
+      player.trigger(Events.PLAYER_PLAY)
+      player.trigger(Events.PLAYER_PAUSE)
+      player.trigger(Events.PLAYER_ERROR)
+
+      expect(callbacks.onPlay).not.toHaveBeenCalled()
+      expect(callbacks.onPause).not.toHaveBeenCalled()
+      expect(callbacks.onError).not.toHaveBeenCalled()
+    })
+
+    test('should handle destroy when no options.events are present', () => {
+      const playerWithoutEvents = new Player({ source: '/video.mp4' })
+      const element = document.createElement('div')
+      playerWithoutEvents.attachTo(element)
+
+      expect(() => playerWithoutEvents.destroy()).not.toThrow()
+    })
+
+    test('should remove listeners added through configure', () => {
+      const configureCallback = jest.fn()
+      player.configure({
+        events: {
+          onStop: configureCallback
+        }
+      })
+      player.destroy()
+      player.trigger(Events.PLAYER_STOP)
+
+      expect(configureCallback).not.toHaveBeenCalled()
+    })
+  })
 })

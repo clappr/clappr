@@ -328,6 +328,16 @@ export default class Player extends BaseObject {
     return this
   }
 
+  _unregisterOptionEventListeners() {
+    if (!this.options.events) return this
+    Object.keys(this.options.events).forEach(userEvent => {
+      const eventType = this.eventsMapping[userEvent]
+      const eventFunction = this.options.events[userEvent]
+      if (eventType && eventFunction) this.off(eventType, eventFunction)
+    })
+    return this
+  }
+
   _containerChanged() {
     this.stopListening()
     this._addEventListeners()
@@ -427,6 +437,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   destroy() {
+    this._unregisterOptionEventListeners()
     this.stopListening()
     this.core.destroy()
     return this
