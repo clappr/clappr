@@ -10168,10 +10168,10 @@ history@^4.9.0:
     tiny-warning "^1.0.0"
     value-equal "^1.0.1"
 
-hls.js@1.6.13:
-  version "1.6.13"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.6.13.tgz#fcf2823f17aaf9127b9011ef135cae5d2520ab75"
-  integrity sha512-hNEzjZNHf5bFrUNvdS4/1RjIanuJ6szpWNfTaX5I6WfGynWXGT7K/YQLYtemSvFExzeMdgdE4SsyVLJbd5PcZA==
+hls.js@1.6.14:
+  version "1.6.14"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.6.14.tgz#acee6b3b7ea878d01adbd5af554199e2d3a12a0e"
+  integrity sha512-CSpT2aXsv71HST8C5ETeVo+6YybqCpHBiYrCRQSn3U5QUZuLTSsvtq/bj+zuvjLVADeKxoebzo16OkH8m1+65Q==
 
 hmac-drbg@^1.0.1:
   version "1.0.1"
