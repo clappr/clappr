@@ -50,7 +50,7 @@
     "babel-jest": "^26.6.3",
     "coveralls": "^3.1.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "8.49.0",
+    "eslint": "9.26.0",
     "hls.js": "1.6.15",
     "jest": "^26.6.3",
     "rollup": "^4.18.0",
