@@ -27,7 +27,7 @@ const webpackConfig = (config) => {
       port: 8181
     },
     mode: config.mode,
-    devtool: 'source-maps',
+    devtool: 'source-map',
     entry: path.resolve(__dirname, 'src/clappr-dash-shaka-playback.js'),
     externals: config.externals,
     module: {
