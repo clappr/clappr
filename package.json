@@ -13,7 +13,8 @@
     "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
     "release": "lerna publish --include-merged-tags --provenance --yes",
     "prepare": "husky",
-    "test": "lerna run test --scope=@clappr/core"
+    "test": "lerna run test --scope=@clappr/core",
+    "build": "lerna run build --scope=@clappr/player --include-dependencies"
   },
   "volta": {
     "node": "18.18.2",
