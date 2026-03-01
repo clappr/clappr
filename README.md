@@ -345,10 +345,10 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/LeonardoCardoso">
-                    <img src="https://avatars.githubusercontent.com/u/1775157?v=4" width="100;" alt="LeonardoCardoso"/>
+                <a href="https://github.com/leonardocardoso">
+                    <img src="https://avatars.githubusercontent.com/u/1775157?v=4" width="100;" alt="leonardocardoso"/>
                     <br />
-                    <sub><b>LeonardoCardoso</b></sub>
+                    <sub><b>leonardocardoso</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -572,6 +572,13 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/gbarrostv">
+                    <img src="https://avatars.githubusercontent.com/u/88685638?v=4" width="100;" alt="gbarrostv"/>
+                    <br />
+                    <sub><b>gbarrostv</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/liamsegura">
                     <img src="https://avatars.githubusercontent.com/u/102547056?v=4" width="100;" alt="liamsegura"/>
                     <br />
@@ -585,6 +592,8 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>shaharmor</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/PNixx">
                     <img src="https://avatars.githubusercontent.com/u/1117351?v=4" width="100;" alt="PNixx"/>
@@ -592,8 +601,6 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>PNixx</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/kolpax">
                     <img src="https://avatars.githubusercontent.com/u/3372392?v=4" width="100;" alt="kolpax"/>
@@ -629,6 +636,8 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>nicolaswalcker</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/ahmadmayahi">
                     <img src="https://avatars.githubusercontent.com/u/1689910?v=4" width="100;" alt="ahmadmayahi"/>
@@ -636,8 +645,6 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>ahmadmayahi</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/celiolatorraca">
                     <img src="https://avatars.githubusercontent.com/u/43214?v=4" width="100;" alt="celiolatorraca"/>
@@ -673,6 +680,8 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>medeeiros</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/jfairley">
                     <img src="https://avatars.githubusercontent.com/u/992483?v=4" width="100;" alt="jfairley"/>
@@ -680,8 +689,6 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>jfairley</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/markx">
                     <img src="https://avatars.githubusercontent.com/u/1816385?v=4" width="100;" alt="markx"/>
@@ -717,6 +724,8 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>CommanderRoot</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/timgates42">
                     <img src="https://avatars.githubusercontent.com/u/47873678?v=4" width="100;" alt="timgates42"/>
@@ -724,8 +733,6 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>timgates42</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/rpadovani">
                     <img src="https://avatars.githubusercontent.com/u/1713343?v=4" width="100;" alt="rpadovani"/>
@@ -761,6 +768,8 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>Lucbm99</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/lucasbraganca-tw">
                     <img src="https://avatars.githubusercontent.com/u/77497129?v=4" width="100;" alt="lucasbraganca-tw"/>
@@ -768,8 +777,6 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>lucasbraganca-tw</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/hugocm99">
                     <img src="https://avatars.githubusercontent.com/u/33068028?v=4" width="100;" alt="hugocm99"/>
@@ -805,6 +812,8 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>brinobruno</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/brunacm-dev">
                     <img src="https://avatars.githubusercontent.com/u/71555436?v=4" width="100;" alt="brunacm-dev"/>
@@ -812,8 +821,6 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>brunacm-dev</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/poshe">
                     <img src="https://avatars.githubusercontent.com/u/4026615?v=4" width="100;" alt="poshe"/>
