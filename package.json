@@ -7,6 +7,9 @@
   ],
   "scripts": {
     "dev": "lerna run start --scope=@clappr/player",
+    "dev:local": "lerna run dev:local --scope=@clappr/player",
+    "dev:hlsjs": "lerna run start --scope=@clappr/hlsjs-playback",
+    "dev:plugins": "lerna run start --scope=@clappr/plugins",
     "lint": "eslint packages/*/src/",
     "lint:fix": "eslint packages/*/src/ --fix",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",

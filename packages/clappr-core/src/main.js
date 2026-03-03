@@ -26,6 +26,9 @@ import Styler from './base/styler/styler'
 import template from './base/template'
 import Strings from './plugins/strings/strings'
 import SourcesPlugin from './plugins/sources/sources'
+import { TelemetryEventTypes, TRACE_EVENT, TELEMETRY_CONTRACT_VERSION, createEnvelope, emitTelemetry, getBufferAhead, getBufferedRanges, hashUrl } from './telemetry'
+import BufferSamplePlugin from './telemetry/buffer_sample_plugin'
+import VideoStatePlugin from './telemetry/video_state_plugin'
 
 import $ from 'clappr-zepto'
 
@@ -39,6 +42,8 @@ const version = VERSION
 
 Loader.registerPlugin(Strings)
 Loader.registerPlugin(SourcesPlugin)
+Loader.registerPlugin(BufferSamplePlugin)
+Loader.registerPlugin(VideoStatePlugin)
 
 Loader.registerPlayback(NoOp)
 Loader.registerPlayback(HTMLImg)
@@ -68,7 +73,18 @@ export {
   Styler,
   version,
   template,
-  $
+  $,
+  // Telemetry
+  TelemetryEventTypes,
+  TRACE_EVENT,
+  TELEMETRY_CONTRACT_VERSION,
+  createEnvelope,
+  emitTelemetry,
+  getBufferAhead,
+  getBufferedRanges,
+  hashUrl,
+  VideoStatePlugin,
+  BufferSamplePlugin,
 }
 
 export default {
@@ -94,5 +110,16 @@ export default {
   Styler,
   version,
   template,
-  $
+  $,
+  // Telemetry
+  TelemetryEventTypes,
+  TRACE_EVENT,
+  TELEMETRY_CONTRACT_VERSION,
+  createEnvelope,
+  emitTelemetry,
+  getBufferAhead,
+  getBufferedRanges,
+  hashUrl,
+  VideoStatePlugin,
+  BufferSamplePlugin,
 }
