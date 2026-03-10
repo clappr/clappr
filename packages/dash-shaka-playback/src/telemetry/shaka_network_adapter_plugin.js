@@ -1,6 +1,5 @@
 import { ContainerPlugin, Events } from '@clappr/core'
 import { emitTelemetry, hashUrl } from './helpers'
-import { TelemetryEventTypes } from './constants'
 import DashShakaPlayback from '../clappr-dash-shaka-playback'
 
 // Maps Shaka RequestType integers to human-readable kind strings
@@ -41,7 +40,6 @@ export default class ShakaNetworkAdapterPlugin extends ContainerPlugin {
     this._requestFilter = this._requestFilter.bind(this)
     this._responseFilter = this._responseFilter.bind(this)
     this._onShakaReady = this._onShakaReady.bind(this)
-    console.log("test v1")
   }
 
   bindEvents() {
@@ -57,17 +55,18 @@ export default class ShakaNetworkAdapterPlugin extends ContainerPlugin {
   _onContainerReady() {
     if (!this._isEnabled()) return
 
-    const player = this.container?.playback?.shakaPlayerInstance
-    if (player) {
-      this._onShakaReady()
-      return
-    }
-
+    // Register listener for future SHAKA_READY events
     this.listenTo(
       this.container.playback,
       DashShakaPlayback.Events.SHAKA_READY,
       this._onShakaReady,
     )
+
+    // If player is already available, attach immediately
+    const player = this.container?.playback?.shakaPlayerInstance
+    if (player) {
+      this._onShakaReady()
+    }
   }
 
   _onShakaReady() {
@@ -107,14 +106,7 @@ export default class ShakaNetworkAdapterPlugin extends ContainerPlugin {
     const queue = this._pendingRequests.get(uri) ?? []
     queue.push({ id, startT })
     this._pendingRequests.set(uri, queue)
-
-    console.log('Emitting NET_REQUEST_START:', {
-      id,
-      kind: shakaKind(type),
-      urlHash: hashUrl(uri),
-    }, this.name);
-
-    emitTelemetry(this.container, TelemetryEventTypes.NET_REQUEST_START, {
+    emitTelemetry(this.container, Events.CONTAINER_TELEMETRY_REQUEST_START, {
       id,
       kind: shakaKind(type),
       urlHash: hashUrl(uri),
@@ -131,15 +123,7 @@ export default class ShakaNetworkAdapterPlugin extends ContainerPlugin {
     }
 
     const durationMs = pending ? performance.now() - pending.startT : 0
-
-    console.log('Emitting NET_REQUEST_END:', {
-      kind: shakaKind(type),
-      urlHash: hashUrl(uri),
-      durationMs,
-      bytes: response.data?.byteLength ?? 0,
-    });
-
-    emitTelemetry(this.container, TelemetryEventTypes.NET_REQUEST_END, {
+    emitTelemetry(this.container, Events.CONTAINER_TELEMETRY_REQUEST_END, {
       id: pending?.id ?? hashUrl(uri),
       kind: shakaKind(type),
       urlHash: hashUrl(uri),

@@ -8,7 +8,7 @@ jest.mock('../clappr-dash-shaka-playback', () => ({
 
 import { Container, Playback, Events } from '@clappr/core'
 import ShakaNetworkAdapterPlugin from './shaka_network_adapter_plugin'
-import { TRACE_EVENT, TelemetryEventTypes } from '@clappr/core'
+import { TRACE_EVENT } from './constants'
 
 class FakePlayback extends Playback {
   get name() { return 'fake-playback' }
@@ -116,12 +116,26 @@ describe('ShakaNetworkAdapterPlugin', () => {
     let triggerSpy, requestFilter, responseFilter
 
     beforeEach(() => {
-      triggerSpy = jest.spyOn(container, 'trigger')
-      container.trigger(Events.CONTAINER_READY)
-      container.playback.trigger('shaka:ready')
+      // Reset the mock calls for the new filter registration
+      fakeEngine.registerRequestFilter.mockClear()
+      fakeEngine.registerResponseFilter.mockClear()
 
-      requestFilter = fakeEngine.registerRequestFilter.mock.calls[0][0]
-      responseFilter = fakeEngine.registerResponseFilter.mock.calls[0][0]
+      // Trigger the container ready and shaka ready events FIRST to register the filters
+      container.trigger(Events.CONTAINER_READY)
+      playback.trigger('shaka:ready')
+
+      // Get the registered filters
+      requestFilter = fakeEngine.registerRequestFilter.mock.calls[0]?.[0]
+      responseFilter = fakeEngine.registerResponseFilter.mock.calls[0]?.[0]
+
+      // ONLY NOW set up the spy to capture telemetry events in the actual tests
+      // This ensures we don't capture the registration calls from above
+      triggerSpy = jest.spyOn(container, 'trigger')
+      triggerSpy.mockClear()  // Clear any calls from the spy setup itself
+    })
+
+    afterEach(() => {
+      triggerSpy.mockRestore()
     })
 
     describe('net.request.start', () => {
@@ -131,7 +145,7 @@ describe('ShakaNetworkAdapterPlugin', () => {
         const call = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)
         expect(call).toBeTruthy()
         const envelope = call[1]
-        expect(envelope.type).toBe(TelemetryEventTypes.NET_REQUEST_START)
+        expect(envelope.type).toBe(Events.CONTAINER_TELEMETRY_REQUEST_START)
         expect(envelope.source).toBe('shaka_network_adapter')
       })
 
@@ -182,7 +196,7 @@ describe('ShakaNetworkAdapterPlugin', () => {
         responseFilter(1, { uri, data })
 
         const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
-        expect(envelope.type).toBe(TelemetryEventTypes.NET_REQUEST_END)
+        expect(envelope.type).toBe(Events.CONTAINER_TELEMETRY_REQUEST_END)
         expect(envelope.data.bytes).toBe(2048)
         expect(envelope.data.durationMs).toBeGreaterThanOrEqual(0)
       })

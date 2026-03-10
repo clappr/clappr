@@ -983,3 +983,19 @@ Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
  * @event MEDIACONTROL_OPTIONS_CHANGE
  */
 Events.MEDIACONTROL_OPTIONS_CHANGE = 'mediacontrol:options:change'
+
+// Telemetry Events
+
+/**
+ * Fired when a telemetry network request starts
+ *
+ * @event CONTAINER_TELEMETRY_REQUEST_START
+ */
+Events.CONTAINER_TELEMETRY_REQUEST_START = 'container:telemetry:request:start'
+
+/**
+ * Fired when a telemetry network request finishes
+ *
+ * @event CONTAINER_TELEMETRY_REQUEST_END
+ */
+Events.CONTAINER_TELEMETRY_REQUEST_END = 'container:telemetry:request:end'
