@@ -1,20 +1,18 @@
 const ClapprCorePkg = require('@clappr/core/package.json')
 
 // Use the compiled dist to avoid babel-jest transform issues with monorepo source files
-// (jest 26 does not transform files outside rootDir reliably)
 const clapprCoreDist = require.resolve('@clappr/core')
 
 module.exports = {
-  verbose: true,
   testEnvironment: 'jsdom',
+  verbose: true,
   transform: {
     '^.+\\.js$': 'babel-jest',
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
     '^clappr$': clapprCoreDist,
     '^@clappr/core$': clapprCoreDist,
     '^clappr-zepto$': 'clappr-zepto/zepto.js',
   },
-  globals: { CLAPPR_CORE_VERSION: ClapprCorePkg.version, VERSION: ClapprCorePkg.version },
+  globals: { VERSION: ClapprCorePkg.version },
 }

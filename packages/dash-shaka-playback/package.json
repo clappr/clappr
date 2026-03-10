@@ -13,6 +13,8 @@
     "start": "webpack-dev-server",
     "release": "webpack",
     "lint": "eslint src/",
+    "test": "jest ./src --coverage --silent",
+    "test:watch": "jest ./src --watch",
     "prepublishOnly": "yarn dist"
   },
   "files": [
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "babel-jest": "^29.7.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-add-module-exports": "^1.0.4",
     "eslint": "8.49.0",
@@ -38,6 +41,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.1.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "shaka-player": "^3.0.7",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.104.1",

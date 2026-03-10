@@ -5,8 +5,10 @@
   "main": "dist/clappr.js",
   "scripts": {
     "build": "rollup --config --bundleConfigAsCjs",
+    "build:copy": "npm run build && cp dist/clappr.js public/clappr.js",
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
     "commitizen": "git-cz",
+    "dev:local": "npm run build:copy && npx http-server public -p 8081 -o",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
     "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
