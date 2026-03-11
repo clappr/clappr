@@ -26,7 +26,7 @@ import Styler from './base/styler/styler'
 import template from './base/template'
 import Strings from './plugins/strings/strings'
 import SourcesPlugin from './plugins/sources/sources'
-import { TELEMETRY_CONTRACT_VERSION, createEnvelope, emitTelemetry, hashUrl } from './telemetry'
+import { TELEMETRY_CONTRACT_VERSION, createEnvelope, emitTelemetry, hashUrl, calculateThroughput } from './telemetry'
 
 import $ from 'clappr-zepto'
 
@@ -74,7 +74,8 @@ export {
   TELEMETRY_CONTRACT_VERSION,
   createEnvelope,
   emitTelemetry,
-  hashUrl
+  hashUrl,
+  calculateThroughput
 }
 
 export default {
@@ -105,5 +106,6 @@ export default {
   TELEMETRY_CONTRACT_VERSION,
   createEnvelope,
   emitTelemetry,
-  hashUrl
+  hashUrl,
+  calculateThroughput
 }

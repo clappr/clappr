@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Player</title>
+  <script src="../dist/clappr-core.js"></script>
+  <script src="../../dash-shaka-playback/dist/dash-shaka-playback.js"></script>
+  <script src="../../dash-shaka-playback/dist/dash-shaka-telemetry-plugin.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #1a1a1a;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #player {
+      width: 100%;
+      max-width: 900px;
+      height: 500px;
+      background: #000;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="player"></div>
+  <div class="buttons">
+    <button id="play">Play</button>
+    <button id="pause">Pause</button>
+  </div>
+
+  <script>
+    let player = null
+
+    class TelemetryLogger extends Clappr.ContainerPlugin {
+      get name() { return 'telemetry_logger' }
+      bindEvents() {
+        this.listenTo(this.container, 'container:telemetry:trace', (e) => {
+          if (e.type === 'container:telemetry:request:start') {
+            console.log('[TELEMETRY START]', e)
+          } else if (e.type === 'container:telemetry:request:end') {
+            console.log('[TELEMETRY END]', e)
+          }
+        })
+      }
+    }
+
+    player = new Clappr.Player({
+      parentId: '#player',
+      source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+      plugins: [DashShakaPlayback, ShakaNetworkAdapterPlugin, TelemetryLogger],
+      telemetry: { shakaNetwork: { enabled: true } },
+      width: '100%',
+      height: '100%',
+      muted: true
+    })
+
+    player.on('ready', () => console.log('Ready'))
+    player.on('play', () => console.log('Playing'))
+    player.on('pause', () => console.log('Paused'))
+    player.on('error', (e) => console.error('Error', e))
+
+    document.getElementById('play').onclick = () => player.play()
+    document.getElementById('pause').onclick = () => player.pause()
+  </script>
+</body>
+
+</html>

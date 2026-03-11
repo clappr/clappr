@@ -1,4 +1,4 @@
-import { HTML5Video, Log, Events, PlayerError, Utils } from 'clappr'
+import { HTML5Video, Log, Events, PlayerError, Utils } from '@clappr/player'
 import shaka from 'shaka-player'
 
 const SEND_STATS_INTERVAL_MS = 30 * 1e3

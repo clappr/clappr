@@ -64,3 +64,24 @@ export const hashUrl = (url) => {
 
   return hash.toString(16)
 }
+
+/**
+ * Calculates network throughput in Mbps.
+ *
+ * Formula: (bytes × 8 bits/byte) / (duration in seconds) / 1,000,000 bits/Mbps
+ *
+ * @param {number} bytes - Response data size in bytes
+ * @param {number} durationMs - Request duration in milliseconds
+ * @returns {number} Throughput in Mbps (0 if duration is invalid)
+ */
+export const calculateThroughput = (bytes, durationMs) => {
+  const MS_PER_SECOND = 1000
+  const BITS_PER_BYTE = 8
+  const BITS_PER_MEGABIT = 1000000
+
+  if (durationMs <= 0) return 0
+
+  const durationSeconds = durationMs / MS_PER_SECOND
+  const bits = bytes * BITS_PER_BYTE
+  return bits / durationSeconds / BITS_PER_MEGABIT
+}

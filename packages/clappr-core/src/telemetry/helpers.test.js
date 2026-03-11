@@ -1,5 +1,5 @@
 import './constants'
-import { emitTelemetry, hashUrl, createEnvelope } from './helpers'
+import { emitTelemetry, hashUrl, createEnvelope, calculateThroughput } from './helpers'
 import Events from '../base/events/events'
 
 describe('Telemetry Constants', () => {
@@ -149,5 +149,73 @@ describe('Telemetry Envelope Contract', () => {
     requiredFields.forEach((f) => {
       expect(envelope).toHaveProperty(f)
     })
+  })
+})
+
+describe('calculateThroughput', () => {
+  const ONE_MB_IN_BYTES = 1000000
+  const TEN_MB_IN_BYTES = 10000000
+  const TEN_KB_IN_BYTES = 10000
+
+  const ONE_SECOND_MS = 1000
+  const HALF_SECOND_MS = 500
+  const TEN_SECONDS_MS = 10000
+
+  it('should calculate throughput in Mbps correctly', () => {
+    // 1 MB (1,000,000 bytes) in 1 second (1000 ms) = 8 Mbps
+    const throughput = calculateThroughput(ONE_MB_IN_BYTES, ONE_SECOND_MS)
+
+    expect(throughput).toBe(8)
+  })
+
+  it('should handle half-second transfer', () => {
+    // 1 MB in 500 ms (0.5 seconds) = 16 Mbps
+    const throughput = calculateThroughput(ONE_MB_IN_BYTES, HALF_SECOND_MS)
+
+    expect(throughput).toBe(16)
+  })
+
+  it('should handle small payloads', () => {
+    // 10 KB (10,000 bytes) in 100 ms
+    // Formula: (10000 * 8) / (100 / 1000) / 1000000
+    // = 80000 / 0.1 / 1000000 = 0.8 Mbps
+    const throughput = calculateThroughput(TEN_KB_IN_BYTES, 100)
+
+    expect(throughput).toBeCloseTo(0.8, 5)
+  })
+
+  it('should return 0 when duration is 0', () => {
+    expect(calculateThroughput(ONE_MB_IN_BYTES, 0)).toBe(0)
+  })
+
+  it('should return 0 when duration is negative', () => {
+    expect(calculateThroughput(ONE_MB_IN_BYTES, -100)).toBe(0)
+  })
+
+  it('should return 0 when bytes is 0', () => {
+    expect(calculateThroughput(0, ONE_SECOND_MS)).toBe(0)
+  })
+
+  it('should handle very fast transfers (high throughput)', () => {
+    // 10 MB in 1 second = 80 Mbps
+    const throughput = calculateThroughput(TEN_MB_IN_BYTES, ONE_SECOND_MS)
+
+    expect(throughput).toBe(80)
+  })
+
+  it('should handle very slow transfers (low throughput)', () => {
+    // 1 MB in 10 seconds = 0.8 Mbps
+    const throughput = calculateThroughput(ONE_MB_IN_BYTES, TEN_SECONDS_MS)
+
+    expect(throughput).toBeCloseTo(0.8, 5)
+  })
+
+  it('should handle fractional bytes and milliseconds', () => {
+    // 5000 bytes in 250 ms
+    // Formula: (5000 * 8) / (250 / 1000) / 1000000
+    // = 40000 / 0.25 / 1000000 = 0.16 Mbps
+    const throughput = calculateThroughput(5000, 250)
+
+    expect(throughput).toBeCloseTo(0.16, 5)
   })
 })
