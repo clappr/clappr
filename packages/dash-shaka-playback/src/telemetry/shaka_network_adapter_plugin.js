@@ -1,5 +1,4 @@
-import { ContainerPlugin, Events } from '@clappr/core'
-import { emitTelemetry, hashUrl } from './helpers'
+import { ContainerPlugin, Events, emitTelemetry, hashUrl } from '@clappr/core'
 import DashShakaPlayback from '../clappr-dash-shaka-playback'
 
 // Maps Shaka RequestType integers to human-readable kind strings
@@ -100,12 +99,13 @@ export default class ShakaNetworkAdapterPlugin extends ContainerPlugin {
 
   _requestFilter(type, request) {
     const uri = request.uris?.[0] ?? ''
-    const id = `${hashUrl(uri)}_${performance.now()}`
-    const startT = performance.now()
+    const id = `${hashUrl(uri)}-${performance.now()}`
+    const entry = { id, startT: performance.now() }
 
     const queue = this._pendingRequests.get(uri) ?? []
-    queue.push({ id, startT })
+    queue.push(entry)
     this._pendingRequests.set(uri, queue)
+
     emitTelemetry(this.container, Events.CONTAINER_TELEMETRY_REQUEST_START, {
       id,
       kind: shakaKind(type),
@@ -123,12 +123,16 @@ export default class ShakaNetworkAdapterPlugin extends ContainerPlugin {
     }
 
     const durationMs = pending ? performance.now() - pending.startT : 0
+    const bytes = response.data?.byteLength ?? 0
+    const throughputMbps = durationMs > 0 ? (bytes * 8) / durationMs / 1000 : 0
+
     emitTelemetry(this.container, Events.CONTAINER_TELEMETRY_REQUEST_END, {
       id: pending?.id ?? hashUrl(uri),
       kind: shakaKind(type),
       urlHash: hashUrl(uri),
       durationMs,
-      bytes: response.data?.byteLength ?? 0,
+      bytes,
+      throughputMbps,
     }, this.name)
   }
 

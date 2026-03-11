@@ -1,18 +1,23 @@
+import './constants'
 import { emitTelemetry, hashUrl, createEnvelope } from './helpers'
-import { TRACE_EVENT } from './constants'
-import { Events } from '@clappr/core'
+import Events from '../base/events/events'
 
 describe('Telemetry Constants', () => {
   it('should define all canonical event types', () => {
+    expect(Events.CONTAINER_TELEMETRY_TRACE)
+      .toBe('container:telemetry:trace')
+
     expect(Events.CONTAINER_TELEMETRY_REQUEST_START)
       .toBe('container:telemetry:request:start')
 
     expect(Events.CONTAINER_TELEMETRY_REQUEST_END)
       .toBe('container:telemetry:request:end')
-  })
 
-  it('should define TRACE_EVENT channel', () => {
-    expect(TRACE_EVENT).toBe('telemetry:trace')
+    expect(Events.CONTAINER_TELEMETRY_BUS)
+      .toBe('container:telemetry:bus')
+
+    expect(Events.CONTAINER_TELEMETRY_ERROR)
+      .toBe('container:telemetry:error')
   })
 })
 
@@ -31,7 +36,7 @@ describe('createEnvelope', () => {
         type: 'media.event',
         source: 'video-state-telemetry',
         data: { name: 'waiting', currentTime: 5 },
-        v: '1.0',
+        v: '1.0'
       })
     )
 
@@ -59,7 +64,7 @@ describe('createEnvelope', () => {
 })
 
 describe('emitTelemetry', () => {
-  it('should trigger TRACE_EVENT with envelope', () => {
+  it('should trigger telemetry trace event with envelope', () => {
     const emitter = { trigger: jest.fn() }
 
     emitTelemetry(
@@ -70,22 +75,22 @@ describe('emitTelemetry', () => {
     )
 
     expect(emitter.trigger).toHaveBeenCalledWith(
-      TRACE_EVENT,
+      Events.CONTAINER_TELEMETRY_TRACE,
       expect.objectContaining({
         type: Events.CONTAINER_TELEMETRY_REQUEST_START,
-        source: 'test-plugin',
+        source: 'test-plugin'
       })
     )
   })
 
-  it('should emit telemetry.error if trigger throws', () => {
+  it('should emit telemetry error if trigger throws', () => {
     let count = 0
 
     const emitter = {
       trigger: jest.fn(() => {
         count++
         if (count === 1) throw new Error('boom')
-      }),
+      })
     }
 
     emitTelemetry(
@@ -96,6 +101,13 @@ describe('emitTelemetry', () => {
     )
 
     expect(emitter.trigger).toHaveBeenCalledTimes(2)
+
+    expect(emitter.trigger).toHaveBeenLastCalledWith(
+      Events.CONTAINER_TELEMETRY_TRACE,
+      expect.objectContaining({
+        type: Events.CONTAINER_TELEMETRY_ERROR
+      })
+    )
   })
 })
 

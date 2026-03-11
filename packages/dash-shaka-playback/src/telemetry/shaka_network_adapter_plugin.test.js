@@ -8,7 +8,6 @@ jest.mock('../clappr-dash-shaka-playback', () => ({
 
 import { Container, Playback, Events } from '@clappr/core'
 import ShakaNetworkAdapterPlugin from './shaka_network_adapter_plugin'
-import { TRACE_EVENT } from './constants'
 
 class FakePlayback extends Playback {
   get name() { return 'fake-playback' }
@@ -142,7 +141,7 @@ describe('ShakaNetworkAdapterPlugin', () => {
       it('should emit on request filter invocation', () => {
         requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
 
-        const call = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)
+        const call = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)
         expect(call).toBeTruthy()
         const envelope = call[1]
         expect(envelope.type).toBe(Events.CONTAINER_TELEMETRY_REQUEST_START)
@@ -152,35 +151,35 @@ describe('ShakaNetworkAdapterPlugin', () => {
       it('should emit kind=segment for type 1', () => {
         requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.data.kind).toBe('segment')
       })
 
       it('should emit kind=manifest for type 0', () => {
         requestFilter(0, { uris: ['https://example.com/manifest.mpd'] })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.data.kind).toBe('manifest')
       })
 
       it('should emit kind=license for type 2', () => {
         requestFilter(2, { uris: ['https://example.com/license'] })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.data.kind).toBe('license')
       })
 
       it('should emit kind=unknown for unrecognized types', () => {
         requestFilter(99, { uris: ['https://example.com/unknown'] })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.data.kind).toBe('unknown')
       })
 
       it('should include urlHash in payload', () => {
         requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.data.urlHash).toBeTruthy()
         expect(typeof envelope.data.urlHash).toBe('string')
       })
@@ -195,7 +194,7 @@ describe('ShakaNetworkAdapterPlugin', () => {
         const data = new ArrayBuffer(2048)
         responseFilter(1, { uri, data })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.type).toBe(Events.CONTAINER_TELEMETRY_REQUEST_END)
         expect(envelope.data.bytes).toBe(2048)
         expect(envelope.data.durationMs).toBeGreaterThanOrEqual(0)
@@ -204,11 +203,11 @@ describe('ShakaNetworkAdapterPlugin', () => {
       it('should match id from net.request.start to net.request.end', () => {
         const uri = 'https://example.com/seg-001.mp4'
         requestFilter(1, { uris: [uri] })
-        const startEnvelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const startEnvelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
 
         triggerSpy.mockClear()
         responseFilter(1, { uri, data: new ArrayBuffer(512) })
-        const endEnvelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const endEnvelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
 
         expect(endEnvelope.data.id).toBe(startEnvelope.data.id)
       })
@@ -228,7 +227,7 @@ describe('ShakaNetworkAdapterPlugin', () => {
 
         responseFilter(1, { uri, data: null })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope.data.bytes).toBe(0)
       })
 
@@ -238,31 +237,47 @@ describe('ShakaNetworkAdapterPlugin', () => {
         // Two concurrent requests for the same URI
         requestFilter(1, { uris: [uri] })
         const firstId = triggerSpy.mock.calls
-          .filter(([evt]) => evt === TRACE_EVENT)
+          .filter(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)
           .at(-1)?.[1]?.data?.id
 
         requestFilter(1, { uris: [uri] })
         const secondId = triggerSpy.mock.calls
-          .filter(([evt]) => evt === TRACE_EVENT)
+          .filter(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)
           .at(-1)?.[1]?.data?.id
 
         expect(firstId).not.toBe(secondId)
         expect(plugin._pendingRequests.get(uri).length).toBe(2)
       })
+
+      it('should include throughputMbps in payload', () => {
+        const uri = 'https://example.com/seg-001.mp4'
+
+        requestFilter(1, { uris: [uri] })
+        triggerSpy.mockClear()
+
+        const data = new ArrayBuffer(2048)
+        responseFilter(1, { uri, data })
+
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
+
+        expect(envelope.data.throughputMbps).toBeDefined()
+        expect(typeof envelope.data.throughputMbps).toBe('number')
+        expect(envelope.data.throughputMbps).toBeGreaterThanOrEqual(0)
+      })
     })
 
     describe('envelope contract', () => {
-      it('should use canonical TRACE_EVENT channel for all emissions', () => {
+      it('should use canonical CONTAINER_TELEMETRY_TRACE event for all emissions', () => {
         requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
 
-        const traceCalls = triggerSpy.mock.calls.filter(([evt]) => evt === TRACE_EVENT)
+        const traceCalls = triggerSpy.mock.calls.filter(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)
         expect(traceCalls.length).toBeGreaterThan(0)
       })
 
       it('should include all required envelope fields', () => {
         requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
 
-        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === TRACE_EVENT)?.[1]
+        const envelope = triggerSpy.mock.calls.find(([evt]) => evt === Events.CONTAINER_TELEMETRY_TRACE)?.[1]
         expect(envelope).toHaveProperty('type')
         expect(envelope).toHaveProperty('t')
         expect(envelope).toHaveProperty('ts')
