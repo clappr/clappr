@@ -1,29 +1,11 @@
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const telemetryConfigs = require('./src/telemetry/webpack.config.telemetry.js')
 
 var NPM_RUN = process.env.npm_lifecycle_event
 
 const externals = () => {
   // By default, only Clappr is defined as external library
-  return {
-    clappr: {
-      amd: 'clappr',
-      commonjs: 'clappr',
-      commonjs2: 'clappr',
-      root: 'Clappr'
-    },
-    '@clappr/core': {
-      amd: '@clappr/core',
-      commonjs: '@clappr/core',
-      commonjs2: '@clappr/core',
-      root: 'ClapprCore'
-    }
-  }
-}
-
-const telemetryExternals = () => {
-  // Telemetry plugin only needs clappr as external
-  // @clappr/core will be bundled since it's needed for the plugin
   return {
     clappr: {
       amd: 'clappr',
@@ -66,35 +48,6 @@ const webpackConfig = (config) => {
       filename: config.filename,
       library: 'DashShakaPlayback',
       libraryTarget: 'umd',
-      globalObject: 'window'
-    },
-    plugins: config.plugins,
-  }
-}
-
-const telemetryWebpackConfig = (config) => {
-  return {
-    mode: config.mode,
-    devtool: 'source-map',
-    entry: path.resolve(__dirname, 'src/telemetry/shaka_network_adapter_plugin.js'),
-    externals: config.externals,
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          loader: 'babel-loader',
-          include: [
-            path.resolve(__dirname, 'src')
-          ]
-        },
-      ],
-    },
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: config.filename,
-      library: 'ShakaNetworkAdapterPlugin',
-      libraryTarget: 'umd',
-      globalObject: 'window'
     },
     plugins: config.plugins,
   }
@@ -118,14 +71,6 @@ if (NPM_RUN === 'build' || NPM_RUN === 'start') {
     filename: 'dash-shaka-playback.external.js',
     plugins: [],
     externals: customExt,
-    mode: 'development'
-  }))
-
-  // Telemetry plugin unminified
-  configurations.push(telemetryWebpackConfig({
-    filename: 'dash-shaka-telemetry-plugin.js',
-    plugins: [],
-    externals: telemetryExternals(),
     mode: 'development'
   }))
 }
@@ -160,21 +105,7 @@ if (NPM_RUN === 'release') {
     externals: customExt,
     mode: 'production'
   }))
-
-  // Telemetry plugin minified
-  configurations.push(telemetryWebpackConfig({
-    filename: 'dash-shaka-telemetry-plugin.min.js',
-    optimization: {
-      minimizer: [
-        new UglifyJsPlugin({
-          sourceMap: true
-        }),
-      ]
-    },
-    externals: telemetryExternals(),
-    mode: 'production'
-  }))
 }
 
 // https://webpack.js.org/configuration/configuration-types/#exporting-multiple-configurations
-module.exports = configurations
+module.exports = [...configurations, ...telemetryConfigs]
