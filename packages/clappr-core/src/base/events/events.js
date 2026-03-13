@@ -923,6 +923,43 @@ Events.CONTAINER_OPTIONS_WILL_CHANGE = 'container:options:will:change'
  */
 Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'
 
+// Telemetry Events
+
+/**
+ * Fired when a telemetry trace event is emitted
+ *
+ * @event CONTAINER_TELEMETRY_TRACE
+ */
+Events.CONTAINER_TELEMETRY_TRACE = 'container:telemetry:trace'
+
+/**
+ * Fired when a telemetry network request starts
+ *
+ * @event CONTAINER_TELEMETRY_REQUEST_START
+ */
+Events.CONTAINER_TELEMETRY_REQUEST_START = 'container:telemetry:request:start'
+
+/**
+ * Fired when a telemetry network request finishes
+ *
+ * @event CONTAINER_TELEMETRY_REQUEST_END
+ */
+Events.CONTAINER_TELEMETRY_REQUEST_END = 'container:telemetry:request:end'
+
+/**
+ * Fired when a telemetry event is emitted by the telemetry bus
+ *
+ * @event CONTAINER_TELEMETRY_BUS
+ */
+Events.CONTAINER_TELEMETRY_BUS = 'container:telemetry:bus'
+
+/**
+ * Fired when a telemetry internal error occurs
+ *
+ * @event CONTAINER_TELEMETRY_ERROR
+ */
+Events.CONTAINER_TELEMETRY_ERROR = 'container:telemetry:error'
+
 // MediaControl Events
 Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
 /**
