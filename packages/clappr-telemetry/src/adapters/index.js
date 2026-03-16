@@ -1,4 +1,4 @@
-import ShakaNetworkAdapter from './ShakaNetworkAdapter'
+import ShakaNetworkAdapter from './shaka_network_adapter'
 
 /**
  * Registry of available telemetry adapters.
@@ -11,13 +11,13 @@ const ADAPTERS = [
 ]
 
 /**
- * Find appropriate adapter for given playback engine.
+ * Find appropriate network adapter for given playback engine.
  * @param {Object} playback - Playback engine instance
- * @returns {Class|null} Adapter class if supported, null otherwise
+ * @returns {Class|null} Network adapter class if supported, null otherwise
  */
-export function findAdapterForPlayback(playback) {
+export function findNetworkAdapter(playback) {
   const AdapterClass = ADAPTERS.find(adapter => adapter.isSupported(playback))
   return AdapterClass || null
 }
 
-export { default as ShakaNetworkAdapter } from './ShakaNetworkAdapter'
+export { default as ShakaNetworkAdapter } from './shaka_network_adapter'

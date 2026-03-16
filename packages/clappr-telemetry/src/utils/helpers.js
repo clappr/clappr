@@ -1,5 +1,6 @@
 import { TELEMETRY_CONTRACT_VERSION } from './constants'
 import { Events } from '@clappr/core'
+import { TelemetryEvents } from './telemetry_events'
 
 /**
  * Creates a telemetry envelope with monotonic and wall-clock timestamps.
@@ -36,9 +37,9 @@ export const emitTelemetry = (emitter, type, data, source) => {
   } catch (error) {
     try {
       const errorEnvelope = createEnvelope(
-        Events.CONTAINER_TELEMETRY_ERROR,
+        TelemetryEvents.ERROR,
         { scope: source, message: error?.message || 'unknown' },
-        Events.CONTAINER_TELEMETRY_BUS
+        TelemetryEvents.BUS
       )
       emitter.trigger(Events.CONTAINER_TELEMETRY_TRACE, errorEnvelope)
     } catch {

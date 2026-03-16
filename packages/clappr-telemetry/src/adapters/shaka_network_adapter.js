@@ -1,5 +1,6 @@
-import { Events, Log } from '@clappr/core'
+import { Log } from '@clappr/core'
 import { emitTelemetry, hashUrl, calculateThroughput } from '../utils'
+import { TelemetryEvents } from '../utils/telemetry_events'
 
 // Maps Shaka RequestType integers to human-readable kind strings
 const SHAKA_KIND_MAP = {
@@ -115,7 +116,7 @@ export default class ShakaNetworkAdapter {
     this.pendingRequests.set(uri, queue)
 
     // Emit through container's telemetry bus
-    emitTelemetry(this.container, Events.CONTAINER_TELEMETRY_REQUEST_START, {
+    emitTelemetry(this.container, TelemetryEvents.REQUEST_START, {
       id,
       kind: shakaKind(type),
       urlHash: hashUrl(uri)
@@ -136,7 +137,7 @@ export default class ShakaNetworkAdapter {
     const throughputMbps = calculateThroughput(bytes, durationMs)
 
     // Emit through container's telemetry bus
-    emitTelemetry(this.container, Events.CONTAINER_TELEMETRY_REQUEST_END, {
+    emitTelemetry(this.container, TelemetryEvents.REQUEST_END, {
       id: pending?.id ?? hashUrl(uri),
       kind: shakaKind(type),
       urlHash: hashUrl(uri),

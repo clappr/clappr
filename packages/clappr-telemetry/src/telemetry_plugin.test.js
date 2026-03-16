@@ -1,4 +1,4 @@
-import TelemetryPlugin from './TelemetryPlugin'
+import TelemetryPlugin from './telemetry_plugin'
 
 describe('TelemetryPlugin', () => {
   it('should create TelemetryPlugin class', () => {

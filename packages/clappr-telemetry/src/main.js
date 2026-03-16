@@ -1,2 +1,2 @@
-import TelemetryPlugin from './TelemetryPlugin'
+import TelemetryPlugin from './telemetry_plugin'
 export default TelemetryPlugin

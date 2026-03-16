@@ -1,5 +1,5 @@
 import { ContainerPlugin, Log } from '@clappr/core'
-import { findAdapterForPlayback } from './adapters'
+import { findNetworkAdapter } from './adapters'
 
 /**
  * Main telemetry plugin.
@@ -34,7 +34,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
       return
     }
 
-    const AdapterClass = findAdapterForPlayback(playback)
+    const AdapterClass = findNetworkAdapter(playback)
 
     if (!AdapterClass) {
       Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.constructor.name}`)
