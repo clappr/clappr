@@ -1,23 +1,19 @@
 import './constants'
 import { emitTelemetry, hashUrl, createEnvelope, calculateThroughput } from './helpers'
 import { Events } from '@clappr/core'
+import { TelemetryEvents } from './telemetry_events'
 
 describe('Telemetry Constants', () => {
-  it('should define all canonical event types', () => {
+  it('should define public container trace event', () => {
     expect(Events.CONTAINER_TELEMETRY_TRACE)
       .toBe('container:telemetry:trace')
+  })
 
-    expect(Events.CONTAINER_TELEMETRY_REQUEST_START)
-      .toBe('container:telemetry:request:start')
-
-    expect(Events.CONTAINER_TELEMETRY_REQUEST_END)
-      .toBe('container:telemetry:request:end')
-
-    expect(Events.CONTAINER_TELEMETRY_BUS)
-      .toBe('container:telemetry:bus')
-
-    expect(Events.CONTAINER_TELEMETRY_ERROR)
-      .toBe('container:telemetry:error')
+  it('should define internal telemetry event types', () => {
+    expect(TelemetryEvents.REQUEST_START).toBe('request:start')
+    expect(TelemetryEvents.REQUEST_END).toBe('request:end')
+    expect(TelemetryEvents.ERROR).toBe('error')
+    expect(TelemetryEvents.BUS).toBe('telemetry_bus')
   })
 })
 
@@ -69,7 +65,7 @@ describe('emitTelemetry', () => {
 
     emitTelemetry(
       emitter,
-      Events.CONTAINER_TELEMETRY_REQUEST_START,
+      TelemetryEvents.REQUEST_START,
       { url: 'video.ts' },
       'test-plugin'
     )
@@ -77,7 +73,7 @@ describe('emitTelemetry', () => {
     expect(emitter.trigger).toHaveBeenCalledWith(
       Events.CONTAINER_TELEMETRY_TRACE,
       expect.objectContaining({
-        type: Events.CONTAINER_TELEMETRY_REQUEST_START,
+        type: TelemetryEvents.REQUEST_START,
         source: 'test-plugin'
       })
     )
@@ -95,7 +91,7 @@ describe('emitTelemetry', () => {
 
     emitTelemetry(
       emitter,
-      Events.CONTAINER_TELEMETRY_REQUEST_START,
+      TelemetryEvents.REQUEST_START,
       {},
       'plugin'
     )
@@ -105,7 +101,7 @@ describe('emitTelemetry', () => {
     expect(emitter.trigger).toHaveBeenLastCalledWith(
       Events.CONTAINER_TELEMETRY_TRACE,
       expect.objectContaining({
-        type: Events.CONTAINER_TELEMETRY_ERROR
+        type: TelemetryEvents.ERROR
       })
     )
   })

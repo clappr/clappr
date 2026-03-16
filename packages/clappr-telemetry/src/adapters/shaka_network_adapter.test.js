@@ -5,9 +5,9 @@ jest.mock('../utils', () => ({
   calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0))
 }))
 
-import { Events } from '@clappr/core'
-import ShakaNetworkAdapter from './ShakaNetworkAdapter'
+import ShakaNetworkAdapter from './shaka_network_adapter'
 import { emitTelemetry } from '../utils'
+import { TelemetryEvents } from '../utils/telemetry_events'
 
 const createFakeNetworkEngine = () => ({
   registerRequestFilter: jest.fn(),
@@ -156,7 +156,7 @@ describe('ShakaNetworkAdapter', () => {
 
       expect(emitTelemetry).toHaveBeenCalledWith(
         container,
-        Events.CONTAINER_TELEMETRY_REQUEST_START,
+        TelemetryEvents.REQUEST_START,
         expect.objectContaining({ kind: 'segment' }),
         ShakaNetworkAdapter.name
       )
@@ -244,7 +244,7 @@ describe('ShakaNetworkAdapter', () => {
 
       expect(emitTelemetry).toHaveBeenCalledWith(
         container,
-        Events.CONTAINER_TELEMETRY_REQUEST_END,
+        TelemetryEvents.REQUEST_END,
         expect.objectContaining({ bytes: 2048 }),
         ShakaNetworkAdapter.name
       )
