@@ -1,6 +1,7 @@
 import { Log } from '@clappr/core'
-import { emitTelemetry, hashUrl, calculateThroughput } from '../utils'
+import { emitTelemetry, calculateThroughput } from '../utils'
 import { TelemetryEvents } from '../utils/telemetry_events'
+import { TELEMETRY_SOURCE_NETWORK } from '../utils/constants'
 
 // Maps Shaka RequestType integers to human-readable kind strings
 const SHAKA_KIND_MAP = {
@@ -107,8 +108,8 @@ export default class ShakaNetworkAdapter {
 
   requestFilter(type, request) {
     const uri = request.uris?.[0] ?? ''
-    const id = `${hashUrl(uri)}-${performance.now()}`
-    const entry = { id, startT: performance.now() }
+    const startT = performance.now()
+    const entry = { startT }
 
     // Track concurrent requests to same URI
     const queue = this.pendingRequests.get(uri) ?? []
@@ -117,10 +118,8 @@ export default class ShakaNetworkAdapter {
 
     // Emit through container's telemetry bus
     emitTelemetry(this.container, TelemetryEvents.REQUEST_START, {
-      id,
-      kind: shakaKind(type),
-      urlHash: hashUrl(uri)
-    }, ShakaNetworkAdapter.name)
+      kind: shakaKind(type)
+    }, TELEMETRY_SOURCE_NETWORK)
   }
 
   responseFilter(type, response) {
@@ -138,13 +137,11 @@ export default class ShakaNetworkAdapter {
 
     // Emit through container's telemetry bus
     emitTelemetry(this.container, TelemetryEvents.REQUEST_END, {
-      id: pending?.id ?? hashUrl(uri),
       kind: shakaKind(type),
-      urlHash: hashUrl(uri),
       durationMs,
       bytes,
       throughputMbps
-    }, ShakaNetworkAdapter.name)
+    }, TELEMETRY_SOURCE_NETWORK)
   }
 
   destroy() {

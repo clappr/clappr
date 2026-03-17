@@ -10,3 +10,5 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Initial release of @clappr/telemetry package
 - Basic project structure with Rollup build configuration
 - Support for UMD and ESM module formats
+- Shaka network adapter for telemetry collection
+
