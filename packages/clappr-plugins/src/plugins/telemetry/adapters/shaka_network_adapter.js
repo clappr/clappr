@@ -28,9 +28,7 @@ export default class ShakaNetworkAdapter {
   }
 
   static isSupported(playback) {
-    // Check playback engine name only (shakaPlayerInstance may not be available yet)
-    const engineName = playback?.constructor?.name || ''
-    return engineName.includes('DashShaka') || engineName.includes('Shaka')
+    return playback?.name === 'dash_shaka_playback'
   }
 
   constructor(playback, container) {
@@ -39,14 +37,12 @@ export default class ShakaNetworkAdapter {
     this.shakaPlayer = null
     this.pendingRequests = new Map()
 
-    // Bind methods for filter registration/unregistration
     this.requestFilter = this.requestFilter.bind(this)
     this.responseFilter = this.responseFilter.bind(this)
     this._onShakaReady = this._onShakaReady.bind(this)
   }
 
   bind() {
-    // Try synchronous bind first
     const shakaPlayer = this.playback?.shakaPlayerInstance
 
     if (shakaPlayer && typeof shakaPlayer.getNetworkingEngine === 'function') {
@@ -55,7 +51,6 @@ export default class ShakaNetworkAdapter {
       return
     }
 
-    // If not available yet, wait for SHAKA_READY event
     if (this.playback?.on) {
       this.playback.on('shaka:ready', this._onShakaReady)
     } else {
@@ -71,7 +66,6 @@ export default class ShakaNetworkAdapter {
       return
     }
 
-    // Detach from event after first successful bind
     if (this.playback?.off) {
       this.playback.off('shaka:ready', this._onShakaReady)
     }
@@ -100,6 +94,7 @@ export default class ShakaNetworkAdapter {
     const networkEngine = this.shakaPlayer.getNetworkingEngine()
     if (!networkEngine) {
       Log.warn('[ShakaNetworkAdapter] Networking engine not available for detachment')
+      return
     }
 
     networkEngine.unregisterRequestFilter(this.requestFilter)
@@ -111,12 +106,10 @@ export default class ShakaNetworkAdapter {
     const startT = performance.now()
     const entry = { startT }
 
-    // Track concurrent requests to same URI
     const queue = this.pendingRequests.get(uri) ?? []
     queue.push(entry)
     this.pendingRequests.set(uri, queue)
 
-    // Emit through container's telemetry bus
     emitTelemetry(this.container, TelemetryEvents.REQUEST_START, {
       kind: shakaKind(type)
     }, TELEMETRY_SOURCE_NETWORK)
@@ -135,7 +128,6 @@ export default class ShakaNetworkAdapter {
     const bytes = response.data?.byteLength ?? 0
     const throughputMbps = calculateThroughput(bytes, durationMs)
 
-    // Emit through container's telemetry bus
     emitTelemetry(this.container, TelemetryEvents.REQUEST_END, {
       kind: shakaKind(type),
       durationMs,
@@ -145,7 +137,6 @@ export default class ShakaNetworkAdapter {
   }
 
   destroy() {
-    // Unregister from SHAKA_READY event if waiting
     if (this.playback?.off) {
       this.playback.off('shaka:ready', this._onShakaReady)
     }

@@ -51,15 +51,11 @@ describe('ShakaNetworkAdapter', () => {
 
   describe('isSupported', () => {
     it('returns true for DashShakaPlayback', () => {
-      expect(ShakaNetworkAdapter.isSupported({ constructor: { name: 'DashShakaPlayback' } })).toBe(true)
-    })
-
-    it('returns true for a generic Shaka playback engine', () => {
-      expect(ShakaNetworkAdapter.isSupported({ constructor: { name: 'ShakaPlayer' } })).toBe(true)
+      expect(ShakaNetworkAdapter.isSupported({ name: 'dash_shaka_playback' })).toBe(true)
     })
 
     it('returns false for unrelated playback engines', () => {
-      expect(ShakaNetworkAdapter.isSupported({ constructor: { name: 'HlsPlayback' } })).toBe(false)
+      expect(ShakaNetworkAdapter.isSupported({ name: 'hls_playback' })).toBe(false)
     })
 
     it('returns false when playback is null', () => {
