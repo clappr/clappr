@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Clappr Player — Telemetry Plugin Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="/packages/clappr-core/dist/clappr-core.js"></script>
+  <script src="/packages/dash-shaka-playback/dist/dash-shaka-playback.js"></script>
+  <script src="/packages/clappr-plugins/dist/clappr-plugins.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0b0c0f;
+      --surface: #13151a;
+      --border: rgba(255, 255, 255, 0.07);
+      --accent: #4ade80;
+      --accent2: #22d3ee;
+      --text: #e8eaf0;
+      --muted: #5a5f72;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px 60px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 600;
+      background: rgba(74, 222, 128, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(74, 222, 128, 0.25);
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      margin-left: auto;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .engine-row {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .engine-label {
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .engine-tabs {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .engine-tab {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      cursor: pointer;
+      color: var(--muted);
+      border: none;
+      background: transparent;
+      transition: color 0.2s, background 0.2s;
+      border-right: 1px solid var(--border);
+    }
+
+    .engine-tab:last-child {
+      border-right: none;
+    }
+
+    .engine-tab.active {
+      background: rgba(74, 222, 128, 0.12);
+      color: var(--accent);
+    }
+
+    .engine-tab:hover:not(.active) {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    #player {
+      width: 100%;
+      max-width: 960px;
+      height: 500px;
+      background: #000;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .buttons {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      font-weight: 500;
+      padding: 7px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 5px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.45);
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn:active {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .btn.primary {
+      color: rgba(255, 255, 255, 0.65);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn.primary:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    footer {
+      width: 100%;
+      max-width: 960px;
+      margin-top: 24px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    footer a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">clappr<span>.</span>js</div>
+    <div class="badge">Telemetry Plugin Demo</div>
+    <div class="header-right">v0.5.x</div>
+  </header>
+
+  <div class="engine-row">
+    <span class="engine-label">Playback Engine</span>
+    <div class="engine-tabs">
+      <button class="engine-tab" id="tab-default" onclick="switchEngine('default')">Default (HLS)</button>
+      <button class="engine-tab active" id="tab-shaka" onclick="switchEngine('shaka')">Shaka (DASH)</button>
+    </div>
+  </div>
+
+
+  <div id="player"></div>
+
+  <div class="buttons">
+    <button class="btn primary" id="playBtn">Play</button>
+    <button class="btn" id="pauseBtn">Pause</button>
+    <button class="btn" id="stopBtn">Stop</button>
+  </div>
+
+  <footer>
+    <span>clappr-telemetry — Network telemetry plugin for Clappr Player</span>
+    <a href="https://github.com/clappr/clappr" target="_blank">GitHub ↗</a>
+  </footer>
+
+  <script>
+    class SimpleTelemetryLogger extends Clappr.ContainerPlugin {
+      get name() { return 'simple_telemetry_logger' }
+
+      get supportedVersion() { return { min: '0.13.0' } }
+
+      bindEvents() {
+        this.listenTo(
+          this.container,
+          'container:telemetry:trace',
+          (envelope) => console.log('[TELEMETRY]', envelope)
+        )
+      }
+    }
+
+    class PlayerFactory {
+
+      static engines = {
+        shaka: {
+          source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+          plugins: [DashShakaPlayback, ClapprPlugins.TelemetryPlugin, SimpleTelemetryLogger],
+          telemetry: { network: { enabled: true } }
+        },
+
+        default: {
+          source: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          plugins: [ClapprPlugins.TelemetryPlugin, SimpleTelemetryLogger],
+          telemetry: { network: { enabled: true } }
+        }
+      }
+
+      static create(engine) {
+        const config = this.engines[engine]
+
+        return new Clappr.Player({
+          parentId: '#player',
+          source: config.source,
+          width: '100%',
+          height: 500,
+          muted: true,
+          autoPlay: false,
+          plugins: config.plugins,
+          telemetry: config.telemetry
+        })
+      }
+    }
+
+    class PlayerApp {
+
+      constructor() {
+        this.player = null
+        this.engine = 'shaka'
+        console.log('[Demo] ClapprPlugins:', ClapprPlugins)
+        console.log('[Demo] TelemetryPlugin:', ClapprPlugins.TelemetryPlugin)
+        this.init()
+      }
+
+      init() {
+        this.build()
+      }
+
+      build() {
+        if (this.player) this.player.destroy()
+        this.player = PlayerFactory.create(this.engine)
+      }
+
+      switchEngine(engine) {
+        if (engine === this.engine) return
+
+        this.engine = engine
+        this.updateTabs(engine)
+        this.build()
+      }
+
+      updateTabs(engine) {
+        document
+          .querySelectorAll('.engine-tab')
+          .forEach(tab => tab.classList.remove('active'))
+
+        document
+          .getElementById('tab-' + engine)
+          .classList.add('active')
+      }
+    }
+
+    const app = new PlayerApp()
+
+    function handlePlayerAction(action) {
+      const player = app.player
+      if (player && typeof player[action] === 'function') {
+        player[action]()
+      } else {
+        console.error(`player.${action} is not available`)
+      }
+    }
+
+    document.getElementById('playBtn').onclick = () => handlePlayerAction('play')
+    document.getElementById('pauseBtn').onclick = () => handlePlayerAction('pause')
+    document.getElementById('stopBtn').onclick = () => handlePlayerAction('stop')
+
+    function switchEngine(engine) {
+      app.switchEngine(engine)
+    }
+  </script>
+</body>
+
+</html>

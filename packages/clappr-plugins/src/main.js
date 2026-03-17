@@ -14,6 +14,7 @@ import Poster from './plugins/poster'
 import SeekTime from './plugins/seek_time'
 import SpinnerThreeBounce from './plugins/spinner_three_bounce'
 import Stats from './plugins/stats'
+import TelemetryPlugin from './plugins/telemetry/telemetry_plugin'
 import WaterMark from './plugins/watermark'
 
 import Vendor from './vendor'
@@ -33,6 +34,7 @@ const Plugins = {
   SeekTime,
   SpinnerThreeBounce,
   Stats,
+  TelemetryPlugin,
   WaterMark
 }
 
@@ -49,6 +51,7 @@ export {
   SeekTime,
   SpinnerThreeBounce,
   Stats,
+  TelemetryPlugin,
   WaterMark,
   Vendor,
   Plugins,
