@@ -1,6 +1,4 @@
-import './constants'
 import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
-import { Events } from '@clappr/core'
 import { TelemetryEvents, CONTAINER_TELEMETRY_TRACE } from './telemetry_events'
 
 describe('Telemetry Constants', () => {
