@@ -2,6 +2,8 @@ import { Log } from '@clappr/core'
 import { TELEMETRY_CONTRACT_VERSION } from './constants'
 import { CONTAINER_TELEMETRY_TRACE } from './telemetry_events'
 
+const DECIMAL_PLACES = 2
+
 /**
  * Creates a telemetry envelope with monotonic and wall-clock timestamps.
  *
@@ -52,14 +54,14 @@ export const calculateThroughput = (bytes, durationMs) => {
   const MS_PER_SECOND = 1000
   const BITS_PER_BYTE = 8
   const BITS_PER_MEGABIT = 1000000
-  // Industry standard: 2 decimal places for bandwidth/throughput metrics (monitoring, analytics)
-  const DECIMAL_PLACES = 2
 
-  if (durationMs <= 0) return 0
+  if (!Number.isFinite(durationMs) || durationMs <= 0) return 0
+  if (!Number.isFinite(bytes) || bytes < 0) return 0
 
   const durationSeconds = durationMs / MS_PER_SECOND
   const bits = bytes * BITS_PER_BYTE
   const throughput = bits / durationSeconds / BITS_PER_MEGABIT
 
-  return Math.round(throughput * Math.pow(10, DECIMAL_PLACES)) / Math.pow(10, DECIMAL_PLACES)
+  const factor = 10 ** DECIMAL_PLACES
+  return Math.round(throughput * factor) / factor
 }
