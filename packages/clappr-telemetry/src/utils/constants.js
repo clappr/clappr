@@ -10,3 +10,9 @@
  * Current version of the telemetry envelope contract.
  */
 export const TELEMETRY_CONTRACT_VERSION = '1.0'
+
+/**
+ * Generic source identifier for network adapter telemetry.
+ * Used across all player implementations to maintain abstraction.
+ */
+export const TELEMETRY_SOURCE_NETWORK = 'network'

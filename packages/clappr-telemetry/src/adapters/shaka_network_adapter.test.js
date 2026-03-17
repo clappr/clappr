@@ -1,13 +1,13 @@
 // Mock utilities
 jest.mock('../utils', () => ({
   emitTelemetry: jest.fn(),
-  hashUrl: jest.fn((url) => `hash:${url}`),
   calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0))
 }))
 
 import ShakaNetworkAdapter from './shaka_network_adapter'
 import { emitTelemetry } from '../utils'
 import { TelemetryEvents } from '../utils/telemetry_events'
+import { TELEMETRY_SOURCE_NETWORK } from '../utils/constants'
 
 const createFakeNetworkEngine = () => ({
   registerRequestFilter: jest.fn(),
@@ -158,7 +158,7 @@ describe('ShakaNetworkAdapter', () => {
         container,
         TelemetryEvents.REQUEST_START,
         expect.objectContaining({ kind: 'segment' }),
-        ShakaNetworkAdapter.name
+        TELEMETRY_SOURCE_NETWORK
       )
     })
 
@@ -190,21 +190,6 @@ describe('ShakaNetworkAdapter', () => {
       expect(data.kind).toBe('unknown')
     })
 
-    it('includes a truthy urlHash in the payload', () => {
-      adapter.requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
-
-      const [, , data] = emitTelemetry.mock.calls[0]
-      expect(data.urlHash).toBeTruthy()
-      expect(typeof data.urlHash).toBe('string')
-    })
-
-    it('includes an id in the payload', () => {
-      adapter.requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
-
-      const [, , data] = emitTelemetry.mock.calls[0]
-      expect(data.id).toBeTruthy()
-    })
-
     it('tracks the pending request in pendingRequests', () => {
       const uri = 'https://example.com/seg-001.mp4'
       adapter.requestFilter(1, { uris: [uri] })
@@ -220,7 +205,6 @@ describe('ShakaNetworkAdapter', () => {
 
       const queue = adapter.pendingRequests.get(uri)
       expect(queue).toHaveLength(2)
-      expect(queue[0].id).not.toBe(queue[1].id)
     })
   })
 
@@ -246,7 +230,7 @@ describe('ShakaNetworkAdapter', () => {
         container,
         TelemetryEvents.REQUEST_END,
         expect.objectContaining({ bytes: 2048 }),
-        ShakaNetworkAdapter.name
+        TELEMETRY_SOURCE_NETWORK
       )
     })
 
@@ -270,18 +254,6 @@ describe('ShakaNetworkAdapter', () => {
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.durationMs).toBeGreaterThanOrEqual(0)
-    })
-
-    it('matches the id from the corresponding request', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
-      const [, , startData] = emitTelemetry.mock.calls[0]
-      jest.clearAllMocks()
-
-      responseFilter(1, { uri, data: new ArrayBuffer(512) })
-      const [, , endData] = emitTelemetry.mock.calls[0]
-
-      expect(endData.id).toBe(startData.id)
     })
 
     it('clears the pending entry after a matched response', () => {
@@ -313,24 +285,6 @@ describe('ShakaNetworkAdapter', () => {
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(typeof data.throughputMbps).toBe('number')
       expect(data.throughputMbps).toBeGreaterThanOrEqual(0)
-    })
-
-    it('resolves concurrent requests to the same URI in FIFO order', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-
-      requestFilter(1, { uris: [uri] })
-      const firstId = emitTelemetry.mock.calls.at(-1)[2].id
-
-      requestFilter(1, { uris: [uri] })
-      const secondId = emitTelemetry.mock.calls.at(-1)[2].id
-
-      jest.clearAllMocks()
-      responseFilter(1, { uri, data: new ArrayBuffer(256) })
-      expect(emitTelemetry.mock.calls[0][2].id).toBe(firstId)
-
-      jest.clearAllMocks()
-      responseFilter(1, { uri, data: new ArrayBuffer(256) })
-      expect(emitTelemetry.mock.calls[0][2].id).toBe(secondId)
     })
   })
 })

@@ -1,5 +1,5 @@
 import './constants'
-import { emitTelemetry, hashUrl, createEnvelope, calculateThroughput } from './helpers'
+import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
 import { Events } from '@clappr/core'
 import { TelemetryEvents } from './telemetry_events'
 
@@ -79,13 +79,10 @@ describe('emitTelemetry', () => {
     )
   })
 
-  it('should emit telemetry error if trigger throws', () => {
-    let count = 0
-
+  it('should silently ignore errors from trigger', () => {
     const emitter = {
       trigger: jest.fn(() => {
-        count++
-        if (count === 1) throw new Error('boom')
+        throw new Error('boom')
       })
     }
 
@@ -96,43 +93,8 @@ describe('emitTelemetry', () => {
       'plugin'
     )
 
-    expect(emitter.trigger).toHaveBeenCalledTimes(2)
-
-    expect(emitter.trigger).toHaveBeenLastCalledWith(
-      Events.CONTAINER_TELEMETRY_TRACE,
-      expect.objectContaining({
-        type: TelemetryEvents.ERROR
-      })
-    )
-  })
-})
-
-describe('hashUrl', () => {
-  it('should return a hex string', () => {
-    const hash = hashUrl('https://example.com/segment.ts')
-
-    expect(typeof hash).toBe('string')
-    expect(hash).toMatch(/^[0-9a-f]+$/)
-  })
-
-  it('should generate same hash for same url', () => {
-    const a = hashUrl('https://example.com/a.ts')
-    const b = hashUrl('https://example.com/a.ts')
-
-    expect(a).toBe(b)
-  })
-
-  it('should generate different hashes for different urls', () => {
-    const a = hashUrl('https://example.com/a.ts')
-    const b = hashUrl('https://example.com/b.ts')
-
-    expect(a).not.toBe(b)
-  })
-
-  it('should return 0 for empty values', () => {
-    expect(hashUrl(null)).toBe('0')
-    expect(hashUrl(undefined)).toBe('0')
-    expect(hashUrl('')).toBe('0')
+    // Should have been called once despite throwing
+    expect(emitter.trigger).toHaveBeenCalledTimes(1)
   })
 })
 

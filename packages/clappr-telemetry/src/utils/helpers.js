@@ -1,6 +1,5 @@
 import { TELEMETRY_CONTRACT_VERSION } from './constants'
 import { Events } from '@clappr/core'
-import { TelemetryEvents } from './telemetry_events'
 
 /**
  * Creates a telemetry envelope with monotonic and wall-clock timestamps.
@@ -31,39 +30,12 @@ export const createEnvelope = (type, data, source) => ({
  * @param {string} source  - Plugin name that originated the event
  */
 export const emitTelemetry = (emitter, type, data, source) => {
+  const envelope = createEnvelope(type, data, source)
   try {
-    const envelope = createEnvelope(type, data, source)
     emitter.trigger(Events.CONTAINER_TELEMETRY_TRACE, envelope)
-  } catch (error) {
-    try {
-      const errorEnvelope = createEnvelope(
-        TelemetryEvents.ERROR,
-        { scope: source, message: error?.message || 'unknown' },
-        TelemetryEvents.BUS
-      )
-      emitter.trigger(Events.CONTAINER_TELEMETRY_TRACE, errorEnvelope)
-    } catch {
-      // Silently ignore errors from telemetry error reporting to prevent infinite loops
-    }
+  } catch {
+    // Fire and forget - emission errors are ignored
   }
-}
-
-/**
- * Generates a simple hash from a URL for correlation purposes.
- * Uses a fast non-cryptographic hash (djb2).
- *
- * @param {string} url - URL to hash
- * @returns {string} Hex hash string
- */
-export const hashUrl = (url) => {
-  if (!url) return '0'
-
-  let hash = 5381
-  for (let i = 0; i < url.length; i++) {
-    hash = ((hash << 5) + hash + url.charCodeAt(i)) >>> 0
-  }
-
-  return hash.toString(16)
 }
 
 /**
@@ -79,10 +51,14 @@ export const calculateThroughput = (bytes, durationMs) => {
   const MS_PER_SECOND = 1000
   const BITS_PER_BYTE = 8
   const BITS_PER_MEGABIT = 1000000
+  // Industry standard: 2 decimal places for bandwidth/throughput metrics (monitoring, analytics)
+  const DECIMAL_PLACES = 2
 
   if (durationMs <= 0) return 0
 
   const durationSeconds = durationMs / MS_PER_SECOND
   const bits = bytes * BITS_PER_BYTE
-  return bits / durationSeconds / BITS_PER_MEGABIT
+  const throughput = bits / durationSeconds / BITS_PER_MEGABIT
+
+  return Math.round(throughput * Math.pow(10, DECIMAL_PLACES)) / Math.pow(10, DECIMAL_PLACES)
 }
