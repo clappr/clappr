@@ -40,6 +40,7 @@ export default class ShakaNetworkAdapter {
     this.requestFilter = this.requestFilter.bind(this)
     this.responseFilter = this.responseFilter.bind(this)
     this._onShakaReady = this._onShakaReady.bind(this)
+    this._onShakaError = this._onShakaError.bind(this)
   }
 
   bind() {
@@ -74,6 +75,10 @@ export default class ShakaNetworkAdapter {
     this.attachFilters(shakaPlayer)
   }
 
+  _onShakaError() {
+    this.pendingRequests.clear()
+  }
+
   attachFilters(shakaPlayer) {
     const networkEngine = shakaPlayer.getNetworkingEngine()
 
@@ -84,6 +89,7 @@ export default class ShakaNetworkAdapter {
 
     networkEngine.registerRequestFilter(this.requestFilter)
     networkEngine.registerResponseFilter(this.responseFilter)
+    shakaPlayer.addEventListener('error', this._onShakaError)
   }
 
   detachFilters() {
@@ -99,6 +105,7 @@ export default class ShakaNetworkAdapter {
 
     networkEngine.unregisterRequestFilter(this.requestFilter)
     networkEngine.unregisterResponseFilter(this.responseFilter)
+    this.shakaPlayer.removeEventListener('error', this._onShakaError)
   }
 
   requestFilter(type, request) {

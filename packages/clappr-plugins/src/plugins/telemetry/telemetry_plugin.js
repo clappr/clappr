@@ -17,11 +17,16 @@ export default class TelemetryPlugin extends ContainerPlugin {
     return 'telemetry'
   }
 
+  get supportedVersion() {
+    return { min: '0.13.1' }
+  }
+
   bindEvents() {
-    this.listenTo(this.container, Events.CONTAINER_PLAYBACK, this.onPlaybackRead.bind(this))
-    if (this.container.playback) {
-      this.onPlaybackRead(this.container.playback)
-    }
+    this.listenTo(this.container, Events.CONTAINER_READY, () => {
+      if (this.container.playback) {
+        this.onPlaybackRead(this.container.playback)
+      }
+    })
   }
 
   onPlaybackRead(playback) {
@@ -35,7 +40,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
     const AdapterClass = findNetworkAdapter(playback)
 
     if (!AdapterClass) {
-      Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.constructor.name}`)
+      Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.name || playback.constructor.name || 'unknown'}`)
       return
     }
 

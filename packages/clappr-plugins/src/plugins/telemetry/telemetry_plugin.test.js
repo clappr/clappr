@@ -35,8 +35,29 @@ describe('TelemetryPlugin', () => {
     expect(plugin.name).toBe('telemetry')
   })
 
-  it('should listen to container playback event on bindEvents', () => {
-    expect(plugin.listenTo).toBeDefined()
+  it('should register listener on CONTAINER_READY event during bindEvents', () => {
+    jest.spyOn(plugin, 'listenTo')
+    plugin.bindEvents()
+
+    expect(plugin.listenTo).toHaveBeenCalledWith(
+      mockContainer,
+      Events.CONTAINER_READY,
+      expect.any(Function)
+    )
+  })
+
+  it('should call onPlaybackRead when CONTAINER_READY event fires', () => {
+    jest.spyOn(plugin, 'listenTo')
+    jest.spyOn(plugin, 'onPlaybackRead')
+    plugin.bindEvents()
+
+    const [, event, callback] = plugin.listenTo.mock.calls[0]
+    expect(event).toBe(Events.CONTAINER_READY)
+
+    mockContainer.playback = mockPlayback
+    callback()
+
+    expect(plugin.onPlaybackRead).toHaveBeenCalledWith(mockPlayback)
   })
 
   it('should instantiate adapter when playback is ready and telemetry enabled', () => {
@@ -54,6 +75,18 @@ describe('TelemetryPlugin', () => {
     expect(plugin.adapter).toBeNull()
   })
 
+  it('should log warning when no adapter is found for playback engine', () => {
+    jest.spyOn(Log, 'warn')
+    const { findNetworkAdapter } = require('./adapters')
+    findNetworkAdapter.mockReturnValue(null)
+
+    plugin.onPlaybackRead(mockPlayback)
+
+    expect(Log.warn).toHaveBeenCalledWith(
+      '[TelemetryPlugin] No network adapter for playback: dash_shaka_playback'
+    )
+  })
+
   it('should clean up adapter on destroy', () => {
     const mockAdapter = { destroy: jest.fn(), bind: jest.fn() }
     plugin.adapter = mockAdapter
@@ -61,6 +94,16 @@ describe('TelemetryPlugin', () => {
     plugin.destroy()
 
     expect(mockAdapter.destroy).toHaveBeenCalled()
+    expect(plugin.adapter).toBeNull()
+  })
+
+  it('should call parent destroy method', () => {
+    jest.spyOn(Object.getPrototypeOf(Object.getPrototypeOf(plugin)), 'destroy')
+    const mockAdapter = { destroy: jest.fn(), bind: jest.fn() }
+    plugin.adapter = mockAdapter
+
+    plugin.destroy()
+
     expect(plugin.adapter).toBeNull()
   })
 })

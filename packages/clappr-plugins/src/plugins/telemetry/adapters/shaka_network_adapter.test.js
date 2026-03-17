@@ -17,7 +17,9 @@ const createFakeNetworkEngine = () => ({
 })
 
 const createFakeShakaPlayer = (engine) => ({
-  getNetworkingEngine: jest.fn(() => engine)
+  getNetworkingEngine: jest.fn(() => engine),
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn()
 })
 
 const createFakePlayback = (shakaPlayer = null) => ({
