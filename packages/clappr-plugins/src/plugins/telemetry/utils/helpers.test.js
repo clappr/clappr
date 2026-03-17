@@ -1,3 +1,4 @@
+import { Log } from '@clappr/core'
 import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
 import { TelemetryEvents, CONTAINER_TELEMETRY_TRACE } from './telemetry_events'
 
@@ -94,6 +95,29 @@ describe('emitTelemetry', () => {
     // Should have been called once despite throwing
     expect(emitter.trigger).toHaveBeenCalledTimes(1)
   })
+
+  it('should log error when trigger throws', () => {
+    const spy = jest.spyOn(Log, 'error').mockImplementation(() => {})
+    const emitter = {
+      trigger: jest.fn(() => {
+        throw new Error('boom')
+      })
+    }
+
+    emitTelemetry(
+      emitter,
+      TelemetryEvents.REQUEST_START,
+      {},
+      'plugin'
+    )
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to emit event'),
+      expect.any(Error)
+    )
+    spy.mockRestore()
+  })
 })
 
 describe('Telemetry Envelope Contract', () => {
@@ -173,5 +197,13 @@ describe('calculateThroughput', () => {
     const throughput = calculateThroughput(5000, 250)
 
     expect(throughput).toBeCloseTo(0.16, 5)
+  })
+
+  it('should return 0 for NaN duration', () => {
+    expect(calculateThroughput(1000000, NaN)).toBe(0)
+  })
+
+  it('should return 0 for NaN bytes', () => {
+    expect(calculateThroughput(NaN, 1000)).toBe(0)
   })
 })
