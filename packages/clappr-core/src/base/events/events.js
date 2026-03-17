@@ -923,15 +923,6 @@ Events.CONTAINER_OPTIONS_WILL_CHANGE = 'container:options:will:change'
  */
 Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'
 
-// Telemetry Events
-
-/**
- * Fired when a telemetry trace event is emitted
- *
- * @event CONTAINER_TELEMETRY_TRACE
- */
-Events.CONTAINER_TELEMETRY_TRACE = 'container:telemetry:trace'
-
 // MediaControl Events
 Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
 /**

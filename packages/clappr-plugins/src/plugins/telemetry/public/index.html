@@ -10,7 +10,7 @@
     rel="stylesheet">
   <script src="/packages/clappr-core/dist/clappr-core.js"></script>
   <script src="/packages/dash-shaka-playback/dist/dash-shaka-playback.js"></script>
-  <script src="/packages/clappr-telemetry/dist/clappr-telemetry.js"></script>
+  <script src="/packages/clappr-plugins/dist/clappr-plugins.js"></script>
   <style>
     *,
     *::before,
@@ -232,7 +232,7 @@
       <button class="engine-tab active" id="tab-shaka" onclick="switchEngine('shaka')">Shaka (DASH)</button>
     </div>
   </div>
-  
+
 
   <div id="player"></div>
 
@@ -243,13 +243,15 @@
   </div>
 
   <footer>
-    <span>clappr-telemetry — MSE &amp; playback engine telemetry plugin</span>
+    <span>clappr-telemetry — Network telemetry plugin for Clappr Player</span>
     <a href="https://github.com/clappr/clappr" target="_blank">GitHub ↗</a>
   </footer>
 
   <script>
     class SimpleTelemetryLogger extends Clappr.ContainerPlugin {
       get name() { return 'simple_telemetry_logger' }
+
+      get supportedVersion() { return { min: '0.13.0' } }
 
       bindEvents() {
         this.listenTo(
@@ -265,13 +267,13 @@
       static engines = {
         shaka: {
           source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
-          plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
+          plugins: [DashShakaPlayback, ClapprPlugins.TelemetryPlugin, SimpleTelemetryLogger],
           telemetry: { network: { enabled: true } }
         },
 
         default: {
           source: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          plugins: [ClapprTelemetry, SimpleTelemetryLogger],
+          plugins: [ClapprPlugins.TelemetryPlugin, SimpleTelemetryLogger],
           telemetry: { network: { enabled: true } }
         }
       }
@@ -297,6 +299,8 @@
       constructor() {
         this.player = null
         this.engine = 'shaka'
+        console.log('[Demo] ClapprPlugins:', ClapprPlugins)
+        console.log('[Demo] TelemetryPlugin:', ClapprPlugins.TelemetryPlugin)
         this.init()
       }
 
@@ -330,7 +334,6 @@
 
     const app = new PlayerApp()
 
-    // Função única para controlar ações do player
     function handlePlayerAction(action) {
       const player = app.player
       if (player && typeof player[action] === 'function') {

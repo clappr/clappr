@@ -1,11 +1,11 @@
 import './constants'
 import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
 import { Events } from '@clappr/core'
-import { TelemetryEvents } from './telemetry_events'
+import { TelemetryEvents, CONTAINER_TELEMETRY_TRACE } from './telemetry_events'
 
 describe('Telemetry Constants', () => {
   it('should define public container trace event', () => {
-    expect(Events.CONTAINER_TELEMETRY_TRACE)
+    expect(CONTAINER_TELEMETRY_TRACE)
       .toBe('container:telemetry:trace')
   })
 
@@ -71,7 +71,7 @@ describe('emitTelemetry', () => {
     )
 
     expect(emitter.trigger).toHaveBeenCalledWith(
-      Events.CONTAINER_TELEMETRY_TRACE,
+      CONTAINER_TELEMETRY_TRACE,
       expect.objectContaining({
         type: TelemetryEvents.REQUEST_START,
         source: 'test-plugin'

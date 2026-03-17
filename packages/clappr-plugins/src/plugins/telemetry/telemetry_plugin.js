@@ -1,4 +1,4 @@
-import { ContainerPlugin, Log } from '@clappr/core'
+import { ContainerPlugin, Log, Events } from '@clappr/core'
 import { findNetworkAdapter } from './adapters'
 
 /**
@@ -18,15 +18,13 @@ export default class TelemetryPlugin extends ContainerPlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.container, 'container:playback', this.onPlaybackRead.bind(this))
-    // Check if playback is already available
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACK, this.onPlaybackRead.bind(this))
     if (this.container.playback) {
       this.onPlaybackRead(this.container.playback)
     }
   }
 
   onPlaybackRead(playback) {
-    // Check if network telemetry is enabled
     const telemetryConfig = this.container.options?.telemetry || {}
     const networkEnabled = telemetryConfig.network?.enabled
 
@@ -41,7 +39,6 @@ export default class TelemetryPlugin extends ContainerPlugin {
       return
     }
 
-    // Pass container for emitTelemetry access
     this.adapter = new AdapterClass(playback, this.container)
     this.adapter.bind()
   }
