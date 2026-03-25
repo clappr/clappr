@@ -2,9 +2,15 @@ import { ContainerPlugin, Log, Events } from '@clappr/core'
 import { findNetworkAdapter } from './adapters'
 
 /**
+ * @event CONTAINER_TELEMETRY_TRACE
+ * Emits telemetry data from all sources (network, playback, etc.)
+ * Payload: { type, source, data, t, ts, v }
+ */
+Events.register('CONTAINER_TELEMETRY_TRACE')
+
+/**
  * Main telemetry plugin.
  * Detects playback engine and activates appropriate adapter for metrics collection.
- *
  * Integrates with container's telemetry bus to forward network and playback metrics.
  */
 export default class TelemetryPlugin extends ContainerPlugin {
@@ -23,7 +29,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_READY, () => {
-      if (this.container.playback) {
+      if (this.container?.playback) {
         this.onPlaybackRead(this.container.playback)
       }
     })
@@ -31,7 +37,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
   onPlaybackRead(playback) {
     const telemetryConfig = this.container.options?.telemetry || {}
-    const networkEnabled = telemetryConfig.network?.enabled
+    const networkEnabled = telemetryConfig.network?.enabled === true
 
     if (!networkEnabled) {
       return

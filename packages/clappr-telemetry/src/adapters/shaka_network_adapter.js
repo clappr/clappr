@@ -1,7 +1,12 @@
 import { Log } from '@clappr/core'
 import { emitTelemetry, calculateThroughput } from '../utils'
-import { TelemetryEvents } from '../utils/telemetry_events'
-import { TELEMETRY_SOURCE_NETWORK } from '../utils/constants'
+import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
+
+/**
+ * @event SHAKA_READY
+ * Emitted when Shaka Player instance is ready
+ */
+const SHAKA_READY = 'shaka:ready'
 
 // Maps Shaka RequestType integers to human-readable kind strings
 const SHAKA_KIND_MAP = {
@@ -14,6 +19,9 @@ const SHAKA_KIND_MAP = {
 }
 
 const shakaKind = (type) => SHAKA_KIND_MAP[type] ?? 'unknown'
+
+// Guard against unbounded growth on stalled responses
+const MAX_PENDING_REQUESTS = 100
 
 /**
  * Telemetry adapter for Shaka Player.
@@ -36,6 +44,7 @@ export default class ShakaNetworkAdapter {
     this.container = container
     this.shakaPlayer = null
     this.pendingRequests = new Map()
+    this._requestCounter = 0
 
     this.requestFilter = this.requestFilter.bind(this)
     this.responseFilter = this.responseFilter.bind(this)
@@ -53,7 +62,7 @@ export default class ShakaNetworkAdapter {
     }
 
     if (this.playback?.on) {
-      this.playback.on('shaka:ready', this._onShakaReady)
+      this.playback.on(SHAKA_READY, this._onShakaReady)
     } else {
       Log.warn('[ShakaNetworkAdapter] Shaka player instance not available and no event handler')
     }
@@ -68,7 +77,7 @@ export default class ShakaNetworkAdapter {
     }
 
     if (this.playback?.off) {
-      this.playback.off('shaka:ready', this._onShakaReady)
+      this.playback.off(SHAKA_READY, this._onShakaReady)
     }
 
     this.shakaPlayer = shakaPlayer
@@ -109,43 +118,43 @@ export default class ShakaNetworkAdapter {
   }
 
   requestFilter(type, request) {
-    const uri = request.uris?.[0] ?? ''
-    const startT = performance.now()
-    const entry = { startT }
+    if (this.pendingRequests.size >= MAX_PENDING_REQUESTS) {
+      Log.warn('[ShakaNetworkAdapter] pendingRequests limit reached, clearing stale entries')
+      this.pendingRequests.clear()
+    }
 
-    const queue = this.pendingRequests.get(uri) ?? []
-    queue.push(entry)
-    this.pendingRequests.set(uri, queue)
+    const requestId = ++this._requestCounter
+    request._telemetryId = requestId
+    this.pendingRequests.set(requestId, { startT: performance.now() })
 
-    emitTelemetry(this.container, TelemetryEvents.REQUEST_START, {
+    emitTelemetry(this.container, EVENT_TYPES.REQUEST_START, {
       kind: shakaKind(type)
-    }, TELEMETRY_SOURCE_NETWORK)
+    }, TELEMETRY_SOURCES.NETWORK)
   }
 
   responseFilter(type, response) {
-    const uri = response.uri ?? ''
-    const queue = this.pendingRequests.get(uri) ?? []
-    const pending = queue.shift()
+    const requestId = response.originalRequest?._telemetryId
+    const pending = requestId != null ? this.pendingRequests.get(requestId) : undefined
 
-    if (queue.length === 0) {
-      this.pendingRequests.delete(uri)
+    if (requestId != null) {
+      this.pendingRequests.delete(requestId)
     }
 
     const durationMs = pending ? performance.now() - pending.startT : 0
     const bytes = response.data?.byteLength ?? 0
     const throughputMbps = calculateThroughput(bytes, durationMs)
 
-    emitTelemetry(this.container, TelemetryEvents.REQUEST_END, {
+    emitTelemetry(this.container, EVENT_TYPES.REQUEST_END, {
       kind: shakaKind(type),
       durationMs,
       bytes,
       throughputMbps
-    }, TELEMETRY_SOURCE_NETWORK)
+    }, TELEMETRY_SOURCES.NETWORK)
   }
 
   destroy() {
     if (this.playback?.off) {
-      this.playback.off('shaka:ready', this._onShakaReady)
+      this.playback.off(SHAKA_READY, this._onShakaReady)
     }
 
     this.detachFilters()

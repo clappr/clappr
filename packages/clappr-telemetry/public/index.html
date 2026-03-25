@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Clappr Player — Telemetry Plugin Demo</title>
+  <script src="/packages/clappr-core/dist/clappr-core.js"></script>
+  <script src="/packages/dash-shaka-playback/dist/dash-shaka-playback.js"></script>
+  <script src="/packages/clappr-telemetry/dist/clappr-telemetry.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .controls {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    #examples {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    #examples:hover {
+      border-color: #999;
+    }
+
+    #examples:focus {
+      outline: none;
+      border-color: #333;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    #player {
+      width: 100%;
+      height: 500px;
+      background: #000;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    button:active {
+      background: #222;
+    }
+
+    .info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 4px;
+      border-left: 4px solid #333;
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Clappr Telemetry Plugin Demo</h1>
+
+    <div class="controls">
+      <label for="examples">Example:</label>
+      <select id="examples" onchange="switchExample(this.value)"></select>
+    </div>
+
+    <div id="player"></div>
+
+    <div class="buttons">
+      <button id="playBtn">Play</button>
+      <button id="pauseBtn">Pause</button>
+      <button id="stopBtn">Stop</button>
+    </div>
+
+    <div class="info">
+      <strong>Telemetry Events:</strong> Open the browser console to see telemetry events being tracked in the CONTAINER_TELEMETRY_TRACE channel.
+    </div>
+  </div>
+
+  <script>
+    const TELEMETRY_TRACE_EVENT = Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE
+
+    class SimpleTelemetryLogger extends Clappr.ContainerPlugin {
+      get name() { return 'simple_telemetry_logger' }
+
+      bindEvents() {
+        this.listenTo(
+          this.container,
+          TELEMETRY_TRACE_EVENT,
+          (envelope) => console.log('[TELEMETRY]', envelope)
+        )
+      }
+    }
+
+    class PlayerFactory {
+      static engines = {
+        'dash-shaka': {
+          label: 'Shaka DASH',
+          source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+          plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
+          telemetry: { network: { enabled: true } }
+        },
+        'html5-video': {
+          label: 'HTML5 Video',
+          source: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          plugins: [ClapprTelemetry, SimpleTelemetryLogger],
+          telemetry: { network: { enabled: true } }
+        }
+      }
+
+      static create(exampleKey) {
+        const config = this.engines[exampleKey]
+        return new Clappr.Player({
+          parentId: '#player',
+          source: config.source,
+          width: '100%',
+          height: 500,
+          muted: true,
+          autoPlay: false,
+          plugins: config.plugins,
+          telemetry: config.telemetry
+        })
+      }
+    }
+
+    function populateExamples() {
+      const select = document.getElementById('examples')
+      Object.keys(PlayerFactory.engines).forEach(key => {
+        const option = document.createElement('option')
+        option.value = key
+        option.textContent = PlayerFactory.engines[key].label
+        if (key === 'dash-shaka') option.selected = true
+        select.appendChild(option)
+      })
+    }
+
+    class PlayerApp {
+      constructor() {
+        this.player = null
+        this.example = 'dash-shaka'
+        this.init()
+      }
+
+      init() {
+        populateExamples()
+        this.build()
+      }
+
+      build() {
+        if (this.player) this.player.destroy()
+        this.player = PlayerFactory.create(this.example)
+      }
+
+      switchExample(exampleKey) {
+        if (exampleKey === this.example) return
+        this.example = exampleKey
+        this.build()
+      }
+    }
+
+    const app = new PlayerApp()
+
+    function handlePlayerAction(action) {
+      const player = app.player
+      if (player && typeof player[action] === 'function') {
+        player[action]()
+      } else {
+        console.error(`player.${action} não está disponível`)
+      }
+    }
+
+    document.getElementById('playBtn').onclick = () => handlePlayerAction('play')
+    document.getElementById('pauseBtn').onclick = () => handlePlayerAction('pause')
+    document.getElementById('stopBtn').onclick = () => handlePlayerAction('stop')
+
+    function switchExample(exampleKey) {
+      app.switchExample(exampleKey)
+    }
+  </script>
+</body>
+</html>

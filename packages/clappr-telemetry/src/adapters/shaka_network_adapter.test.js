@@ -1,4 +1,3 @@
-// Mock utilities
 jest.mock('../utils', () => ({
   emitTelemetry: jest.fn(),
   calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0))
@@ -6,8 +5,7 @@ jest.mock('../utils', () => ({
 
 import ShakaNetworkAdapter from './shaka_network_adapter'
 import { emitTelemetry } from '../utils'
-import { TelemetryEvents } from '../utils/telemetry_events'
-import { TELEMETRY_SOURCE_NETWORK } from '../utils/constants'
+import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
 const createFakeNetworkEngine = () => ({
   registerRequestFilter: jest.fn(),
@@ -98,7 +96,6 @@ describe('ShakaNetworkAdapter', () => {
       const lateAdapter = new ShakaNetworkAdapter(playback, container)
       lateAdapter.bind()
 
-      // Simulate the event firing with the instance now available
       playback.shakaPlayerInstance = fakeShakaPlayer
       const [, readyCb] = playback.on.mock.calls.find(([evt]) => evt === 'shaka:ready')
       readyCb()
@@ -131,15 +128,42 @@ describe('ShakaNetworkAdapter', () => {
 
     it('clears pending requests on destroy', () => {
       adapter.bind()
-      adapter.pendingRequests.set('https://example.com/segment.mp4', [{ id: 'test', startT: 0 }])
+      adapter.requestFilter(1, {})
 
       adapter.destroy()
 
       expect(adapter.pendingRequests.size).toBe(0)
     })
 
+    it('clears pendingRequests when the error event fires on shakaPlayer', () => {
+      adapter.bind()
+      adapter.requestFilter(1, {})
+
+      const [, errorCb] = fakeShakaPlayer.addEventListener.mock.calls.find(([evt]) => evt === 'error')
+      errorCb()
+
+      expect(adapter.pendingRequests.size).toBe(0)
+    })
+
+    it('does not throw when getNetworkingEngine returns null', () => {
+      fakeShakaPlayer.getNetworkingEngine.mockReturnValue(null)
+
+      expect(() => adapter.bind()).not.toThrow()
+    })
+
+    it('does not attach filters when shakaPlayerInstance is missing on shaka:ready', () => {
+      playback.shakaPlayerInstance = null
+      const lateAdapter = new ShakaNetworkAdapter(playback, container)
+      lateAdapter.bind()
+
+      const [, readyCb] = playback.on.mock.calls.find(([evt]) => evt === 'shaka:ready')
+      readyCb()
+
+      expect(fakeEngine.registerRequestFilter).not.toHaveBeenCalled()
+      lateAdapter.destroy()
+    })
+
     it('does nothing on destroy when shakaPlayer was never set', () => {
-      // Should not throw
       expect(() => adapter.destroy()).not.toThrow()
     })
   })
@@ -150,59 +174,56 @@ describe('ShakaNetworkAdapter', () => {
     beforeEach(() => adapter.bind())
 
     it('emits CONTAINER_TELEMETRY_REQUEST_START via emitTelemetry', () => {
-      adapter.requestFilter(1, { uris: ['https://example.com/seg-001.mp4'] })
+      adapter.requestFilter(1, {})
 
       expect(emitTelemetry).toHaveBeenCalledWith(
         container,
-        TelemetryEvents.REQUEST_START,
+        EVENT_TYPES.REQUEST_START,
         expect.objectContaining({ kind: 'segment' }),
-        TELEMETRY_SOURCE_NETWORK
+        TELEMETRY_SOURCES.NETWORK
       )
     })
 
     it('emits kind=segment for Shaka type 1', () => {
-      adapter.requestFilter(1, { uris: ['https://example.com/seg.mp4'] })
+      adapter.requestFilter(1, {})
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.kind).toBe('segment')
     })
 
     it('emits kind=manifest for Shaka type 0', () => {
-      adapter.requestFilter(0, { uris: ['https://example.com/manifest.mpd'] })
+      adapter.requestFilter(0, {})
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.kind).toBe('manifest')
     })
 
     it('emits kind=license for Shaka type 2', () => {
-      adapter.requestFilter(2, { uris: ['https://example.com/license'] })
+      adapter.requestFilter(2, {})
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.kind).toBe('license')
     })
 
     it('emits kind=unknown for unrecognized Shaka types', () => {
-      adapter.requestFilter(99, { uris: ['https://example.com/unknown'] })
+      adapter.requestFilter(99, {})
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.kind).toBe('unknown')
     })
 
     it('tracks the pending request in pendingRequests', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      adapter.requestFilter(1, { uris: [uri] })
+      const request = {}
+      adapter.requestFilter(1, request)
 
-      expect(adapter.pendingRequests.get(uri)).toHaveLength(1)
+      expect(adapter.pendingRequests.size).toBe(1)
     })
 
-    it('tracks concurrent requests to the same URI in order', () => {
-      const uri = 'https://example.com/seg-001.mp4'
+    it('tracks two concurrent requests to the same URI independently', () => {
+      adapter.requestFilter(1, {})
+      adapter.requestFilter(1, {})
 
-      adapter.requestFilter(1, { uris: [uri] })
-      adapter.requestFilter(1, { uris: [uri] })
-
-      const queue = adapter.pendingRequests.get(uri)
-      expect(queue).toHaveLength(2)
+      expect(adapter.pendingRequests.size).toBe(2)
     })
   })
 
@@ -218,67 +239,67 @@ describe('ShakaNetworkAdapter', () => {
     })
 
     it('emits CONTAINER_TELEMETRY_REQUEST_END via emitTelemetry', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
+      const request = {}
+      requestFilter(1, request)
       jest.clearAllMocks()
 
-      responseFilter(1, { uri, data: new ArrayBuffer(2048) })
+      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(2048) })
 
       expect(emitTelemetry).toHaveBeenCalledWith(
         container,
-        TelemetryEvents.REQUEST_END,
+        EVENT_TYPES.REQUEST_END,
         expect.objectContaining({ bytes: 2048 }),
-        TELEMETRY_SOURCE_NETWORK
+        TELEMETRY_SOURCES.NETWORK
       )
     })
 
     it('emits bytes equal to response data byteLength', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
+      const request = {}
+      requestFilter(1, request)
       jest.clearAllMocks()
 
-      responseFilter(1, { uri, data: new ArrayBuffer(2048) })
+      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(2048) })
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.bytes).toBe(2048)
     })
 
     it('emits durationMs >= 0', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
+      const request = {}
+      requestFilter(1, request)
       jest.clearAllMocks()
 
-      responseFilter(1, { uri, data: new ArrayBuffer(512) })
+      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(512) })
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.durationMs).toBeGreaterThanOrEqual(0)
     })
 
     it('clears the pending entry after a matched response', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
-      responseFilter(1, { uri, data: new ArrayBuffer(512) })
+      const request = {}
+      requestFilter(1, request)
+      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(512) })
 
       expect(adapter.pendingRequests.size).toBe(0)
     })
 
     it('emits bytes=0 when response data is null', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
+      const request = {}
+      requestFilter(1, request)
       jest.clearAllMocks()
 
-      responseFilter(1, { uri, data: null })
+      responseFilter(1, { originalRequest: request, data: null })
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.bytes).toBe(0)
     })
 
     it('includes throughputMbps in the payload', () => {
-      const uri = 'https://example.com/seg-001.mp4'
-      requestFilter(1, { uris: [uri] })
+      const request = {}
+      requestFilter(1, request)
       jest.clearAllMocks()
 
-      responseFilter(1, { uri, data: new ArrayBuffer(2048) })
+      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(2048) })
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(typeof data.throughputMbps).toBe('number')
