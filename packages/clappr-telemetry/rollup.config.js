@@ -30,16 +30,16 @@ const output = [
   },
   ...(minimize
     ? [
-        {
-          file: 'dist/clappr-telemetry.min.js',
-          format: 'umd',
-          name: 'ClapprTelemetry',
-          globals: {
-            '@clappr/core': 'Clappr'
-          },
-          plugins: [terser()]
-        }
-      ]
+      {
+        file: 'dist/clappr-telemetry.min.js',
+        format: 'umd',
+        name: 'ClapprTelemetry',
+        globals: {
+          '@clappr/core': 'Clappr'
+        },
+        plugins: [terser()]
+      }
+    ]
     : [])
 ]
 
