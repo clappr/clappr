@@ -1,11 +1,17 @@
 import ShakaNetworkAdapter from './shaka_network_adapter'
 
 /**
- * Registry of available telemetry adapters.
- * New adapters (HLS.js, etc) are added here.
+ * Telemetry adapters hook into player components to collect metrics.
+ * Different adapter types can capture data from various sources:
+ * - Network: streaming engine network requests
+ */
+
+/**
+ * Network adapters registry.
+ * Collects telemetry metrics from streaming engines.
  * Each adapter must implement static isSupported() and bind() methods.
  */
-const ADAPTERS = [
+const NETWORK_ADAPTERS = [
   ShakaNetworkAdapter
   // HLSjsNetworkAdapter - future
 ]
@@ -16,7 +22,7 @@ const ADAPTERS = [
  * @returns {Class|null} Network adapter class if supported, null otherwise
  */
 export function findNetworkAdapter(playback) {
-  const AdapterClass = ADAPTERS.find(adapter => adapter.isSupported(playback))
+  const AdapterClass = NETWORK_ADAPTERS.find(adapter => adapter.isSupported(playback))
   return AdapterClass || null
 }
 

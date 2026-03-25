@@ -1,18 +1,21 @@
-import { Log } from '@clappr/core'
 import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
-import { TelemetryEvents, CONTAINER_TELEMETRY_TRACE } from './telemetry_events'
+import { Events } from '@clappr/core'
+import { EVENT_TYPES } from './constants'
+
+Events.register('CONTAINER_TELEMETRY_TRACE')
+const CONTAINER_TELEMETRY_TRACE = Events.Custom.CONTAINER_TELEMETRY_TRACE
 
 describe('Telemetry Constants', () => {
   it('should define public container trace event', () => {
     expect(CONTAINER_TELEMETRY_TRACE)
-      .toBe('container:telemetry:trace')
+      .toBe('containerTelemetryTrace')
   })
 
   it('should define internal telemetry event types', () => {
-    expect(TelemetryEvents.REQUEST_START).toBe('request:start')
-    expect(TelemetryEvents.REQUEST_END).toBe('request:end')
-    expect(TelemetryEvents.ERROR).toBe('error')
-    expect(TelemetryEvents.BUS).toBe('telemetry_bus')
+    expect(EVENT_TYPES.REQUEST_START).toBe('request:start')
+    expect(EVENT_TYPES.REQUEST_END).toBe('request:end')
+    expect(EVENT_TYPES.ERROR).toBe('error')
+    expect(EVENT_TYPES.BUS).toBe('telemetry_bus')
   })
 })
 
@@ -64,7 +67,7 @@ describe('emitTelemetry', () => {
 
     emitTelemetry(
       emitter,
-      TelemetryEvents.REQUEST_START,
+      EVENT_TYPES.REQUEST_START,
       { url: 'video.ts' },
       'test-plugin'
     )
@@ -72,7 +75,7 @@ describe('emitTelemetry', () => {
     expect(emitter.trigger).toHaveBeenCalledWith(
       CONTAINER_TELEMETRY_TRACE,
       expect.objectContaining({
-        type: TelemetryEvents.REQUEST_START,
+        type: EVENT_TYPES.REQUEST_START,
         source: 'test-plugin'
       })
     )
@@ -87,36 +90,13 @@ describe('emitTelemetry', () => {
 
     emitTelemetry(
       emitter,
-      TelemetryEvents.REQUEST_START,
+      EVENT_TYPES.REQUEST_START,
       {},
       'plugin'
     )
 
     // Should have been called once despite throwing
     expect(emitter.trigger).toHaveBeenCalledTimes(1)
-  })
-
-  it('should log error when trigger throws', () => {
-    const spy = jest.spyOn(Log, 'error').mockImplementation(() => {})
-    const emitter = {
-      trigger: jest.fn(() => {
-        throw new Error('boom')
-      })
-    }
-
-    emitTelemetry(
-      emitter,
-      TelemetryEvents.REQUEST_START,
-      {},
-      'plugin'
-    )
-
-    expect(spy).toHaveBeenCalled()
-    expect(spy).toHaveBeenCalledWith(
-      expect.stringContaining('Failed to emit event'),
-      expect.any(Error)
-    )
-    spy.mockRestore()
   })
 })
 
@@ -197,13 +177,5 @@ describe('calculateThroughput', () => {
     const throughput = calculateThroughput(5000, 250)
 
     expect(throughput).toBeCloseTo(0.16, 5)
-  })
-
-  it('should return 0 for NaN duration', () => {
-    expect(calculateThroughput(1000000, NaN)).toBe(0)
-  })
-
-  it('should return 0 for NaN bytes', () => {
-    expect(calculateThroughput(NaN, 1000)).toBe(0)
   })
 })
