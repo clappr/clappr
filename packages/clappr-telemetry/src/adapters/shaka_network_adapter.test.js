@@ -162,12 +162,13 @@ describe('ShakaNetworkAdapter', () => {
       expect(readyCalls).toHaveLength(1)
     })
 
-    it('attaches filters on a subsequent bind() once the networking engine becomes available', () => {
+    it('attaches filters when shaka:ready fires after networking engine becomes available', () => {
       fakeShakaPlayer.getNetworkingEngine.mockReturnValue(null)
       adapter.bind()
 
       fakeShakaPlayer.getNetworkingEngine.mockReturnValue(fakeEngine)
-      adapter.bind()
+      const [, readyCb] = playback.on.mock.calls.find(([evt]) => evt === 'shaka:ready')
+      readyCb()
 
       expect(fakeEngine.registerRequestFilter).toHaveBeenCalledTimes(1)
       expect(fakeEngine.registerResponseFilter).toHaveBeenCalledTimes(1)

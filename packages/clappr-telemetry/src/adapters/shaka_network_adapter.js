@@ -63,8 +63,9 @@ export default class ShakaNetworkAdapter {
       this.shakaPlayer = shakaPlayer
       if (this.attachFilters(shakaPlayer)) {
         this._isBound = true
+        return
       }
-      return
+      // attachFilters failed (networking engine not yet ready); fall through to register listener
     }
 
     if (this.playback?.on) {
