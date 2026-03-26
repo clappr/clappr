@@ -15,18 +15,14 @@ const isDev = !!process.env.DEV
 const minimize = !!process.env.MINIMIZE
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 
-const output = [
+const umdGlobals = { '@clappr/core': 'Clappr' }
+
+const umdOutput = [
   {
     file: 'dist/clappr-telemetry.js',
     format: 'umd',
     name: 'ClapprTelemetry',
-    globals: {
-      '@clappr/core': 'Clappr'
-    }
-  },
-  {
-    file: 'dist/clappr-telemetry.esm.js',
-    format: 'esm'
+    globals: umdGlobals
   },
   ...(minimize
     ? [
@@ -34,14 +30,17 @@ const output = [
         file: 'dist/clappr-telemetry.min.js',
         format: 'umd',
         name: 'ClapprTelemetry',
-        globals: {
-          '@clappr/core': 'Clappr'
-        },
+        globals: umdGlobals,
         plugins: [terser()]
       }
     ]
     : [])
 ]
+
+const esmOutput = {
+  file: 'dist/clappr-telemetry.esm.js',
+  format: 'esm'
+}
 
 const plugins = [
   replace({
@@ -68,9 +67,17 @@ const plugins = [
   ] : [])
 ]
 
-module.exports = {
-  input: 'src/main.js',
-  external: ['@clappr/core'],
-  output,
-  plugins
-}
+module.exports = [
+  {
+    input: 'src/main.umd.js',
+    external: ['@clappr/core'],
+    output: umdOutput,
+    plugins
+  },
+  {
+    input: 'src/main.js',
+    external: ['@clappr/core'],
+    output: esmOutput,
+    plugins
+  }
+]

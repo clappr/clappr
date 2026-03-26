@@ -59,6 +59,37 @@ const player = new Clappr.Player({
 })
 ```
 
+### Public API (ES modules)
+
+The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the plugin as the **default** export and these **named** exports (for tests, tooling, or custom adapters):
+
+| Export                       | Description                                                               |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| `ShakaNetworkAdapter`        | Shaka network metrics adapter class                                       |
+| `findNetworkAdapter`         | Resolves the adapter class for a playback instance (used by the plugin) |
+| `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                                |
+| `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `request:end`, etc.)           |
+| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                              |
+| `createEnvelope`             | Builds the versioned envelope object                                      |
+| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter         |
+| `calculateThroughput`        | Mbps helper used by network adapters                                    |
+
+Example:
+
+```javascript
+import ClapprTelemetry, {
+  ShakaNetworkAdapter,
+  findNetworkAdapter
+} from '@clappr/telemetry'
+
+const Adapter = findNetworkAdapter(playback)
+if (Adapter === ShakaNetworkAdapter) {
+  // ...
+}
+```
+
+The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Use the ESM file if you need named exports.
+
 ## Configuration
 
 | Option                      | Type    | Default | Description                       |
@@ -73,6 +104,10 @@ All telemetry data is emitted on a single event registered by the plugin: `Clapp
 class MyTelemetryConsumer extends Clappr.ContainerPlugin {
   get name() {
     return 'my_telemetry_consumer'
+  }
+
+  get supportedVersion() {
+    return { min: '0.13.1' }
   }
 
   bindEvents() {
