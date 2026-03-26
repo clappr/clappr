@@ -68,9 +68,10 @@ export default class ShakaNetworkAdapter {
       // attachFilters failed (networking engine not yet ready); fall through to register listener
     }
 
+    this._isBound = true
+
     if (this.playback?.on) {
       this.playback.on(SHAKA_READY, this._onShakaReady)
-      this._isBound = true
     } else {
       Log.warn('[ShakaNetworkAdapter] Shaka player instance not available and no event handler')
     }

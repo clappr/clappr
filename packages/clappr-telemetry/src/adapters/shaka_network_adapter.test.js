@@ -198,6 +198,19 @@ describe('ShakaNetworkAdapter', () => {
       expect(fakeEngine.registerResponseFilter).toHaveBeenCalledTimes(1)
     })
 
+    it('does not register filters again when shakaPlayer is present, attachFilters fails, and playback.on is unavailable', () => {
+      fakeShakaPlayer.getNetworkingEngine.mockReturnValue(null)
+      playback.on = undefined
+      const noListenerAdapter = new ShakaNetworkAdapter(playback, container)
+
+      noListenerAdapter.bind()
+      noListenerAdapter.bind()
+
+      expect(fakeEngine.registerRequestFilter).not.toHaveBeenCalled()
+      expect(fakeEngine.registerResponseFilter).not.toHaveBeenCalled()
+      noListenerAdapter.destroy()
+    })
+
     it('does not re-register the shaka:ready listener when bind() is called multiple times while shakaPlayerInstance is unavailable', () => {
       playback.shakaPlayerInstance = null
       const lateAdapter = new ShakaNetworkAdapter(playback, container)
