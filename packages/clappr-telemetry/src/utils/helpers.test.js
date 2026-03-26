@@ -1,5 +1,5 @@
 import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
-import { Events } from '@clappr/core'
+import { Events, Log } from '@clappr/core'
 import { EVENT_TYPES } from './constants'
 
 Events.register('CONTAINER_TELEMETRY_TRACE')
@@ -71,17 +71,21 @@ describe('emitTelemetry', () => {
     )
   })
 
-  it('should silently ignore errors from trigger', () => {
+  it('should log and not rethrow when trigger fails', () => {
+    jest.spyOn(Log, 'warn').mockImplementation(() => {})
     const emitter = {
       trigger: jest.fn(() => {
         throw new Error('boom')
       })
     }
 
-    emitTelemetry(emitter, EVENT_TYPES.REQUEST_START, {}, 'plugin')
+    expect(() =>
+      emitTelemetry(emitter, EVENT_TYPES.REQUEST_START, {}, 'plugin')
+    ).not.toThrow()
 
-    // Should have been called once despite throwing
     expect(emitter.trigger).toHaveBeenCalledTimes(1)
+    expect(Log.warn).toHaveBeenCalledWith('[telemetry]', 'emit failed', expect.any(Error))
+    Log.warn.mockRestore()
   })
 })
 

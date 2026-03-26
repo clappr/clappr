@@ -1,4 +1,4 @@
-import { Events } from '@clappr/core'
+import { Events, Log } from '@clappr/core'
 import { TELEMETRY_CONTRACT_VERSION } from './constants'
 
 const MS_PER_SECOND = 1000
@@ -38,8 +38,8 @@ export const emitTelemetry = (emitter, type, data, source) => {
   const envelope = createEnvelope(type, data, source)
   try {
     emitter.trigger(Events.Custom.CONTAINER_TELEMETRY_TRACE, envelope)
-  } catch {
-    // Fire and forget - emission errors are ignored
+  } catch (err) {
+    Log.warn('[telemetry]', 'emit failed', err)
   }
 }
 
