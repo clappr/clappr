@@ -28,14 +28,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr-telemetry.git"
+    "url": "https://github.com/clappr/clappr.git",
+    "directory": "packages/clappr-telemetry"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/clappr/clappr-telemetry/issues"
+    "url": "https://github.com/clappr/clappr/issues"
   },
-  "homepage": "https://github.com/clappr/clappr-telemetry",
+  "homepage": "https://github.com/clappr/clappr/tree/main/packages/clappr-telemetry",
   "peerDependencies": {
     "@clappr/core": "*"
   },
