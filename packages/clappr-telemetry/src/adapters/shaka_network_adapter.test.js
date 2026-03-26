@@ -225,6 +225,29 @@ describe('ShakaNetworkAdapter', () => {
 
       expect(adapter.pendingRequests.size).toBe(2)
     })
+
+    it('evicts only the oldest entries when pendingRequests reaches the limit', () => {
+      for (let i = 0; i < 100; i++) adapter.requestFilter(1, {})
+
+      expect(adapter.pendingRequests.size).toBe(100)
+
+      adapter.requestFilter(1, {})
+
+      expect(adapter.pendingRequests.size).toBeLessThan(100)
+      expect(adapter.pendingRequests.size).toBeGreaterThan(0)
+    })
+
+    it('preserves recent pending requests after eviction so responses still match', () => {
+      const recentRequest = {}
+      for (let i = 0; i < 99; i++) adapter.requestFilter(1, {})
+      adapter.requestFilter(1, recentRequest)
+
+      expect(adapter.pendingRequests.size).toBe(100)
+
+      adapter.requestFilter(1, {})
+
+      expect(adapter.pendingRequests.has(recentRequest._telemetryId)).toBe(true)
+    })
   })
 
   // ─── responseFilter ─────────────────────────────────────────────────────────

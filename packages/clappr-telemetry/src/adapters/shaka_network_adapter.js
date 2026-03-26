@@ -22,6 +22,7 @@ const shakaKind = (type) => SHAKA_KIND_MAP[type] ?? 'unknown'
 
 // Guard against unbounded growth on stalled responses
 const MAX_PENDING_REQUESTS = 100
+const EVICTION_BATCH_SIZE = 20
 
 /**
  * Telemetry adapter for Shaka Player.
@@ -119,8 +120,8 @@ export default class ShakaNetworkAdapter {
 
   requestFilter(type, request) {
     if (this.pendingRequests.size >= MAX_PENDING_REQUESTS) {
-      Log.warn('[ShakaNetworkAdapter] pendingRequests limit reached, clearing stale entries')
-      this.pendingRequests.clear()
+      Log.warn('[ShakaNetworkAdapter] pendingRequests limit reached, evicting oldest entries')
+      this._evictOldest(EVICTION_BATCH_SIZE)
     }
 
     const requestId = ++this._requestCounter
@@ -150,6 +151,15 @@ export default class ShakaNetworkAdapter {
       bytes,
       throughputMbps
     }, TELEMETRY_SOURCES.NETWORK)
+  }
+
+  _evictOldest(count) {
+    let removed = 0
+    for (const key of this.pendingRequests.keys()) {
+      if (removed >= count) break
+      this.pendingRequests.delete(key)
+      removed++
+    }
   }
 
   destroy() {

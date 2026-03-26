@@ -50,6 +50,10 @@ export default class TelemetryPlugin extends ContainerPlugin {
       return
     }
 
+    if (this.adapter) {
+      this.adapter.destroy()
+    }
+
     this.adapter = new AdapterClass(playback, this.container)
     this.adapter.bind()
   }

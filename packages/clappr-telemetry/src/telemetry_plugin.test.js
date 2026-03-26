@@ -136,6 +136,24 @@ describe('TelemetryPlugin', () => {
     )
   })
 
+  it('should destroy previous adapter when onPlaybackRead is called again', () => {
+    const { findNetworkAdapter } = require('./adapters')
+    const oldAdapter = { bind: jest.fn(), destroy: jest.fn() }
+    const newAdapter = { bind: jest.fn(), destroy: jest.fn() }
+    const OldClass = jest.fn(() => oldAdapter)
+    const NewClass = jest.fn(() => newAdapter)
+
+    findNetworkAdapter.mockReturnValueOnce(OldClass)
+    plugin.onPlaybackRead(mockPlayback)
+    expect(plugin.adapter).toBe(oldAdapter)
+
+    findNetworkAdapter.mockReturnValueOnce(NewClass)
+    plugin.onPlaybackRead(mockPlayback)
+
+    expect(oldAdapter.destroy).toHaveBeenCalled()
+    expect(plugin.adapter).toBe(newAdapter)
+  })
+
   it('should not throw on destroy when adapter is null', () => {
     plugin.adapter = null
     expect(() => plugin.destroy()).not.toThrow()
