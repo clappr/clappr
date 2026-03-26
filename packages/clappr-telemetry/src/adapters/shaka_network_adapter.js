@@ -61,8 +61,9 @@ export default class ShakaNetworkAdapter {
 
     if (shakaPlayer && typeof shakaPlayer.getNetworkingEngine === 'function') {
       this.shakaPlayer = shakaPlayer
-      this.attachFilters(shakaPlayer)
-      this._isBound = true
+      if (this.attachFilters(shakaPlayer)) {
+        this._isBound = true
+      }
       return
     }
 
@@ -99,13 +100,13 @@ export default class ShakaNetworkAdapter {
 
     if (!networkEngine) {
       Log.warn('[ShakaNetworkAdapter] Networking engine not available')
-      return
+      return false
     }
 
     networkEngine.registerRequestFilter(this.requestFilter)
     networkEngine.registerResponseFilter(this.responseFilter)
     shakaPlayer.addEventListener('error', this._onShakaError)
-    this._isBound = true
+    return true
   }
 
   detachFilters() {
