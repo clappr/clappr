@@ -166,6 +166,25 @@ describe('ShakaNetworkAdapter', () => {
     it('does nothing on destroy when shakaPlayer was never set', () => {
       expect(() => adapter.destroy()).not.toThrow()
     })
+
+    it('does not register filters twice when bind() is called multiple times', () => {
+      adapter.bind()
+      adapter.bind()
+
+      expect(fakeEngine.registerRequestFilter).toHaveBeenCalledTimes(1)
+      expect(fakeEngine.registerResponseFilter).toHaveBeenCalledTimes(1)
+    })
+
+    it('allows re-binding after destroy', () => {
+      adapter.bind()
+      adapter.destroy()
+
+      playback.shakaPlayerInstance = fakeShakaPlayer
+      adapter = new ShakaNetworkAdapter(playback, container)
+      adapter.bind()
+
+      expect(fakeEngine.registerRequestFilter).toHaveBeenCalledTimes(2)
+    })
   })
 
   // ─── requestFilter ──────────────────────────────────────────────────────────

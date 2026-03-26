@@ -46,6 +46,7 @@ export default class ShakaNetworkAdapter {
     this.shakaPlayer = null
     this.pendingRequests = new Map()
     this._requestCounter = 0
+    this._isBound = false
 
     this.requestFilter = this.requestFilter.bind(this)
     this.responseFilter = this.responseFilter.bind(this)
@@ -54,6 +55,8 @@ export default class ShakaNetworkAdapter {
   }
 
   bind() {
+    if (this._isBound) return
+
     const shakaPlayer = this.playback?.shakaPlayerInstance
 
     if (shakaPlayer && typeof shakaPlayer.getNetworkingEngine === 'function') {
@@ -100,6 +103,7 @@ export default class ShakaNetworkAdapter {
     networkEngine.registerRequestFilter(this.requestFilter)
     networkEngine.registerResponseFilter(this.responseFilter)
     shakaPlayer.addEventListener('error', this._onShakaError)
+    this._isBound = true
   }
 
   detachFilters() {
@@ -170,5 +174,6 @@ export default class ShakaNetworkAdapter {
     this.detachFilters()
     this.pendingRequests.clear()
     this.shakaPlayer = null
+    this._isBound = false
   }
 }
