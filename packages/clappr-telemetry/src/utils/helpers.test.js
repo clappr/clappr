@@ -7,8 +7,7 @@ const CONTAINER_TELEMETRY_TRACE = Events.Custom.CONTAINER_TELEMETRY_TRACE
 
 describe('Telemetry Constants', () => {
   it('should define public container trace event', () => {
-    expect(CONTAINER_TELEMETRY_TRACE)
-      .toBe('containerTelemetryTrace')
+    expect(CONTAINER_TELEMETRY_TRACE).toBe('containerTelemetryTrace')
   })
 
   it('should define internal telemetry event types', () => {
@@ -23,11 +22,7 @@ describe('createEnvelope', () => {
   it('should create a valid envelope with all required fields', () => {
     const data = { name: 'waiting', currentTime: 5 }
 
-    const envelope = createEnvelope(
-      'media.event',
-      data,
-      'video-state-telemetry'
-    )
+    const envelope = createEnvelope('media.event', data, 'video-state-telemetry')
 
     expect(envelope).toEqual(
       expect.objectContaining({
@@ -65,12 +60,7 @@ describe('emitTelemetry', () => {
   it('should trigger telemetry trace event with envelope', () => {
     const emitter = { trigger: jest.fn() }
 
-    emitTelemetry(
-      emitter,
-      EVENT_TYPES.REQUEST_START,
-      { url: 'video.ts' },
-      'test-plugin'
-    )
+    emitTelemetry(emitter, EVENT_TYPES.REQUEST_START, { url: 'video.ts' }, 'test-plugin')
 
     expect(emitter.trigger).toHaveBeenCalledWith(
       CONTAINER_TELEMETRY_TRACE,
@@ -88,12 +78,7 @@ describe('emitTelemetry', () => {
       })
     }
 
-    emitTelemetry(
-      emitter,
-      EVENT_TYPES.REQUEST_START,
-      {},
-      'plugin'
-    )
+    emitTelemetry(emitter, EVENT_TYPES.REQUEST_START, {}, 'plugin')
 
     // Should have been called once despite throwing
     expect(emitter.trigger).toHaveBeenCalledTimes(1)
@@ -106,7 +91,7 @@ describe('Telemetry Envelope Contract', () => {
   it('should contain all required fields', () => {
     const envelope = createEnvelope('test', {}, 'src')
 
-    requiredFields.forEach((f) => {
+    requiredFields.forEach(f => {
       expect(envelope).toHaveProperty(f)
     })
   })
