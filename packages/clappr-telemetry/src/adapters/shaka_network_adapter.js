@@ -67,6 +67,7 @@ export default class ShakaNetworkAdapter {
 
     if (this.playback?.on) {
       this.playback.on(SHAKA_READY, this._onShakaReady)
+      this._isBound = true
     } else {
       Log.warn('[ShakaNetworkAdapter] Shaka player instance not available and no event handler')
     }
