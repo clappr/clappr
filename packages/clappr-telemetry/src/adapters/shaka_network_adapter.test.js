@@ -151,6 +151,26 @@ describe('ShakaNetworkAdapter', () => {
       expect(() => adapter.bind()).not.toThrow()
     })
 
+    it('does not register shaka:ready listener on a subsequent bind() when shakaPlayerInstance had a null networkEngine on the first call', () => {
+      fakeShakaPlayer.getNetworkingEngine.mockReturnValue(null)
+      adapter.bind()
+
+      playback.shakaPlayerInstance = null
+      adapter.bind()
+
+      const readyCalls = playback.on.mock.calls.filter(([evt]) => evt === 'shaka:ready')
+      expect(readyCalls).toHaveLength(0)
+    })
+
+    it('does not call attachFilters more than once when getNetworkingEngine returns null on repeated bind() calls', () => {
+      fakeShakaPlayer.getNetworkingEngine.mockReturnValue(null)
+
+      adapter.bind()
+      adapter.bind()
+
+      expect(fakeShakaPlayer.getNetworkingEngine).toHaveBeenCalledTimes(1)
+    })
+
     it('does not attach filters when shakaPlayerInstance is missing on shaka:ready', () => {
       playback.shakaPlayerInstance = null
       const lateAdapter = new ShakaNetworkAdapter(playback, container)

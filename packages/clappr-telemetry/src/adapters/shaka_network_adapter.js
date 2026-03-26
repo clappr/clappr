@@ -62,6 +62,7 @@ export default class ShakaNetworkAdapter {
     if (shakaPlayer && typeof shakaPlayer.getNetworkingEngine === 'function') {
       this.shakaPlayer = shakaPlayer
       this.attachFilters(shakaPlayer)
+      this._isBound = true
       return
     }
 
