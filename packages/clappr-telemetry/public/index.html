@@ -136,6 +136,10 @@
     class SimpleTelemetryLogger extends Clappr.ContainerPlugin {
       get name() { return 'simple_telemetry_logger' }
 
+      get supportedVersion() {
+        return { min: '0.13.1' }
+      }
+
       bindEvents() {
         this.listenTo(
           this.container,
