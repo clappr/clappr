@@ -61,8 +61,8 @@ const player = new Clappr.Player({
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|---|---|---|---|
+| Option                      | Type    | Default | Description                       |
+| --------------------------- | ------- | ------- | --------------------------------- |
 | `telemetry.network.enabled` | Boolean | `false` | Enables network request telemetry |
 
 ## Consuming telemetry events
@@ -71,7 +71,9 @@ All telemetry data is emitted on a single event registered by the plugin: `Clapp
 
 ```javascript
 class MyTelemetryConsumer extends Clappr.ContainerPlugin {
-  get name() { return 'my_telemetry_consumer' }
+  get name() {
+    return 'my_telemetry_consumer'
+  }
 
   bindEvents() {
     this.listenTo(this.container, Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE, this.onTrace)
@@ -97,60 +99,56 @@ This event is registered when the TelemetryPlugin is instantiated. It is the pub
 
 Every emission on `containerTelemetryTrace` carries a versioned envelope:
 
-| Field | Type | Description |
-|---|---|---|
-| `type` | string | What happened — identifies the event within its source area |
+| Field    | Type   | Description                                                 |
+| -------- | ------ | ----------------------------------------------------------- |
+| `type`   | string | What happened — identifies the event within its source area |
 | `source` | string | Where it came from — which telemetry area emitted the event |
-| `data` | object | Event-specific payload (varies by `type`) |
-| `t` | number | Monotonic timestamp from `performance.now()` |
-| `ts` | number | Wall-clock timestamp from `Date.now()` |
-| `v` | string | Envelope contract version (`1.0`) |
+| `data`   | object | Event-specific payload (varies by `type`)                   |
+| `t`      | number | Monotonic timestamp from `performance.now()`                |
+| `ts`     | number | Wall-clock timestamp from `Date.now()`                      |
+| `v`      | string | Envelope contract version (`1.0`)                           |
 
 ### Event types (`type`)
 
 The `type` field identifies what happened. As new telemetry areas are added (MSE, engine, playback state), new types will appear here.
 
-| `type` | `source` | Description |
-|---|---|---|
+| `type`          | `source`  | Description                     |
+| --------------- | --------- | ------------------------------- |
 | `request:start` | `network` | A network request was initiated |
-| `request:end` | `network` | A network request completed |
+| `request:end`   | `network` | A network request completed     |
 
 ### Sources (`source`)
 
 The `source` field identifies which telemetry area emitted the event. Each adapter owns one source.
 
-| `source` | Area | Status |
-|---|---|---|
+| `source`  | Area                                                    | Status    |
+| --------- | ------------------------------------------------------- | --------- |
 | `network` | Network request metrics (segments, manifests, licenses) | Available |
-
 
 ## Adapters
 
 Adapters connect the plugin to specific playback engines. Each adapter implements `static isSupported(playback)` and `bind()`.
 
-| Adapter | Engine | Status |
-|---|---|---|
-| `ShakaNetworkAdapter` | `dash-shaka-playback` | Available |
-| HLS.js Network Adapter | `hlsjs-playback` | Planned |
+| Adapter                | Engine                | Status    |
+| ---------------------- | --------------------- | --------- |
+| `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
+| HLS.js Network Adapter | `hlsjs-playback`      | Planned   |
 
 ## Development
 
+This package lives in the Clappr monorepo under `packages/clappr-telemetry`. Install dependencies once at the **repository root**; build, dev server, and tests should be run with **`yarn workspace @clappr/telemetry`** so Yarn resolves the workspace correctly:
+
 ```bash
-# Install dependencies
+# From the monorepo root (not only inside this package)
 yarn install
 
-# Build
-yarn build
-
-# Watch mode + local dev server (http://localhost:8080)
-yarn dev
-
-# Run tests
-yarn test
-
-# Run tests in watch mode
-yarn test:watch
+yarn workspace @clappr/telemetry build
+yarn workspace @clappr/telemetry dev        # Rollup watch + demo at http://localhost:8080
+yarn workspace @clappr/telemetry test
+yarn workspace @clappr/telemetry test:watch
 ```
+
+The demo page expects UMD builds from sibling packages (for example `@clappr/core` and `dash-shaka-playback`). If those `dist/` folders are missing, build them from the root (for example `lerna run build --scope=@clappr/core` and `lerna run build --scope=dash-shaka-playback`) before opening the dev server.
 
 ## License
 
