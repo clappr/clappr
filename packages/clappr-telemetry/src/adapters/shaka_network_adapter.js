@@ -21,10 +21,6 @@ const SHAKA_KIND_MAP = {
 
 const shakaKind = (type) => SHAKA_KIND_MAP[type] ?? 'unknown'
 
-// Guard against unbounded growth on stalled responses
-const MAX_PENDING_REQUESTS = 100
-const EVICTION_BATCH_SIZE = 20
-
 /**
  * Telemetry adapter for Shaka Player.
  * Collects network request/response metrics from Shaka's networking engine.
@@ -46,7 +42,6 @@ export default class ShakaNetworkAdapter {
     this.container = container
     this.shakaPlayer = null
     this.pendingRequests = new Map()
-    this._requestCounter = 0
     this._isBound = false
     this._lastDrmSessionHash = null
 
@@ -145,14 +140,10 @@ export default class ShakaNetworkAdapter {
    * @param {string} data.kind - Request type ("manifest"|"segment"|"license"|"app"|"timing"|"cert")
    */
   requestFilter(type, request) {
-    if (this.pendingRequests.size >= MAX_PENDING_REQUESTS) {
-      Log.warn('[ShakaNetworkAdapter] pendingRequests limit reached, evicting oldest entries')
-      this._evictOldest(EVICTION_BATCH_SIZE)
+    const uri = request.uris?.[0]
+    if (uri) {
+      this.pendingRequests.set(uri, performance.now())
     }
-
-    const requestId = ++this._requestCounter
-    request._telemetryId = requestId
-    this.pendingRequests.set(requestId, { startT: performance.now() })
 
     emitTelemetry(this.container, EVENT_TYPES.REQUEST_START, {
       kind: shakaKind(type)
@@ -167,14 +158,11 @@ export default class ShakaNetworkAdapter {
    * @param {number} data.throughputMbps - Calculated throughput in Mbps
    */
   responseFilter(type, response) {
-    const requestId = response.originalRequest?._telemetryId
-    const pending = requestId != null ? this.pendingRequests.get(requestId) : undefined
+    const uri = response.originalUri ?? response.uri
+    const startT = uri ? this.pendingRequests.get(uri) : undefined
+    if (uri) this.pendingRequests.delete(uri)
 
-    if (requestId != null) {
-      this.pendingRequests.delete(requestId)
-    }
-
-    const durationMs = pending ? performance.now() - pending.startT : 0
+    const durationMs = startT != null ? performance.now() - startT : 0
     const bytes = response.data?.byteLength ?? 0
     const throughputMbps = calculateThroughput(bytes, durationMs)
 
@@ -184,15 +172,6 @@ export default class ShakaNetworkAdapter {
       bytes,
       throughputMbps
     }, TELEMETRY_SOURCES.NETWORK)
-  }
-
-  _evictOldest(count) {
-    let removed = 0
-    for (const key of this.pendingRequests.keys()) {
-      if (removed >= count) break
-      this.pendingRequests.delete(key)
-      removed++
-    }
   }
 
   /**

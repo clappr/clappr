@@ -132,7 +132,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('clears pending requests on destroy', () => {
       adapter.bind()
-      adapter.requestFilter(1, {})
+      adapter.requestFilter(1, { uris: ['https://example.com/seg.ts'] })
 
       adapter.destroy()
 
@@ -141,7 +141,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('clears pendingRequests when the error event fires on shakaPlayer', () => {
       adapter.bind()
-      adapter.requestFilter(1, {})
+      adapter.requestFilter(1, { uris: ['https://example.com/seg.ts'] })
 
       const [, errorCb] = fakeShakaPlayer.addEventListener.mock.calls.find(([evt]) => evt === 'error')
       errorCb()
@@ -484,40 +484,32 @@ describe('ShakaNetworkAdapter', () => {
     })
 
     it('tracks the pending request in pendingRequests', () => {
-      const request = {}
-      adapter.requestFilter(1, request)
+      adapter.requestFilter(1, { uris: ['https://example.com/seg.ts'] })
 
       expect(adapter.pendingRequests.size).toBe(1)
     })
 
-    it('tracks two concurrent requests to the same URI independently', () => {
-      adapter.requestFilter(1, {})
-      adapter.requestFilter(1, {})
+    it('overwrites startT for a second request to the same URI', () => {
+      jest.useFakeTimers()
+      const uri = 'https://example.com/seg.ts'
 
-      expect(adapter.pendingRequests.size).toBe(2)
+      adapter.requestFilter(1, { uris: [uri] })
+      const first = adapter.pendingRequests.get(uri)
+
+      jest.advanceTimersByTime(50)
+      adapter.requestFilter(1, { uris: [uri] })
+      const second = adapter.pendingRequests.get(uri)
+
+      expect(adapter.pendingRequests.size).toBe(1)
+      expect(second).toBeGreaterThan(first)
+
+      jest.useRealTimers()
     })
 
-    it('evicts only the oldest entries when pendingRequests reaches the limit', () => {
-      for (let i = 0; i < 100; i++) adapter.requestFilter(1, {})
-
-      expect(adapter.pendingRequests.size).toBe(100)
-
+    it('does not track requests without uris', () => {
       adapter.requestFilter(1, {})
 
-      expect(adapter.pendingRequests.size).toBeLessThan(100)
-      expect(adapter.pendingRequests.size).toBeGreaterThan(0)
-    })
-
-    it('preserves recent pending requests after eviction so responses still match', () => {
-      const recentRequest = {}
-      for (let i = 0; i < 99; i++) adapter.requestFilter(1, {})
-      adapter.requestFilter(1, recentRequest)
-
-      expect(adapter.pendingRequests.size).toBe(100)
-
-      adapter.requestFilter(1, {})
-
-      expect(adapter.pendingRequests.has(recentRequest._telemetryId)).toBe(true)
+      expect(adapter.pendingRequests.size).toBe(0)
     })
   })
 
@@ -532,12 +524,17 @@ describe('ShakaNetworkAdapter', () => {
       responseFilter = adapter.responseFilter.bind(adapter)
     })
 
+    const makeRequest = (uri = 'https://example.com/seg.ts') => ({ uris: [uri] })
+    const makeResponse = (uri = 'https://example.com/seg.ts', data = new ArrayBuffer(2048)) => ({
+      originalUri: uri,
+      data
+    })
+
     it('emits CONTAINER_TELEMETRY_REQUEST_END via emitTelemetry', () => {
-      const request = {}
-      requestFilter(1, request)
+      requestFilter(1, makeRequest())
       jest.clearAllMocks()
 
-      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(2048) })
+      responseFilter(1, makeResponse())
 
       expect(emitTelemetry).toHaveBeenCalledWith(
         container,
@@ -548,56 +545,59 @@ describe('ShakaNetworkAdapter', () => {
     })
 
     it('emits bytes equal to response data byteLength', () => {
-      const request = {}
-      requestFilter(1, request)
+      requestFilter(1, makeRequest())
       jest.clearAllMocks()
 
-      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(2048) })
+      responseFilter(1, makeResponse())
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.bytes).toBe(2048)
     })
 
     it('emits durationMs >= 0', () => {
-      const request = {}
-      requestFilter(1, request)
+      requestFilter(1, makeRequest())
       jest.clearAllMocks()
 
-      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(512) })
+      responseFilter(1, makeResponse('https://example.com/seg.ts', new ArrayBuffer(512)))
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.durationMs).toBeGreaterThanOrEqual(0)
     })
 
     it('clears the pending entry after a matched response', () => {
-      const request = {}
-      requestFilter(1, request)
-      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(512) })
+      requestFilter(1, makeRequest())
+      responseFilter(1, makeResponse('https://example.com/seg.ts', new ArrayBuffer(512)))
 
       expect(adapter.pendingRequests.size).toBe(0)
     })
 
     it('emits bytes=0 when response data is null', () => {
-      const request = {}
-      requestFilter(1, request)
+      requestFilter(1, makeRequest())
       jest.clearAllMocks()
 
-      responseFilter(1, { originalRequest: request, data: null })
+      responseFilter(1, makeResponse('https://example.com/seg.ts', null))
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data.bytes).toBe(0)
     })
 
     it('includes throughputMbps in the payload', () => {
-      const request = {}
-      requestFilter(1, request)
+      requestFilter(1, makeRequest())
       jest.clearAllMocks()
 
-      responseFilter(1, { originalRequest: request, data: new ArrayBuffer(2048) })
+      responseFilter(1, makeResponse())
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(typeof data.throughputMbps).toBe('number')
       expect(data.throughputMbps).toBeGreaterThanOrEqual(0)
+    })
+
+    it('matches response using response.uri when originalUri is absent', () => {
+      const uri = 'https://example.com/seg.ts'
+      requestFilter(1, makeRequest(uri))
+      responseFilter(1, { uri, data: new ArrayBuffer(512) })
+
+      expect(adapter.pendingRequests.size).toBe(0)
     })
   })
 })
