@@ -235,6 +235,98 @@ describe('ShakaNetworkAdapter', () => {
     })
   })
 
+  // ─── variant changed / BITRATE_CHANGE ────────────────────────────────────────
+
+  describe('variantchanged / BITRATE_CHANGE', () => {
+    it('registers variantchanged listener on attachFilters', () => {
+      adapter.bind()
+
+      expect(fakeShakaPlayer.addEventListener)
+        .toHaveBeenCalledWith('variantchanged', expect.any(Function))
+    })
+
+    it('emits BITRATE_CHANGE with previous and current when variantchanged fires', () => {
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onVariantChanged({
+        oldTrack: { bandwidth: 1200000, width: 1280, height: 720 },
+        newTrack: { bandwidth: 2400000, width: 1920, height: 1080 }
+      })
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.BITRATE_CHANGE,
+        {
+          previous: { bitrate: 1200000, width: 1280, height: 720 },
+          current: { bitrate: 2400000, width: 1920, height: 1080 }
+        },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('emits null bitrate and null dimensions when tracks are missing', () => {
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onVariantChanged({})
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.current.bitrate).toBeNull()
+      expect(data.current.width).toBeNull()
+      expect(data.current.height).toBeNull()
+      expect(data.previous.bitrate).toBeNull()
+      expect(data.previous.width).toBeNull()
+      expect(data.previous.height).toBeNull()
+    })
+
+    it('emits null fields for missing track when only one track is present', () => {
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onVariantChanged({ newTrack: { bandwidth: 3000000, width: 1920, height: 1080 } })
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.current.bitrate).toBe(3000000)
+      expect(data.current.width).toBe(1920)
+      expect(data.current.height).toBe(1080)
+      expect(data.previous.bitrate).toBeNull()
+      expect(data.previous.width).toBeNull()
+      expect(data.previous.height).toBeNull()
+    })
+
+    it('removes variantchanged listener on destroy', () => {
+      adapter.bind()
+      adapter.destroy()
+
+      expect(fakeShakaPlayer.removeEventListener)
+        .toHaveBeenCalledWith('variantchanged', expect.any(Function))
+    })
+
+    it('removes variantchanged listener even when networkEngine is null on destroy', () => {
+      adapter.bind()
+      fakeShakaPlayer.getNetworkingEngine.mockReturnValue(null)
+      adapter.destroy()
+
+      expect(fakeShakaPlayer.removeEventListener)
+        .toHaveBeenCalledWith('variantchanged', expect.any(Function))
+    })
+
+    it('registers variantchanged listener when attachFilters runs via shaka:ready', () => {
+      playback.shakaPlayerInstance = null
+      const lateAdapter = new ShakaNetworkAdapter(playback, container)
+      lateAdapter.bind()
+
+      playback.shakaPlayerInstance = fakeShakaPlayer
+      const [, readyCb] = playback.on.mock.calls.find(([evt]) => evt === 'shaka:ready')
+      readyCb()
+
+      expect(fakeShakaPlayer.addEventListener)
+        .toHaveBeenCalledWith('variantchanged', expect.any(Function))
+      lateAdapter.destroy()
+    })
+  })
+
   // ─── requestFilter ──────────────────────────────────────────────────────────
 
   describe('requestFilter', () => {
