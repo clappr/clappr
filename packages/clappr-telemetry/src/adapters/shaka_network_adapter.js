@@ -2,11 +2,10 @@ import { Log } from '@clappr/core'
 import { emitTelemetry, calculateThroughput } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
-/**
- * @event SHAKA_READY
- * Emitted when Shaka Player instance is ready
- */
+// Shaka Player native event names
 const SHAKA_READY = 'shaka:ready'
+const SHAKA_ERROR = 'error'
+const SHAKA_VARIANT_CHANGED = 'variantchanged'
 
 // Maps Shaka RequestType integers to human-readable kind strings
 const SHAKA_KIND_MAP = {
@@ -52,6 +51,7 @@ export default class ShakaNetworkAdapter {
     this.responseFilter = this.responseFilter.bind(this)
     this._onShakaReady = this._onShakaReady.bind(this)
     this._onShakaError = this._onShakaError.bind(this)
+    this._onVariantChanged = this._onVariantChanged.bind(this)
   }
 
   bind() {
@@ -107,7 +107,9 @@ export default class ShakaNetworkAdapter {
 
     networkEngine.registerRequestFilter(this.requestFilter)
     networkEngine.registerResponseFilter(this.responseFilter)
-    shakaPlayer.addEventListener('error', this._onShakaError)
+    shakaPlayer.addEventListener(SHAKA_ERROR, this._onShakaError)
+    shakaPlayer.addEventListener(SHAKA_VARIANT_CHANGED, this._onVariantChanged)
+
     return true
   }
 
@@ -115,6 +117,9 @@ export default class ShakaNetworkAdapter {
     if (!this.shakaPlayer) {
       return
     }
+
+    this.shakaPlayer.removeEventListener(SHAKA_ERROR, this._onShakaError)
+    this.shakaPlayer.removeEventListener(SHAKA_VARIANT_CHANGED, this._onVariantChanged)
 
     const networkEngine = this.shakaPlayer.getNetworkingEngine()
     if (!networkEngine) {
@@ -124,7 +129,6 @@ export default class ShakaNetworkAdapter {
 
     networkEngine.unregisterRequestFilter(this.requestFilter)
     networkEngine.unregisterResponseFilter(this.responseFilter)
-    this.shakaPlayer.removeEventListener('error', this._onShakaError)
   }
 
   requestFilter(type, request) {
@@ -169,6 +173,23 @@ export default class ShakaNetworkAdapter {
       this.pendingRequests.delete(key)
       removed++
     }
+  }
+
+  _onVariantChanged(event) {
+    const oldTrack = event.oldTrack ?? {}
+    const newTrack = event.newTrack ?? {}
+    emitTelemetry(this.container, EVENT_TYPES.BITRATE_CHANGE, {
+      previous: {
+        bitrate: oldTrack.bandwidth ?? null,
+        width: oldTrack.width ?? null,
+        height: oldTrack.height ?? null
+      },
+      current: {
+        bitrate: newTrack.bandwidth ?? null,
+        width: newTrack.width ?? null,
+        height: newTrack.height ?? null
+      }
+    }, TELEMETRY_SOURCES.NETWORK)
   }
 
   destroy() {
