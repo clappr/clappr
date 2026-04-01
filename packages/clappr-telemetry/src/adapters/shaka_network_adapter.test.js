@@ -1,6 +1,7 @@
 jest.mock('../utils', () => ({
   emitTelemetry: jest.fn(),
-  calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0))
+  calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0)),
+  sanitizeLicenseUri: jest.requireActual('../utils').sanitizeLicenseUri
 }))
 
 import ShakaNetworkAdapter from './shaka_network_adapter'
@@ -17,7 +18,10 @@ const createFakeNetworkEngine = () => ({
 const createFakeShakaPlayer = (engine) => ({
   getNetworkingEngine: jest.fn(() => engine),
   addEventListener: jest.fn(),
-  removeEventListener: jest.fn()
+  removeEventListener: jest.fn(),
+  keySystem: jest.fn(() => 'com.widevine.alpha'),
+  drmInfo: jest.fn(() => ({ licenseServerUri: 'https://drm.example.com/wvs' })),
+  getExpiration: jest.fn(() => Infinity)
 })
 
 const createFakePlayback = (shakaPlayer = null) => ({
@@ -324,6 +328,114 @@ describe('ShakaNetworkAdapter', () => {
       expect(fakeShakaPlayer.addEventListener)
         .toHaveBeenCalledWith('variantchanged', expect.any(Function))
       lateAdapter.destroy()
+    })
+  })
+
+  // ─── DRM events ─────────────────────────────────────────────────────────────
+
+  describe('DRM events', () => {
+    it('registers drmsessionupdate listener on attachFilters', () => {
+      adapter.bind()
+
+      expect(fakeShakaPlayer.addEventListener)
+        .toHaveBeenCalledWith('drmsessionupdate', expect.any(Function))
+    })
+
+    it('registers expirationupdated listener on attachFilters', () => {
+      adapter.bind()
+
+      expect(fakeShakaPlayer.addEventListener)
+        .toHaveBeenCalledWith('expirationupdated', expect.any(Function))
+    })
+
+    it('emits DRM_SESSION_UPDATE with keySystem, licenseServerOrigin and licenseServerParams', () => {
+      fakeShakaPlayer.drmInfo.mockReturnValueOnce({ licenseServerUri: 'https://drm.example.com/wvs?deviceId=abc&token=xyz' })
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onDrmSessionUpdate()
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.DRM_SESSION_UPDATE,
+        {
+          keySystem: 'com.widevine.alpha',
+          licenseServerOrigin: 'https://drm.example.com',
+          licenseServerParams: ['deviceId', 'token']
+        },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('emits licenseServerOrigin=null and empty params when drmInfo returns null', () => {
+      fakeShakaPlayer.drmInfo.mockReturnValueOnce(null)
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onDrmSessionUpdate()
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.licenseServerOrigin).toBeNull()
+      expect(data.licenseServerParams).toEqual([])
+    })
+
+    it('emits DRM_EXPIRATION_UPDATED with expirationTime from getExpiration()', () => {
+      const expiration = Date.now() + 60000
+      fakeShakaPlayer.getExpiration.mockReturnValueOnce(expiration)
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onExpirationUpdated()
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.expirationTime).toBe(expiration)
+    })
+
+    it('emits expirationTime=Infinity when license has no expiration', () => {
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onExpirationUpdated()
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.expirationTime).toBe(Infinity)
+    })
+
+    it('does not emit DRM_SESSION_UPDATE when data is identical to previous emission', () => {
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onDrmSessionUpdate()
+      adapter._onDrmSessionUpdate()
+
+      expect(emitTelemetry).toHaveBeenCalledTimes(1)
+    })
+
+    it('emits DRM_SESSION_UPDATE again when keySystem changes', () => {
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._onDrmSessionUpdate()
+      fakeShakaPlayer.keySystem.mockReturnValueOnce('com.apple.fps')
+      adapter._onDrmSessionUpdate()
+
+      expect(emitTelemetry).toHaveBeenCalledTimes(2)
+    })
+
+    it('removes drmsessionupdate listener on destroy', () => {
+      adapter.bind()
+      adapter.destroy()
+
+      expect(fakeShakaPlayer.removeEventListener)
+        .toHaveBeenCalledWith('drmsessionupdate', expect.any(Function))
+    })
+
+    it('removes expirationupdated listener on destroy', () => {
+      adapter.bind()
+      adapter.destroy()
+
+      expect(fakeShakaPlayer.removeEventListener)
+        .toHaveBeenCalledWith('expirationupdated', expect.any(Function))
     })
   })
 

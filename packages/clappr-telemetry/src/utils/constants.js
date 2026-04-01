@@ -49,5 +49,19 @@ export const EVENT_TYPES = {
    *
    * @event BUS
    */
-  BUS: 'telemetry_bus'
+  BUS: 'telemetry_bus',
+
+  /**
+   * Emitted when a DRM session is updated
+   *
+   * @event DRM_SESSION_UPDATE
+   */
+  DRM_SESSION_UPDATE: 'drm:session:update',
+
+  /**
+   * Emitted when a DRM license expiration time is updated
+   *
+   * @event DRM_EXPIRATION_UPDATED
+   */
+  DRM_EXPIRATION_UPDATED: 'drm:expiration:updated'
 }

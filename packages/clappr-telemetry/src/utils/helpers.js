@@ -44,6 +44,26 @@ export const emitTelemetry = (emitter, type, data, source) => {
 }
 
 /**
+ * Sanitizes a DRM license server URI for telemetry.
+ * Strips query param values to avoid leaking credentials or device identifiers.
+ *
+ * @param {string|null} uri - License server URL
+ * @returns {{ licenseServerOrigin: string|null, licenseServerParams: string[] }}
+ */
+export const sanitizeLicenseUri = (uri) => {
+  if (!uri) return { licenseServerOrigin: null, licenseServerParams: [] }
+  try {
+    const url = new URL(uri)
+    return {
+      licenseServerOrigin: url.origin,
+      licenseServerParams: [...url.searchParams.keys()]
+    }
+  } catch {
+    return { licenseServerOrigin: null, licenseServerParams: [] }
+  }
+}
+
+/**
  * Calculates network throughput in Mbps.
  *
  * Formula: (bytes × 8 bits/byte) / (duration in seconds) / 1,000,000 bits/Mbps
