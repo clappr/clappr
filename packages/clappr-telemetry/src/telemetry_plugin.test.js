@@ -6,7 +6,7 @@ jest.mock('./adapters', () => {
   const actual = jest.requireActual('./adapters')
   return {
     findNetworkAdapter: jest.fn(),
-    ShakaNetworkAdapter: actual.ShakaNetworkAdapter,
+    ShakaNetworkAdapter: actual.ShakaNetworkAdapter
   }
 })
 
