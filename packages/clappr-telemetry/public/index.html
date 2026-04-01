@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Clappr Player — Telemetry Plugin Demo</title>
-  <script src="/packages/clappr-core/dist/clappr-core.js"></script>
+  <script src="/packages/player/dist/clappr.js"></script>
   <script src="/packages/dash-shaka-playback/dist/dash-shaka-playback.js"></script>
   <script src="/packages/clappr-telemetry/dist/clappr-telemetry.js"></script>
   <style>
@@ -70,12 +70,6 @@
       margin-bottom: 15px;
     }
 
-    .buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
     button {
       padding: 10px 20px;
       font-size: 14px;
@@ -105,6 +99,95 @@
       color: #666;
       line-height: 1.6;
     }
+
+    #custom-config {
+      display: none;
+      margin-bottom: 15px;
+      padding: 16px;
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #custom-config.visible {
+      display: flex;
+    }
+
+    .custom-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .custom-field label {
+      font-size: 12px;
+      color: #555;
+    }
+
+    .custom-field input {
+      padding: 8px 10px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    .custom-field input:focus {
+      outline: none;
+      border-color: #333;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+    }
+
+    .custom-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    #applyCustomBtn {
+      padding: 7px 14px;
+      font-size: 13px;
+      background: #1a7f37;
+    }
+
+    #applyCustomBtn:hover {
+      background: #268040;
+    }
+
+    .custom-guide {
+      background: #f0f4ff;
+      border: 1px solid #c7d4f0;
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    .custom-guide strong {
+      display: block;
+      font-size: 13px;
+      color: #222;
+      margin-bottom: 6px;
+    }
+
+    .custom-guide ol {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    .custom-guide ol li {
+      margin-bottom: 4px;
+    }
+
+    .custom-guide code {
+      background: #e2e8f8;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
@@ -117,13 +200,32 @@
       <select id="examples" onchange="switchExample(this.value)"></select>
     </div>
 
-    <div id="player"></div>
-
-    <div class="buttons">
-      <button id="playBtn">Play</button>
-      <button id="pauseBtn">Pause</button>
-      <button id="stopBtn">Stop</button>
+    <div id="custom-config">
+      <div class="custom-guide">
+        <strong>How to get your stream configuration from DevTools</strong>
+        <ol>
+          <li>Open your player in another tab and start playback.</li>
+          <li>Open DevTools (<code>F12</code>) → <strong>Network</strong> tab.</li>
+          <li><strong>Stream URL:</strong> filter by <code>.mpd</code> — copy the <em>Request URL</em> of the first result (returns <code>application/dash+xml</code>).</li>
+          <li><strong>License Server URL:</strong> filter by your DRM domain (e.g. <code>drm.</code> or <code>license</code>) — find the <code>POST</code> request and copy its <em>Request URL</em>. If the URL contains auth params (e.g. <code>?deviceId=</code>), include them.</li>
+          <li><strong>Headers:</strong> on that same <code>POST</code> request → <strong>Headers</strong> tab → look for custom request headers such as <code>Authorization</code> or <code>X-*</code>. Add each one below.</li>
+          <li>⚠️ MPD URLs with embedded tokens expire — grab fresh URLs each session.</li>
+        </ol>
+      </div>
+      <div class="custom-field">
+        <label>Stream URL (MPD)</label>
+        <input id="customSource" type="text" placeholder="https://example.com/stream.mpd" />
+      </div>
+      <div class="custom-field">
+        <label>License Server URL (optional)</label>
+        <input id="customLicenseServer" type="text" placeholder="https://drm.example.com/wvs?deviceId=abc123" />
+      </div>
+      <div class="custom-actions" style="margin-top: 4px">
+        <button id="applyCustomBtn" onclick="applyCustom()">Apply</button>
+      </div>
     </div>
+
+    <div id="player"></div>
 
     <div class="info">
       <strong>Telemetry Events:</strong> Open the browser console to see telemetry events being tracked in the CONTAINER_TELEMETRY_TRACE channel.
@@ -157,10 +259,14 @@
           plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
           telemetry: { network: { enabled: true } }
         },
+        'dash-shaka-widevine': {
+          label: 'Shaka DASH + Widevine',
+          custom: true
+        },
         'html5-video': {
           label: 'HTML5 Video',
-          source: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          plugins: [ClapprTelemetry, SimpleTelemetryLogger],
+          source: 'http://clappr.io/highline.mp4',
+          plugins: [Clappr.HTML5Video, ClapprTelemetry, SimpleTelemetryLogger],
           telemetry: { network: { enabled: true } }
         }
       }
@@ -175,7 +281,26 @@
           muted: true,
           autoPlay: false,
           plugins: config.plugins,
-          telemetry: config.telemetry
+          telemetry: config.telemetry,
+          ...(config.shakaConfiguration && { shakaConfiguration: config.shakaConfiguration })
+        })
+      }
+
+      static createWidevine({ source, licenseServer }) {
+        const shakaConfiguration = licenseServer
+          ? { drm: { servers: { 'com.widevine.alpha': licenseServer } } }
+          : undefined
+
+        return new Clappr.Player({
+          parentId: '#player',
+          source,
+          width: '100%',
+          height: 500,
+          muted: true,
+          autoPlay: false,
+          plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
+          telemetry: { network: { enabled: true } },
+          ...(shakaConfiguration && { shakaConfiguration })
         })
       }
     }
@@ -189,6 +314,16 @@
         if (key === 'dash-shaka') option.selected = true
         select.appendChild(option)
       })
+    }
+
+    function applyCustom() {
+      const source = document.getElementById('customSource').value.trim()
+      if (!source) { alert('Stream URL is required'); return }
+
+      const licenseServer = document.getElementById('customLicenseServer').value.trim()
+
+      if (app.player) app.player.destroy()
+      app.player = PlayerFactory.createWidevine({ source, licenseServer })
     }
 
     class PlayerApp {
@@ -209,6 +344,15 @@
       }
 
       switchExample(exampleKey) {
+        const customConfig = document.getElementById('custom-config')
+        if (PlayerFactory.engines[exampleKey]?.custom) {
+          customConfig.classList.add('visible')
+          if (this.player) { this.player.destroy(); this.player = null }
+          document.getElementById('player').innerHTML = ''
+          this.example = null
+          return
+        }
+        customConfig.classList.remove('visible')
         if (exampleKey === this.example) return
         this.example = exampleKey
         this.build()
@@ -216,19 +360,6 @@
     }
 
     const app = new PlayerApp()
-
-    function handlePlayerAction(action) {
-      const player = app.player
-      if (player && typeof player[action] === 'function') {
-        player[action]()
-      } else {
-        console.error(`player.${action} is not available`)
-      }
-    }
-
-    document.getElementById('playBtn').onclick = () => handlePlayerAction('play')
-    document.getElementById('pauseBtn').onclick = () => handlePlayerAction('pause')
-    document.getElementById('stopBtn').onclick = () => handlePlayerAction('stop')
 
     function switchExample(exampleKey) {
       app.switchExample(exampleKey)

@@ -143,14 +143,14 @@ Every emission on `containerTelemetryTrace` carries a versioned envelope:
 | `ts`     | number | Wall-clock timestamp from `Date.now()`                      |
 | `v`      | string | Envelope contract version (`1.0`)                           |
 
-### Event types (`type`)
+## Adapters
 
-The `type` field identifies what happened. As new telemetry areas are added (MSE, engine, playback state), new types will appear here.
+Adapters connect the plugin to specific playback engines. Each adapter implements `static isSupported(playback)` and `bind()`.
 
-| `type`          | `source`  | Description                     |
-| --------------- | --------- | ------------------------------- |
-| `request:start` | `network` | A network request was initiated |
-| `request:end`   | `network` | A network request completed     |
+| Adapter                | Engine                | Status    |
+| ---------------------- | --------------------- | --------- |
+| `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
+| HLS.js Network Adapter | `hlsjs-playback`      | Planned   |
 
 ### Sources (`source`)
 
@@ -160,14 +160,17 @@ The `source` field identifies which telemetry area emitted the event. Each adapt
 | --------- | ------------------------------------------------------- | --------- |
 | `network` | Network request metrics (segments, manifests, licenses) | Available |
 
-## Adapters
+### Event types (`type`)
 
-Adapters connect the plugin to specific playback engines. Each adapter implements `static isSupported(playback)` and `bind()`.
+The `type` field identifies what happened. As new telemetry areas are added (MSE, engine, playback state), new types will appear here.
 
-| Adapter                | Engine                | Status    |
-| ---------------------- | --------------------- | --------- |
-| `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
-| HLS.js Network Adapter | `hlsjs-playback`      | Planned   |
+| `type`                   | `source`  | Description                                           |
+| ------------------------ | --------- | ----------------------------------------------------- |
+| `request:start`          | `network` | A network request was initiated                       |
+| `request:end`            | `network` | A network request completed                           |
+| `bitrate:change`         | `network` | ABR algorithm switched to a different quality variant |
+| `drm:session:update`     | `network` | A DRM session was updated                             |
+| `drm:expiration:updated` | `network` | A DRM license expiration time was updated             |
 
 ## Development
 

@@ -1,4 +1,4 @@
-import { emitTelemetry, createEnvelope, calculateThroughput } from './helpers'
+import { emitTelemetry, createEnvelope, calculateThroughput, sanitizeLicenseUri } from './helpers'
 import { Events, Log } from '@clappr/core'
 import { EVENT_TYPES } from './constants'
 
@@ -98,6 +98,32 @@ describe('Telemetry Envelope Contract', () => {
     requiredFields.forEach(f => {
       expect(envelope).toHaveProperty(f)
     })
+  })
+})
+
+describe('sanitizeLicenseUri', () => {
+  it('strips query param values and returns origin and param names', () => {
+    const result = sanitizeLicenseUri('https://drm.example.com/wvs?deviceId=abc&token=xyz')
+    expect(result).toEqual({
+      licenseServerOrigin: 'https://drm.example.com',
+      licenseServerParams: ['deviceId', 'token']
+    })
+  })
+
+  it('returns empty params when URI has no query string', () => {
+    const result = sanitizeLicenseUri('https://drm.example.com/wvs')
+    expect(result).toEqual({
+      licenseServerOrigin: 'https://drm.example.com',
+      licenseServerParams: []
+    })
+  })
+
+  it('returns null origin and empty params when uri is null', () => {
+    expect(sanitizeLicenseUri(null)).toEqual({ licenseServerOrigin: null, licenseServerParams: [] })
+  })
+
+  it('returns null origin and empty params when uri is invalid', () => {
+    expect(sanitizeLicenseUri('not-a-url')).toEqual({ licenseServerOrigin: null, licenseServerParams: [] })
   })
 })
 

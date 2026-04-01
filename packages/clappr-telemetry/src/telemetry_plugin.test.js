@@ -1,17 +1,24 @@
 import { Log, Events } from '@clappr/core'
 import TelemetryPlugin from './telemetry_plugin'
-import { ShakaNetworkAdapter } from './adapters'
+import { findNetworkAdapter, ShakaNetworkAdapter } from './adapters'
 
-jest.mock('./adapters', () => ({
-  findNetworkAdapter: jest.fn()
-}))
+jest.mock('./adapters', () => {
+  const actual = jest.requireActual('./adapters')
+  return {
+    findNetworkAdapter: jest.fn(),
+    ShakaNetworkAdapter: actual.ShakaNetworkAdapter,
+  }
+})
 
 describe('TelemetryPlugin', () => {
   let plugin, mockContainer, mockPlayback
 
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   beforeEach(() => {
     jest.clearAllMocks()
-    const { findNetworkAdapter } = require('./adapters')
     findNetworkAdapter.mockReturnValue(ShakaNetworkAdapter)
 
     mockPlayback = { name: 'dash_shaka_playback' }
@@ -79,7 +86,6 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should instantiate and bind the adapter when playback is available', () => {
-    const { findNetworkAdapter } = require('./adapters')
     const mockAdapter = { bind: jest.fn() }
     const MockAdapterClass = jest.fn(() => mockAdapter)
     findNetworkAdapter.mockReturnValue(MockAdapterClass)
@@ -116,7 +122,6 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should not instantiate adapter when findNetworkAdapter returns null', () => {
-    const { findNetworkAdapter } = require('./adapters')
     findNetworkAdapter.mockReturnValueOnce(null)
 
     plugin.onPlaybackRead(mockPlayback)
@@ -126,7 +131,6 @@ describe('TelemetryPlugin', () => {
 
   it('should log warning when no adapter is found for playback engine', () => {
     jest.spyOn(Log, 'warn').mockImplementation(() => {})
-    const { findNetworkAdapter } = require('./adapters')
     findNetworkAdapter.mockReturnValueOnce(null)
 
     plugin.onPlaybackRead(mockPlayback)
@@ -137,7 +141,6 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should destroy previous adapter when onPlaybackRead is called again', () => {
-    const { findNetworkAdapter } = require('./adapters')
     const oldAdapter = { bind: jest.fn(), destroy: jest.fn() }
     const newAdapter = { bind: jest.fn(), destroy: jest.fn() }
     const OldClass = jest.fn(() => oldAdapter)

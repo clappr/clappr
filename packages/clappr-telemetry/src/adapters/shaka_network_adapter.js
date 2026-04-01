@@ -1,11 +1,13 @@
 import { Log } from '@clappr/core'
-import { emitTelemetry, calculateThroughput } from '../utils'
+import { emitTelemetry, calculateThroughput, sanitizeLicenseUri } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
 // Shaka Player native event names
 const SHAKA_READY = 'shaka:ready'
 const SHAKA_ERROR = 'error'
 const SHAKA_VARIANT_CHANGED = 'variantchanged'
+const SHAKA_DRM_SESSION_UPDATE = 'drmsessionupdate'
+const SHAKA_EXPIRATION_UPDATED = 'expirationupdated'
 
 // Maps Shaka RequestType integers to human-readable kind strings
 const SHAKA_KIND_MAP = {
@@ -46,12 +48,15 @@ export default class ShakaNetworkAdapter {
     this.pendingRequests = new Map()
     this._requestCounter = 0
     this._isBound = false
+    this._lastDrmSessionHash = null
 
     this.requestFilter = this.requestFilter.bind(this)
     this.responseFilter = this.responseFilter.bind(this)
     this._onShakaReady = this._onShakaReady.bind(this)
     this._onShakaError = this._onShakaError.bind(this)
     this._onVariantChanged = this._onVariantChanged.bind(this)
+    this._onDrmSessionUpdate = this._onDrmSessionUpdate.bind(this)
+    this._onExpirationUpdated = this._onExpirationUpdated.bind(this)
   }
 
   bind() {
@@ -109,6 +114,8 @@ export default class ShakaNetworkAdapter {
     networkEngine.registerResponseFilter(this.responseFilter)
     shakaPlayer.addEventListener(SHAKA_ERROR, this._onShakaError)
     shakaPlayer.addEventListener(SHAKA_VARIANT_CHANGED, this._onVariantChanged)
+    shakaPlayer.addEventListener(SHAKA_DRM_SESSION_UPDATE, this._onDrmSessionUpdate)
+    shakaPlayer.addEventListener(SHAKA_EXPIRATION_UPDATED, this._onExpirationUpdated)
 
     return true
   }
@@ -120,6 +127,8 @@ export default class ShakaNetworkAdapter {
 
     this.shakaPlayer.removeEventListener(SHAKA_ERROR, this._onShakaError)
     this.shakaPlayer.removeEventListener(SHAKA_VARIANT_CHANGED, this._onVariantChanged)
+    this.shakaPlayer.removeEventListener(SHAKA_DRM_SESSION_UPDATE, this._onDrmSessionUpdate)
+    this.shakaPlayer.removeEventListener(SHAKA_EXPIRATION_UPDATED, this._onExpirationUpdated)
 
     const networkEngine = this.shakaPlayer.getNetworkingEngine()
     if (!networkEngine) {
@@ -131,6 +140,10 @@ export default class ShakaNetworkAdapter {
     networkEngine.unregisterResponseFilter(this.responseFilter)
   }
 
+  /**
+   * Emits REQUEST_START. Telemetry data:
+   * @param {string} data.kind - Request type ("manifest"|"segment"|"license"|"app"|"timing"|"cert")
+   */
   requestFilter(type, request) {
     if (this.pendingRequests.size >= MAX_PENDING_REQUESTS) {
       Log.warn('[ShakaNetworkAdapter] pendingRequests limit reached, evicting oldest entries')
@@ -146,6 +159,13 @@ export default class ShakaNetworkAdapter {
     }, TELEMETRY_SOURCES.NETWORK)
   }
 
+  /**
+   * Emits REQUEST_END. Telemetry data:
+   * @param {string} data.kind - Same values as requestFilter
+   * @param {number} data.durationMs - Request round-trip time in ms
+   * @param {number} data.bytes - Response size in bytes
+   * @param {number} data.throughputMbps - Calculated throughput in Mbps
+   */
   responseFilter(type, response) {
     const requestId = response.originalRequest?._telemetryId
     const pending = requestId != null ? this.pendingRequests.get(requestId) : undefined
@@ -175,6 +195,15 @@ export default class ShakaNetworkAdapter {
     }
   }
 
+  /**
+   * Emits BITRATE_CHANGE. Telemetry data:
+   * @param {number|null} data.previous.bitrate - Previous bandwidth in bps
+   * @param {number|null} data.previous.width - Previous video width in px
+   * @param {number|null} data.previous.height - Previous video height in px
+   * @param {number|null} data.current.bitrate - New bandwidth in bps
+   * @param {number|null} data.current.width - New video width in px
+   * @param {number|null} data.current.height - New video height in px
+   */
   _onVariantChanged(event) {
     const oldTrack = event.oldTrack ?? {}
     const newTrack = event.newTrack ?? {}
@@ -192,6 +221,37 @@ export default class ShakaNetworkAdapter {
     }, TELEMETRY_SOURCES.NETWORK)
   }
 
+  /**
+   * Emits DRM_SESSION_UPDATE. Telemetry data:
+   * @param {string} data.keySystem - DRM key system in use (e.g. "com.widevine.alpha")
+   * @param {string|null} data.licenseServerOrigin - License server origin (no path or query params)
+   * @param {string[]} data.licenseServerParams - Query param names present in the license URL (no values)
+   */
+  _onDrmSessionUpdate() {
+    const { licenseServerOrigin, licenseServerParams } = sanitizeLicenseUri(
+      this.shakaPlayer.drmInfo()?.licenseServerUri
+    )
+    const data = {
+      keySystem: this.shakaPlayer.keySystem(),
+      licenseServerOrigin,
+      licenseServerParams
+    }
+    const hash = JSON.stringify(data)
+    if (hash === this._lastDrmSessionHash) return
+    this._lastDrmSessionHash = hash
+    emitTelemetry(this.container, EVENT_TYPES.DRM_SESSION_UPDATE, data, TELEMETRY_SOURCES.NETWORK)
+  }
+
+  /**
+   * Emits DRM_EXPIRATION_UPDATED. Telemetry data:
+   * @param {number} data.expirationTime - Unix timestamp (ms) when the license expires; Infinity if no expiration
+   */
+  _onExpirationUpdated() {
+    emitTelemetry(this.container, EVENT_TYPES.DRM_EXPIRATION_UPDATED, {
+      expirationTime: this.shakaPlayer.getExpiration()
+    }, TELEMETRY_SOURCES.NETWORK)
+  }
+
   destroy() {
     if (this.playback?.off) {
       this.playback.off(SHAKA_READY, this._onShakaReady)
@@ -201,5 +261,6 @@ export default class ShakaNetworkAdapter {
     this.pendingRequests.clear()
     this.shakaPlayer = null
     this._isBound = false
+    this._lastDrmSessionHash = null
   }
 }
