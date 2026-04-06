@@ -38,6 +38,13 @@ export const EVENT_TYPES = {
   BITRATE_CHANGE: 'bitrate:change',
 
   /**
+   * Emitted when a network request fails
+   *
+   * @event REQUEST_ERROR
+   */
+  REQUEST_ERROR: 'request:error',
+
+  /**
    * Emitted when a telemetry internal error occurs
    *
    * @event ERROR

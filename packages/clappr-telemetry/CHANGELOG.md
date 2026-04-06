@@ -15,4 +15,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Shaka `bitrate:change` event: emitted when the ABR algorithm switches to a different quality variant
 - Shaka `drm:session:update` event: emitted when a DRM session is updated
 - Shaka `drm:expiration:updated` event: emitted when a DRM license expiration time changes
-
+- HLS.js network adapter for telemetry collection
+- HLS.js `request:start` event: emitted when a fragment, manifest, or key request is initiated
+- HLS.js `request:end` event: emitted when a fragment, manifest, or key request completes
+- HLS.js `bitrate:change` event: emitted when the ABR algorithm switches to a different quality variant 

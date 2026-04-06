@@ -1,14 +1,10 @@
 import { Log, Events } from '@clappr/core'
 import TelemetryPlugin from './telemetry_plugin'
-import { findNetworkAdapter, ShakaNetworkAdapter } from './adapters'
+import { findNetworkAdapter } from './adapters'
 
-jest.mock('./adapters', () => {
-  const actual = jest.requireActual('./adapters')
-  return {
-    findNetworkAdapter: jest.fn(),
-    ShakaNetworkAdapter: actual.ShakaNetworkAdapter
-  }
-})
+jest.mock('./adapters', () => ({
+  findNetworkAdapter: jest.fn()
+}))
 
 describe('TelemetryPlugin', () => {
   let plugin, mockContainer, mockPlayback
@@ -19,7 +15,6 @@ describe('TelemetryPlugin', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    findNetworkAdapter.mockReturnValue(ShakaNetworkAdapter)
 
     mockPlayback = { name: 'dash_shaka_playback' }
     mockContainer = {
@@ -157,6 +152,18 @@ describe('TelemetryPlugin', () => {
     expect(plugin.adapter).toBe(newAdapter)
   })
 
+  it('should instantiate HlsNetworkAdapter when findNetworkAdapter returns it', () => {
+    const mockAdapter = { bind: jest.fn() }
+    const MockHlsClass = jest.fn(() => mockAdapter)
+    findNetworkAdapter.mockReturnValueOnce(MockHlsClass)
+
+    plugin.onPlaybackRead({ name: 'hls' })
+
+    expect(MockHlsClass).toHaveBeenCalledWith({ name: 'hls' }, mockContainer)
+    expect(mockAdapter.bind).toHaveBeenCalled()
+    expect(plugin.adapter).toBe(mockAdapter)
+  })
+
   it('should not throw on destroy when adapter is null', () => {
     plugin.adapter = null
     expect(() => plugin.destroy()).not.toThrow()
@@ -173,7 +180,10 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should call parent destroy method', () => {
-    const parentDestroy = jest.spyOn(Object.getPrototypeOf(Object.getPrototypeOf(plugin)), 'destroy')
+    const parentDestroy = jest.spyOn(
+      Object.getPrototypeOf(Object.getPrototypeOf(plugin)),
+      'destroy'
+    )
     plugin.destroy()
     expect(parentDestroy).toHaveBeenCalled()
   })
