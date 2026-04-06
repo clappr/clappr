@@ -66,26 +66,27 @@ The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the p
 | Export                       | Description                                                               |
 | ---------------------------- | ------------------------------------------------------------------------- |
 | `ShakaNetworkAdapter`        | Shaka network metrics adapter class                                       |
-| `findNetworkAdapter`         | Resolves the adapter class for a playback instance (used by the plugin) |
+| `HlsNetworkAdapter`          | HLS.js network metrics adapter class                                      |
+| `findNetworkAdapter`         | Resolves the adapter class for a playback instance (used by the plugin)   |
 | `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                                |
 | `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `request:end`, etc.)           |
-| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                              |
+| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                                |
 | `createEnvelope`             | Builds the versioned envelope object                                      |
-| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter         |
-| `calculateThroughput`        | Mbps helper used by network adapters                                    |
+| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter          |
+| `calculateThroughput`        | Mbps helper used by network adapters                                      |
 
 Example:
 
 ```javascript
 import ClapprTelemetry, {
   ShakaNetworkAdapter,
+  HlsNetworkAdapter,
   findNetworkAdapter
 } from '@clappr/telemetry'
 
 const Adapter = findNetworkAdapter(playback)
-if (Adapter === ShakaNetworkAdapter) {
-  // ...
-}
+if (Adapter === ShakaNetworkAdapter) { /* ... */ }
+if (Adapter === HlsNetworkAdapter) { /* ... */ }
 ```
 
 The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Use the ESM file if you need named exports.
@@ -130,6 +131,7 @@ Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE
 
 This event is registered when the TelemetryPlugin is instantiated. It is the public contract of the plugin. Consumers never need to know which adapter or engine is active — they always listen to the same event and receive the same envelope shape.
 
+
 ## Envelope format
 
 Every emission on `containerTelemetryTrace` carries a versioned envelope:
@@ -143,6 +145,7 @@ Every emission on `containerTelemetryTrace` carries a versioned envelope:
 | `ts`     | number | Wall-clock timestamp from `Date.now()`                      |
 | `v`      | string | Envelope contract version (`1.0`)                           |
 
+
 ## Adapters
 
 Adapters connect the plugin to specific playback engines. Each adapter implements `static isSupported(playback)` and `bind()`.
@@ -151,7 +154,9 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 | ---------------------- | --------------------- | --------- |
 | `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
 | HLS.js Network Adapter | `hlsjs-playback`      | Planned   |
-
+             
+    
+                  |
 ### Sources (`source`)
 
 The `source` field identifies which telemetry area emitted the event. Each adapter owns one source.
@@ -159,6 +164,7 @@ The `source` field identifies which telemetry area emitted the event. Each adapt
 | `source`  | Area                                                    | Status    |
 | --------- | ------------------------------------------------------- | --------- |
 | `network` | Network request metrics (segments, manifests, licenses) | Available |
+
 
 ### Event types (`type`)
 
@@ -168,9 +174,11 @@ The `type` field identifies what happened. As new telemetry areas are added (MSE
 | ------------------------ | --------- | ----------------------------------------------------- |
 | `request:start`          | `network` | A network request was initiated                       |
 | `request:end`            | `network` | A network request completed                           |
+| `request:error`  | `network` | A network request failed (includes `details` and `fatal`) |
 | `bitrate:change`         | `network` | ABR algorithm switched to a different quality variant |
 | `drm:session:update`     | `network` | A DRM session was updated                             |
 | `drm:expiration:updated` | `network` | A DRM license expiration time was updated             |
+
 
 ## Development
 

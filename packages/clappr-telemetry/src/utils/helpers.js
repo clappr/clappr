@@ -64,6 +64,22 @@ export const sanitizeLicenseUri = (uri) => {
 }
 
 /**
+ * Hashes a URL string to a compact hex string using FNV-1a (32-bit).
+ * Used to avoid sending raw URLs in telemetry payloads.
+ *
+ * @param {string} url
+ * @returns {string} 8-character hex hash
+ */
+export const hashUrl = url => {
+  let h = 0x811c9dc5
+  for (let i = 0; i < url.length; i++) {
+    h ^= url.charCodeAt(i)
+    h = Math.imul(h, 0x01000193) >>> 0
+  }
+  return h.toString(16).padStart(8, '0')
+}
+
+/**
  * Calculates network throughput in Mbps.
  *
  * Formula: (bytes × 8 bits/byte) / (duration in seconds) / 1,000,000 bits/Mbps

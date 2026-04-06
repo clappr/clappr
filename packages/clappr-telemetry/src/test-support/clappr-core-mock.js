@@ -21,6 +21,7 @@ const register = (eventName) => {
 export const Events = {
   Custom: {},
   CONTAINER_READY: 'container:ready',
+  CONTAINER_PLAY: 'container:play',
   register
 }
 

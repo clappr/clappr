@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Clappr Player — Telemetry Plugin Demo</title>
   <script src="/packages/player/dist/clappr.js"></script>
+  <script src="/packages/hlsjs-playback/dist/hlsjs-playback.js"></script>
   <script src="/packages/dash-shaka-playback/dist/dash-shaka-playback.js"></script>
   <script src="/packages/clappr-telemetry/dist/clappr-telemetry.js"></script>
   <style>
@@ -252,6 +253,12 @@
 
     class PlayerFactory {
       static engines = {
+        'hls-hlsjs': {
+          label: 'HLS.js',
+          source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+          plugins: [HlsjsPlayback, ClapprTelemetry, SimpleTelemetryLogger],
+          telemetry: { network: { enabled: true } }
+        },
         'dash-shaka': {
           label: 'Shaka DASH',
           source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
@@ -306,11 +313,11 @@
 
     function populateExamples() {
       const select = document.getElementById('examples')
-      Object.keys(PlayerFactory.engines).forEach(key => {
+      Object.keys(PlayerFactory.engines).forEach((key, i) => {
         const option = document.createElement('option')
         option.value = key
         option.textContent = PlayerFactory.engines[key].label
-        if (key === 'dash-shaka') option.selected = true
+        if (i === 0) option.selected = true
         select.appendChild(option)
       })
     }
@@ -328,12 +335,13 @@
     class PlayerApp {
       constructor() {
         this.player = null
-        this.example = 'dash-shaka'
+        this.example = null
         this.init()
       }
 
       init() {
         populateExamples()
+        this.example = Object.keys(PlayerFactory.engines)[0]
         this.build()
       }
 

@@ -1,4 +1,5 @@
 import ShakaNetworkAdapter from './shaka_network_adapter'
+import HlsNetworkAdapter from './hls_network_adapter'
 
 /**
  * Telemetry adapters hook into player components to collect metrics.
@@ -12,8 +13,8 @@ import ShakaNetworkAdapter from './shaka_network_adapter'
  * Each adapter must implement static isSupported() and bind() methods.
  */
 const NETWORK_ADAPTERS = [
-  ShakaNetworkAdapter
-  // HLSjsNetworkAdapter - future
+  ShakaNetworkAdapter,
+  HlsNetworkAdapter
 ]
 
 /**
@@ -27,3 +28,4 @@ export function findNetworkAdapter(playback) {
 }
 
 export { default as ShakaNetworkAdapter } from './shaka_network_adapter'
+export { default as HlsNetworkAdapter } from './hls_network_adapter'
