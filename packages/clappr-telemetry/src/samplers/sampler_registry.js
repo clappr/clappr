@@ -45,7 +45,7 @@ export default class SamplerRegistry {
     const missing = [
       typeof SamplerClass.isEnabled !== 'function' && 'static isEnabled()',
       typeof proto?.collect !== 'function' && 'collect()',
-      typeof proto?.destroy !== 'function' && 'destroy()',
+      typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
 
     if (missing.length > 0) {

@@ -113,8 +113,8 @@ describe('DecodingSampler', () => {
         getVideoPlaybackQuality: jest
           .fn()
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 100, droppedVideoFrames: 10 })) // constructor
-          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 105, droppedVideoFrames: 0 }))  // collect — dropped reset
-          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 105, droppedVideoFrames: 0 }))  // _seed()
+          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 105, droppedVideoFrames: 0 })) // collect — dropped reset
+          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 105, droppedVideoFrames: 0 })) // _seed()
       }
 
       const sampler = new DecodingSampler({ el })
@@ -133,8 +133,8 @@ describe('DecodingSampler', () => {
         getVideoPlaybackQuality: jest
           .fn()
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 100, droppedVideoFrames: 2 })) // constructor
-          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 10, droppedVideoFrames: 0 }))  // collect — counters reset
-          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 10, droppedVideoFrames: 0 }))  // _seed() re-baseline
+          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 10, droppedVideoFrames: 0 })) // collect — counters reset
+          .mockReturnValueOnce(makeQuality({ totalVideoFrames: 10, droppedVideoFrames: 0 })) // _seed() re-baseline
       }
 
       const sampler = new DecodingSampler({ el })
