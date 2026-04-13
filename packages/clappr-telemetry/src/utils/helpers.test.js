@@ -1,6 +1,7 @@
-import { emitTelemetry, createEnvelope, calculateThroughput, sanitizeLicenseUri } from './helpers'
+import { emitTelemetry, createEnvelope, calculateThroughput, sanitizeLicenseUri, getBufferAhead, getBufferedRanges } from './helpers'
 import { Events, Log } from '@clappr/core'
 import { EVENT_TYPES } from './constants'
+import { makeBuffered } from '../__fixtures__'
 
 Events.register('CONTAINER_TELEMETRY_TRACE')
 const CONTAINER_TELEMETRY_TRACE = Events.Custom.CONTAINER_TELEMETRY_TRACE
@@ -124,6 +125,56 @@ describe('sanitizeLicenseUri', () => {
 
   it('returns null origin and empty params when uri is invalid', () => {
     expect(sanitizeLicenseUri('not-a-url')).toEqual({ licenseServerOrigin: null, licenseServerParams: [] })
+  })
+})
+
+describe('getBufferAhead', () => {
+  it('returns 0 when buffered is empty', () => {
+    const videoEl = { buffered: makeBuffered([]), currentTime: 5 }
+    expect(getBufferAhead(videoEl)).toBe(0)
+  })
+
+  it('returns end - currentTime when currentTime is inside a range', () => {
+    const videoEl = { buffered: makeBuffered([[0, 30]]), currentTime: 10 }
+    expect(getBufferAhead(videoEl)).toBe(20)
+  })
+
+  it('returns 0 when currentTime is outside all ranges', () => {
+    const videoEl = { buffered: makeBuffered([[0, 10], [20, 30]]), currentTime: 15 }
+    expect(getBufferAhead(videoEl)).toBe(0)
+  })
+
+  it('matches the correct range among multiple ranges', () => {
+    const videoEl = { buffered: makeBuffered([[0, 10], [15, 40]]), currentTime: 20 }
+    expect(getBufferAhead(videoEl)).toBe(20)
+  })
+
+  it('returns 0 when currentTime equals the end of a range', () => {
+    const videoEl = { buffered: makeBuffered([[0, 10]]), currentTime: 10 }
+    expect(getBufferAhead(videoEl)).toBe(0)
+  })
+
+  it('returns full range when currentTime equals range start', () => {
+    const videoEl = { buffered: makeBuffered([[10, 30]]), currentTime: 10 }
+    expect(getBufferAhead(videoEl)).toBe(20)
+  })
+})
+
+describe('getBufferedRanges', () => {
+  it('returns empty array when buffered is empty', () => {
+    expect(getBufferedRanges(makeBuffered([]))).toEqual([])
+  })
+
+  it('returns one pair for a single range', () => {
+    expect(getBufferedRanges(makeBuffered([[0, 30]]))).toEqual([[0, 30]])
+  })
+
+  it('returns multiple pairs for multiple ranges', () => {
+    expect(getBufferedRanges(makeBuffered([[0, 10], [20, 30]]))).toEqual([[0, 10], [20, 30]])
+  })
+
+  it('rounds values to 2 decimal places', () => {
+    expect(getBufferedRanges(makeBuffered([[1.123456, 29.999999]]))).toEqual([[1.12, 30]])
   })
 })
 
