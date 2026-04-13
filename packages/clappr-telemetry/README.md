@@ -2,13 +2,16 @@
 
 [![npm version](https://img.shields.io/badge/npm-v0.1.0-cb3837)](https://www.npmjs.com/package/@clappr/telemetry)
 
-A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, engine, and MSE metrics from the player and exposes them through a single unified event on the container bus.
+A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, buffer, and decoding metrics from the player and exposes them through a single unified event on the container bus.
 
 ## Overview
 
 `@clappr/telemetry` is a `ContainerPlugin` that automatically detects the active playback engine and activates the appropriate adapter for metrics collection. All telemetry data — regardless of source or event type — flows through the same registered event channel using a versioned envelope format, keeping consumers decoupled from internal implementation details.
 
-The adapter architecture is extensible: new playback engines (HLS.js, Shaka, native playback, etc.) can be supported by adding an adapter without changing the plugin or consumer code.
+The plugin is built around two extensible subsystems:
+
+- **Network adapters** — hook into the streaming engine (Shaka, HLS.js) to capture request timings, bitrate changes, and DRM events
+- **Sampler registry** — drives a set of periodic samplers from a single timer, emitting one `mse.sample` event per tick with buffer and decoding data grouped under their respective keys
 
 ## Installation
 
@@ -36,7 +39,9 @@ Via CDN (jsDelivr):
     source: 'https://example.com/stream.mpd',
     plugins: [DashShakaPlayback, ClapprTelemetry],
     telemetry: {
-      network: { enabled: true }
+      network:        { enabled: true },
+      bufferSample:   { enabled: true },
+      decodingSample: { enabled: true }
     }
   })
 </script>
@@ -54,48 +59,59 @@ const player = new Clappr.Player({
   source: 'https://example.com/stream.mpd',
   plugins: [DashShakaPlayback, ClapprTelemetry],
   telemetry: {
-    network: { enabled: true }
+    network:        { enabled: true },
+    bufferSample:   { enabled: true },
+    decodingSample: { enabled: true }
   }
 })
 ```
 
-### Public API (ES modules)
+### Named exports (ES modules)
 
-The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the plugin as the **default** export and these **named** exports (for tests, tooling, or custom adapters):
+Available from `dist/clappr-telemetry.esm.js`:
 
-| Export                       | Description                                                               |
-| ---------------------------- | ------------------------------------------------------------------------- |
-| `ShakaNetworkAdapter`        | Shaka network metrics adapter class                                       |
-| `HlsNetworkAdapter`          | HLS.js network metrics adapter class                                      |
-| `findNetworkAdapter`         | Resolves the adapter class for a playback instance (used by the plugin)   |
-| `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                                |
-| `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `request:end`, etc.)           |
-| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                                |
-| `createEnvelope`             | Builds the versioned envelope object                                      |
-| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter          |
-| `calculateThroughput`        | Mbps helper used by network adapters                                      |
+**Adapters**
 
-Example:
+| Export                | Description                                                             |
+| --------------------- | ----------------------------------------------------------------------- |
+| `ShakaNetworkAdapter` | Shaka network metrics adapter class                                     |
+| `HlsNetworkAdapter`   | HLS.js network metrics adapter class                                    |
+| `findNetworkAdapter`  | Resolves the adapter class for a playback instance (used by the plugin) |
 
-```javascript
-import ClapprTelemetry, {
-  ShakaNetworkAdapter,
-  HlsNetworkAdapter,
-  findNetworkAdapter
-} from '@clappr/telemetry'
+**Samplers**
 
-const Adapter = findNetworkAdapter(playback)
-if (Adapter === ShakaNetworkAdapter) { /* ... */ }
-if (Adapter === HlsNetworkAdapter) { /* ... */ }
-```
+| Export              | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| `SamplerRegistry`  | Registry class — use to register custom samplers         |
+| `BufferSampler`     | Built-in buffer state sampler                            |
+| `DecodingSampler`   | Built-in decoding quality sampler                        |
+
+**Utils**
+
+| Export                       | Description                                                      |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                       |
+| `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `mse.sample`, etc.)  |
+| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                       |
+| `createEnvelope`             | Builds the versioned envelope object                             |
+| `emitTelemetry`              | Triggers `CONTAINER_TELEMETRY_TRACE` on an emitter               |
+| `calculateThroughput`        | Mbps helper used by network adapters                             |
+| `getBufferAhead`             | Returns seconds buffered ahead of the current position           |
+| `getBufferedRanges`          | Converts `TimeRanges` to a compact `[[start, end], ...]` array   |
 
 The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Use the ESM file if you need named exports.
 
 ## Configuration
 
-| Option                      | Type    | Default | Description                       |
-| --------------------------- | ------- | ------- | --------------------------------- |
-| `telemetry.network.enabled` | Boolean | `false` | Enables network request telemetry |
+All options are opt-in — nothing is collected by default.
+
+| Option                                 | Type    | Default | Description                                               |
+| -------------------------------------- | ------- | ------- | --------------------------------------------------------- |
+| `telemetry.network.enabled`            | Boolean | `false` | Enables network request telemetry                         |
+| `telemetry.bufferSample.enabled`       | Boolean | `false` | Enables periodic buffer state sampling                    |
+| `telemetry.bufferSample.includeRanges` | Boolean | `true`  | Includes buffered time ranges in the `mse.sample` payload |
+| `telemetry.decodingSample.enabled`     | Boolean | `false` | Enables periodic decoding quality sampling                |
+| `telemetry.sampleIntervalMs`           | Number  | `0`     | Sampling frequency in ms. When `0` (default), no automatic interval is started and only on-demand snapshots via `snapshot()` are available |
 
 ## Consuming telemetry events
 
@@ -116,7 +132,10 @@ class MyTelemetryConsumer extends Clappr.ContainerPlugin {
   }
 
   onTrace(envelope) {
-    // Process the telemetry envelope
+    if (envelope.type === 'mse.sample') {
+      const { buffer, decoding } = envelope.data
+      // buffer and decoding keys are only present when the respective sampler is enabled
+    }
   }
 }
 ```
@@ -134,7 +153,7 @@ This event is registered when the TelemetryPlugin is instantiated. It is the pub
 
 ## Envelope format
 
-Every emission on `containerTelemetryTrace` carries a versioned envelope:
+Every emission on `CONTAINER_TELEMETRY_TRACE` carries a versioned envelope:
 
 | Field    | Type   | Description                                                 |
 | -------- | ------ | ----------------------------------------------------------- |
@@ -150,34 +169,135 @@ Every emission on `containerTelemetryTrace` carries a versioned envelope:
 
 Adapters connect the plugin to specific playback engines. Each adapter implements `static isSupported(playback)` and `bind()`.
 
-| Adapter                | Engine                | Status    |
-| ---------------------- | --------------------- | --------- |
-| `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
-| HLS.js Network Adapter | `hlsjs-playback`      | Planned   |
-             
-    
-                  |
+| Adapter               | Engine                | Status    |
+| --------------------- | --------------------- | --------- |
+| `ShakaNetworkAdapter` | `dash-shaka-playback` | Available |
+| `HlsNetworkAdapter`   | `hlsjs-playback`      | Available |
+
 ### Sources (`source`)
 
-The `source` field identifies which telemetry area emitted the event. Each adapter owns one source.
-
-| `source`  | Area                                                    | Status    |
-| --------- | ------------------------------------------------------- | --------- |
-| `network` | Network request metrics (segments, manifests, licenses) | Available |
+| `source`            | Area                                                    |
+| ------------------- | ------------------------------------------------------- |
+| `network`           | Network request metrics (segments, manifests, licenses) |
+| `sampler-registry` | Periodic MSE metrics (buffer state, decoding quality)   |
 
 
 ### Event types (`type`)
 
-The `type` field identifies what happened. As new telemetry areas are added (MSE, engine, playback state), new types will appear here.
+| `type`                   | `source`            | Description                                           |
+| ------------------------ | ------------------- | ----------------------------------------------------- |
+| `request:start`          | `network`           | A network request was initiated                       |
+| `request:end`            | `network`           | A network request completed                           |
+| `request:error`          | `network`           | A network request failed                              |
+| `bitrate:change`         | `network`           | ABR algorithm switched to a different quality variant |
+| `drm:session:update`     | `network`           | A DRM session was updated                             |
+| `drm:expiration:updated` | `network`           | A DRM license expiration time was updated             |
+| `mse.sample`             | `sampler-registry` | Periodic snapshot of buffer and/or decoding state     |
 
-| `type`                   | `source`  | Description                                           |
-| ------------------------ | --------- | ----------------------------------------------------- |
-| `request:start`          | `network` | A network request was initiated                       |
-| `request:end`            | `network` | A network request completed                           |
-| `request:error`  | `network` | A network request failed (includes `details` and `fatal`) |
-| `bitrate:change`         | `network` | ABR algorithm switched to a different quality variant |
-| `drm:session:update`     | `network` | A DRM session was updated                             |
-| `drm:expiration:updated` | `network` | A DRM license expiration time was updated             |
+### `mse.sample` payload
+
+Emitted once per tick by the `SamplerRegistry`. Each key is only present when the respective sampler is enabled and has data to report (the `decoding` key is absent on the first tick while the baseline is being established).
+
+```javascript
+{
+  buffer: {
+    bufferAhead:   20,       // seconds buffered ahead of current position
+    currentTime:   10,       // current playback position in seconds
+    rangesCompact: [[0, 30]] // buffered time ranges (omitted if includeRanges: false)
+  },
+  decoding: {
+    decodedFps:   24,        // frames decoded per second in the interval
+    droppedFps:    1,        // frames dropped per second in the interval
+    dropRatio:  0.04,        // ratio of dropped frames over total in the interval
+    currentTime:   10,       // current playback position in seconds
+    totalDropped:   2,       // cumulative dropped frames since playback started
+    totalDecoded: 537        // cumulative decoded frames since playback started
+  }
+}
+```
+
+## Custom samplers
+
+The sampler registry is extensible. You can add your own sampler and have it participate in the same `mse.sample` tick without forking the package.
+
+### Contract
+
+A custom sampler must implement three members:
+
+| Member | Description |
+| --- | --- |
+| `static isEnabled(cfg)` | Returns `true` when the sampler should be active. `cfg` is `container.options.telemetry` |
+| `collect()` | Called every tick. Returns a plain object with the data to include, or `null` to skip this tick |
+| `destroy()` | Called when the registry is destroyed. Clean up any internal state here |
+
+### Example
+
+```javascript
+import {
+  SamplerRegistry,
+  emitTelemetry,
+  getBufferAhead
+} from '@clappr/telemetry'
+
+class AudioSampler {
+  static isEnabled(cfg) {
+    return cfg?.audioSample?.enabled === true
+  }
+
+  constructor(playback) {
+    this._playback = playback
+  }
+
+  collect() {
+    const videoEl = this._playback?.el
+    if (!videoEl) return null
+    return { volume: videoEl.volume, muted: videoEl.muted }
+  }
+
+  destroy() {
+    this._playback = null
+  }
+}
+
+// register before instantiating the player
+SamplerRegistry.register('audio', AudioSampler)
+
+new Clappr.Player({
+  plugins: [ClapprTelemetry],
+  telemetry: {
+    audioSample: { enabled: true }
+  }
+})
+```
+
+The result appears under the `audio` key in the `mse.sample` payload:
+
+```javascript
+{
+  buffer:  { ... },
+  decoding:{ ... },
+  audio:   { volume: 1, muted: false }
+}
+```
+
+To remove a previously registered sampler:
+
+```javascript
+SamplerRegistry.unregister('audio')
+```
+
+### On-demand snapshot
+
+The `TelemetryPlugin` exposes a `snapshot` getter that returns the current sampler data immediately, without waiting for the next tick and without emitting any event:
+
+```javascript
+const telemetry = player.getPlugin('telemetry')
+const data = telemetry.snapshot
+// { buffer: { bufferAhead: 20, currentTime: 10 }, decoding: { ... } }
+```
+
+Returns an empty object if called before the player is ready.
+
 
 
 ## Development

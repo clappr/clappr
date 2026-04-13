@@ -70,5 +70,14 @@ export const EVENT_TYPES = {
    *
    * @event DRM_EXPIRATION_UPDATED
    */
-  DRM_EXPIRATION_UPDATED: 'drm:expiration:updated'
+  DRM_EXPIRATION_UPDATED: 'drm:expiration:updated',
+
+  /**
+   * Emitted once per scheduler tick with a combined snapshot of buffer and decoding state.
+   * Payload shape: `{ buffer?: {...}, decoding?: {...} }` — keys are present only
+   * when the respective sampler is enabled and has data to report.
+   *
+   * @event MSE_SAMPLE
+   */
+  MSE_SAMPLE: 'mse.sample'
 }

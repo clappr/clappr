@@ -6,6 +6,10 @@ const BITS_PER_BYTE = 8
 const BITS_PER_MEGABIT = 1e6
 const THROUGHPUT_DECIMAL_PLACES = 2
 
+export const round1 = v => Math.round(v * 10) / 10
+export const round4 = v => Math.round(v * 10000) / 10000
+const round2 = v => Math.round(v * 100) / 100
+
 /**
  * Creates a telemetry envelope with monotonic and wall-clock timestamps.
  *
@@ -77,6 +81,37 @@ export const hashUrl = url => {
     h = Math.imul(h, 0x01000193) >>> 0
   }
   return h.toString(16).padStart(8, '0')
+}
+
+/**
+ * Returns how many seconds of video are buffered ahead of the current playback position.
+ *
+ * @param {HTMLVideoElement} videoEl
+ * @returns {number} Seconds buffered ahead (0 if currentTime is outside all ranges)
+ */
+export const getBufferAhead = (videoEl) => {
+  const { buffered, currentTime } = videoEl
+  for (let i = 0; i < buffered.length; i++) {
+    if (currentTime >= buffered.start(i) && currentTime <= buffered.end(i)) {
+      return buffered.end(i) - currentTime
+    }
+  }
+  return 0
+}
+
+/**
+ * Converts a TimeRanges object into a compact array of [start, end] pairs.
+ * Values are rounded to 2 decimal places.
+ *
+ * @param {TimeRanges} buffered
+ * @returns {Array<[number, number]>}
+ */
+export const getBufferedRanges = (buffered) => {
+  const ranges = []
+  for (let i = 0; i < buffered.length; i++) {
+    ranges.push([round2(buffered.start(i)), round2(buffered.end(i))])
+  }
+  return ranges
 }
 
 /**

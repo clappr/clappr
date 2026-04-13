@@ -44,6 +44,16 @@
       font-weight: bold;
     }
 
+    .toggle-label {
+      font-size: 13px;
+      color: #444;
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
     #examples {
       padding: 8px 12px;
       font-size: 14px;
@@ -200,6 +210,28 @@
       <select id="examples" onchange="switchExample(this.value)"></select>
     </div>
 
+    <div class="controls">
+      <label>Adapter:</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-network" checked> Network</label>
+    </div>
+
+    <div class="controls">
+      <label>Sampler:</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-buffer" checked> Buffer</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-decoding" checked> Decoding</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-audio"> Audio (custom)</label>
+      <label for="sample-interval" style="margin-left: 10px">Interval:</label>
+      <select id="sample-interval" onchange="app.build()">
+        <option value="0" selected>snapshot only</option>
+        <option value="1000">1s</option>
+        <option value="5000">5s</option>
+        <option value="10000">10s</option>
+        <option value="30000">30s</option>
+        <option value="60000">60s</option>
+      </select>
+      <button onclick="takeSnapshot()" style="margin-left: auto">Snapshot</button>
+    </div>
+
     <div id="custom-config">
       <div class="custom-guide">
         <strong>How to get your stream configuration from DevTools</strong>
@@ -251,19 +283,41 @@
       }
     }
 
+    // Custom sampler example — follows the contract documented in the README:
+    // static isEnabled(cfg), collect(), destroy()
+    class AudioSampler {
+      static isEnabled(cfg) {
+        return cfg?.audioSample?.enabled === true
+      }
+
+      constructor(playback) {
+        this._playback = playback
+      }
+
+      collect() {
+        const videoEl = this._playback?.el
+        if (!videoEl) return null
+        return { volume: videoEl.volume, muted: videoEl.muted }
+      }
+
+      destroy() {
+        this._playback = null
+      }
+    }
+
+    ClapprTelemetry.SamplerRegistry.register('audio', AudioSampler)
+
     class PlayerFactory {
       static engines = {
         'hls-hlsjs': {
           label: 'HLS.js',
           source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
           plugins: [HlsjsPlayback, ClapprTelemetry, SimpleTelemetryLogger],
-          telemetry: { network: { enabled: true } }
         },
         'dash-shaka': {
           label: 'Shaka DASH',
           source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
           plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
-          telemetry: { network: { enabled: true } }
         },
         'dash-shaka-widevine': {
           label: 'Shaka DASH + Widevine',
@@ -273,7 +327,16 @@
           label: 'HTML5 Video',
           source: 'http://clappr.io/highline.mp4',
           plugins: [Clappr.HTML5Video, ClapprTelemetry, SimpleTelemetryLogger],
-          telemetry: { network: { enabled: true } }
+        }
+      }
+
+      static getTelemetryConfig() {
+        return {
+          network:          { enabled: document.getElementById('chk-network').checked },
+          bufferSample:     { enabled: document.getElementById('chk-buffer').checked },
+          decodingSample:   { enabled: document.getElementById('chk-decoding').checked },
+          audioSample:      { enabled: document.getElementById('chk-audio').checked },
+          sampleIntervalMs: Number(document.getElementById('sample-interval').value),
         }
       }
 
@@ -287,8 +350,7 @@
           muted: true,
           autoPlay: false,
           plugins: config.plugins,
-          telemetry: config.telemetry,
-          ...(config.shakaConfiguration && { shakaConfiguration: config.shakaConfiguration })
+          telemetry: this.getTelemetryConfig(),
         })
       }
 
@@ -305,7 +367,7 @@
           muted: true,
           autoPlay: false,
           plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
-          telemetry: { network: { enabled: true } },
+          telemetry: this.getTelemetryConfig(),
           ...(shakaConfiguration && { shakaConfiguration })
         })
       }
@@ -371,6 +433,16 @@
     function switchExample(exampleKey) {
       app.switchExample(exampleKey)
     }
+
+    function takeSnapshot() {
+      const telemetry = app.player?.getPlugin('telemetry')
+      if (!telemetry) { console.warn('[SNAPSHOT] No player or telemetry plugin active'); return }
+      console.log('[SNAPSHOT]', telemetry.snapshot)
+    }
+
+    ;['chk-network', 'chk-buffer', 'chk-decoding', 'chk-audio'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => app.build())
+    })
   </script>
 </body>
 </html>

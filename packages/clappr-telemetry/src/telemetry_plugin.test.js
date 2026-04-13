@@ -1,10 +1,18 @@
 import { Log, Events } from '@clappr/core'
 import TelemetryPlugin from './telemetry_plugin'
 import { findNetworkAdapter } from './adapters'
+import MockSamplerRegistryClass from './samplers/sampler_registry'
 
 jest.mock('./adapters', () => ({
   findNetworkAdapter: jest.fn()
 }))
+
+jest.mock('./samplers/sampler_registry', () => ({
+  __esModule: true,
+  default: jest.fn()
+}))
+
+let mockSamplerRegistry
 
 describe('TelemetryPlugin', () => {
   let plugin, mockContainer, mockPlayback
@@ -15,6 +23,9 @@ describe('TelemetryPlugin', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    findNetworkAdapter.mockReturnValue(null)
+    mockSamplerRegistry = { bind: jest.fn(), destroy: jest.fn() }
+    MockSamplerRegistryClass.mockImplementation(() => mockSamplerRegistry)
 
     mockPlayback = { name: 'dash_shaka_playback' }
     mockContainer = {
@@ -186,5 +197,61 @@ describe('TelemetryPlugin', () => {
     )
     plugin.destroy()
     expect(parentDestroy).toHaveBeenCalled()
+  })
+
+  describe('snapshot getter', () => {
+    it('delegates to samplerScheduler.snapshot()', () => {
+      mockSamplerRegistry.snapshot = jest.fn(() => ({ buffer: { bufferAhead: 10 } }))
+      plugin.onPlaybackRead(mockPlayback)
+      expect(plugin.snapshot).toEqual({ buffer: { bufferAhead: 10 } })
+      expect(mockSamplerRegistry.snapshot).toHaveBeenCalled()
+    })
+
+    it('returns empty object when samplerScheduler is null', () => {
+      plugin.samplerRegistry = null
+      expect(plugin.snapshot).toEqual({})
+    })
+  })
+
+  describe('SamplerRegistry lifecycle', () => {
+    it('should instantiate and bind samplerScheduler on onPlaybackRead', () => {
+      plugin.onPlaybackRead(mockPlayback)
+
+      expect(MockSamplerRegistryClass).toHaveBeenCalledWith(mockPlayback, mockContainer)
+      expect(mockSamplerRegistry.bind).toHaveBeenCalled()
+      expect(plugin.samplerRegistry).toBe(mockSamplerRegistry)
+    })
+
+    it('should destroy previous samplerScheduler on re-bind', () => {
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.onPlaybackRead(mockPlayback)
+
+      expect(mockSamplerRegistry.destroy).toHaveBeenCalledTimes(1)
+    })
+
+    it('should destroy samplerScheduler on plugin destroy', () => {
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.destroy()
+
+      expect(mockSamplerRegistry.destroy).toHaveBeenCalled()
+      expect(plugin.samplerRegistry).toBeNull()
+    })
+
+    it('should not throw on destroy when samplerScheduler is null', () => {
+      plugin.samplerRegistry = null
+      expect(() => plugin.destroy()).not.toThrow()
+    })
+
+    it('should instantiate samplerScheduler even when network adapter is disabled', () => {
+      const c = {
+        on: jest.fn(), off: jest.fn(), playback: null,
+        options: { telemetry: { network: { enabled: false } } }
+      }
+      const p = new TelemetryPlugin(c)
+      p.onPlaybackRead(mockPlayback)
+
+      expect(p.samplerRegistry).toBe(mockSamplerRegistry)
+      expect(p.adapter).toBeNull()
+    })
   })
 })
