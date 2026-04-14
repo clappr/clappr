@@ -65,29 +65,15 @@ The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the p
 
 | Export                       | Description                                                               |
 | ---------------------------- | ------------------------------------------------------------------------- |
+| `AdapterRegistry`            | Registry class — use to register and unregister custom network adapters   |
 | `ShakaNetworkAdapter`        | Shaka network metrics adapter class                                       |
 | `HlsNetworkAdapter`          | HLS.js network metrics adapter class                                      |
-| `findNetworkAdapter`         | Resolves the adapter class for a playback instance (used by the plugin)   |
 | `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                                |
 | `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `request:end`, etc.)           |
 | `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                                |
 | `createEnvelope`             | Builds the versioned envelope object                                      |
 | `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter          |
 | `calculateThroughput`        | Mbps helper used by network adapters                                      |
-
-Example:
-
-```javascript
-import ClapprTelemetry, {
-  ShakaNetworkAdapter,
-  HlsNetworkAdapter,
-  findNetworkAdapter
-} from '@clappr/telemetry'
-
-const Adapter = findNetworkAdapter(playback)
-if (Adapter === ShakaNetworkAdapter) { /* ... */ }
-if (Adapter === HlsNetworkAdapter) { /* ... */ }
-```
 
 The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Use the ESM file if you need named exports.
 
@@ -153,10 +139,34 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 | Adapter                | Engine                | Status    |
 | ---------------------- | --------------------- | --------- |
 | `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
-| HLS.js Network Adapter | `hlsjs-playback`      | Planned   |
-             
-    
-                  |
+| `HlsNetworkAdapter`    | `hlsjs-playback`      | Available |
+
+### Custom adapters
+
+Any playback engine can be supported by registering a custom adapter class via `AdapterRegistry`. Registered adapters have higher priority than the built-ins.
+
+**Adapter contract:**
+
+| Member | Description |
+| --- | --- |
+| `static get name()` | String identifier |
+| `static isSupported(playback)` | Returns `true` when this adapter handles the given playback |
+| `constructor(playback, container)` | Receives playback engine and container |
+| `bind()` | Attaches listeners/hooks into the engine |
+| `destroy()` | Detaches listeners and releases resources |
+
+**Usage:**
+
+```javascript
+import { AdapterRegistry } from '@clappr/telemetry'
+
+// Register before instantiating the player
+AdapterRegistry.register(MyCustomAdapter)
+
+// Remove when no longer needed
+AdapterRegistry.unregister(MyCustomAdapter)
+```
+
 ### Sources (`source`)
 
 The `source` field identifies which telemetry area emitted the event. Each adapter owns one source.
