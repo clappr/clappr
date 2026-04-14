@@ -1,6 +1,6 @@
 const _registry = []
 
-export default class AdapterRegistry {
+export default class NetworkAdapters {
   /**
    * Registers an adapter class. Adapters are matched in registration order —
    * first registered has highest priority.

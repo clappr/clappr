@@ -1,4 +1,4 @@
-import AdapterRegistry from './adapter_registry'
+import NetworkAdapters from './network_adapters'
 
 const makeAdapter = (name, supported = false) => ({
   name,
@@ -6,11 +6,11 @@ const makeAdapter = (name, supported = false) => ({
 })
 
 let _registered = []
-const register = (adapter) => { _registered.push(adapter); AdapterRegistry.register(adapter) }
+const register = (adapter) => { _registered.push(adapter); NetworkAdapters.register(adapter) }
 
-describe('AdapterRegistry', () => {
+describe('NetworkAdapters', () => {
   afterEach(() => {
-    _registered.forEach(a => AdapterRegistry.unregister(a))
+    _registered.forEach(a => NetworkAdapters.unregister(a))
     _registered = []
   })
 
@@ -18,14 +18,14 @@ describe('AdapterRegistry', () => {
 
   describe('find', () => {
     it('returns null when no adapter supports the playback', () => {
-      expect(AdapterRegistry.find({ name: 'unknown' })).toBeNull()
+      expect(NetworkAdapters.find({ name: 'unknown' })).toBeNull()
     })
 
     it('returns the matching adapter', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(AdapterRegistry.find({ name: 'anything' })).toBe(adapter)
+      expect(NetworkAdapters.find({ name: 'anything' })).toBe(adapter)
     })
 
     it('returns the first matching adapter when multiple match', () => {
@@ -34,7 +34,7 @@ describe('AdapterRegistry', () => {
       register(first)
       register(second)
 
-      expect(AdapterRegistry.find({})).toBe(first)
+      expect(NetworkAdapters.find({})).toBe(first)
     })
 
     it('calls isSupported with the playback instance', () => {
@@ -42,7 +42,7 @@ describe('AdapterRegistry', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      AdapterRegistry.find(playback)
+      NetworkAdapters.find(playback)
 
       expect(adapter.isSupported).toHaveBeenCalledWith(playback)
     })
@@ -55,7 +55,7 @@ describe('AdapterRegistry', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(AdapterRegistry.find({})).toBe(adapter)
+      expect(NetworkAdapters.find({})).toBe(adapter)
     })
 
     it('first registered adapter has higher priority', () => {
@@ -64,7 +64,7 @@ describe('AdapterRegistry', () => {
       register(custom)
       register(builtIn)
 
-      expect(AdapterRegistry.find({})).toBe(custom)
+      expect(NetworkAdapters.find({})).toBe(custom)
     })
 
     it('registering the same class twice is a no-op', () => {
@@ -72,7 +72,7 @@ describe('AdapterRegistry', () => {
       register(adapter)
       register(adapter)
 
-      expect(AdapterRegistry.find({})).toBe(adapter)
+      expect(NetworkAdapters.find({})).toBe(adapter)
     })
   })
 
@@ -82,24 +82,24 @@ describe('AdapterRegistry', () => {
     it('removes a previously registered adapter', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
-      AdapterRegistry.unregister(adapter)
+      NetworkAdapters.unregister(adapter)
 
-      expect(AdapterRegistry.find({})).toBeNull()
+      expect(NetworkAdapters.find({})).toBeNull()
     })
 
     it('does not throw when unregistering an adapter that was never registered', () => {
       const adapter = makeAdapter('ghost')
 
-      expect(() => AdapterRegistry.unregister(adapter)).not.toThrow()
+      expect(() => NetworkAdapters.unregister(adapter)).not.toThrow()
     })
 
     it('unregistering after deduplicated register fully removes the adapter', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
       register(adapter)
-      AdapterRegistry.unregister(adapter)
+      NetworkAdapters.unregister(adapter)
 
-      expect(AdapterRegistry.find({})).toBeNull()
+      expect(NetworkAdapters.find({})).toBeNull()
     })
   })
 })

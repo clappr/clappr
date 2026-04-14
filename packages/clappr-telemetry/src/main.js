@@ -1,6 +1,6 @@
 import TelemetryPlugin from './telemetry_plugin'
 
-export { AdapterRegistry, ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'
+export { NetworkAdapters, ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'
 export {
   TELEMETRY_CONTRACT_VERSION,
   EVENT_TYPES,

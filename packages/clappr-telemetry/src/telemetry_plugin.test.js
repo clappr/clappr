@@ -1,9 +1,9 @@
 import { Log, Events } from '@clappr/core'
 import TelemetryPlugin from './telemetry_plugin'
-import { AdapterRegistry } from './adapters'
+import { NetworkAdapters } from './adapters'
 
 jest.mock('./adapters', () => ({
-  AdapterRegistry: { find: jest.fn() }
+  NetworkAdapters: { find: jest.fn() }
 }))
 
 describe('TelemetryPlugin', () => {
@@ -40,8 +40,8 @@ describe('TelemetryPlugin', () => {
     expect(plugin.name).toBe('telemetry')
   })
 
-  it('exposes AdapterRegistry as a static getter', () => {
-    expect(TelemetryPlugin.AdapterRegistry).toBe(AdapterRegistry)
+  it('exposes NetworkAdapters as a static getter', () => {
+    expect(TelemetryPlugin.NetworkAdapters).toBe(NetworkAdapters)
   })
 
   it('should register listener on CONTAINER_READY event during bindEvents', () => {
@@ -87,7 +87,7 @@ describe('TelemetryPlugin', () => {
   it('should instantiate and bind the adapter when playback is available', () => {
     const mockAdapter = { bind: jest.fn() }
     const MockAdapterClass = jest.fn(() => mockAdapter)
-    AdapterRegistry.find.mockReturnValue(MockAdapterClass)
+    NetworkAdapters.find.mockReturnValue(MockAdapterClass)
 
     plugin.onPlaybackRead(mockPlayback)
 
@@ -120,8 +120,8 @@ describe('TelemetryPlugin', () => {
     expect(disabledPlugin.adapter).toBeNull()
   })
 
-  it('should not instantiate adapter when AdapterRegistry.find returns null', () => {
-    AdapterRegistry.find.mockReturnValueOnce(null)
+  it('should not instantiate adapter when NetworkAdapters.find returns null', () => {
+    NetworkAdapters.find.mockReturnValueOnce(null)
 
     plugin.onPlaybackRead(mockPlayback)
 
@@ -130,7 +130,7 @@ describe('TelemetryPlugin', () => {
 
   it('should log warning when no adapter is found for playback engine', () => {
     jest.spyOn(Log, 'warn').mockImplementation(() => {})
-    AdapterRegistry.find.mockReturnValueOnce(null)
+    NetworkAdapters.find.mockReturnValueOnce(null)
 
     plugin.onPlaybackRead(mockPlayback)
 
@@ -145,21 +145,21 @@ describe('TelemetryPlugin', () => {
     const OldClass = jest.fn(() => oldAdapter)
     const NewClass = jest.fn(() => newAdapter)
 
-    AdapterRegistry.find.mockReturnValueOnce(OldClass)
+    NetworkAdapters.find.mockReturnValueOnce(OldClass)
     plugin.onPlaybackRead(mockPlayback)
     expect(plugin.adapter).toBe(oldAdapter)
 
-    AdapterRegistry.find.mockReturnValueOnce(NewClass)
+    NetworkAdapters.find.mockReturnValueOnce(NewClass)
     plugin.onPlaybackRead(mockPlayback)
 
     expect(oldAdapter.destroy).toHaveBeenCalled()
     expect(plugin.adapter).toBe(newAdapter)
   })
 
-  it('should instantiate HlsNetworkAdapter when AdapterRegistry.find returns it', () => {
+  it('should instantiate HlsNetworkAdapter when NetworkAdapters.find returns it', () => {
     const mockAdapter = { bind: jest.fn() }
     const MockHlsClass = jest.fn(() => mockAdapter)
-    AdapterRegistry.find.mockReturnValueOnce(MockHlsClass)
+    NetworkAdapters.find.mockReturnValueOnce(MockHlsClass)
 
     plugin.onPlaybackRead({ name: 'hls' })
 

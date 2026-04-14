@@ -63,19 +63,19 @@ const player = new Clappr.Player({
 
 The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the plugin as the **default** export and these **named** exports (for tests, tooling, or custom adapters):
 
-| Export                       | Description                                                               |
-| ---------------------------- | ------------------------------------------------------------------------- |
-| `AdapterRegistry`            | Registry class — use to register and unregister adapters (none pre-registered) |
-| `ShakaNetworkAdapter`        | Shaka network metrics adapter class — must be registered explicitly       |
-| `HlsNetworkAdapter`          | HLS.js network metrics adapter class — must be registered explicitly      |
-| `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                                |
-| `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `request:end`, etc.)           |
-| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                                |
-| `createEnvelope`             | Builds the versioned envelope object                                      |
-| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter          |
-| `calculateThroughput`        | Mbps helper used by network adapters                                      |
+| Export                         | Description                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------ |
+| `NetworkAdapters`              | Registry class — use to register and unregister adapters (none pre-registered) |
+| `ShakaNetworkAdapter`          | Shaka network metrics adapter class — must be registered explicitly            |
+| `HlsNetworkAdapter`            | HLS.js network metrics adapter class — must be registered explicitly           |
+| `TELEMETRY_CONTRACT_VERSION`   | Semver string on each envelope (`v` field)                                     |
+| `EVENT_TYPES`                  | Canonical `type` strings (`request:start`, `request:end`, etc.)                |
+| `TELEMETRY_SOURCES`            | Canonical `source` values (e.g. `network`)                                     |
+| `createEnvelope`               | Builds the versioned envelope object                                           |
+| `emitTelemetry`                | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter               |
+| `calculateThroughput`          | Mbps helper used by network adapters                                           |
 
-The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Adapters must be registered explicitly via `ClapprTelemetry.AdapterRegistry` — no adapter is pre-registered in any build.
+The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Adapters must be registered explicitly via `ClapprTelemetry.NetworkAdapters` — no adapter is pre-registered in any build.
 
 ## Configuration
 
@@ -146,16 +146,16 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 All adapters — including the built-ins — must be registered before the player is instantiated. The first registered adapter has the highest priority.
 
 ```javascript
-import { AdapterRegistry, ShakaNetworkAdapter, HlsNetworkAdapter } from '@clappr/telemetry'
+import { NetworkAdapters, ShakaNetworkAdapter, HlsNetworkAdapter } from '@clappr/telemetry'
 
-AdapterRegistry.register(ShakaNetworkAdapter)
-AdapterRegistry.register(HlsNetworkAdapter)
+NetworkAdapters.register(ShakaNetworkAdapter)
+NetworkAdapters.register(HlsNetworkAdapter)
 
 // Custom adapters can also be registered
-AdapterRegistry.register(MyCustomAdapter)
+NetworkAdapters.register(MyCustomAdapter)
 
 // Remove when no longer needed
-AdapterRegistry.unregister(MyCustomAdapter)
+NetworkAdapters.unregister(MyCustomAdapter)
 ```
 
 **Adapter contract:**

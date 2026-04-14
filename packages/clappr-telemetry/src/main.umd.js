@@ -1,7 +1,7 @@
 /**
  * UMD entry: the global `ClapprTelemetry` is the plugin class.
  * Adapters are exposed as static properties for explicit registration:
- *   ClapprTelemetry.AdapterRegistry.register(ClapprTelemetry.ShakaNetworkAdapter)
+ *   ClapprTelemetry.NetworkAdapters.register(ClapprTelemetry.ShakaNetworkAdapter)
  */
 import TelemetryPlugin from './telemetry_plugin'
 import { ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'

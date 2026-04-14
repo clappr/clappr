@@ -233,8 +233,9 @@
   </div>
 
   <script>
-    ClapprTelemetry.AdapterRegistry.register(ClapprTelemetry.ShakaNetworkAdapter)
-    ClapprTelemetry.AdapterRegistry.register(ClapprTelemetry.HlsNetworkAdapter)
+    const { NetworkAdapters, ShakaNetworkAdapter, HlsNetworkAdapter } = ClapprTelemetry
+    NetworkAdapters.register(ShakaNetworkAdapter)
+    NetworkAdapters.register(HlsNetworkAdapter)
 
     const TELEMETRY_TRACE_EVENT = Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE
 
