@@ -27,6 +27,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
     return { min: '0.13.1' }
   }
 
+  static get AdapterRegistry() { return AdapterRegistry }
+
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_READY, () => {
       if (this.container?.playback) {

@@ -40,6 +40,10 @@ describe('TelemetryPlugin', () => {
     expect(plugin.name).toBe('telemetry')
   })
 
+  it('exposes AdapterRegistry as a static getter', () => {
+    expect(TelemetryPlugin.AdapterRegistry).toBe(AdapterRegistry)
+  })
+
   it('should register listener on CONTAINER_READY event during bindEvents', () => {
     jest.spyOn(plugin, 'listenTo')
     plugin.bindEvents()

@@ -65,9 +65,9 @@ The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the p
 
 | Export                       | Description                                                               |
 | ---------------------------- | ------------------------------------------------------------------------- |
-| `AdapterRegistry`            | Registry class — use to register and unregister custom network adapters   |
-| `ShakaNetworkAdapter`        | Shaka network metrics adapter class                                       |
-| `HlsNetworkAdapter`          | HLS.js network metrics adapter class                                      |
+| `AdapterRegistry`            | Registry class — use to register and unregister adapters (none pre-registered) |
+| `ShakaNetworkAdapter`        | Shaka network metrics adapter class — must be registered explicitly       |
+| `HlsNetworkAdapter`          | HLS.js network metrics adapter class — must be registered explicitly      |
 | `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                                |
 | `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `request:end`, etc.)           |
 | `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                                |
@@ -75,7 +75,7 @@ The `module` field points to `dist/clappr-telemetry.esm.js`, which exposes the p
 | `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter          |
 | `calculateThroughput`        | Mbps helper used by network adapters                                      |
 
-The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Use the ESM file if you need named exports.
+The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Adapters must be registered explicitly via `ClapprTelemetry.AdapterRegistry` — no adapter is pre-registered in any build.
 
 ## Configuration
 
@@ -141,31 +141,32 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 | `ShakaNetworkAdapter`  | `dash-shaka-playback` | Available |
 | `HlsNetworkAdapter`    | `hlsjs-playback`      | Available |
 
-### Custom adapters
+### Registering adapters
 
-Any playback engine can be supported by registering a custom adapter class via `AdapterRegistry`. Registered adapters have higher priority than the built-ins.
-
-**Adapter contract:**
-
-| Member | Description |
-| --- | --- |
-| `static get name()` | String identifier |
-| `static isSupported(playback)` | Returns `true` when this adapter handles the given playback |
-| `constructor(playback, container)` | Receives playback engine and container |
-| `bind()` | Attaches listeners/hooks into the engine |
-| `destroy()` | Detaches listeners and releases resources |
-
-**Usage:**
+All adapters — including the built-ins — must be registered before the player is instantiated. The first registered adapter has the highest priority.
 
 ```javascript
-import { AdapterRegistry } from '@clappr/telemetry'
+import { AdapterRegistry, ShakaNetworkAdapter, HlsNetworkAdapter } from '@clappr/telemetry'
 
-// Register before instantiating the player
+AdapterRegistry.register(ShakaNetworkAdapter)
+AdapterRegistry.register(HlsNetworkAdapter)
+
+// Custom adapters can also be registered
 AdapterRegistry.register(MyCustomAdapter)
 
 // Remove when no longer needed
 AdapterRegistry.unregister(MyCustomAdapter)
 ```
+
+**Adapter contract:**
+
+| Member | Description |
+| --- | --- |
+| `static get name()` | String identifier (optional — used only in log messages) |
+| `static isSupported(playback)` | Returns `true` when this adapter handles the given playback |
+| `constructor(playback, container)` | Receives playback engine and container |
+| `bind()` | Attaches listeners/hooks into the engine |
+| `destroy()` | Detaches listeners and releases resources |
 
 ### Sources (`source`)
 

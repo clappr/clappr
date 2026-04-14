@@ -1,17 +1,15 @@
-import ShakaNetworkAdapter from './shaka_network_adapter'
-import HlsNetworkAdapter from './hls_network_adapter'
-
-const _registry = [ShakaNetworkAdapter, HlsNetworkAdapter]
+const _registry = []
 
 export default class AdapterRegistry {
   /**
-   * Registers an external adapter class with higher priority than built-ins.
+   * Registers an adapter class. Adapters are matched in registration order —
+   * first registered has highest priority.
    * Must be called before the player is instantiated.
    *
    * @param {Function} AdapterClass - Class implementing the network adapter contract
    */
   static register(AdapterClass) {
-    if (!_registry.includes(AdapterClass)) _registry.unshift(AdapterClass)
+    if (!_registry.includes(AdapterClass)) _registry.push(AdapterClass)
   }
 
   /**

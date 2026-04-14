@@ -1,5 +1,12 @@
 /**
- * UMD entry: default export only so the global `ClapprTelemetry` stays the plugin class
- * (same as before named exports were added on the ESM entry).
+ * UMD entry: the global `ClapprTelemetry` is the plugin class.
+ * Adapters are exposed as static properties for explicit registration:
+ *   ClapprTelemetry.AdapterRegistry.register(ClapprTelemetry.ShakaNetworkAdapter)
  */
-export { default } from './telemetry_plugin'
+import TelemetryPlugin from './telemetry_plugin'
+import { ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'
+
+TelemetryPlugin.ShakaNetworkAdapter = ShakaNetworkAdapter
+TelemetryPlugin.HlsNetworkAdapter = HlsNetworkAdapter
+
+export default TelemetryPlugin

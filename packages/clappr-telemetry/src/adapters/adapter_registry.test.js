@@ -1,6 +1,3 @@
-jest.mock('./shaka_network_adapter', () => ({ isSupported: jest.fn(() => false) }))
-jest.mock('./hls_network_adapter', () => ({ isSupported: jest.fn(() => false) }))
-
 import AdapterRegistry from './adapter_registry'
 
 const makeAdapter = (name, supported = false) => ({
@@ -34,8 +31,8 @@ describe('AdapterRegistry', () => {
     it('returns the first matching adapter when multiple match', () => {
       const first = makeAdapter('first', true)
       const second = makeAdapter('second', true)
-      register(second)
       register(first)
+      register(second)
 
       expect(AdapterRegistry.find({})).toBe(first)
     })
@@ -61,11 +58,11 @@ describe('AdapterRegistry', () => {
       expect(AdapterRegistry.find({})).toBe(adapter)
     })
 
-    it('registered adapter has higher priority than built-ins', () => {
-      const builtIn = makeAdapter('built_in', true)
+    it('first registered adapter has higher priority', () => {
       const custom = makeAdapter('custom', true)
-      register(builtIn)
+      const builtIn = makeAdapter('built_in', true)
       register(custom)
+      register(builtIn)
 
       expect(AdapterRegistry.find({})).toBe(custom)
     })
