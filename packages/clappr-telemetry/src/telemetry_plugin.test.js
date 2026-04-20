@@ -2,6 +2,7 @@ import { Log, Events } from '@clappr/core'
 import TelemetryPlugin from './telemetry_plugin'
 import { findNetworkAdapter } from './adapters'
 import MockSamplerRegistryClass from './samplers/sampler_registry'
+import MockObserverRegistryClass from './observers/observer_registry'
 
 jest.mock('./adapters', () => ({
   findNetworkAdapter: jest.fn()
@@ -12,7 +13,13 @@ jest.mock('./samplers/sampler_registry', () => ({
   default: jest.fn()
 }))
 
+jest.mock('./observers/observer_registry', () => ({
+  __esModule: true,
+  default: jest.fn()
+}))
+
 let mockSamplerRegistry
+let mockObserverRegistry
 
 describe('TelemetryPlugin', () => {
   let plugin, mockContainer, mockPlayback
@@ -26,6 +33,8 @@ describe('TelemetryPlugin', () => {
     findNetworkAdapter.mockReturnValue(null)
     mockSamplerRegistry = { bind: jest.fn(), destroy: jest.fn() }
     MockSamplerRegistryClass.mockImplementation(() => mockSamplerRegistry)
+    mockObserverRegistry = { bind: jest.fn(), destroy: jest.fn() }
+    MockObserverRegistryClass.mockImplementation(() => mockObserverRegistry)
 
     mockPlayback = { name: 'dash_shaka_playback' }
     mockContainer = {
@@ -65,7 +74,7 @@ describe('TelemetryPlugin', () => {
   it('should call onPlaybackRead with container.playback when CONTAINER_READY fires', () => {
     mockContainer.playback = mockPlayback
     jest.spyOn(plugin, 'onPlaybackRead').mockImplementation(() => {})
-    jest.spyOn(plugin, 'listenTo').mockImplementation((emitter, event, cb) => cb('container-name'))
+    jest.spyOn(plugin, 'listenTo').mockImplementation((_emitter, _event, cb) => cb('container-name'))
 
     plugin.bindEvents()
 
@@ -75,7 +84,7 @@ describe('TelemetryPlugin', () => {
   it('should not call onPlaybackRead when container.playback is null on CONTAINER_READY', () => {
     mockContainer.playback = null
     jest.spyOn(plugin, 'onPlaybackRead').mockImplementation(() => {})
-    jest.spyOn(plugin, 'listenTo').mockImplementation((emitter, event, cb) => cb('container-name'))
+    jest.spyOn(plugin, 'listenTo').mockImplementation((_emitter, _event, cb) => cb('container-name'))
 
     plugin.bindEvents()
 
@@ -252,6 +261,36 @@ describe('TelemetryPlugin', () => {
 
       expect(p.samplerRegistry).toBe(mockSamplerRegistry)
       expect(p.adapter).toBeNull()
+    })
+  })
+
+  describe('ObserverRegistry lifecycle', () => {
+    it('should instantiate and bind observerRegistry on onPlaybackRead', () => {
+      plugin.onPlaybackRead(mockPlayback)
+
+      expect(MockObserverRegistryClass).toHaveBeenCalledWith(mockPlayback, mockContainer, mockSamplerRegistry)
+      expect(mockObserverRegistry.bind).toHaveBeenCalled()
+      expect(plugin.observerRegistry).toBe(mockObserverRegistry)
+    })
+
+    it('should destroy previous observerRegistry on re-bind', () => {
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.onPlaybackRead(mockPlayback)
+
+      expect(mockObserverRegistry.destroy).toHaveBeenCalledTimes(1)
+    })
+
+    it('should destroy observerRegistry on plugin destroy', () => {
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.destroy()
+
+      expect(mockObserverRegistry.destroy).toHaveBeenCalled()
+      expect(plugin.observerRegistry).toBeNull()
+    })
+
+    it('should not throw on destroy when observerRegistry is null', () => {
+      plugin.observerRegistry = null
+      expect(() => plugin.destroy()).not.toThrow()
     })
   })
 })
