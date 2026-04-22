@@ -6,15 +6,10 @@ import { getBufferAhead, getBufferedRanges, round1 } from '../utils/helpers'
  * Reads the buffer state directly from the `<video>` element on each `collect()` call.
  *
  * **Configuration** via `container.options.telemetry.bufferSample`:
- * - `enabled`       {boolean} — opt-in, must be `true` to activate (default: false)
  * - `includeRanges` {boolean} — whether to include buffered ranges in the payload (default: true)
  */
 export default class BufferSampler {
-  static get name() { return 'buffer-sampler' }
-
-  static isEnabled(cfg) {
-    return cfg?.bufferSample?.enabled === true
-  }
+  static get name() { return 'buffer' }
 
   constructor(playback, container) {
     this._playback = playback

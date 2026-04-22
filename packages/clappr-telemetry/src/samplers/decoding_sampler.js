@@ -4,20 +4,12 @@
  * Uses `HTMLVideoElement.getVideoPlaybackQuality()`, which returns cumulative
  * counters since playback started. The sampler keeps the previous sample state
  * to compute per-interval deltas.
- *
- * **Configuration** via `container.options.telemetry.decodingSample.enabled: true`
  */
 
 import { round1, round4 } from '../utils/helpers'
 
 export default class DecodingSampler {
-  static get name() {
-    return 'decoding-sampler'
-  }
-
-  static isEnabled(cfg) {
-    return cfg?.decodingSample?.enabled === true
-  }
+  static get name() { return 'decoding' }
 
   constructor(playback, _container) {
     this._playback = playback

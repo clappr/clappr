@@ -17,22 +17,8 @@ describe('DecodingSampler', () => {
     jest.restoreAllMocks()
   })
 
-  describe('isEnabled()', () => {
-    it('returns false by default', () => {
-      expect(DecodingSampler.isEnabled({})).toBe(false)
-    })
-
-    it('returns true when decodingSample.enabled is true', () => {
-      expect(DecodingSampler.isEnabled({ decodingSample: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when decodingSample.enabled is false', () => {
-      expect(DecodingSampler.isEnabled({ decodingSample: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when cfg is null', () => {
-      expect(DecodingSampler.isEnabled(null)).toBe(false)
-    })
+  it('exposes a static name used as payload key', () => {
+    expect(DecodingSampler.name).toBe('decoding')
   })
 
   describe('collect()', () => {
