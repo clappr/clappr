@@ -1,35 +1,18 @@
 import { Log } from '@clappr/core'
 import { emitTelemetry } from '../utils'
 import { EVENT_TYPES } from '../utils/constants'
-import BufferSampler from './buffer_sampler'
-import DecodingSampler from './decoding_sampler'
-import PlaybackStateSampler from './playback_state_sampler'
-import NetworkSampler from './network_sampler'
-import PlaybackTimingSampler from './playback_timing_sampler'
-import StreamInfoSampler from './stream_info_sampler'
 
 const DISABLED_INTERVAL = 0
 
-const _registry = new Map([
-  ['buffer', BufferSampler],
-  ['decoding', DecodingSampler],
-  ['playbackState', PlaybackStateSampler],
-  ['network', NetworkSampler],
-  ['timing', PlaybackTimingSampler],
-  ['streamInfo', StreamInfoSampler]
-])
+const _registry = new Map()
 
 /**
  * Drives all active samplers from a single `setInterval`.
  *
- * On construction, filters the sampler registry by each sampler's `isEnabled()`
- * and instantiates only those that are enabled. On every tick, calls `collect()`
- * on each active sampler and emits a single `MSE_SAMPLE` event with the results
- * grouped by key (`buffer`, `decoding`). Keys are omitted when the sampler
- * returns `null` (e.g. decoding seed call).
- *
- * The registry is extensible via `SamplerRegistry.register()` — external samplers
- * can be added before the player is instantiated.
+ * Samplers are registered via `SamplerRegistry.register()` and instantiated
+ * on construction. On every tick, calls `collect()` on each sampler and emits
+ * a single `MSE_SAMPLE` event with the results grouped by name. Keys are
+ * omitted when the sampler returns `null` (e.g. decoding seed call).
  *
  * **Configuration** via `container.options.telemetry`:
  * - `sampleIntervalMs` {number} — tick frequency in ms (default: 0 — disabled, use snapshot() for on-demand collection)
@@ -38,38 +21,33 @@ export default class SamplerRegistry {
   static get name() { return 'sampler-registry' }
 
   /**
-   * Registers an external sampler class into the global registry.
-   * Must be called before the player is instantiated.
+   * Registers a sampler class. The sampler's `static get name()` is used as
+   * the key in the `mse.sample` payload.
    *
-   * **Note:** This method modifies a module-level registry shared by all
-   * SamplerRegistry instances. It is intended to be called once during
-   * app bootstrap, before any player is created.
-   *
-   * @param {string} key - Key used in the `mse.sample` payload (e.g. `'metrics'`)
-   * @param {Function} SamplerClass - Class implementing `static isEnabled()`, `collect()`, and `destroy()`
+   * @param {Function} SamplerClass - Class with `static get name()`, `collect()`, and `destroy()`
    */
-  static register(key, SamplerClass) {
-    const proto = SamplerClass.prototype
+  static register(SamplerClass) {
+    const proto = SamplerClass?.prototype
     const missing = [
-      typeof SamplerClass.isEnabled !== 'function' && 'static isEnabled()',
+      typeof SamplerClass.name !== 'string' && 'static get name()',
       typeof proto?.collect !== 'function' && 'collect()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
 
     if (missing.length > 0) {
-      Log.warn('[SamplerRegistry]', `${key}: missing ${missing.join(', ')} — skipping`)
+      Log.warn('[SamplerRegistry]', `missing ${missing.join(', ')} — skipping`)
       return
     }
-    _registry.set(key, SamplerClass)
+    _registry.set(SamplerClass.name, SamplerClass)
   }
 
   /**
    * Removes a previously registered sampler from the global registry.
    *
-   * @param {string} key - The key used when registering the sampler
+   * @param {Function} SamplerClass - The class reference used when registering
    */
-  static unregister(key) {
-    _registry.delete(key)
+  static unregister(SamplerClass) {
+    _registry.delete(SamplerClass.name)
   }
 
   constructor(playback, container) {
@@ -78,7 +56,6 @@ export default class SamplerRegistry {
     const raw = cfg.sampleIntervalMs
     this._intervalMs = (typeof raw === 'number' && raw > 0) ? raw : DISABLED_INTERVAL
     this._samplers = [..._registry.entries()]
-      .filter(([, S]) => S.isEnabled(cfg))
       .map(([key, S]) => [key, new S(playback, container)])
     this._timerId = null
   }

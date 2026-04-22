@@ -16,12 +16,6 @@ Events.register('CONTAINER_TELEMETRY_TRACE')
  * Integrates with container's telemetry bus to forward network and playback metrics.
  */
 export default class TelemetryPlugin extends ContainerPlugin {
-  /**
-   * UMD access point for `SamplerRegistry.register()`.
-   * The UMD build exposes only the plugin class as the global, so named exports
-   * are not reachable. This static getter bridges that gap for script-tag consumers.
-   * ESM consumers should import `SamplerRegistry` directly from the package.
-   */
   static get SamplerRegistry() { return SamplerRegistry }
   static get ObserverRegistry() { return ObserverRegistry }
 
@@ -32,6 +26,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.adapter = null
     this.samplerRegistry = null
     this.observerRegistry = null
+    this._configAdapters = []
+    this._configSamplers = []
   }
 
   get name() {
@@ -44,7 +40,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
   /**
    * Returns a snapshot of all active samplers at the current moment.
-   * Returns an empty object if the scheduler is not yet initialized.
+   * Returns an empty object if the registry is not yet initialized.
    *
    * @returns {Object} Sampler data keyed by sampler name (e.g. `{ buffer: {...}, decoding: {...} }`)
    */
@@ -64,6 +60,16 @@ export default class TelemetryPlugin extends ContainerPlugin {
     const cfg = this.container.options?.telemetry
     if (!cfg) return
 
+    this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
+    const samplers = cfg.samplers || []
+    samplers.forEach(S => SamplerRegistry.register(S))
+    this._configSamplers = samplers
+
+    this._configAdapters.forEach(A => NetworkAdapters.unregister(A))
+    const adapters = cfg.adapters || []
+    adapters.forEach(A => NetworkAdapters.register(A))
+    this._configAdapters = adapters
+
     // Samplers must be bound before the adapter so events emitted during
     // adapter.bind() (e.g. STREAM_INFO on Shaka's attachFilters) are captured.
     if (this.samplerRegistry) this.samplerRegistry.destroy()
@@ -74,20 +80,21 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
     this.observerRegistry.bind()
 
-    if (cfg.network?.enabled === true) {
-      const AdapterClass = NetworkAdapters.find(playback)
-
-      if (!AdapterClass) {
-        Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.name || playback.constructor.name || 'unknown'}`)
-      } else {
-        if (this.adapter) this.adapter.destroy()
-        this.adapter = new AdapterClass(playback, this.container)
-        this.adapter.bind()
-      }
+    const AdapterClass = NetworkAdapters.find(playback)
+    if (AdapterClass) {
+      if (this.adapter) this.adapter.destroy()
+      this.adapter = new AdapterClass(playback, this.container)
+      this.adapter.bind()
+    } else if (adapters.length > 0) {
+      Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.name || playback.constructor.name || 'unknown'}`)
     }
   }
 
   destroy() {
+    this._configAdapters.forEach(A => NetworkAdapters.unregister(A))
+    this._configAdapters = []
+    this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
+    this._configSamplers = []
     if (this.adapter) {
       this.adapter.destroy()
       this.adapter = null

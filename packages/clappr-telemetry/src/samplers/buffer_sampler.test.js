@@ -23,22 +23,8 @@ describe('BufferSampler', () => {
     sampler = new BufferSampler(playback, container)
   })
 
-  describe('isEnabled()', () => {
-    it('returns false by default', () => {
-      expect(BufferSampler.isEnabled({})).toBe(false)
-    })
-
-    it('returns true when bufferSample.enabled is true', () => {
-      expect(BufferSampler.isEnabled({ bufferSample: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when bufferSample.enabled is false', () => {
-      expect(BufferSampler.isEnabled({ bufferSample: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when cfg is null', () => {
-      expect(BufferSampler.isEnabled(null)).toBe(false)
-    })
+  it('exposes a static name used as payload key', () => {
+    expect(BufferSampler.name).toBe('buffer')
   })
 
   describe('collect()', () => {
