@@ -84,11 +84,11 @@ Available from `dist/clappr-telemetry.esm.js`:
 
 **Adapters**
 
-| Export                | Description                                                             |
-| --------------------- | ----------------------------------------------------------------------- |
-| `ShakaNetworkAdapter` | Shaka network metrics adapter class                                     |
-| `HlsNetworkAdapter`   | HLS.js network metrics adapter class                                    |
-| `findNetworkAdapter`  | Resolves the adapter class for a playback instance (used by the plugin) |
+| Export                | Description                                                                    |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `NetworkAdapters`     | Registry class — use to register and unregister adapters (none pre-registered) |
+| `ShakaNetworkAdapter` | Shaka network metrics adapter class — must be registered explicitly            |
+| `HlsNetworkAdapter`   | HLS.js network metrics adapter class — must be registered explicitly           |
 
 **Samplers**
 
@@ -117,13 +117,13 @@ Available from `dist/clappr-telemetry.esm.js`:
 | `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `mse.sample`, etc.)  |
 | `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                       |
 | `createEnvelope`             | Builds the versioned envelope object                             |
-| `emitTelemetry`              | Triggers `CONTAINER_TELEMETRY_TRACE` on an emitter               |
+| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter |
 | `calculateThroughput`        | Mbps helper used by network adapters                             |
 | `getBufferAhead`             | Returns seconds buffered ahead of the current position           |
 | `getBufferedRanges`          | Converts `TimeRanges` to a compact `[[start, end], ...]` array   |
 | `DEFAULT_VIDEO_EVENTS`       | Array with the 14 default `HTMLVideoElement` event names observed |
 
-The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Use the ESM file if you need named exports.
+The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Adapters must be registered explicitly via `ClapprTelemetry.NetworkAdapters` — no adapter is pre-registered in any build.
 
 ## Configuration
 
@@ -200,6 +200,33 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 | --------------------- | --------------------- | --------- |
 | `ShakaNetworkAdapter` | `dash-shaka-playback` | Available |
 | `HlsNetworkAdapter`   | `hlsjs-playback`      | Available |
+
+### Registering adapters
+
+All adapters — including the built-ins — must be registered before the player is instantiated. The first registered adapter has the highest priority.
+
+```javascript
+import { NetworkAdapters, ShakaNetworkAdapter, HlsNetworkAdapter } from '@clappr/telemetry'
+
+NetworkAdapters.register(ShakaNetworkAdapter)
+NetworkAdapters.register(HlsNetworkAdapter)
+
+// Custom adapters can also be registered
+NetworkAdapters.register(MyCustomAdapter)
+
+// Remove when no longer needed
+NetworkAdapters.unregister(MyCustomAdapter)
+```
+
+**Adapter contract:**
+
+| Member | Description |
+| --- | --- |
+| `static get name()` | String identifier (optional — used only in log messages) |
+| `static isSupported(playback)` | Returns `true` when this adapter handles the given playback |
+| `constructor(playback, container)` | Receives playback engine and container |
+| `bind()` | Attaches listeners/hooks into the engine |
+| `destroy()` | Detaches listeners and releases resources |
 
 ### Sources (`source`)
 

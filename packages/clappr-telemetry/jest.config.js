@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = {
   testEnvironment: 'jsdom',
+  testEnvironmentOptions: {},
   transform: {
     '^.+\\.js$': 'babel-jest'
   },

@@ -1,5 +1,5 @@
 import { ContainerPlugin, Log, Events } from '@clappr/core'
-import { findNetworkAdapter } from './adapters'
+import { NetworkAdapters } from './adapters'
 import { SamplerRegistry } from './samplers'
 import { ObserverRegistry } from './observers'
 
@@ -24,6 +24,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
    */
   static get SamplerRegistry() { return SamplerRegistry }
   static get ObserverRegistry() { return ObserverRegistry }
+
+  static get NetworkAdapters() { return NetworkAdapters }
 
   constructor(container) {
     super(container)
@@ -73,7 +75,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.observerRegistry.bind()
 
     if (cfg.network?.enabled === true) {
-      const AdapterClass = findNetworkAdapter(playback)
+      const AdapterClass = NetworkAdapters.find(playback)
 
       if (!AdapterClass) {
         Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.name || playback.constructor.name || 'unknown'}`)
