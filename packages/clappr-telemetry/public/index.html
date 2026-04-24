@@ -212,14 +212,20 @@
 
     <div class="controls">
       <label>Adapter:</label>
-      <label class="toggle-label"><input type="checkbox" id="chk-network" checked> Network</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-network"> Network</label>
     </div>
 
     <div class="controls">
       <label>Sampler:</label>
-      <label class="toggle-label"><input type="checkbox" id="chk-buffer" checked> Buffer</label>
-      <label class="toggle-label"><input type="checkbox" id="chk-decoding" checked> Decoding</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-buffer"> Buffer</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-decoding"> Decoding</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-playback-state"> Playback State</label>
       <label class="toggle-label"><input type="checkbox" id="chk-audio"> Audio (custom)</label>
+    </div>
+
+    <div class="controls">
+      <label>Observer:</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-video-state"> Video State</label>
       <label for="sample-interval" style="margin-left: 10px">Interval:</label>
       <select id="sample-interval" onchange="app.build()">
         <option value="0" selected>snapshot only</option>
@@ -275,11 +281,9 @@
       }
 
       bindEvents() {
-        this.listenTo(
-          this.container,
-          TELEMETRY_TRACE_EVENT,
-          (envelope) => console.log('[TELEMETRY]', envelope)
-        )
+        this.listenTo(this.container, TELEMETRY_TRACE_EVENT, (envelope) => {
+          console.log('[TELEMETRY]', envelope)
+        })
       }
     }
 
@@ -333,10 +337,12 @@
       static getTelemetryConfig() {
         return {
           network:          { enabled: document.getElementById('chk-network').checked },
-          bufferSample:     { enabled: document.getElementById('chk-buffer').checked },
-          decodingSample:   { enabled: document.getElementById('chk-decoding').checked },
-          audioSample:      { enabled: document.getElementById('chk-audio').checked },
+          bufferSample:        { enabled: document.getElementById('chk-buffer').checked },
+          decodingSample:      { enabled: document.getElementById('chk-decoding').checked },
+          playbackStateSample: { enabled: document.getElementById('chk-playback-state').checked },
+          audioSample:         { enabled: document.getElementById('chk-audio').checked },
           sampleIntervalMs: Number(document.getElementById('sample-interval').value),
+          videoState:       { enabled: document.getElementById('chk-video-state').checked },
         }
       }
 
@@ -440,7 +446,7 @@
       console.log('[SNAPSHOT]', telemetry.snapshot)
     }
 
-    ;['chk-network', 'chk-buffer', 'chk-decoding', 'chk-audio'].forEach(id => {
+    ;['chk-network', 'chk-buffer', 'chk-decoding', 'chk-playback-state', 'chk-audio', 'chk-video-state'].forEach(id => {
       document.getElementById(id).addEventListener('change', () => app.build())
     })
   </script>

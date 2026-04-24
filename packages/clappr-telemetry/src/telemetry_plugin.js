@@ -1,6 +1,7 @@
 import { ContainerPlugin, Log, Events } from '@clappr/core'
 import { findNetworkAdapter } from './adapters'
 import { SamplerRegistry } from './samplers'
+import { ObserverRegistry } from './observers'
 
 /**
  * @event CONTAINER_TELEMETRY_TRACE
@@ -22,11 +23,13 @@ export default class TelemetryPlugin extends ContainerPlugin {
    * ESM consumers should import `SamplerRegistry` directly from the package.
    */
   static get SamplerRegistry() { return SamplerRegistry }
+  static get ObserverRegistry() { return ObserverRegistry }
 
   constructor(container) {
     super(container)
     this.adapter = null
     this.samplerRegistry = null
+    this.observerRegistry = null
   }
 
   get name() {
@@ -76,6 +79,10 @@ export default class TelemetryPlugin extends ContainerPlugin {
     if (this.samplerRegistry) this.samplerRegistry.destroy()
     this.samplerRegistry = new SamplerRegistry(playback, this.container)
     this.samplerRegistry.bind()
+
+    if (this.observerRegistry) this.observerRegistry.destroy()
+    this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
+    this.observerRegistry.bind()
   }
 
   destroy() {
@@ -86,6 +93,10 @@ export default class TelemetryPlugin extends ContainerPlugin {
     if (this.samplerRegistry) {
       this.samplerRegistry.destroy()
       this.samplerRegistry = null
+    }
+    if (this.observerRegistry) {
+      this.observerRegistry.destroy()
+      this.observerRegistry = null
     }
     super.destroy()
   }
