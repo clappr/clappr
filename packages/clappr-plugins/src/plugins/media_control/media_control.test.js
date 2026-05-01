@@ -78,6 +78,31 @@ describe('MediaControl', function () {
       expect(this.mediaControl.muted).toBe(true)
     })
 
+    it('restores prior volume after mute toggle instead of jumping to 100', function () {
+      const setVolumeSpy = jest.spyOn(this.container, 'setVolume')
+
+      this.mediaControl.setVolume(10)
+      this.container.trigger(Events.CONTAINER_READY)
+
+      this.mediaControl.toggleMute()
+      expect(this.mediaControl.muted).toBe(true)
+      expect(this.mediaControl.volume).toBe(0)
+
+      this.mediaControl.toggleMute()
+      expect(this.mediaControl.muted).toBe(false)
+      expect(this.mediaControl.volume).toBe(10)
+      expect(setVolumeSpy).toHaveBeenLastCalledWith(10)
+    })
+
+    it('unmute toggle defaults to 100 when there was no stored level (already at 0)', function () {
+      this.mediaControl.setVolume(0)
+      this.container.trigger(Events.CONTAINER_READY)
+
+      this.mediaControl.toggleMute()
+      expect(this.mediaControl.muted).toBe(false)
+      expect(this.mediaControl.volume).toBe(100)
+    })
+
     it('persists volume when persistence is on', function () {
       // expected to be default value (100)
       expect(Config.restore('volume')).toBe(100)

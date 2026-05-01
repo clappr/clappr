@@ -24,6 +24,9 @@ import hdIcon from '../../icons/08-hd.svg'
 
 const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 
+/** Volume used when unmuting via toggle and no prior level was stored (e.g. started at 0). */
+const DEFAULT_VOLUME_AFTER_UNMUTE_TOGGLE = 100
+
 export default class MediaControl extends UICorePlugin {
   get name() { return 'media_control' }
   get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
@@ -74,6 +77,8 @@ export default class MediaControl extends UICorePlugin {
   constructor(core) {
     super(core)
     this.persistConfig = this.options.persistConfig
+    /** @type {number|null} Level to restore after mute toggle; cleared on container/options volume init. */
+    this._volumeBeforeMuteToggle = null
     this.currentPositionValue = null
     this.currentDurationValue = null
     this.keepVisible = false
@@ -169,6 +174,7 @@ export default class MediaControl extends UICorePlugin {
   }
 
   setInitialVolume() {
+    this._volumeBeforeMuteToggle = null
     const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
     const options = this.container && this.container.options || this.options
     this.setVolume(options.mute ? 0 : initialVolume, true)
@@ -317,7 +323,17 @@ export default class MediaControl extends UICorePlugin {
   }
 
   toggleMute() {
-    this.setVolume(this.muted ? 100 : 0)
+    if (this.muted) {
+      const stored = this._volumeBeforeMuteToggle
+      this._volumeBeforeMuteToggle = null
+      const restore =
+        stored != null && stored > 0 ? stored : DEFAULT_VOLUME_AFTER_UNMUTE_TOGGLE
+      this.setVolume(restore)
+      return
+    }
+    const current = this.volume
+    this._volumeBeforeMuteToggle = current > 0 ? current : null
+    this.setVolume(0)
   }
 
   setVolume(value, isInitialVolume = false) {
