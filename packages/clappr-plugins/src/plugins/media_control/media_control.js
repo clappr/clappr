@@ -24,7 +24,6 @@ import hdIcon from '../../icons/08-hd.svg'
 
 const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 
-/** Default level when unmuting via toggle and no prior level was stored (e.g. started at 0). */
 const defaultVolumeState = 100
 
 export default class MediaControl extends UICorePlugin {
@@ -77,7 +76,6 @@ export default class MediaControl extends UICorePlugin {
   constructor(core) {
     super(core)
     this.persistConfig = this.options.persistConfig
-    /** @type {number|null} Last non-zero volume before mute toggle; cleared on volume init. */
     this._previousVolumeState = null
     this.currentPositionValue = null
     this.currentDurationValue = null
