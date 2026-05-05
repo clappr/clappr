@@ -4,6 +4,7 @@ import { Log } from '@clappr/core'
 
 jest.mock('./video_event_observer', () => {
   const mock = jest.fn()
+  mock.isEnabled = jest.fn(() => true)
   return { __esModule: true, default: mock }
 })
 
@@ -61,9 +62,21 @@ describe('ObserverRegistry', () => {
       expect(warnSpy).toHaveBeenCalled()
     })
 
+    it('skips registration and warns when static isEnabled() is missing', () => {
+      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      const CustomObserver = jest.fn()
+      CustomObserver.prototype.bind = jest.fn()
+      CustomObserver.prototype.destroy = jest.fn()
+
+      ObserverRegistry.register('custom', CustomObserver)
+      expect(warnSpy).toHaveBeenCalled()
+      expect(warnSpy.mock.calls[0].join(' ')).toContain('static isEnabled()')
+    })
+
     it('includes a registered external observer and calls bind() on it', () => {
       const customInstance = { bind: jest.fn(), destroy: jest.fn() }
       const CustomObserver = jest.fn(() => customInstance)
+      CustomObserver.isEnabled = jest.fn(() => true)
       CustomObserver.prototype.bind = jest.fn()
       CustomObserver.prototype.destroy = jest.fn()
 
@@ -87,10 +100,48 @@ describe('ObserverRegistry', () => {
     })
   })
 
+  describe('observer filtering via isEnabled()', () => {
+    afterEach(() => {
+      ObserverRegistry.unregister('custom')
+    })
+
+    it('excludes observers whose isEnabled returns false', () => {
+      VideoEventObserver.isEnabled.mockReturnValue(false)
+
+      const registry = new ObserverRegistry({}, makeContainer(), null)
+      registry.destroy()
+      expect(VideoEventObserver).not.toHaveBeenCalled()
+      VideoEventObserver.isEnabled.mockReturnValue(true)
+    })
+
+    it('includes observers whose isEnabled returns true', () => {
+      VideoEventObserver.isEnabled.mockReturnValue(true)
+
+      const registry = new ObserverRegistry({}, makeContainer(), null)
+      registry.bind()
+      expect(VideoEventObserver).toHaveBeenCalled()
+    })
+
+    it('excludes a registered external observer when isEnabled returns false', () => {
+      const customInstance = { bind: jest.fn(), destroy: jest.fn() }
+      const CustomObserver = jest.fn(() => customInstance)
+      CustomObserver.isEnabled = jest.fn(() => false)
+      CustomObserver.prototype.bind = jest.fn()
+      CustomObserver.prototype.destroy = jest.fn()
+
+      ObserverRegistry.register('custom', CustomObserver)
+
+      const registry = new ObserverRegistry({}, makeContainer(), null)
+      registry.bind()
+      expect(CustomObserver).not.toHaveBeenCalled()
+    })
+  })
+
   describe('unregister()', () => {
     it('removes a previously registered observer', () => {
       const customInstance = { bind: jest.fn(), destroy: jest.fn() }
       const CustomObserver = jest.fn(() => customInstance)
+      CustomObserver.isEnabled = jest.fn(() => true)
       CustomObserver.prototype.bind = jest.fn()
       CustomObserver.prototype.destroy = jest.fn()
 
