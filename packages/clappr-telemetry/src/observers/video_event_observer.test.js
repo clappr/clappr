@@ -33,22 +33,25 @@ describe('VideoEventObserver', () => {
     observer = new VideoEventObserver(playback, container)
   })
 
+  describe('static isEnabled()', () => {
+    it('returns true when videoState.enabled is true', () => {
+      expect(VideoEventObserver.isEnabled({ videoState: { enabled: true } })).toBe(true)
+    })
+
+    it('returns false when videoState.enabled is false', () => {
+      expect(VideoEventObserver.isEnabled({ videoState: { enabled: false } })).toBe(false)
+    })
+
+    it('returns false when videoState is undefined', () => {
+      expect(VideoEventObserver.isEnabled({})).toBe(false)
+    })
+
+    it('returns false when cfg is undefined', () => {
+      expect(VideoEventObserver.isEnabled(undefined)).toBe(false)
+    })
+  })
+
   describe('constructor', () => {
-    it('is disabled by default when enabled is not set', () => {
-      const o = new VideoEventObserver(playback, makeContainer())
-      expect(o._enabled).toBe(false)
-    })
-
-    it('reads enabled: true from options', () => {
-      const o = new VideoEventObserver(playback, makeContainer({ enabled: true }))
-      expect(o._enabled).toBe(true)
-    })
-
-    it('reads enabled: false from options', () => {
-      const o = new VideoEventObserver(playback, makeContainer({ enabled: false }))
-      expect(o._enabled).toBe(false)
-    })
-
     it('uses DEFAULT_VIDEO_EVENTS when not configured', () => {
       expect(observer._videoEvents).toEqual(DEFAULT_VIDEO_EVENTS)
     })
@@ -63,12 +66,6 @@ describe('VideoEventObserver', () => {
     it('attaches one listener per configured event', () => {
       observer.bind()
       expect(videoEl.addEventListener).toHaveBeenCalledTimes(observer._videoEvents.length)
-    })
-
-    it('does nothing when disabled', () => {
-      const o = new VideoEventObserver(playback, makeContainer({ enabled: false }))
-      o.bind()
-      expect(videoEl.addEventListener).not.toHaveBeenCalled()
     })
 
     it('does nothing when videoEl is null', () => {

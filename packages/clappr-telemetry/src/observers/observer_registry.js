@@ -11,7 +11,7 @@ const _registry = new Map([
  * Extensible via `ObserverRegistry.register()` — external observers can be added
  * before the player is instantiated.
  *
- * Observer contract: must implement `bind()` and `destroy()` on the prototype.
+ * Observer contract: must implement `static isEnabled(cfg)`, `bind()` and `destroy()` on the prototype.
  */
 export default class ObserverRegistry {
   static get name() { return 'observer-registry' }
@@ -21,11 +21,12 @@ export default class ObserverRegistry {
    * Must be called before the player is instantiated.
    *
    * @param {string} key - Identifier for the observer (e.g. `'customEvents'`)
-   * @param {Function} ObserverClass - Class implementing `bind()` and `destroy()`
+   * @param {Function} ObserverClass - Class implementing `static isEnabled()`, `bind()` and `destroy()`
    */
   static register(key, ObserverClass) {
     const proto = ObserverClass.prototype
     const missing = [
+      typeof ObserverClass.isEnabled !== 'function' && 'static isEnabled()',
       typeof proto.bind !== 'function' && 'bind()',
       typeof proto.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
@@ -47,8 +48,10 @@ export default class ObserverRegistry {
   }
 
   constructor(playback, container, samplerRegistry) {
-    this._observers = [..._registry.values()]
-      .map(ObserverClass => new ObserverClass(playback, container, samplerRegistry))
+    const cfg = container.options?.telemetry || {}
+    this._observers = [..._registry.entries()]
+      .filter(([, O]) => O.isEnabled(cfg))
+      .map(([, ObserverClass]) => new ObserverClass(playback, container, samplerRegistry))
   }
 
   bind() {
