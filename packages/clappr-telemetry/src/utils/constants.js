@@ -49,6 +49,13 @@ export const EVENT_TYPES = {
   REQUEST_END: 'request:end',
 
   /**
+   * Emitted once when the initial quality variant is known (no previous value)
+   *
+   * @event BITRATE_INIT
+   */
+  BITRATE_INIT: 'bitrate:init',
+
+  /**
    * Emitted when the ABR algorithm switches to a different quality variant
    *
    * @event BITRATE_CHANGE

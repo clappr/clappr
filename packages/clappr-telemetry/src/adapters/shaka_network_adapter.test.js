@@ -21,7 +21,8 @@ const createFakeShakaPlayer = (engine) => ({
   removeEventListener: jest.fn(),
   keySystem: jest.fn(() => 'com.widevine.alpha'),
   drmInfo: jest.fn(() => ({ licenseServerUri: 'https://drm.example.com/wvs' })),
-  getExpiration: jest.fn(() => Infinity)
+  getExpiration: jest.fn(() => Infinity),
+  getStats: jest.fn(() => ({ estimatedBandwidth: 5000000 }))
 })
 
 const createFakePlayback = (shakaPlayer = null) => ({
@@ -314,6 +315,31 @@ describe('ShakaNetworkAdapter', () => {
 
       expect(fakeShakaPlayer.removeEventListener)
         .toHaveBeenCalledWith('variantchanged', expect.any(Function))
+    })
+
+    it('emits BITRATE_INIT with active track data on attachFilters', () => {
+      fakeShakaPlayer.getVariantTracks = jest.fn(() => [
+        { active: false, bandwidth: 800000, width: 640, height: 360 },
+        { active: true, bandwidth: 2400000, width: 1920, height: 1080 }
+      ])
+      adapter.bind()
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.BITRATE_INIT,
+        { current: { bitrate: 2400000, width: 1920, height: 1080 } },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('does not emit BITRATE_INIT when no active track', () => {
+      fakeShakaPlayer.getVariantTracks = jest.fn(() => [
+        { active: false, bandwidth: 800000, width: 640, height: 360 }
+      ])
+      adapter.bind()
+
+      const initCall = emitTelemetry.mock.calls.find(([, type]) => type === EVENT_TYPES.BITRATE_INIT)
+      expect(initCall).toBeUndefined()
     })
 
     it('registers variantchanged listener when attachFilters runs via shaka:ready', () => {

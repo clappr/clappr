@@ -128,6 +128,27 @@ export default class HlsNetworkAdapter {
     hls.on(HLS_EVENTS.LEVEL_SWITCHED, this._onLevelSwitched)
     hls.on(HLS_EVENTS.ERROR, this._onHlsError)
     this.hlsInstance = hls
+    this._emitBitrateInit()
+  }
+
+  _emitBitrateInit() {
+    const hls = this.hlsInstance
+    if (hls.currentLevel < 0) return
+    const level = hls.levels?.[hls.currentLevel]
+    if (!level) return
+    this._previousLevel = hls.currentLevel
+    emitTelemetry(
+      this.container,
+      EVENT_TYPES.BITRATE_INIT,
+      {
+        current: {
+          bitrate: level.bitrate ?? null,
+          width: level.width ?? null,
+          height: level.height ?? null
+        }
+      },
+      TELEMETRY_SOURCES.NETWORK
+    )
   }
 
   detachFilters() {
@@ -155,7 +176,12 @@ export default class HlsNetworkAdapter {
       emitTelemetry(
         this.container,
         EVENT_TYPES.REQUEST_ERROR,
-        { kind: entry.kind ?? 'unknown', urlHash: isUrl ? hashUrl(key) : null, details: 'evicted', fatal: false },
+        {
+          kind: entry.kind ?? 'unknown',
+          urlHash: isUrl ? hashUrl(key) : null,
+          details: 'evicted',
+          fatal: false
+        },
         TELEMETRY_SOURCES.NETWORK
       )
       this.pendingRequests.delete(key)
@@ -198,7 +224,16 @@ export default class HlsNetworkAdapter {
     emitTelemetry(
       this.container,
       EVENT_TYPES.REQUEST_END,
-      { kind: fragKind(frag), urlHash: hashUrl(frag.url), chunk: fragChunk(frag), durationMs, bytes, throughputMbps: calculateThroughput(bytes, durationMs) },
+      {
+        kind: fragKind(frag),
+        urlHash: hashUrl(frag.url),
+        chunk: fragChunk(frag),
+        durationMs,
+        bytes,
+        throughputMbps: calculateThroughput(bytes, durationMs),
+        throughputEwmaMbps:
+          this.hlsInstance != null ? this.hlsInstance.bandwidthEstimate / 1e6 : null
+      },
       TELEMETRY_SOURCES.NETWORK
     )
   }
@@ -238,7 +273,13 @@ export default class HlsNetworkAdapter {
     emitTelemetry(
       this.container,
       EVENT_TYPES.REQUEST_END,
-      { kind: 'manifest', urlHash: hashUrl(url), durationMs, bytes, throughputMbps: calculateThroughput(bytes, durationMs) },
+      {
+        kind: 'manifest',
+        urlHash: hashUrl(url),
+        durationMs,
+        bytes,
+        throughputMbps: calculateThroughput(bytes, durationMs)
+      },
       TELEMETRY_SOURCES.NETWORK
     )
   }
@@ -280,7 +321,13 @@ export default class HlsNetworkAdapter {
     emitTelemetry(
       this.container,
       EVENT_TYPES.REQUEST_END,
-      { kind: 'key', urlHash: hashUrl(url), durationMs, bytes: 0, throughputMbps: calculateThroughput(0, durationMs) },
+      {
+        kind: 'key',
+        urlHash: hashUrl(url),
+        durationMs,
+        bytes: 0,
+        throughputMbps: calculateThroughput(0, durationMs)
+      },
       TELEMETRY_SOURCES.NETWORK
     )
   }
@@ -299,7 +346,13 @@ export default class HlsNetworkAdapter {
       emitTelemetry(
         this.container,
         EVENT_TYPES.REQUEST_ERROR,
-        { kind: fragKind(frag), urlHash: hashUrl(frag.url), chunk: fragChunk(frag), details: data.details, fatal: data.fatal },
+        {
+          kind: fragKind(frag),
+          urlHash: hashUrl(frag.url),
+          chunk: fragChunk(frag),
+          details: data.details,
+          fatal: data.fatal
+        },
         TELEMETRY_SOURCES.NETWORK
       )
       return
@@ -312,7 +365,12 @@ export default class HlsNetworkAdapter {
       emitTelemetry(
         this.container,
         EVENT_TYPES.REQUEST_ERROR,
-        { kind: pending?.kind ?? 'unknown', urlHash: hashUrl(url), details: data.details, fatal: data.fatal },
+        {
+          kind: pending?.kind ?? 'unknown',
+          urlHash: hashUrl(url),
+          details: data.details,
+          fatal: data.fatal
+        },
         TELEMETRY_SOURCES.NETWORK
       )
     }
