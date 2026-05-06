@@ -4,13 +4,15 @@ import { EVENT_TYPES } from '../utils/constants'
 import BufferSampler from './buffer_sampler'
 import DecodingSampler from './decoding_sampler'
 import PlaybackStateSampler from './playback_state_sampler'
+import NetworkSampler from './network_sampler'
 
 const DISABLED_INTERVAL = 0
 
 const _registry = new Map([
   ['buffer', BufferSampler],
   ['decoding', DecodingSampler],
-  ['playbackState', PlaybackStateSampler]
+  ['playbackState', PlaybackStateSampler],
+  ['network', NetworkSampler]
 ])
 
 /**

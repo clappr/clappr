@@ -1,7 +1,7 @@
 import TelemetryPlugin from './telemetry_plugin'
 
 export { findNetworkAdapter, ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'
-export { SamplerRegistry, BufferSampler, DecodingSampler, PlaybackStateSampler } from './samplers'
+export { SamplerRegistry, BufferSampler, DecodingSampler, PlaybackStateSampler, NetworkSampler } from './samplers'
 export { ObserverRegistry, VideoEventObserver } from './observers'
 export {
   TELEMETRY_CONTRACT_VERSION,
