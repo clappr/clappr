@@ -23,3 +23,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - `BufferSampler`: samples buffer state on each tick
 - `DecodingSampler`: samples decoded/dropped frames on each tick
 - `PlaybackStateSampler`: samples playback state on each tick
+- `bitrate:init` event on HLS.js and Shaka adapters: emitted once when the initial quality variant is known
+- `throughputEwmaMbps` field added to `request:end` on both adapters
+- `PlaybackStateSampler`: now includes `bitrateKbps`, `width`, `height`, `switchesUp`, `switchesDown`
+- `NetworkSampler`: samples request counters, throughput, and segment metrics on each tick
+- `PlaybackTimingSampler`: accumulates `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs`
