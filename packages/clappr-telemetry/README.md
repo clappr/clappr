@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/badge/npm-v0.1.0-cb3837)](https://www.npmjs.com/package/@clappr/telemetry)
 
-A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, buffer, decoding, and playback state metrics from the player and exposes them through a single unified event on the container bus.
+A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, buffer, decoding, playback state, and playback timing metrics from the player and exposes them through a single unified event on the container bus.
 
 ## Overview
 
@@ -44,6 +44,8 @@ Via CDN (jsDelivr):
       bufferSample:        { enabled: true },
       decodingSample:      { enabled: true },
       playbackStateSample: { enabled: true },
+      networkSample:       { enabled: true },
+      timingSample:        { enabled: true },
       sampleIntervalMs:    1000,
       videoState:          { enabled: true }
     }
@@ -67,6 +69,8 @@ const player = new Clappr.Player({
     bufferSample:        { enabled: true },
     decodingSample:      { enabled: true },
     playbackStateSample: { enabled: true },
+    networkSample:       { enabled: true },
+    timingSample:        { enabled: true },
     sampleIntervalMs:    1000,
     videoState:          { enabled: true }
   }
@@ -87,12 +91,14 @@ Available from `dist/clappr-telemetry.esm.js`:
 
 **Samplers**
 
-| Export                | Description                                                      |
-| --------------------- | ---------------------------------------------------------------- |
-| `SamplerRegistry`     | Registry class — use to register custom samplers                 |
-| `BufferSampler`       | Built-in buffer state sampler                                    |
-| `DecodingSampler`     | Built-in decoding quality sampler                                |
-| `PlaybackStateSampler`| Built-in sampler for `networkState`, `paused` and `playbackRate` |
+| Export                  | Description                                                      |
+| ----------------------- | ---------------------------------------------------------------- |
+| `SamplerRegistry`       | Registry class — use to register custom samplers                 |
+| `BufferSampler`         | Built-in buffer state sampler                                    |
+| `DecodingSampler`       | Built-in decoding quality sampler                                |
+| `PlaybackStateSampler`  | Built-in sampler for `networkState`, `paused`, `playbackRate`, and bitrate |
+| `NetworkSampler`        | Built-in sampler for request counters, throughput, and segment metrics |
+| `PlaybackTimingSampler` | Built-in sampler for `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs` |
 
 **Observers**
 
@@ -127,7 +133,9 @@ All options are opt-in — nothing is collected by default.
 | `telemetry.bufferSample.enabled`         | Boolean  | `false`   | Enables periodic buffer state sampling                                                                                                     |
 | `telemetry.bufferSample.includeRanges`   | Boolean  | `true`    | Includes buffered time ranges in the `mse.sample` payload                                                                                  |
 | `telemetry.decodingSample.enabled`       | Boolean  | `false`   | Enables periodic decoding quality sampling                                                                                                 |
-| `telemetry.playbackStateSample.enabled`  | Boolean  | `false`   | Enables periodic `networkState`, `paused` and `playbackRate` sampling                                                                      |
+| `telemetry.playbackStateSample.enabled`  | Boolean  | `false`   | Enables periodic `networkState`, `paused`, `playbackRate`, and bitrate sampling                                                            |
+| `telemetry.networkSample.enabled`        | Boolean  | `false`   | Enables periodic request counters, throughput, and segment metrics sampling                                                                |
+| `telemetry.timingSample.enabled`         | Boolean  | `false`   | Enables cumulative playback timing: `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs`                                                     |
 | `telemetry.sampleIntervalMs`             | Number   | `0`       | Sampling frequency in ms. When `0` (default), no automatic interval is started and only on-demand snapshots via `snapshot()` are available |
 | `telemetry.videoState.enabled`           | Boolean  | `false`   | Enables the `VideoEventObserver`                                                                                                           |
 | `telemetry.videoState.videoEvents`       | String[] | see below | List of `HTMLVideoElement` event names to observe. Defaults to the full set (see **VideoEventObserver**)                                   |
@@ -205,6 +213,7 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 | `request:start`          | `network`              | A network request was initiated                       |
 | `request:end`            | `network`              | A network request completed                           |
 | `request:error`          | `network`              | A network request failed                              |
+| `bitrate:init`           | `network`              | Initial quality variant is known (first segment loaded) |
 | `bitrate:change`         | `network`              | ABR algorithm switched to a different quality variant |
 | `drm:session:update`     | `network`              | A DRM session was updated                             |
 | `drm:expiration:updated` | `network`              | A DRM license expiration time was updated             |
@@ -234,7 +243,30 @@ Emitted once per tick by the `SamplerRegistry`. Each key is only present when th
     networkState:  2,        // HTMLVideoElement.networkState (0–3)
     paused:        false,    // whether the player is paused
     playbackRate:  1,        // current playback rate
-    currentTime:   10        // current playback position in seconds
+    currentTime:   10,       // current playback position in seconds
+    bitrateKbps:   4500,     // current ABR variant bitrate in kbps (null before first segment)
+    width:         1920,     // current variant horizontal resolution (null before first segment)
+    height:        1080,     // current variant vertical resolution (null before first segment)
+    switchesUp:    2,        // cumulative ABR upgrades since playback started
+    switchesDown:  0         // cumulative ABR downgrades since playback started
+  },
+  network: {
+    throughputEwmaMbps:    18.4, // exponentially weighted moving average throughput in Mbps
+    lastThroughputMbps:    20.1, // throughput of the last completed segment request
+    activeRequests:           1, // number of in-flight requests
+    segmentsLoaded:          42, // cumulative segments successfully loaded
+    segmentErrors:            0, // cumulative segment request failures
+    totalBytesKB:          8320, // cumulative bytes downloaded (segments only)
+    avgSegmentLoadTimeMs:   210, // average segment load time in ms (null before first segment)
+    licenseRequests:          1, // cumulative DRM license requests
+    licenseErrors:            0, // cumulative DRM license failures
+    fatalErrors:              0, // cumulative fatal adapter errors
+    drmExpirationTime:     null  // DRM license expiration timestamp (ms), null if not set
+  },
+  timing: {
+    timePlayingMs:  120000,  // cumulative ms in playing state
+    timeWaitingMs:    3200,  // cumulative ms in waiting/buffering state
+    joinTimeMs:        850   // ms from play() request to first playing event (null before first play)
   }
 }
 ```
@@ -272,6 +304,39 @@ new Clappr.Player({
       enabled:     true,                           // default: false
       videoEvents: ['waiting', 'stalled', 'error'] // default: full list above
     }
+  }
+})
+```
+
+## PlaybackTimingSampler
+
+The `PlaybackTimingSampler` accumulates the duration of each playback state by listening to native `HTMLVideoElement` events (`play`, `playing`, `waiting`). It is engine-agnostic and works with any playback backend.
+
+Enable via `telemetry.timingSample.enabled: true`. The data is exposed under the `timing` key of `mse.sample` and in the `snapshot` of every `media.event`:
+
+```javascript
+timing: {
+  timePlayingMs:  120000, // cumulative ms in playing state
+  timeWaitingMs:    3200, // cumulative ms in waiting/buffering state
+  joinTimeMs:        850  // ms from play() to first playing event (null until first play)
+}
+```
+
+### Derived QoE metrics
+
+| Metric | Formula | Industry reference |
+| --- | --- | --- |
+| Rebuffer ratio | `timeWaitingMs / timePlayingMs` | Mux, Conviva CIRR, NPAW Buffer Ratio |
+| Join time | `joinTimeMs` | ITU-T P.1203 (target: < 2 s) |
+
+### Configuration
+
+```javascript
+new Clappr.Player({
+  plugins: [ClapprTelemetry],
+  telemetry: {
+    timingSample:    { enabled: true },
+    sampleIntervalMs: 1000
   }
 })
 ```
