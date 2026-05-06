@@ -112,7 +112,25 @@ export default class ShakaNetworkAdapter {
     shakaPlayer.addEventListener(SHAKA_DRM_SESSION_UPDATE, this._onDrmSessionUpdate)
     shakaPlayer.addEventListener(SHAKA_EXPIRATION_UPDATED, this._onExpirationUpdated)
 
+    this._emitBitrateInit()
     return true
+  }
+
+  _emitBitrateInit() {
+    const activeTrack = this.shakaPlayer.getVariantTracks?.().find(t => t.active)
+    if (!activeTrack) return
+    emitTelemetry(
+      this.container,
+      EVENT_TYPES.BITRATE_INIT,
+      {
+        current: {
+          bitrate: activeTrack.bandwidth ?? null,
+          width: activeTrack.width ?? null,
+          height: activeTrack.height ?? null
+        }
+      },
+      TELEMETRY_SOURCES.NETWORK
+    )
   }
 
   detachFilters() {
@@ -170,7 +188,8 @@ export default class ShakaNetworkAdapter {
       kind: shakaKind(type),
       durationMs,
       bytes,
-      throughputMbps
+      throughputMbps,
+      throughputEwmaMbps: this.shakaPlayer != null ? this.shakaPlayer.getStats().estimatedBandwidth / 1e6 : null
     }, TELEMETRY_SOURCES.NETWORK)
   }
 

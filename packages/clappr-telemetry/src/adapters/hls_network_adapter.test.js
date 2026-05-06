@@ -614,6 +614,34 @@ describe('HlsNetworkAdapter', () => {
       expect(adapter._previousLevel).toBe(1)
     })
 
+    it('emits BITRATE_INIT when currentLevel is already selected on attachFilters', () => {
+      const levels = [{ bitrate: 1200000, width: 1280, height: 720 }]
+      fakeHls = { ...createFakeHls(levels), currentLevel: 0 }
+      playback = createFakePlayback(fakeHls)
+      adapter.destroy()
+      adapter = new HlsNetworkAdapter(playback, container)
+      adapter.bind()
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.BITRATE_INIT,
+        { current: { bitrate: 1200000, width: 1280, height: 720 } },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('does not emit BITRATE_INIT when currentLevel is -1', () => {
+      const levels = [{ bitrate: 1200000, width: 1280, height: 720 }]
+      fakeHls = { ...createFakeHls(levels), currentLevel: -1 }
+      playback = createFakePlayback(fakeHls)
+      adapter.destroy()
+      adapter = new HlsNetworkAdapter(playback, container)
+      adapter.bind()
+
+      const initCall = emitTelemetry.mock.calls.find(([, type]) => type === EVENT_TYPES.BITRATE_INIT)
+      expect(initCall).toBeUndefined()
+    })
+
     it('registers LEVEL_SWITCHED listener on bind()', () => {
       adapter.bind()
 

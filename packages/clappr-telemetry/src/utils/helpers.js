@@ -6,9 +6,9 @@ const BITS_PER_BYTE = 8
 const BITS_PER_MEGABIT = 1e6
 const THROUGHPUT_DECIMAL_PLACES = 2
 
-export const round1 = v => Math.round(v * 10) / 10
+export const round1 = v => v != null ? Math.round(v * 10) / 10 : null
 export const round4 = v => Math.round(v * 10000) / 10000
-const round2 = v => Math.round(v * 100) / 100
+export const round2 = v => Math.round(v * 100) / 100
 
 /**
  * Creates a telemetry envelope with monotonic and wall-clock timestamps.
