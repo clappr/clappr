@@ -220,6 +220,7 @@
       <label class="toggle-label"><input type="checkbox" id="chk-buffer"> Buffer</label>
       <label class="toggle-label"><input type="checkbox" id="chk-decoding"> Decoding</label>
       <label class="toggle-label"><input type="checkbox" id="chk-playback-state"> Playback State</label>
+      <label class="toggle-label"><input type="checkbox" id="chk-network-sampler"> Network</label>
       <label class="toggle-label"><input type="checkbox" id="chk-audio"> Audio (custom)</label>
     </div>
 
@@ -340,6 +341,7 @@
           bufferSample:        { enabled: document.getElementById('chk-buffer').checked },
           decodingSample:      { enabled: document.getElementById('chk-decoding').checked },
           playbackStateSample: { enabled: document.getElementById('chk-playback-state').checked },
+          networkSample:       { enabled: document.getElementById('chk-network-sampler').checked },
           audioSample:         { enabled: document.getElementById('chk-audio').checked },
           sampleIntervalMs: Number(document.getElementById('sample-interval').value),
           videoState:       { enabled: document.getElementById('chk-video-state').checked },
@@ -446,7 +448,7 @@
       console.log('[SNAPSHOT]', telemetry.snapshot)
     }
 
-    ;['chk-network', 'chk-buffer', 'chk-decoding', 'chk-playback-state', 'chk-audio', 'chk-video-state'].forEach(id => {
+    ;['chk-network', 'chk-buffer', 'chk-decoding', 'chk-playback-state', 'chk-network-sampler', 'chk-audio', 'chk-video-state'].forEach(id => {
       document.getElementById(id).addEventListener('change', () => app.build())
     })
   </script>
