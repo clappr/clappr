@@ -133,6 +133,13 @@ export default class ShakaNetworkAdapter {
     )
   }
 
+  _getEwmaMbps() {
+    try {
+      const bw = this.shakaPlayer?.getStats().estimatedBandwidth ?? 0
+      return bw > 0 ? bw / 1e6 : null
+    } catch { return null }
+  }
+
   detachFilters() {
     if (!this.shakaPlayer) {
       return
@@ -189,7 +196,7 @@ export default class ShakaNetworkAdapter {
       durationMs,
       bytes,
       throughputMbps,
-      throughputEwmaMbps: this.shakaPlayer != null ? this.shakaPlayer.getStats().estimatedBandwidth / 1e6 : null
+      throughputEwmaMbps: this._getEwmaMbps()
     }, TELEMETRY_SOURCES.NETWORK)
   }
 

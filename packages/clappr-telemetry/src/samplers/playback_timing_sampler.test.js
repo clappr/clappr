@@ -45,10 +45,12 @@ describe('PlaybackTimingSampler', () => {
   })
 
   describe('constructor', () => {
-    it('registers listeners for play, playing and waiting on el', () => {
+    it('registers listeners for play, playing, waiting, pause and ended on el', () => {
       expect(el.addEventListener).toHaveBeenCalledWith('play', expect.any(Function), { passive: true })
       expect(el.addEventListener).toHaveBeenCalledWith('playing', expect.any(Function), { passive: true })
       expect(el.addEventListener).toHaveBeenCalledWith('waiting', expect.any(Function), { passive: true })
+      expect(el.addEventListener).toHaveBeenCalledWith('pause', expect.any(Function), { passive: true })
+      expect(el.addEventListener).toHaveBeenCalledWith('ended', expect.any(Function), { passive: true })
     })
 
     it('does not throw when playback has no el', () => {
@@ -58,14 +60,14 @@ describe('PlaybackTimingSampler', () => {
   })
 
   describe('playing', () => {
-    it('acumula timePlayingMs enquanto em playing', () => {
+    it('accumulates timePlayingMs while playing', () => {
       el._emit('play')
       el._emit('playing')
       jest.advanceTimersByTime(100)
       expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
-    it('registra joinTimeMs como intervalo entre play e primeiro playing', () => {
+    it('records joinTimeMs as the interval between play and the first playing event', () => {
       jest.setSystemTime(100)
       el._emit('play')
       jest.setSystemTime(350)
@@ -73,7 +75,7 @@ describe('PlaybackTimingSampler', () => {
       expect(sampler.collect().joinTimeMs).toBe(250)
     })
 
-    it('joinTimeMs não muda em playings subsequentes', () => {
+    it('joinTimeMs does not change on subsequent playing events', () => {
       jest.setSystemTime(100)
       el._emit('play')
       jest.setSystemTime(200)
@@ -84,18 +86,18 @@ describe('PlaybackTimingSampler', () => {
       expect(sampler.collect().joinTimeMs).toBe(100)
     })
 
-    it('joinTimeMs é null se playing ocorre sem play anterior', () => {
+    it('joinTimeMs is null if playing fires without a prior play event', () => {
       el._emit('playing')
       expect(sampler.collect().joinTimeMs).toBeNull()
     })
 
-    it('joinTimeMs é null antes de qualquer evento', () => {
+    it('joinTimeMs is null before any event', () => {
       expect(sampler.collect().joinTimeMs).toBeNull()
     })
   })
 
-  describe('waiting durante playing', () => {
-    it('acumula timeWaitingMs', () => {
+  describe('waiting while playing', () => {
+    it('accumulates timeWaitingMs', () => {
       el._emit('play')
       el._emit('playing')
       jest.advanceTimersByTime(100)
@@ -104,7 +106,7 @@ describe('PlaybackTimingSampler', () => {
       expect(sampler.collect().timeWaitingMs).toBe(50)
     })
 
-    it('para de acumular timePlayingMs durante waiting', () => {
+    it('stops accumulating timePlayingMs during waiting', () => {
       el._emit('play')
       el._emit('playing')
       jest.advanceTimersByTime(100)
@@ -114,7 +116,7 @@ describe('PlaybackTimingSampler', () => {
     })
   })
 
-  describe('sequência completa', () => {
+  describe('full sequence', () => {
     it('idle → playing(100ms) → waiting(50ms) → playing(200ms)', () => {
       el._emit('play')
       el._emit('playing')
@@ -131,7 +133,7 @@ describe('PlaybackTimingSampler', () => {
   })
 
   describe('collect() live', () => {
-    it('inclui tempo corrente do estado ativo sem precisar de novo evento', () => {
+    it('includes current state time without requiring a new event', () => {
       el._emit('play')
       el._emit('playing')
       jest.advanceTimersByTime(150)
@@ -140,27 +142,70 @@ describe('PlaybackTimingSampler', () => {
       expect(sampler.collect().timePlayingMs).toBe(200)
     })
 
-    it('retorna null após destroy', () => {
+    it('returns null after destroy', () => {
       sampler.destroy()
       expect(sampler.collect()).toBeNull()
     })
   })
 
+  describe('pause', () => {
+    it('stops accumulating timePlayingMs on pause', () => {
+      el._emit('play')
+      el._emit('playing')
+      jest.advanceTimersByTime(100)
+      el._emit('pause')
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timePlayingMs).toBe(100)
+    })
+
+    it('does not accumulate timeWaitingMs during pause', () => {
+      el._emit('play')
+      el._emit('playing')
+      el._emit('pause')
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timeWaitingMs).toBe(0)
+    })
+
+    it('resumes counting after playing event following pause', () => {
+      el._emit('play')
+      el._emit('playing')
+      jest.advanceTimersByTime(100)
+      el._emit('pause')
+      jest.advanceTimersByTime(200)
+      el._emit('playing')
+      jest.advanceTimersByTime(50)
+      expect(sampler.collect().timePlayingMs).toBe(150)
+    })
+  })
+
+  describe('ended', () => {
+    it('stops accumulating timePlayingMs on ended', () => {
+      el._emit('play')
+      el._emit('playing')
+      jest.advanceTimersByTime(100)
+      el._emit('ended')
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timePlayingMs).toBe(100)
+    })
+  })
+
   describe('destroy()', () => {
-    it('remove os três listeners do el', () => {
+    it('removes all five listeners from el', () => {
       sampler.destroy()
       expect(el.removeEventListener).toHaveBeenCalledWith('play', expect.any(Function))
       expect(el.removeEventListener).toHaveBeenCalledWith('playing', expect.any(Function))
       expect(el.removeEventListener).toHaveBeenCalledWith('waiting', expect.any(Function))
+      expect(el.removeEventListener).toHaveBeenCalledWith('pause', expect.any(Function))
+      expect(el.removeEventListener).toHaveBeenCalledWith('ended', expect.any(Function))
     })
 
-    it('ignora eventos após destroy', () => {
+    it('ignores events after destroy', () => {
       sampler.destroy()
       el._emit('playing')
       expect(sampler.collect()).toBeNull()
     })
 
-    it('é idempotente', () => {
+    it('is idempotent', () => {
       expect(() => { sampler.destroy(); sampler.destroy() }).not.toThrow()
     })
   })

@@ -231,8 +231,9 @@ export default class HlsNetworkAdapter {
         durationMs,
         bytes,
         throughputMbps: calculateThroughput(bytes, durationMs),
-        throughputEwmaMbps:
-          this.hlsInstance != null ? this.hlsInstance.bandwidthEstimate / 1e6 : null
+        throughputEwmaMbps: (this.hlsInstance?.bandwidthEstimate > 0)
+          ? this.hlsInstance.bandwidthEstimate / 1e6
+          : null
       },
       TELEMETRY_SOURCES.NETWORK
     )

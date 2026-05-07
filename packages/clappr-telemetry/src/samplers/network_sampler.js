@@ -21,19 +21,16 @@ export default class NetworkSampler {
     this._segmentsLoaded = 0
     this._segmentErrors = 0
     this._totalBytesKB = 0
-    this._currentBitrateKbps = null
-    this._currentWidth = null
-    this._currentHeight = null
-    this._switchesUp = 0
-    this._switchesDown = 0
     this._licenseRequests = 0
     this._licenseErrors = 0
     this._fatalErrors = 0
     this._totalSegmentLoadTimeMs = 0
     this._drmExpirationTime = null
 
-    this._onTrace = this._onTrace.bind(this)
-    container.on(Events.Custom.CONTAINER_TELEMETRY_TRACE, this._onTrace)
+    if (container) {
+      this._onTrace = this._onTrace.bind(this)
+      container.on(Events.Custom.CONTAINER_TELEMETRY_TRACE, this._onTrace)
+    }
   }
 
   _onTrace({ type, data }) {
@@ -82,6 +79,24 @@ export default class NetworkSampler {
     this._drmExpirationTime = expirationTime ?? null
   }
 
+  /**
+   * Collects the current network metrics snapshot.
+   * Returns `null` after `destroy()` is called.
+   *
+   * @returns {{
+   *   throughputEwmaMbps: number|null,
+   *   lastThroughputMbps: number|null,
+   *   activeRequests: number,
+   *   segmentsLoaded: number,
+   *   segmentErrors: number,
+   *   totalBytesKB: number,
+   *   licenseRequests: number,
+   *   licenseErrors: number,
+   *   fatalErrors: number,
+   *   avgSegmentLoadTimeMs: number|null,
+   *   drmExpirationTime: number|null
+   * } | null}
+   */
   collect() {
     if (this._destroyed) return null
     return {
@@ -100,6 +115,7 @@ export default class NetworkSampler {
   }
 
   destroy() {
+    if (this._destroyed) return
     if (this._container) {
       this._container.off(Events.Custom.CONTAINER_TELEMETRY_TRACE, this._onTrace)
     }
