@@ -20,12 +20,16 @@ export default class PlaybackTimingSampler {
     this._onPlay = this._onPlay.bind(this)
     this._onPlaying = this._onPlaying.bind(this)
     this._onWaiting = this._onWaiting.bind(this)
+    this._onPause = this._onPause.bind(this)
+    this._onEnded = this._onEnded.bind(this)
 
     const el = playback?.el
     if (el) {
       el.addEventListener('play', this._onPlay, { passive: true })
       el.addEventListener('playing', this._onPlaying, { passive: true })
       el.addEventListener('waiting', this._onWaiting, { passive: true })
+      el.addEventListener('pause', this._onPause, { passive: true })
+      el.addEventListener('ended', this._onEnded, { passive: true })
     }
   }
 
@@ -56,6 +60,28 @@ export default class PlaybackTimingSampler {
     this._state = 'waiting'
   }
 
+  _onPause() {
+    if (this._destroyed) return
+    this._flush()
+    this._state = 'idle'
+  }
+
+  _onEnded() {
+    if (this._destroyed) return
+    this._flush()
+    this._state = 'idle'
+  }
+
+  /**
+   * Collects the current playback timing metrics, including live time in the active state.
+   * Returns `null` after `destroy()` is called.
+   *
+   * @returns {{
+   *   timePlayingMs: number,
+   *   timeWaitingMs: number,
+   *   joinTimeMs: number|null
+   * } | null}
+   */
   collect() {
     if (this._destroyed) return null
     const live = Date.now() - this._stateStartMs
@@ -73,6 +99,8 @@ export default class PlaybackTimingSampler {
       el.removeEventListener('play', this._onPlay)
       el.removeEventListener('playing', this._onPlaying)
       el.removeEventListener('waiting', this._onWaiting)
+      el.removeEventListener('pause', this._onPause)
+      el.removeEventListener('ended', this._onEnded)
     }
     this._destroyed = true
     this._playback = null

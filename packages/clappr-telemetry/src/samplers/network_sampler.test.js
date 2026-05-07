@@ -48,6 +48,10 @@ describe('NetworkSampler', () => {
         expect.any(Function)
       )
     })
+
+    it('does not throw when container is null', () => {
+      expect(() => new NetworkSampler(null, null)).not.toThrow()
+    })
   })
 
   describe('REQUEST_START', () => {
@@ -96,13 +100,13 @@ describe('NetworkSampler', () => {
       expect(sampler.collect().lastThroughputMbps).toBeNull()
     })
 
-    it('segment: acumula durationMs para avgSegmentLoadTimeMs', () => {
+    it('segment: accumulates durationMs into avgSegmentLoadTimeMs', () => {
       sampler._onTrace(trace(EVENT_TYPES.REQUEST_END, { kind: 'segment', bytes: 0, durationMs: 200 }))
       sampler._onTrace(trace(EVENT_TYPES.REQUEST_END, { kind: 'segment', bytes: 0, durationMs: 400 }))
       expect(sampler.collect().avgSegmentLoadTimeMs).toBe(300)
     })
 
-    it('avgSegmentLoadTimeMs é null antes do primeiro segmento', () => {
+    it('avgSegmentLoadTimeMs is null before the first segment', () => {
       expect(sampler.collect().avgSegmentLoadTimeMs).toBeNull()
     })
 
@@ -148,12 +152,12 @@ describe('NetworkSampler', () => {
   })
 
   describe('DRM_EXPIRATION_UPDATED', () => {
-    it('atualiza drmExpirationTime', () => {
+    it('updates drmExpirationTime', () => {
       sampler._onTrace(trace(EVENT_TYPES.DRM_EXPIRATION_UPDATED, { expirationTime: 1700000000000 }))
       expect(sampler.collect().drmExpirationTime).toBe(1700000000000)
     })
 
-    it('drmExpirationTime é null antes de qualquer evento DRM', () => {
+    it('drmExpirationTime is null before any DRM event', () => {
       expect(sampler.collect().drmExpirationTime).toBeNull()
     })
   })
@@ -178,6 +182,10 @@ describe('NetworkSampler', () => {
       sampler.destroy()
       sampler._onTrace(trace(EVENT_TYPES.REQUEST_START))
       expect(sampler.collect()).toBeNull()
+    })
+
+    it('is idempotent', () => {
+      expect(() => { sampler.destroy(); sampler.destroy() }).not.toThrow()
     })
   })
 })

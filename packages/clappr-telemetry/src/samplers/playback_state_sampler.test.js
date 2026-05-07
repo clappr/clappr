@@ -92,7 +92,7 @@ describe('PlaybackStateSampler', () => {
   })
 
   describe('BITRATE_INIT', () => {
-    it('define bitrateKbps, width e height', () => {
+    it('sets bitrateKbps, width and height', () => {
       sampler._onTrace(trace(EVENT_TYPES.BITRATE_INIT, { current: { bitrate: 2000000, width: 1920, height: 1080 } }))
       const result = sampler.collect()
       expect(result.bitrateKbps).toBe(2000)
@@ -100,13 +100,13 @@ describe('PlaybackStateSampler', () => {
       expect(result.height).toBe(1080)
     })
 
-    it('não conta switchesUp nem switchesDown', () => {
+    it('does not count switchesUp or switchesDown', () => {
       sampler._onTrace(trace(EVENT_TYPES.BITRATE_INIT, { current: { bitrate: 2000000 } }))
       expect(sampler.collect().switchesUp).toBe(0)
       expect(sampler.collect().switchesDown).toBe(0)
     })
 
-    it('define previousBitrateKbps para que BITRATE_CHANGE seguinte conte switch corretamente', () => {
+    it('sets previousBitrateKbps so the next BITRATE_CHANGE counts the switch correctly', () => {
       sampler._onTrace(trace(EVENT_TYPES.BITRATE_INIT, { current: { bitrate: 1000000 } }))
       sampler._onTrace(trace(EVENT_TYPES.BITRATE_CHANGE, { current: { bitrate: 2000000 } }))
       expect(sampler.collect().switchesUp).toBe(1)
@@ -116,7 +116,7 @@ describe('PlaybackStateSampler', () => {
   describe('BITRATE_CHANGE', () => {
     const bitrateChange = (current) => trace(EVENT_TYPES.BITRATE_CHANGE, { current })
 
-    it('atualiza bitrateKbps, width e height', () => {
+    it('updates bitrateKbps, width and height', () => {
       sampler._onTrace(bitrateChange({ bitrate: 3000000, width: 1280, height: 720 }))
       const result = sampler.collect()
       expect(result.bitrateKbps).toBe(3000)
@@ -124,25 +124,25 @@ describe('PlaybackStateSampler', () => {
       expect(result.height).toBe(720)
     })
 
-    it('incrementa switchesUp no aumento de bitrate', () => {
+    it('increments switchesUp on bitrate increase', () => {
       sampler._onTrace(bitrateChange({ bitrate: 1000000 }))
       sampler._onTrace(bitrateChange({ bitrate: 2000000 }))
       expect(sampler.collect().switchesUp).toBe(1)
     })
 
-    it('incrementa switchesDown na queda de bitrate', () => {
+    it('increments switchesDown on bitrate drop', () => {
       sampler._onTrace(bitrateChange({ bitrate: 2000000 }))
       sampler._onTrace(bitrateChange({ bitrate: 1000000 }))
       expect(sampler.collect().switchesDown).toBe(1)
     })
 
-    it('não conta switch no primeiro BITRATE_CHANGE', () => {
+    it('does not count a switch on the first BITRATE_CHANGE', () => {
       sampler._onTrace(bitrateChange({ bitrate: 1000000 }))
       expect(sampler.collect().switchesUp).toBe(0)
       expect(sampler.collect().switchesDown).toBe(0)
     })
 
-    it('ignora bitrate quando current.bitrate é null', () => {
+    it('ignores bitrate when current.bitrate is null', () => {
       sampler._onTrace(bitrateChange({ bitrate: null, width: 1280, height: 720 }))
       expect(sampler.collect().bitrateKbps).toBeNull()
       expect(sampler.collect().width).toBe(1280)

@@ -62,6 +62,22 @@ export default class PlaybackStateSampler {
     if (current?.height != null) this._currentHeight = current.height
   }
 
+  /**
+   * Collects the current playback state from the video element and ABR tracking.
+   * Returns `null` if the video element is not available or after `destroy()` is called.
+   *
+   * @returns {{
+   *   networkState: number,
+   *   paused: boolean,
+   *   playbackRate: number,
+   *   currentTime: number|null,
+   *   bitrateKbps: number|null,
+   *   width: number|null,
+   *   height: number|null,
+   *   switchesUp: number,
+   *   switchesDown: number
+   * } | null}
+   */
   collect() {
     if (this._destroyed) return null
     const el = this._playback?.el
@@ -81,6 +97,7 @@ export default class PlaybackStateSampler {
   }
 
   destroy() {
+    if (this._destroyed) return
     if (this._container) {
       this._container.off(Events.Custom.CONTAINER_TELEMETRY_TRACE, this._onTrace)
     }
