@@ -123,6 +123,26 @@ export const getBufferedRanges = (buffered) => {
  * @param {number} durationMs - Request duration in milliseconds
  * @returns {number} Throughput in Mbps (0 if duration is invalid)
  */
+export const parseVideoCodec = (codec) => {
+  if (!codec) return null
+  if (/^avc/.test(codec)) return 'H.264'
+  if (/^hvc1|^hev1/.test(codec)) return 'H.265'
+  if (/^av01/.test(codec)) return 'AV1'
+  if (/^vp09/.test(codec)) return 'VP9'
+  if (/^vp8/.test(codec)) return 'VP8'
+  return codec
+}
+
+export const parseAudioCodec = (codec) => {
+  if (!codec) return null
+  if (/^mp4a\.40/.test(codec)) return 'AAC'
+  if (codec === 'ac-3') return 'AC3'
+  if (codec === 'ec-3') return 'DD+'
+  if (codec === 'opus') return 'Opus'
+  if (codec === 'flac') return 'FLAC'
+  return codec
+}
+
 export const calculateThroughput = (bytes, durationMs) => {
   if (durationMs <= 0) return 0
 

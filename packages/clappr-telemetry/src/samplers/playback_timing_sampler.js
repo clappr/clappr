@@ -1,3 +1,6 @@
+import { Events } from '@clappr/core'
+import { EVENT_TYPES } from '../utils/constants'
+
 export default class PlaybackTimingSampler {
   static get name() { return 'timing-sampler' }
 
@@ -5,31 +8,43 @@ export default class PlaybackTimingSampler {
     return cfg?.timingSample?.enabled === true
   }
 
-  constructor(playback, _container) {
+  constructor(playback, container) {
     this._playback = playback
+    this._container = container
     this._destroyed = false
 
     this._state = 'idle'
     this._stateStartMs = Date.now()
 
+    this._sessionStartAt = Date.now()
+
     this._timePlayingMs = 0
     this._timeWaitingMs = 0
     this._joinTimeMs = null
+    this._timeToFirstFrameMs = null
     this._playRequestedAt = null
+    this._manifestLoadTimeMs = null
+    this._firstSegmentLoadTimeMs = null
 
-    this._onPlay = this._onPlay.bind(this)
+    this._onPlayIntent = this._onPlayIntent.bind(this)
     this._onPlaying = this._onPlaying.bind(this)
-    this._onWaiting = this._onWaiting.bind(this)
+    this._onBuffering = this._onBuffering.bind(this)
     this._onPause = this._onPause.bind(this)
     this._onEnded = this._onEnded.bind(this)
+    this._onStop = this._onStop.bind(this)
+    this._onTrace = this._onTrace.bind(this)
 
-    const el = playback?.el
-    if (el) {
-      el.addEventListener('play', this._onPlay, { passive: true })
-      el.addEventListener('playing', this._onPlaying, { passive: true })
-      el.addEventListener('waiting', this._onWaiting, { passive: true })
-      el.addEventListener('pause', this._onPause, { passive: true })
-      el.addEventListener('ended', this._onEnded, { passive: true })
+    if (playback) {
+      playback.on(Events.PLAYBACK_PLAY_INTENT, this._onPlayIntent)
+      playback.on(Events.PLAYBACK_PLAY, this._onPlaying)
+      playback.on(Events.PLAYBACK_BUFFERING, this._onBuffering)
+      playback.on(Events.PLAYBACK_PAUSE, this._onPause)
+      playback.on(Events.PLAYBACK_ENDED, this._onEnded)
+      playback.on(Events.PLAYBACK_STOP, this._onStop)
+    }
+
+    if (container) {
+      container.on(Events.Custom.CONTAINER_TELEMETRY_TRACE, this._onTrace)
     }
   }
 
@@ -40,21 +55,36 @@ export default class PlaybackTimingSampler {
     this._stateStartMs = Date.now()
   }
 
-  _onPlay() {
+  _onTrace({ type, data }) {
+    if (this._destroyed) return
+    if (type === EVENT_TYPES.REQUEST_END) {
+      if (data?.kind === 'manifest' && this._manifestLoadTimeMs === null) {
+        if (data.durationMs != null) this._manifestLoadTimeMs = data.durationMs
+      } else if (data?.kind === 'segment' && this._firstSegmentLoadTimeMs === null) {
+        if (data.durationMs != null) this._firstSegmentLoadTimeMs = data.durationMs
+      }
+    }
+  }
+
+  _onPlayIntent() {
     if (this._destroyed || this._playRequestedAt !== null) return
     this._playRequestedAt = Date.now()
   }
 
   _onPlaying() {
     if (this._destroyed) return
+    const now = Date.now()
     if (this._joinTimeMs === null && this._playRequestedAt !== null) {
-      this._joinTimeMs = Date.now() - this._playRequestedAt
+      this._joinTimeMs = now - this._playRequestedAt
+    }
+    if (this._timeToFirstFrameMs === null) {
+      this._timeToFirstFrameMs = now - this._sessionStartAt
     }
     this._flush()
     this._state = 'playing'
   }
 
-  _onWaiting() {
+  _onBuffering() {
     if (this._destroyed) return
     this._flush()
     this._state = 'waiting'
@@ -72,37 +102,40 @@ export default class PlaybackTimingSampler {
     this._state = 'idle'
   }
 
-  /**
-   * Collects the current playback timing metrics, including live time in the active state.
-   * Returns `null` after `destroy()` is called.
-   *
-   * @returns {{
-   *   timePlayingMs: number,
-   *   timeWaitingMs: number,
-   *   joinTimeMs: number|null
-   * } | null}
-   */
+  _onStop() {
+    if (this._destroyed) return
+    this._flush()
+    this._state = 'idle'
+  }
+
   collect() {
     if (this._destroyed) return null
     const live = Date.now() - this._stateStartMs
     return {
       timePlayingMs: this._timePlayingMs + (this._state === 'playing' ? live : 0),
       timeWaitingMs: this._timeWaitingMs + (this._state === 'waiting' ? live : 0),
-      joinTimeMs: this._joinTimeMs
+      joinTimeMs: this._joinTimeMs,
+      autoplayStartupTimeMs: this._playRequestedAt === null ? this._timeToFirstFrameMs : null,
+      manifestLoadTimeMs: this._manifestLoadTimeMs,
+      firstSegmentLoadTimeMs: this._firstSegmentLoadTimeMs
     }
   }
 
   destroy() {
     if (this._destroyed) return
-    const el = this._playback?.el
-    if (el) {
-      el.removeEventListener('play', this._onPlay)
-      el.removeEventListener('playing', this._onPlaying)
-      el.removeEventListener('waiting', this._onWaiting)
-      el.removeEventListener('pause', this._onPause)
-      el.removeEventListener('ended', this._onEnded)
+    if (this._playback) {
+      this._playback.off(Events.PLAYBACK_PLAY_INTENT, this._onPlayIntent)
+      this._playback.off(Events.PLAYBACK_PLAY, this._onPlaying)
+      this._playback.off(Events.PLAYBACK_BUFFERING, this._onBuffering)
+      this._playback.off(Events.PLAYBACK_PAUSE, this._onPause)
+      this._playback.off(Events.PLAYBACK_ENDED, this._onEnded)
+      this._playback.off(Events.PLAYBACK_STOP, this._onStop)
+    }
+    if (this._container) {
+      this._container.off(Events.Custom.CONTAINER_TELEMETRY_TRACE, this._onTrace)
     }
     this._destroyed = true
     this._playback = null
+    this._container = null
   }
 }

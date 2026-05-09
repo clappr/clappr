@@ -1,5 +1,5 @@
 import { Log, Events } from '@clappr/core'
-import { emitTelemetry, calculateThroughput, hashUrl } from '../utils'
+import { emitTelemetry, calculateThroughput, hashUrl, parseVideoCodec, parseAudioCodec } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
 // HLS.js event name constants — kept local to avoid bundling hls.js into this package
@@ -15,6 +15,13 @@ export const HLS_EVENTS = {
 }
 
 const HLS_NETWORK_ERROR_TYPE = 'networkError'
+
+const inferHlsContainer = (level) => {
+  const url = level.details?.fragments?.[0]?.relurl ?? ''
+  if (/\.mp4$|\.m4s$/i.test(url)) return 'HLS/fMP4'
+  if (/\.ts$/i.test(url)) return 'HLS/TS'
+  return 'HLS'
+}
 
 const MAX_PENDING_REQUESTS = 100
 const EVICTION_BATCH_SIZE = 20
@@ -129,6 +136,7 @@ export default class HlsNetworkAdapter {
     hls.on(HLS_EVENTS.ERROR, this._onHlsError)
     this.hlsInstance = hls
     this._emitBitrateInit()
+    this._emitStreamInfo()
   }
 
   _emitBitrateInit() {
@@ -149,6 +157,19 @@ export default class HlsNetworkAdapter {
       },
       TELEMETRY_SOURCES.NETWORK
     )
+  }
+
+  _emitStreamInfo() {
+    const hls = this.hlsInstance
+    if (!hls || hls.currentLevel < 0) return
+    const level = hls.levels?.[hls.currentLevel]
+    if (!level) return
+    emitTelemetry(this.container, EVENT_TYPES.STREAM_INFO, {
+      container: inferHlsContainer(level),
+      videoCodec: parseVideoCodec(level.videoCodec || null),
+      audioCodec: parseAudioCodec(level.audioCodec || null),
+      levelsCount: hls.levels.length
+    }, TELEMETRY_SOURCES.NETWORK)
   }
 
   detachFilters() {
@@ -388,6 +409,7 @@ export default class HlsNetworkAdapter {
     const currentLevelData = levels[data.level] ?? null
 
     this._previousLevel = data.level
+    this._emitStreamInfo()
 
     emitTelemetry(
       this.container,

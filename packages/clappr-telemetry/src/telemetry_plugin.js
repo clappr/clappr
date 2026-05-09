@@ -61,6 +61,16 @@ export default class TelemetryPlugin extends ContainerPlugin {
   onPlaybackRead(playback) {
     const telemetryConfig = this.container.options?.telemetry || {}
 
+    // Samplers must be bound before the adapter so events emitted during
+    // adapter.bind() (e.g. STREAM_INFO on Shaka's attachFilters) are captured.
+    if (this.samplerRegistry) this.samplerRegistry.destroy()
+    this.samplerRegistry = new SamplerRegistry(playback, this.container)
+    this.samplerRegistry.bind()
+
+    if (this.observerRegistry) this.observerRegistry.destroy()
+    this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
+    this.observerRegistry.bind()
+
     if (telemetryConfig.network?.enabled === true) {
       const AdapterClass = findNetworkAdapter(playback)
 
@@ -72,17 +82,6 @@ export default class TelemetryPlugin extends ContainerPlugin {
         this.adapter.bind()
       }
     }
-
-    // The scheduler is always instantiated regardless of which built-in samplers
-    // are enabled — external samplers registered via SamplerRegistry.register()
-    // must also be able to run without requiring the built-ins to be on.
-    if (this.samplerRegistry) this.samplerRegistry.destroy()
-    this.samplerRegistry = new SamplerRegistry(playback, this.container)
-    this.samplerRegistry.bind()
-
-    if (this.observerRegistry) this.observerRegistry.destroy()
-    this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
-    this.observerRegistry.bind()
   }
 
   destroy() {

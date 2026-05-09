@@ -655,4 +655,68 @@ describe('HlsNetworkAdapter', () => {
       expect(fakeHls.off).toHaveBeenCalledWith(HLS_EVENTS.LEVEL_SWITCHED, expect.any(Function))
     })
   })
+
+  describe('STREAM_INFO', () => {
+    it('emits STREAM_INFO on attachFilters when currentLevel is valid', () => {
+      const levels = [{ bitrate: 1200000, width: 1280, height: 720, videoCodec: 'avc1.640028', audioCodec: 'mp4a.40.2', frameRate: 30 }]
+      fakeHls = { ...createFakeHls(levels), currentLevel: 0 }
+      playback = createFakePlayback(fakeHls)
+      adapter.destroy()
+      adapter = new HlsNetworkAdapter(playback, container)
+      adapter.bind()
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.STREAM_INFO,
+        {
+          container: 'HLS',
+          videoCodec: 'H.264',
+          audioCodec: 'AAC',
+          levelsCount: 1,
+        },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('does not emit STREAM_INFO on attachFilters when currentLevel is -1', () => {
+      const levels = [{ bitrate: 1200000, videoCodec: 'avc1.640028', audioCodec: 'mp4a.40.2', frameRate: 30 }]
+      fakeHls = { ...createFakeHls(levels), currentLevel: -1 }
+      playback = createFakePlayback(fakeHls)
+      adapter.destroy()
+      adapter = new HlsNetworkAdapter(playback, container)
+      adapter.bind()
+
+      const call = emitTelemetry.mock.calls.find(([, type]) => type === EVENT_TYPES.STREAM_INFO)
+      expect(call).toBeUndefined()
+    })
+
+    it('emits STREAM_INFO on LEVEL_SWITCHED with parsed codec', () => {
+      const levels = [
+        { bitrate: 500000, videoCodec: 'avc1.42001f', audioCodec: 'mp4a.40.2', frameRate: 25 },
+        { bitrate: 2000000, videoCodec: 'hvc1.1.6.L93', audioCodec: 'mp4a.40.2', frameRate: 25 }
+      ]
+      fakeHls = { ...createFakeHls(levels), currentLevel: 0 }
+      playback = createFakePlayback(fakeHls)
+      adapter.destroy()
+      adapter = new HlsNetworkAdapter(playback, container)
+      adapter.bind()
+
+      const cb = getHlsHandler(fakeHls, HLS_EVENTS.LEVEL_SWITCHED)
+      jest.clearAllMocks()
+      fakeHls.currentLevel = 1
+      cb(null, { level: 1 })
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.STREAM_INFO,
+        {
+          container: 'HLS',
+          videoCodec: 'H.265',
+          audioCodec: 'AAC',
+          levelsCount: 2
+        },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+  })
 })

@@ -1,7 +1,9 @@
 jest.mock('../utils', () => ({
   emitTelemetry: jest.fn(),
   calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0)),
-  sanitizeLicenseUri: jest.requireActual('../utils').sanitizeLicenseUri
+  sanitizeLicenseUri: jest.requireActual('../utils').sanitizeLicenseUri,
+  parseVideoCodec: jest.requireActual('../utils').parseVideoCodec,
+  parseAudioCodec: jest.requireActual('../utils').parseAudioCodec
 }))
 
 import ShakaNetworkAdapter from './shaka_network_adapter'
@@ -22,7 +24,8 @@ const createFakeShakaPlayer = (engine) => ({
   keySystem: jest.fn(() => 'com.widevine.alpha'),
   drmInfo: jest.fn(() => ({ licenseServerUri: 'https://drm.example.com/wvs' })),
   getExpiration: jest.fn(() => Infinity),
-  getStats: jest.fn(() => ({ estimatedBandwidth: 5000000 }))
+  getStats: jest.fn(() => ({ estimatedBandwidth: 5000000 })),
+  getVariantTracks: jest.fn(() => [])
 })
 
 const createFakePlayback = (shakaPlayer = null) => ({
@@ -342,6 +345,41 @@ describe('ShakaNetworkAdapter', () => {
       expect(initCall).toBeUndefined()
     })
 
+    it('registers trackschanged listener on attachFilters', () => {
+      adapter.bind()
+
+      expect(fakeShakaPlayer.addEventListener)
+        .toHaveBeenCalledWith('trackschanged', expect.any(Function))
+    })
+
+    it('emits BITRATE_INIT when trackschanged fires (manifest loaded after bind)', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([])
+      adapter.bind()
+
+      const [, cb] = fakeShakaPlayer.addEventListener.mock.calls.find(([evt]) => evt === 'trackschanged')
+      jest.clearAllMocks()
+
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 1, active: true, bandwidth: 1500000, width: 1280, height: 720 }
+      ])
+      cb()
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.BITRATE_INIT,
+        { current: { bitrate: 1500000, width: 1280, height: 720 } },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('removes trackschanged listener on destroy', () => {
+      adapter.bind()
+      adapter.destroy()
+
+      expect(fakeShakaPlayer.removeEventListener)
+        .toHaveBeenCalledWith('trackschanged', expect.any(Function))
+    })
+
     it('registers variantchanged listener when attachFilters runs via shaka:ready', () => {
       playback.shakaPlayerInstance = null
       const lateAdapter = new ShakaNetworkAdapter(playback, container)
@@ -468,7 +506,10 @@ describe('ShakaNetworkAdapter', () => {
   // ─── requestFilter ──────────────────────────────────────────────────────────
 
   describe('requestFilter', () => {
-    beforeEach(() => adapter.bind())
+    beforeEach(() => {
+      adapter.bind()
+      jest.clearAllMocks()
+    })
 
     it('emits CONTAINER_TELEMETRY_REQUEST_START via emitTelemetry', () => {
       adapter.requestFilter(1, {})
@@ -546,6 +587,7 @@ describe('ShakaNetworkAdapter', () => {
 
     beforeEach(() => {
       adapter.bind()
+      jest.clearAllMocks()
       requestFilter = adapter.requestFilter.bind(adapter)
       responseFilter = adapter.responseFilter.bind(adapter)
     })
@@ -624,6 +666,168 @@ describe('ShakaNetworkAdapter', () => {
       responseFilter(1, { uri, data: new ArrayBuffer(512) })
 
       expect(adapter.pendingRequests.size).toBe(0)
+    })
+
+    it('segment response includes chunk with seq and variantId', () => {
+      requestFilter(1, makeRequest())
+      jest.clearAllMocks()
+
+      responseFilter(1, makeResponse())
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.chunk).toEqual({ seq: expect.any(Number), variantId: 0, start: 0, dur: 0 })
+    })
+
+    it('non-segment response has chunk=undefined', () => {
+      requestFilter(0, makeRequest())
+      jest.clearAllMocks()
+
+      responseFilter(0, makeResponse())
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.chunk).toBeUndefined()
+    })
+
+    it('seq increments across consecutive segment responses', () => {
+      responseFilter(1, makeResponse('https://example.com/a.ts'))
+      responseFilter(1, makeResponse('https://example.com/b.ts'))
+
+      const calls = emitTelemetry.mock.calls
+      expect(calls[0][2].chunk.seq).toBe(0)
+      expect(calls[1][2].chunk.seq).toBe(1)
+    })
+
+    it('seq resets to 0 after destroy and re-bind', () => {
+      responseFilter(1, makeResponse())
+      adapter.destroy()
+
+      playback.shakaPlayerInstance = fakeShakaPlayer
+      adapter = new ShakaNetworkAdapter(playback, container)
+      adapter.bind()
+      jest.clearAllMocks()
+      adapter.responseFilter(1, makeResponse())
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data.chunk.seq).toBe(0)
+    })
+  })
+
+  // ─── variant index caching ───────────────────────────────────────────────────
+
+  describe('variant index caching', () => {
+    it('initializes _currentVariantIdx=0 before any variant event', () => {
+      expect(adapter._currentVariantIdx).toBe(0)
+    })
+
+    it('sets _currentVariantIdx from the active track on attachFilters', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 10, active: false, bandwidth: 800000 },
+        { id: 11, active: true, bandwidth: 1500000 },
+        { id: 12, active: false, bandwidth: 3000000 }
+      ])
+      adapter.bind()
+
+      expect(adapter._currentVariantIdx).toBe(1)
+    })
+
+    it('updates _currentVariantIdx when variantchanged fires', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 10, active: false, bandwidth: 800000 },
+        { id: 11, active: false, bandwidth: 1500000 },
+        { id: 12, active: true, bandwidth: 3000000 }
+      ])
+      adapter.bind()
+
+      adapter._onVariantChanged({ newTrack: { id: 12, bandwidth: 3000000 } })
+
+      expect(adapter._currentVariantIdx).toBe(2)
+    })
+
+    it('keeps _currentVariantIdx=0 when variantchanged newTrack has no id', () => {
+      adapter.bind()
+      adapter._onVariantChanged({ newTrack: {} })
+
+      expect(adapter._currentVariantIdx).toBe(0)
+    })
+
+    it('resets _currentVariantIdx to 0 on destroy', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 10, active: false, bandwidth: 800000 },
+        { id: 11, active: true, bandwidth: 3000000 }
+      ])
+      adapter.bind()
+      adapter.destroy()
+
+      expect(adapter._currentVariantIdx).toBe(0)
+    })
+  })
+
+  // ─── STREAM_INFO ─────────────────────────────────────────────────────────────
+
+  describe('STREAM_INFO', () => {
+    it('emits STREAM_INFO on trackschanged with parsed fields', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([])
+      adapter.bind()
+
+      const [, cb] = fakeShakaPlayer.addEventListener.mock.calls.find(([evt]) => evt === 'trackschanged')
+      jest.clearAllMocks()
+
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 1, active: true, bandwidth: 2000000, videoCodec: 'hvc1.1.6.L93', audioCodec: 'ec-3' }
+      ])
+      cb()
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.STREAM_INFO,
+        {
+          container: 'DASH',
+          videoCodec: 'H.265',
+          audioCodec: 'DD+',
+          levelsCount: 1
+        },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('emits STREAM_INFO on variantchanged with updated active track', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 1, active: false, bandwidth: 800000, videoCodec: 'avc1.42001f', audioCodec: 'mp4a.40.2' },
+        { id: 2, active: true, bandwidth: 2000000, videoCodec: 'av01.0.04M.08', audioCodec: 'opus' }
+      ])
+      adapter.bind()
+      jest.clearAllMocks()
+
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 1, active: false, bandwidth: 800000, videoCodec: 'avc1.42001f', audioCodec: 'mp4a.40.2' },
+        { id: 2, active: true, bandwidth: 2000000, videoCodec: 'av01.0.04M.08', audioCodec: 'opus' }
+      ])
+      adapter._onVariantChanged({ oldTrack: { id: 1, bandwidth: 800000 }, newTrack: { id: 2, bandwidth: 2000000 } })
+
+      expect(emitTelemetry).toHaveBeenCalledWith(
+        container,
+        EVENT_TYPES.STREAM_INFO,
+        {
+          container: 'DASH',
+          videoCodec: 'AV1',
+          audioCodec: 'Opus',
+          levelsCount: 2
+        },
+        TELEMETRY_SOURCES.NETWORK
+      )
+    })
+
+    it('does not emit STREAM_INFO when no active track is found', () => {
+      fakeShakaPlayer.getVariantTracks.mockReturnValue([
+        { id: 1, active: false, bandwidth: 800000 }
+      ])
+      adapter.bind()
+      jest.clearAllMocks()
+
+      adapter._emitStreamInfo()
+
+      const call = emitTelemetry.mock.calls.find(([, type]) => type === EVENT_TYPES.STREAM_INFO)
+      expect(call).toBeUndefined()
     })
   })
 })

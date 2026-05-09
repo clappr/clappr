@@ -6,6 +6,7 @@ import DecodingSampler from './decoding_sampler'
 import PlaybackStateSampler from './playback_state_sampler'
 import NetworkSampler from './network_sampler'
 import PlaybackTimingSampler from './playback_timing_sampler'
+import StreamInfoSampler from './stream_info_sampler'
 
 const DISABLED_INTERVAL = 0
 
@@ -14,7 +15,8 @@ const _registry = new Map([
   ['decoding', DecodingSampler],
   ['playbackState', PlaybackStateSampler],
   ['network', NetworkSampler],
-  ['timing', PlaybackTimingSampler]
+  ['timing', PlaybackTimingSampler],
+  ['streamInfo', StreamInfoSampler],
 ])
 
 /**

@@ -6,5 +6,7 @@ export {
   sanitizeLicenseUri,
   hashUrl,
   getBufferAhead,
-  getBufferedRanges
+  getBufferedRanges,
+  parseVideoCodec,
+  parseAudioCodec
 } from './helpers'
