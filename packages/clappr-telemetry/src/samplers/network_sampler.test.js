@@ -162,6 +162,157 @@ describe('NetworkSampler', () => {
     })
   })
 
+  describe('segmentHistory', () => {
+    const seg = (overrides = {}) => trace(EVENT_TYPES.REQUEST_END, {
+      kind: 'segment', bytes: 1024, durationMs: 200,
+      chunk: { seq: 1, variantId: 0, start: 0, dur: 4 },
+      ...overrides
+    })
+
+    it('starts empty', () => {
+      expect(sampler.collect().segmentHistory).toEqual([])
+    })
+
+    it('records a segment entry on REQUEST_END', () => {
+      sampler._onTrace(seg({ chunk: { seq: 3, variantId: 1, start: 8, dur: 4 }, durationMs: 150, bytes: 2048 }))
+      const [entry] = sampler.collect().segmentHistory
+      expect(entry).toEqual({ seq: 3, variantId: 1, start: 8, dur: 4, loadTimeMs: 150, bytes: 2048, ok: true })
+    })
+
+    it('records an error entry on REQUEST_ERROR with chunk', () => {
+      sampler._onTrace(trace(EVENT_TYPES.REQUEST_ERROR, {
+        kind: 'segment', fatal: false,
+        chunk: { seq: 5, variantId: 2, start: 16, dur: 4 }
+      }))
+      const [entry] = sampler.collect().segmentHistory
+      expect(entry).toEqual({ seq: 5, variantId: 2, start: 16, dur: 4, loadTimeMs: 0, bytes: 0, ok: false })
+    })
+
+    it('ignores REQUEST_END segments without chunk', () => {
+      sampler._onTrace(trace(EVENT_TYPES.REQUEST_END, { kind: 'segment', bytes: 0 }))
+      expect(sampler.collect().segmentHistory).toEqual([])
+    })
+
+    it('ignores REQUEST_END segments with seq=null (init segments)', () => {
+      sampler._onTrace(trace(EVENT_TYPES.REQUEST_END, {
+        kind: 'segment', bytes: 0,
+        chunk: { seq: null, variantId: 0, start: 0, dur: 0 }
+      }))
+      expect(sampler.collect().segmentHistory).toEqual([])
+    })
+
+    it('does not record history for non-segment kinds', () => {
+      sampler._onTrace(trace(EVENT_TYPES.REQUEST_END, {
+        kind: 'manifest', bytes: 512, chunk: { seq: 1, variantId: 0, start: 0, dur: 4 }
+      }))
+      expect(sampler.collect().segmentHistory).toEqual([])
+    })
+
+    it('caps at SEGMENT_HISTORY_SIZE dropping oldest', () => {
+      for (let i = 0; i < 13; i++) {
+        sampler._onTrace(seg({ chunk: { seq: i, variantId: 0, start: i * 4, dur: 4 } }))
+      }
+      const history = sampler.collect().segmentHistory
+      expect(history.length).toBe(10)
+      expect(history[0].seq).toBe(3)
+      expect(history[9].seq).toBe(12)
+    })
+
+    it('collect() returns a snapshot copy (mutations do not affect internal state)', () => {
+      sampler._onTrace(seg())
+      const h = sampler.collect().segmentHistory
+      h.push({ seq: 99 })
+      expect(sampler.collect().segmentHistory.length).toBe(1)
+    })
+  })
+
+  describe('networkQuality', () => {
+    const emitSegment = (s, throughputEwmaMbps) =>
+      s._onTrace(trace(EVENT_TYPES.REQUEST_END, { kind: 'segment', throughputEwmaMbps, throughputMbps: throughputEwmaMbps, durationMs: 100, bytes: 1000 }))
+
+    it('is null before any segment', () => {
+      expect(sampler.collect().networkQuality).toBeNull()
+    })
+
+    it("is excellent when EWMA > 25", () => {
+      emitSegment(sampler, 30)
+      expect(sampler.collect().networkQuality).toEqual({ label: 'excellent', score: 4 })
+    })
+
+    it("is good when EWMA is between 10 and 25", () => {
+      emitSegment(sampler, 15)
+      expect(sampler.collect().networkQuality).toEqual({ label: 'good', score: 3 })
+    })
+
+    it("is fair when EWMA is between 4 and 10", () => {
+      emitSegment(sampler, 6)
+      expect(sampler.collect().networkQuality).toEqual({ label: 'fair', score: 2 })
+    })
+
+    it("is poor when EWMA is between 1.5 and 4", () => {
+      emitSegment(sampler, 2)
+      expect(sampler.collect().networkQuality).toEqual({ label: 'poor', score: 1 })
+    })
+
+    it("is critical when EWMA < 1.5", () => {
+      emitSegment(sampler, 1)
+      expect(sampler.collect().networkQuality).toEqual({ label: 'critical', score: 0 })
+    })
+  })
+
+  describe('networkAdequacy', () => {
+    const emitSegment = (s, throughputEwmaMbps) =>
+      s._onTrace(trace(EVENT_TYPES.REQUEST_END, { kind: 'segment', throughputEwmaMbps, throughputMbps: throughputEwmaMbps, durationMs: 100, bytes: 1000 }))
+    const emitBitrate = (s, bitrateKbps) =>
+      s._onTrace(trace(EVENT_TYPES.BITRATE_INIT, { current: { bitrate: bitrateKbps * 1000 } }))
+
+    it('is null before any segment', () => {
+      expect(sampler.collect().networkAdequacy).toBeNull()
+    })
+
+    it('is null when bitrate has not arrived yet', () => {
+      emitSegment(sampler, 10)
+      expect(sampler.collect().networkAdequacy).toBeNull()
+    })
+
+    it("is excellent when ratio > 3", () => {
+      emitBitrate(sampler, 2000)
+      emitSegment(sampler, 10)
+      expect(sampler.collect().networkAdequacy).toEqual({ label: 'excellent', score: 4 })
+    })
+
+    it("is good when ratio is between 2 and 3", () => {
+      emitBitrate(sampler, 4000)
+      emitSegment(sampler, 10)
+      expect(sampler.collect().networkAdequacy).toEqual({ label: 'good', score: 3 })
+    })
+
+    it("is fair when ratio is between 1.5 and 2", () => {
+      emitBitrate(sampler, 6000)
+      emitSegment(sampler, 10)
+      expect(sampler.collect().networkAdequacy).toEqual({ label: 'fair', score: 2 })
+    })
+
+    it("is poor when ratio is between 1 and 1.5", () => {
+      emitBitrate(sampler, 8000)
+      emitSegment(sampler, 10)
+      expect(sampler.collect().networkAdequacy).toEqual({ label: 'poor', score: 1 })
+    })
+
+    it("is critical when ratio < 1", () => {
+      emitBitrate(sampler, 15000)
+      emitSegment(sampler, 10)
+      expect(sampler.collect().networkAdequacy).toEqual({ label: 'critical', score: 0 })
+    })
+
+    it('updates when BITRATE_CHANGE fires', () => {
+      emitBitrate(sampler, 2000)
+      emitSegment(sampler, 10)
+      sampler._onTrace(trace(EVENT_TYPES.BITRATE_CHANGE, { current: { bitrate: 15000 * 1000 } }))
+      expect(sampler.collect().networkAdequacy).toEqual({ label: 'critical', score: 0 })
+    })
+  })
+
   describe('collect()', () => {
     it('returns null after destroy', () => {
       sampler.destroy()

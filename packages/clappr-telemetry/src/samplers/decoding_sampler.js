@@ -84,8 +84,8 @@ export default class DecodingSampler {
       return null
     }
 
-    const totalFramesInInterval = framesDecodedInInterval + framesDroppedInInterval
-    const dropRatio = totalFramesInInterval > 0 ? framesDroppedInInterval / totalFramesInInterval : 0
+    const totalFrames = quality.totalVideoFrames + quality.droppedVideoFrames
+    const dropRatio = totalFrames > 0 ? quality.droppedVideoFrames / totalFrames : 0
 
     return {
       decodedFps: round1(framesDecodedInInterval / elapsedSec),

@@ -2,6 +2,31 @@ import { Events } from '@clappr/core'
 import { round1 } from '../utils/helpers'
 import { EVENT_TYPES } from '../utils/constants'
 
+const SEGMENT_HISTORY_SIZE = 10
+
+const QUALITY_SCORE = { excellent: 4, good: 3, fair: 2, poor: 1, critical: 0 }
+
+const quality = (label) => ({ label, score: QUALITY_SCORE[label] })
+
+function _classifyNetworkQuality(mbps) {
+  if (mbps == null) return null
+  if (mbps > 25) return quality('excellent')
+  if (mbps > 10) return quality('good')
+  if (mbps > 4) return quality('fair')
+  if (mbps > 1.5) return quality('poor')
+  return quality('critical')
+}
+
+function _classifyNetworkAdequacy(mbps, bitrateKbps) {
+  if (mbps == null || bitrateKbps == null || bitrateKbps === 0) return null
+  const ratio = mbps / (bitrateKbps / 1000)
+  if (ratio > 3) return quality('excellent')
+  if (ratio > 2) return quality('good')
+  if (ratio > 1.5) return quality('fair')
+  if (ratio > 1) return quality('poor')
+  return quality('critical')
+}
+
 export default class NetworkSampler {
   static get name() {
     return 'network-sampler'
@@ -26,6 +51,9 @@ export default class NetworkSampler {
     this._fatalErrors = 0
     this._totalSegmentLoadTimeMs = 0
     this._drmExpirationTime = null
+    this._currentBitrateKbps = null
+    this._lastSegmentBytes = null
+    this._segmentHistory = []
 
     if (container) {
       this._onTrace = this._onTrace.bind(this)
@@ -48,6 +76,12 @@ export default class NetworkSampler {
       case EVENT_TYPES.DRM_EXPIRATION_UPDATED:
         this._onDrmExpirationUpdated(data)
         break
+      case EVENT_TYPES.BITRATE_INIT:
+      case EVENT_TYPES.BITRATE_CHANGE:
+        if (data?.current?.bitrate != null) {
+          this._currentBitrateKbps = data.current.bitrate / 1000
+        }
+        break
     }
   }
 
@@ -61,8 +95,21 @@ export default class NetworkSampler {
       if (data.throughputEwmaMbps != null) this._throughputEwmaMbps = data.throughputEwmaMbps
       if (data.throughputMbps != null) this._lastThroughputMbps = data.throughputMbps
       this._segmentsLoaded++
+      this._lastSegmentBytes = data.bytes ?? null
       this._totalBytesKB += (data.bytes ?? 0) / 1024
       this._totalSegmentLoadTimeMs += data.durationMs ?? 0
+      const chunk = data.chunk
+      if (chunk?.seq != null) {
+        this._pushSegment({
+          seq: chunk.seq,
+          variantId: chunk.variantId,
+          start: round1(chunk.start),
+          dur: round1(chunk.dur),
+          loadTimeMs: Math.round(data.durationMs ?? 0),
+          bytes: data.bytes ?? 0,
+          ok: true
+        })
+      }
     } else if (data.kind === 'license') {
       this._licenseRequests++
     }
@@ -71,8 +118,28 @@ export default class NetworkSampler {
   _onRequestError(data) {
     this._activeRequests = Math.max(0, this._activeRequests - 1)
     if (data.fatal === true) this._fatalErrors++
-    if (data.kind === 'segment') this._segmentErrors++
-    else if (data.kind === 'license') this._licenseErrors++
+    if (data.kind === 'segment') {
+      this._segmentErrors++
+      const chunk = data.chunk
+      if (chunk?.seq != null) {
+        this._pushSegment({
+          seq: chunk.seq,
+          variantId: chunk.variantId,
+          start: round1(chunk.start),
+          dur: round1(chunk.dur),
+          loadTimeMs: 0,
+          bytes: 0,
+          ok: false
+        })
+      }
+    } else if (data.kind === 'license') {
+      this._licenseErrors++
+    }
+  }
+
+  _pushSegment(entry) {
+    if (this._segmentHistory.length >= SEGMENT_HISTORY_SIZE) this._segmentHistory.shift()
+    this._segmentHistory.push(entry)
   }
 
   _onDrmExpirationUpdated({ expirationTime }) {
@@ -94,7 +161,10 @@ export default class NetworkSampler {
    *   licenseErrors: number,
    *   fatalErrors: number,
    *   avgSegmentLoadTimeMs: number|null,
-   *   drmExpirationTime: number|null
+   *   drmExpirationTime: number|null,
+   *   networkQuality: {label:string, score:number}|null,
+   *   networkAdequacy: {label:string, score:number}|null,
+   *   segmentHistory: Array<{seq:number, variantId:number, start:number, dur:number, loadTimeMs:number, bytes:number, ok:boolean}>
    * } | null}
    */
   collect() {
@@ -110,7 +180,11 @@ export default class NetworkSampler {
       licenseErrors: this._licenseErrors,
       fatalErrors: this._fatalErrors,
       avgSegmentLoadTimeMs: this._segmentsLoaded > 0 ? round1(this._totalSegmentLoadTimeMs / this._segmentsLoaded) : null,
-      drmExpirationTime: this._drmExpirationTime
+      drmExpirationTime: this._drmExpirationTime,
+      lastSegmentBytes: this._lastSegmentBytes,
+      networkQuality: _classifyNetworkQuality(this._throughputEwmaMbps),
+      networkAdequacy: _classifyNetworkAdequacy(this._throughputEwmaMbps, this._currentBitrateKbps),
+      segmentHistory: this._segmentHistory.slice()
     }
   }
 

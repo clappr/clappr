@@ -112,5 +112,13 @@ export const EVENT_TYPES = {
    *
    * @event MEDIA_EVENT
    */
-  MEDIA_EVENT: 'media.event'
+  MEDIA_EVENT: 'media.event',
+
+  /**
+   * Emitted when stream metadata is available (manifest load or variant change).
+   * Payload: `{ container, videoCodec, audioCodec, levelsCount }`
+   *
+   * @event STREAM_INFO
+   */
+  STREAM_INFO: 'stream:info'
 }

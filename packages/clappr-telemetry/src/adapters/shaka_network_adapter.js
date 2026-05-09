@@ -1,10 +1,11 @@
 import { Log } from '@clappr/core'
-import { emitTelemetry, calculateThroughput, sanitizeLicenseUri } from '../utils'
+import { emitTelemetry, calculateThroughput, sanitizeLicenseUri, parseVideoCodec, parseAudioCodec } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
 // Shaka Player native event names
 const SHAKA_READY = 'shaka:ready'
 const SHAKA_ERROR = 'error'
+const SHAKA_TRACKS_CHANGED = 'trackschanged'
 const SHAKA_VARIANT_CHANGED = 'variantchanged'
 const SHAKA_DRM_SESSION_UPDATE = 'drmsessionupdate'
 const SHAKA_EXPIRATION_UPDATED = 'expirationupdated'
@@ -20,6 +21,11 @@ const SHAKA_KIND_MAP = {
 }
 
 const shakaKind = (type) => SHAKA_KIND_MAP[type] ?? 'unknown'
+
+function variantIndex(tracks, targetId) {
+  const sorted = [...tracks].sort((a, b) => a.bandwidth - b.bandwidth)
+  return Math.max(sorted.findIndex(t => t.id === targetId), 0)
+}
 
 /**
  * Telemetry adapter for Shaka Player.
@@ -44,11 +50,14 @@ export default class ShakaNetworkAdapter {
     this.pendingRequests = new Map()
     this._isBound = false
     this._lastDrmSessionHash = null
+    this._segSeq = 0
+    this._currentVariantIdx = 0
 
     this.requestFilter = this.requestFilter.bind(this)
     this.responseFilter = this.responseFilter.bind(this)
     this._onShakaReady = this._onShakaReady.bind(this)
     this._onShakaError = this._onShakaError.bind(this)
+    this._onTracksChanged = this._onTracksChanged.bind(this)
     this._onVariantChanged = this._onVariantChanged.bind(this)
     this._onDrmSessionUpdate = this._onDrmSessionUpdate.bind(this)
     this._onExpirationUpdated = this._onExpirationUpdated.bind(this)
@@ -97,6 +106,11 @@ export default class ShakaNetworkAdapter {
     this.pendingRequests.clear()
   }
 
+  _onTracksChanged() {
+    this._emitBitrateInit()
+    this._emitStreamInfo()
+  }
+
   attachFilters(shakaPlayer) {
     const networkEngine = shakaPlayer.getNetworkingEngine()
 
@@ -108,17 +122,36 @@ export default class ShakaNetworkAdapter {
     networkEngine.registerRequestFilter(this.requestFilter)
     networkEngine.registerResponseFilter(this.responseFilter)
     shakaPlayer.addEventListener(SHAKA_ERROR, this._onShakaError)
+    shakaPlayer.addEventListener(SHAKA_TRACKS_CHANGED, this._onTracksChanged)
     shakaPlayer.addEventListener(SHAKA_VARIANT_CHANGED, this._onVariantChanged)
     shakaPlayer.addEventListener(SHAKA_DRM_SESSION_UPDATE, this._onDrmSessionUpdate)
     shakaPlayer.addEventListener(SHAKA_EXPIRATION_UPDATED, this._onExpirationUpdated)
 
     this._emitBitrateInit()
+    this._emitStreamInfo()
+    this._emitManifestDuration()
     return true
   }
 
+  _emitManifestDuration() {
+    // Clappr notifies TelemetryPlugin only via CONTAINER_READY, which fires
+    // after DashShakaPlayback has already called shakaPlayer.load(src). The
+    // manifest is fetched during load(), so by the time we reach this point
+    // and register the network filters, the manifest request is already done
+    // and its duration cannot be measured. Fixing this would require
+    // DashShakaPlayback to expose an event before calling load(), so filters
+    // could be registered before the manifest is fetched.
+    emitTelemetry(this.container, EVENT_TYPES.REQUEST_END, {
+      kind: 'manifest',
+      durationMs: null
+    }, TELEMETRY_SOURCES.NETWORK)
+  }
+
   _emitBitrateInit() {
-    const activeTrack = this.shakaPlayer.getVariantTracks?.().find(t => t.active)
+    const tracks = this.shakaPlayer.getVariantTracks?.() ?? []
+    const activeTrack = tracks.find(t => t.active)
     if (!activeTrack) return
+    this._currentVariantIdx = variantIndex(tracks, activeTrack.id)
     emitTelemetry(
       this.container,
       EVENT_TYPES.BITRATE_INIT,
@@ -133,11 +166,21 @@ export default class ShakaNetworkAdapter {
     )
   }
 
+  _emitStreamInfo() {
+    const tracks = this.shakaPlayer?.getVariantTracks?.() ?? []
+    const active = tracks.find(t => t.active)
+    if (!active) return
+    emitTelemetry(this.container, EVENT_TYPES.STREAM_INFO, {
+      container: active.videoMimeType?.split('/')?.[1]?.toUpperCase() ?? 'DASH',
+      videoCodec: parseVideoCodec(active.videoCodec ?? null),
+      audioCodec: parseAudioCodec(active.audioCodec ?? null),
+      levelsCount: tracks.length,
+    }, TELEMETRY_SOURCES.NETWORK)
+  }
+
   _getEwmaMbps() {
-    try {
-      const bw = this.shakaPlayer?.getStats().estimatedBandwidth ?? 0
-      return bw > 0 ? bw / 1e6 : null
-    } catch { return null }
+    const bw = this.shakaPlayer?.getStats?.().estimatedBandwidth ?? 0
+    return bw > 0 ? bw / 1e6 : null
   }
 
   detachFilters() {
@@ -146,6 +189,7 @@ export default class ShakaNetworkAdapter {
     }
 
     this.shakaPlayer.removeEventListener(SHAKA_ERROR, this._onShakaError)
+    this.shakaPlayer.removeEventListener(SHAKA_TRACKS_CHANGED, this._onTracksChanged)
     this.shakaPlayer.removeEventListener(SHAKA_VARIANT_CHANGED, this._onVariantChanged)
     this.shakaPlayer.removeEventListener(SHAKA_DRM_SESSION_UPDATE, this._onDrmSessionUpdate)
     this.shakaPlayer.removeEventListener(SHAKA_EXPIRATION_UPDATED, this._onExpirationUpdated)
@@ -190,13 +234,19 @@ export default class ShakaNetworkAdapter {
     const durationMs = startT != null ? performance.now() - startT : 0
     const bytes = response.data?.byteLength ?? 0
     const throughputMbps = calculateThroughput(bytes, durationMs)
+    const kind = shakaKind(type)
+
+    const chunk = kind === 'segment'
+      ? { seq: this._segSeq++, variantId: this._currentVariantIdx, start: 0, dur: 0 }
+      : undefined
 
     emitTelemetry(this.container, EVENT_TYPES.REQUEST_END, {
-      kind: shakaKind(type),
+      kind,
       durationMs,
       bytes,
       throughputMbps,
-      throughputEwmaMbps: this._getEwmaMbps()
+      throughputEwmaMbps: this._getEwmaMbps(),
+      chunk
     }, TELEMETRY_SOURCES.NETWORK)
   }
 
@@ -212,6 +262,11 @@ export default class ShakaNetworkAdapter {
   _onVariantChanged(event) {
     const oldTrack = event.oldTrack ?? {}
     const newTrack = event.newTrack ?? {}
+    const tracks = this.shakaPlayer?.getVariantTracks?.() ?? []
+    if (tracks.length && newTrack.id != null) {
+      this._currentVariantIdx = variantIndex(tracks, newTrack.id)
+    }
+    this._emitStreamInfo()
     emitTelemetry(this.container, EVENT_TYPES.BITRATE_CHANGE, {
       previous: {
         bitrate: oldTrack.bandwidth ?? null,
@@ -267,5 +322,7 @@ export default class ShakaNetworkAdapter {
     this.shakaPlayer = null
     this._isBound = false
     this._lastDrmSessionHash = null
+    this._segSeq = 0
+    this._currentVariantIdx = 0
   }
 }

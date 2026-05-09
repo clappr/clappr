@@ -22,6 +22,13 @@ export const Events = {
   Custom: {},
   CONTAINER_READY: 'container:ready',
   CONTAINER_PLAY: 'container:play',
+  PLAYBACK_PLAY_INTENT: 'playback:play_intent',
+  PLAYBACK_READY: 'playback:ready',
+  PLAYBACK_PLAY: 'playback:play',
+  PLAYBACK_BUFFERING: 'playback:buffering',
+  PLAYBACK_PAUSE: 'playback:pause',
+  PLAYBACK_ENDED: 'playback:ended',
+  PLAYBACK_STOP: 'playback:stop',
   register
 }
 
@@ -37,4 +44,14 @@ export class ContainerPlugin {
   listenTo() {}
 
   destroy() {}
+}
+
+export class UIContainerPlugin extends ContainerPlugin {
+  get $el() {
+    return [{ querySelector: () => null, querySelectorAll: () => [] }]
+  }
+
+  html() { return this }
+
+  append() { return this }
 }

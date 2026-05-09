@@ -1,25 +1,31 @@
+import { Events } from '@clappr/core'
 import PlaybackTimingSampler from './playback_timing_sampler'
 
-const makeEl = () => {
+const makePlayback = () => {
   const listeners = {}
   return {
-    addEventListener: jest.fn((event, handler) => { listeners[event] = handler }),
-    removeEventListener: jest.fn((event, handler) => { if (listeners[event] === handler) delete listeners[event] }),
-    _emit: (event) => listeners[event]?.()
+    on: jest.fn((event, handler) => { listeners[event] = handler }),
+    off: jest.fn(),
+    _emit: (event, data) => listeners[event]?.(data)
   }
 }
 
-const makePlayback = (el) => ({ el })
+const makeContainer = () => ({
+  on: jest.fn(),
+  off: jest.fn()
+})
 
 describe('PlaybackTimingSampler', () => {
   let sampler
-  let el
+  let playback
+  let container
 
   beforeEach(() => {
     jest.useFakeTimers()
     jest.setSystemTime(0)
-    el = makeEl()
-    sampler = new PlaybackTimingSampler(makePlayback(el), null)
+    playback = makePlayback()
+    container = makeContainer()
+    sampler = new PlaybackTimingSampler(playback, container)
   })
 
   afterEach(() => {
@@ -45,97 +51,140 @@ describe('PlaybackTimingSampler', () => {
   })
 
   describe('constructor', () => {
-    it('registers listeners for play, playing, waiting, pause and ended on el', () => {
-      expect(el.addEventListener).toHaveBeenCalledWith('play', expect.any(Function), { passive: true })
-      expect(el.addEventListener).toHaveBeenCalledWith('playing', expect.any(Function), { passive: true })
-      expect(el.addEventListener).toHaveBeenCalledWith('waiting', expect.any(Function), { passive: true })
-      expect(el.addEventListener).toHaveBeenCalledWith('pause', expect.any(Function), { passive: true })
-      expect(el.addEventListener).toHaveBeenCalledWith('ended', expect.any(Function), { passive: true })
+    it('registers listeners on playback for all required events', () => {
+      expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_PLAY_INTENT, expect.any(Function))
+      expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_PLAY, expect.any(Function))
+      expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_BUFFERING, expect.any(Function))
+      expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_PAUSE, expect.any(Function))
+      expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_ENDED, expect.any(Function))
+      expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_STOP, expect.any(Function))
     })
 
-    it('does not throw when playback has no el', () => {
-      expect(() => new PlaybackTimingSampler({ el: null }, null)).not.toThrow()
+    it('does not throw when playback is null', () => {
       expect(() => new PlaybackTimingSampler(null, null)).not.toThrow()
     })
   })
 
-  describe('playing', () => {
-    it('accumulates timePlayingMs while playing', () => {
-      el._emit('play')
-      el._emit('playing')
+  describe('timePlayingMs', () => {
+    it('accumulates while playing', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
       jest.advanceTimersByTime(100)
       expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
-    it('records joinTimeMs as the interval between play and the first playing event', () => {
-      jest.setSystemTime(100)
-      el._emit('play')
-      jest.setSystemTime(350)
-      el._emit('playing')
-      expect(sampler.collect().joinTimeMs).toBe(250)
+    it('stops accumulating on pause', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
+      jest.advanceTimersByTime(100)
+      playback._emit(Events.PLAYBACK_PAUSE)
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
-    it('joinTimeMs does not change on subsequent playing events', () => {
-      jest.setSystemTime(100)
-      el._emit('play')
-      jest.setSystemTime(200)
-      el._emit('playing')
-      jest.setSystemTime(500)
-      el._emit('waiting')
-      el._emit('playing')
-      expect(sampler.collect().joinTimeMs).toBe(100)
+    it('stops accumulating on ended', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
+      jest.advanceTimersByTime(100)
+      playback._emit(Events.PLAYBACK_ENDED)
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
-    it('joinTimeMs is null if playing fires without a prior play event', () => {
-      el._emit('playing')
-      expect(sampler.collect().joinTimeMs).toBeNull()
+    it('stops accumulating during buffering', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
+      jest.advanceTimersByTime(100)
+      playback._emit(Events.PLAYBACK_BUFFERING)
+      jest.advanceTimersByTime(50)
+      expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
-    it('joinTimeMs is null before any event', () => {
-      expect(sampler.collect().joinTimeMs).toBeNull()
+    it('resumes after buffering', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
+      jest.advanceTimersByTime(100)
+      playback._emit(Events.PLAYBACK_BUFFERING)
+      jest.advanceTimersByTime(50)
+      playback._emit(Events.PLAYBACK_PLAY)
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timePlayingMs).toBe(300)
     })
   })
 
-  describe('waiting while playing', () => {
-    it('accumulates timeWaitingMs', () => {
-      el._emit('play')
-      el._emit('playing')
+  describe('timeWaitingMs', () => {
+    it('accumulates during buffering', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
       jest.advanceTimersByTime(100)
-      el._emit('waiting')
+      playback._emit(Events.PLAYBACK_BUFFERING)
       jest.advanceTimersByTime(50)
       expect(sampler.collect().timeWaitingMs).toBe(50)
     })
 
-    it('stops accumulating timePlayingMs during waiting', () => {
-      el._emit('play')
-      el._emit('playing')
-      jest.advanceTimersByTime(100)
-      el._emit('waiting')
-      jest.advanceTimersByTime(50)
-      expect(sampler.collect().timePlayingMs).toBe(100)
+    it('does not accumulate during pause', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
+      playback._emit(Events.PLAYBACK_PAUSE)
+      jest.advanceTimersByTime(200)
+      expect(sampler.collect().timeWaitingMs).toBe(0)
     })
   })
 
-  describe('full sequence', () => {
-    it('idle → playing(100ms) → waiting(50ms) → playing(200ms)', () => {
-      el._emit('play')
-      el._emit('playing')
-      jest.advanceTimersByTime(100)
-      el._emit('waiting')
-      jest.advanceTimersByTime(50)
-      el._emit('playing')
-      jest.advanceTimersByTime(200)
+  describe('joinTimeMs', () => {
+    it('is the interval between PLAY_INTENT and first PLAY', () => {
+      jest.setSystemTime(100)
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      jest.setSystemTime(350)
+      playback._emit(Events.PLAYBACK_PLAY)
+      expect(sampler.collect().joinTimeMs).toBe(250)
+    })
 
-      const result = sampler.collect()
-      expect(result.timePlayingMs).toBe(300)
-      expect(result.timeWaitingMs).toBe(50)
+    it('does not change on subsequent PLAY events', () => {
+      jest.setSystemTime(100)
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      jest.setSystemTime(200)
+      playback._emit(Events.PLAYBACK_PLAY)
+      jest.setSystemTime(500)
+      playback._emit(Events.PLAYBACK_BUFFERING)
+      playback._emit(Events.PLAYBACK_PLAY)
+      expect(sampler.collect().joinTimeMs).toBe(100)
+    })
+
+    it('is null when PLAY fires without a prior PLAY_INTENT', () => {
+      playback._emit(Events.PLAYBACK_PLAY)
+      expect(sampler.collect().joinTimeMs).toBeNull()
+    })
+
+    it('is null before any event', () => {
+      expect(sampler.collect().joinTimeMs).toBeNull()
+    })
+  })
+
+  describe('autoplayStartupTimeMs', () => {
+    it('is null when there was a PLAY_INTENT', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
+      expect(sampler.collect().autoplayStartupTimeMs).toBeNull()
+    })
+
+    it('equals time since session start when there was no PLAY_INTENT', () => {
+      jest.setSystemTime(0)
+      sampler = new PlaybackTimingSampler(playback, container)
+      jest.setSystemTime(2000)
+      playback._emit(Events.PLAYBACK_PLAY)
+      expect(sampler.collect().autoplayStartupTimeMs).toBe(2000)
+    })
+
+    it('is null before first PLAY fires', () => {
+      expect(sampler.collect().autoplayStartupTimeMs).toBeNull()
     })
   })
 
   describe('collect() live', () => {
     it('includes current state time without requiring a new event', () => {
-      el._emit('play')
-      el._emit('playing')
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
       jest.advanceTimersByTime(150)
       expect(sampler.collect().timePlayingMs).toBe(150)
       jest.advanceTimersByTime(50)
@@ -148,60 +197,36 @@ describe('PlaybackTimingSampler', () => {
     })
   })
 
-  describe('pause', () => {
-    it('stops accumulating timePlayingMs on pause', () => {
-      el._emit('play')
-      el._emit('playing')
+  describe('full sequence: idle → playing(100ms) → waiting(50ms) → playing(200ms)', () => {
+    it('accumulates correctly', () => {
+      playback._emit(Events.PLAYBACK_PLAY_INTENT)
+      playback._emit(Events.PLAYBACK_PLAY)
       jest.advanceTimersByTime(100)
-      el._emit('pause')
-      jest.advanceTimersByTime(200)
-      expect(sampler.collect().timePlayingMs).toBe(100)
-    })
-
-    it('does not accumulate timeWaitingMs during pause', () => {
-      el._emit('play')
-      el._emit('playing')
-      el._emit('pause')
-      jest.advanceTimersByTime(200)
-      expect(sampler.collect().timeWaitingMs).toBe(0)
-    })
-
-    it('resumes counting after playing event following pause', () => {
-      el._emit('play')
-      el._emit('playing')
-      jest.advanceTimersByTime(100)
-      el._emit('pause')
-      jest.advanceTimersByTime(200)
-      el._emit('playing')
+      playback._emit(Events.PLAYBACK_BUFFERING)
       jest.advanceTimersByTime(50)
-      expect(sampler.collect().timePlayingMs).toBe(150)
-    })
-  })
-
-  describe('ended', () => {
-    it('stops accumulating timePlayingMs on ended', () => {
-      el._emit('play')
-      el._emit('playing')
-      jest.advanceTimersByTime(100)
-      el._emit('ended')
+      playback._emit(Events.PLAYBACK_PLAY)
       jest.advanceTimersByTime(200)
-      expect(sampler.collect().timePlayingMs).toBe(100)
+
+      const result = sampler.collect()
+      expect(result.timePlayingMs).toBe(300)
+      expect(result.timeWaitingMs).toBe(50)
     })
   })
 
   describe('destroy()', () => {
-    it('removes all five listeners from el', () => {
+    it('unregisters all events from playback', () => {
       sampler.destroy()
-      expect(el.removeEventListener).toHaveBeenCalledWith('play', expect.any(Function))
-      expect(el.removeEventListener).toHaveBeenCalledWith('playing', expect.any(Function))
-      expect(el.removeEventListener).toHaveBeenCalledWith('waiting', expect.any(Function))
-      expect(el.removeEventListener).toHaveBeenCalledWith('pause', expect.any(Function))
-      expect(el.removeEventListener).toHaveBeenCalledWith('ended', expect.any(Function))
+      expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_PLAY_INTENT, expect.any(Function))
+      expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_PLAY, expect.any(Function))
+      expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_BUFFERING, expect.any(Function))
+      expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_PAUSE, expect.any(Function))
+      expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_ENDED, expect.any(Function))
+      expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_STOP, expect.any(Function))
     })
 
     it('ignores events after destroy', () => {
       sampler.destroy()
-      el._emit('playing')
+      playback._emit(Events.PLAYBACK_PLAY)
       expect(sampler.collect()).toBeNull()
     })
 
