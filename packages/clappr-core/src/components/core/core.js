@@ -15,6 +15,12 @@ import ErrorMixin from '../../base/error_mixin/error_mixin'
 import CoreStyle from './public/style.scss'
 import ResetStyle from './public/optional_reset.scss'
 
+function isFullscreenPolicyBlocked(error) {
+  if (!error) return false
+  const message = error.message || String(error)
+  return /disallowed by permissions policy|permissions policy|fullscreen is not allowed/i.test(message)
+}
+
 /**
  * The Core is responsible to manage Containers and the player state.
  * @class Core
@@ -337,16 +343,37 @@ export default class Core extends UIObject {
       const fullscreenEl = Browser.isiOS ? this.activePlaybackEl : this.el
       if (!fullscreenEl) return
 
-      (Browser.isSafari || Browser.isiOS) // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
-        ? Fullscreen.requestFullscreen(fullscreenEl)
-        : Fullscreen.requestFullscreen(fullscreenEl).then(
-          _ => _,
-          error => setTimeout(() => { // fixes the issue https://github.com/clappr/clappr/issues/1860
-            if (!this.isFullscreen()) throw new ReferenceError(error)
-          }, 600)
-        )
+      const addFullscreenClass = () => {
+        !Browser.isiOS && this.$el.addClass('fullscreen')
+      }
 
-      !Browser.isiOS && this.$el.addClass('fullscreen')
+      if (Browser.isSafari || Browser.isiOS) {
+        // Safari doesn't return a promise like the other browsers. See more in https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+        Fullscreen.requestFullscreen(fullscreenEl)
+        addFullscreenClass()
+      } else {
+        const requestResult = Fullscreen.requestFullscreen(fullscreenEl)
+        const promise =
+          requestResult != null && typeof requestResult.then === 'function'
+            ? requestResult
+            : Promise.resolve()
+
+        addFullscreenClass()
+
+        promise.then(
+          () => {},
+          (error) => {
+            setTimeout(() => {
+              // fixes the issue https://github.com/clappr/clappr/issues/1860
+              if (!this.isFullscreen()) {
+                this.$el.removeClass('fullscreen')
+                if (isFullscreenPolicyBlocked(error)) return
+                throw new ReferenceError(error.message || String(error))
+              }
+            }, 600)
+          }
+        )
+      }
     }
   }
 

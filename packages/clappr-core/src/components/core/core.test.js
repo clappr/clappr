@@ -163,6 +163,23 @@ describe('Core', function () {
           expect(core.$el.addClass).toHaveBeenCalledWith('fullscreen')
           delete core.el.requestFullscreen
         })
+
+        test('removes fullscreen class when requestFullscreen is blocked by permissions policy', async () => {
+          jest.useFakeTimers()
+          const policyError = new TypeError('Disallowed by permissions policy')
+          core.el.requestFullscreen = () => Promise.reject(policyError)
+          jest.spyOn(core.$el, 'removeClass')
+          jest.spyOn(core, 'isFullscreen').mockReturnValue(false)
+
+          core.toggleFullscreen()
+
+          await Promise.resolve()
+          jest.advanceTimersByTime(600)
+
+          expect(core.$el.removeClass).toHaveBeenCalledWith('fullscreen')
+          jest.useRealTimers()
+          delete core.el.requestFullscreen
+        })
       })
 
       describe('and is an iOS Browser', () => {
