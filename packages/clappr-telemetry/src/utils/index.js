@@ -1,4 +1,4 @@
-export { TELEMETRY_CONTRACT_VERSION, EVENT_TYPES, TELEMETRY_SOURCES } from './constants'
+export { TELEMETRY_CONTRACT_VERSION, EVENT_TYPES, TELEMETRY_SOURCES, DEFAULT_VIDEO_EVENTS } from './constants'
 export {
   createEnvelope,
   emitTelemetry,

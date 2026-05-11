@@ -18,4 +18,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - HLS.js network adapter for telemetry collection
 - HLS.js `request:start` event: emitted when a fragment, manifest, or key request is initiated
 - HLS.js `request:end` event: emitted when a fragment, manifest, or key request completes
-- HLS.js `bitrate:change` event: emitted when the ABR algorithm switches to a different quality variant 
+- HLS.js `bitrate:change` event: emitted when the ABR algorithm switches to a different quality variant
+- `VideoEventObserver` and `ObserverRegistry`: observe native `HTMLVideoElement` events and emit `media.event` traces
+- `BufferSampler`: samples buffer state on each tick
+- `DecodingSampler`: samples decoded/dropped frames on each tick
+- `PlaybackStateSampler`: samples playback state on each tick

@@ -12,8 +12,26 @@
 export const TELEMETRY_CONTRACT_VERSION = '1.0'
 
 export const TELEMETRY_SOURCES = {
-  NETWORK: 'network'
+  NETWORK: 'network',
+  VIDEO_EVENT_OBSERVER: 'video-event-observer'
 }
+
+export const DEFAULT_VIDEO_EVENTS = [
+  'waiting',
+  'playing',
+  'stalled',
+  'seeking',
+  'seeked',
+  'ended',
+  'canplay',
+  'canplaythrough',
+  'loadedmetadata',
+  'loadeddata',
+  'error',
+  'emptied',
+  'suspend',
+  'abort'
+]
 
 export const EVENT_TYPES = {
   /**
@@ -79,5 +97,13 @@ export const EVENT_TYPES = {
    *
    * @event MSE_SAMPLE
    */
-  MSE_SAMPLE: 'mse.sample'
+  MSE_SAMPLE: 'mse.sample',
+
+  /**
+   * Emitted when a relevant HTMLVideoElement DOM event fires.
+   * Payload: `{ name, currentTime, readyState, snapshot }`
+   *
+   * @event MEDIA_EVENT
+   */
+  MEDIA_EVENT: 'media.event'
 }

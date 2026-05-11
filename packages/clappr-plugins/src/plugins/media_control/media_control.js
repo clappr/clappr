@@ -24,6 +24,8 @@ import hdIcon from '../../icons/08-hd.svg'
 
 const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 
+const defaultVolumeState = 100
+
 export default class MediaControl extends UICorePlugin {
   get name() { return 'media_control' }
   get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
@@ -74,6 +76,7 @@ export default class MediaControl extends UICorePlugin {
   constructor(core) {
     super(core)
     this.persistConfig = this.options.persistConfig
+    this._previousVolumeState = null
     this.currentPositionValue = null
     this.currentDurationValue = null
     this.keepVisible = false
@@ -169,6 +172,7 @@ export default class MediaControl extends UICorePlugin {
   }
 
   setInitialVolume() {
+    this._previousVolumeState = null
     const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
     const options = this.container && this.container.options || this.options
     this.setVolume(options.mute ? 0 : initialVolume, true)
@@ -317,7 +321,17 @@ export default class MediaControl extends UICorePlugin {
   }
 
   toggleMute() {
-    this.setVolume(this.muted ? 100 : 0)
+    if (this.muted) {
+      const stored = this._previousVolumeState
+      this._previousVolumeState = null
+      const restore =
+        stored != null && stored > 0 ? stored : defaultVolumeState
+      this.setVolume(restore)
+      return
+    }
+    const current = this.volume
+    this._previousVolumeState = current > 0 ? current : null
+    this.setVolume(0)
   }
 
   setVolume(value, isInitialVolume = false) {

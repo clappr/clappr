@@ -234,14 +234,21 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/fecampi">
+                    <img src="https://avatars.githubusercontent.com/u/58281716?v=4" width="100;" alt="fecampi"/>
+                    <br />
+                    <sub><b>fecampi</b></sub>
+                </a>
+            </td>
+		</tr>
+		<tr>
+            <td align="center">
                 <a href="https://github.com/afonsocdaniel">
                     <img src="https://avatars.githubusercontent.com/u/1382338?v=4" width="100;" alt="afonsocdaniel"/>
                     <br />
                     <sub><b>afonsocdaniel</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/leftees">
                     <img src="https://avatars.githubusercontent.com/u/12038092?v=4" width="100;" alt="leftees"/>
@@ -275,13 +282,6 @@ Thanks to all our amazing contributors! 🎉
                     <img src="https://avatars.githubusercontent.com/u/2771618?v=4" width="100;" alt="stanogurnik"/>
                     <br />
                     <sub><b>stanogurnik</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/fecampi">
-                    <img src="https://avatars.githubusercontent.com/u/58281716?v=4" width="100;" alt="fecampi"/>
-                    <br />
-                    <sub><b>fecampi</b></sub>
                 </a>
             </td>
 		</tr>
@@ -396,6 +396,13 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/cursoragent">
+                    <img src="https://avatars.githubusercontent.com/u/199161495?v=4" width="100;" alt="cursoragent"/>
+                    <br />
+                    <sub><b>cursoragent</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/RussCoder">
                     <img src="https://avatars.githubusercontent.com/u/18438165?v=4" width="100;" alt="RussCoder"/>
                     <br />
@@ -409,20 +416,13 @@ Thanks to all our amazing contributors! 🎉
                     <sub><b>lucasrodcosta</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/leticiafernandes">
                     <img src="https://avatars.githubusercontent.com/u/13765802?v=4" width="100;" alt="leticiafernandes"/>
                     <br />
                     <sub><b>leticiafernandes</b></sub>
-                </a>
-            </td>
-		</tr>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/cursoragent">
-                    <img src="https://avatars.githubusercontent.com/u/199161495?v=4" width="100;" alt="cursoragent"/>
-                    <br />
-                    <sub><b>cursoragent</b></sub>
                 </a>
             </td>
             <td align="center">
