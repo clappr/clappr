@@ -129,22 +129,7 @@ export default class ShakaNetworkAdapter {
 
     this._emitBitrateInit()
     this._emitStreamInfo()
-    this._emitManifestDuration()
     return true
-  }
-
-  _emitManifestDuration() {
-    // Clappr notifies TelemetryPlugin only via CONTAINER_READY, which fires
-    // after DashShakaPlayback has already called shakaPlayer.load(src). The
-    // manifest is fetched during load(), so by the time we reach this point
-    // and register the network filters, the manifest request is already done
-    // and its duration cannot be measured. Fixing this would require
-    // DashShakaPlayback to expose an event before calling load(), so filters
-    // could be registered before the manifest is fetched.
-    emitTelemetry(this.container, EVENT_TYPES.REQUEST_END, {
-      kind: 'manifest',
-      durationMs: null
-    }, TELEMETRY_SOURCES.NETWORK)
   }
 
   _emitBitrateInit() {
@@ -174,7 +159,7 @@ export default class ShakaNetworkAdapter {
       container: active.videoMimeType?.split('/')?.[1]?.toUpperCase() ?? 'DASH',
       videoCodec: parseVideoCodec(active.videoCodec ?? null),
       audioCodec: parseAudioCodec(active.audioCodec ?? null),
-      levelsCount: tracks.length,
+      levelsCount: tracks.length
     }, TELEMETRY_SOURCES.NETWORK)
   }
 
