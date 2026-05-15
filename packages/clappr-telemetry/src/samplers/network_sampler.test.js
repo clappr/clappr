@@ -234,27 +234,27 @@ describe('NetworkSampler', () => {
       expect(sampler.collect().networkQuality).toBeNull()
     })
 
-    it("is excellent when EWMA > 25", () => {
+    it('is excellent when EWMA > 25', () => {
       emitSegment(sampler, 30)
       expect(sampler.collect().networkQuality).toEqual({ label: 'excellent', score: 4 })
     })
 
-    it("is good when EWMA is between 10 and 25", () => {
+    it('is good when EWMA is between 10 and 25', () => {
       emitSegment(sampler, 15)
       expect(sampler.collect().networkQuality).toEqual({ label: 'good', score: 3 })
     })
 
-    it("is fair when EWMA is between 4 and 10", () => {
+    it('is fair when EWMA is between 4 and 10', () => {
       emitSegment(sampler, 6)
       expect(sampler.collect().networkQuality).toEqual({ label: 'fair', score: 2 })
     })
 
-    it("is poor when EWMA is between 1.5 and 4", () => {
+    it('is poor when EWMA is between 1.5 and 4', () => {
       emitSegment(sampler, 2)
       expect(sampler.collect().networkQuality).toEqual({ label: 'poor', score: 1 })
     })
 
-    it("is critical when EWMA < 1.5", () => {
+    it('is critical when EWMA < 1.5', () => {
       emitSegment(sampler, 1)
       expect(sampler.collect().networkQuality).toEqual({ label: 'critical', score: 0 })
     })
@@ -275,31 +275,31 @@ describe('NetworkSampler', () => {
       expect(sampler.collect().networkAdequacy).toBeNull()
     })
 
-    it("is excellent when ratio > 3", () => {
+    it('is excellent when ratio > 3', () => {
       emitBitrate(sampler, 2000)
       emitSegment(sampler, 10)
       expect(sampler.collect().networkAdequacy).toEqual({ label: 'excellent', score: 4 })
     })
 
-    it("is good when ratio is between 2 and 3", () => {
+    it('is good when ratio is between 2 and 3', () => {
       emitBitrate(sampler, 4000)
       emitSegment(sampler, 10)
       expect(sampler.collect().networkAdequacy).toEqual({ label: 'good', score: 3 })
     })
 
-    it("is fair when ratio is between 1.5 and 2", () => {
+    it('is fair when ratio is between 1.5 and 2', () => {
       emitBitrate(sampler, 6000)
       emitSegment(sampler, 10)
       expect(sampler.collect().networkAdequacy).toEqual({ label: 'fair', score: 2 })
     })
 
-    it("is poor when ratio is between 1 and 1.5", () => {
+    it('is poor when ratio is between 1 and 1.5', () => {
       emitBitrate(sampler, 8000)
       emitSegment(sampler, 10)
       expect(sampler.collect().networkAdequacy).toEqual({ label: 'poor', score: 1 })
     })
 
-    it("is critical when ratio < 1", () => {
+    it('is critical when ratio < 1', () => {
       emitBitrate(sampler, 15000)
       emitSegment(sampler, 10)
       expect(sampler.collect().networkAdequacy).toEqual({ label: 'critical', score: 0 })

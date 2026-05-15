@@ -133,7 +133,7 @@ export default class ShakaNetworkAdapter {
   }
 
   _emitBitrateInit() {
-    const tracks = this.shakaPlayer.getVariantTracks?.() ?? []
+    const tracks = this.shakaPlayer?.getVariantTracks?.() ?? []
     const activeTrack = tracks.find(t => t.active)
     if (!activeTrack) return
     this._currentVariantIdx = variantIndex(tracks, activeTrack.id)

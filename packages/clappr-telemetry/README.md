@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/badge/npm-v0.1.0-cb3837)](https://www.npmjs.com/package/@clappr/telemetry)
 
-A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, buffer, decoding, playback state, and playback timing metrics from the player and exposes them through a single unified event on the container bus.
+A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, buffer, decoding, playback state, playback timing, and stream info metrics from the player and exposes them through a single unified event on the container bus.
 
 ## Overview
 
@@ -46,6 +46,7 @@ Via CDN (jsDelivr):
       playbackStateSample: { enabled: true },
       networkSample:       { enabled: true },
       timingSample:        { enabled: true },
+      streamInfoSample:    { enabled: true },
       sampleIntervalMs:    1000,
       videoState:          { enabled: true }
     }
@@ -99,6 +100,7 @@ Available from `dist/clappr-telemetry.esm.js`:
 | `PlaybackStateSampler`  | Built-in sampler for `networkState`, `paused`, `playbackRate`, and bitrate |
 | `NetworkSampler`        | Built-in sampler for request counters, throughput, and segment metrics |
 | `PlaybackTimingSampler` | Built-in sampler for `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs` |
+| `StreamInfoSampler`     | Built-in sampler for stream metadata (container format, codecs, variant count) |
 
 **Observers**
 
@@ -135,7 +137,8 @@ All options are opt-in — nothing is collected by default.
 | `telemetry.decodingSample.enabled`       | Boolean  | `false`   | Enables periodic decoding quality sampling                                                                                                 |
 | `telemetry.playbackStateSample.enabled`  | Boolean  | `false`   | Enables periodic `networkState`, `paused`, `playbackRate`, and bitrate sampling                                                            |
 | `telemetry.networkSample.enabled`        | Boolean  | `false`   | Enables periodic request counters, throughput, and segment metrics sampling                                                                |
-| `telemetry.timingSample.enabled`         | Boolean  | `false`   | Enables cumulative playback timing: `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs`                                                     |
+| `telemetry.timingSample.enabled`         | Boolean  | `false`   | Enables cumulative playback timing: `timePlayingMs`, `timeWaitingMs`, `joinTimeMs`, and startup/load times                                 |
+| `telemetry.streamInfoSample.enabled`     | Boolean  | `false`   | Enables stream metadata sampling: container format, video/audio codec, and variant count                                                   |
 | `telemetry.sampleIntervalMs`             | Number   | `0`       | Sampling frequency in ms. When `0` (default), no automatic interval is started and only on-demand snapshots via `snapshot()` are available |
 | `telemetry.videoState.enabled`           | Boolean  | `false`   | Enables the `VideoEventObserver`                                                                                                           |
 | `telemetry.videoState.videoEvents`       | String[] | see below | List of `HTMLVideoElement` event names to observe. Defaults to the full set (see **VideoEventObserver**)                                   |
@@ -215,6 +218,7 @@ Adapters connect the plugin to specific playback engines. Each adapter implement
 | `request:error`          | `network`              | A network request failed                              |
 | `bitrate:init`           | `network`              | Initial quality variant is known (first segment loaded) |
 | `bitrate:change`         | `network`              | ABR algorithm switched to a different quality variant |
+| `stream:info`            | `network`              | Stream metadata available (manifest loaded or variant changed) |
 | `drm:session:update`     | `network`              | A DRM session was updated                             |
 | `drm:expiration:updated` | `network`              | A DRM license expiration time was updated             |
 | `mse.sample`             | `sampler-registry`     | Periodic snapshot of buffer, decoding and/or playback state |
@@ -261,12 +265,24 @@ Emitted once per tick by the `SamplerRegistry`. Each key is only present when th
     licenseRequests:          1, // cumulative DRM license requests
     licenseErrors:            0, // cumulative DRM license failures
     fatalErrors:              0, // cumulative fatal adapter errors
-    drmExpirationTime:     null  // DRM license expiration timestamp (ms), null if not set
+    drmExpirationTime:     null, // DRM license expiration timestamp (ms), null if not set
+    networkQuality:  { label: 'good', score: 0.9 },     // throughput tier classification
+    networkAdequacy: { label: 'adequate', score: 0.8 }, // throughput adequacy vs current bitrate
+    segmentHistory:  [...]                              // recent segment load records
   },
   timing: {
-    timePlayingMs:  120000,  // cumulative ms in playing state
-    timeWaitingMs:    3200,  // cumulative ms in waiting/buffering state
-    joinTimeMs:        850   // ms from play() request to first playing event (null before first play)
+    timePlayingMs:          120000, // cumulative ms in playing state
+    timeWaitingMs:            3200, // cumulative ms in waiting/buffering state
+    joinTimeMs:                850, // ms from play() to first playing event (null before first play)
+    autoplayStartupTimeMs:    1200, // ms to first frame when no play() call was made (null on manual play)
+    manifestLoadTimeMs:        320, // first manifest load time in ms (null until received via network trace)
+    firstSegmentLoadTimeMs:    180  // first segment load time in ms (null until received via network trace)
+  },
+  streamInfo: {
+    container:   'MP4',  // container format derived from the video MIME type
+    videoCodec:  'avc1', // parsed video codec string
+    audioCodec:  'mp4a', // parsed audio codec string
+    levelsCount:     8   // total number of variant tracks
   }
 }
 ```
@@ -304,39 +320,6 @@ new Clappr.Player({
       enabled:     true,                           // default: false
       videoEvents: ['waiting', 'stalled', 'error'] // default: full list above
     }
-  }
-})
-```
-
-## PlaybackTimingSampler
-
-The `PlaybackTimingSampler` accumulates the duration of each playback state by listening to native `HTMLVideoElement` events (`play`, `playing`, `waiting`). It is engine-agnostic and works with any playback backend.
-
-Enable via `telemetry.timingSample.enabled: true`. The data is exposed under the `timing` key of `mse.sample` and in the `snapshot` of every `media.event`:
-
-```javascript
-timing: {
-  timePlayingMs:  120000, // cumulative ms in playing state
-  timeWaitingMs:    3200, // cumulative ms in waiting/buffering state
-  joinTimeMs:        850  // ms from play() to first playing event (null until first play)
-}
-```
-
-### Derived QoE metrics
-
-| Metric | Formula | Industry reference |
-| --- | --- | --- |
-| Rebuffer ratio | `timeWaitingMs / timePlayingMs` | Mux, Conviva CIRR, NPAW Buffer Ratio |
-| Join time | `joinTimeMs` | ITU-T P.1203 (target: < 2 s) |
-
-### Configuration
-
-```javascript
-new Clappr.Player({
-  plugins: [ClapprTelemetry],
-  telemetry: {
-    timingSample:    { enabled: true },
-    sampleIntervalMs: 1000
   }
 })
 ```

@@ -26,5 +26,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - `bitrate:init` event on HLS.js and Shaka adapters: emitted once when the initial quality variant is known
 - `throughputEwmaMbps` field added to `request:end` on both adapters
 - `PlaybackStateSampler`: now includes `bitrateKbps`, `width`, `height`, `switchesUp`, `switchesDown`
-- `NetworkSampler`: samples request counters, throughput, and segment metrics on each tick
-- `PlaybackTimingSampler`: accumulates `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs`
+- `NetworkSampler`: samples request counters, throughput, quality classification, and segment history
+- `PlaybackTimingSampler`: accumulates playing/waiting time, join time, and startup/load timing
+- `StreamInfoSampler`: captures stream metadata (container, codecs, variant count)
+- `stream:info` event on Shaka adapter: emitted when stream metadata is available

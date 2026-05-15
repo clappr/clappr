@@ -16,7 +16,7 @@ const _registry = new Map([
   ['playbackState', PlaybackStateSampler],
   ['network', NetworkSampler],
   ['timing', PlaybackTimingSampler],
-  ['streamInfo', StreamInfoSampler],
+  ['streamInfo', StreamInfoSampler]
 ])
 
 /**
