@@ -6,8 +6,21 @@ const SEGMENT_HISTORY_SIZE = 10
 
 const QUALITY_SCORE = { excellent: 4, good: 3, fair: 2, poor: 1, critical: 0 }
 
-const quality = (label) => ({ label, score: QUALITY_SCORE[label] })
+const quality = label => ({ label, score: QUALITY_SCORE[label] })
 
+/**
+ * Classifies absolute throughput into a quality tier.
+ *
+ * Thresholds derived from industry benchmarks used by Mux, Conviva, and NPAW:
+ * - > 25 Mbps → excellent (4K HDR headroom)
+ * - > 10 Mbps → good     (1080p with comfortable margin)
+ * - >  4 Mbps → fair     (720p viable)
+ * - >1.5 Mbps → poor     (360p / SD territory)
+ * - ≤1.5 Mbps → critical (below reliable SD playback)
+ *
+ * @param {number|null} mbps - EWMA throughput in Mbps
+ * @returns {{label: string, score: number}|null}
+ */
 function _classifyNetworkQuality(mbps) {
   if (mbps == null) return null
   if (mbps > 25) return quality('excellent')
@@ -17,6 +30,18 @@ function _classifyNetworkQuality(mbps) {
   return quality('critical')
 }
 
+/**
+ * Classifies throughput adequacy relative to the current stream bitrate.
+ *
+ * Based on the buffer-safety margin concept from Conviva and NPAW: a ratio of
+ * throughput-to-bitrate above 2× is considered safe for continuous playback
+ * without rebuffering. Ratios below 1× mean the network cannot sustain the
+ * current quality level.
+ *
+ * @param {number|null} mbps       - EWMA throughput in Mbps
+ * @param {number|null} bitrateKbps - Current ABR variant bitrate in kbps
+ * @returns {{label: string, score: number}|null}
+ */
 function _classifyNetworkAdequacy(mbps, bitrateKbps) {
   if (mbps == null || bitrateKbps == null || bitrateKbps === 0) return null
   const ratio = mbps / (bitrateKbps / 1000)
@@ -78,10 +103,20 @@ export default class NetworkSampler {
         break
       case EVENT_TYPES.BITRATE_INIT:
       case EVENT_TYPES.BITRATE_CHANGE:
-        if (data?.current?.bitrate != null) {
-          this._currentBitrateKbps = data.current.bitrate / 1000
-        }
+        this._onBitrateUpdate(data)
         break
+    }
+  }
+
+  get _avgSegmentLoadTimeMs() {
+    return this._segmentsLoaded > 0
+      ? round1(this._totalSegmentLoadTimeMs / this._segmentsLoaded)
+      : null
+  }
+
+  _onBitrateUpdate(data) {
+    if (data?.current?.bitrate != null) {
+      this._currentBitrateKbps = data.current.bitrate / 1000
     }
   }
 
@@ -162,6 +197,7 @@ export default class NetworkSampler {
    *   fatalErrors: number,
    *   avgSegmentLoadTimeMs: number|null,
    *   drmExpirationTime: number|null,
+   *   lastSegmentBytes: number|null,
    *   networkQuality: {label:string, score:number}|null,
    *   networkAdequacy: {label:string, score:number}|null,
    *   segmentHistory: Array<{seq:number, variantId:number, start:number, dur:number, loadTimeMs:number, bytes:number, ok:boolean}>
@@ -179,7 +215,7 @@ export default class NetworkSampler {
       licenseRequests: this._licenseRequests,
       licenseErrors: this._licenseErrors,
       fatalErrors: this._fatalErrors,
-      avgSegmentLoadTimeMs: this._segmentsLoaded > 0 ? round1(this._totalSegmentLoadTimeMs / this._segmentsLoaded) : null,
+      avgSegmentLoadTimeMs: this._avgSegmentLoadTimeMs,
       drmExpirationTime: this._drmExpirationTime,
       lastSegmentBytes: this._lastSegmentBytes,
       networkQuality: _classifyNetworkQuality(this._throughputEwmaMbps),

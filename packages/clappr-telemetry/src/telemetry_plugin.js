@@ -59,7 +59,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
   }
 
   onPlaybackRead(playback) {
-    const telemetryConfig = this.container.options?.telemetry || {}
+    const cfg = this.container.options?.telemetry
+    if (!cfg) return
 
     // Samplers must be bound before the adapter so events emitted during
     // adapter.bind() (e.g. STREAM_INFO on Shaka's attachFilters) are captured.
@@ -71,7 +72,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
     this.observerRegistry.bind()
 
-    if (telemetryConfig.network?.enabled === true) {
+    if (cfg.network?.enabled === true) {
       const AdapterClass = findNetworkAdapter(playback)
 
       if (!AdapterClass) {

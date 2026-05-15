@@ -672,7 +672,7 @@ describe('HlsNetworkAdapter', () => {
           container: 'HLS',
           videoCodec: 'H.264',
           audioCodec: 'AAC',
-          levelsCount: 1,
+          levelsCount: 1
         },
         TELEMETRY_SOURCES.NETWORK
       )

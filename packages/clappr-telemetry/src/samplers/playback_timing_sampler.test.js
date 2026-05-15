@@ -1,5 +1,6 @@
 import { Events } from '@clappr/core'
 import PlaybackTimingSampler from './playback_timing_sampler'
+import { EVENT_TYPES } from '../utils/constants'
 
 const makePlayback = () => {
   const listeners = {}
@@ -161,6 +162,57 @@ describe('PlaybackTimingSampler', () => {
     })
   })
 
+  describe('manifestLoadTimeMs', () => {
+    it('is null before any REQUEST_END event', () => {
+      expect(sampler.collect().manifestLoadTimeMs).toBeNull()
+    })
+
+    it('captures duration from first REQUEST_END with kind=manifest', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'manifest', durationMs: 320 } })
+      expect(sampler.collect().manifestLoadTimeMs).toBe(320)
+    })
+
+    it('is not overwritten by subsequent manifest events', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'manifest', durationMs: 320 } })
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'manifest', durationMs: 999 } })
+      expect(sampler.collect().manifestLoadTimeMs).toBe(320)
+    })
+
+    it('ignores REQUEST_END with durationMs=null', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'manifest', durationMs: null } })
+      expect(sampler.collect().manifestLoadTimeMs).toBeNull()
+    })
+  })
+
+  describe('firstSegmentLoadTimeMs', () => {
+    it('is null before any REQUEST_END event', () => {
+      expect(sampler.collect().firstSegmentLoadTimeMs).toBeNull()
+    })
+
+    it('captures duration from first REQUEST_END with kind=segment', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'segment', durationMs: 180 } })
+      expect(sampler.collect().firstSegmentLoadTimeMs).toBe(180)
+    })
+
+    it('is not overwritten by subsequent segment events', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'segment', durationMs: 180 } })
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'segment', durationMs: 999 } })
+      expect(sampler.collect().firstSegmentLoadTimeMs).toBe(180)
+    })
+
+    it('ignores REQUEST_END with durationMs=null', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'segment', durationMs: null } })
+      expect(sampler.collect().firstSegmentLoadTimeMs).toBeNull()
+    })
+
+    it('does not interfere with manifestLoadTimeMs', () => {
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'manifest', durationMs: 320 } })
+      sampler._onTrace({ type: EVENT_TYPES.REQUEST_END, data: { kind: 'segment', durationMs: 180 } })
+      expect(sampler.collect().manifestLoadTimeMs).toBe(320)
+      expect(sampler.collect().firstSegmentLoadTimeMs).toBe(180)
+    })
+  })
+
   describe('autoplayStartupTimeMs', () => {
     it('is null when there was a PLAY_INTENT', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
@@ -222,6 +274,14 @@ describe('PlaybackTimingSampler', () => {
       expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_PAUSE, expect.any(Function))
       expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_ENDED, expect.any(Function))
       expect(playback.off).toHaveBeenCalledWith(Events.PLAYBACK_STOP, expect.any(Function))
+    })
+
+    it('unregisters listener on CONTAINER_TELEMETRY_TRACE', () => {
+      sampler.destroy()
+      expect(container.off).toHaveBeenCalledWith(
+        Events.Custom.CONTAINER_TELEMETRY_TRACE,
+        expect.any(Function)
+      )
     })
 
     it('ignores events after destroy', () => {
