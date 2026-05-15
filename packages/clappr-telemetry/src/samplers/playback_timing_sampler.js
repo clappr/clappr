@@ -57,12 +57,18 @@ export default class PlaybackTimingSampler {
 
   _onTrace({ type, data }) {
     if (this._destroyed) return
-    if (type === EVENT_TYPES.REQUEST_END) {
-      if (data?.kind === 'manifest' && this._manifestLoadTimeMs === null) {
-        if (data.durationMs != null) this._manifestLoadTimeMs = data.durationMs
-      } else if (data?.kind === 'segment' && this._firstSegmentLoadTimeMs === null) {
-        if (data.durationMs != null) this._firstSegmentLoadTimeMs = data.durationMs
-      }
+    if (this._manifestLoadTimeMs !== null && this._firstSegmentLoadTimeMs !== null) return
+    if (type !== EVENT_TYPES.REQUEST_END) return
+
+    const kind = data?.kind
+    const durationMs = data?.durationMs
+
+    if (kind === 'manifest' && this._manifestLoadTimeMs === null && durationMs != null) {
+      this._manifestLoadTimeMs = durationMs
+    }
+
+    if (kind === 'segment' && this._firstSegmentLoadTimeMs === null && durationMs != null) {
+      this._firstSegmentLoadTimeMs = durationMs
     }
   }
 
@@ -108,6 +114,19 @@ export default class PlaybackTimingSampler {
     this._state = 'idle'
   }
 
+  /**
+   * Collects accumulated playback timing metrics for the current session.
+   * Returns `null` after `destroy()` is called.
+   *
+   * @returns {{
+   *   timePlayingMs: number,
+   *   timeWaitingMs: number,
+   *   joinTimeMs: number|null,
+   *   autoplayStartupTimeMs: number|null,
+   *   manifestLoadTimeMs: number|null,
+   *   firstSegmentLoadTimeMs: number|null
+   * } | null}
+   */
   collect() {
     if (this._destroyed) return null
     const live = Date.now() - this._stateStartMs

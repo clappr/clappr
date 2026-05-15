@@ -20,6 +20,12 @@ export default class StreamInfoSampler {
     if (type === EVENT_TYPES.STREAM_INFO) this._info = { ...data }
   }
 
+  /**
+   * Collects the last known stream info snapshot captured from a STREAM_INFO trace event.
+   * Returns `null` if no stream info has been received yet or after `destroy()` is called.
+   *
+   * @returns {{ container: string, videoCodec: string|null, audioCodec: string|null, levelsCount: number } | null}
+   */
   collect() {
     if (this._destroyed) return null
     return this._info ? { ...this._info } : null
