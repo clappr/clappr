@@ -28,6 +28,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.observerRegistry = null
     this._configAdapters = []
     this._configSamplers = []
+    this._configObservers = []
   }
 
   get name() {
@@ -58,7 +59,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
   onPlaybackRead(playback) {
     const cfg = this.container.options?.telemetry
-    if (!cfg) return
+    if (!cfg || cfg.enabled === false) return
 
     this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
     const samplers = cfg.samplers || []
@@ -75,6 +76,11 @@ export default class TelemetryPlugin extends ContainerPlugin {
     if (this.samplerRegistry) this.samplerRegistry.destroy()
     this.samplerRegistry = new SamplerRegistry(playback, this.container)
     this.samplerRegistry.bind()
+
+    this._configObservers.forEach(O => ObserverRegistry.unregister(O))
+    const observers = cfg.observers || []
+    observers.forEach(O => ObserverRegistry.register(O))
+    this._configObservers = observers
 
     if (this.observerRegistry) this.observerRegistry.destroy()
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
@@ -95,6 +101,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this._configAdapters = []
     this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
     this._configSamplers = []
+    this._configObservers.forEach(O => ObserverRegistry.unregister(O))
+    this._configObservers = []
     if (this.adapter) {
       this.adapter.destroy()
       this.adapter = null

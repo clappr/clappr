@@ -1,9 +1,6 @@
 import { Log } from '@clappr/core'
-import VideoEventObserver from './video_event_observer'
 
-const _registry = new Map([
-  ['videoState', VideoEventObserver]
-])
+const _registry = new Map()
 
 /**
  * Manages all active observers, instantiating and delegating lifecycle calls to each.
@@ -11,47 +8,43 @@ const _registry = new Map([
  * Extensible via `ObserverRegistry.register()` — external observers can be added
  * before the player is instantiated.
  *
- * Observer contract: must implement `static isEnabled(cfg)`, `bind()` and `destroy()` on the prototype.
+ * Observer contract: must implement `bind()` and `destroy()` on the prototype.
  */
 export default class ObserverRegistry {
   static get name() { return 'observer-registry' }
 
   /**
-   * Registers an external observer class into the global registry.
-   * Must be called before the player is instantiated.
+   * Registers an observer class. The class's `name` property is used as the registry key.
    *
-   * @param {string} key - Identifier for the observer (e.g. `'customEvents'`)
-   * @param {Function} ObserverClass - Class implementing `static isEnabled()`, `bind()` and `destroy()`
+   * @param {Function} ObserverClass - Class implementing `bind()` and `destroy()`
    */
-  static register(key, ObserverClass) {
-    const proto = ObserverClass.prototype
+  static register(ObserverClass) {
+    const proto = ObserverClass?.prototype
     const missing = [
-      typeof ObserverClass.isEnabled !== 'function' && 'static isEnabled()',
-      typeof proto.bind !== 'function' && 'bind()',
-      typeof proto.destroy !== 'function' && 'destroy()'
+      typeof ObserverClass?.name !== 'string' && 'static get name()',
+      typeof proto?.bind !== 'function' && 'bind()',
+      typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
 
     if (missing.length > 0) {
-      Log.warn('[ObserverRegistry]', `${key}: missing ${missing.join(', ')} — skipping`)
+      Log.warn('[ObserverRegistry]', `missing ${missing.join(', ')} — skipping`)
       return
     }
-    _registry.set(key, ObserverClass)
+    _registry.set(ObserverClass.name, ObserverClass)
   }
 
   /**
-   * Removes a previously registered observer from the global registry.
+   * Removes a previously registered observer class from the registry.
    *
-   * @param {string} key - The key used when registering the observer
+   * @param {Function} ObserverClass - The class reference used when registering
    */
-  static unregister(key) {
-    _registry.delete(key)
+  static unregister(ObserverClass) {
+    _registry.delete(ObserverClass.name)
   }
 
   constructor(playback, container, samplerRegistry) {
-    const cfg = container.options?.telemetry || {}
-    this._observers = [..._registry.entries()]
-      .filter(([, O]) => O.isEnabled(cfg))
-      .map(([, ObserverClass]) => new ObserverClass(playback, container, samplerRegistry))
+    this._observers = [..._registry.values()]
+      .map(ObserverClass => new ObserverClass(playback, container, samplerRegistry))
   }
 
   bind() {

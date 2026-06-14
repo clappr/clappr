@@ -33,24 +33,6 @@ describe('VideoEventObserver', () => {
     observer = new VideoEventObserver(playback, container)
   })
 
-  describe('static isEnabled()', () => {
-    it('returns true when videoState.enabled is true', () => {
-      expect(VideoEventObserver.isEnabled({ videoState: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when videoState.enabled is false', () => {
-      expect(VideoEventObserver.isEnabled({ videoState: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when videoState is undefined', () => {
-      expect(VideoEventObserver.isEnabled({})).toBe(false)
-    })
-
-    it('returns false when cfg is undefined', () => {
-      expect(VideoEventObserver.isEnabled(undefined)).toBe(false)
-    })
-  })
-
   describe('constructor', () => {
     it('uses DEFAULT_VIDEO_EVENTS when not configured', () => {
       expect(observer._videoEvents).toEqual(DEFAULT_VIDEO_EVENTS)

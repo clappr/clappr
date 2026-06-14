@@ -3,7 +3,7 @@ import { round1 } from '../utils/helpers'
 import { EVENT_TYPES } from '../utils/constants'
 
 export default class PlaybackStateSampler {
-  static get name() { return 'playback-state-sampler' }
+  static get name() { return 'playbackState' }
 
   static isEnabled(cfg) {
     return cfg?.playbackStateSample?.enabled === true
