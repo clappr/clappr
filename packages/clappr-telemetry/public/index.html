@@ -50,7 +50,12 @@
   </section>
 
   <script>
-    const { ShakaNetworkAdapter, HlsNetworkAdapter, BufferSampler, DecodingSampler } = ClapprTelemetry
+    const {
+      ShakaNetworkAdapter, HlsNetworkAdapter,
+      BufferSampler, DecodingSampler, PlaybackStateSampler,
+      NetworkSampler, PlaybackTimingSampler, StreamInfoSampler,
+      VideoEventObserver
+    } = ClapprTelemetry
 
     const TELEMETRY_TRACE_EVENT = Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE
 
@@ -62,32 +67,82 @@
       }
     }
 
+    const SAMPLERS = `[BufferSampler, DecodingSampler, PlaybackStateSampler,
+                NetworkSampler, PlaybackTimingSampler, StreamInfoSampler]`
+    const OBSERVERS = `[VideoEventObserver]`
+    const INTERVAL = `// enabled: false,        // set to false to disable all telemetry
+    // sampleIntervalMs: 1000, // set interval in ms to enable periodic sampling`
+
     const MEDIAS = {
-      hls:   { label: 'HLS.js',       source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8' },
-      shaka: { label: 'Shaka DASH',   source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd' },
-      html5: { label: 'HTML5 Video',  source: 'http://clappr.io/highline.mp4' },
-    }
-
-    var MEDIA = MEDIAS.hls.source
-
-    const CODE = `window.player = new Clappr.Player({
+      hls: {
+        label: 'HLS.js',
+        code: `window.player = new Clappr.Player({
   parentId: '#player-wrapper',
-  source: MEDIA,
-  width: 640,
-  height: 360,
-  muted: true,
-  plugins: [HlsjsPlayback, DashShakaPlayback, Clappr.HTML5Video, ClapprTelemetry, SimpleTelemetryLogger],
+  source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+  width: 640, height: 360, muted: true,
+  plugins: [HlsjsPlayback, ClapprTelemetry, SimpleTelemetryLogger],
   telemetry: {
-    adapters: [HlsNetworkAdapter, ShakaNetworkAdapter],
-    samplers: [BufferSampler, DecodingSampler],
-    sampleIntervalMs: 1000,
+    adapters:  [HlsNetworkAdapter],
+    samplers:  ${SAMPLERS},
+    observers: ${OBSERVERS},
+    ${INTERVAL}
   }
 })`
+      },
+      shaka: {
+        label: 'Shaka DASH',
+        code: `window.player = new Clappr.Player({
+  parentId: '#player-wrapper',
+  source: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+  width: 640, height: 360, muted: true,
+  plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
+  telemetry: {
+    adapters:  [ShakaNetworkAdapter],
+    samplers:  ${SAMPLERS},
+    observers: ${OBSERVERS},
+    ${INTERVAL}
+  }
+})`
+      },
+      widevine: {
+        label: 'Shaka DASH + Widevine',
+        code: `window.player = new Clappr.Player({
+  parentId: '#player-wrapper',
+  source: 'https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd',
+  width: 640, height: 360, muted: true,
+  plugins: [DashShakaPlayback, ClapprTelemetry, SimpleTelemetryLogger],
+  shakaConfiguration: {
+    drm: { servers: { 'com.widevine.alpha': 'https://cwip-shaka-proxy.appspot.com/no_auth' } }
+  },
+  telemetry: {
+    adapters:  [ShakaNetworkAdapter],
+    samplers:  ${SAMPLERS},
+    observers: ${OBSERVERS},
+    ${INTERVAL}
+  }
+})`
+      },
+      html5: {
+        label: 'HTML5 Video',
+        code: `window.player = new Clappr.Player({
+  parentId: '#player-wrapper',
+  source: 'http://clappr.io/highline.mp4',
+  width: 640, height: 360, muted: true,
+  plugins: [Clappr.HTML5Video, ClapprTelemetry, SimpleTelemetryLogger],
+  telemetry: {
+    samplers:  [BufferSampler, DecodingSampler, PlaybackStateSampler, PlaybackTimingSampler],
+    observers: ${OBSERVERS},
+    ${INTERVAL}
+  }
+})`
+      },
+    }
 
     var editor
 
     function selectMedia(key) {
-      MEDIA = (MEDIAS[key] ?? MEDIAS.hls).source
+      const media = MEDIAS[key] ?? MEDIAS.hls
+      editor.getSession().setValue(media.code)
       run()
     }
 
@@ -115,10 +170,10 @@
 
     window.onload = function () {
       const select = document.getElementById('media-select')
-      Object.entries(MEDIAS).forEach(([key, { label, source }]) => {
+      Object.entries(MEDIAS).forEach(([key, { label }]) => {
         const opt = document.createElement('option')
         opt.value = key
-        opt.textContent = `${label} — ${source}`
+        opt.textContent = label
         select.appendChild(opt)
       })
 
@@ -128,7 +183,7 @@
       session.setMode('ace/mode/javascript')
       session.setTabSize(2)
       session.setUseSoftTabs(true)
-      editor.getSession().setValue(CODE)
+      editor.getSession().setValue(MEDIAS.hls.code)
 
       document.querySelector('.run').addEventListener('click', run)
       run()

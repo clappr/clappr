@@ -224,8 +224,11 @@ describe('TelemetryPlugin', () => {
     expect(NetworkAdapters.register).not.toHaveBeenCalled()
   })
 
-  it('returns early and skips all setup when enabled is false', () => {
-    mockContainer.options.telemetry.enabled = false
+  it.each([
+    ['telemetry config is absent', undefined],
+    ['enabled is false',           { enabled: false }],
+  ])('returns early and skips all setup when %s', (_, telemetry) => {
+    mockContainer.options.telemetry = telemetry
 
     plugin.onPlaybackRead(mockPlayback)
 

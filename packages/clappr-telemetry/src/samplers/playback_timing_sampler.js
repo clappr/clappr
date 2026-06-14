@@ -2,7 +2,7 @@ import { Events } from '@clappr/core'
 import { EVENT_TYPES } from '../utils/constants'
 
 export default class PlaybackTimingSampler {
-  static get name() { return 'timing-sampler' }
+  static get name() { return 'timing' }
 
   static isEnabled(cfg) {
     return cfg?.timingSample?.enabled === true

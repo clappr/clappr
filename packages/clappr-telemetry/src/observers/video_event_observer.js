@@ -12,9 +12,7 @@ import { EVENT_TYPES, TELEMETRY_SOURCES, DEFAULT_VIDEO_EVENTS } from '../utils/c
  * `DEFAULT_VIDEO_EVENTS` and can be narrowed with `telemetry.videoState.videoEvents`.
  */
 export default class VideoEventObserver {
-  static isEnabled(cfg) {
-    return cfg?.videoState?.enabled === true
-  }
+  static get name() { return 'videoState' }
 
   constructor(playback, container, samplerRegistry = null) {
     this._playback = playback

@@ -35,20 +35,23 @@ Via CDN (jsDelivr):
 
 <div id="player"></div>
 <script>
+  const {
+    ShakaNetworkAdapter, HlsNetworkAdapter,
+    BufferSampler, DecodingSampler, PlaybackStateSampler,
+    NetworkSampler, PlaybackTimingSampler, StreamInfoSampler,
+    VideoEventObserver
+  } = ClapprTelemetry
+
   const player = new Clappr.Player({
     parentId: '#player',
     source: 'https://example.com/stream.mpd',
     plugins: [DashShakaPlayback, ClapprTelemetry],
     telemetry: {
-      network:             { enabled: true },
-      bufferSample:        { enabled: true },
-      decodingSample:      { enabled: true },
-      playbackStateSample: { enabled: true },
-      networkSample:       { enabled: true },
-      timingSample:        { enabled: true },
-      streamInfoSample:    { enabled: true },
-      sampleIntervalMs:    1000,
-      videoState:          { enabled: true }
+      adapters:  [ShakaNetworkAdapter, HlsNetworkAdapter],
+      samplers:  [BufferSampler, DecodingSampler, PlaybackStateSampler,
+                  NetworkSampler, PlaybackTimingSampler, StreamInfoSampler],
+      observers: [VideoEventObserver],
+      sampleIntervalMs: 1000,
     }
   })
 </script>
@@ -59,21 +62,23 @@ With npm/ESM:
 ```javascript
 import Clappr from '@clappr/core'
 import DashShakaPlayback from 'dash-shaka-playback'
-import ClapprTelemetry from '@clappr/telemetry'
+import ClapprTelemetry, {
+  ShakaNetworkAdapter, HlsNetworkAdapter,
+  BufferSampler, DecodingSampler, PlaybackStateSampler,
+  NetworkSampler, PlaybackTimingSampler, StreamInfoSampler,
+  VideoEventObserver
+} from '@clappr/telemetry'
 
 const player = new Clappr.Player({
   parentId: '#player',
   source: 'https://example.com/stream.mpd',
   plugins: [DashShakaPlayback, ClapprTelemetry],
   telemetry: {
-    network:             { enabled: true },
-    bufferSample:        { enabled: true },
-    decodingSample:      { enabled: true },
-    playbackStateSample: { enabled: true },
-    networkSample:       { enabled: true },
-    timingSample:        { enabled: true },
-    sampleIntervalMs:    1000,
-    videoState:          { enabled: true }
+    adapters:  [ShakaNetworkAdapter, HlsNetworkAdapter],
+    samplers:  [BufferSampler, DecodingSampler, PlaybackStateSampler,
+                NetworkSampler, PlaybackTimingSampler, StreamInfoSampler],
+    observers: [VideoEventObserver],
+    sampleIntervalMs: 1000,
   }
 })
 ```
