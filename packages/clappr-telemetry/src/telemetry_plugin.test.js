@@ -147,6 +147,12 @@ describe('TelemetryPlugin', () => {
     expect(plugin.adapter).toBeNull()
   })
 
+  it('passes telemetry config to NetworkAdapters.find', () => {
+    plugin.onPlaybackRead(mockPlayback)
+
+    expect(NetworkAdapters.find).toHaveBeenCalledWith(mockPlayback, mockContainer.options.telemetry)
+  })
+
   it('should not throw on destroy when adapter is null', () => {
     plugin.adapter = null
     expect(() => plugin.destroy()).not.toThrow()

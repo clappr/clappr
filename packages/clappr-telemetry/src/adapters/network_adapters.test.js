@@ -47,6 +47,36 @@ describe('NetworkAdapters', () => {
       expect(adapter.isSupported).toHaveBeenCalledWith(playback)
     })
 
+    it('returns null when adapter is disabled via cfg[name].enabled = false', () => {
+      const adapter = makeAdapter('custom', true)
+      register(adapter)
+
+      expect(NetworkAdapters.find({}, { custom: { enabled: false } })).toBeNull()
+    })
+
+    it('finds adapter when cfg[name] is not set', () => {
+      const adapter = makeAdapter('custom', true)
+      register(adapter)
+
+      expect(NetworkAdapters.find({}, {})).toBe(adapter)
+    })
+
+    it('is backwards-compatible when called without cfg', () => {
+      const adapter = makeAdapter('custom', true)
+      register(adapter)
+
+      expect(NetworkAdapters.find({})).toBe(adapter)
+    })
+
+    it('defers to static isEnabled(cfg) when defined on the adapter', () => {
+      const adapter = makeAdapter('custom', true)
+      adapter.isEnabled = jest.fn(() => false)
+      register(adapter)
+
+      expect(NetworkAdapters.find({}, {})).toBeNull()
+      expect(adapter.isEnabled).toHaveBeenCalled()
+    })
+
   })
 
   // ─── register ────────────────────────────────────────────────────────────────

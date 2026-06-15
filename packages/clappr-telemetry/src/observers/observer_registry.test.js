@@ -104,6 +104,41 @@ describe('ObserverRegistry', () => {
     })
   })
 
+  describe('isEnabled filtering', () => {
+    it('does not instantiate when cfg[name].enabled is false', () => {
+      const { Cls } = makeObserverClass()
+      ObserverRegistry.register(Cls)
+      const registry = new ObserverRegistry({}, makeContainer({ MockObserver: { enabled: false } }), null)
+      expect(Cls).not.toHaveBeenCalled()
+      registry.destroy()
+    })
+
+    it('instantiates when no enabled flag is set', () => {
+      const { Cls } = makeObserverClass()
+      ObserverRegistry.register(Cls)
+      const registry = new ObserverRegistry({}, makeContainer(), null)
+      expect(Cls).toHaveBeenCalledTimes(1)
+      registry.destroy()
+    })
+
+    it('instantiates when cfg[name].enabled is true', () => {
+      const { Cls } = makeObserverClass()
+      ObserverRegistry.register(Cls)
+      const registry = new ObserverRegistry({}, makeContainer({ MockObserver: { enabled: true } }), null)
+      expect(Cls).toHaveBeenCalledTimes(1)
+      registry.destroy()
+    })
+
+    it('defers to static isEnabled(cfg) when defined on the class', () => {
+      const { Cls } = makeObserverClass()
+      Cls.isEnabled = jest.fn(() => false)
+      ObserverRegistry.register(Cls)
+      new ObserverRegistry({}, makeContainer(), null) // eslint-disable-line no-new
+      expect(Cls.isEnabled).toHaveBeenCalled()
+      expect(Cls).not.toHaveBeenCalled()
+    })
+  })
+
   describe('constructor', () => {
     it('passes samplerRegistry to each observer', () => {
       const { Cls } = makeObserverClass()

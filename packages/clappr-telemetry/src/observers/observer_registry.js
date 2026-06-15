@@ -53,7 +53,12 @@ export default class ObserverRegistry {
   }
 
   constructor(playback, container, samplerRegistry) {
+    const cfg = container.options?.telemetry || {}
     this._observers = [..._registry.values()]
+      .filter(Obs => {
+        if (typeof Obs.isEnabled === 'function') return Obs.isEnabled(cfg)
+        return cfg[Obs.name]?.enabled !== false
+      })
       .map(ObserverClass => new ObserverClass(playback, container, samplerRegistry))
   }
 

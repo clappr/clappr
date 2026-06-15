@@ -66,6 +66,10 @@ export default class SamplerRegistry {
     const raw = cfg.sampleIntervalMs
     this._intervalMs = (typeof raw === 'number' && raw > 0) ? raw : DISABLED_INTERVAL
     this._samplers = [..._registry.entries()]
+      .filter(([, S]) => {
+        if (typeof S.isEnabled === 'function') return S.isEnabled(cfg)
+        return cfg[S.name]?.enabled !== false
+      })
       .map(([key, S]) => [key, new S(playback, container)])
     this._timerId = null
   }

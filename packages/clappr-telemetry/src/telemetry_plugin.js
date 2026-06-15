@@ -86,7 +86,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
     this.observerRegistry.bind()
 
-    const AdapterClass = NetworkAdapters.find(playback)
+    const AdapterClass = NetworkAdapters.find(playback, cfg)
     if (AdapterClass) {
       if (this.adapter) this.adapter.destroy()
       this.adapter = new AdapterClass(playback, this.container)
