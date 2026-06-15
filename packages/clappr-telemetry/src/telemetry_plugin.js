@@ -63,13 +63,13 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
     this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
     const samplers = cfg.samplers || []
+    this._configSamplers = samplers.filter(S => S != null && !SamplerRegistry.has(S))
     samplers.forEach(S => SamplerRegistry.register(S))
-    this._configSamplers = samplers
 
     this._configAdapters.forEach(A => NetworkAdapters.unregister(A))
     const adapters = cfg.adapters || []
+    this._configAdapters = adapters.filter(A => A != null && !NetworkAdapters.has(A))
     adapters.forEach(A => NetworkAdapters.register(A))
-    this._configAdapters = adapters
 
     // Samplers must be bound before the adapter so events emitted during
     // adapter.bind() (e.g. STREAM_INFO on Shaka's attachFilters) are captured.
@@ -79,8 +79,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
     this._configObservers.forEach(O => ObserverRegistry.unregister(O))
     const observers = cfg.observers || []
+    this._configObservers = observers.filter(O => O != null && !ObserverRegistry.has(O))
     observers.forEach(O => ObserverRegistry.register(O))
-    this._configObservers = observers
 
     if (this.observerRegistry) this.observerRegistry.destroy()
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
@@ -91,7 +91,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
       if (this.adapter) this.adapter.destroy()
       this.adapter = new AdapterClass(playback, this.container)
       this.adapter.bind()
-    } else if (adapters.length > 0) {
+    } else if (NetworkAdapters.size > 0) {
       Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.name || playback.constructor.name || 'unknown'}`)
     }
   }

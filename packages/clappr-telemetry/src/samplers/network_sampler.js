@@ -55,10 +55,6 @@ function _classifyNetworkAdequacy(mbps, bitrateKbps) {
 export default class NetworkSampler {
   static get name() { return 'network' }
 
-  static isEnabled(cfg) {
-    return cfg?.networkSample?.enabled === true
-  }
-
   constructor(_playback, container) {
     this._destroyed = false
     this._container = container

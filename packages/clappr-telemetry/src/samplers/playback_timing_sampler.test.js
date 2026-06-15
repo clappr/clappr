@@ -33,24 +33,6 @@ describe('PlaybackTimingSampler', () => {
     jest.useRealTimers()
   })
 
-  describe('isEnabled()', () => {
-    it('returns true when timingSample.enabled is true', () => {
-      expect(PlaybackTimingSampler.isEnabled({ timingSample: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when timingSample.enabled is false', () => {
-      expect(PlaybackTimingSampler.isEnabled({ timingSample: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when timingSample is absent', () => {
-      expect(PlaybackTimingSampler.isEnabled({})).toBe(false)
-    })
-
-    it('returns false when cfg is null', () => {
-      expect(PlaybackTimingSampler.isEnabled(null)).toBe(false)
-    })
-  })
-
   describe('constructor', () => {
     it('registers listeners on playback for all required events', () => {
       expect(playback.on).toHaveBeenCalledWith(Events.PLAYBACK_PLAY_INTENT, expect.any(Function))
