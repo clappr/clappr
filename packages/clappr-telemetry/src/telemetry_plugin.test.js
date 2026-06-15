@@ -5,12 +5,14 @@ import MockSamplerRegistryClass from './samplers/sampler_registry'
 import MockObserverRegistryClass from './observers/observer_registry'
 
 jest.mock('./adapters', () => ({
-  NetworkAdapters: { find: jest.fn(), register: jest.fn() }
+  NetworkAdapters: { find: jest.fn(), register: jest.fn(), unregister: jest.fn(), has: jest.fn(() => false), size: 0 }
 }))
 
 jest.mock('./samplers/sampler_registry', () => {
   const mock = jest.fn()
   mock.register = jest.fn()
+  mock.unregister = jest.fn()
+  mock.has = jest.fn(() => false)
   return { __esModule: true, default: mock }
 })
 
@@ -18,10 +20,13 @@ jest.mock('./samplers', () => ({
   SamplerRegistry: jest.requireMock('./samplers/sampler_registry').default
 }))
 
-jest.mock('./observers/observer_registry', () => ({
-  __esModule: true,
-  default: jest.fn()
-}))
+jest.mock('./observers/observer_registry', () => {
+  const mock = jest.fn()
+  mock.register = jest.fn()
+  mock.unregister = jest.fn()
+  mock.has = jest.fn(() => false)
+  return { __esModule: true, default: mock }
+})
 
 let mockSamplerRegistry
 let mockObserverRegistry
@@ -36,6 +41,7 @@ describe('TelemetryPlugin', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     NetworkAdapters.find.mockReturnValue(null)
+    NetworkAdapters.size = 0
     mockSamplerRegistry = { bind: jest.fn(), destroy: jest.fn(), snapshot: jest.fn(() => ({})) }
     MockSamplerRegistryClass.mockImplementation(() => mockSamplerRegistry)
     mockObserverRegistry = { bind: jest.fn(), destroy: jest.fn() }
@@ -187,6 +193,7 @@ describe('TelemetryPlugin', () => {
     const MockAdapterClass = jest.fn()
     mockContainer.options.telemetry.adapters = [MockAdapterClass]
     NetworkAdapters.find.mockReturnValueOnce(null)
+    NetworkAdapters.size = 1
 
     plugin.onPlaybackRead(mockPlayback)
 

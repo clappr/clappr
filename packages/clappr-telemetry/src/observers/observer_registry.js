@@ -21,7 +21,7 @@ export default class ObserverRegistry {
   static register(ObserverClass) {
     const proto = ObserverClass?.prototype
     const missing = [
-      typeof ObserverClass?.name !== 'string' && 'static get name()',
+      !ObserverClass?.name && 'static get name()',
       typeof proto?.bind !== 'function' && 'bind()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
@@ -39,7 +39,17 @@ export default class ObserverRegistry {
    * @param {Function} ObserverClass - The class reference used when registering
    */
   static unregister(ObserverClass) {
-    _registry.delete(ObserverClass.name)
+    if (ObserverClass?.name) _registry.delete(ObserverClass.name)
+  }
+
+  /**
+   * Returns true if an observer with the given class's name is already registered.
+   *
+   * @param {Function} ObserverClass
+   * @returns {boolean}
+   */
+  static has(ObserverClass) {
+    return _registry.has(ObserverClass?.name)
   }
 
   constructor(playback, container, samplerRegistry) {

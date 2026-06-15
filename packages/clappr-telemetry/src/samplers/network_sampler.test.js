@@ -23,24 +23,6 @@ describe('NetworkSampler', () => {
     sampler = new NetworkSampler(null, container)
   })
 
-  describe('isEnabled()', () => {
-    it('returns true when networkSample.enabled is true', () => {
-      expect(NetworkSampler.isEnabled({ networkSample: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when networkSample.enabled is false', () => {
-      expect(NetworkSampler.isEnabled({ networkSample: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when networkSample is absent', () => {
-      expect(NetworkSampler.isEnabled({})).toBe(false)
-    })
-
-    it('returns false when cfg is null', () => {
-      expect(NetworkSampler.isEnabled(null)).toBe(false)
-    })
-  })
-
   describe('constructor', () => {
     it('registers listener on CONTAINER_TELEMETRY_TRACE', () => {
       expect(container.on).toHaveBeenCalledWith(

@@ -29,7 +29,7 @@ export default class SamplerRegistry {
   static register(SamplerClass) {
     const proto = SamplerClass?.prototype
     const missing = [
-      typeof SamplerClass.name !== 'string' && 'static get name()',
+      !SamplerClass?.name && 'static get name()',
       typeof proto?.collect !== 'function' && 'collect()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
@@ -47,7 +47,17 @@ export default class SamplerRegistry {
    * @param {Function} SamplerClass - The class reference used when registering
    */
   static unregister(SamplerClass) {
-    _registry.delete(SamplerClass.name)
+    if (SamplerClass?.name) _registry.delete(SamplerClass.name)
+  }
+
+  /**
+   * Returns true if a sampler with the given class's name is already registered.
+   *
+   * @param {Function} SamplerClass
+   * @returns {boolean}
+   */
+  static has(SamplerClass) {
+    return _registry.has(SamplerClass?.name)
   }
 
   constructor(playback, container) {

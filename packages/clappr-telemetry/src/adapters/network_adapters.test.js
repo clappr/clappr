@@ -46,6 +46,7 @@ describe('NetworkAdapters', () => {
 
       expect(adapter.isSupported).toHaveBeenCalledWith(playback)
     })
+
   })
 
   // ─── register ────────────────────────────────────────────────────────────────

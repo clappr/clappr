@@ -4,10 +4,6 @@ import { EVENT_TYPES } from '../utils/constants'
 export default class PlaybackTimingSampler {
   static get name() { return 'timing' }
 
-  static isEnabled(cfg) {
-    return cfg?.timingSample?.enabled === true
-  }
-
   constructor(playback, container) {
     this._playback = playback
     this._container = container

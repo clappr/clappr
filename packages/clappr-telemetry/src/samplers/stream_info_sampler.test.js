@@ -31,24 +31,6 @@ describe('StreamInfoSampler', () => {
     sampler = new StreamInfoSampler(null, container)
   })
 
-  describe('isEnabled()', () => {
-    it('returns true when streamInfoSample.enabled is true', () => {
-      expect(StreamInfoSampler.isEnabled({ streamInfoSample: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when streamInfoSample.enabled is false', () => {
-      expect(StreamInfoSampler.isEnabled({ streamInfoSample: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when streamInfoSample is absent', () => {
-      expect(StreamInfoSampler.isEnabled({})).toBe(false)
-    })
-
-    it('returns false when cfg is null', () => {
-      expect(StreamInfoSampler.isEnabled(null)).toBe(false)
-    })
-  })
-
   describe('constructor', () => {
     it('registers listener on CONTAINER_TELEMETRY_TRACE', () => {
       expect(container.on).toHaveBeenCalledWith(

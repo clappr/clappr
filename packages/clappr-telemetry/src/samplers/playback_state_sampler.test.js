@@ -32,24 +32,6 @@ describe('PlaybackStateSampler', () => {
     sampler = new PlaybackStateSampler(playback, container)
   })
 
-  describe('isEnabled()', () => {
-    it('returns false by default', () => {
-      expect(PlaybackStateSampler.isEnabled({})).toBe(false)
-    })
-
-    it('returns true when playbackStateSample.enabled is true', () => {
-      expect(PlaybackStateSampler.isEnabled({ playbackStateSample: { enabled: true } })).toBe(true)
-    })
-
-    it('returns false when playbackStateSample.enabled is false', () => {
-      expect(PlaybackStateSampler.isEnabled({ playbackStateSample: { enabled: false } })).toBe(false)
-    })
-
-    it('returns false when cfg is null', () => {
-      expect(PlaybackStateSampler.isEnabled(null)).toBe(false)
-    })
-  })
-
   describe('collect()', () => {
     it('returns networkState, paused, playbackRate, currentTime and null bitrate fields', () => {
       expect(sampler.collect()).toEqual({
