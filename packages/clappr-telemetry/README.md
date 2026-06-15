@@ -132,21 +132,46 @@ The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as 
 
 ## Configuration
 
-All options are opt-in — nothing is collected by default.
+All options are opt-in — nothing is collected by default. Components are activated by including their class in the corresponding array.
 
-| Option                                   | Type     | Default   | Description                                                                                                                                |
-| ---------------------------------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `telemetry.network.enabled`              | Boolean  | `false`   | Enables network request telemetry                                                                                                          |
-| `telemetry.bufferSample.enabled`         | Boolean  | `false`   | Enables periodic buffer state sampling                                                                                                     |
-| `telemetry.bufferSample.includeRanges`   | Boolean  | `true`    | Includes buffered time ranges in the `mse.sample` payload                                                                                  |
-| `telemetry.decodingSample.enabled`       | Boolean  | `false`   | Enables periodic decoding quality sampling                                                                                                 |
-| `telemetry.playbackStateSample.enabled`  | Boolean  | `false`   | Enables periodic `networkState`, `paused`, `playbackRate`, and bitrate sampling                                                            |
-| `telemetry.networkSample.enabled`        | Boolean  | `false`   | Enables periodic request counters, throughput, and segment metrics sampling                                                                |
-| `telemetry.timingSample.enabled`         | Boolean  | `false`   | Enables cumulative playback timing: `timePlayingMs`, `timeWaitingMs`, `joinTimeMs`, and startup/load times                                 |
-| `telemetry.streamInfoSample.enabled`     | Boolean  | `false`   | Enables stream metadata sampling: container format, video/audio codec, and variant count                                                   |
-| `telemetry.sampleIntervalMs`             | Number   | `0`       | Sampling frequency in ms. When `0` (default), no automatic interval is started and only on-demand snapshots via `snapshot()` are available |
-| `telemetry.videoState.enabled`           | Boolean  | `false`   | Enables the `VideoEventObserver`                                                                                                           |
-| `telemetry.videoState.videoEvents`       | String[] | see below | List of `HTMLVideoElement` event names to observe. Defaults to the full set (see **VideoEventObserver**)                                   |
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `telemetry.enabled` | Boolean | `true` | Set to `false` to disable the plugin entirely for this player instance |
+| `telemetry.adapters` | Class[] | `[]` | Network adapter classes to activate. The first registered adapter whose `isSupported(playback)` returns `true` is used |
+| `telemetry.samplers` | Class[] | `[]` | Sampler classes to register for this player instance |
+| `telemetry.observers` | Class[] | `[]` | Observer classes to register for this player instance |
+| `telemetry.sampleIntervalMs` | Number | `0` | Sampling interval in ms. When `0` (default), no automatic interval is started — use `snapshot()` for on-demand collection |
+| `telemetry.<name>.enabled` | Boolean | `true` | Opt-out flag for any registered component. Key is the component's `static get name()` value (e.g. `buffer`, `decoding`, `videoState`) |
+| `telemetry.bufferSample.includeRanges` | Boolean | `true` | Include buffered time ranges in the `mse.sample` payload |
+| `telemetry.videoState.videoEvents` | String[] | 14 events | `HTMLVideoElement` event names for `VideoEventObserver` to observe. Defaults to the full list (see **VideoEventObserver**) |
+
+### Disabling individual components
+
+When components are pre-registered globally (e.g. in a shared SDK setup), use the `<name>.enabled: false` opt-out to disable specific ones for a player instance without affecting others:
+
+```javascript
+new Clappr.Player({
+  telemetry: {
+    samplers:  [BufferSampler, DecodingSampler, NetworkSampler, ...],
+    observers: [VideoEventObserver],
+    // disable specific components by their static get name() value:
+    decoding:   { enabled: false },
+    videoState: { enabled: false },
+  }
+})
+```
+
+The `<name>` key maps to each class's `static get name()` property:
+
+| Class | Key |
+| --- | --- |
+| `BufferSampler` | `buffer` |
+| `DecodingSampler` | `decoding` |
+| `PlaybackStateSampler` | `playbackState` |
+| `NetworkSampler` | `network` |
+| `PlaybackTimingSampler` | `timing` |
+| `StreamInfoSampler` | `streamInfo` |
+| `VideoEventObserver` | `videoState` |
 
 ## Consuming telemetry events
 
@@ -344,12 +369,14 @@ Default observed events: `waiting`, `playing`, `stalled`, `seeking`, `seeked`, `
 
 ### Configuration
 
+Include `VideoEventObserver` in the `observers` array to activate it. Use `videoState.videoEvents` to narrow the observed event list:
+
 ```javascript
 new Clappr.Player({
   plugins: [ClapprTelemetry],
   telemetry: {
+    observers: [VideoEventObserver],
     videoState: {
-      enabled:     true,                           // default: false
       videoEvents: ['waiting', 'stalled', 'error'] // default: full list above
     }
   }
@@ -362,13 +389,12 @@ The sampler registry is extensible. You can add your own sampler and have it par
 
 ### Contract
 
-A custom sampler must implement three members:
-
-| Member | Description |
-| --- | --- |
-| `static isEnabled(cfg)` | Returns `true` when the sampler should be active. `cfg` is `container.options.telemetry` |
-| `collect()` | Called every tick. Returns a plain object with the data to include, or `null` to skip this tick |
-| `destroy()` | Called when the registry is destroyed. Clean up any internal state here |
+| Member | Required | Description |
+| --- | --- | --- |
+| `static get name()` | Yes | Unique string key — used as the registry identifier and as the key in the `mse.sample` payload |
+| `collect()` | Yes | Called every tick. Returns a plain object with the data to include, or `null` to skip this tick |
+| `destroy()` | Yes | Called when the registry is destroyed. Clean up any internal state here |
+| `static isEnabled(cfg)` | No | Override the registry's default enable/disable check. `cfg` is `container.options.telemetry`. Omit to use the standard `cfg[name].enabled` opt-out |
 
 ### Example
 
@@ -376,9 +402,7 @@ A custom sampler must implement three members:
 import { SamplerRegistry } from '@clappr/telemetry'
 
 class AudioSampler {
-  static isEnabled(cfg) {
-    return cfg?.audioSample?.enabled === true
-  }
+  static get name() { return 'audio' }
 
   constructor(playback) {
     this._playback = playback
@@ -396,13 +420,13 @@ class AudioSampler {
 }
 
 // register before instantiating the player
-SamplerRegistry.register('audio', AudioSampler)
+SamplerRegistry.register(AudioSampler)
 
 new Clappr.Player({
   plugins: [ClapprTelemetry],
   telemetry: {
+    samplers: [AudioSampler],
     sampleIntervalMs: 1000,
-    audioSample: { enabled: true }
   }
 })
 ```
@@ -421,7 +445,7 @@ The result appears under the `audio` key in the `mse.sample` payload:
 To remove a previously registered sampler:
 
 ```javascript
-SamplerRegistry.unregister('audio')
+SamplerRegistry.unregister(AudioSampler)
 ```
 
 ### On-demand snapshot
@@ -443,12 +467,12 @@ The observer registry is extensible. You can add your own observer and have it m
 
 ### Contract
 
-A custom observer must implement two members:
-
-| Member      | Description                                                                 |
-| ----------- | --------------------------------------------------------------------------- |
-| `bind()`    | Called after instantiation. Attach event listeners and start collecting     |
-| `destroy()` | Called when the registry is destroyed. Remove listeners and clean up state  |
+| Member | Required | Description |
+| --- | --- | --- |
+| `static get name()` | Yes | Unique string key — used as the registry identifier |
+| `bind()` | Yes | Called after instantiation. Attach event listeners and start collecting |
+| `destroy()` | Yes | Called when the registry is destroyed. Remove listeners and clean up state |
+| `static isEnabled(cfg)` | No | Override the registry's default enable/disable check. Omit to use the standard `cfg[name].enabled` opt-out |
 
 The constructor receives `(playback, container, samplerRegistry)` — the same arguments as `VideoEventObserver`.
 
@@ -458,6 +482,8 @@ The constructor receives `(playback, container, samplerRegistry)` — the same a
 import { ObserverRegistry } from '@clappr/telemetry'
 
 class PlaybackEventObserver {
+  static get name() { return 'playbackEvents' }
+
   constructor(playback, container, samplerRegistry) {
     this._container = container
     this._samplerRegistry = samplerRegistry
@@ -476,13 +502,20 @@ class PlaybackEventObserver {
 }
 
 // register before instantiating the player
-ObserverRegistry.register('playbackEvents', PlaybackEventObserver)
+ObserverRegistry.register(PlaybackEventObserver)
+
+new Clappr.Player({
+  plugins: [ClapprTelemetry],
+  telemetry: {
+    observers: [PlaybackEventObserver],
+  }
+})
 ```
 
 To remove a previously registered observer:
 
 ```javascript
-ObserverRegistry.unregister('playbackEvents')
+ObserverRegistry.unregister(PlaybackEventObserver)
 ```
 
 ## Development
