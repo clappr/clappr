@@ -232,6 +232,44 @@ describe('SamplerRegistry', () => {
     })
   })
 
+  describe('isEnabled filtering', () => {
+    it('does not instantiate a sampler when cfg[name].enabled is false', () => {
+      const registry = new SamplerRegistry({}, makeContainer({ buffer: { enabled: false } }))
+      expect(BufferSampler).not.toHaveBeenCalled()
+      expect(DecodingSampler).toHaveBeenCalledTimes(1)
+      registry.destroy()
+    })
+
+    it('instantiates all samplers when no enabled flag is set', () => {
+      const registry = new SamplerRegistry({}, makeContainer())
+      expect(BufferSampler).toHaveBeenCalledTimes(1)
+      expect(DecodingSampler).toHaveBeenCalledTimes(1)
+      registry.destroy()
+    })
+
+    it('instantiates when cfg[name].enabled is true', () => {
+      const registry = new SamplerRegistry({}, makeContainer({ buffer: { enabled: true } }))
+      expect(BufferSampler).toHaveBeenCalledTimes(1)
+      registry.destroy()
+    })
+
+    it('defers to static isEnabled(cfg) when defined on the class', () => {
+      const CustomSampler = jest.fn()
+      Object.defineProperty(CustomSampler, 'name', { value: 'custom', configurable: true })
+      CustomSampler.prototype.collect = jest.fn()
+      CustomSampler.prototype.destroy = jest.fn()
+      CustomSampler.isEnabled = jest.fn(() => false)
+
+      SamplerRegistry.register(CustomSampler)
+      new SamplerRegistry({}, makeContainer()) // eslint-disable-line no-new
+
+      expect(CustomSampler.isEnabled).toHaveBeenCalled()
+      expect(CustomSampler).not.toHaveBeenCalled()
+
+      SamplerRegistry.unregister(CustomSampler)
+    })
+  })
+
   describe('snapshot()', () => {
     it('returns collected data keyed by sampler name', () => {
       const scheduler = new SamplerRegistry({}, makeContainer())

@@ -48,9 +48,11 @@ export default class NetworkAdapters {
    * @param {Object} [cfg={}] - Telemetry config (`container.options.telemetry`)
    * @returns {Function|null} Adapter class if found, null otherwise
    */
-  static find(playback) {
-    return _registry.find(adapter =>
-      typeof adapter.isSupported === 'function' && adapter.isSupported(playback)
-    ) ?? null
+  static find(playback, cfg = {}) {
+    return _registry.find(adapter => {
+      if (typeof adapter.isEnabled === 'function' && !adapter.isEnabled(cfg)) return false
+      if (cfg[adapter.name]?.enabled === false) return false
+      return typeof adapter.isSupported === 'function' && adapter.isSupported(playback)
+    }) ?? null
   }
 }
