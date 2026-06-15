@@ -61,14 +61,16 @@ export default class TelemetryPlugin extends ContainerPlugin {
     const cfg = this.container.options?.telemetry
     if (!cfg || cfg.enabled === false) return
 
+    // Unregister previously tracked config classes (ref-counted — global registry
+    // only removes them when the last player holding a ref calls unregister).
     this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
     const samplers = cfg.samplers || []
-    this._configSamplers = samplers.filter(S => S != null && !SamplerRegistry.has(S))
+    this._configSamplers = samplers.filter(S => S != null)
     samplers.forEach(S => SamplerRegistry.register(S))
 
     this._configAdapters.forEach(A => NetworkAdapters.unregister(A))
     const adapters = cfg.adapters || []
-    this._configAdapters = adapters.filter(A => A != null && !NetworkAdapters.has(A))
+    this._configAdapters = adapters.filter(A => A != null)
     adapters.forEach(A => NetworkAdapters.register(A))
 
     // Samplers must be bound before the adapter so events emitted during
@@ -79,7 +81,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
 
     this._configObservers.forEach(O => ObserverRegistry.unregister(O))
     const observers = cfg.observers || []
-    this._configObservers = observers.filter(O => O != null && !ObserverRegistry.has(O))
+    this._configObservers = observers.filter(O => O != null)
     observers.forEach(O => ObserverRegistry.register(O))
 
     if (this.observerRegistry) this.observerRegistry.destroy()
@@ -91,7 +93,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
       if (this.adapter) this.adapter.destroy()
       this.adapter = new AdapterClass(playback, this.container)
       this.adapter.bind()
-    } else if (NetworkAdapters.size > 0) {
+    } else if (adapters.length > 0) {
       Log.warn(`[TelemetryPlugin] No network adapter for playback: ${playback.name || playback.constructor.name || 'unknown'}`)
     }
   }

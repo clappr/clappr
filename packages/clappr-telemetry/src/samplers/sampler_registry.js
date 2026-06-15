@@ -1,10 +1,11 @@
 import { Log } from '@clappr/core'
-import { emitTelemetry } from '../utils'
+import { emitTelemetry, isComponentEnabled } from '../utils'
 import { EVENT_TYPES } from '../utils/constants'
 
 const DISABLED_INTERVAL = 0
 
 const _registry = new Map()
+const _refCounts = new Map()
 
 /**
  * Drives all active samplers from a single `setInterval`.
@@ -22,7 +23,8 @@ export default class SamplerRegistry {
 
   /**
    * Registers a sampler class. The sampler's `static get name()` is used as
-   * the key in the `mse.sample` payload.
+   * the key in the `mse.sample` payload. Reference-counted — safe to call
+   * multiple times (e.g. from concurrent player instances).
    *
    * @param {Function} SamplerClass - Class with `static get name()`, `collect()`, and `destroy()`
    */
@@ -38,16 +40,30 @@ export default class SamplerRegistry {
       Log.warn('[SamplerRegistry]', `missing ${missing.join(', ')} — skipping`)
       return
     }
-    _registry.set(SamplerClass.name, SamplerClass)
+    const name = SamplerClass.name
+    if (_registry.has(name) && _registry.get(name) !== SamplerClass) {
+      Log.warn('[SamplerRegistry]', `name collision on '${name}' — overwriting existing class`)
+    }
+    _registry.set(name, SamplerClass)
+    _refCounts.set(name, (_refCounts.get(name) || 0) + 1)
   }
 
   /**
    * Removes a previously registered sampler from the global registry.
+   * Reference-counted — the class is only removed when all registrations are released.
    *
    * @param {Function} SamplerClass - The class reference used when registering
    */
   static unregister(SamplerClass) {
-    if (SamplerClass?.name) _registry.delete(SamplerClass.name)
+    if (!SamplerClass?.name) return
+    const name = SamplerClass.name
+    const count = (_refCounts.get(name) || 0) - 1
+    if (count <= 0) {
+      _registry.delete(name)
+      _refCounts.delete(name)
+    } else {
+      _refCounts.set(name, count)
+    }
   }
 
   /**
@@ -66,10 +82,7 @@ export default class SamplerRegistry {
     const raw = cfg.sampleIntervalMs
     this._intervalMs = (typeof raw === 'number' && raw > 0) ? raw : DISABLED_INTERVAL
     this._samplers = [..._registry.entries()]
-      .filter(([, S]) => {
-        if (typeof S.isEnabled === 'function') return S.isEnabled(cfg)
-        return cfg[S.name]?.enabled !== false
-      })
+      .filter(([, S]) => isComponentEnabled(S, cfg))
       .map(([key, S]) => [key, new S(playback, container)])
     this._timerId = null
   }

@@ -1,12 +1,13 @@
 import { Log } from '@clappr/core'
 
 const _registry = []
+const _refCounts = new Map()
 
 export default class NetworkAdapters {
   /**
    * Registers an adapter class. Adapters are matched in registration order —
-   * first registered has highest priority.
-   * Must be called before the player is instantiated.
+   * first registered has highest priority. Reference-counted — safe to call
+   * multiple times (e.g. from concurrent player instances).
    *
    * @param {Function} AdapterClass - Class implementing the network adapter contract
    */
@@ -16,16 +17,24 @@ export default class NetworkAdapters {
       return
     }
     if (!_registry.includes(AdapterClass)) _registry.push(AdapterClass)
+    _refCounts.set(AdapterClass, (_refCounts.get(AdapterClass) || 0) + 1)
   }
 
   /**
    * Removes a previously registered adapter class from the registry.
+   * Reference-counted — the class is only removed when all registrations are released.
    *
    * @param {Function} AdapterClass - The class reference used when registering
    */
   static unregister(AdapterClass) {
-    const idx = _registry.indexOf(AdapterClass)
-    if (idx !== -1) _registry.splice(idx, 1)
+    const count = (_refCounts.get(AdapterClass) || 0) - 1
+    if (count <= 0) {
+      const idx = _registry.indexOf(AdapterClass)
+      if (idx !== -1) _registry.splice(idx, 1)
+      _refCounts.delete(AdapterClass)
+    } else {
+      _refCounts.set(AdapterClass, count)
+    }
   }
 
   /**
