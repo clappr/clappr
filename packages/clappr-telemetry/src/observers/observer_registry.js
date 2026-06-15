@@ -1,6 +1,8 @@
 import { Log } from '@clappr/core'
+import { isComponentEnabled } from '../utils'
 
 const _registry = new Map()
+const _refCounts = new Map()
 
 /**
  * Manages all active observers, instantiating and delegating lifecycle calls to each.
@@ -15,6 +17,7 @@ export default class ObserverRegistry {
 
   /**
    * Registers an observer class. The class's `name` property is used as the registry key.
+   * Reference-counted — safe to call multiple times (e.g. from concurrent player instances).
    *
    * @param {Function} ObserverClass - Class implementing `bind()` and `destroy()`
    */
@@ -30,16 +33,30 @@ export default class ObserverRegistry {
       Log.warn('[ObserverRegistry]', `missing ${missing.join(', ')} — skipping`)
       return
     }
-    _registry.set(ObserverClass.name, ObserverClass)
+    const name = ObserverClass.name
+    if (_registry.has(name) && _registry.get(name) !== ObserverClass) {
+      Log.warn('[ObserverRegistry]', `name collision on '${name}' — overwriting existing class`)
+    }
+    _registry.set(name, ObserverClass)
+    _refCounts.set(name, (_refCounts.get(name) || 0) + 1)
   }
 
   /**
    * Removes a previously registered observer class from the registry.
+   * Reference-counted — the class is only removed when all registrations are released.
    *
    * @param {Function} ObserverClass - The class reference used when registering
    */
   static unregister(ObserverClass) {
-    if (ObserverClass?.name) _registry.delete(ObserverClass.name)
+    if (!ObserverClass?.name) return
+    const name = ObserverClass.name
+    const count = (_refCounts.get(name) || 0) - 1
+    if (count <= 0) {
+      _registry.delete(name)
+      _refCounts.delete(name)
+    } else {
+      _refCounts.set(name, count)
+    }
   }
 
   /**
@@ -55,10 +72,7 @@ export default class ObserverRegistry {
   constructor(playback, container, samplerRegistry) {
     const cfg = container.options?.telemetry || {}
     this._observers = [..._registry.values()]
-      .filter(Obs => {
-        if (typeof Obs.isEnabled === 'function') return Obs.isEnabled(cfg)
-        return cfg[Obs.name]?.enabled !== false
-      })
+      .filter(Obs => isComponentEnabled(Obs, cfg))
       .map(ObserverClass => new ObserverClass(playback, container, samplerRegistry))
   }
 

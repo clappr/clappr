@@ -17,7 +17,9 @@ const makeObserverClass = (overrides = {}) => {
 
 describe('ObserverRegistry', () => {
   afterEach(() => {
-    ObserverRegistry.unregister({ name: 'MockObserver' })
+    while (ObserverRegistry.has({ name: 'MockObserver' })) {
+      ObserverRegistry.unregister({ name: 'MockObserver' })
+    }
   })
 
   describe('register()', () => {
@@ -136,6 +138,28 @@ describe('ObserverRegistry', () => {
       new ObserverRegistry({}, makeContainer(), null) // eslint-disable-line no-new
       expect(Cls.isEnabled).toHaveBeenCalled()
       expect(Cls).not.toHaveBeenCalled()
+    })
+
+    it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
+      const { Cls } = makeObserverClass()
+      Cls.isEnabled = jest.fn(() => true)
+      ObserverRegistry.register(Cls)
+      const registry = new ObserverRegistry({}, makeContainer({ MockObserver: { enabled: false } }), null)
+      expect(Cls.isEnabled).toHaveBeenCalled()
+      expect(Cls).not.toHaveBeenCalled()
+      registry.destroy()
+    })
+  })
+
+  describe('ref counting', () => {
+    it('is reference-counted — class removed only after all registrations are released', () => {
+      const { Cls } = makeObserverClass()
+      ObserverRegistry.register(Cls)  // refCount → 1
+      ObserverRegistry.register(Cls)  // refCount → 2
+      ObserverRegistry.unregister(Cls) // refCount → 1 — still registered
+      expect(ObserverRegistry.has(Cls)).toBe(true)
+      ObserverRegistry.unregister(Cls) // refCount → 0 — removed
+      expect(ObserverRegistry.has(Cls)).toBe(false)
     })
   })
 

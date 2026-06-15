@@ -124,12 +124,24 @@ describe('NetworkAdapters', () => {
       expect(() => NetworkAdapters.unregister(adapter)).not.toThrow()
     })
 
-    it('unregistering after deduplicated register fully removes the adapter', () => {
+    it('ref-counted: one unregister after two registers still leaves adapter discoverable', () => {
       const adapter = makeAdapter('custom', true)
-      register(adapter)
-      register(adapter)
-      NetworkAdapters.unregister(adapter)
+      register(adapter)             // refCount → 1
+      register(adapter)             // refCount → 2
+      NetworkAdapters.unregister(adapter) // refCount → 1 — still in registry
+      expect(NetworkAdapters.find({})).toBe(adapter)
+      // afterEach drains the remaining ref via _registered = [adapter, adapter]
+    })
+  })
 
+  describe('ref counting', () => {
+    it('is reference-counted — removed only after all registrations are released', () => {
+      const adapter = makeAdapter('custom', true)
+      NetworkAdapters.register(adapter)  // refCount → 1
+      NetworkAdapters.register(adapter)  // refCount → 2
+      NetworkAdapters.unregister(adapter) // refCount → 1 — still findable
+      expect(NetworkAdapters.find({})).toBe(adapter)
+      NetworkAdapters.unregister(adapter) // refCount → 0 — removed
       expect(NetworkAdapters.find({})).toBeNull()
     })
   })

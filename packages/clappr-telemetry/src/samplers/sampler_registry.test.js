@@ -268,6 +268,39 @@ describe('SamplerRegistry', () => {
 
       SamplerRegistry.unregister(CustomSampler)
     })
+
+    it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
+      const CustomSampler = jest.fn()
+      Object.defineProperty(CustomSampler, 'name', { value: 'custom', configurable: true })
+      CustomSampler.prototype.collect = jest.fn()
+      CustomSampler.prototype.destroy = jest.fn()
+      CustomSampler.isEnabled = jest.fn(() => true)
+
+      SamplerRegistry.register(CustomSampler)
+      const registry = new SamplerRegistry({}, makeContainer({ custom: { enabled: false } }))
+
+      expect(CustomSampler.isEnabled).toHaveBeenCalled()
+      expect(CustomSampler).not.toHaveBeenCalled()
+
+      SamplerRegistry.unregister(CustomSampler)
+      registry.destroy()
+    })
+  })
+
+  describe('ref counting', () => {
+    it('is reference-counted — class removed only after all registrations are released', () => {
+      const CustomSampler = jest.fn()
+      Object.defineProperty(CustomSampler, 'name', { value: 'counted', configurable: true })
+      CustomSampler.prototype.collect = jest.fn()
+      CustomSampler.prototype.destroy = jest.fn()
+
+      SamplerRegistry.register(CustomSampler)  // refCount → 1
+      SamplerRegistry.register(CustomSampler)  // refCount → 2
+      SamplerRegistry.unregister(CustomSampler) // refCount → 1 — still registered
+      expect(SamplerRegistry.has(CustomSampler)).toBe(true)
+      SamplerRegistry.unregister(CustomSampler) // refCount → 0 — removed
+      expect(SamplerRegistry.has(CustomSampler)).toBe(false)
+    })
   })
 
   describe('snapshot()', () => {

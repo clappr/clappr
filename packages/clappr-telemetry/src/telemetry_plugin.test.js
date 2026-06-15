@@ -199,7 +199,6 @@ describe('TelemetryPlugin', () => {
     const MockAdapterClass = jest.fn()
     mockContainer.options.telemetry.adapters = [MockAdapterClass]
     NetworkAdapters.find.mockReturnValueOnce(null)
-    NetworkAdapters.size = 1
 
     plugin.onPlaybackRead(mockPlayback)
 
@@ -323,6 +322,17 @@ describe('TelemetryPlugin', () => {
       plugin.onPlaybackRead(mockPlayback)
 
       expect(registerSpy).not.toHaveBeenCalled()
+    })
+
+    it('calls unregister on destroy for samplers that were pre-registered in the global registry', () => {
+      const SamplerA = jest.fn()
+      MockSamplerRegistryClass.has.mockReturnValue(true)
+      mockContainer.options.telemetry.samplers = [SamplerA]
+
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.destroy()
+
+      expect(MockSamplerRegistryClass.unregister).toHaveBeenCalledWith(SamplerA)
     })
   })
 
