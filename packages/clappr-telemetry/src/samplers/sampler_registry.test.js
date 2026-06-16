@@ -294,8 +294,8 @@ describe('SamplerRegistry', () => {
       CustomSampler.prototype.collect = jest.fn()
       CustomSampler.prototype.destroy = jest.fn()
 
-      SamplerRegistry.register(CustomSampler)  // refCount → 1
-      SamplerRegistry.register(CustomSampler)  // refCount → 2
+      SamplerRegistry.register(CustomSampler) // refCount → 1
+      SamplerRegistry.register(CustomSampler) // refCount → 2
       SamplerRegistry.unregister(CustomSampler) // refCount → 1 — still registered
       expect(SamplerRegistry.has(CustomSampler)).toBe(true)
       SamplerRegistry.unregister(CustomSampler) // refCount → 0 — removed

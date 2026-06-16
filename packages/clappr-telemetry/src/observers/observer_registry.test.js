@@ -52,7 +52,7 @@ describe('ObserverRegistry', () => {
     })
 
     it('deduplicates — registering the same class twice only instantiates once', () => {
-      const { Cls, instance } = makeObserverClass()
+      const { Cls } = makeObserverClass()
       ObserverRegistry.register(Cls)
       ObserverRegistry.register(Cls)
       const registry = new ObserverRegistry({}, makeContainer(), null)
@@ -63,7 +63,7 @@ describe('ObserverRegistry', () => {
 
   describe('unregister()', () => {
     it('removes a previously registered observer', () => {
-      const { Cls, instance } = makeObserverClass()
+      const { Cls } = makeObserverClass()
       ObserverRegistry.register(Cls)
       ObserverRegistry.unregister(Cls)
       const registry = new ObserverRegistry({}, makeContainer(), null)
@@ -154,8 +154,8 @@ describe('ObserverRegistry', () => {
   describe('ref counting', () => {
     it('is reference-counted — class removed only after all registrations are released', () => {
       const { Cls } = makeObserverClass()
-      ObserverRegistry.register(Cls)  // refCount → 1
-      ObserverRegistry.register(Cls)  // refCount → 2
+      ObserverRegistry.register(Cls) // refCount → 1
+      ObserverRegistry.register(Cls) // refCount → 2
       ObserverRegistry.unregister(Cls) // refCount → 1 — still registered
       expect(ObserverRegistry.has(Cls)).toBe(true)
       ObserverRegistry.unregister(Cls) // refCount → 0 — removed
@@ -168,7 +168,7 @@ describe('ObserverRegistry', () => {
       const { Cls } = makeObserverClass()
       ObserverRegistry.register(Cls)
       const fakeSamplerRegistry = { snapshot: jest.fn() }
-      new ObserverRegistry({}, makeContainer(), fakeSamplerRegistry)
+      new ObserverRegistry({}, makeContainer(), fakeSamplerRegistry) // eslint-disable-line no-new
       expect(Cls).toHaveBeenCalledWith(
         expect.anything(),
         expect.anything(),

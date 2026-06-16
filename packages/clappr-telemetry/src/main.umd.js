@@ -4,9 +4,9 @@
  *   ClapprTelemetry.ShakaNetworkAdapter, ClapprTelemetry.BufferSampler, etc.
  */
 import TelemetryPlugin from './telemetry_plugin'
-import { NetworkAdapters, ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'
-import { SamplerRegistry, BufferSampler, DecodingSampler, PlaybackStateSampler, NetworkSampler, PlaybackTimingSampler, StreamInfoSampler } from './samplers'
-import { ObserverRegistry, VideoEventObserver } from './observers'
+import { ShakaNetworkAdapter, HlsNetworkAdapter } from './adapters'
+import { BufferSampler, DecodingSampler, PlaybackStateSampler, NetworkSampler, PlaybackTimingSampler, StreamInfoSampler } from './samplers'
+import { VideoEventObserver } from './observers'
 
 TelemetryPlugin.ShakaNetworkAdapter = ShakaNetworkAdapter
 TelemetryPlugin.HlsNetworkAdapter = HlsNetworkAdapter

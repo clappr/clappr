@@ -238,7 +238,7 @@ describe('TelemetryPlugin', () => {
 
   it.each([
     ['telemetry config is absent', undefined],
-    ['enabled is false',           { enabled: false }],
+    ['enabled is false', { enabled: false }]
   ])('returns early and skips all setup when %s', (_, telemetry) => {
     mockContainer.options.telemetry = telemetry
 
