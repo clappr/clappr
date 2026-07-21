@@ -137,7 +137,7 @@ All options are opt-in — nothing is collected by default. Components are activ
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `telemetry.enabled` | Boolean | `true` | Set to `false` to disable the plugin entirely for this player instance |
-| `telemetry.adapters` | Class[] | `[]` | Network adapter classes to activate. The first registered adapter whose `isSupported(playback)` returns `true` is used |
+| `telemetry.adapters` | Class[] | `[]` | Network adapter classes to activate for this player instance. The first one in the array whose `isSupported(playback)` returns `true` is used |
 | `telemetry.samplers` | Class[] | `[]` | Sampler classes to register for this player instance |
 | `telemetry.observers` | Class[] | `[]` | Observer classes to register for this player instance |
 | `telemetry.sampleIntervalMs` | Number | `0` | Sampling interval in ms. When `0` (default), no automatic interval is started — use `snapshot()` for on-demand collection |
@@ -147,7 +147,7 @@ All options are opt-in — nothing is collected by default. Components are activ
 
 ### Disabling individual components
 
-When components are pre-registered globally (e.g. in a shared SDK setup), use the `<name>.enabled: false` opt-out to disable specific ones for a player instance without affecting others:
+Each instance only activates its own `samplers`/`observers`/`adapters` arrays. When sharing a config object across players, use `<name>.enabled: false` to disable a component for one instance without touching the shared array:
 
 ```javascript
 new Clappr.Player({

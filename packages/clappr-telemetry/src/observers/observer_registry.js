@@ -11,27 +11,34 @@ const _refCounts = new Map()
  * before the player is instantiated.
  *
  * Observer contract: must implement `bind()` and `destroy()` on the prototype.
+ *
+ * The registry only validates and ref-counts classes; each instance only
+ * instantiates its own container's `telemetry.observers`.
  */
 export default class ObserverRegistry {
   static get name() { return 'observer-registry' }
 
+  /** True if `Cls` declares its own `static get name()`, not the auto-assigned one. */
+  static _hasOwnNameGetter(Cls) {
+    return typeof Cls === 'function' &&
+      typeof Object.getOwnPropertyDescriptor(Cls, 'name')?.get === 'function'
+  }
+
   /**
-   * Registers an observer class. The class's `name` property is used as the registry key.
-   * Reference-counted — safe to call multiple times (e.g. from concurrent player instances).
-   *
-   * @param {Function} ObserverClass - Class implementing `bind()` and `destroy()`
+   * Registers an observer class, keyed by `static get name()`. Ref-counted.
+   * @returns {boolean} false if validation failed
    */
   static register(ObserverClass) {
     const proto = ObserverClass?.prototype
     const missing = [
-      !ObserverClass?.name && 'static get name()',
+      !ObserverRegistry._hasOwnNameGetter(ObserverClass) && 'static get name()',
       typeof proto?.bind !== 'function' && 'bind()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
 
     if (missing.length > 0) {
       Log.warn('[ObserverRegistry]', `missing ${missing.join(', ')} — skipping`)
-      return
+      return false
     }
     const name = ObserverClass.name
     if (_registry.has(name) && _registry.get(name) !== ObserverClass) {
@@ -39,6 +46,7 @@ export default class ObserverRegistry {
     }
     _registry.set(name, ObserverClass)
     _refCounts.set(name, (_refCounts.get(name) || 0) + 1)
+    return true
   }
 
   /**
@@ -71,8 +79,9 @@ export default class ObserverRegistry {
 
   constructor(playback, container, samplerRegistry) {
     const cfg = container.options?.telemetry || {}
-    this._observers = [..._registry.values()]
-      .filter(Obs => isComponentEnabled(Obs, cfg))
+    const observers = cfg.observers || []
+    this._observers = observers
+      .filter(Obs => Obs != null && ObserverRegistry.has(Obs) && isComponentEnabled(Obs, cfg))
       .map(ObserverClass => new ObserverClass(playback, container, samplerRegistry))
   }
 

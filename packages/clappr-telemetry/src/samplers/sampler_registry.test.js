@@ -7,7 +7,7 @@ import { Log } from '@clappr/core'
 
 jest.mock('./buffer_sampler', () => {
   const mock = jest.fn()
-  Object.defineProperty(mock, 'name', { value: 'buffer', configurable: true })
+  Object.defineProperty(mock, 'name', { get: () => 'buffer', configurable: true })
   mock.prototype.collect = jest.fn()
   mock.prototype.destroy = jest.fn()
   return { __esModule: true, default: mock }
@@ -15,7 +15,7 @@ jest.mock('./buffer_sampler', () => {
 
 jest.mock('./decoding_sampler', () => {
   const mock = jest.fn()
-  Object.defineProperty(mock, 'name', { value: 'decoding', configurable: true })
+  Object.defineProperty(mock, 'name', { get: () => 'decoding', configurable: true })
   mock.prototype.collect = jest.fn()
   mock.prototype.destroy = jest.fn()
   return { __esModule: true, default: mock }
@@ -27,7 +27,7 @@ jest.mock('../utils', () => ({
 }))
 
 const makeContainer = (cfg = {}) => ({
-  options: { telemetry: { sampleIntervalMs: 1000, ...cfg } },
+  options: { telemetry: { sampleIntervalMs: 1000, samplers: [BufferSampler, DecodingSampler], ...cfg } },
   trigger: jest.fn()
 })
 
@@ -138,18 +138,12 @@ describe('SamplerRegistry', () => {
       expect(emitTelemetry).not.toHaveBeenCalled()
     })
 
-    it('does not emit when no samplers are registered', () => {
-      SamplerRegistry.unregister(BufferSampler)
-      SamplerRegistry.unregister(DecodingSampler)
-
-      const scheduler = new SamplerRegistry({}, makeContainer())
+    it('does not emit when cfg.samplers is empty', () => {
+      const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [] }))
       scheduler.bind()
       jest.advanceTimersByTime(1000)
 
       expect(emitTelemetry).not.toHaveBeenCalled()
-
-      SamplerRegistry.register(BufferSampler)
-      SamplerRegistry.register(DecodingSampler)
     })
   })
 
@@ -158,7 +152,7 @@ describe('SamplerRegistry', () => {
 
     beforeEach(() => {
       CustomSampler = jest.fn()
-      Object.defineProperty(CustomSampler, 'name', { value: 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = jest.fn()
       CustomSampler.prototype.destroy = jest.fn()
     })
@@ -170,23 +164,29 @@ describe('SamplerRegistry', () => {
     it('skips registration and warns when required methods are missing', () => {
       const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
       class NoMethods {}
-      SamplerRegistry.register(NoMethods)
-
-      const scheduler = new SamplerRegistry({}, makeContainer())
-      scheduler.bind()
-      jest.advanceTimersByTime(1000)
-
+      expect(SamplerRegistry.register(NoMethods)).toBe(false)
       expect(warnSpy).toHaveBeenCalled()
-      scheduler.destroy()
+      warnSpy.mockRestore()
     })
 
-    it('includes a registered external sampler in the tick', () => {
+    it('warns and returns false when the class relies on the auto-assigned name (no static get name())', () => {
+      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      class NoNameGetter {
+        collect() {}
+        destroy() {}
+      }
+      expect(SamplerRegistry.register(NoNameGetter)).toBe(false)
+      expect(warnSpy).toHaveBeenCalled()
+      warnSpy.mockRestore()
+    })
+
+    it('returns true and includes a registered external sampler in the tick', () => {
       const customInstance = { collect: jest.fn(() => ({ foo: 'bar' })), destroy: jest.fn() }
       CustomSampler.mockImplementation(() => customInstance)
 
-      SamplerRegistry.register(CustomSampler)
+      expect(SamplerRegistry.register(CustomSampler)).toBe(true)
 
-      const scheduler = new SamplerRegistry({}, makeContainer())
+      const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler] }))
       scheduler.bind()
       jest.advanceTimersByTime(1000)
 
@@ -197,19 +197,19 @@ describe('SamplerRegistry', () => {
       scheduler.destroy()
     })
 
-    it('overwrites a previously registered sampler with the same name', () => {
+    it('instantiates the exact class from its own cfg.samplers, unaffected by a name collision overwrite elsewhere', () => {
       const NewSampler = jest.fn()
-      Object.defineProperty(NewSampler, 'name', { value: 'custom', configurable: true })
+      Object.defineProperty(NewSampler, 'name', { get: () => 'custom', configurable: true })
       NewSampler.prototype.collect = jest.fn()
       NewSampler.prototype.destroy = jest.fn()
 
-      SamplerRegistry.register(CustomSampler)
-      SamplerRegistry.register(NewSampler)
+      SamplerRegistry.register(CustomSampler) // this container's own class
+      SamplerRegistry.register(NewSampler) // registered elsewhere, same name — overwrites the registry map entry
 
-      new SamplerRegistry({}, makeContainer()) // eslint-disable-line no-new
+      new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler] })) // eslint-disable-line no-new
 
-      expect(NewSampler).toHaveBeenCalled()
-      expect(CustomSampler).not.toHaveBeenCalled()
+      expect(CustomSampler).toHaveBeenCalled()
+      expect(NewSampler).not.toHaveBeenCalled()
 
       SamplerRegistry.unregister(NewSampler)
     })
@@ -232,6 +232,40 @@ describe('SamplerRegistry', () => {
     })
   })
 
+  describe('isolation between instances', () => {
+    it('only instantiates samplers listed in this container own cfg.samplers, even if others are globally registered', () => {
+      const CustomSampler = jest.fn()
+      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
+      CustomSampler.prototype.collect = jest.fn()
+      CustomSampler.prototype.destroy = jest.fn()
+      SamplerRegistry.register(CustomSampler) // registered globally, e.g. by another player instance
+
+      const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [BufferSampler] }))
+      scheduler.bind()
+      jest.advanceTimersByTime(1000)
+
+      const [, , data] = emitTelemetry.mock.calls[0]
+      expect(data).toHaveProperty('buffer')
+      expect(data).not.toHaveProperty('decoding')
+      expect(data).not.toHaveProperty('custom')
+      expect(CustomSampler).not.toHaveBeenCalled()
+
+      scheduler.destroy()
+      SamplerRegistry.unregister(CustomSampler)
+    })
+
+    it('does not instantiate a sampler present in cfg.samplers but never registered', () => {
+      const Unregistered = jest.fn()
+      Object.defineProperty(Unregistered, 'name', { get: () => 'unregistered', configurable: true })
+      Unregistered.prototype.collect = jest.fn()
+      Unregistered.prototype.destroy = jest.fn()
+
+      const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [Unregistered] }))
+      expect(Unregistered).not.toHaveBeenCalled()
+      scheduler.destroy()
+    })
+  })
+
   describe('isEnabled filtering', () => {
     it('does not instantiate a sampler when cfg[name].enabled is false', () => {
       const registry = new SamplerRegistry({}, makeContainer({ buffer: { enabled: false } }))
@@ -240,7 +274,7 @@ describe('SamplerRegistry', () => {
       registry.destroy()
     })
 
-    it('instantiates all samplers when no enabled flag is set', () => {
+    it('instantiates all samplers in cfg.samplers when no enabled flag is set', () => {
       const registry = new SamplerRegistry({}, makeContainer())
       expect(BufferSampler).toHaveBeenCalledTimes(1)
       expect(DecodingSampler).toHaveBeenCalledTimes(1)
@@ -255,13 +289,13 @@ describe('SamplerRegistry', () => {
 
     it('defers to static isEnabled(cfg) when defined on the class', () => {
       const CustomSampler = jest.fn()
-      Object.defineProperty(CustomSampler, 'name', { value: 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = jest.fn()
       CustomSampler.prototype.destroy = jest.fn()
       CustomSampler.isEnabled = jest.fn(() => false)
 
       SamplerRegistry.register(CustomSampler)
-      new SamplerRegistry({}, makeContainer()) // eslint-disable-line no-new
+      new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler] })) // eslint-disable-line no-new
 
       expect(CustomSampler.isEnabled).toHaveBeenCalled()
       expect(CustomSampler).not.toHaveBeenCalled()
@@ -271,13 +305,13 @@ describe('SamplerRegistry', () => {
 
     it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
       const CustomSampler = jest.fn()
-      Object.defineProperty(CustomSampler, 'name', { value: 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = jest.fn()
       CustomSampler.prototype.destroy = jest.fn()
       CustomSampler.isEnabled = jest.fn(() => true)
 
       SamplerRegistry.register(CustomSampler)
-      const registry = new SamplerRegistry({}, makeContainer({ custom: { enabled: false } }))
+      const registry = new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler], custom: { enabled: false } }))
 
       expect(CustomSampler.isEnabled).toHaveBeenCalled()
       expect(CustomSampler).not.toHaveBeenCalled()
@@ -290,7 +324,7 @@ describe('SamplerRegistry', () => {
   describe('ref counting', () => {
     it('is reference-counted — class removed only after all registrations are released', () => {
       const CustomSampler = jest.fn()
-      Object.defineProperty(CustomSampler, 'name', { value: 'counted', configurable: true })
+      Object.defineProperty(CustomSampler, 'name', { get: () => 'counted', configurable: true })
       CustomSampler.prototype.collect = jest.fn()
       CustomSampler.prototype.destroy = jest.fn()
 

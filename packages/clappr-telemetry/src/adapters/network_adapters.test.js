@@ -25,16 +25,17 @@ describe('NetworkAdapters', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(NetworkAdapters.find({ name: 'anything' })).toBe(adapter)
+      expect(NetworkAdapters.find({ name: 'anything' }, { adapters: [adapter] })).toBe(adapter)
     })
 
-    it('returns the first matching adapter when multiple match', () => {
+    it('returns the first matching adapter from cfg.adapters, in array order', () => {
       const first = makeAdapter('first', true)
       const second = makeAdapter('second', true)
       register(first)
       register(second)
 
-      expect(NetworkAdapters.find({})).toBe(first)
+      expect(NetworkAdapters.find({}, { adapters: [first, second] })).toBe(first)
+      expect(NetworkAdapters.find({}, { adapters: [second, first] })).toBe(second)
     })
 
     it('calls isSupported with the playback instance', () => {
@@ -42,7 +43,7 @@ describe('NetworkAdapters', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      NetworkAdapters.find(playback)
+      NetworkAdapters.find(playback, { adapters: [adapter] })
 
       expect(adapter.isSupported).toHaveBeenCalledWith(playback)
     })
@@ -51,21 +52,27 @@ describe('NetworkAdapters', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(NetworkAdapters.find({}, { custom: { enabled: false } })).toBeNull()
+      expect(NetworkAdapters.find({}, { adapters: [adapter], custom: { enabled: false } })).toBeNull()
     })
 
     it('finds adapter when cfg[name] is not set', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(NetworkAdapters.find({}, {})).toBe(adapter)
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBe(adapter)
     })
 
-    it('is backwards-compatible when called without cfg', () => {
+    it('returns null when called without cfg.adapters, even if the class is registered elsewhere', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(NetworkAdapters.find({})).toBe(adapter)
+      expect(NetworkAdapters.find({})).toBeNull()
+    })
+
+    it('ignores an adapter that is not registered, even if present in cfg.adapters', () => {
+      const adapter = makeAdapter('unregistered', true)
+
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBeNull()
     })
 
     it('defers to static isEnabled(cfg) when defined on the adapter', () => {
@@ -73,8 +80,23 @@ describe('NetworkAdapters', () => {
       adapter.isEnabled = jest.fn(() => false)
       register(adapter)
 
-      expect(NetworkAdapters.find({}, {})).toBeNull()
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBeNull()
       expect(adapter.isEnabled).toHaveBeenCalled()
+    })
+  })
+
+  // ─── isolation ───────────────────────────────────────────────────────────────
+
+  describe('isolation', () => {
+    it('a container only ever matches adapters listed in its own cfg.adapters', () => {
+      const a = makeAdapter('a', true)
+      const b = makeAdapter('b', true)
+      register(a)
+      register(b)
+
+      // both are registered globally, but each "instance" only sees its own list
+      expect(NetworkAdapters.find({}, { adapters: [a] })).toBe(a)
+      expect(NetworkAdapters.find({}, { adapters: [b] })).toBe(b)
     })
   })
 
@@ -85,16 +107,7 @@ describe('NetworkAdapters', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
-      expect(NetworkAdapters.find({})).toBe(adapter)
-    })
-
-    it('first registered adapter has higher priority', () => {
-      const custom = makeAdapter('custom', true)
-      const builtIn = makeAdapter('built_in', true)
-      register(custom)
-      register(builtIn)
-
-      expect(NetworkAdapters.find({})).toBe(custom)
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBe(adapter)
     })
 
     it('registering the same class twice is a no-op', () => {
@@ -102,7 +115,20 @@ describe('NetworkAdapters', () => {
       register(adapter)
       register(adapter)
 
-      expect(NetworkAdapters.find({})).toBe(adapter)
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBe(adapter)
+    })
+
+    it('returns false and warns when static isSupported() is missing', () => {
+      const adapter = { name: 'bad' }
+
+      expect(NetworkAdapters.register(adapter)).toBe(false)
+    })
+
+    it('returns true when registration succeeds', () => {
+      const adapter = makeAdapter('custom', true)
+      _registered.push(adapter)
+
+      expect(NetworkAdapters.register(adapter)).toBe(true)
     })
   })
 
@@ -114,7 +140,7 @@ describe('NetworkAdapters', () => {
       register(adapter)
       NetworkAdapters.unregister(adapter)
 
-      expect(NetworkAdapters.find({})).toBeNull()
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBeNull()
     })
 
     it('does not throw when unregistering an adapter that was never registered', () => {
@@ -128,7 +154,7 @@ describe('NetworkAdapters', () => {
       register(adapter) // refCount → 1
       register(adapter) // refCount → 2
       NetworkAdapters.unregister(adapter) // refCount → 1 — still in registry
-      expect(NetworkAdapters.find({})).toBe(adapter)
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBe(adapter)
       // afterEach drains the remaining ref via _registered = [adapter, adapter]
     })
   })
@@ -139,9 +165,9 @@ describe('NetworkAdapters', () => {
       NetworkAdapters.register(adapter) // refCount → 1
       NetworkAdapters.register(adapter) // refCount → 2
       NetworkAdapters.unregister(adapter) // refCount → 1 — still findable
-      expect(NetworkAdapters.find({})).toBe(adapter)
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBe(adapter)
       NetworkAdapters.unregister(adapter) // refCount → 0 — removed
-      expect(NetworkAdapters.find({})).toBeNull()
+      expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBeNull()
     })
   })
 })
