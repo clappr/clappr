@@ -85,9 +85,15 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)
     this.observerRegistry.bind()
 
+    // Always tear down the previous adapter first — otherwise switching to a
+    // playback/source with no matching adapter would leave the old one bound
+    // to a stale playback instance.
+    if (this.adapter) {
+      this.adapter.destroy()
+      this.adapter = null
+    }
     const AdapterClass = NetworkAdapters.find(playback, cfg)
     if (AdapterClass) {
-      if (this.adapter) this.adapter.destroy()
       this.adapter = new AdapterClass(playback, this.container)
       this.adapter.bind()
     } else if (adapters.length > 0) {
