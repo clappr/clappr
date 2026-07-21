@@ -5,12 +5,12 @@ import MockSamplerRegistryClass from './samplers/sampler_registry'
 import MockObserverRegistryClass from './observers/observer_registry'
 
 jest.mock('./adapters', () => ({
-  NetworkAdapters: { find: jest.fn(), register: jest.fn(), unregister: jest.fn(), has: jest.fn(() => false), size: 0 }
+  NetworkAdapters: { find: jest.fn(), register: jest.fn(() => true), unregister: jest.fn(), has: jest.fn(() => false), size: 0 }
 }))
 
 jest.mock('./samplers/sampler_registry', () => {
   const mock = jest.fn()
-  mock.register = jest.fn()
+  mock.register = jest.fn(() => true)
   mock.unregister = jest.fn()
   mock.has = jest.fn(() => false)
   return { __esModule: true, default: mock }
@@ -22,7 +22,7 @@ jest.mock('./samplers', () => ({
 
 jest.mock('./observers/observer_registry', () => {
   const mock = jest.fn()
-  mock.register = jest.fn()
+  mock.register = jest.fn(() => true)
   mock.unregister = jest.fn()
   mock.has = jest.fn(() => false)
   return { __esModule: true, default: mock }
@@ -236,6 +236,17 @@ describe('TelemetryPlugin', () => {
     expect(NetworkAdapters.register).not.toHaveBeenCalled()
   })
 
+  it('does not unregister an adapter that failed registration (avoids removing an unrelated class on destroy)', () => {
+    const InvalidAdapter = jest.fn()
+    NetworkAdapters.register.mockReturnValueOnce(false)
+    mockContainer.options.telemetry.adapters = [InvalidAdapter]
+
+    plugin.onPlaybackRead(mockPlayback)
+    plugin.destroy()
+
+    expect(NetworkAdapters.unregister).not.toHaveBeenCalledWith(InvalidAdapter)
+  })
+
   it.each([
     ['telemetry config is absent', undefined],
     ['enabled is false', { enabled: false }]
@@ -303,25 +314,22 @@ describe('TelemetryPlugin', () => {
     })
 
     it('registers samplers from telemetry.samplers config before instantiating SamplerRegistry', () => {
-      const SamplerRegistry = MockSamplerRegistryClass
-      const registerSpy = jest.spyOn(SamplerRegistry, 'register').mockImplementation(() => {})
       const SamplerA = jest.fn()
       const SamplerB = jest.fn()
       mockContainer.options.telemetry.samplers = [SamplerA, SamplerB]
 
       plugin.onPlaybackRead(mockPlayback)
 
-      expect(registerSpy).toHaveBeenCalledWith(SamplerA)
-      expect(registerSpy).toHaveBeenCalledWith(SamplerB)
+      expect(MockSamplerRegistryClass.register).toHaveBeenCalledWith(SamplerA)
+      expect(MockSamplerRegistryClass.register).toHaveBeenCalledWith(SamplerB)
     })
 
     it('does not call SamplerRegistry.register when samplers config is absent', () => {
-      const registerSpy = jest.spyOn(MockSamplerRegistryClass, 'register').mockImplementation(() => {})
       delete mockContainer.options.telemetry.samplers
 
       plugin.onPlaybackRead(mockPlayback)
 
-      expect(registerSpy).not.toHaveBeenCalled()
+      expect(MockSamplerRegistryClass.register).not.toHaveBeenCalled()
     })
 
     it('calls unregister on destroy for samplers that were pre-registered in the global registry', () => {
@@ -333,6 +341,17 @@ describe('TelemetryPlugin', () => {
       plugin.destroy()
 
       expect(MockSamplerRegistryClass.unregister).toHaveBeenCalledWith(SamplerA)
+    })
+
+    it('does not unregister a sampler that failed registration (avoids removing an unrelated class sharing its name)', () => {
+      const InvalidSampler = jest.fn()
+      MockSamplerRegistryClass.register.mockReturnValueOnce(false)
+      mockContainer.options.telemetry.samplers = [InvalidSampler]
+
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.destroy()
+
+      expect(MockSamplerRegistryClass.unregister).not.toHaveBeenCalledWith(InvalidSampler)
     })
   })
 
@@ -363,6 +382,17 @@ describe('TelemetryPlugin', () => {
     it('should not throw on destroy when observerRegistry is null', () => {
       plugin.observerRegistry = null
       expect(() => plugin.destroy()).not.toThrow()
+    })
+
+    it('does not unregister an observer that failed registration (avoids removing an unrelated class sharing its name)', () => {
+      const InvalidObserver = jest.fn()
+      MockObserverRegistryClass.register.mockReturnValueOnce(false)
+      mockContainer.options.telemetry.observers = [InvalidObserver]
+
+      plugin.onPlaybackRead(mockPlayback)
+      plugin.destroy()
+
+      expect(MockObserverRegistryClass.unregister).not.toHaveBeenCalledWith(InvalidObserver)
     })
   })
 })

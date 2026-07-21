@@ -61,17 +61,15 @@ export default class TelemetryPlugin extends ContainerPlugin {
     const cfg = this.container.options?.telemetry
     if (!cfg || cfg.enabled === false) return
 
-    // Unregister previously tracked config classes (ref-counted — global registry
-    // only removes them when the last player holding a ref calls unregister).
+    // Only track classes that actually registered — these registries are keyed
+    // by name, so unregistering a rejected class could remove an unrelated one.
     this._configSamplers.forEach(S => SamplerRegistry.unregister(S))
-    const samplers = cfg.samplers || []
-    this._configSamplers = samplers.filter(S => S != null)
-    samplers.forEach(S => SamplerRegistry.register(S))
+    const samplers = (cfg.samplers || []).filter(S => S != null)
+    this._configSamplers = samplers.filter(S => SamplerRegistry.register(S))
 
     this._configAdapters.forEach(A => NetworkAdapters.unregister(A))
-    const adapters = cfg.adapters || []
-    this._configAdapters = adapters.filter(A => A != null)
-    adapters.forEach(A => NetworkAdapters.register(A))
+    const adapters = (cfg.adapters || []).filter(A => A != null)
+    this._configAdapters = adapters.filter(A => NetworkAdapters.register(A))
 
     // Samplers must be bound before the adapter so events emitted during
     // adapter.bind() (e.g. STREAM_INFO on Shaka's attachFilters) are captured.
@@ -80,9 +78,8 @@ export default class TelemetryPlugin extends ContainerPlugin {
     this.samplerRegistry.bind()
 
     this._configObservers.forEach(O => ObserverRegistry.unregister(O))
-    const observers = cfg.observers || []
-    this._configObservers = observers.filter(O => O != null)
-    observers.forEach(O => ObserverRegistry.register(O))
+    const observers = (cfg.observers || []).filter(O => O != null)
+    this._configObservers = observers.filter(O => ObserverRegistry.register(O))
 
     if (this.observerRegistry) this.observerRegistry.destroy()
     this.observerRegistry = new ObserverRegistry(playback, this.container, this.samplerRegistry)

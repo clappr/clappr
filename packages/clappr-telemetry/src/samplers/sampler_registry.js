@@ -16,29 +16,36 @@ const _refCounts = new Map()
  * omitted when the sampler returns `null` (e.g. decoding seed call).
  *
  * **Configuration** via `container.options.telemetry`:
- * - `sampleIntervalMs` {number} — tick frequency in ms (default: 0 — disabled, use snapshot() for on-demand collection)
+ * - `samplers` {Function[]} — sampler classes for this container
+ * - `sampleIntervalMs` {number} — tick frequency in ms (default: 0 — disabled)
+ *
+ * The registry only validates and ref-counts classes; each instance only
+ * instantiates its own container's `telemetry.samplers`.
  */
 export default class SamplerRegistry {
   static get name() { return 'sampler-registry' }
 
+  /** True if `Cls` declares its own `static get name()`, not the auto-assigned one. */
+  static _hasOwnNameGetter(Cls) {
+    return typeof Cls === 'function' &&
+      typeof Object.getOwnPropertyDescriptor(Cls, 'name')?.get === 'function'
+  }
+
   /**
-   * Registers a sampler class. The sampler's `static get name()` is used as
-   * the key in the `mse.sample` payload. Reference-counted — safe to call
-   * multiple times (e.g. from concurrent player instances).
-   *
-   * @param {Function} SamplerClass - Class with `static get name()`, `collect()`, and `destroy()`
+   * Registers a sampler class, keyed by `static get name()`. Ref-counted.
+   * @returns {boolean} false if validation failed
    */
   static register(SamplerClass) {
     const proto = SamplerClass?.prototype
     const missing = [
-      !SamplerClass?.name && 'static get name()',
+      !SamplerRegistry._hasOwnNameGetter(SamplerClass) && 'static get name()',
       typeof proto?.collect !== 'function' && 'collect()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
 
     if (missing.length > 0) {
       Log.warn('[SamplerRegistry]', `missing ${missing.join(', ')} — skipping`)
-      return
+      return false
     }
     const name = SamplerClass.name
     if (_registry.has(name) && _registry.get(name) !== SamplerClass) {
@@ -46,6 +53,7 @@ export default class SamplerRegistry {
     }
     _registry.set(name, SamplerClass)
     _refCounts.set(name, (_refCounts.get(name) || 0) + 1)
+    return true
   }
 
   /**
@@ -81,9 +89,10 @@ export default class SamplerRegistry {
     this._container = container
     const raw = cfg.sampleIntervalMs
     this._intervalMs = (typeof raw === 'number' && raw > 0) ? raw : DISABLED_INTERVAL
-    this._samplers = [..._registry.entries()]
-      .filter(([, S]) => isComponentEnabled(S, cfg))
-      .map(([key, S]) => [key, new S(playback, container)])
+    const samplers = cfg.samplers || []
+    this._samplers = samplers
+      .filter(S => S != null && SamplerRegistry.has(S) && isComponentEnabled(S, cfg))
+      .map(S => [S.name, new S(playback, container)])
     this._timerId = null
   }
 
