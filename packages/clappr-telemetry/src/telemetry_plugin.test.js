@@ -194,6 +194,21 @@ describe('TelemetryPlugin', () => {
     expect(plugin.adapter).toBe(newAdapter)
   })
 
+  it('should destroy previous adapter when a subsequent onPlaybackRead finds no matching adapter', () => {
+    const oldAdapter = { bind: jest.fn(), destroy: jest.fn() }
+    const OldClass = jest.fn(() => oldAdapter)
+
+    NetworkAdapters.find.mockReturnValueOnce(OldClass)
+    plugin.onPlaybackRead(mockPlayback)
+    expect(plugin.adapter).toBe(oldAdapter)
+
+    NetworkAdapters.find.mockReturnValueOnce(null)
+    plugin.onPlaybackRead(mockPlayback)
+
+    expect(oldAdapter.destroy).toHaveBeenCalled()
+    expect(plugin.adapter).toBeNull()
+  })
+
   it('should log warning when adapters are provided but none matches the playback engine', () => {
     jest.spyOn(Log, 'warn').mockImplementation(() => {})
     const MockAdapterClass = jest.fn()
