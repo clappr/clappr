@@ -7,7 +7,7 @@ import {
   UNKNOWN_ERROR,
   DEFAULT_MINIMUM_DVR_SIZE,
   LIVE_STATE_THRESHOLD,
-  getExtension,
+  getExtension
 } from './utils/constants'
 
 /**
@@ -62,8 +62,7 @@ export default class HTML5TVsPlayback extends Playback {
 
     const { audioTracks } = this.el
     const audioTracksFormatted = []
-    for (let i = 0 ; i < audioTracks.length ; i++)
-      audioTracksFormatted.push(this._formatAudioTrack(audioTracks[i]))
+    for (let i = 0 ; i < audioTracks.length ; i++) { audioTracksFormatted.push(this._formatAudioTrack(audioTracks[i])) }
 
     return audioTracksFormatted
   }
@@ -73,11 +72,12 @@ export default class HTML5TVsPlayback extends Playback {
 
     let currentTrack = null
     const { audioTracks } = this.el
-    for (let i = 0; i < audioTracks.length; i++)
+    for (let i = 0; i < audioTracks.length; i++) {
       if (audioTracks[i].enabled) {
         currentTrack = audioTracks[i]
         break
       }
+    }
 
     return currentTrack && this._formatAudioTrack(currentTrack)
   }
@@ -118,7 +118,7 @@ export default class HTML5TVsPlayback extends Playback {
       abort: this._onAbort,
       suspend: this._onSuspend,
       ended: this._onEnded,
-      error: this._onError,
+      error: this._onError
     }
   }
 
@@ -185,7 +185,7 @@ export default class HTML5TVsPlayback extends Playback {
     const formattedError = this.createError({
       code: 'DRM',
       description: errorMessage,
-      level: PlayerError.Levels.FATAL,
+      level: PlayerError.Levels.FATAL
     })
 
     this.trigger(Events.PLAYBACK_ERROR, formattedError)
@@ -208,7 +208,7 @@ export default class HTML5TVsPlayback extends Playback {
       id: htmlAudioTrack.id,
       language: htmlAudioTrack.language,
       label: htmlAudioTrack.label,
-      kind: htmlAudioTrack.kind,
+      kind: htmlAudioTrack.kind
     }
   }
 
@@ -326,7 +326,7 @@ export default class HTML5TVsPlayback extends Playback {
       code,
       description: message,
       raw: rawError,
-      level: PlayerError.Levels.FATAL,
+      level: PlayerError.Levels.FATAL
     })
 
     this.trigger(Events.PLAYBACK_ERROR, formattedError)
@@ -373,8 +373,7 @@ export default class HTML5TVsPlayback extends Playback {
     if (!track || track.enabled) return
 
     const { audioTracks } = this.el
-    for (let i = 0; i < audioTracks.length; i++)
-      audioTracks[i].enabled = audioTracks[i].id === id
+    for (let i = 0; i < audioTracks.length; i++) { audioTracks[i].enabled = audioTracks[i].id === id }
 
     this.trigger(Events.PLAYBACK_AUDIO_CHANGED, this._formatAudioTrack(track))
   }

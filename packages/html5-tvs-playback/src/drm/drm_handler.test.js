@@ -6,19 +6,19 @@ const {
   getFullChallengeMessageTemplate,
   getLicenseOverrideMessageTemplate,
   getClearMessageTemplate,
-  createDrmAgent,
+  createDrmAgent
 } = DRMFunctions
 
 const {
   sendLicenseRequest,
-  clearLicenseRequest,
+  clearLicenseRequest
 } = DRMHandler
 
 let oipfdrmagent
 const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][DRMHandler]'
 
-describe('DRMHandler', function() {
+describe('DRMHandler', function () {
   beforeEach(() => {
     this.restoreConsole = mockConsole()
     jest.clearAllMocks()
@@ -41,12 +41,12 @@ describe('DRMHandler', function() {
   describe('getFullChallengeMessageTemplate method', () => {
     test('returns XML template with the composition of the received XML', () => {
       const header = 'fake_xml'
-      const result = '<?xml version="1.0" encoding="utf-8"?>'
-      + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
-      + '<LicenseAcquisition>'
-      + `<Header>${header}</Header>`
-      + '</LicenseAcquisition>'
-      + '</PlayReadyInitiator>'
+      const result = '<?xml version="1.0" encoding="utf-8"?>' +
+      '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+      '<LicenseAcquisition>' +
+      `<Header>${header}</Header>` +
+      '</LicenseAcquisition>' +
+      '</PlayReadyInitiator>'
       const response = getFullChallengeMessageTemplate(header)
 
       expect(response).toEqual(result)
@@ -56,12 +56,12 @@ describe('DRMHandler', function() {
   describe('getLicenseOverrideMessageTemplate method', () => {
     test('returns XML template with received license server URL', () => {
       const fakeLicenseServerURL = 'http://fake-domain/fake_folder/playready?deviceId=FAKEID'
-      const result = '<?xml version="1.0" encoding="utf-8"?>'
-      + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
-      + '<LicenseServerUriOverride>'
-      + `<LA_URL>${fakeLicenseServerURL}</LA_URL>`
-      + '</LicenseServerUriOverride>'
-      + '</PlayReadyInitiator>'
+      const result = '<?xml version="1.0" encoding="utf-8"?>' +
+      '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+      '<LicenseServerUriOverride>' +
+      `<LA_URL>${fakeLicenseServerURL}</LA_URL>` +
+      '</LicenseServerUriOverride>' +
+      '</PlayReadyInitiator>'
       const response = getLicenseOverrideMessageTemplate(fakeLicenseServerURL)
 
       expect(response).toEqual(result)
@@ -70,9 +70,9 @@ describe('DRMHandler', function() {
 
   describe('getClearMessageTemplate method', () => {
     test('returns XML template without any licenseServerURL', () => {
-      const result = '<?xml version="1.0" encoding="utf-8"?>'
-      + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
-      + '</PlayReadyInitiator>'
+      const result = '<?xml version="1.0" encoding="utf-8"?>' +
+      '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+      '</PlayReadyInitiator>'
 
       expect(getClearMessageTemplate()).toEqual(result)
     })
@@ -141,7 +141,7 @@ describe('DRMHandler', function() {
         '%c[warn][DRMHandler]',
         'color: #ff8000;font-weight: bold; font-size: 13px;',
         'Error at sendDRMMessage call',
-        'oipfdrmagent.sendDRMMessage is not a function',
+        'oipfdrmagent.sendDRMMessage is not a function'
       )
 
       expect(successCb).toHaveBeenCalledTimes(1)
@@ -213,7 +213,7 @@ describe('DRMHandler', function() {
       expect(console.log).toHaveBeenCalledWith(
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
-        'No one DRM license has been configured before. It\'s not necessary to clear any license server.',
+        'No one DRM license has been configured before. It\'s not necessary to clear any license server.'
       )
     })
 
@@ -237,7 +237,7 @@ describe('DRMHandler', function() {
         '%c[error][DRMHandler]',
         'color: #ff0000;font-weight: bold; font-size: 13px;',
         'Error at sendDRMMessage call',
-        'oipfdrmagent.sendDRMMessage is not a function',
+        'oipfdrmagent.sendDRMMessage is not a function'
       )
 
       expect(errorCb).toHaveBeenCalledTimes(1)

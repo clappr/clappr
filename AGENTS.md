@@ -18,6 +18,7 @@ Monorepo managed by Lerna with Yarn workspaces. Each package has its own `packag
   - `packages/clappr-zepto/` — Lightweight DOM utilities for Clappr UI
   - `packages/hlsjs-playback/` — HLS via hls.js (`@clappr/hlsjs-playback`)
   - `packages/dash-shaka-playback/` — MPEG-DASH via Shaka Player
+  - `packages/html5-tvs-playback/` — HTML5 playback for HbbTV smart TVs (`@clappr/clappr-html5-tvs-playback`)
   - `packages/clappr-telemetry/` — Telemetry helpers
 
 ## Tooling
@@ -61,7 +62,7 @@ Do not read these by default — open only when the task involves the topic.
 | Events | `apps/clappr.io/docs/guides/events.md` |
 | Supported formats | `apps/clappr.io/docs/supported_formats.md` |
 | FAQ | `apps/clappr.io/docs/faq.md` |
-| HLS / DASH playback | `packages/hlsjs-playback/README.md`, `packages/dash-shaka-playback/README.md` |
+| HLS / DASH / Smart TV playback | `packages/hlsjs-playback/README.md`, `packages/dash-shaka-playback/README.md`, `packages/html5-tvs-playback/README.md` |
 
 ### Code map
 

@@ -42,9 +42,9 @@ const createAudioTrackListStub = () => {
         language: 'en',
         kind: 'description',
         label: 'English (describes video)',
-        enabled: true,
+        enabled: true
       },
-      enumerable: true,
+      enumerable: true
     },
     1: {
       value: {
@@ -52,16 +52,16 @@ const createAudioTrackListStub = () => {
         language: 'en',
         kind: 'main',
         label: 'English',
-        enabled: false,
+        enabled: false
       },
-      enumerable: true,
+      enumerable: true
     },
-    length: { value: 2 },
+    length: { value: 2 }
   })
 
   return {
     value: tracks,
-    configurable: true,
+    configurable: true
   }
 }
 
@@ -72,7 +72,7 @@ const setHTMLMediaElementStubs = () => {
   Object.defineProperty(window.HTMLMediaElement.prototype, 'audioTracks', createAudioTrackListStub())
 }
 
-describe('HTML5TVsPlayback', function() {
+describe('HTML5TVsPlayback', function () {
   beforeEach(() => {
     setHTMLMediaElementStubs()
 
@@ -183,8 +183,8 @@ describe('HTML5TVsPlayback', function() {
         seekable: {
           start: index => startTimeChunks[index],
           end: index => endTimeChunks[index],
-          length: 3,
-        },
+          length: 3
+        }
       }
 
       expect(this.playback.duration).toEqual(1000)
@@ -192,7 +192,6 @@ describe('HTML5TVsPlayback', function() {
 
     test('handle exception if TimeRange access throws error', () => {
       const startTimeChunks = [0, 11, 101]
-      const endTimeChunks = [10, 100, 1000]
 
       jest.spyOn(this.playback, 'isLive', 'get').mockImplementation(() => true)
 
@@ -200,7 +199,7 @@ describe('HTML5TVsPlayback', function() {
         seekable: {
           start: index => startTimeChunks[index],
           end: index => { throw new Error('IndexSizeError') },
-          length: 3,
+          length: 3
         },
         duration: Infinity
       }
@@ -253,13 +252,13 @@ describe('HTML5TVsPlayback', function() {
         id: '0',
         language: 'en',
         kind: 'description',
-        label: 'English (describes video)',
+        label: 'English (describes video)'
       })
       expect(tracks).toContainEqual({
         id: '1',
         language: 'en',
         kind: 'main',
-        label: 'English',
+        label: 'English'
       })
     })
   })
@@ -270,7 +269,7 @@ describe('HTML5TVsPlayback', function() {
         id: '0',
         language: 'en',
         kind: 'description',
-        label: 'English (describes video)',
+        label: 'English (describes video)'
       })
     })
 
@@ -399,7 +398,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement canplay event is triggered: ',
-        canPlayEvent,
+        canPlayEvent
       )
     })
 
@@ -411,7 +410,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement canplaythrough event is triggered: ',
-        canPlayThroughEvent,
+        canPlayThroughEvent
       )
     })
 
@@ -423,7 +422,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement loadstart event is triggered: ',
-        loadStartEvent,
+        loadStartEvent
       )
     })
 
@@ -435,7 +434,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement loadedmetadata event is triggered: ',
-        loadedMetadataEvent,
+        loadedMetadataEvent
       )
     })
 
@@ -447,7 +446,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement loadeddata event is triggered: ',
-        loadDataEvent,
+        loadDataEvent
       )
     })
 
@@ -459,7 +458,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement waiting event is triggered: ',
-        waitingEvent,
+        waitingEvent
       )
     })
 
@@ -471,7 +470,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement stalled event is triggered: ',
-        stalledEvent,
+        stalledEvent
       )
     })
 
@@ -483,7 +482,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement emptied event is triggered: ',
-        emptiedEvent,
+        emptiedEvent
       )
     })
 
@@ -495,7 +494,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement play event is triggered: ',
-        playEvent,
+        playEvent
       )
     })
 
@@ -507,7 +506,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement playing event is triggered: ',
-        playingEvent,
+        playingEvent
       )
     })
 
@@ -519,7 +518,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement pause event is triggered: ',
-        pauseEvent,
+        pauseEvent
       )
     })
 
@@ -531,7 +530,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement ratechange event is triggered: ',
-        rateChangeEvent,
+        rateChangeEvent
       )
     })
 
@@ -543,7 +542,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement volumechange event is triggered: ',
-        volumeChangeEvent,
+        volumeChangeEvent
       )
     })
 
@@ -555,7 +554,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement seeking event is triggered: ',
-        seekingEvent,
+        seekingEvent
       )
     })
 
@@ -567,7 +566,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement seeked event is triggered: ',
-        seekedEvent,
+        seekedEvent
       )
     })
 
@@ -579,7 +578,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement durationchange event is triggered: ',
-        durationChangeEvent,
+        durationChangeEvent
       )
     })
 
@@ -591,7 +590,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement abort event is triggered: ',
-        abortEvent,
+        abortEvent
       )
     })
 
@@ -603,7 +602,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement suspend event is triggered: ',
-        suspendEvent,
+        suspendEvent
       )
     })
 
@@ -615,7 +614,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_INFO_HEAD_MESSAGE,
         LOG_INFO_STYLE,
         'The HTMLMediaElement ended event is triggered: ',
-        endedEvent,
+        endedEvent
       )
     })
 
@@ -628,7 +627,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
         'The HTMLMediaElement error event is triggered: ',
-        errorEvent,
+        errorEvent
       )
     })
 
@@ -642,7 +641,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
         'The HTMLMediaElement error event is triggered: ',
-        errorEvent,
+        errorEvent
       )
     })
   })
@@ -727,7 +726,7 @@ describe('HTML5TVsPlayback', function() {
       expect(DRMHandler.sendLicenseRequest).toHaveBeenCalledWith(
         container.playback.config.drm,
         container.playback._onDrmConfigured,
-        container.playback._onDrmError,
+        container.playback._onDrmError
       )
     })
 
@@ -805,8 +804,8 @@ describe('HTML5TVsPlayback', function() {
           level: 'FATAL',
           origin: 'html5_tvs_playback',
           raw: {},
-          scope: 'playback',
-        },
+          scope: 'playback'
+        }
       )
     })
   })
@@ -986,8 +985,8 @@ describe('HTML5TVsPlayback', function() {
           level: 'FATAL',
           origin: 'html5_tvs_playback',
           raw: { code: 171, message: 'É mentirinha!' },
-          scope: 'playback',
-        },
+          scope: 'playback'
+        }
       )
     })
   })
@@ -1040,7 +1039,7 @@ describe('HTML5TVsPlayback', function() {
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
         'The play promise throws one error: ',
-        error,
+        error
       ))
     })
   })
@@ -1070,7 +1069,7 @@ describe('HTML5TVsPlayback', function() {
       expect(console.log).toHaveBeenCalledWith(
         LOG_WARN_HEAD_MESSAGE,
         LOG_WARN_STYLE,
-        'Attempting to seek to a negative time. Ignoring this operation.',
+        'Attempting to seek to a negative time. Ignoring this operation.'
       )
     })
 

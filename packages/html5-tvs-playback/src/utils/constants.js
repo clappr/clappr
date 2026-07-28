@@ -14,7 +14,7 @@ export const READY_STATE_STAGES = {
   HAVE_METADATA: 1,
   HAVE_CURRENT_DATA: 2,
   HAVE_FUTURE_DATA: 3,
-  HAVE_ENOUGH_DATA: 4,
+  HAVE_ENOUGH_DATA: 4
 }
 
 /** Enum of supported mime types.
@@ -25,7 +25,7 @@ export const MIME_TYPES = {
   MP4: 'video/mp4',
   VND_APPLE_MPEGURL: 'application/vnd.apple.mpegurl',
   VND_MS_SSTR: 'application/vnd.ms-sstr+xml',
-  DASH: 'application/dash+xml',
+  DASH: 'application/dash+xml'
 }
 
 export const MIME_TYPES_BY_EXTENSION = {
@@ -33,7 +33,7 @@ export const MIME_TYPES_BY_EXTENSION = {
   m3u: MIME_TYPES.VND_APPLE_MPEGURL,
   mp4: MIME_TYPES.MP4,
   ism: MIME_TYPES.VND_MS_SSTR,
-  mpd: MIME_TYPES.DASH,
+  mpd: MIME_TYPES.DASH
 }
 
 export const DEFAULT_MINIMUM_DVR_SIZE = 60 // in seconds

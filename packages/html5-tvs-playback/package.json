@@ -9,9 +9,9 @@
     "HTML5",
     "HBBTV"
   ],
-  "homepage": "https://github.com/clappr/clappr-html5-tvs-playback",
+  "homepage": "https://github.com/clappr/clappr/tree/main/packages/html5-tvs-playback",
   "bugs": {
-    "url": "https://github.com/clappr/clappr-html5-tvs-playback/issues",
+    "url": "https://github.com/clappr/clappr/issues",
     "email": "player-web@g.globo"
   },
   "license": "BSD-3-Clause",
@@ -23,51 +23,48 @@
     "/dist",
     "/src"
   ],
-  "main": "dist/clappr-html5-tvs-playback.js",
-  "module": "dist/clappr-html5-tvs-playback.esm.js",
+  "main": "./dist/clappr-html5-tvs-playback.js",
+  "module": "./dist/clappr-html5-tvs-playback.esm.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr-html5-tvs-playback.git"
+    "url": "git@github.com:clappr/clappr.git",
+    "directory": "packages/html5-tvs-playback"
   },
   "scripts": {
-    "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
-    "build": "rollup --config",
-    "release": "MINIMIZE=true rollup --config",
-    "prepublishOnly": "npm run release",
-    "start": "DEV=true rollup --config --watch",
-    "watch": "rollup --config --watch",
+    "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
+    "build": "rollup --config --bundleConfigAsCjs",
+    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "prepublishOnly": "lerna run release --scope=@clappr/clappr-html5-tvs-playback",
+    "start": "DEV=true rollup --config --bundleConfigAsCjs --watch",
+    "watch": "rollup --config --bundleConfigAsCjs --watch",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "jest --coverage --silent",
-    "test:watch": "jest ./test --watch",
-    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
-    "test:coverage": "open coverage/lcov-report/index.html"
+    "test": "jest ./src --coverage --silent",
+    "test:watch": "jest ./src --watch",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
+  },
+  "peerDependencies": {
+    "@clappr/core": "*"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.14",
+    "@babel/core": "^7.14.2",
     "@babel/plugin-transform-runtime": "^7.13.10",
-    "@babel/preset-env": "^7.13.12",
-    "@clappr/core": "^0.12.0",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^18.0.0",
-    "@rollup/plugin-node-resolve": "^11.2.1",
+    "@babel/preset-env": "^7.14.2",
+    "@clappr/core": "^0.13.1",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^28.0.8",
+    "@rollup/plugin-node-resolve": "^15.2.1",
     "babel-jest": "^26.6.3",
-    "coveralls": "^3.1.1",
-    "eslint": "^7.23.0",
+    "eslint": "8.49.0",
     "jest": "^26.6.3",
+    "jest-environment-jsdom": "^26.6.2",
     "jest-mock-console": "^1.0.1",
-    "rollup": "^2.44.0",
+    "rollup": "^3.30.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-sizes": "^1.0.4",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-visualizer": "^5.3.0"
-  },
-  "peerDependencies": {
-    "@clappr/core": "^0.12.0"
-  },
-  "engines": {
-    "node": ">=12.0.0"
+    "rollup-plugin-visualizer": "^5.5.0"
   },
   "publishConfig": {
     "access": "public"
@@ -76,5 +73,14 @@
     "> 0.5%",
     "last 2 versions",
     "not ie <= 11"
-  ]
+  ],
+  "nx": {
+    "targets": {
+      "test": {
+        "dependsOn": [
+          "^release"
+        ]
+      }
+    }
+  }
 }

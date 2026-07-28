@@ -15,6 +15,7 @@ This project is a monorepo managed by Lerna using Yarn workspaces. Each package 
   - `packages/clappr-zepto/` - Zepto.js build for Clappr
   - `packages/dash-shaka-playback/` - DASH playback with Shaka Player
   - `packages/hlsjs-playback/` - HLS playback with hls.js (`@clappr/hlsjs-playback`)
+  - `packages/html5-tvs-playback/` - HTML5 playback for HbbTV smart TVs (`@clappr/clappr-html5-tvs-playback`)
 
 # Package Manager
 

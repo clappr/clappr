@@ -31,6 +31,7 @@ This repository uses a monorepo layout:
 | [`/packages/clappr-zepto`](/packages/clappr-zepto)               | Lightweight **DOM utility layer**, a modernized fork of Zepto tailored for Clappr’s internal UI rendering.                        |
 | [`/packages/hlsjs-playback`](/packages/hlsjs-playback)           | Playback module that adds support for **HLS streams** using [hls.js](https://github.com/video-dev/hls.js).                        |
 | [`/packages/dash-shaka-playback`](/packages/dash-shaka-playback) | Playback module that enables **MPEG-DASH** streaming via [Shaka Player](https://github.com/google/shaka-player).                  |
+| [`/packages/html5-tvs-playback`](/packages/html5-tvs-playback)   | Playback module for **HbbTV smart TVs**, supporting VoD/Live and DRM via the OIPF DRM agent.                                      |
 
 ## Documentation
 

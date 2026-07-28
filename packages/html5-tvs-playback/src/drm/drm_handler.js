@@ -4,31 +4,31 @@ const MESSAGE_TYPE = 'application/vnd.ms-playready.initiator+xml'
 const DRM_SYSTEM_ID = 'urn:dvb:casystemid:19219'
 
 const getFullChallengeMessageTemplate = header => {
-  const template = '<?xml version="1.0" encoding="utf-8"?>'
-  + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
-  + '<LicenseAcquisition>'
-  + '<Header>'
-  + `${header}`
-  + '</Header>'
-  + '</LicenseAcquisition>'
-  + '</PlayReadyInitiator>'
+  const template = '<?xml version="1.0" encoding="utf-8"?>' +
+  '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+  '<LicenseAcquisition>' +
+  '<Header>' +
+  `${header}` +
+  '</Header>' +
+  '</LicenseAcquisition>' +
+  '</PlayReadyInitiator>'
   return template
 }
 
 const getLicenseOverrideMessageTemplate = licenseServerURL => {
-  const template = '<?xml version="1.0" encoding="utf-8"?>'
-  + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
-  + '<LicenseServerUriOverride>'
-  + `<LA_URL>${licenseServerURL}</LA_URL>`
-  + '</LicenseServerUriOverride>'
-  + '</PlayReadyInitiator>'
+  const template = '<?xml version="1.0" encoding="utf-8"?>' +
+  '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+  '<LicenseServerUriOverride>' +
+  `<LA_URL>${licenseServerURL}</LA_URL>` +
+  '</LicenseServerUriOverride>' +
+  '</PlayReadyInitiator>'
   return template
 }
 
 const getClearMessageTemplate = () => {
-  const template = '<?xml version="1.0" encoding="utf-8"?>'
-  + '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">'
-  + '</PlayReadyInitiator>'
+  const template = '<?xml version="1.0" encoding="utf-8"?>' +
+  '<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+  '</PlayReadyInitiator>'
   return template
 }
 
@@ -51,7 +51,7 @@ const DRMFunctions = {
   getFullChallengeMessageTemplate,
   getLicenseOverrideMessageTemplate,
   getClearMessageTemplate,
-  createDrmAgent,
+  createDrmAgent
 }
 
 /* eslint-disable-next-line func-style */
@@ -75,7 +75,7 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
     const errorMessage = {
       0: 'DRM: No license error',
       1: 'DRM: Invalid license error',
-      2: 'DRM: License valid',
+      2: 'DRM: License valid'
     }
 
     if (resultCode < 2) {
@@ -94,7 +94,7 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
       2: 'DRM: Cannot process request',
       3: 'DRM: Wrong format',
       4: 'DRM: User Consent Needed',
-      5: 'DRM: Unknown DRM system',
+      5: 'DRM: Unknown DRM system'
     }
 
     if (resultCode !== 0) {
@@ -147,7 +147,7 @@ export function clearLicenseRequest(onSuccess = () => {}, onFail = () => {}) {
 
 const DRMHandler = {
   sendLicenseRequest,
-  clearLicenseRequest,
+  clearLicenseRequest
 }
 
 export { DRMFunctions, DRMHandler as default }

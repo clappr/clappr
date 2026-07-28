@@ -119,14 +119,21 @@ Group all DRM-related config. The currently available configs are:
 - [ ] Advertisement;
 
 ## Development
-Install dependencies: `npm install`
 
-Run: `npm start`
+From the monorepo root:
 
-Test: `npm test`
+```bash
+yarn install
+yarn lerna run start --scope=@clappr/clappr-html5-tvs-playback
+yarn lerna run test --scope=@clappr/clappr-html5-tvs-playback
+yarn lerna run build --scope=@clappr/clappr-html5-tvs-playback
+```
 
-Lint: `npm run lint`
+Or from this package directory:
 
-Build: `npm run build`
-
-Minified version: `npm run release`
+```bash
+yarn start
+yarn test
+yarn build
+yarn release  # minified build
+```

@@ -1,21 +1,23 @@
-import { createBabelInputPluginFactory } from '@rollup/plugin-babel'
-import resolve from '@rollup/plugin-node-resolve'
+import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
-import serve from 'rollup-plugin-serve'
+import resolve from '@rollup/plugin-node-resolve'
 import filesize from 'rollup-plugin-filesize'
+import serve from 'rollup-plugin-serve'
 import size from 'rollup-plugin-sizes'
-import visualize from 'rollup-plugin-visualizer'
 import { terser } from 'rollup-plugin-terser'
+import visualize from 'rollup-plugin-visualizer'
 import pkg from './package.json'
-import babelConfig from './babel.config.json'
 
 const dev = !!process.env.DEV
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const minimize = !!process.env.MINIMIZE
 
-const babelPluginForUMDBundle = createBabelInputPluginFactory()
-const babelPluginForESMBundle = createBabelInputPluginFactory()
-const babelPluginOptions = { ...babelConfig, exclude: 'node_modules/**', babelHelpers: 'bundled' }
+const babelOptionsUMD = { exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled' }
+const babelOptionsESM = {
+  exclude: ['node_modules/**', '../../node_modules/**'],
+  babelHelpers: 'runtime',
+  plugins: ['@babel/plugin-transform-runtime'],
+}
 
 const plugins = [
   size(),
@@ -41,8 +43,8 @@ const mainBundle = {
       globals: { '@clappr/core': 'Clappr' },
       plugins: terser(),
     },
-  ],
-  plugins: [babelPluginForUMDBundle(babelPluginOptions), resolve(), commonjs(), ...plugins],
+  ].filter(Boolean),
+  plugins: [babel(babelOptionsUMD), resolve(), commonjs(), ...plugins.filter(Boolean)],
 }
 
 const esmBundle = {
@@ -54,14 +56,7 @@ const esmBundle = {
     format: 'esm',
     globals: { '@clappr/core': 'Clappr' },
   },
-  plugins: [
-    babelPluginForESMBundle({
-      ...babelPluginOptions,
-      plugins: ['@babel/plugin-transform-runtime'],
-      babelHelpers: 'runtime',
-    }),
-    ...plugins,
-  ],
+  plugins: [babel(babelOptionsESM), ...plugins.filter(Boolean)],
 }
 
 export default [mainBundle, esmBundle]
