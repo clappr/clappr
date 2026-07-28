@@ -54,7 +54,6 @@ const DRMFunctions = {
   createDrmAgent
 }
 
-/* eslint-disable-next-line func-style */
 export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = () => {}) {
   const successCallback = onSuccess.bind(this)
   const errorCallback = onFail.bind(this)
@@ -117,7 +116,6 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
   }
 }
 
-/* eslint-disable-next-line func-style */
 export function clearLicenseRequest(onSuccess = () => {}, onFail = () => {}) {
   const successCallback = onSuccess.bind(this)
   const errorCallback = onFail.bind(this)
