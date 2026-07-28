@@ -1,13 +1,4 @@
-<!-- [![](https://data.jsdelivr.com/v1/package/npm/@joaopaulo.vieira/clappr-html5-tvs-playback//badge)](https://www.jsdelivr.com/package/npm/@joaopaulo.vieira/clappr-html5-tvs-playback/) -->
-<!-- [![](https://img.shields.io/npm/v/@joaopaulo.vieira/clappr-html5-tvs-playback/.svg?style=flat-square)](https://npmjs.org/package/@joaopaulo.vieira/clappr-html5-tvs-playback/) -->
-<!-- [![](https://img.shields.io/npm/dt/@joaopaulo.vieira/clappr-html5-tvs-playback/.svg?style=flat-square)](https://npmjs.org/package/@joaopaulo.vieira/clappr-html5-tvs-playback/) -->
-<!-- [![npm bundle size](https://img.shields.io/bundlephobia/min/@joaopaulo.vieira/clappr-html5-tvs-playback/?style=flat-square)](https://bundlephobia.com/result?p=@joaopaulo.vieira/clappr-html5-tvs-playback/) -->
-<!-- [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) -->
-<!-- ![Travis (.com)](https://img.shields.io/travis/com/joaopaulovieira/clappr-html5-tvs-playback/?style=flat-square) -->
-<!-- ![Coveralls github](https://img.shields.io/coveralls/github/joaopaulovieira/clappr-html5-tvs-playback/?style=flat-square) -->
-<!-- [![](https://img.shields.io/github/license/joaopaulovieira/clappr-context-menu-plugin?style=flat-square)](https://github.com/joaopaulovieira/clappr-context-menu-plugin/blob/master/LICENSE) -->
-
-<h3 align=center><b>This project is still in progress. Check the next steps to see the path to the first stable version.</b></h1>
+<h3 align=center><b>This project is still in progress. Check the next steps to see the path to the first stable version.</b></h3>
 
 ---
 
@@ -48,6 +39,9 @@ Group all DRM-related config. The currently available configs are:
 * #### `xmlLicenceAcquisition {String}`
   The part of XML that contains all necessary info to do the full challenge of license acquisition. See more about the PlayReady Header Specification [here](https://docs.microsoft.com/en-us/playready/specifications/playready-header-specification).
 
+### `disableDRMSetup {Boolean}`
+Skips the DRM license request even when `drm` is configured, appending the source element directly. Useful when the license acquisition is handled outside the playback.
+
 ## API Documentation
 
 ### Playback API
@@ -73,7 +67,7 @@ Group all DRM-related config. The currently available configs are:
 |--------|-------------|----------|
 | `playback.config` | Returns the `options.html5TvsPlayback` value. | `{Object}` |
 | `playback.mediaType` | Returns if the media is `live` or `vod`. | `{String}` |
-| `playback.isReady` |  Indicates if the video is  ready to play, checking if [HTMLMediaElement.readyState](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) is greater than or equal [HAVE_CURRENT_DATA](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState#value) value. | `{Boolean}` |
+| `playback.isReady` |  Indicates if the video is  ready to play, checking if [HTMLMediaElement.readyState](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) is greater than or equal [HAVE_FUTURE_DATA](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState#value) value. | `{Boolean}` |
 | `playback.playing` | Indicates if the video is playing or not. | `{Boolean}` |
 | `playback.currentTime` | Returns the position the media is at the current moment. | `{Number} - time in seconds` |
 | `playback.duration` | Returns the duration of the current media. | `{Number} - time in seconds` |
