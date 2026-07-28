@@ -46,6 +46,9 @@
   "peerDependencies": {
     "@clappr/core": "*"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.27.4"
+  },
   "devDependencies": {
     "@babel/core": "^7.14.2",
     "@babel/plugin-transform-runtime": "^7.13.10",
