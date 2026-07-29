@@ -21,6 +21,27 @@ Monorepo managed by Lerna with Yarn workspaces. Each package has its own `packag
   - `packages/html5-tvs-playback/` — HTML5 playback for HbbTV smart TVs (`@clappr/clappr-html5-tvs-playback`)
   - `packages/clappr-telemetry/` — Telemetry helpers
 
+## Publishing
+
+Packages published to npm (via the Release workflow / Trusted Publishers):
+
+| Package | npm name |
+|---------|----------|
+| `packages/clappr-core/` | `@clappr/core` |
+| `packages/clappr-plugins/` | `@clappr/plugins` |
+| `packages/player/` | `@clappr/player` |
+| `packages/hlsjs-playback/` | `@clappr/hlsjs-playback` |
+| `packages/dash-shaka-playback/` | `dash-shaka-playback` |
+| `packages/html5-tvs-playback/` | `@clappr/clappr-html5-tvs-playback` |
+
+Packages that do **not** publish to npm:
+
+| Package | Reason |
+|---------|--------|
+| `packages/clappr-zepto/` | Internal only (`private: true`); bundled into `@clappr/core` |
+| `packages/clappr-telemetry/` | `private: true` until the first intentional release |
+| `apps/clappr.io/` | Docs site (`clappr-docs`, already `private: true`) |
+
 ## Tooling
 
 ### Package manager
