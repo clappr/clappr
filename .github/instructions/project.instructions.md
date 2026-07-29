@@ -12,6 +12,7 @@ This project is a monorepo managed by Lerna using Yarn workspaces. Each package 
   - `packages/player/` - Main player bundle (`@clappr/player`)
   - `packages/clappr-core/` - Core player components (`@clappr/core`)
   - `packages/clappr-plugins/` - Main player plugins (`@clappr/plugins`)
+  - `packages/clappr-telemetry/` - Playback telemetry and metrics (`@clappr/telemetry`)
   - `packages/clappr-zepto/` - Zepto.js build for Clappr
   - `packages/dash-shaka-playback/` - DASH playback with Shaka Player
   - `packages/hlsjs-playback/` - HLS playback with hls.js (`@clappr/hlsjs-playback`)
