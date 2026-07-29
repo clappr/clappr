@@ -4,13 +4,13 @@ on:
   workflow_run:
     workflows: ['CI']
     branches: [main]
-    types:
-      - completed
+    types: [completed]
+  workflow_dispatch:
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
       id-token: write
@@ -30,44 +30,82 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: '22.x'
           registry-url: https://registry.npmjs.org
           cache: 'yarn'
+
+      - name: Ensure npm supports trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Check for changes
-        id: check_changes
+      - name: Resolve packages to publish
+        id: changed
         run: |
           git fetch --tags
           set +e
-          OUTPUT=$(lerna changed 2>&1)
+          OUTPUT=$(npx lerna changed --include-merged-tags --json 2>&1)
           EXIT_CODE=$?
           set -e
 
           if echo "$OUTPUT" | grep -q "No changed packages found"; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "packages=[]" >> "$GITHUB_OUTPUT"
+            echo "count=0" >> "$GITHUB_OUTPUT"
             echo "No packages to publish"
-          elif [ $EXIT_CODE -eq 0 ] && [ -n "$OUTPUT" ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Found packages to publish:"
-            echo "$OUTPUT"
-          elif [ $EXIT_CODE -eq 0 ] && [ -z "$OUTPUT" ]; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No packages to publish (empty output)"
-          else
+            exit 0
+          fi
+
+          if [ $EXIT_CODE -ne 0 ]; then
             echo "Error running lerna changed (exit code: $EXIT_CODE):"
             echo "$OUTPUT"
             exit 1
           fi
 
-      - name: Release packages
-        id: release
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: yarn release
-        continue-on-error: true
+          PKGS=$(echo "$OUTPUT" | jq -c '[.[] | select(.private == false) | .name]')
+          echo "packages=$PKGS" >> "$GITHUB_OUTPUT"
+          echo "count=$(echo "$PKGS" | jq 'length')" >> "$GITHUB_OUTPUT"
+          echo "Packages to publish: $PKGS"
 
-      - name: Publish from git tags
-        if: steps.check_changes.outputs.has_changes == 'true' && steps.release.outcome == 'failure'
-        run: lerna publish from-git --yes
+      - name: Version and tag
+        if: steps.changed.outputs.count != '0'
+        run: npx lerna version --include-merged-tags --no-push --yes
+
+      - name: Push commit, then tags
+        if: steps.changed.outputs.count != '0'
+        run: |
+          # Fail here if branch protection rejects the bot — before any tags leave the runner
+          git push origin HEAD:main
+          git push origin --tags
+
+      - name: Publish to npm
+        if: steps.changed.outputs.count != '0'
+        run: |
+          for pkg in $(echo '${{ steps.changed.outputs.packages }}' | jq -r '.[]'); do
+            echo "::group::publish $pkg"
+            npm publish -w "$pkg" --provenance
+            echo "::endgroup::"
+          done
+
+  notify-failure:
+    needs: release
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open issue for failed release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue create --repo ${{ github.repository }} \
+            --title "Release workflow failed on $(date -u +%Y-%m-%d)" \
+            --label bug \
+            --body "The Release workflow failed and no packages were published.
+
+          Run: $RUN_URL
+
+          Check the failing step before re-running. Recovery is manual via \`workflow_dispatch\`."
