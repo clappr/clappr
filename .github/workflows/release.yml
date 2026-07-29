@@ -19,6 +19,9 @@ jobs:
     permissions:
       contents: write
       id-token: write
+    outputs:
+      player_published: ${{ steps.announce.outputs.player_published || 'false' }}
+      player_tag: ${{ steps.announce.outputs.player_tag || '' }}
 
     steps:
       - name: Generate GitHub App token
@@ -115,9 +118,13 @@ jobs:
           git push origin --tags
 
       - name: Publish to npm
+        id: publish
         if: steps.changed.outputs.count != '0'
         run: |
           failed=()
+          # Records only versions this run actually pushed to npm — the release
+          # notes gate reads it, so "already on npm" skips must not land here.
+          PUBLISHED_FILE=$(mktemp)
           # Versions after lerna version live in package.json; read them via Lerna JSON
           # instead of `npm pkg get` stdout (npm 12+ is not JSON by default — see #2472).
           ERR_FILE=$(mktemp)
@@ -150,16 +157,63 @@ jobs:
             if ! npm publish -w "$pkg" --provenance; then
               echo "::error::Failed to publish $pkg@$ver"
               failed+=("$pkg@$ver")
+            else
+              echo "$pkg@$ver" >> "$PUBLISHED_FILE"
             fi
             echo "::endgroup::"
           done
+          PUBLISHED_JSON=$(jq -R -s -c 'split("\n") | map(select(length > 0))' < "$PUBLISHED_FILE")
+          rm -f "$PUBLISHED_FILE"
+          echo "published=$PUBLISHED_JSON" >> "$GITHUB_OUTPUT"
+          echo "Published in this run: $PUBLISHED_JSON"
           if [ ${#failed[@]} -gt 0 ]; then
             echo "Publish failures: ${failed[*]}"
             exit 1
           fi
 
-  notify-failure:
+      # Only announce when this run actually published @clappr/player to npm. The
+      # requested set is not enough: publish_only asks for every public package, and
+      # versions already on npm are skipped — neither is a new release to announce.
+      - name: Set release notes outputs
+        id: announce
+        if: steps.changed.outputs.count != '0'
+        env:
+          PUBLISHED_JSON: ${{ steps.publish.outputs.published }}
+        run: |
+          # Tag comes from the same version the publish used, so it cannot drift.
+          tag=$(echo "$PUBLISHED_JSON" | jq -r '.[] | select(startswith("@clappr/player@"))' | head -1)
+          if [ -z "$tag" ]; then
+            echo "player_published=false" >> "$GITHUB_OUTPUT"
+            echo "player_tag=" >> "$GITHUB_OUTPUT"
+            echo "@clappr/player was not published in this run; skipping release notes"
+            exit 0
+          fi
+          echo "player_published=true" >> "$GITHUB_OUTPUT"
+          echo "player_tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "Will request release notes for ${tag}"
+
+  # Draft GitHub Release only when this run pushed a new player version to npm —
+  # not on empty Release runs, non-player publishes, or versions already on npm.
+  notes:
     needs: release
+    if: needs.release.outputs.player_published == 'true'
+    permissions:
+      contents: write
+      pull-requests: read
+    # Only secret the notes workflow uses — no need to hand it the release app key.
+    secrets:
+      COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+    uses: ./.github/workflows/generate-release-notes.yml
+    with:
+      player_tag: ${{ needs.release.outputs.player_tag }}
+      # Explicit even though it is the default: this job only exists because the
+      # publish succeeded, so a missing npm version here must fail, not skip.
+      published_in_run: true
+
+  # `if: failure()` keeps this running when release fails and notes is skipped —
+  # a skipped need does not block a job guarded by a status function.
+  notify-failure:
+    needs: [release, notes]
     if: failure()
     runs-on: ubuntu-latest
     permissions:
@@ -169,12 +223,29 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPO: ${{ github.repository }}
+          RELEASE_RESULT: ${{ needs.release.result }}
         run: |
-          gh issue create --repo ${{ github.repository }} \
-            --title "Release workflow failed on $(date -u +%Y-%m-%d)" \
-            --label bug \
-            --body "The Release workflow failed and no packages were published.
+          # Publishing and drafting notes fail for different reasons and need
+          # different recovery — do not claim nothing was published when it was.
+          if [ "$RELEASE_RESULT" != "success" ]; then
+            title="Release workflow failed on $(date -u +%Y-%m-%d)"
+            # The publish step publishes package by package, so a failure can leave
+            # part of the batch on npm — check the run rather than assuming either way.
+            body="The Release workflow failed. Some packages may already have been published before the failure — check the \`Publish to npm\` step for what landed.
 
           Run: $RUN_URL
 
           Check the failing step before re-running. Recovery is manual via \`workflow_dispatch\` (use publish_only if versions/tags already landed)."
+          else
+            title="Release notes generation failed on $(date -u +%Y-%m-%d)"
+            body="Packages were published to npm successfully, but the **Generate release notes** job failed, so no draft GitHub Release was created.
+
+          Run: $RUN_URL
+
+          Nothing needs to be re-published. Once the failing step is understood, re-run the notes manually via Actions → **Generate release notes**."
+          fi
+          gh issue create --repo "$REPO" \
+            --title "$title" \
+            --label bug \
+            --body "$body"
