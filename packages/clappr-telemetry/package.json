@@ -10,7 +10,7 @@
     "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "build": "rollup --config --bundleConfigAsCjs",
     "watch": "rollup --config --watch --bundleConfigAsCjs",
-    "test": "jest src/",
+    "test": "jest src/ --coverage --silent",
     "test:coverage": "jest src/ --coverage",
     "test:coverage:open": "open coverage/lcov-report/index.html",
     "test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
