@@ -27,7 +27,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/hlsjs-playback.git"
+    "url": "https://github.com/clappr/clappr.git",
+    "directory": "packages/hlsjs-playback"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",

@@ -30,7 +30,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr-core.git"
+    "url": "https://github.com/clappr/clappr.git",
+    "directory": "packages/clappr-core"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",

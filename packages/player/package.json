@@ -24,7 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr.git"
+    "url": "https://github.com/clappr/clappr.git",
+    "directory": "packages/player"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",
