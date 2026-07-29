@@ -118,7 +118,14 @@ jobs:
           failed=()
           for pkg in $(echo '${{ steps.changed.outputs.packages }}' | jq -r '.[]'); do
             echo "::group::publish $pkg"
-            ver=$(npm pkg get version -w "$pkg" | tr -d '"')
+            # npm pkg get -w returns {"name":"version"} JSON, not a bare string
+            ver=$(npm pkg get version -w "$pkg" | jq -r 'to_entries[0].value')
+            if [ -z "$ver" ] || [ "$ver" = "null" ]; then
+              echo "::error::Could not resolve version for $pkg"
+              failed+=("$pkg")
+              echo "::endgroup::"
+              continue
+            fi
             if npm view "$pkg@$ver" version >/dev/null 2>&1; then
               echo "Skipping $pkg@$ver (already on npm)"
               echo "::endgroup::"
