@@ -50,11 +50,21 @@ Notes do **not** run when:
 
 - The Release run published nothing, or only non-player packages (e.g. `@clappr/telemetry` alone)
 - The run did not actually publish the player — the version was already on npm and got skipped (common on `publish_only` recovery)
-- A git tag exists but the player version is not on npm yet (failed/partial publish)
 
-You can also run Actions → **Generate release notes** manually (updates an existing draft) — that is the way to regenerate notes in the cases above. `resolve` still requires the player version on npm.
+You can also run Actions → **Generate release notes** manually (updates an existing draft) — that is the way to regenerate notes in the cases above. `resolve` still requires the player version on npm; aimed by hand at a git-only tag it skips with a warning.
 
-Not finding a version and not being able to ask are different things: if the npm registry cannot answer, the notes job **fails** (opening a "Release notes generation failed" issue) instead of quietly skipping the draft. Nothing needs re-publishing in that case — just re-run the notes.
+**When the player version is missing from npm, the two paths differ on purpose:**
+
+| Path | Missing on npm | Why |
+|---|---|---|
+| Called by `Release` (`published_in_run: true`) | **Fails** → "Release notes generation failed" issue | The publish already succeeded, so absence contradicts the caller's own precondition. Whether it is registry lag or a real incident, a green run would notify nobody. |
+| Manual dispatch | Skips with a warning | You aimed at that tag deliberately; failing would be noise. |
+
+The registry gets ~50s (`REGISTRY_ATTEMPTS: 6`) on the Release path before it counts as missing, so the failure means something is wrong rather than npm being slow.
+
+Not finding a version and not being able to ask are also different things: if the npm registry cannot answer at all, the notes job **fails** on both paths instead of quietly skipping the draft (only the Release path opens an issue — `notify-failure` lives in `release.yml`).
+
+Nothing needs re-publishing for any notes failure — "Re-run failed jobs" on the Release run re-runs only the notes job, and no duplicate issue is opened.
 
 Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
 
