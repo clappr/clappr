@@ -56,11 +56,18 @@ jobs:
         run: |
           git fetch --tags
           set +e
-          OUTPUT=$(npx lerna changed --include-merged-tags --json 2>&1)
+          # Keep lerna notices on stderr out of OUTPUT — mixing 2>&1 breaks jq.
+          ERR_FILE=$(mktemp)
+          OUTPUT=$(npx lerna changed --include-merged-tags --json 2>"$ERR_FILE")
           EXIT_CODE=$?
           set -e
+          ERR=$(cat "$ERR_FILE")
+          rm -f "$ERR_FILE"
+          if [ -n "$ERR" ]; then
+            echo "$ERR"
+          fi
 
-          if echo "$OUTPUT" | grep -q "No changed packages found"; then
+          if echo "$ERR$OUTPUT" | grep -q "No changed packages found"; then
             echo "packages=[]" >> "$GITHUB_OUTPUT"
             echo "count=0" >> "$GITHUB_OUTPUT"
             echo "No packages to publish"
@@ -69,6 +76,7 @@ jobs:
 
           if [ $EXIT_CODE -ne 0 ]; then
             echo "Error running lerna changed (exit code: $EXIT_CODE):"
+            echo "$ERR"
             echo "$OUTPUT"
             exit 1
           fi
