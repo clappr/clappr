@@ -6,6 +6,11 @@ on:
     branches: [main]
     types: [completed]
   workflow_dispatch:
+    inputs:
+      publish_only:
+        description: 'Skip versioning; publish current package.json versions (recovery after a failed publish)'
+        type: boolean
+        default: false
 
 jobs:
   release:
@@ -53,13 +58,21 @@ jobs:
 
       - name: Resolve packages to publish
         id: changed
+        env:
+          PUBLISH_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_only }}
         run: |
           git fetch --tags
           set +e
-          # Keep lerna notices on stderr out of OUTPUT — mixing 2>&1 breaks jq.
           ERR_FILE=$(mktemp)
-          OUTPUT=$(npx lerna changed --include-merged-tags --json 2>"$ERR_FILE")
-          EXIT_CODE=$?
+          if [ "$PUBLISH_ONLY" = "true" ]; then
+            # Recovery: versions/tags already on main; publish public packages as-is.
+            OUTPUT=$(npx lerna list --json 2>"$ERR_FILE")
+            EXIT_CODE=$?
+          else
+            # Keep lerna notices on stderr out of OUTPUT — mixing 2>&1 breaks jq.
+            OUTPUT=$(npx lerna changed --include-merged-tags --json 2>"$ERR_FILE")
+            EXIT_CODE=$?
+          fi
           set -e
           ERR=$(cat "$ERR_FILE")
           rm -f "$ERR_FILE"
@@ -67,15 +80,16 @@ jobs:
             echo "$ERR"
           fi
 
-          if echo "$ERR$OUTPUT" | grep -q "No changed packages found"; then
+          if [ "$PUBLISH_ONLY" != "true" ] && echo "$ERR$OUTPUT" | grep -q "No changed packages found"; then
             echo "packages=[]" >> "$GITHUB_OUTPUT"
             echo "count=0" >> "$GITHUB_OUTPUT"
+            echo "publish_only=false" >> "$GITHUB_OUTPUT"
             echo "No packages to publish"
             exit 0
           fi
 
           if [ $EXIT_CODE -ne 0 ]; then
-            echo "Error running lerna changed (exit code: $EXIT_CODE):"
+            echo "Error resolving packages (exit code: $EXIT_CODE):"
             echo "$ERR"
             echo "$OUTPUT"
             exit 1
@@ -84,14 +98,15 @@ jobs:
           PKGS=$(echo "$OUTPUT" | jq -c '[.[] | select(.private == false) | .name]')
           echo "packages=$PKGS" >> "$GITHUB_OUTPUT"
           echo "count=$(echo "$PKGS" | jq 'length')" >> "$GITHUB_OUTPUT"
+          echo "publish_only=$PUBLISH_ONLY" >> "$GITHUB_OUTPUT"
           echo "Packages to publish: $PKGS"
 
       - name: Version and tag
-        if: steps.changed.outputs.count != '0'
+        if: steps.changed.outputs.count != '0' && steps.changed.outputs.publish_only != 'true'
         run: npx lerna version --include-merged-tags --no-push --yes
 
       - name: Push commit, then tags
-        if: steps.changed.outputs.count != '0'
+        if: steps.changed.outputs.count != '0' && steps.changed.outputs.publish_only != 'true'
         run: |
           # Fail here if branch protection rejects the bot — before any tags leave the runner
           git push origin HEAD:main
@@ -125,4 +140,4 @@ jobs:
 
           Run: $RUN_URL
 
-          Check the failing step before re-running. Recovery is manual via \`workflow_dispatch\`."
+          Check the failing step before re-running. Recovery is manual via \`workflow_dispatch\` (use publish_only if versions/tags already landed)."
