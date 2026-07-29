@@ -25,6 +25,11 @@ on:
         required: false
         type: string
         default: 'auto'
+      published_in_run:
+        description: 'Caller published the player in this run, so a missing npm version is an error rather than a skip'
+        required: false
+        type: boolean
+        default: true
     secrets:
       # Must be declared to be passed explicitly by the caller (only `inherit`
       # skips this). Optional: the Copilot step fails open without it.
@@ -67,6 +72,12 @@ jobs:
           # (publish_only recovery) would read as a manual run.
           MODE: ${{ inputs.mode || 'manual' }}
           PLAYER_TAG: ${{ inputs.player_tag || '' }}
+          # Absent on workflow_dispatch, so a hand-aimed orphan tag still just skips.
+          REQUIRE_NPM: ${{ inputs.published_in_run && '1' || '0' }}
+          # The caller published seconds ago, so give packument propagation a wider
+          # budget there (~50s): under REQUIRE_NPM this is what separates "npm was
+          # slow" from a real alarm, and a false alarm costs a bug issue.
+          REGISTRY_ATTEMPTS: ${{ inputs.published_in_run && '6' || '3' }}
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: .github/scripts/generate-release-notes.sh resolve

@@ -4,6 +4,8 @@
 # rows are likewise filtered to versions present on the registry. Both tolerate
 # publish-to-registry lag via REGISTRY_ATTEMPTS (default 3) and REGISTRY_RETRY_DELAY
 # (default 10s), and fail loudly when the registry cannot answer at all.
+# REQUIRE_NPM=1 additionally turns a *confirmed* absence into a failure — set it only
+# when the caller already published the player in this run (see resolve).
 # Usage:
 #   MODE=auto|manual [PLAYER_TAG=...] ./generate-release-notes.sh resolve
 #   MODE=auto|manual PLAYER_TAG=... RELEASE_ID=... HIGHLIGHTS=... \
@@ -17,6 +19,10 @@ GITHUB_OUTPUT="${GITHUB_OUTPUT:-/dev/null}"
 GITHUB_STEP_SUMMARY="${GITHUB_STEP_SUMMARY:-/dev/null}"
 # Overridable so the registry-unreachable path can be exercised locally.
 NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmjs.org}"
+# Deliberately not derived from MODE: `auto` is also the default for a bare local
+# run, and MODE answers a different question (may render overwrite a draft?).
+# Off by default so inspecting an orphan tag by hand stays a clean skip.
+REQUIRE_NPM="${REQUIRE_NPM:-0}"
 
 # Script-scoped so the EXIT trap can still see the path after cmd_render returns
 # (a `local body_file` would be unbound under `set -u` when the trap fires).
@@ -199,9 +205,12 @@ cmd_resolve() {
   fi
 
   # Git tags can land before npm publish succeeds — never draft that case. Retries
-  # because Release calls this seconds after publishing. A confirmed absence is a
-  # deliberate skip (warning + step summary); an inconclusive registry is a failure,
-  # so notify-failure opens an issue instead of leaving a silently green run.
+  # because Release calls this seconds after publishing. An inconclusive registry is
+  # always a failure, so notify-failure opens an issue instead of leaving a silently
+  # green run. A confirmed absence is a deliberate skip when a human aimed us at the
+  # tag, but a failure under REQUIRE_NPM: there the caller already published the
+  # player, so "not on npm" contradicts its own precondition — lag or incident, both
+  # need a human, and only a red job notifies anyone.
   player_ver="${player_tag##*@}"
   registry_rc=0
   registry_has_version "@clappr/player" "$player_ver" "${REGISTRY_ATTEMPTS:-3}" || registry_rc=$?
@@ -210,6 +219,10 @@ cmd_resolve() {
     exit 1
   fi
   if [ "$registry_rc" != "0" ]; then
+    if [ "$REQUIRE_NPM" = "1" ]; then
+      echo "::error::Release published @clappr/player@${player_ver} but the registry still reports it absent (attempts: ${REGISTRY_ATTEMPTS:-3}); failing so the notes can be re-run"
+      exit 1
+    fi
     echo "::warning::@clappr/player@${player_ver} is tagged in git but not on npm; no draft release created"
     {
       echo "### Release notes skipped"

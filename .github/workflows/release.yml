@@ -206,6 +206,9 @@ jobs:
     uses: ./.github/workflows/generate-release-notes.yml
     with:
       player_tag: ${{ needs.release.outputs.player_tag }}
+      # Explicit even though it is the default: this job only exists because the
+      # publish succeeded, so a missing npm version here must fail, not skip.
+      published_in_run: true
 
   # `if: failure()` keeps this running when release fails and notes is skipped —
   # a skipped need does not block a job guarded by a status function.
