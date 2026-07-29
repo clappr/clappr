@@ -20,6 +20,16 @@ on:
         required: false
         type: string
         default: ''
+      mode:
+        description: 'auto (never touch an existing draft) or manual (may update one)'
+        required: false
+        type: string
+        default: 'auto'
+    secrets:
+      # Must be declared to be passed explicitly by the caller (only `inherit`
+      # skips this). Optional: the Copilot step fails open without it.
+      COPILOT_GITHUB_TOKEN:
+        required: false
   workflow_dispatch:
     inputs:
       player_tag:
@@ -50,8 +60,12 @@ jobs:
       - name: Resolve tags and version table
         id: resolve
         env:
-          # workflow_call from Release = auto; manual dispatch can update drafts.
-          MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
+          # `mode` exists only under workflow_call, where its default applies (auto);
+          # on workflow_dispatch the key is absent, so this falls back to manual.
+          # Do not derive this from github.event_name — in a called workflow the
+          # github context is the caller's, so Release's own workflow_dispatch
+          # (publish_only recovery) would read as a manual run.
+          MODE: ${{ inputs.mode || 'manual' }}
           PLAYER_TAG: ${{ inputs.player_tag || '' }}
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -76,7 +90,8 @@ jobs:
       - name: Create or update draft release
         if: steps.resolve.outputs.should_run == 'true'
         env:
-          MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
+          # Same derivation as the resolve step above — see the note there.
+          MODE: ${{ inputs.mode || 'manual' }}
           PLAYER_TAG: ${{ steps.resolve.outputs.player_tag }}
           TITLE: ${{ steps.resolve.outputs.title }}
           RELEASE_ID: ${{ steps.resolve.outputs.release_id }}

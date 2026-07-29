@@ -2,6 +2,8 @@
 # Resolve player tags / version table, or render + create/update a draft GitHub Release.
 # resolve refuses to announce a player tag that is not on npm; Published versions
 # rows are likewise filtered to versions present on the registry.
+# The player gate tolerates publish-to-registry lag via NPM_VIEW_ATTEMPTS (default 3)
+# and NPM_VIEW_RETRY_DELAY (default 10s).
 # Usage:
 #   MODE=auto|manual [PLAYER_TAG=...] ./generate-release-notes.sh resolve
 #   MODE=auto|manual PLAYER_TAG=... RELEASE_ID=... HIGHLIGHTS=... \
@@ -52,10 +54,33 @@ pkg_version_at() {
 }
 
 # True when registry.npmjs.org has name@version (avoids announcing git-only tags).
+# The packument can lag a few seconds behind `npm publish`, so callers that run right
+# after a publish pass attempts > 1. Callers still treat a false return as "absent",
+# so a failure that is not a 404 is warned about loudly before returning.
 npm_has_package_version() {
   local name="$1"
   local ver="$2"
-  npm view "${name}@${ver}" version >/dev/null 2>&1
+  local attempts="${3:-1}"
+  local attempt=1
+  local out=""
+
+  while true; do
+    if out="$(npm view "${name}@${ver}" version --fetch-retries=1 2>&1)"; then
+      return 0
+    fi
+    # Only a clean 404 means "not published yet" and is worth waiting on. npm
+    # already retries network failures itself, so anything else is inconclusive:
+    # warn once and stop rather than stacking more waits on top of npm's.
+    if ! printf '%s' "$out" | grep -q 'E404'; then
+      echo "::warning::npm view ${name}@${ver} failed without a 404: $(printf '%s' "$out" | tr '\n' ' ')"
+      return 1
+    fi
+    if [ "$attempt" -ge "$attempts" ]; then
+      return 1
+    fi
+    attempt=$((attempt + 1))
+    sleep "${NPM_VIEW_RETRY_DELAY:-10}"
+  done
 }
 
 build_versions_table_and_links() {
@@ -81,12 +106,6 @@ build_versions_table_and_links() {
       continue
     fi
 
-    # Only list versions that actually landed on npm (partial publish batches).
-    if ! npm_has_package_version "$name" "$now"; then
-      echo "Skipping ${name}@${now} in Published versions (not on npm)"
-      continue
-    fi
-
     if [ -n "$base_tag" ] && git cat-file -e "${base_tag}:${pkg_json}" 2>/dev/null; then
       prev="$(pkg_version_at "$base_tag" "$pkg_json")"
     else
@@ -96,6 +115,14 @@ build_versions_table_and_links() {
     if [ -z "$prev" ]; then
       prev="—"
     elif [ "$prev" = "$now" ]; then
+      continue
+    fi
+
+    # Only list versions that actually landed on npm (partial publish batches).
+    # Checked last: unchanged packages already dropped out above, so this is one
+    # registry call per table row instead of one per package in the monorepo.
+    if ! npm_has_package_version "$name" "$now"; then
+      echo "Skipping ${name}@${now} in Published versions (not on npm)"
       continue
     fi
 
@@ -140,10 +167,17 @@ cmd_resolve() {
     exit 1
   fi
 
-  # Git tags can land before npm publish succeeds — never draft that case.
+  # Git tags can land before npm publish succeeds — never draft that case. Retries
+  # because Release calls this seconds after publishing, and a suppressed draft is
+  # surfaced (warning + step summary) instead of leaving a silently green run.
   player_ver="${player_tag##*@}"
-  if ! npm_has_package_version "@clappr/player" "$player_ver"; then
-    echo "@clappr/player@${player_ver} tag exists but is not on npm; skipping draft"
+  if ! npm_has_package_version "@clappr/player" "$player_ver" "${NPM_VIEW_ATTEMPTS:-3}"; then
+    echo "::warning::@clappr/player@${player_ver} is tagged in git but not on npm; no draft release created"
+    {
+      echo "### Release notes skipped"
+      echo
+      echo "\`@clappr/player@${player_ver}\` is tagged in git but was not found on npm, so no draft GitHub Release was created."
+    } >>"$GITHUB_STEP_SUMMARY"
     should_run="false"
   fi
 
@@ -162,12 +196,14 @@ cmd_resolve() {
     fi
   fi
 
-  if [ "$should_run" = "true" ] && [ -n "$release_id" ] && [ "$is_draft" = "false" ]; then
-    echo "Published release already exists for ${player_tag} (id=${release_id}); skipping"
-    should_run="false"
-  elif [ "$should_run" = "true" ] && [ -n "$release_id" ] && [ "$is_draft" = "true" ] && [ "$MODE" = "auto" ]; then
-    echo "Draft already exists for ${player_tag} (id=${release_id}) and MODE=auto; skipping"
-    should_run="false"
+  if [ "$should_run" = "true" ] && [ -n "$release_id" ]; then
+    if [ "$is_draft" = "false" ]; then
+      echo "Published release already exists for ${player_tag} (id=${release_id}); skipping"
+      should_run="false"
+    elif [ "$is_draft" = "true" ] && [ "$MODE" = "auto" ]; then
+      echo "Draft already exists for ${player_tag} (id=${release_id}) and MODE=auto; skipping"
+      should_run="false"
+    fi
   fi
 
   # When player_tag is the oldest tag, getline hits EOF and must not reprint $0.

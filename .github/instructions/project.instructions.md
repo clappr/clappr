@@ -33,7 +33,7 @@ Use Yarn with Lerna.
 
 After `Release` successfully publishes `@clappr/player` to npm, it calls **Generate release notes**, which creates a **draft** GitHub Release anchored on `@clappr/player@*`. Manual dispatch (Actions → **Generate release notes**) can regenerate/update a draft.
 
-This is intentional: `@clappr/player` is the public umbrella announcement. Empty Release runs, non-player-only publishes, and git tags that never reached npm do **not** create a GitHub Release — npm + package CHANGELOGs remain the source of truth for those.
+This is intentional: `@clappr/player` is the public umbrella announcement. Empty Release runs, non-player-only publishes, runs where the player version was already on npm (nothing new published), and git tags that never reached npm do **not** create a GitHub Release — npm + package CHANGELOGs remain the source of truth for those. Manual dispatch is the way to regenerate notes in those cases.
 
 If a draft was opened for a player tag that is not on npm: delete the draft, recover with Release `publish_only`, then re-run **Generate release notes** if needed.
 
