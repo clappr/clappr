@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3](https://github.com/clappr/clappr/compare/@clappr/telemetry@0.2.2...@clappr/telemetry@0.2.3) (2026-07-29)
+
+### Bug Fixes
+
+- **telemetry:** drop private flag to enable npm publishing ([b56a4b6](https://github.com/clappr/clappr/commit/b56a4b662dce0139ce1b85410dff7408e54e7d2b)), closes [#2470](https://github.com/clappr/clappr/issues/2470)
+
 ## [0.2.2](https://github.com/clappr/clappr/compare/@clappr/telemetry@0.2.1...@clappr/telemetry@0.2.2) (2026-07-29)
 
 **Note:** Version bump only for package @clappr/telemetry
