@@ -49,9 +49,10 @@ After `Release` **successfully publishes `@clappr/player` to npm**, it calls **G
 Notes do **not** run when:
 
 - The Release run published nothing, or only non-player packages (e.g. `@clappr/telemetry` alone)
+- The run did not actually publish the player — the version was already on npm and got skipped (common on `publish_only` recovery)
 - A git tag exists but the player version is not on npm yet (failed/partial publish)
 
-You can also run Actions → **Generate release notes** manually (updates an existing draft). `resolve` still requires the player version on npm.
+You can also run Actions → **Generate release notes** manually (updates an existing draft) — that is the way to regenerate notes in the cases above. `resolve` still requires the player version on npm.
 
 Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
 
