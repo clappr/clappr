@@ -61,6 +61,9 @@ jobs:
           pr-strategy: github-api
           instructions: .github/release-notes-instructions.md
         env:
+          # GITHUB_TOKEN is required for pr-strategy: github-api (repo/PR reads).
+          # Actions does not inject it into step env automatically.
+          GITHUB_TOKEN: ${{ github.token }}
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 
       - name: Create or update draft release

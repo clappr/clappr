@@ -42,6 +42,12 @@ Packages that do **not** publish to npm:
 | `packages/clappr-telemetry/` | `private: true` until the first intentional release |
 | `apps/clappr.io/` | Docs site (`clappr-docs`, already `private: true`) |
 
+### GitHub Release notes
+
+After a successful `Release` workflow (or Actions → **Generate release notes**), CI opens a **draft** GitHub Release anchored on `@clappr/player@*`. That tag is the public umbrella announcement: publishes that bump only other packages (e.g. `@clappr/core` alone) do not create a GitHub Release.
+
+Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
+
 ## Tooling
 
 ### Package manager

@@ -4,6 +4,7 @@
 #   MODE=auto|manual [PLAYER_TAG=...] ./generate-release-notes.sh resolve
 #   MODE=auto|manual PLAYER_TAG=... RELEASE_ID=... HIGHLIGHTS=... \
 #     VERSIONS_TABLE=... CHANGELOG_LINKS=... ./generate-release-notes.sh render
+#   DRY_RUN=1 ... ./generate-release-notes.sh render   # print body only; no create/update
 set -euo pipefail
 
 REPO="${GITHUB_REPOSITORY:-clappr/clappr}"
@@ -31,7 +32,8 @@ find_release_for_tag() {
   # List endpoint includes drafts for actors with push access.
   # GET /releases/tags/{tag} only returns published releases — do not use it here.
   # gh api --jq does not accept jq --arg flags; interpolate carefully (tag is ours).
-  gh api --paginate "repos/${REPO}/releases" \
+  # per_page=100 keeps the clappr release list on a single page today.
+  gh api --paginate "repos/${REPO}/releases?per_page=100" \
     --jq ".[] | select(.tag_name == \"${tag}\") | {id: .id, draft: .draft}" \
     | head -n1
 }
@@ -50,6 +52,7 @@ build_versions_table_and_links() {
   local pkg_json dir name private prev now
 
   # Discover packages from the tag tree — not the worktree (checkout may lag tags).
+  # NF==3 matches packages/<name>/package.json only (no nested package roots).
   while IFS= read -r pkg_json; do
     [ -n "$pkg_json" ] || continue
     dir="${pkg_json%/package.json}"
@@ -139,7 +142,8 @@ cmd_resolve() {
     should_run="false"
   fi
 
-  base_tag="$(player_tags | awk -v t="$player_tag" '$0 == t { getline; print; exit }')"
+  # When player_tag is the oldest tag, getline hits EOF and must not reprint $0.
+  base_tag="$(player_tags | awk -v t="$player_tag" '$0 == t { if ((getline line) > 0) print line; exit }')"
   if [ -z "$base_tag" ]; then
     echo "No previous @clappr/player tag before ${player_tag}; Copilot step will be skipped"
     skip_copilot="true"
@@ -180,6 +184,7 @@ cmd_render() {
   local changelog_links="${CHANGELOG_LINKS:-}"
   local body_file
   body_file="$(mktemp)"
+  trap 'rm -f "$body_file"' EXIT
 
   if [ -z "$(echo "$highlights" | tr -d '[:space:]')" ]; then
     highlights="- See package changelogs below for details."
@@ -220,7 +225,6 @@ cmd_render() {
     echo "DRY_RUN=1 — not creating/updating GitHub Release"
     echo "---- body ----"
     cat "$body_file"
-    rm -f "$body_file"
     return 0
   fi
 
@@ -231,7 +235,7 @@ cmd_render() {
     fi
     echo "Updating draft release id=${release_id} for ${player_tag}"
     # --input expects JSON on stdin; use jq to build the payload safely.
-    jq -n --rawfile body "$body_file" '{body: $body}' \
+    jq -n --rawfile body "$body_file" --arg name "$title" '{body: $body, name: $name}' \
       | gh api -X PATCH "repos/${REPO}/releases/${release_id}" --input -
   else
     echo "Creating draft release for ${player_tag} (title=${title})"
@@ -241,8 +245,6 @@ cmd_render() {
       --title "$title" \
       --notes-file "$body_file"
   fi
-
-  rm -f "$body_file"
 }
 
 main() {

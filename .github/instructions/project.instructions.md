@@ -32,6 +32,8 @@ Use Yarn with Lerna.
 
 After a successful `Release` workflow (or via Actions → **Generate release notes**), CI creates a **draft** GitHub Release anchored on `@clappr/player@*`.
 
+This is intentional: `@clappr/player` is the public umbrella announcement. A publish that bumps only `@clappr/core` (or another package) without a new player tag does **not** create a GitHub Release — npm + package CHANGELOGs remain the source of truth for those.
+
 Optional repo secret for prose Highlights:
 
 - `COPILOT_GITHUB_TOKEN` — fine-grained PAT with **Copilot Requests: Read** (token owner needs an active Copilot license). Without it, the draft still ships with a mechanical Highlights fallback.
