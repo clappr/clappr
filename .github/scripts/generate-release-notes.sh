@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Resolve player tags / version table, or render + create/update a draft GitHub Release.
 # resolve refuses to announce a player tag that is not on npm; Published versions
-# rows are likewise filtered to versions present on the registry.
-# The player gate tolerates publish-to-registry lag via NPM_VIEW_ATTEMPTS (default 3)
-# and NPM_VIEW_RETRY_DELAY (default 10s).
+# rows are likewise filtered to versions present on the registry. Both tolerate
+# publish-to-registry lag via REGISTRY_ATTEMPTS (default 3) and REGISTRY_RETRY_DELAY
+# (default 10s), and fail loudly when the registry cannot answer at all.
 # Usage:
 #   MODE=auto|manual [PLAYER_TAG=...] ./generate-release-notes.sh resolve
 #   MODE=auto|manual PLAYER_TAG=... RELEASE_ID=... HIGHLIGHTS=... \
@@ -15,6 +15,8 @@ REPO="${GITHUB_REPOSITORY:-clappr/clappr}"
 MODE="${MODE:-auto}"
 GITHUB_OUTPUT="${GITHUB_OUTPUT:-/dev/null}"
 GITHUB_STEP_SUMMARY="${GITHUB_STEP_SUMMARY:-/dev/null}"
+# Overridable so the registry-unreachable path can be exercised locally.
+NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmjs.org}"
 
 # Script-scoped so the EXIT trap can still see the path after cmd_render returns
 # (a `local body_file` would be unbound under `set -u` when the trap fires).
@@ -53,33 +55,36 @@ pkg_version_at() {
   git show "${ref}:${path}" 2>/dev/null | jq -r '.version // empty'
 }
 
-# True when registry.npmjs.org has name@version (avoids announcing git-only tags).
-# The packument can lag a few seconds behind `npm publish`, so callers that run right
-# after a publish pass attempts > 1. Callers still treat a false return as "absent",
-# so a failure that is not a 404 is warned about loudly before returning.
-npm_has_package_version() {
+# Asks registry.npmjs.org whether name@version exists, so git-only tags are never
+# announced. Three-state on purpose: "we could not find out" must not be silently
+# equivalent to "not published". Queried over HTTP rather than `npm view` because the
+# status code is a stable contract — this workflow has no setup-node, so it would
+# otherwise depend on the runner image's npm keeping E404 in its stderr (see #2472).
+#   0 = present (200)   1 = confirmed absent (404)   2 = inconclusive (anything else)
+# A 404 is retried: the packument can lag seconds behind a publish.
+registry_has_version() {
   local name="$1"
   local ver="$2"
   local attempts="${3:-1}"
   local attempt=1
-  local out=""
+  local code=""
 
   while true; do
-    if out="$(npm view "${name}@${ver}" version --fetch-retries=1 2>&1)"; then
+    code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
+      "${NPM_REGISTRY}/${name//\//%2f}/${ver}" || true)"
+
+    if [ "$code" = "200" ]; then
       return 0
     fi
-    # Only a clean 404 means "not published yet" and is worth waiting on. npm
-    # already retries network failures itself, so anything else is inconclusive:
-    # warn once and stop rather than stacking more waits on top of npm's.
-    if ! printf '%s' "$out" | grep -q 'E404'; then
-      echo "::warning::npm view ${name}@${ver} failed without a 404: $(printf '%s' "$out" | tr '\n' ' ')"
-      return 1
-    fi
     if [ "$attempt" -ge "$attempts" ]; then
-      return 1
+      if [ "$code" = "404" ]; then
+        return 1
+      fi
+      echo "::warning::Registry lookup for ${name}@${ver} was inconclusive (HTTP ${code:-none})"
+      return 2
     fi
     attempt=$((attempt + 1))
-    sleep "${NPM_VIEW_RETRY_DELAY:-10}"
+    sleep "${REGISTRY_RETRY_DELAY:-10}"
   done
 }
 
@@ -88,7 +93,8 @@ build_versions_table_and_links() {
   local player_tag="$2"
   local table_rows=""
   local links=""
-  local pkg_json dir name private prev now
+  local skipped=""
+  local pkg_json dir name private prev now rc
 
   # Discover packages from the tag tree — not the worktree (checkout may lag tags).
   # NF==3 matches packages/<name>/package.json only (no nested package roots).
@@ -121,8 +127,19 @@ build_versions_table_and_links() {
     # Only list versions that actually landed on npm (partial publish batches).
     # Checked last: unchanged packages already dropped out above, so this is one
     # registry call per table row instead of one per package in the monorepo.
-    if ! npm_has_package_version "$name" "$now"; then
+    # Same retry budget as the player gate — these siblings were published in the
+    # same run, so they are just as exposed to packument lag, and a row silently
+    # dropped would announce fewer packages than were actually released.
+    rc=0
+    registry_has_version "$name" "$now" "${REGISTRY_ATTEMPTS:-3}" || rc=$?
+    if [ "$rc" = "2" ]; then
+      echo "::error::Could not determine whether ${name}@${now} is on npm; refusing to render a partial table"
+      exit 1
+    fi
+    if [ "$rc" != "0" ]; then
       echo "Skipping ${name}@${now} in Published versions (not on npm)"
+      skipped+="- \`${name}@${now}\`"
+      skipped+=$'\n'
       continue
     fi
 
@@ -136,12 +153,26 @@ build_versions_table_and_links() {
 
   VERSIONS_TABLE_OUT="$table_rows"
   CHANGELOG_LINKS_OUT="$links"
+
+  # A dropped row means the draft understates the release — say so where a human
+  # will see it, not only in the job log.
+  if [ -n "$skipped" ]; then
+    echo "::warning::Some bumped packages were left out of Published versions (not on npm)"
+    {
+      echo "### Packages left out of the release notes"
+      echo
+      echo "Bumped between tags but not found on npm, so they are not listed in the draft:"
+      echo
+      printf '%s\n' "$skipped" | sed '/^$/d'
+    } >>"$GITHUB_STEP_SUMMARY"
+  fi
 }
 
 cmd_resolve() {
   local player_tag="${PLAYER_TAG:-}"
   local base_tag=""
   local player_ver=""
+  local registry_rc=0
   local release_json release_id is_draft should_run="true" skip_copilot="false"
   local versions_table="" changelog_links="" title=""
 
@@ -168,10 +199,17 @@ cmd_resolve() {
   fi
 
   # Git tags can land before npm publish succeeds — never draft that case. Retries
-  # because Release calls this seconds after publishing, and a suppressed draft is
-  # surfaced (warning + step summary) instead of leaving a silently green run.
+  # because Release calls this seconds after publishing. A confirmed absence is a
+  # deliberate skip (warning + step summary); an inconclusive registry is a failure,
+  # so notify-failure opens an issue instead of leaving a silently green run.
   player_ver="${player_tag##*@}"
-  if ! npm_has_package_version "@clappr/player" "$player_ver" "${NPM_VIEW_ATTEMPTS:-3}"; then
+  registry_rc=0
+  registry_has_version "@clappr/player" "$player_ver" "${REGISTRY_ATTEMPTS:-3}" || registry_rc=$?
+  if [ "$registry_rc" = "2" ]; then
+    echo "::error::Could not determine whether @clappr/player@${player_ver} is on npm; failing instead of skipping silently"
+    exit 1
+  fi
+  if [ "$registry_rc" != "0" ]; then
     echo "::warning::@clappr/player@${player_ver} is tagged in git but not on npm; no draft release created"
     {
       echo "### Release notes skipped"

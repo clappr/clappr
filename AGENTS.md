@@ -54,6 +54,8 @@ Notes do **not** run when:
 
 You can also run Actions → **Generate release notes** manually (updates an existing draft) — that is the way to regenerate notes in the cases above. `resolve` still requires the player version on npm.
 
+Not finding a version and not being able to ask are different things: if the npm registry cannot answer, the notes job **fails** (opening a "Release notes generation failed" issue) instead of quietly skipping the draft. Nothing needs re-publishing in that case — just re-run the notes.
+
 Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
 
 **Cleanup if a draft was created for a git-only player tag** (tag pushed, npm publish failed): delete that draft GitHub Release, recover with Release `workflow_dispatch` + `publish_only`, then run **Generate release notes** manually if needed.
