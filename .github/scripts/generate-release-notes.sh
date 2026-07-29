@@ -12,6 +12,11 @@ MODE="${MODE:-auto}"
 GITHUB_OUTPUT="${GITHUB_OUTPUT:-/dev/null}"
 GITHUB_STEP_SUMMARY="${GITHUB_STEP_SUMMARY:-/dev/null}"
 
+# Script-scoped so the EXIT trap can still see the path after cmd_render returns
+# (a `local body_file` would be unbound under `set -u` when the trap fires).
+body_file=""
+trap 'rm -f "$body_file"' EXIT
+
 emit() {
   local key="$1"
   local value="$2"
@@ -182,9 +187,7 @@ cmd_render() {
   local highlights="${HIGHLIGHTS:-}"
   local versions_table="${VERSIONS_TABLE:-}"
   local changelog_links="${CHANGELOG_LINKS:-}"
-  local body_file
   body_file="$(mktemp)"
-  trap 'rm -f "$body_file"' EXIT
 
   if [ -z "$(echo "$highlights" | tr -d '[:space:]')" ]; then
     highlights="- See package changelogs below for details."
