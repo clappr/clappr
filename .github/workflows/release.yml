@@ -115,11 +115,25 @@ jobs:
       - name: Publish to npm
         if: steps.changed.outputs.count != '0'
         run: |
+          failed=()
           for pkg in $(echo '${{ steps.changed.outputs.packages }}' | jq -r '.[]'); do
             echo "::group::publish $pkg"
-            npm publish -w "$pkg" --provenance
+            ver=$(npm pkg get version -w "$pkg" | tr -d '"')
+            if npm view "$pkg@$ver" version >/dev/null 2>&1; then
+              echo "Skipping $pkg@$ver (already on npm)"
+              echo "::endgroup::"
+              continue
+            fi
+            if ! npm publish -w "$pkg" --provenance; then
+              echo "::error::Failed to publish $pkg@$ver"
+              failed+=("$pkg@$ver")
+            fi
             echo "::endgroup::"
           done
+          if [ ${#failed[@]} -gt 0 ]; then
+            echo "Publish failures: ${failed[*]}"
+            exit 1
+          fi
 
   notify-failure:
     needs: release
