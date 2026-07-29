@@ -1,0 +1,78 @@
+# Creates a draft GitHub Release anchored on @clappr/player after a successful
+# Release workflow (or via workflow_dispatch).
+#
+# Prerequisite (optional but recommended for prose Highlights):
+#   Repository secret COPILOT_GITHUB_TOKEN — fine-grained PAT with
+#   "Copilot Requests: Read". The token owner must have an active Copilot
+#   license (individual is fine). Without it, the Copilot step fails open and
+#   the draft is created with a mechanical Highlights fallback.
+name: Generate release notes
+
+on:
+  workflow_run:
+    workflows: ['Release']
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      player_tag:
+        description: '@clappr/player tag to announce (default: latest player tag)'
+        required: false
+        type: string
+
+concurrency:
+  group: generate-release-notes
+  cancel-in-progress: false
+
+jobs:
+  notes:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        run: git fetch --tags --force
+
+      - name: Resolve tags and version table
+        id: resolve
+        env:
+          MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
+          PLAYER_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.player_tag || '' }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: .github/scripts/generate-release-notes.sh resolve
+
+      - name: Generate highlights
+        id: copilot
+        if: steps.resolve.outputs.should_run == 'true' && steps.resolve.outputs.skip_copilot != 'true'
+        continue-on-error: true
+        uses: github/copilot-release-notes@v1
+        with:
+          base-ref: ${{ steps.resolve.outputs.base_tag }}
+          head-ref: ${{ steps.resolve.outputs.player_tag }}
+          pr-strategy: github-api
+          instructions: .github/release-notes-instructions.md
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+
+      - name: Create or update draft release
+        if: steps.resolve.outputs.should_run == 'true'
+        env:
+          MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
+          PLAYER_TAG: ${{ steps.resolve.outputs.player_tag }}
+          TITLE: ${{ steps.resolve.outputs.title }}
+          RELEASE_ID: ${{ steps.resolve.outputs.release_id }}
+          VERSIONS_TABLE: ${{ steps.resolve.outputs.versions_table }}
+          CHANGELOG_LINKS: ${{ steps.resolve.outputs.changelog_links }}
+          HIGHLIGHTS: ${{ steps.copilot.outputs.release-notes }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: .github/scripts/generate-release-notes.sh render
