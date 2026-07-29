@@ -6,8 +6,7 @@
   "main": "zepto.min.js",
   "types": "./main.d.ts",
   "scripts": {
-    "build": "./scripts/build-clappr-zepto -c=v1.2.0 -o=./",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./scripts/build-clappr-zepto -c=v1.2.0 -o=./"
   },
   "repository": {
     "type": "git",
