@@ -20,7 +20,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # github-actions[bot] cannot be added to bypass_pull_request_allowances;
+          # Core Team fine-grained PAT until a bypassable app is available. See #2460.
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Configure git
         run: |
