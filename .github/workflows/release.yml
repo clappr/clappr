@@ -227,7 +227,9 @@ jobs:
           # different recovery — do not claim nothing was published when it was.
           if [ "$RELEASE_RESULT" != "success" ]; then
             title="Release workflow failed on $(date -u +%Y-%m-%d)"
-            body="The Release workflow failed and no packages were published.
+            # The publish step publishes package by package, so a failure can leave
+            # part of the batch on npm — check the run rather than assuming either way.
+            body="The Release workflow failed. Some packages may already have been published before the failure — check the \`Publish to npm\` step for what landed.
 
           Run: $RUN_URL
 
