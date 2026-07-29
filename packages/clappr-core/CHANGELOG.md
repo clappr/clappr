@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/clappr/clappr-core/compare/@clappr/core@0.13.2...@clappr/core@0.14.0) (2026-07-29)
+
+### Bug Fixes
+
+- **core:** handle fullscreen blocked by permissions policy ([d65ac1f](https://github.com/clappr/clappr-core/commit/d65ac1f87710342c1d0e2aef4bd3e8d9690972a7))
+- **player:** prevent memory leak by cleaning up event listeners on destroy ([b55b035](https://github.com/clappr/clappr-core/commit/b55b035006e014ed6a874d1a99f2057c84f6d973))
+- **security:** correct useless regex escapes in os_data.js ([9ac5e0c](https://github.com/clappr/clappr-core/commit/9ac5e0c6fed9082f5d42d256dcdcd0d598b7df46))
+- **security:** remove useless regexp character escapes in browser detection ([1f0ad6f](https://github.com/clappr/clappr-core/commit/1f0ad6fdb028e6d414f4ebed965b3bdb8251192b))
+
+### Features
+
+- **telemetry:** scaffold telemetry package with shaka adapter ([f154ce0](https://github.com/clappr/clappr-core/commit/f154ce07a9a81c1cba703b758f40e09651fc956d))
+
 ## [0.13.2](https://github.com/clappr/clappr-core/compare/@clappr/core@0.13.1...@clappr/core@0.13.2) (2025-10-15)
 
 **Note:** Version bump only for package @clappr/core

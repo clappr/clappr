@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/clappr/clappr-plugins/compare/@clappr/plugins@0.8.11...@clappr/plugins@0.9.0) (2026-07-29)
+
+### Bug Fixes
+
+- **plugins:** restore volume after mute toggle in media control ([6a16feb](https://github.com/clappr/clappr-plugins/commit/6a16febfa50775ce6443acd7d439d48463844879)), closes [#2436](https://github.com/clappr/clappr-plugins/issues/2436)
+- **telemetry:** add NaN guards and expand test coverage ([e35f289](https://github.com/clappr/clappr-plugins/commit/e35f28973f3fca17c66aee9963d43516212e7fab))
+- **telemetry:** fix event binding, error handling, memory leak, and expand test coverage ([af52eaa](https://github.com/clappr/clappr-plugins/commit/af52eaa232c8a8fdfd74b5d12820f5fb86d20eb8))
+
+### Features
+
+- **clappr-plugins:** migrate testing framework from Karma to Jest ([4f3dd38](https://github.com/clappr/clappr-plugins/commit/4f3dd380ba557f599efe68cb6d582752d57bd0ce))
+
+### Reverts
+
+- remove telemetry package ([1db1d77](https://github.com/clappr/clappr-plugins/commit/1db1d77aac74e40020fed427d09250155c2ecafa))
+
 ## [0.8.11](https://github.com/clappr/clappr-plugins/compare/@clappr/plugins@0.8.10...@clappr/plugins@0.8.11) (2025-10-15)
 
 **Note:** Version bump only for package @clappr/plugins

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/clappr/dash-shaka-playback/compare/dash-shaka-playback@3.6.3...dash-shaka-playback@3.7.0) (2026-07-29)
+
+### Bug Fixes
+
+- **webpack:** correct devtool option from 'source-maps' to 'source-map' ([b27b1f6](https://github.com/clappr/dash-shaka-playback/commit/b27b1f69f6d770db4ee0b4898d442f24082ebd1e))
+
+### Features
+
+- **actions:** improve gh actions release ([6aeb74f](https://github.com/clappr/dash-shaka-playback/commit/6aeb74f7c9a40e816ae870e3bc7298b5aa5fc00e))
+
 ## [3.6.3](https://github.com/clappr/dash-shaka-playback/compare/dash-shaka-playback@3.6.2...dash-shaka-playback@3.6.3) (2025-09-09)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/clappr/clappr/compare/@clappr/player@0.11.16...@clappr/player@0.12.0) (2026-07-29)
+
+### Features
+
+- add website cross-linking and fix documentation ([99f6be7](https://github.com/clappr/clappr/commit/99f6be70cbc7b7ee2b9ce1432b32a75ab461fb0a))
+
 ## [0.11.16](https://github.com/clappr/clappr/compare/@clappr/player@0.11.15...@clappr/player@0.11.16) (2025-10-15)
 
 **Note:** Version bump only for package @clappr/player
