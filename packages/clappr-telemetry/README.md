@@ -1,6 +1,6 @@
 # @clappr/telemetry
 
-[![npm version](https://img.shields.io/badge/npm-v0.1.0-cb3837)](https://www.npmjs.com/package/@clappr/telemetry)
+[![npm version](https://img.shields.io/npm/v/@clappr/telemetry.svg?color=cb3837)](https://www.npmjs.com/package/@clappr/telemetry)
 
 A telemetry plugin for [Clappr](https://github.com/clappr/clappr). Collects network, buffer, decoding, playback state, playback timing, and stream info metrics from the player and exposes them through a single unified event on the container bus.
 
