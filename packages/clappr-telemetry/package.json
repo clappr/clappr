@@ -1,6 +1,7 @@
 {
   "name": "@clappr/telemetry",
   "version": "0.1.0",
+  "private": true,
   "description": "Telemetry package for Clappr player",
   "main": "./dist/clappr-telemetry.js",
   "module": "./dist/clappr-telemetry.esm.js",

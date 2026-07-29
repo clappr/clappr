@@ -1,6 +1,6 @@
 {
   "name": "@clappr/hlsjs-playback",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "HLS Playback based on hls.js",
   "main": "./dist/hlsjs-playback.js",
   "module": "./dist/hlsjs-playback.esm.js",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@babel/core": "^7.14.2",
     "@babel/preset-env": "^7.14.2",
-    "@clappr/core": "^0.13.1",
+    "@clappr/core": "^0.13.2",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^15.2.1",
