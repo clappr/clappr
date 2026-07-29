@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.1](https://github.com/clappr/clappr/compare/dash-shaka-playback@3.7.0...dash-shaka-playback@3.7.1) (2026-07-29)
+
+### Bug Fixes
+
+- **ci:** align package repository URLs for npm provenance ([a14cd90](https://github.com/clappr/clappr/commit/a14cd90ffe64715d691230f4a50ae3e0b0c15b9a)), closes [#2455](https://github.com/clappr/clappr/issues/2455)
+
 # [3.7.0](https://github.com/clappr/dash-shaka-playback/compare/dash-shaka-playback@3.6.3...dash-shaka-playback@3.7.0) (2026-07-29)
 
 ### Bug Fixes

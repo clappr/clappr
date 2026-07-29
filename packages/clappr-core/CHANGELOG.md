@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.1](https://github.com/clappr/clappr/compare/@clappr/core@0.14.0...@clappr/core@0.14.1) (2026-07-29)
+
+### Bug Fixes
+
+- **ci:** align package repository URLs for npm provenance ([a14cd90](https://github.com/clappr/clappr/commit/a14cd90ffe64715d691230f4a50ae3e0b0c15b9a)), closes [#2455](https://github.com/clappr/clappr/issues/2455)
+
 # [0.14.0](https://github.com/clappr/clappr-core/compare/@clappr/core@0.13.2...@clappr/core@0.14.0) (2026-07-29)
 
 ### Bug Fixes
