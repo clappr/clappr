@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Resolve player tags / version table, or render + create/update a draft GitHub Release.
+# resolve refuses to announce a player tag that is not on npm; Published versions
+# rows are likewise filtered to versions present on the registry.
 # Usage:
 #   MODE=auto|manual [PLAYER_TAG=...] ./generate-release-notes.sh resolve
 #   MODE=auto|manual PLAYER_TAG=... RELEASE_ID=... HIGHLIGHTS=... \
@@ -49,6 +51,13 @@ pkg_version_at() {
   git show "${ref}:${path}" 2>/dev/null | jq -r '.version // empty'
 }
 
+# True when registry.npmjs.org has name@version (avoids announcing git-only tags).
+npm_has_package_version() {
+  local name="$1"
+  local ver="$2"
+  npm view "${name}@${ver}" version >/dev/null 2>&1
+}
+
 build_versions_table_and_links() {
   local base_tag="$1"
   local player_tag="$2"
@@ -69,6 +78,12 @@ build_versions_table_and_links() {
 
     now="$(pkg_version_at "$player_tag" "$pkg_json")"
     if [ -z "$now" ]; then
+      continue
+    fi
+
+    # Only list versions that actually landed on npm (partial publish batches).
+    if ! npm_has_package_version "$name" "$now"; then
+      echo "Skipping ${name}@${now} in Published versions (not on npm)"
       continue
     fi
 
@@ -99,6 +114,7 @@ build_versions_table_and_links() {
 cmd_resolve() {
   local player_tag="${PLAYER_TAG:-}"
   local base_tag=""
+  local player_ver=""
   local release_json release_id is_draft should_run="true" skip_copilot="false"
   local versions_table="" changelog_links="" title=""
 
@@ -124,6 +140,13 @@ cmd_resolve() {
     exit 1
   fi
 
+  # Git tags can land before npm publish succeeds — never draft that case.
+  player_ver="${player_tag##*@}"
+  if ! npm_has_package_version "@clappr/player" "$player_ver"; then
+    echo "@clappr/player@${player_ver} tag exists but is not on npm; skipping draft"
+    should_run="false"
+  fi
+
   release_json="$(find_release_for_tag "$player_tag" || true)"
   release_id=""
   is_draft=""
@@ -139,10 +162,10 @@ cmd_resolve() {
     fi
   fi
 
-  if [ -n "$release_id" ] && [ "$is_draft" = "false" ]; then
+  if [ "$should_run" = "true" ] && [ -n "$release_id" ] && [ "$is_draft" = "false" ]; then
     echo "Published release already exists for ${player_tag} (id=${release_id}); skipping"
     should_run="false"
-  elif [ -n "$release_id" ] && [ "$is_draft" = "true" ] && [ "$MODE" = "auto" ]; then
+  elif [ "$should_run" = "true" ] && [ -n "$release_id" ] && [ "$is_draft" = "true" ] && [ "$MODE" = "auto" ]; then
     echo "Draft already exists for ${player_tag} (id=${release_id}) and MODE=auto; skipping"
     should_run="false"
   fi

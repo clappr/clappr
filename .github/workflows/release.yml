@@ -19,6 +19,9 @@ jobs:
     permissions:
       contents: write
       id-token: write
+    outputs:
+      player_published: ${{ steps.announce.outputs.player_published || 'false' }}
+      player_tag: ${{ steps.announce.outputs.player_tag || '' }}
 
     steps:
       - name: Generate GitHub App token
@@ -157,6 +160,42 @@ jobs:
             echo "Publish failures: ${failed[*]}"
             exit 1
           fi
+
+      # Only announce when this run's publish set included @clappr/player and
+      # Publish to npm succeeded (skip-already-on-npm counts as success).
+      - name: Set release notes outputs
+        id: announce
+        if: steps.changed.outputs.count != '0'
+        env:
+          PACKAGES_JSON: ${{ steps.changed.outputs.packages }}
+        run: |
+          if ! echo "$PACKAGES_JSON" | jq -e 'index("@clappr/player") != null' >/dev/null; then
+            echo "player_published=false" >> "$GITHUB_OUTPUT"
+            echo "player_tag=" >> "$GITHUB_OUTPUT"
+            echo "Player not in publish set; skipping release notes"
+            exit 0
+          fi
+          ver=$(jq -r '.version' packages/player/package.json)
+          if [ -z "$ver" ] || [ "$ver" = "null" ]; then
+            echo "::error::Could not read @clappr/player version from package.json"
+            exit 1
+          fi
+          echo "player_published=true" >> "$GITHUB_OUTPUT"
+          echo "player_tag=@clappr/player@${ver}" >> "$GITHUB_OUTPUT"
+          echo "Will request release notes for @clappr/player@${ver}"
+
+  # Draft GitHub Release only after a successful player publish (not on empty
+  # Release runs or non-player-only publishes).
+  notes:
+    needs: release
+    if: needs.release.outputs.player_published == 'true'
+    permissions:
+      contents: write
+      pull-requests: read
+    secrets: inherit
+    uses: ./.github/workflows/generate-release-notes.yml
+    with:
+      player_tag: ${{ needs.release.outputs.player_tag }}
 
   notify-failure:
     needs: release
