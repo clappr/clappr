@@ -1,5 +1,9 @@
-# Creates a draft GitHub Release anchored on @clappr/player after a successful
-# Release workflow (or via workflow_dispatch).
+# Creates a draft GitHub Release anchored on @clappr/player after Release
+# successfully publishes that package (workflow_call), or via workflow_dispatch.
+#
+# Does not run on empty Release successes or non-player publishes — Release
+# only calls this workflow when player_published=true. resolve also requires
+# the player version to exist on npm before creating a draft.
 #
 # Prerequisite (optional but recommended for prose Highlights):
 #   Repository secret COPILOT_GITHUB_TOKEN — fine-grained PAT with
@@ -9,10 +13,13 @@
 name: Generate release notes
 
 on:
-  workflow_run:
-    workflows: ['Release']
-    branches: [main]
-    types: [completed]
+  workflow_call:
+    inputs:
+      player_tag:
+        description: '@clappr/player tag to announce (default: latest player tag)'
+        required: false
+        type: string
+        default: ''
   workflow_dispatch:
     inputs:
       player_tag:
@@ -27,7 +34,6 @@ concurrency:
 jobs:
   notes:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
       pull-requests: read
@@ -44,8 +50,9 @@ jobs:
       - name: Resolve tags and version table
         id: resolve
         env:
+          # workflow_call from Release = auto; manual dispatch can update drafts.
           MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
-          PLAYER_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.player_tag || '' }}
+          PLAYER_TAG: ${{ inputs.player_tag || '' }}
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: .github/scripts/generate-release-notes.sh resolve

@@ -44,9 +44,18 @@ Packages that do **not** publish to npm:
 
 ### GitHub Release notes
 
-After a successful `Release` workflow (or Actions → **Generate release notes**), CI opens a **draft** GitHub Release anchored on `@clappr/player@*`. That tag is the public umbrella announcement: publishes that bump only other packages (e.g. `@clappr/core` alone) do not create a GitHub Release.
+After `Release` **successfully publishes `@clappr/player` to npm**, it calls **Generate release notes**, which opens a **draft** GitHub Release anchored on `@clappr/player@*`. That tag is the public umbrella announcement.
+
+Notes do **not** run when:
+
+- The Release run published nothing, or only non-player packages (e.g. `@clappr/telemetry` alone)
+- A git tag exists but the player version is not on npm yet (failed/partial publish)
+
+You can also run Actions → **Generate release notes** manually (updates an existing draft). `resolve` still requires the player version on npm.
 
 Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
+
+**Cleanup if a draft was created for a git-only player tag** (tag pushed, npm publish failed): delete that draft GitHub Release, recover with Release `workflow_dispatch` + `publish_only`, then run **Generate release notes** manually if needed.
 
 ## Tooling
 
