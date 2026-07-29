@@ -28,6 +28,16 @@ Use Yarn with Lerna.
 - `lerna run <command> --scope=<package-name>` - Run command in specific package
 - `lerna publish` - Publish packages (independent versioning)
 
+# Release notes
+
+After a successful `Release` workflow (or via Actions → **Generate release notes**), CI creates a **draft** GitHub Release anchored on `@clappr/player@*`.
+
+Optional repo secret for prose Highlights:
+
+- `COPILOT_GITHUB_TOKEN` — fine-grained PAT with **Copilot Requests: Read** (token owner needs an active Copilot license). Without it, the draft still ships with a mechanical Highlights fallback.
+- Style guide: `.github/release-notes-instructions.md`
+- Logic: `.github/scripts/generate-release-notes.sh`
+
 # Running Projects
 
 ## Player Development
