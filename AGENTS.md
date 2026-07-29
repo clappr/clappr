@@ -51,7 +51,7 @@ Packages that do **not** publish to npm:
 - `yarn workspace <package-name> add <dependency>` — Package-specific dependency
 - `lerna run <command>` — All packages
 - `lerna run <command> --scope=<package-name>` — Single package
-- `yarn release` — Publish (`lerna publish`, independent versioning)
+- `yarn release` — Version packages (`lerna version`); npm publish is done by the Release workflow via OIDC
 
 ### Running projects
 
