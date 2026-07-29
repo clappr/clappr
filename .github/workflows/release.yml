@@ -50,7 +50,9 @@ jobs:
 
       - name: Ensure npm supports trusted publishing
         run: |
-          npm install -g npm@latest
+          # Pin to npm 11: trusted publishing needs a recent npm, but npm 12 stopped
+          # forcing JSON from `npm pkg get` and can surprise CI with other CLI changes.
+          npm install -g npm@^11.5.0
           npm --version
 
       - name: Install dependencies
@@ -116,10 +118,24 @@ jobs:
         if: steps.changed.outputs.count != '0'
         run: |
           failed=()
+          # Versions after lerna version live in package.json; read them via Lerna JSON
+          # instead of `npm pkg get` stdout (npm 12+ is not JSON by default — see #2472).
+          ERR_FILE=$(mktemp)
+          LIST_JSON=$(npx lerna list --json 2>"$ERR_FILE")
+          LIST_EXIT=$?
+          ERR=$(cat "$ERR_FILE")
+          rm -f "$ERR_FILE"
+          if [ -n "$ERR" ]; then
+            echo "$ERR"
+          fi
+          if [ $LIST_EXIT -ne 0 ]; then
+            echo "::error::Could not list package versions (exit code: $LIST_EXIT)"
+            exit 1
+          fi
+
           for pkg in $(echo '${{ steps.changed.outputs.packages }}' | jq -r '.[]'); do
             echo "::group::publish $pkg"
-            # npm pkg get -w returns {"name":"version"} JSON, not a bare string
-            ver=$(npm pkg get version -w "$pkg" | jq -r 'to_entries[0].value')
+            ver=$(echo "$LIST_JSON" | jq -r --arg pkg "$pkg" '.[] | select(.name == $pkg) | .version')
             if [ -z "$ver" ] || [ "$ver" = "null" ]; then
               echo "::error::Could not resolve version for $pkg"
               failed+=("$pkg")
