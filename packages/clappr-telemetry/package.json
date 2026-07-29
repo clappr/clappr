@@ -1,6 +1,6 @@
 {
   "name": "@clappr/telemetry",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "description": "Telemetry package for Clappr player",
   "main": "./dist/clappr-telemetry.js",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.17",
     "@babel/preset-env": "^7.22.15",
-    "@clappr/core": "^0.14.1",
+    "@clappr/core": "^0.14.2",
     "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.2",
