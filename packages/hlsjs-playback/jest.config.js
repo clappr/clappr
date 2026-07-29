@@ -1,6 +1,8 @@
 const ClapprCorePkg = require('@clappr/core/package.json')
 
 module.exports = {
+  // Explicit since jest 27 flipped the default to 'node'; these suites need DOM.
+  testEnvironment: 'jsdom',
   verbose: true,
   transform: {
     '^.+\\.js$': 'babel-jest',
