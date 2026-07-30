@@ -101,7 +101,8 @@ player.attachTo(playerElement);
 
       if (window.location.hash) {
         var editorContent = atob(window.location.hash.slice(1))
-        document.getElementById("editor").innerHTML = editorContent
+        // textContent avoids HTML parsing of shared URL payloads (DOM XSS).
+        document.getElementById("editor").textContent = editorContent
         setTimeout(run, 0)
       } else {
         var playerElement = document.getElementById("player-wrapper");
