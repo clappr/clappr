@@ -142,14 +142,16 @@ var Zepto = (function() {
   // This function can be overridden in plugins for example to make
   // it compatible with browsers that don't support the DOM fully.
   zepto.fragment = function(html, name, properties) {
-    var dom, nodes, container
+    var dom, nodes, container, match
 
     // A special case optimization for a single tag
-    if (singleTagRE.test(html)) dom = $(document.createElement(RegExp.$1))
+    if ((match = singleTagRE.exec(html))) dom = $(document.createElement(match[1]))
 
     if (!dom) {
       if (html.replace) html = html.replace(tagExpanderRE, "<$1></$2>")
-      if (name === undefined) name = fragmentRE.test(html) && RegExp.$1
+      // exec() yields null without a match; previously test() && RegExp.$1
+      // yielded false. Both fall through to name = '*' below.
+      if (name === undefined) name = (match = fragmentRE.exec(html)) && match[1]
       if (!(name in containers)) name = '*'
 
       container = containers[name]
@@ -188,7 +190,7 @@ var Zepto = (function() {
   // special cases).
   // This method can be overridden in plugins.
   zepto.init = function(selector, context) {
-    var dom
+    var dom, match
     // If nothing given, return an empty Zepto collection
     if (!selector) return zepto.Z()
     // Optimize for string selectors
@@ -197,8 +199,8 @@ var Zepto = (function() {
       // If it's a html fragment, create nodes from it
       // Note: In both Chrome 21 and Firefox 15, DOM error 12
       // is thrown if the fragment doesn't begin with <
-      if (selector[0] == '<' && fragmentRE.test(selector))
-        dom = zepto.fragment(selector, RegExp.$1, context), selector = null
+      if (selector[0] == '<' && (match = fragmentRE.exec(selector)))
+        dom = zepto.fragment(selector, match[1], context), selector = null
       // If there's a context, create a collection on that context first, and select
       // nodes from there
       else if (context !== undefined) return $(context).find(selector)
@@ -216,8 +218,8 @@ var Zepto = (function() {
       else if (isObject(selector))
         dom = [selector], selector = null
       // If it's a html fragment, create nodes from it
-      else if (fragmentRE.test(selector))
-        dom = zepto.fragment(selector.trim(), RegExp.$1, context), selector = null
+      else if ((match = fragmentRE.exec(selector)))
+        dom = zepto.fragment(selector.trim(), match[1], context), selector = null
       // If there's a context, create a collection on that context first, and select
       // nodes from there
       else if (context !== undefined) return $(context).find(selector)
