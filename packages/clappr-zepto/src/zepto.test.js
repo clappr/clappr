@@ -84,8 +84,8 @@ describe('RegExp.$1 fragment sites', () => {
   })
 
   test('fragmentRE no-match falls through to default container', () => {
-    // name = fragmentRE.test(html) && RegExp.$1 yields false without a match;
-    // both false and null (from a future exec() migration) hit name = '*'.
+    // name = fragmentRE.test(html) && RegExp.$1 yielded false without a match;
+    // exec() yields null. Both hit name = '*'.
     const nodes = $.zepto.fragment('plain text', undefined)
     expect(nodes.length).toBe(1)
     expect(nodes[0].nodeType).toBe(Node.TEXT_NODE)
