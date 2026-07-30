@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Permanent Zepto fork — do not reformat
+packages/clappr-zepto/src/zepto.js
+
 # Build outputs
 dist/
 build/

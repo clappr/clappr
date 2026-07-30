@@ -1,11 +1,31 @@
-# clappr-zepto
+# @clappr/zepto
 
-[Zepto.js](https://github.com/madrobby/zepto) custom build used by [Clappr player](https://github.com/clappr/clappr).
+Permanent fork of [Zepto.js](https://github.com/madrobby/zepto) v1.2.0 used by Clappr
+(`Clappr.$`). Modules included: `zepto`, `ajax`, `callbacks`, `deferred`, `event`, `ie`,
+`selector`.
 
-Zepto is build with `ajax callbacks deferred event ie selector zepto` modules.
+This package is **not regenerated** from upstream. The source in `src/zepto.js` is maintained
+in this repository (including Clappr-specific patches). Do not reintroduce a clone/build
+script that overwrites it.
 
-## Building
+Internal only (`private: true`); consumed by `@clappr/core` and inlined into its published
+bundle.
+
+## Build
 
 ```shell
-$ npm run build
+yarn build
 ```
+
+Runs Rollup and writes UMD + ESM outputs to `dist/`. There is no minified artifact here —
+minification is `@clappr/core`'s responsibility.
+
+## Test
+
+```shell
+yarn test
+```
+
+## License
+
+MIT — see [LICENSE](./LICENSE) (Thomas Fuchs / Zepto original copyright).
