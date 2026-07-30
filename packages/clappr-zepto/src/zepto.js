@@ -12,7 +12,7 @@ var Zepto = (function() {
     cssNumber = { 'column-count': 1, 'columns': 1, 'font-weight': 1, 'line-height': 1,'opacity': 1, 'z-index': 1, 'zoom': 1 },
     fragmentRE = /^\s*<(!|\w+(?!\w))[^>]*>/,
     singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
-    tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+    tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)(?![\w:])(?:"[^"]*"|'[^']*'|\/(?!>)|[^>"'\/])*)\/>/ig,
     rootNodeRE = /^(?:body|html)$/i,
     capitalRE = /([A-Z])/g,
 
