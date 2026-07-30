@@ -13,7 +13,6 @@ module.exports = {
   },
   'moduleNameMapper': {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^clappr-zepto$': 'clappr-zepto/zepto.js',
     '\\.(scss)$': '<rootDir>/src/__mocks__/styleMock.js'
   },
   'collectCoverageFrom': [

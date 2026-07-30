@@ -13,6 +13,7 @@
     "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
     "release": "lerna version --include-merged-tags --no-push --yes",
     "prepare": "husky",
+    "pretest": "lerna run build --scope=@clappr/zepto",
     "test": "lerna run test --no-bail",
     "build": "lerna run build --scope=@clappr/player --include-dependencies"
   },
