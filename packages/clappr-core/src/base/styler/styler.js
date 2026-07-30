@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import $ from 'clappr-zepto'
+import $ from '../zepto/zepto'
 import template from '../template'
 
 const Styler = {

@@ -1,4 +1,4 @@
-import $ from 'clappr-zepto'
+import $ from '../../base/zepto/zepto'
 import BROWSER_DATA from './browser_data'
 import OS_DATA from './os_data'
 

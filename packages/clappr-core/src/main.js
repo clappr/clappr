@@ -27,7 +27,7 @@ import template from './base/template'
 import Strings from './plugins/strings/strings'
 import SourcesPlugin from './plugins/sources/sources'
 
-import $ from 'clappr-zepto'
+import $ from './base/zepto/zepto'
 
 /** @constant
     @type {string}

@@ -6,7 +6,7 @@
  * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
-import $ from 'clappr-zepto'
+import $ from '../../base/zepto/zepto'
 import BaseObject from '../../base/base_object/base_object'
 import Events from '../../base/events/events'
 import Container from '../container/container'
