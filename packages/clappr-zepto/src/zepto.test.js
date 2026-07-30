@@ -207,6 +207,20 @@ describe('$.fn.load', () => {
   })
 })
 
+describe('event handler remove', () => {
+  test('off() removes a handler without disturbing later registrations', () => {
+    const el = $('<div/>')
+    const first = jest.fn()
+    const second = jest.fn()
+    el.on('click', first)
+    el.on('click', second)
+    el.off('click', first)
+    el.trigger('click')
+    expect(first).not.toHaveBeenCalled()
+    expect(second).toHaveBeenCalledTimes(1)
+  })
+})
+
 describe('$.ajaxJSONP', () => {
   let appendSpy
   let appended

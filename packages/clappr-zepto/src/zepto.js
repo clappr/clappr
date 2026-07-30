@@ -1647,7 +1647,11 @@ window.$ === undefined && (window.$ = Zepto)
     var id = zid(element)
     ;(events || '').split(/\s/).forEach(function(event){
       findHandlers(element, event, fn, selector).forEach(function(handler){
-        delete handlers[id][handler.i]
+        // handler.i is the stable index assigned at registration (set.length).
+        // Guard own-property so a forged key cannot delete Object.prototype
+        // members; keep delete (not splice) so later handlers' indices stay valid.
+        if (Object.prototype.hasOwnProperty.call(handlers[id], handler.i))
+          delete handlers[id][handler.i]
       if ('removeEventListener' in element)
         element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
       })
