@@ -52,3 +52,34 @@ describe('RegExp.$1 fragment sites', () => {
     expect(nodes[0].children[0].tagName).toBe('TD')
   })
 })
+
+describe('$.zepto.isZ', () => {
+  test('detects Zepto collections only', () => {
+    expect($.zepto.isZ($('<div/>'))).toBe(true)
+    expect($.zepto.isZ($(document.createElement('span')))).toBe(true)
+    expect($.zepto.isZ(document.createElement('div'))).toBe(false)
+    expect($.zepto.isZ({})).toBe(false)
+    expect($.zepto.isZ(null)).toBe(false)
+  })
+})
+
+describe('html() and tagExpander paths', () => {
+  test('html() setter preserves entity-encoded text', () => {
+    const el = $('<div/>').html('a &amp; b &lt;c&gt;')
+    expect(el.html()).toBe('a &amp; b &lt;c&gt;')
+    expect(el[0].textContent).toBe('a & b <c>')
+  })
+
+  test('self-closing non-void tags expand before innerHTML', () => {
+    const nodes = $('<div><p/></div>')
+    expect(nodes.find('p').length).toBe(1)
+    expect(nodes.find('p')[0].tagName).toBe('P')
+  })
+
+  test('malformed fragment still yields a collection', () => {
+    const nodes = $('<div><span>unclosed')
+    expect(nodes.length).toBe(1)
+    expect(nodes[0].tagName).toBe('DIV')
+    expect(nodes.find('span').length).toBe(1)
+  })
+})

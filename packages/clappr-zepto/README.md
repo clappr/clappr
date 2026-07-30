@@ -9,7 +9,8 @@ in this repository (including Clappr-specific patches). Do not reintroduce a clo
 script that overwrites it.
 
 Internal only (`private: true`); consumed by `@clappr/core` and inlined into its published
-bundle.
+bundle. Version **2.0.0** marks the identity break from the old vendored `clappr-zepto@0.x`
+lineage (new name, owned source, Rollup `dist/` entry) — not a rewrite of Zepto's API.
 
 ## Build
 

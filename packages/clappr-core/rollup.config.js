@@ -31,6 +31,8 @@ const postcssOptions = {
 }
 const aliasPluginOptions = {
   entries: {
+    // Bundle from source so a missing/stale zepto dist/ cannot externalize the import
+    '@clappr/zepto': `${__dirname}/../clappr-zepto/src/zepto.js`,
     '@': `${__dirname}/src`
   }
 }
