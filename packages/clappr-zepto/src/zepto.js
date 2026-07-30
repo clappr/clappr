@@ -1576,7 +1576,9 @@ window.$ === undefined && (window.$ = Zepto)
       slice = Array.prototype.slice,
       isFunction = $.isFunction,
       isString = function(obj){ return typeof obj == 'string' },
-      handlers = {},
+      // Prototype-less map: handlers['__proto__'] must never resolve to
+      // Object.prototype (CodeQL js/prototype-polluting-assignment).
+      handlers = Object.create(null),
       specialEvents={},
       focusinSupported = 'onfocusin' in window,
       focus = { focus: 'focusin', blur: 'focusout' },
@@ -1585,7 +1587,11 @@ window.$ === undefined && (window.$ = Zepto)
   specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
 
   function zid(element) {
-    return element._zid || (element._zid = _zid++)
+    // Always a number — a forged element._zid string must not become a
+    // dynamic key into handlers.
+    var id = element._zid
+    if (typeof id !== 'number') element._zid = id = _zid++
+    return id
   }
   function findHandlers(element, event, fn, selector) {
     event = parse(event)
@@ -1649,13 +1655,8 @@ window.$ === undefined && (window.$ = Zepto)
     var id = zid(element)
     ;(events || '').split(/\s/).forEach(function(event){
       findHandlers(element, event, fn, selector).forEach(function(handler){
-        // handler.i is the stable index assigned at registration (set.length).
-        // Reject prototype-chain keys and require an own slot; keep delete (not
-        // splice) so later handlers' indices stay valid for off().
-        var i = handler.i
-        if (i !== '__proto__' && i !== 'constructor' && i !== 'prototype' &&
-            Object.prototype.hasOwnProperty.call(handlers[id], i))
-          delete handlers[id][i]
+        // Keep delete (not splice) so handler.i remains a stable index for off().
+        delete handlers[id][handler.i]
       if ('removeEventListener' in element)
         element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
       })
