@@ -1,5 +1,9 @@
-# Creates a draft GitHub Release anchored on @clappr/player after a successful
-# Release workflow (or via workflow_dispatch).
+# Creates a draft GitHub Release anchored on @clappr/player after Release
+# successfully publishes that package (workflow_call), or via workflow_dispatch.
+#
+# Does not run on empty Release successes or non-player publishes — Release
+# only calls this workflow when player_published=true. resolve also requires
+# the player version to exist on npm before creating a draft.
 #
 # Prerequisite (optional but recommended for prose Highlights):
 #   Repository secret COPILOT_GITHUB_TOKEN — fine-grained PAT with
@@ -9,10 +13,28 @@
 name: Generate release notes
 
 on:
-  workflow_run:
-    workflows: ['Release']
-    branches: [main]
-    types: [completed]
+  workflow_call:
+    inputs:
+      player_tag:
+        description: '@clappr/player tag to announce (default: latest player tag)'
+        required: false
+        type: string
+        default: ''
+      mode:
+        description: 'auto (never touch an existing draft) or manual (may update one)'
+        required: false
+        type: string
+        default: 'auto'
+      published_in_run:
+        description: 'Caller published the player in this run, so a missing npm version is an error rather than a skip'
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      # Must be declared to be passed explicitly by the caller (only `inherit`
+      # skips this). Optional: the Copilot step fails open without it.
+      COPILOT_GITHUB_TOKEN:
+        required: false
   workflow_dispatch:
     inputs:
       player_tag:
@@ -27,7 +49,6 @@ concurrency:
 jobs:
   notes:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
       pull-requests: read
@@ -44,8 +65,19 @@ jobs:
       - name: Resolve tags and version table
         id: resolve
         env:
-          MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
-          PLAYER_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.player_tag || '' }}
+          # `mode` exists only under workflow_call, where its default applies (auto);
+          # on workflow_dispatch the key is absent, so this falls back to manual.
+          # Do not derive this from github.event_name — in a called workflow the
+          # github context is the caller's, so Release's own workflow_dispatch
+          # (publish_only recovery) would read as a manual run.
+          MODE: ${{ inputs.mode || 'manual' }}
+          PLAYER_TAG: ${{ inputs.player_tag || '' }}
+          # Absent on workflow_dispatch, so a hand-aimed orphan tag still just skips.
+          REQUIRE_NPM: ${{ inputs.published_in_run && '1' || '0' }}
+          # The caller published seconds ago, so give packument propagation a wider
+          # budget there (~50s): under REQUIRE_NPM this is what separates "npm was
+          # slow" from a real alarm, and a false alarm costs a bug issue.
+          REGISTRY_ATTEMPTS: ${{ inputs.published_in_run && '6' || '3' }}
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: .github/scripts/generate-release-notes.sh resolve
@@ -69,7 +101,8 @@ jobs:
       - name: Create or update draft release
         if: steps.resolve.outputs.should_run == 'true'
         env:
-          MODE: ${{ github.event_name == 'workflow_dispatch' && 'manual' || 'auto' }}
+          # Same derivation as the resolve step above — see the note there.
+          MODE: ${{ inputs.mode || 'manual' }}
           PLAYER_TAG: ${{ steps.resolve.outputs.player_tag }}
           TITLE: ${{ steps.resolve.outputs.title }}
           RELEASE_ID: ${{ steps.resolve.outputs.release_id }}

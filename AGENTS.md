@@ -44,9 +44,31 @@ Packages that do **not** publish to npm:
 
 ### GitHub Release notes
 
-After a successful `Release` workflow (or Actions → **Generate release notes**), CI opens a **draft** GitHub Release anchored on `@clappr/player@*`. That tag is the public umbrella announcement: publishes that bump only other packages (e.g. `@clappr/core` alone) do not create a GitHub Release.
+After `Release` **successfully publishes `@clappr/player` to npm**, it calls **Generate release notes**, which opens a **draft** GitHub Release anchored on `@clappr/player@*`. That tag is the public umbrella announcement.
+
+Notes do **not** run when:
+
+- The Release run published nothing, or only non-player packages (e.g. `@clappr/telemetry` alone)
+- The run did not actually publish the player — the version was already on npm and got skipped (common on `publish_only` recovery)
+
+You can also run Actions → **Generate release notes** manually (updates an existing draft) — that is the way to regenerate notes in the cases above. `resolve` still requires the player version on npm; aimed by hand at a git-only tag it skips with a warning.
+
+**When the player version is missing from npm, the two paths differ on purpose:**
+
+| Path | Missing on npm | Why |
+|---|---|---|
+| Called by `Release` (`published_in_run: true`) | **Fails** → "Release notes generation failed" issue | The publish already succeeded, so absence contradicts the caller's own precondition. Whether it is registry lag or a real incident, a green run would notify nobody. |
+| Manual dispatch | Skips with a warning | You aimed at that tag deliberately; failing would be noise. |
+
+The registry gets ~50s (`REGISTRY_ATTEMPTS: 6`) on the Release path before it counts as missing, so the failure means something is wrong rather than npm being slow.
+
+Not finding a version and not being able to ask are also different things: if the npm registry cannot answer at all, the notes job **fails** on both paths instead of quietly skipping the draft (only the Release path opens an issue — `notify-failure` lives in `release.yml`).
+
+Nothing needs re-publishing for any notes failure — "Re-run failed jobs" on the Release run re-runs only the notes job, and no duplicate issue is opened.
 
 Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
+
+**Cleanup if a draft was created for a git-only player tag** (tag pushed, npm publish failed): delete that draft GitHub Release, recover with Release `workflow_dispatch` + `publish_only`, then run **Generate release notes** manually if needed.
 
 ## Tooling
 

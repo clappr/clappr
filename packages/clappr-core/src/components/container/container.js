@@ -15,8 +15,10 @@ import ContainerStyle from './public/style.scss'
 import $ from '@clappr/zepto'
 
 /**
- * An abstraction to represent a container for a given playback
- * TODO: describe its responsabilities
+ * An abstraction to represent a container for a given playback.
+ * It wraps a playback instance, forwards its events, and exposes
+ * playback controls (play, pause, seek, volume, fullscreen, etc.)
+ * to the rest of the player.
  * @class Container
  * @constructor
  * @extends UIObject

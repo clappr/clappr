@@ -521,9 +521,17 @@ Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
  * @param {boolean} state true if dvr enabled
  */
 Events.PLAYBACK_DVR = 'playback:dvr'
-// TODO doc
+/**
+ * Fired when the playback requests the media control to be disabled.
+ *
+ * @event PLAYBACK_MEDIACONTROL_DISABLE
+ */
 Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'
-// TODO doc
+/**
+ * Fired when the playback requests the media control to be enabled.
+ *
+ * @event PLAYBACK_MEDIACONTROL_ENABLE
+ */
 Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
 /**
  * Fired when the media for a playback ends.
@@ -580,9 +588,21 @@ Events.PLAYBACK_STOP = 'playback:stop'
  * @param {String} name Playback name
  */
 Events.PLAYBACK_ERROR = 'playback:error'
-// TODO doc
+/**
+ * Fired when the playback has stats data to report.
+ *
+ * @event PLAYBACK_STATS_ADD
+ * @param {Object} stats Data
+ * stats object, its shape depends on the playback implementation
+ */
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
-// TODO doc
+/**
+ * Fired when a media fragment/segment has finished loading.
+ *
+ * @event PLAYBACK_FRAGMENT_LOADED
+ * @param {Object} data Data
+ * fragment metadata, its shape depends on the playback implementation
+ */
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 /**
  *  Fired when a fragment has been appended into buffer
@@ -592,7 +612,13 @@ Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
  *
  */
 Events.PLAYBACK_FRAGMENT_BUFFERED = 'playback:fragment:buffered'
-// TODO doc
+/**
+ * Fired when the playback switches to a different quality level.
+ *
+ * @event PLAYBACK_LEVEL_SWITCH
+ * @param {Object} data Data
+ * level switch metadata, its shape depends on the playback implementation
+ */
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 /**
  * Fired when subtitle is available on playback for display
