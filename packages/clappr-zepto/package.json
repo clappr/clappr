@@ -8,6 +8,7 @@
   "sideEffects": true,
   "scripts": {
     "build": "rollup -c",
+    "pretest": "rollup -c",
     "test": "jest src/"
   },
   "repository": {
