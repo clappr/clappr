@@ -8,8 +8,11 @@ module.exports = {
   'verbose': true,
   'resolver': 'jest-directory-named-resolver',
   'transform': {
-    // Inline babel config so the sibling @clappr/zepto source (ESM export) is
-    // transformed even though it lives outside this package's rootDir/babelrc.
+    // Replaces packages/clappr-core/.babelrc for all jest transforms (babelrc:
+    // false). Needed so the sibling @clappr/zepto source (ESM export default)
+    // is compiled to CJS when resolved via moduleNameMapper outside rootDir.
+    // Keep this preset in sync with .babelrc env.test — edits to .babelrc alone
+    // do not affect tests while this inline config is present.
     '^.+\\.js$': ['babel-jest', {
       babelrc: false,
       configFile: false,
