@@ -7,7 +7,6 @@ module.exports = [
       'eslint.config.js',
       'dist/',
       'public/',
-      'clappr-zepto/',
       'node_modules/',
       'coverage/',
       '*.min.js',
@@ -15,7 +14,7 @@ module.exports = [
       'rollup.config.js',
       '# Package-specific ignores',
       'packages/clappr-core/src/base/polyfills.js',
-      'packages/clappr-zepto/',
+      'packages/clappr-zepto/src/zepto.js',
       'packages/clappr-core/src/base/template.js'
     ]
   },
