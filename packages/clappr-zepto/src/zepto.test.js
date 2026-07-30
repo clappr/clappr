@@ -149,21 +149,18 @@ describe('html() and tagExpander paths', () => {
     // expander does not match. Old [^>]* swallowed it. Spy replace so we
     // exercise the production tagExpanderRE (jsdom drops both parse outcomes).
     const html = '<div title="unclosed />'
-    const original = String.prototype.replace
-    let expanderResult
-    String.prototype.replace = function (re, repl) {
-      const result = original.apply(this, arguments)
-      if (re && typeof re.source === 'string' && re.source.indexOf('area|br|col') !== -1) {
-        expanderResult = result
-      }
-      return result
-    }
+    const spy = jest.spyOn(String.prototype, 'replace')
     try {
       $.zepto.fragment(html)
+      const idx = spy.mock.calls.findIndex(
+        args => args[0] && typeof args[0].source === 'string' &&
+          args[0].source.indexOf('area|br|col') !== -1
+      )
+      expect(idx).toBeGreaterThanOrEqual(0)
+      expect(spy.mock.results[idx].value).toBe(html)
     } finally {
-      String.prototype.replace = original
+      spy.mockRestore()
     }
-    expect(expanderResult).toBe(html)
   })
 
   test('tagExpanderRE and fragmentRE stay linear on pathological input', () => {
