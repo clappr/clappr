@@ -948,7 +948,6 @@ window.$ === undefined && (window.$ = Zepto)
       document = window.document,
       key,
       name,
-      rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
       scriptTypeRE = /^(?:text|application)\/javascript/i,
       xmlTypeRE = /^(?:text|application)\/xml/i,
       jsonType = 'application/json',
@@ -1285,9 +1284,17 @@ window.$ === undefined && (window.$ = Zepto)
         callback = options.success
     if (parts.length > 1) options.url = parts[0], selector = parts[1]
     options.success = function(response){
-      self.html(selector ?
-        $('<div>').html(response.replace(rscript, "")).find(selector)
-        : response)
+      // With a selector, parse into a detached container and drop <script>
+      // nodes structurally before finding matches. Without a selector the
+      // response is inserted as-is (same asymmetry as jQuery). This is not
+      // a sanitizer: event-handler attrs and javascript: URLs still pass.
+      if (selector) {
+        var container = $('<div>').html(response)
+        container.find('script').remove()
+        self.html(container.find(selector))
+      } else {
+        self.html(response)
+      }
       callback && callback.apply(self, arguments)
     }
     $.ajax(options)
@@ -1804,10 +1811,13 @@ window.$ === undefined && (window.$ = Zepto)
     return result
   }
 
-  // shortcut methods for `.bind(event, fn)` for each event type
+  // shortcut methods for `.bind(event, fn)` for each event type.
+  // Skip names already defined (e.g. ajax $.fn.load) — this fork concatenates
+  // ajax before event, unlike upstream's default `event ajax` order.
   ;('focusin focusout focus blur load resize scroll unload click dblclick '+
   'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave '+
   'change select keydown keypress keyup error').split(' ').forEach(function(event) {
+    if ($.fn[event]) return
     $.fn[event] = function(callback) {
       return (0 in arguments) ?
         this.bind(event, callback) :
