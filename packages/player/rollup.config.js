@@ -1,3 +1,4 @@
+import path from 'path'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
@@ -21,6 +22,21 @@ const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', p
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
 const visualizePluginOptions = { open: true }
 
+// Resolve workspace packages to concrete dist files. Avoids a CI ENOTDIR from
+// node-resolve treating package "module" paths like
+// `.../clappr-plugins.esm.js/package.json` as directories.
+const workspaceDistAlias = {
+  name: 'workspace-dist-alias',
+  resolveId(source) {
+    const map = {
+      '@clappr/core': path.resolve(__dirname, '../clappr-core/dist/clappr-core.esm.js'),
+      '@clappr/plugins': path.resolve(__dirname, '../clappr-plugins/dist/clappr-plugins.esm.js'),
+      '@clappr/hlsjs-playback': path.resolve(__dirname, '../hlsjs-playback/dist/hlsjs-playback.esm.js')
+    }
+    return map[source] || null
+  }
+}
+
 const plugins = [
   replace({
     preventAssignment: true,
@@ -29,6 +45,7 @@ const plugins = [
       CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
     }
   }),
+  workspaceDistAlias,
   resolve(),
   commonjs(),
   babel({ exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled', compact: false }),

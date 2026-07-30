@@ -65,6 +65,11 @@
   },
   "nx": {
     "targets": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
       "start": {
         "dependsOn": [
           "^build"
