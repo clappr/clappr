@@ -1062,7 +1062,14 @@ window.$ === undefined && (window.$ = Zepto)
       responseData = arguments
     }
 
-    script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName)
+    // Rewrite the last `=?` after `?` without a regex (avoids ReDoS on `.+`).
+    // `i > q + 1` preserves the original `.+` requirement of at least one
+    // character between `?` and `=?`.
+    var q = options.url.indexOf('?'),
+        i = q > -1 ? options.url.lastIndexOf('=?') : -1
+    script.src = i > q + 1
+      ? options.url.slice(0, i + 1) + callbackName + options.url.slice(i + 2)
+      : options.url
     document.head.appendChild(script)
 
     if (options.timeout > 0) abortTimeout = setTimeout(function(){
