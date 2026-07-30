@@ -122,6 +122,35 @@ describe('html() and tagExpander paths', () => {
     expect(nodes.find('span').attr('class')).toBe('x')
   })
 
+  test('self-closing tag with quoted attr containing /> does not break out', () => {
+    // Previously [^>]* crossed the quote and expanded at the /> inside the
+    // attribute value (#111). Quote-aware expansion must leave the attr intact.
+    const nodes = $('<div title="/>"/>')
+    expect(nodes.length).toBe(1)
+    expect(nodes[0].tagName).toBe('DIV')
+    expect(nodes.attr('title')).toBe('/>')
+  })
+
+  test('unterminated quote no longer expands self-closing tag', () => {
+    // Intentional divergence: lone " cannot be consumed by any branch, so the
+    // expander does not match. Old [^>]* swallowed it.
+    const html = '<div title="unclosed />'
+    const expanded = html.replace(
+      /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)(?![\w:])(?:"[^"]*"|'[^']*'|\/(?!>)|[^>"'\/])*)\/>/ig,
+      '<$1></$2>'
+    )
+    expect(expanded).toBe(html)
+  })
+
+  test('tagExpanderRE and fragmentRE stay linear on pathological input', () => {
+    const html = '<' + 'a'.repeat(50000)
+    const start = Date.now()
+    const nodes = $.zepto.fragment(html)
+    const elapsed = Date.now() - start
+    expect(elapsed).toBeLessThan(2000)
+    expect($(nodes).filter('*').length).toBe(0)
+  })
+
   test('malformed fragment still yields a collection', () => {
     const nodes = $('<div><span>unclosed')
     expect(nodes.length).toBe(1)
