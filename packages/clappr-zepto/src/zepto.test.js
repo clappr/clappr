@@ -159,6 +159,54 @@ describe('html() and tagExpander paths', () => {
   })
 })
 
+describe('$.fn.load', () => {
+  let originalAjax
+
+  beforeEach(() => {
+    originalAjax = $.ajax
+  })
+
+  afterEach(() => {
+    $.ajax = originalAjax
+  })
+
+  test('without selector inserts the full response including script nodes', () => {
+    const html = '<p>hi</p><script type="text/plain">keep</script><span>there</span>'
+    $.ajax = jest.fn(options => {
+      options.success(html)
+      return {}
+    })
+    const el = $('<div/>')
+    el.load('/x')
+    expect(el.find('p').length).toBe(1)
+    expect(el.find('span').length).toBe(1)
+    expect(el.find('script').length).toBe(1)
+    expect(el.text()).toContain('hi')
+    expect(el.text()).toContain('there')
+  })
+
+  test('with selector inserts matches and removes script nodes structurally', () => {
+    const html =
+      '<div class="item">keep</div>' +
+      '<script>window.__zeptoLoadSpy=1</script>' +
+      '<div class="other">drop</div>' +
+      '<div class="item"><script type="text/plain">nested</script>ok</div>'
+    $.ajax = jest.fn(options => {
+      expect(options.url).toBe('/x')
+      options.success(html)
+      return {}
+    })
+    const el = $('<div/>')
+    el.load('/x .item')
+    expect(el.find('.item').length).toBe(2)
+    expect(el.find('.other').length).toBe(0)
+    expect(el.find('script').length).toBe(0)
+    expect(el.text()).toContain('keep')
+    expect(el.text()).toContain('ok')
+    expect(window.__zeptoLoadSpy).toBeUndefined()
+  })
+})
+
 describe('$.ajaxJSONP', () => {
   let appendSpy
   let appended
