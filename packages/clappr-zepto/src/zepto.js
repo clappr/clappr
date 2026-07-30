@@ -1649,12 +1649,12 @@ window.$ === undefined && (window.$ = Zepto)
     var id = zid(element)
     ;(events || '').split(/\s/).forEach(function(event){
       findHandlers(element, event, fn, selector).forEach(function(handler){
-        // handler.i is the stable numeric index assigned at registration
-        // (set.length). Restrict to numbers and own properties so a forged key
-        // cannot touch Object.prototype; keep delete (not splice) so later
-        // handlers' indices stay valid for off().
+        // handler.i is the stable index assigned at registration (set.length).
+        // Reject prototype-chain keys and require an own slot; keep delete (not
+        // splice) so later handlers' indices stay valid for off().
         var i = handler.i
-        if (typeof i === 'number' && Object.prototype.hasOwnProperty.call(handlers[id], i))
+        if (i !== '__proto__' && i !== 'constructor' && i !== 'prototype' &&
+            Object.prototype.hasOwnProperty.call(handlers[id], i))
           delete handlers[id][i]
       if ('removeEventListener' in element)
         element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
