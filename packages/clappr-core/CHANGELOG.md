@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.4](https://github.com/clappr/clappr/compare/@clappr/core@0.14.3...@clappr/core@0.14.4) (2026-07-30)
+
+### Bug Fixes
+
+- **zepto:** address PR review — source aliases, housekeeping, coverage ([7748136](https://github.com/clappr/clappr/commit/77481369c26d68b62da44d0e1691d7d9a43e5f09))
+
 ## [0.14.3](https://github.com/clappr/clappr/compare/@clappr/core@0.14.2...@clappr/core@0.14.3) (2026-07-29)
 
 **Note:** Version bump only for package @clappr/core

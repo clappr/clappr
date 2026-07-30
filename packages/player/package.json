@@ -1,6 +1,6 @@
 {
   "name": "@clappr/player",
-  "version": "0.12.3",
+  "version": "0.12.4",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.js",
   "scripts": {
@@ -36,9 +36,9 @@
   "devDependencies": {
     "@babel/core": "^7.14.2",
     "@babel/preset-env": "^7.14.2",
-    "@clappr/core": "^0.14.3",
-    "@clappr/hlsjs-playback": "^1.9.8",
-    "@clappr/plugins": "^0.9.3",
+    "@clappr/core": "^0.14.4",
+    "@clappr/hlsjs-playback": "^1.9.9",
+    "@clappr/plugins": "^0.9.4",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^15.2.1",

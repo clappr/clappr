@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.12.4](https://github.com/clappr/clappr/compare/@clappr/player@0.12.3...@clappr/player@0.12.4) (2026-07-30)
+
+### Bug Fixes
+
+- **player:** resolve workspace dist files to avoid CI ENOTDIR ([a3df0eb](https://github.com/clappr/clappr/commit/a3df0ebb323e2c94c88d95d55e171ec6b9aff235))
+
 ## [0.12.3](https://github.com/clappr/clappr/compare/@clappr/player@0.12.2...@clappr/player@0.12.3) (2026-07-29)
 
 **Note:** Version bump only for package @clappr/player
