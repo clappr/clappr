@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.12.6](https://github.com/clappr/clappr/compare/@clappr/player@0.12.5...@clappr/player@0.12.6) (2026-07-30)
+
+### Bug Fixes
+
+- **player:** use textContent for demo editor hash payload ([8542bca](https://github.com/clappr/clappr/commit/8542bcaba9ba911ae4d5003c2c62b594b3571385))
+
 ## [0.12.5](https://github.com/clappr/clappr/compare/@clappr/player@0.12.4...@clappr/player@0.12.5) (2026-07-30)
 
 **Note:** Version bump only for package @clappr/player
