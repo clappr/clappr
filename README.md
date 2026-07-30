@@ -59,6 +59,10 @@ yarn dev
 http://localhost:8080
 ```
 
+## Contributing
+
+We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to report bugs, propose features, and submit pull requests. Please follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Contributors
 
 Thanks to all our amazing contributors! 🎉
