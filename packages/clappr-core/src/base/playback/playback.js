@@ -2,7 +2,7 @@ import { extend } from '../../utils/utils'
 import UIObject from '../ui_object/ui_object'
 import ErrorMixin from '../error_mixin/error_mixin'
 import Events from '../../base/events/events'
-import $ from '../zepto/zepto'
+import $ from '@clappr/zepto'
 
 /**
  * An object representing a single audio track.
