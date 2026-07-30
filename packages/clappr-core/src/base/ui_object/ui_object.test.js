@@ -1,5 +1,5 @@
 import UIObject from './ui_object'
-import $ from '../zepto/zepto'
+import $ from '@clappr/zepto'
 
 describe('UIObject', () => {
   test('is a div tag by default', () => {

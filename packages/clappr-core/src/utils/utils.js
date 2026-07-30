@@ -6,7 +6,7 @@
 import '../base/polyfills'
 import Media from '../base/media'
 import Browser from '../components/browser/browser'
-import $ from '../base/zepto/zepto'
+import $ from '@clappr/zepto'
 
 const idsCounter = {}
 const videoStack = []

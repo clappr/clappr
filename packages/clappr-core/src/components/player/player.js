@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import $ from '../../base/zepto/zepto'
+import $ from '@clappr/zepto'
 import { uniqueId, currentScriptUrl } from '../../utils/utils'
 import BaseObject from '../../base/base_object/base_object'
 import Events from '../../base/events/events'

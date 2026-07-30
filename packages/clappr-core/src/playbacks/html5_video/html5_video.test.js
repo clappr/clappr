@@ -1,7 +1,7 @@
 import HTML5Video from './html5_video'
 import Events from '../../base/events'
 
-import $ from '../../base/zepto/zepto'
+import $ from '@clappr/zepto'
 
 describe('HTML5Video playback', function () {
   let options
