@@ -91,6 +91,19 @@ describe('RegExp.$1 fragment sites', () => {
     expect(nodes[0].nodeType).toBe(Node.TEXT_NODE)
     expect(nodes[0].textContent).toBe('plain text')
   })
+
+  test.each(['toString', 'constructor', 'valueOf'])(
+    'prototype-key container name %s falls back to default',
+    name => {
+      // Pass the hostile name directly: previously `name in containers` was
+      // true for Object.prototype keys and threw TypeError on childNodes.
+      expect(() => $.zepto.fragment('<div>x</div>', name)).not.toThrow()
+      const nodes = $.zepto.fragment('<div>x</div>', name)
+      expect(nodes.length).toBe(1)
+      expect(nodes[0].tagName).toBe('DIV')
+      expect(nodes[0].textContent).toBe('x')
+    }
+  )
 })
 
 describe('$.zepto.isZ', () => {

@@ -152,7 +152,9 @@ var Zepto = (function() {
       // exec() yields null without a match; previously test() && RegExp.$1
       // yielded false. Both fall through to name = '*' below.
       if (name === undefined) name = (match = fragmentRE.exec(html)) && match[1]
-      if (!(name in containers)) name = '*'
+      // Own-property check: `in` walks the prototype (`toString`, etc.) and
+      // would make container a function — childNodes then throws TypeError.
+      if (!Object.prototype.hasOwnProperty.call(containers, name)) name = '*'
 
       container = containers[name]
       container.innerHTML = '' + html
