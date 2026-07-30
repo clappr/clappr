@@ -3,10 +3,12 @@
   "version": "0.1.2",
   "private": true,
   "description": "Clappr's zepto custom build",
-  "main": "zepto.min.js",
-  "types": "./main.d.ts",
+  "main": "./dist/clappr-zepto.js",
+  "module": "./dist/clappr-zepto.esm.js",
+  "sideEffects": true,
   "scripts": {
-    "build": "./scripts/build-clappr-zepto -c=v1.2.0 -o=./"
+    "build": "rollup -c",
+    "prepare": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/thiagopnts/clappr-zepto/issues"
   },
-  "homepage": "https://github.com/thiagopnts/clappr-zepto"
+  "homepage": "https://github.com/thiagopnts/clappr-zepto",
+  "devDependencies": {
+    "rollup": "^3.30.0"
+  }
 }

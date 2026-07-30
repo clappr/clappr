@@ -11,8 +11,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js',
     '\\.(scss)$': '<rootDir>/src/__mocks__/styleMock.js',
-    '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.js',
-    '^clappr-zepto$': 'clappr-zepto/zepto.js'
+    '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.js'
   },
   collectCoverageFrom: ['src/*.js', 'src/**/*.js', 'src/**/**/*.js'],
   globals: { CLAPPR_CORE_VERSION: ClapprCorePkg.version }

@@ -10,7 +10,6 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js',
-    '^clappr-zepto$': 'clappr-zepto/zepto.js',
   },
   globals: { CLAPPR_CORE_VERSION: ClapprCorePkg.version },
 }

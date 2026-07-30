@@ -31,7 +31,6 @@ const postcssOptions = {
 }
 const aliasPluginOptions = {
   entries: {
-    'clappr-zepto': `${__dirname}/../../node_modules/clappr-zepto/zepto.js`,
     '@': `${__dirname}/src`
   }
 }
