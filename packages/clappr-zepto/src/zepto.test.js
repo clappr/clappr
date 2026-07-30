@@ -146,13 +146,24 @@ describe('html() and tagExpander paths', () => {
 
   test('unterminated quote no longer expands self-closing tag', () => {
     // Intentional divergence: lone " cannot be consumed by any branch, so the
-    // expander does not match. Old [^>]* swallowed it.
+    // expander does not match. Old [^>]* swallowed it. Spy replace so we
+    // exercise the production tagExpanderRE (jsdom drops both parse outcomes).
     const html = '<div title="unclosed />'
-    const expanded = html.replace(
-      /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)(?![\w:])(?:"[^"]*"|'[^']*'|\/(?!>)|[^>"'/])*)\/>/ig,
-      '<$1></$2>'
-    )
-    expect(expanded).toBe(html)
+    const original = String.prototype.replace
+    let expanderResult
+    String.prototype.replace = function (re, repl) {
+      const result = original.apply(this, arguments)
+      if (re && typeof re.source === 'string' && re.source.indexOf('area|br|col') !== -1) {
+        expanderResult = result
+      }
+      return result
+    }
+    try {
+      $.zepto.fragment(html)
+    } finally {
+      String.prototype.replace = original
+    }
+    expect(expanderResult).toBe(html)
   })
 
   test('tagExpanderRE and fragmentRE stay linear on pathological input', () => {
