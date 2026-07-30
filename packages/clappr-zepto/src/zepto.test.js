@@ -149,7 +149,7 @@ describe('html() and tagExpander paths', () => {
     // expander does not match. Old [^>]* swallowed it.
     const html = '<div title="unclosed />'
     const expanded = html.replace(
-      /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)(?![\w:])(?:"[^"]*"|'[^']*'|\/(?!>)|[^>"'\/])*)\/>/ig,
+      /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)(?![\w:])(?:"[^"]*"|'[^']*'|\/(?!>)|[^>"'/])*)\/>/ig,
       '<$1></$2>'
     )
     expect(expanded).toBe(html)
