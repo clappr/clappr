@@ -232,6 +232,20 @@ describe('event handler remove', () => {
     expect(first).not.toHaveBeenCalled()
     expect(second).toHaveBeenCalledTimes(1)
   })
+
+  test('forged element._zid string does not break on/off', () => {
+    const node = document.createElement('div')
+    node._zid = '__proto__'
+    const el = $(node)
+    const fn = jest.fn()
+    el.on('click', fn)
+    el.trigger('click')
+    expect(fn).toHaveBeenCalledTimes(1)
+    el.off('click', fn)
+    el.trigger('click')
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(typeof node._zid).toBe('number')
+  })
 })
 
 describe('$.ajaxJSONP', () => {
