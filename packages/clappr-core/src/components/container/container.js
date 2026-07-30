@@ -12,7 +12,7 @@ import ErrorMixin from '../../base/error_mixin/error_mixin'
 import Styler from '../../base/styler/styler'
 import { DoubleEventHandler } from '../../utils/utils'
 import ContainerStyle from './public/style.scss'
-import $ from 'clappr-zepto'
+import $ from '../../base/zepto/zepto'
 
 /**
  * An abstraction to represent a container for a given playback

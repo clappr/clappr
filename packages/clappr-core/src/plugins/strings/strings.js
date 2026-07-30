@@ -1,4 +1,4 @@
-import $ from 'clappr-zepto'
+import $ from '../../base/zepto/zepto'
 import { getBrowserLanguage } from '../../utils/utils'
 import CorePlugin from '../../base/core_plugin/core_plugin'
 

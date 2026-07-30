@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import $ from 'clappr-zepto'
+import $ from '../../base/zepto/zepto'
 import { Fullscreen, DomRecycler } from '../../utils/utils'
 import Styler from '../../base/styler/styler'
 import Events from '../../base/events/events'

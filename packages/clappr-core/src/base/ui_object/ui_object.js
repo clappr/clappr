@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import $ from 'clappr-zepto'
+import $ from '../zepto/zepto'
 import { uniqueId, DomRecycler, isNumber } from '../../utils/utils'
 import BaseObject from '../base_object/base_object'
 
@@ -132,7 +132,7 @@ export default class UIObject extends BaseObject {
      * the dom element wrapped by `$`
      *
      * @property $el
-     * @type import("clappr-zepto").ZeptoCollection
+     * @type {import('../zepto/zepto').ZeptoCollection}
      */
     this.$el = $.zepto.isZ(element) ? element : $(element)
     /**
