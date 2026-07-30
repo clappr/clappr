@@ -1,4 +1,8 @@
-/* Zepto v1.2.0 - zepto ajax callbacks deferred event ie selector - zeptojs.com/license */
+/*
+ * Permanent fork of Zepto v1.2.0 (modules: zepto ajax callbacks deferred event ie selector).
+ * Originally vendored by Thiago Pontes; now maintained in clappr/clappr.
+ * Do not regenerate from upstream — see LICENSE in this package.
+ */
 
 
 var Zepto = (function() {
@@ -1917,4 +1921,4 @@ window.$ === undefined && (window.$ = Zepto)
     })
   }
 })(Zepto)
-module.exports = Zepto
+export default Zepto
