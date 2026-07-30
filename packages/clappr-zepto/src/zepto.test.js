@@ -271,4 +271,10 @@ describe('$.ajaxJSONP', () => {
     expect(appended.length).toBe(1)
     expect(appended[0].src).toBe('https://example.com/api?callback=fixed')
   })
+
+  test('requires at least one character between ? and =?', () => {
+    // Original /\?(.+)=\?/ needed `.+`; `i > q + 1` preserves that.
+    $.ajaxJSONP(jsonpOptions('https://example.com/api?=?', 'ZeptoTestCb4'))
+    expect(appended[0].src).toBe('https://example.com/api?=?')
+  })
 })
