@@ -15,7 +15,7 @@
     "prepare": "husky",
     "test": "lerna run test --no-bail",
     "build": "lerna run build --scope=@clappr/player --include-dependencies",
-    "build:release": "lerna run release"
+    "build:dist": "lerna run release"
   },
   "engines": {
     "node": ">=24"

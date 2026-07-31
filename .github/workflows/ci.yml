@@ -32,4 +32,7 @@ jobs:
         run: yarn test
 
       - name: build
-        run: yarn build:release
+        run: yarn build
+
+      - name: build dist
+        run: yarn build:dist
