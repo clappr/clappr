@@ -32,4 +32,4 @@ jobs:
         run: yarn test
 
       - name: build
-        run: yarn build
+        run: yarn build:release
