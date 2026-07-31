@@ -44,11 +44,13 @@ jobs:
           git config user.name "${{ steps.app-token.outputs.app-slug }}[bot]"
           git config user.email "${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com"
 
+      # Keep registry-url off this step: setup-node writes ${NODE_AUTH_TOKEN} into
+      # .npmrc, and Yarn Classic fails on `yarn cache dir` when that env is unset
+      # (setup-node@v7 + cache: yarn). Auth for publish is OIDC, not a token.
       - name: Use Node.js
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          registry-url: https://registry.npmjs.org
           cache: 'yarn'
 
       - name: Ensure npm supports trusted publishing
@@ -116,6 +118,14 @@ jobs:
           # Fail here if branch protection rejects the bot — before any tags leave the runner
           git push origin HEAD:main
           git push origin --tags
+
+      # registry-url only here so Yarn never sees the auth .npmrc during install/cache.
+      - name: Configure npm registry
+        if: steps.changed.outputs.count != '0'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: https://registry.npmjs.org
 
       - name: Publish to npm
         id: publish
