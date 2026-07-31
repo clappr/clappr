@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.11](https://github.com/clappr/clappr/compare/@clappr/hlsjs-playback@1.9.10...@clappr/hlsjs-playback@1.9.11) (2026-07-31)
+
+**Note:** Version bump only for package @clappr/hlsjs-playback
+
 ## [1.9.10](https://github.com/clappr/clappr/compare/@clappr/hlsjs-playback@1.9.9...@clappr/hlsjs-playback@1.9.10) (2026-07-30)
 
 **Note:** Version bump only for package @clappr/hlsjs-playback
