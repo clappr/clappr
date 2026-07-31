@@ -14,7 +14,8 @@
     "release": "lerna version --include-merged-tags --no-push --yes",
     "prepare": "husky",
     "test": "lerna run test --no-bail",
-    "build": "lerna run build --scope=@clappr/player --include-dependencies"
+    "build": "lerna run build --scope=@clappr/player --include-dependencies",
+    "build:release": "lerna run release"
   },
   "volta": {
     "node": "18.18.2",
