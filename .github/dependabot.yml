@@ -1,0 +1,40 @@
+version: 2
+updates:
+  # Yarn workspaces resolve every manifest into the root lockfile, so a single
+  # entry at "/" covers all packages and apps.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "cron"
+      cronjob: "0 9 1,15 * *"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 1
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+    groups:
+      all-patches:
+        patterns: ["*"]
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+
+  # Actions pinned to a major tag already receive patches silently, so this
+  # entry mostly surfaces major bumps worth reviewing.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "cron"
+      cronjob: "0 9 1,15 * *"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 1
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "ci(deps)"
+    labels:
+      - "dependencies"
