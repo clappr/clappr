@@ -20,6 +20,7 @@ updates:
         patterns: ["*"]
       security:
         applies-to: security-updates
+        update-types: ["minor", "patch"]
         patterns: ["*"]
     commit-message:
       prefix: "chore(deps)"
@@ -32,13 +33,15 @@ updates:
       interval: "cron"
       cronjob: "0 9 1,15 * *"
       timezone: "America/Sao_Paulo"
-    open-pull-requests-limit: 1
+    open-pull-requests-limit: 5
     groups:
       actions:
         applies-to: version-updates
+        update-types: ["minor", "patch"]
         patterns: ["*"]
       actions-security:
         applies-to: security-updates
+        update-types: ["minor", "patch"]
         patterns: ["*"]
     commit-message:
       prefix: "ci(deps)"
