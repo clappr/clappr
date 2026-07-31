@@ -91,6 +91,7 @@ Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Reque
 ### Build, lint, test
 
 - `yarn build` — Build player and dependencies
+- `yarn build:release` — Run each package's `release` script (`prepublishOnly` path; what CI and publish use)
 - `yarn lint` / `yarn lint:fix` — ESLint
 - `yarn format` / `yarn format:check` — Prettier
 - `yarn test` — Tests for `@clappr/core` (root default)
