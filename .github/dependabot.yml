@@ -1,7 +1,5 @@
 version: 2
 updates:
-  # Yarn workspaces resolve every manifest into the root lockfile, so a single
-  # entry at "/" covers all packages and apps.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -9,9 +7,6 @@ updates:
       cronjob: "0 9 1,15 * *"
       timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 1
-    # Minor is backwards-compatible by semver contract and carries most upstream
-    # fixes, so only major is held back. "ignore" has no applies-to key, so this
-    # governs security updates as well.
     ignore:
       - dependency-name: "*"
         update-types:
@@ -28,8 +23,6 @@ updates:
     labels:
       - "dependencies"
 
-  # Actions pinned to a major tag already receive patches silently, so this
-  # entry mostly surfaces major bumps worth reviewing.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
