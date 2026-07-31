@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/clappr/clappr",
   "devDependencies": {
-    "@babel/core": "^7.14.2",
+    "@babel/core": "^8.0.0",
     "@babel/preset-env": "^7.14.2",
     "@clappr/core": "^0.14.5",
     "@clappr/hlsjs-playback": "^1.9.10",
