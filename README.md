@@ -864,6 +864,10 @@ Thanks to all our amazing contributors! 🎉
 
 See the full list on our [contributors page](https://github.com/clappr/clappr/graphs/contributors).
 
+## Security
+
+Found a vulnerability? Please do not open a public issue — see our [Security Policy](SECURITY.md) for how to report it privately and what falls in scope.
+
 ## License
 
 [BSD-3-Clause](LICENSE) © Globo.com
