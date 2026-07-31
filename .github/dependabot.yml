@@ -1,7 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "/"
+      - "/packages/*"
+      - "/apps/*"
     schedule:
       interval: "cron"
       cronjob: "0 9 1,15 * *"
