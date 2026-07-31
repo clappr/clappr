@@ -90,8 +90,8 @@ Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Reque
 
 ### Build, lint, test
 
-- `yarn build` — Build player and dependencies
-- `yarn build:release` — Run each package's `release` script (`prepublishOnly` path; what CI and publish use)
+- `yarn build` — Build player and dependencies (dev / contributor path)
+- `yarn build:dist` — Run each package's `release` script (minimized artifacts CI also verifies). For 6 of 7 publishable packages this matches `prepublishOnly`; `dash-shaka-playback` uses `yarn dist` (`lint && build && release`) instead — same webpack output, with package lint already covered by root `yarn lint`
 - `yarn lint` / `yarn lint:fix` — ESLint
 - `yarn format` / `yarn format:check` — Prettier
 - `yarn test` — Tests for `@clappr/core` (root default)
