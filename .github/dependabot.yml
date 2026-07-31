@@ -9,13 +9,19 @@ updates:
       cronjob: "0 9 1,15 * *"
       timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 1
+    # Minor is backwards-compatible by semver contract and carries most upstream
+    # fixes, so only major is held back. "ignore" has no applies-to key, so this
+    # governs security updates as well.
     ignore:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
-          - "version-update:semver-minor"
     groups:
-      all-patches:
+      all-updates:
+        applies-to: version-updates
+        patterns: ["*"]
+      security:
+        applies-to: security-updates
         patterns: ["*"]
     commit-message:
       prefix: "chore(deps)"
@@ -33,6 +39,10 @@ updates:
     open-pull-requests-limit: 1
     groups:
       actions:
+        applies-to: version-updates
+        patterns: ["*"]
+      actions-security:
+        applies-to: security-updates
         patterns: ["*"]
     commit-message:
       prefix: "ci(deps)"
