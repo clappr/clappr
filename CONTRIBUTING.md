@@ -38,6 +38,8 @@ yarn format:check
 
 ## Development setup
 
+Requires **Node.js ≥ 24** (see [`.nvmrc`](.nvmrc); with nvm, run `nvm use` before `yarn install`). Yarn 1 enforces the root `engines` field and will abort install on older Node versions.
+
 See the [README](README.md) for:
 
 - [Local Development](README.md#local-development)

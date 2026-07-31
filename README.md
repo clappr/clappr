@@ -46,6 +46,8 @@ For the latest guides, examples, and architecture overviews, visit the resources
 
 ## Local Development
 
+Requires **Node.js ≥ 24**. The repo pins the major version in [`.nvmrc`](.nvmrc); with [nvm](https://github.com/nvm-sh/nvm), run `nvm use` in the project root before installing.
+
 Clone the repository and run:
 
 ```bash
