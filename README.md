@@ -67,7 +67,7 @@ We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to repo
 
 Thanks to all our amazing contributors! 🎉
 
-<!-- readme: contributors -start -->
+<!-- readme: contributors,greenkeeperio-bot/-,cursoragent/- -start -->
 <table>
 	<tbody>
 		<tr>
@@ -864,7 +864,7 @@ Thanks to all our amazing contributors! 🎉
 		</tr>
 	<tbody>
 </table>
-<!-- readme: contributors -end -->
+<!-- readme: contributors,greenkeeperio-bot/-,cursoragent/- -end -->
 
 See the full list on our [contributors page](https://github.com/clappr/clappr/graphs/contributors).
 
