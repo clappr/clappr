@@ -40,6 +40,8 @@ yarn format:check
 
 Requires **Node.js ≥ 24** (see [`.nvmrc`](.nvmrc); with nvm, run `nvm install` then `nvm use` before any yarn command). Yarn 1 enforces the root `engines` field and aborts every yarn command on older Node versions — including `yarn lint`, `yarn test`, and `yarn format:check` above.
 
+Shared tooling (Babel, ESLint, browserslist, and any dependency used by 2+ packages) lives at the workspace root — see [Dependencies and shared config](AGENTS.md#dependencies-and-shared-config) in `AGENTS.md` before adding or bumping a tool.
+
 See the [README](README.md) for:
 
 - [Local Development](README.md#local-development)
