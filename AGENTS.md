@@ -21,6 +21,27 @@ Monorepo managed by Lerna with Yarn workspaces. Each package has its own `packag
   - `packages/html5-tvs-playback/` — HTML5 playback for HbbTV smart TVs (`@clappr/clappr-html5-tvs-playback`)
   - `packages/clappr-telemetry/` — Telemetry helpers
 
+## Dependencies and shared config
+
+**Rule:** a dependency used by **2+ packages** lives in the root `devDependencies`. Single-use stays in the owning package. Packages are not expected to install in isolation — the monorepo is the only entry.
+
+Shared config locations:
+
+| Config | Path | Notes |
+|--------|------|-------|
+| Babel | `babel.base.json` | Packages extend via `.babelrc` |
+| Browserslist | `.browserslistrc` | Root query for packages; `apps/clappr.io` keeps its own field |
+| ESLint | `eslint.config.js` | Flat config; `eslint` + `@eslint/js` declared at the root |
+
+Conscious exceptions:
+
+- **`clappr-zepto` `.babelrc`** — stays standalone. Babel merges preset arrays and cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
+- **`dash-shaka-playback` `.babelrc`** — extends the base and overrides `modules: "commonjs"` plus `add-module-exports`.
+- **`clappr-core` Jest transform** — uses `babelrc: false` / `configFile: false` with an inline preset; not reached by `babel.base.json` (keep in sync with `env.test` by hand).
+- **Deferred to later phases** — Jest family (`jest`, `babel-jest`, `jest-environment-jsdom`, `jest-mock-console`); `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
+
+When adding a shared tool, put it at the root and remove per-package copies. Prefer this over Yarn `resolutions` when the packages do not need to install alone.
+
 ## Publishing
 
 Packages published to npm (via the Release workflow / Trusted Publishers):
