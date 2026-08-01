@@ -42,7 +42,7 @@ const plugins = [
     preventAssignment: true,
     values: {
       CLAPPR_VERSION: JSON.stringify(pkg.version),
-      CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
+      CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion)
     }
   }),
   workspaceDistAlias,
@@ -55,7 +55,7 @@ const plugins = [
   filesize(),
   dev && serve(servePluginOptions),
   dev && livereload(livereloadPluginOptions),
-  analyzeBundle && visualize(visualizePluginOptions),
+  analyzeBundle && visualize(visualizePluginOptions)
 ]
 
 export default [
@@ -66,17 +66,17 @@ export default [
         name: 'Clappr',
         file: 'dist/clappr.plainhtml5.js',
         format: 'umd',
-        sourcemap: true,
+        sourcemap: true
       },
       minimize && {
         name: 'Clappr',
         file: 'dist/clappr.plainhtml5.min.js',
         format: 'iife',
         sourcemap: true,
-        plugins: terser(),
+        plugins: terser()
       }
     ],
-    plugins,
+    plugins
   },
   {
     input: 'src/main.js',
@@ -85,17 +85,16 @@ export default [
         name: 'Clappr',
         file: pkg.main,
         format: 'umd',
-        sourcemap: true,
+        sourcemap: true
       },
       minimize && {
         file: 'dist/clappr.min.js',
         format: 'iife',
         name: 'Clappr',
         sourcemap: true,
-        plugins: terser(),
+        plugins: terser()
       }
     ],
-    plugins,
+    plugins
   }
 ]
-
