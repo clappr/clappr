@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.2](https://github.com/clappr/clappr/compare/dash-shaka-playback@3.7.1...dash-shaka-playback@3.7.2) (2026-08-01)
+
+### Bug Fixes
+
+- **deps:** align browserslist defaults and finish phase-1 cleanup ([65ca7ce](https://github.com/clappr/clappr/commit/65ca7cecfeaf0bad9679fe5717eed7daf79882c9))
+
 ## [3.7.1](https://github.com/clappr/clappr/compare/dash-shaka-playback@3.7.0...dash-shaka-playback@3.7.1) (2026-07-29)
 
 ### Bug Fixes

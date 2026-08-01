@@ -1,6 +1,6 @@
 {
   "name": "@clappr/zepto",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
   "description": "Permanent Zepto v1.2.0 fork used by Clappr for DOM utilities",
   "main": "./dist/clappr-zepto.js",

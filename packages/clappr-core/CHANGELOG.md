@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.7](https://github.com/clappr/clappr/compare/@clappr/core@0.14.6...@clappr/core@0.14.7) (2026-08-01)
+
+### Bug Fixes
+
+- **deps:** align browserslist defaults and finish phase-1 cleanup ([65ca7ce](https://github.com/clappr/clappr/commit/65ca7cecfeaf0bad9679fe5717eed7daf79882c9))
+
 ## [0.14.6](https://github.com/clappr/clappr/compare/@clappr/core@0.14.5...@clappr/core@0.14.6) (2026-07-31)
 
 **Note:** Version bump only for package @clappr/core
