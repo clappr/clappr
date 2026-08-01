@@ -42,22 +42,13 @@
     "@clappr/core": "*"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.17",
-    "@babel/preset-env": "^7.22.15",
     "@clappr/core": "^0.14.6",
-    "@rollup/plugin-commonjs": "^28.0.8",
-    "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.2",
     "babel-jest": "^30.2.0",
     "eslint": "^8.49.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "rollup": "^3.29.1",
-    "rollup-plugin-analyzer": "^4.0.0",
-    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-filesize": "^10.0.0",
-    "rollup-plugin-livereload": "^2.0.5",
-    "rollup-plugin-serve": "^2.0.2",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-serve": "^2.0.2"
   }
 }

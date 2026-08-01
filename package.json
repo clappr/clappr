@@ -15,18 +15,44 @@
     "prepare": "husky",
     "test": "lerna run test --no-bail",
     "build": "lerna run build --scope=@clappr/player --include-dependencies",
-    "build:dist": "lerna run release"
+    "build:dist": "lerna run release",
+    "commitzen": "git-cz"
   },
   "engines": {
     "node": ">=24"
   },
   "devDependencies": {
+    "@babel/core": "^7.22.17",
+    "@babel/preset-env": "^7.22.15",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^28.0.8",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "autoprefixer": "^10.5.4",
+    "coveralls": "^3.1.1",
+    "cz-conventional-changelog": "^3.3.0",
     "globals": "^16.3.0",
     "husky": "^9.1.6",
     "lerna": "^8.1.8",
-    "prettier": "^3.6.2"
+    "postcss": "^8.4.29",
+    "prettier": "^3.6.2",
+    "rollup": "^3.30.0",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-html": "^0.2.1",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-sizes": "^1.0.5",
+    "rollup-plugin-svg": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-visualizer": "^5.9.2",
+    "sass": "^1.93.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
