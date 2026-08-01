@@ -366,17 +366,17 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/leonardocardoso">
-                    <img src="https://avatars.githubusercontent.com/u/1775157?v=4" width="100;" alt="leonardocardoso"/>
-                    <br />
-                    <sub><b>leonardocardoso</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/svanscho">
                     <img src="https://avatars.githubusercontent.com/u/7288358?v=4" width="100;" alt="svanscho"/>
                     <br />
                     <sub><b>svanscho</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/leonardocardoso">
+                    <img src="https://avatars.githubusercontent.com/u/1775157?v=4" width="100;" alt="leonardocardoso"/>
+                    <br />
+                    <sub><b>leonardocardoso</b></sub>
                 </a>
             </td>
 		</tr>
