@@ -97,16 +97,16 @@ describe('HTML5Video playback', function () {
   })
 
   test('setup crossorigin attribute', () => {
-    const options = $.extend({ playback: { crossOrigin: 'use-credentials' } }, options)
-    const playback = new HTML5Video(options)
+    const configuredOptions = $.extend({ playback: { crossOrigin: 'use-credentials' } }, options)
+    const playback = new HTML5Video(configuredOptions)
 
     expect(playback.el.crossOrigin).toEqual('use-credentials')
     expect(playback.el.getAttribute('crossorigin')).toEqual('use-credentials')
   })
 
   test('enables inline playback for webviews when playInline flag is set', () => {
-    const options = $.extend({ playback: { playInline: true } }, options)
-    const playback = new HTML5Video(options)
+    const configuredOptions = $.extend({ playback: { playInline: true } }, options)
+    const playback = new HTML5Video(configuredOptions)
 
     expect(playback.el['x-webkit-playsinline']).toBeTruthy()
     expect(playback.el.getAttribute('playsinline')).toEqual('playsinline')
@@ -325,8 +325,8 @@ describe('HTML5Video playback', function () {
   })
 
   test('can configure loop', () => {
-    const options = $.extend({ loop: true }, options)
-    const playback = new HTML5Video(options)
+    const configuredOptions = $.extend({ loop: true }, options)
+    const playback = new HTML5Video(configuredOptions)
 
     expect(playback.el.loop).toEqual(true)
 

@@ -16,23 +16,23 @@ const output = [
         format: 'umd',
         name: 'ClapprPlugins',
         globals: { '@clappr/core': 'Clappr' },
-        plugins: terser(),
-      },
+        plugins: terser()
+      }
     ]
     : []),
   {
     file: 'dist/clappr-plugins.esm.js',
-    format: 'esm',
-  },
+    format: 'esm'
+  }
 ]
 
 const plugins = [
   ...baseConfig.plugins,
-  ...(analyzeBundle ? [analyze()] : []),
+  ...(analyzeBundle ? [analyze()] : [])
 ]
 
 module.exports = {
   ...baseConfig,
   output,
-  plugins,
+  plugins
 }

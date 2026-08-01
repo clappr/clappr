@@ -5,11 +5,11 @@ module.exports = {
   testEnvironment: 'jsdom',
   verbose: true,
   transform: {
-    '^.+\\.js$': 'babel-jest',
+    '^.+\\.js$': 'babel-jest'
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js',
+    '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js'
   },
-  globals: { CLAPPR_CORE_VERSION: ClapprCorePkg.version },
+  globals: { CLAPPR_CORE_VERSION: ClapprCorePkg.version }
 }
