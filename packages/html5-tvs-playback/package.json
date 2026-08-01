@@ -53,7 +53,6 @@
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@clappr/core": "^0.14.6",
     "babel-jest": "^26.6.3",
-    "eslint": "8.49.0",
     "jest": "^26.6.3",
     "jest-environment-jsdom": "^26.6.2",
     "jest-mock-console": "^1.0.1",
