@@ -25,4 +25,4 @@ jobs:
           readme_path: 'README.md'
           use_username: true
           committer_username: 'github-actions[bot]'
-          commit_message: 'docs(contributors): update contributors list [skip ci]'
+          commit_message: 'docs(contributors): update contributors list'

@@ -56,11 +56,14 @@ jobs:
 
           # github.sha is the head of the dispatched ref, and Checkout below takes no
           # explicit ref — so the commit gated here is the commit that gets released.
-          RUN=$(gh api "/repos/$REPO/actions/workflows/ci.yml/runs?head_sha=$SHA&per_page=1" \
-            --jq '.workflow_runs[0] | "\(.status) \(.conclusion)"' 2>/dev/null || true)
+          # event=push restores the old workflow_run:branches:[main] pair; also accept
+          # workflow_dispatch so a hand-run CI can unblock a tip that had no push run
+          # (e.g. a past [skip ci] commit). pull_request runs are excluded.
+          RUN=$(gh api "/repos/$REPO/actions/workflows/ci.yml/runs?head_sha=$SHA&per_page=5" \
+            --jq '[.workflow_runs[] | select(.event == "push" or .event == "workflow_dispatch")][0] | "\(.status) \(.conclusion)"' 2>/dev/null || true)
 
           if [ -z "$RUN" ] || [ "$RUN" = "null null" ]; then
-            echo "::error::No CI run found for $SHA. CI runs on push to main — wait for it to appear, then dispatch again."
+            echo "::error::No CI run found for $SHA. Wait for push CI, or run CI via workflow_dispatch on this commit, then dispatch again."
             exit 1
           fi
 
@@ -180,7 +183,7 @@ jobs:
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
 
           # Second empty path: lerna reported changes, but every changed package is
-          # private (clappr-zepto, clappr-telemetry) so none of them publish.
+          # private (clappr-zepto) so none of them publish.
           if [ "$COUNT" = "0" ]; then
             nothing_to_release
           fi
