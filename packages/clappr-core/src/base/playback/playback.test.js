@@ -221,11 +221,11 @@ describe('Playback', function () {
         test('creates a default error with UI data', () => {
           const basePlayback = new Playback({}, core.i18n, core.playerError)
           const errorData = basePlayback.createError()
-          const defaultError = {
+          const expectedError = {
             ...defaultError,
             UI: { title: 'default_error_title', message: 'default_error_message' }
           }
-          expect(errorData.UI).toEqual(defaultError.UI)
+          expect(errorData.UI).toEqual(expectedError.UI)
         })
       })
     })

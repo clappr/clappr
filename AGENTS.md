@@ -30,14 +30,14 @@ Shared config locations:
 | Config | Path | Notes |
 |--------|------|-------|
 | Babel | `babel.base.json` | Packages extend via `.babelrc` |
-| Browserslist | `.browserslistrc` | Root query for packages; `apps/clappr.io` keeps its own field |
-| ESLint | `eslint.config.js` | Flat config; `eslint` + `@eslint/js` declared at the root |
+| Browserslist | `.browserslistrc` | Matches autoprefixer `defaults` (`> 0.5%` / `last 2 versions` / `Firefox ESR` / `not dead`); `apps/clappr.io` keeps its own field |
+| ESLint | `eslint.config.js` | Flat config; `eslint` + `@eslint/js` declared at the root. Root `yarn lint` runs `lerna run lint` so package configs (`*.js` at package root) are covered |
 
 Conscious exceptions:
 
 - **`clappr-zepto` `.babelrc`** — stays standalone. Babel merges preset arrays and cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
 - **`dash-shaka-playback` `.babelrc`** — extends the base and overrides `modules: "commonjs"` plus `add-module-exports`.
-- **`clappr-core` Jest transform** — uses `babelrc: false` / `configFile: false` with an inline preset; not reached by `babel.base.json` (keep in sync with `env.test` by hand).
+- **`clappr-core` Jest transform** — uses `babelrc: false` / `configFile: false`, but reads presets from `babel.base.json` `env.test` (with `modules: 'commonjs'` forced). `env.test` targets `node: current` so the root browserslist does not under-transpile tests.
 - **Deferred to later phases** — Jest family (`jest`, `babel-jest`, `jest-environment-jsdom`, `jest-mock-console`); `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
 
 When adding a shared tool, put it at the root and remove per-package copies. Prefer this over Yarn `resolutions` when the packages do not need to install alone.

@@ -29,7 +29,7 @@ let plugins = [
   commonjs(),
   babel(babelOptionsPlugins),
   size(),
-  filesize(),
+  filesize()
 ]
 
 serveLocal && (plugins = [...plugins, replace({ ...replacePluginOptions, 'process.env.NODE_ENV': JSON.stringify('development') }), serve(servePluginOptions)])
@@ -43,9 +43,9 @@ const mainBundle = {
     name: 'HlsjsPlayback',
     file: pkg.main,
     format: 'umd',
-    globals: { '@clappr/core': 'Clappr' },
+    globals: { '@clappr/core': 'Clappr' }
   },
-  plugins,
+  plugins
 }
 
 const mainBundleWithoutHLS = {
@@ -55,9 +55,9 @@ const mainBundleWithoutHLS = {
     name: 'HlsjsPlayback',
     file: 'dist/hlsjs-playback.external.js',
     format: 'umd',
-    globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
+    globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' }
   },
-  plugins,
+  plugins
 }
 
 const mainBundleMinified = {
@@ -67,9 +67,9 @@ const mainBundleMinified = {
     file: 'dist/hlsjs-playback.min.js',
     format: 'iife',
     sourcemap: true,
-    plugins: terser(),
+    plugins: terser()
   },
-  plugins,
+  plugins
 }
 
 const mainBundleWithoutHLSMinified = {
@@ -81,9 +81,9 @@ const mainBundleWithoutHLSMinified = {
     globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
     format: 'iife',
     sourcemap: true,
-    plugins: terser(),
+    plugins: terser()
   },
-  plugins,
+  plugins
 }
 
 const moduleBundle = {
@@ -93,9 +93,9 @@ const moduleBundle = {
     name: 'HlsjsPlayback',
     file: pkg.module,
     format: 'esm',
-    globals: { '@clappr/core': 'Clappr' },
+    globals: { '@clappr/core': 'Clappr' }
   },
-  plugins,
+  plugins
 }
 
 rollupConfig = [mainBundle, mainBundleWithoutHLS, moduleBundle]

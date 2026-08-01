@@ -8,15 +8,17 @@ module.exports = {
   'verbose': true,
   'resolver': 'jest-directory-named-resolver',
   'transform': {
-    // Inline babel config with babelrc/configFile disabled. Needed so the
-    // sibling @clappr/zepto source (ESM export default) is compiled to CJS
-    // when resolved via moduleNameMapper outside rootDir.
-    // Intentionally not reached by babel.base.json — keep this preset in sync
-    // with babel.base.json env.test by hand.
+    // babelrc/configFile disabled so the sibling @clappr/zepto source (ESM
+    // export default) is compiled to CJS when resolved via moduleNameMapper
+    // outside rootDir. Presets come from babel.base.json env.test; modules
+    // is forced to commonjs because babel-jest's caller hint is ignored when
+    // babelrc/configFile are both false.
     '^.+\\.js$': ['babel-jest', {
       babelrc: false,
       configFile: false,
-      presets: [['@babel/preset-env', { modules: 'commonjs' }]]
+      presets: require('../../babel.base.json').env.test.presets.map(
+        ([name, options = {}]) => [name, { ...options, modules: 'commonjs' }]
+      )
     }],
     '^.+\\.html$': '<rootDir>/src/__mocks__/htmlMock.js'
   },

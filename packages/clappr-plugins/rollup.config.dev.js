@@ -6,7 +6,7 @@ const { baseConfig } = require('./rollup.config.base')
 const serveConfig = {
   contentBase: ['dist', 'public'],
   host: '0.0.0.0',
-  port: 8080,
+  port: 8080
 }
 
 const plugins = [
@@ -14,10 +14,10 @@ const plugins = [
   serve(serveConfig),
   livereload({
     watch: ['dist', 'public']
-  }),
+  })
 ]
 
 module.exports = {
   ...baseConfig,
-  plugins,
+  plugins
 }

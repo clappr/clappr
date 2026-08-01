@@ -20,7 +20,7 @@ const postcssOptions = {
       ]
     }]
   ],
-  inject: false,
+  inject: false
 }
 
 const baseConfig = {
@@ -32,15 +32,15 @@ const baseConfig = {
       format: 'umd',
       name: 'ClapprPlugins',
       globals: {
-        '@clappr/core': 'Clappr',
+        '@clappr/core': 'Clappr'
       }
-    },
+    }
   ],
   plugins: [
     replace({
       VERSION: JSON.stringify(version),
       CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
-      preventAssignment: false,
+      preventAssignment: false
     }),
     commonjs(),
     nodeResolve(),
@@ -50,11 +50,11 @@ const baseConfig = {
     }),
     html(),
     svg(),
-    postcss(postcssOptions),
-  ],
+    postcss(postcssOptions)
+  ]
 }
 
 module.exports = {
   baseConfig,
-  postcssOptions,
+  postcssOptions
 }
