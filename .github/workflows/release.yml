@@ -1,29 +1,86 @@
+# Hand-triggered only: releasing is a decision, not a consequence of merging.
+#
+# The old `workflow_run: [CI]` trigger gave two guarantees for free — the commit had
+# passed CI, and it came from main. A button gives neither, so both are re-stated as
+# explicit checks in `Validate dispatch`. Removing that step silently re-opens the
+# possibility of publishing a red commit, or pushing a feature branch onto main.
 name: Release
 
 on:
-  workflow_run:
-    workflows: ['CI']
-    branches: [main]
-    types: [completed]
   workflow_dispatch:
     inputs:
+      dry_run:
+        description: 'Preview only: resolve packages and computed versions, then stop (no commit, tag or publish)'
+        type: boolean
+        default: false
       publish_only:
         description: 'Skip versioning; publish current package.json versions (recovery after a failed publish)'
         type: boolean
         default: false
 
+# Double clicks and two people dispatching at once are the realistic race now that a
+# human starts this. Never cancel in progress: a cancel landing inside the publish loop
+# leaves part of the batch on npm with no matching tags.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
       id-token: write
+      # Lets `Validate dispatch` read the CI run for this SHA.
+      actions: read
     outputs:
       player_published: ${{ steps.announce.outputs.player_published || 'false' }}
       player_tag: ${{ steps.announce.outputs.player_tag || '' }}
 
     steps:
+      # First, and before the app token: a rejected dispatch should cost nothing and
+      # mint no credential. `gh` is preinstalled, so this needs no checkout.
+      - name: Validate dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          REF: ${{ github.ref }}
+        run: |
+          # `Push commit, then tags` below does `git push origin HEAD:main`. Dispatched
+          # from a feature branch that would push the branch's content onto main.
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "::error::Release only runs from main (got $REF). Re-dispatch with main selected in the branch dropdown."
+            exit 1
+          fi
+
+          # github.sha is the head of the dispatched ref, and Checkout below takes no
+          # explicit ref — so the commit gated here is the commit that gets released.
+          RUN=$(gh api "/repos/$REPO/actions/workflows/ci.yml/runs?head_sha=$SHA&per_page=1" \
+            --jq '.workflow_runs[0] | "\(.status) \(.conclusion)"' 2>/dev/null || true)
+
+          if [ -z "$RUN" ] || [ "$RUN" = "null null" ]; then
+            echo "::error::No CI run found for $SHA. CI runs on push to main — wait for it to appear, then dispatch again."
+            exit 1
+          fi
+
+          STATUS=${RUN%% *}
+          CONCLUSION=${RUN##* }
+
+          # The common mistake is merging a PR and clicking Release immediately, while
+          # CI for the new main commit is still running. Pending is not success.
+          if [ "$STATUS" != "completed" ]; then
+            echo "::error::CI for $SHA is still '$STATUS'. Wait for it to finish, then dispatch again."
+            exit 1
+          fi
+
+          if [ "$CONCLUSION" != "success" ]; then
+            echo "::error::CI for $SHA concluded '$CONCLUSION'. Fix main before releasing."
+            exit 1
+          fi
+
+          echo "CI passed for $SHA"
+
       - name: Generate GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v3
@@ -66,8 +123,25 @@ jobs:
       - name: Resolve packages to publish
         id: changed
         env:
-          PUBLISH_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_only }}
+          PUBLISH_ONLY: ${{ inputs.publish_only }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
+          # Both ways of resolving nothing end here. A hand-triggered release that
+          # resolves nothing is a mismatch between what you asked for and what the repo
+          # has — usually commits without a conventional prefix, which lerna cannot read
+          # as a change. Only dry_run treats an empty answer as a valid one.
+          nothing_to_release() {
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "## Release preview" >> "$GITHUB_STEP_SUMMARY"
+              echo >> "$GITHUB_STEP_SUMMARY"
+              echo "Nothing to release." >> "$GITHUB_STEP_SUMMARY"
+              echo "No packages to publish"
+              exit 0
+            fi
+            echo "::error::No packages to publish. Check that the commits since the last release use conventional prefixes (feat/fix/...) — lerna reads those to decide what changed."
+            exit 1
+          }
+
           git fetch --tags
           set +e
           ERR_FILE=$(mktemp)
@@ -90,9 +164,7 @@ jobs:
           if [ "$PUBLISH_ONLY" != "true" ] && echo "$ERR$OUTPUT" | grep -q "No changed packages found"; then
             echo "packages=[]" >> "$GITHUB_OUTPUT"
             echo "count=0" >> "$GITHUB_OUTPUT"
-            echo "publish_only=false" >> "$GITHUB_OUTPUT"
-            echo "No packages to publish"
-            exit 0
+            nothing_to_release
           fi
 
           if [ $EXIT_CODE -ne 0 ]; then
@@ -103,17 +175,76 @@ jobs:
           fi
 
           PKGS=$(echo "$OUTPUT" | jq -c '[.[] | select(.private == false) | .name]')
+          COUNT=$(echo "$PKGS" | jq 'length')
           echo "packages=$PKGS" >> "$GITHUB_OUTPUT"
-          echo "count=$(echo "$PKGS" | jq 'length')" >> "$GITHUB_OUTPUT"
-          echo "publish_only=$PUBLISH_ONLY" >> "$GITHUB_OUTPUT"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+          # Second empty path: lerna reported changes, but every changed package is
+          # private (clappr-zepto, clappr-telemetry) so none of them publish.
+          if [ "$COUNT" = "0" ]; then
+            nothing_to_release
+          fi
+
           echo "Packages to publish: $PKGS"
 
+      # Writes package.json versions through lerna but never commits, tags or pushes:
+      # every mutating step below is guarded on dry_run, and the runner is discarded
+      # when the job ends, so the dirty tree cannot leave this machine.
+      - name: Preview release
+        if: ${{ inputs.dry_run && steps.changed.outputs.count != '0' }}
+        env:
+          PUBLISH_ONLY: ${{ inputs.publish_only }}
+          PACKAGES: ${{ steps.changed.outputs.packages }}
+        run: |
+          BEFORE=$(npx lerna list --json)
+          {
+            echo "## Release preview"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$PUBLISH_ONLY" = "true" ]; then
+            {
+              echo "Mode: \`publish_only\` — publishes the versions already in package.json."
+              echo
+              echo "| Package | Version | Already on npm |"
+              echo "|---|---|---|"
+            } >> "$GITHUB_STEP_SUMMARY"
+            for pkg in $(echo "$PACKAGES" | jq -r '.[]'); do
+              ver=$(echo "$BEFORE" | jq -r --arg pkg "$pkg" '.[] | select(.name == $pkg) | .version')
+              if npm view "$pkg@$ver" version >/dev/null 2>&1; then
+                state='yes — would be skipped'
+              else
+                state='no — would publish'
+              fi
+              echo "| \`$pkg\` | $ver | $state |" >> "$GITHUB_STEP_SUMMARY"
+            done
+          else
+            # --no-git-tag-version --no-push: compute and write the bumps without
+            # creating the release commit or any tag.
+            npx lerna version --include-merged-tags --no-git-tag-version --no-push --yes
+            AFTER=$(npx lerna list --json)
+            {
+              echo "| Package | Current | Next |"
+              echo "|---|---|---|"
+            } >> "$GITHUB_STEP_SUMMARY"
+            for pkg in $(echo "$PACKAGES" | jq -r '.[]'); do
+              from=$(echo "$BEFORE" | jq -r --arg pkg "$pkg" '.[] | select(.name == $pkg) | .version')
+              to=$(echo "$AFTER" | jq -r --arg pkg "$pkg" '.[] | select(.name == $pkg) | .version')
+              echo "| \`$pkg\` | $from | $to |" >> "$GITHUB_STEP_SUMMARY"
+            done
+          fi
+
+          {
+            echo
+            echo "Nothing was committed, tagged or published. Re-dispatch with \`dry_run\` unchecked to release."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Version and tag
-        if: steps.changed.outputs.count != '0' && steps.changed.outputs.publish_only != 'true'
+        if: ${{ steps.changed.outputs.count != '0' && !inputs.publish_only && !inputs.dry_run }}
         run: npx lerna version --include-merged-tags --no-push --yes
 
       - name: Push commit, then tags
-        if: steps.changed.outputs.count != '0' && steps.changed.outputs.publish_only != 'true'
+        if: ${{ steps.changed.outputs.count != '0' && !inputs.publish_only && !inputs.dry_run }}
         run: |
           # Fail here if branch protection rejects the bot — before any tags leave the runner
           git push origin HEAD:main
@@ -121,7 +252,7 @@ jobs:
 
       # registry-url only here so Yarn never sees the auth .npmrc during install/cache.
       - name: Configure npm registry
-        if: steps.changed.outputs.count != '0'
+        if: ${{ steps.changed.outputs.count != '0' && !inputs.dry_run }}
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
@@ -129,7 +260,7 @@ jobs:
 
       - name: Publish to npm
         id: publish
-        if: steps.changed.outputs.count != '0'
+        if: ${{ steps.changed.outputs.count != '0' && !inputs.dry_run }}
         run: |
           failed=()
           # Records only versions this run actually pushed to npm — the release
@@ -186,7 +317,7 @@ jobs:
       # versions already on npm are skipped — neither is a new release to announce.
       - name: Set release notes outputs
         id: announce
-        if: steps.changed.outputs.count != '0'
+        if: ${{ steps.changed.outputs.count != '0' && !inputs.dry_run }}
         env:
           PUBLISHED_JSON: ${{ steps.publish.outputs.published }}
         run: |
@@ -204,6 +335,7 @@ jobs:
 
   # Draft GitHub Release only when this run pushed a new player version to npm —
   # not on empty Release runs, non-player publishes, or versions already on npm.
+  # dry_run skips this on its own: no publish, so player_published stays false.
   notes:
     needs: release
     if: needs.release.outputs.player_published == 'true'
@@ -219,43 +351,3 @@ jobs:
       # Explicit even though it is the default: this job only exists because the
       # publish succeeded, so a missing npm version here must fail, not skip.
       published_in_run: true
-
-  # `if: failure()` keeps this running when release fails and notes is skipped —
-  # a skipped need does not block a job guarded by a status function.
-  notify-failure:
-    needs: [release, notes]
-    if: failure()
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-    steps:
-      - name: Open issue for failed release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          REPO: ${{ github.repository }}
-          RELEASE_RESULT: ${{ needs.release.result }}
-        run: |
-          # Publishing and drafting notes fail for different reasons and need
-          # different recovery — do not claim nothing was published when it was.
-          if [ "$RELEASE_RESULT" != "success" ]; then
-            title="Release workflow failed on $(date -u +%Y-%m-%d)"
-            # The publish step publishes package by package, so a failure can leave
-            # part of the batch on npm — check the run rather than assuming either way.
-            body="The Release workflow failed. Some packages may already have been published before the failure — check the \`Publish to npm\` step for what landed.
-
-          Run: $RUN_URL
-
-          Check the failing step before re-running. Recovery is manual via \`workflow_dispatch\` (use publish_only if versions/tags already landed)."
-          else
-            title="Release notes generation failed on $(date -u +%Y-%m-%d)"
-            body="Packages were published to npm successfully, but the **Generate release notes** job failed, so no draft GitHub Release was created.
-
-          Run: $RUN_URL
-
-          Nothing needs to be re-published. Once the failing step is understood, re-run the notes manually via Actions → **Generate release notes**."
-          fi
-          gh issue create --repo "$REPO" \
-            --title "$title" \
-            --label bug \
-            --body "$body"
