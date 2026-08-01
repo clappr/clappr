@@ -1,4 +1,7 @@
 {
+  // Standalone on purpose: babel.base.json ships a top-level preset with
+  // modules:false. Babel merges preset arrays (they cannot be cleared), so
+  // extending that base would change this package's Rollup build.
   "env": {
     "test": {
       "presets": [["@babel/preset-env", { "modules": "commonjs" }]]

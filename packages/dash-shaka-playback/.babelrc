@@ -1,4 +1,5 @@
 {
+  "extends": "../../babel.base.json",
   "presets": [["@babel/preset-env", { "modules": "commonjs" }]],
   "plugins": ["add-module-exports"]
 }
