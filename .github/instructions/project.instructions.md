@@ -31,7 +31,7 @@ Use Yarn with Lerna.
 
 # Release
 
-`Release` is **manual only** (Actions → **Release** → Run workflow); merging to main publishes nothing. It refuses to run unless it is on main and CI for that exact commit concluded `success` — a CI run still in progress is refused too. There is no override.
+`Release` is **manual only** (Actions → **Release** → Run workflow); merging to main publishes nothing. It refuses to run unless it is on main and CI for that exact commit concluded `success` — a CI run still in progress is refused too. There is no override. If Validate finds no CI run (e.g. a past `[skip ci]` tip), Actions → **CI** → Run workflow on `main`, then re-dispatch Release.
 
 Ritual: merge → wait for CI green → dispatch with `dry_run` to see the computed versions → dispatch again without it. `dry_run` is a pure modifier (nothing is committed, tagged or published) and combines with `publish_only`, the recovery path for versions and tags already on main. Resolving zero publishable packages fails the run, except under `dry_run`.
 

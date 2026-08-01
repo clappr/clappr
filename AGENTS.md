@@ -74,6 +74,8 @@ Packages that do **not** publish to npm:
 
 The run refuses to start unless it is on main **and** CI for that exact commit concluded `success`. A CI run still in progress is refused too, so a dispatch fired seconds after merging fails on purpose — wait and dispatch again. There is no override input; fix the cause instead.
 
+If Validate says there is **no CI run** for the tip SHA, GitHub never created one — usually a `[skip ci]` commit (or equivalent). `contributors.yml` no longer uses that marker; for any leftover or future case, Actions → **CI** → Run workflow on `main`, wait for green, then dispatch **Release**. That is still a real CI pass on the tip, not a gate bypass.
+
 Resolving zero publishable packages **fails** the run (green only under `dry_run`). You asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green.
 
 | Input | Use |
