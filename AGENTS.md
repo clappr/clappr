@@ -50,6 +50,7 @@ Packages published to npm (via the Release workflow / Trusted Publishers):
 |---------|----------|
 | `packages/clappr-core/` | `@clappr/core` |
 | `packages/clappr-plugins/` | `@clappr/plugins` |
+| `packages/clappr-telemetry/` | `@clappr/telemetry` |
 | `packages/player/` | `@clappr/player` |
 | `packages/hlsjs-playback/` | `@clappr/hlsjs-playback` |
 | `packages/dash-shaka-playback/` | `dash-shaka-playback` |
@@ -60,8 +61,27 @@ Packages that do **not** publish to npm:
 | Package | Reason |
 |---------|--------|
 | `packages/clappr-zepto/` | Internal only (`private: true`); bundled into `@clappr/core` |
-| `packages/clappr-telemetry/` | `private: true` until the first intentional release |
 | `apps/clappr.io/` | Docs site (`clappr-docs`, already `private: true`) |
+
+### Releasing
+
+`Release` runs **only by hand** — Actions → **Release** → Run workflow. Merging to main publishes nothing.
+
+1. Merge to main, wait for **CI** to go green on the resulting commit.
+2. Dispatch **Release** with `dry_run` checked. The job summary lists every package with its current and next version; nothing is committed, tagged or published.
+3. Read the table. Wrong or missing bumps are almost always commits without a conventional prefix.
+4. Dispatch again with `dry_run` unchecked.
+
+The run refuses to start unless it is on main **and** CI for that exact commit concluded `success`. A CI run still in progress is refused too, so a dispatch fired seconds after merging fails on purpose — wait and dispatch again. There is no override input; fix the cause instead.
+
+Resolving zero publishable packages **fails** the run (green only under `dry_run`). You asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green.
+
+| Input | Use |
+|---|---|
+| `dry_run` | Preview only. A pure modifier — combine with `publish_only` to preview that path too |
+| `publish_only` | Recovery: versions and tags already landed on main, publish `package.json` as-is |
+
+Nothing announces a failed release: the red run in Actions is the only signal.
 
 ### GitHub Release notes
 
@@ -78,14 +98,14 @@ You can also run Actions → **Generate release notes** manually (updates an exi
 
 | Path | Missing on npm | Why |
 |---|---|---|
-| Called by `Release` (`published_in_run: true`) | **Fails** → "Release notes generation failed" issue | The publish already succeeded, so absence contradicts the caller's own precondition. Whether it is registry lag or a real incident, a green run would notify nobody. |
+| Called by `Release` (`published_in_run: true`) | **Fails** → red `notes` job on the Release run | The publish already succeeded, so absence contradicts the caller's own precondition. Whether it is registry lag or a real incident, a green run would notify nobody. |
 | Manual dispatch | Skips with a warning | You aimed at that tag deliberately; failing would be noise. |
 
 The registry gets ~50s (`REGISTRY_ATTEMPTS: 6`) on the Release path before it counts as missing, so the failure means something is wrong rather than npm being slow.
 
-Not finding a version and not being able to ask are also different things: if the npm registry cannot answer at all, the notes job **fails** on both paths instead of quietly skipping the draft (only the Release path opens an issue — `notify-failure` lives in `release.yml`).
+Not finding a version and not being able to ask are also different things: if the npm registry cannot answer at all, the notes job **fails** on both paths instead of quietly skipping the draft.
 
-Nothing needs re-publishing for any notes failure — "Re-run failed jobs" on the Release run re-runs only the notes job, and no duplicate issue is opened.
+Nothing needs re-publishing for any notes failure — "Re-run failed jobs" on the Release run re-runs only the notes job.
 
 Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See `.github/release-notes-instructions.md` and `.github/scripts/generate-release-notes.sh`.
 

@@ -206,8 +206,8 @@ cmd_resolve() {
 
   # Git tags can land before npm publish succeeds — never draft that case. Retries
   # because Release calls this seconds after publishing. An inconclusive registry is
-  # always a failure, so notify-failure opens an issue instead of leaving a silently
-  # green run. A confirmed absence is a deliberate skip when a human aimed us at the
+  # always a failure, so the run goes red instead of staying silently green.
+  # A confirmed absence is a deliberate skip when a human aimed us at the
   # tag, but a failure under REQUIRE_NPM: there the caller already published the
   # player, so "not on npm" contradicts its own precondition — lag or incident, both
   # need a human, and only a red job notifies anyone.
