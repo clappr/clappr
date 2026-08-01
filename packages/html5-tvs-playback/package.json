@@ -62,11 +62,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "not ie <= 11"
-  ],
   "nx": {
     "targets": {
       "test": {
