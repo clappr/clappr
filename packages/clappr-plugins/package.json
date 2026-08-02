@@ -52,14 +52,5 @@
       "src/vendor",
       "node_modules"
     ]
-  },
-  "nx": {
-    "targets": {
-      "test": {
-        "dependsOn": [
-          "^release"
-        ]
-      }
-    }
   }
 }
