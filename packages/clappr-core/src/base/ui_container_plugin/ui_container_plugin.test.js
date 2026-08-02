@@ -1,5 +1,5 @@
 import UIContainerPlugin from './ui_container_plugin'
-import ErrorMixin from '@/base/error_mixin'
+import ErrorMixin from '@/base/error_mixin/error_mixin'
 
 describe('UI Container Plugin', () => {
   describe('constructor', () => {

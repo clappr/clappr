@@ -1,7 +1,7 @@
 import Container from './container'
-import HTML5Playback from '../../playbacks/html5_video'
-import Playback from '../../base/playback'
-import Events from '../../base/events'
+import HTML5Playback from '../../playbacks/html5_video/html5_video'
+import Playback from '../../base/playback/playback'
+import Events from '../../base/events/events'
 
 const FakePlayback = Playback
 

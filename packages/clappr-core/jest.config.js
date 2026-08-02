@@ -6,7 +6,6 @@ module.exports = {
     'VERSION': pkg.version
   },
   'verbose': true,
-  'resolver': 'jest-directory-named-resolver',
   'transform': {
     // babelrc/configFile disabled so the sibling @clappr/zepto source (ESM
     // export default) is compiled to CJS when resolved via moduleNameMapper

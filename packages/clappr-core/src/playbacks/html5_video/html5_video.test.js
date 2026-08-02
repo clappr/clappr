@@ -1,5 +1,5 @@
 import HTML5Video from './html5_video'
-import Events from '../../base/events'
+import Events from '../../base/events/events'
 
 import $ from '@clappr/zepto'
 

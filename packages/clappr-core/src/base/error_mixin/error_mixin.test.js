@@ -1,12 +1,12 @@
 import ErrorMixin from './error_mixin'
-import PlayerError from '@/components/error'
-import CorePlugin from '@/base/core_plugin'
-import UICorePlugin from '@/base/ui_core_plugin'
-import ContainerPlugin from '@/base/container_plugin'
-import UIContainerPlugin from '@/base/ui_container_plugin'
-import Core from '@/components/core'
-import Playback from '@/base/playback'
-import Events from '@/base/events'
+import PlayerError from '@/components/error/error'
+import CorePlugin from '@/base/core_plugin/core_plugin'
+import UICorePlugin from '@/base/ui_core_plugin/ui_core_plugin'
+import ContainerPlugin from '@/base/container_plugin/container_plugin'
+import UIContainerPlugin from '@/base/ui_container_plugin/ui_container_plugin'
+import Core from '@/components/core/core'
+import Playback from '@/base/playback/playback'
+import Events from '@/base/events/events'
 
 describe('ErrorMixin', function () {
   let errorExample

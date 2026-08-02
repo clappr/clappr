@@ -1,7 +1,7 @@
 import Playback from './playback'
-import Core from '@/components/core'
-import Events from '../../base/events'
-import PlayerError from '@/components/error'
+import Core from '@/components/core/core'
+import Events from '../../base/events/events'
+import PlayerError from '@/components/error/error'
 
 const getProperty = (obj, prop) => {
   return Object.getOwnPropertyDescriptor(Object.getPrototypeOf(obj), prop)

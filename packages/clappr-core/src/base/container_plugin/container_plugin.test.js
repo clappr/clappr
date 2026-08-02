@@ -1,5 +1,5 @@
 import ContainerPlugin from './container_plugin'
-import ErrorMixin from '@/base/error_mixin'
+import ErrorMixin from '@/base/error_mixin/error_mixin'
 
 describe('Container Plugin', () => {
   describe('#constructor', () => {

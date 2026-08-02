@@ -1,7 +1,7 @@
 import CoreFactory from './core_factory'
-import Core from '@/components/core'
-import CorePlugin from '@/base/core_plugin'
-import Player from '@/components/player'
+import Core from '@/components/core/core'
+import CorePlugin from '@/base/core_plugin/core_plugin'
+import Player from '@/components/player/player'
 
 describe('CoreFactory', () => {
   const bareOptions = { source: 'http://some.url/for/video.mp4' }

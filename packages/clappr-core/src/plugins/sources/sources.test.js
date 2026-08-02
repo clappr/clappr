@@ -1,9 +1,9 @@
 import SourcesPlugin from './sources'
-import Playback from '@/base/playback'
-import NoOp from '@/playbacks/no_op'
-import Container from '@/components/container'
-import Core from '@/components/core'
-import Events from '@/base/events'
+import Playback from '@/base/playback/playback'
+import NoOp from '@/playbacks/no_op/no_op'
+import Container from '@/components/container/container'
+import Core from '@/components/core/core'
+import Events from '@/base/events/events'
 
 const createContainersArray = (options, quantity) => {
   const containers = []

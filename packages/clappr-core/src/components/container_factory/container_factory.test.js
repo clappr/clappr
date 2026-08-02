@@ -1,7 +1,7 @@
 import ContainerFactory from './container_factory'
-import Loader from '@/components/loader'
-import ContainerPlugin from '@/base/container_plugin'
-import Playback from '@/base/playback'
+import Loader from '@/components/loader/loader'
+import ContainerPlugin from '@/base/container_plugin/container_plugin'
+import Playback from '@/base/playback/playback'
 
 describe('ContainerFactory', function () {
   let options, playback, loader, container_factory
