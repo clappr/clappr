@@ -9,7 +9,6 @@ module.exports = {
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js',
     '\\.(scss)$': '<rootDir>/src/__mocks__/styleMock.js',
     '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.js'
   },

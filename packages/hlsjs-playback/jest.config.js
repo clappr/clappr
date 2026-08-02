@@ -8,8 +8,7 @@ module.exports = {
     '^.+\\.js$': 'babel-jest'
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^clappr$': '<rootDir>/node_modules/@clappr/core/dist/clappr-core.js'
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
   globals: { CLAPPR_CORE_VERSION: ClapprCorePkg.version }
 }
