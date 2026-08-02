@@ -18,16 +18,18 @@ let oipfdrmagent
 const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][DRMHandler]'
 
-describe('DRMHandler', function () {
+describe('DRMHandler', () => {
+  let restoreConsole
+
   beforeEach(() => {
-    this.restoreConsole = mockConsole()
+    restoreConsole = mockConsole()
     jest.clearAllMocks()
 
     oipfdrmagent = createDrmAgent()
     oipfdrmagent.sendDRMMessage = () => {}
     jest.spyOn(DRMFunctions, 'createDrmAgent').mockReturnValue(oipfdrmagent)
   })
-  afterEach(() => this.restoreConsole())
+  afterEach(() => restoreConsole())
 
   test('only exports methods to handle with license request', () => {
     expect(DRMHandler.sendLicenseRequest).toBeDefined()
@@ -100,8 +102,10 @@ describe('DRMHandler', function () {
   })
 
   describe('sendLicenseRequest method', () => {
+    let config
+
     beforeEach(() => {
-      this.config = { licenseServerURL: 'http://fake-domain/fake_folder/playready?deviceId=FAKEID' }
+      config = { licenseServerURL: 'http://fake-domain/fake_folder/playready?deviceId=FAKEID' }
     })
     afterEach(() => {
       const drmAgentElement = document.getElementById('oipfdrmagent')
@@ -110,7 +114,7 @@ describe('DRMHandler', function () {
 
     test('reuses drmAgent element if already exists', () => {
       document.body.appendChild(DRMFunctions.createDrmAgent())
-      sendLicenseRequest(this.config)
+      sendLicenseRequest(config)
 
       const duplicateIds = document.querySelectorAll('[id=\'oipfdrmagent\']')
 
@@ -119,7 +123,7 @@ describe('DRMHandler', function () {
 
     test('prefer to append drmAgent on parent element of received scope if exits', () => {
       const wantedScope = { el: document.createElement('div') }
-      sendLicenseRequest.call(wantedScope, this.config)
+      sendLicenseRequest.call(wantedScope, config)
 
       expect(wantedScope.el.firstChild.id).toEqual('oipfdrmagent')
     })
@@ -134,7 +138,7 @@ describe('DRMHandler', function () {
       const successCb = jest.fn()
       const errorCb = jest.fn()
       oipfdrmagent.sendDRMMessage = undefined
-      sendLicenseRequest(this.config, successCb, errorCb)
+      sendLicenseRequest(config, successCb, errorCb)
 
       /* eslint-disable-next-line no-console */
       expect(console.log).toHaveBeenCalledWith(
@@ -154,7 +158,7 @@ describe('DRMHandler', function () {
 
         const successCb = jest.fn()
         const errorCb = jest.fn()
-        sendLicenseRequest(this.config, successCb, errorCb)
+        sendLicenseRequest(config, successCb, errorCb)
         drmAgentElement.onDRMRightsError(2)
 
         expect(errorCb).not.toHaveBeenCalled()
@@ -166,7 +170,7 @@ describe('DRMHandler', function () {
 
         const successCb = jest.fn()
         const errorCb = jest.fn()
-        sendLicenseRequest(this.config, successCb, errorCb)
+        sendLicenseRequest(config, successCb, errorCb)
         drmAgentElement.onDRMRightsError(1)
 
         expect(errorCb).toHaveBeenCalledWith('DRM: Invalid license error')
@@ -180,7 +184,7 @@ describe('DRMHandler', function () {
 
         const successCb = jest.fn()
         const errorCb = jest.fn()
-        sendLicenseRequest(this.config, successCb, errorCb)
+        sendLicenseRequest(config, successCb, errorCb)
         drmAgentElement.onDRMMessageResult(0, 'a error message', 1)
         drmAgentElement.onDRMMessageResult(0, 'success', 0)
 
@@ -192,7 +196,7 @@ describe('DRMHandler', function () {
         const drmAgentElement = document.getElementById('oipfdrmagent')
 
         const cb = jest.fn()
-        sendLicenseRequest(this.config, cb)
+        sendLicenseRequest(config, cb)
         drmAgentElement.onDRMMessageResult(0, 'a success message', 0)
 
         expect(cb).toHaveBeenCalled()
