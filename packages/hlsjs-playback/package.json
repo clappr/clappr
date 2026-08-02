@@ -45,14 +45,5 @@
     "hls.js": "1.6.16",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-serve": "^1.1.0"
-  },
-  "nx": {
-    "targets": {
-      "test": {
-        "dependsOn": [
-          "^release"
-        ]
-      }
-    }
   }
 }
