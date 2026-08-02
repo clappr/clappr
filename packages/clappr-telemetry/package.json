@@ -44,9 +44,6 @@
   "devDependencies": {
     "@clappr/core": "^0.14.7",
     "@rollup/plugin-replace": "^5.0.2",
-    "babel-jest": "^30.2.0",
-    "jest": "^30.2.0",
-    "jest-environment-jsdom": "^30.2.0",
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-serve": "^2.0.2"
   }
