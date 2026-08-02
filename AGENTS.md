@@ -38,7 +38,9 @@ Conscious exceptions:
 - **`clappr-zepto` `.babelrc`** — stays standalone. Babel merges preset arrays and cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
 - **`dash-shaka-playback` `.babelrc`** — extends the base and overrides `modules: "commonjs"` plus `add-module-exports`.
 - **`clappr-core` Jest transform** — uses `babelrc: false` / `configFile: false`, but reads presets from `babel.base.json` `env.test` (with `modules: 'commonjs'` forced). `env.test` targets `node: current` so the root browserslist does not under-transpile tests.
-- **Deferred to later phases** — Jest family (`jest`, `babel-jest`, `jest-environment-jsdom`, `jest-mock-console`); `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
+- **Deferred to later phases** — `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
+
+The Jest family (`jest`, `babel-jest`, `jest-environment-jsdom`, `jest-mock-console`) is fully unified at the root; no package declares a Jest dependency of its own. Test imports use the full path to the module file (`../base/events/events`), matching `src/` — there is no directory-named resolution in the Jest configs.
 
 When adding a shared tool, put it at the root and remove per-package copies. Prefer this over Yarn `resolutions` when the packages do not need to install alone.
 
