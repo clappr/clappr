@@ -52,10 +52,6 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@clappr/core": "^0.14.7",
-    "babel-jest": "^30.4.1",
-    "jest": "^30.4.1",
-    "jest-environment-jsdom": "^30.4.1",
-    "jest-mock-console": "^2.0.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-serve": "^1.1.0"
   },

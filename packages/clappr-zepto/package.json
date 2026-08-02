@@ -21,10 +21,5 @@
   "bugs": {
     "url": "https://github.com/clappr/clappr/issues"
   },
-  "homepage": "https://github.com/clappr/clappr/tree/main/packages/clappr-zepto",
-  "devDependencies": {
-    "babel-jest": "^30.4.1",
-    "jest": "^30.4.1",
-    "jest-environment-jsdom": "^30.4.1"
-  }
+  "homepage": "https://github.com/clappr/clappr/tree/main/packages/clappr-zepto"
 }
