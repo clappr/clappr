@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/clappr/clappr/tree/main/packages/clappr-zepto",
   "devDependencies": {
-    "babel-jest": "^29.7.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0"
+    "babel-jest": "^30.4.1",
+    "jest": "^30.4.1",
+    "jest-environment-jsdom": "^30.4.1"
   }
 }
