@@ -40,8 +40,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "jest ./src --coverage --silent",
-    "test:watch": "jest ./src --watch",
-    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
+    "test:watch": "jest ./src --watch"
   },
   "peerDependencies": {
     "@clappr/core": "*"
