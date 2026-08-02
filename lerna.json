@@ -5,6 +5,7 @@
   "command": {
     "version": {
       "allowBranch": "main",
+      "ciBehindBehavior": "error",
       "conventionalCommits": true,
       "message": "chore: publish"
     }
