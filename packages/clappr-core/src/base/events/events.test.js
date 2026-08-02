@@ -1,5 +1,5 @@
 import Events from './events'
-import Log from '@/components/log'
+import Log from '@/components/log/log'
 
 describe('Events', function () {
   let events

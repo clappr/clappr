@@ -9390,13 +9390,6 @@ jest-diff@30.4.1:
     jest-get-type "^29.6.3"
     pretty-format "^29.7.0"
 
-jest-directory-named-resolver@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/jest-directory-named-resolver/-/jest-directory-named-resolver-0.3.0.tgz#77b7843e25189f2522c3af4bd25eb6323dc12830"
-  integrity sha512-1A/N75O6ly4oedbJvEnWY+Rr9S+9qYX8h6Aql+SCBNu9ViQRKlvmBHOMVzk/jI/8lcqzP0iPo6R1r4ubSP8t1A==
-  dependencies:
-    resolve "^1.9.0"
-
 jest-docblock@30.4.0:
   version "30.4.0"
   resolved "https://registry.yarnpkg.com/jest-docblock/-/jest-docblock-30.4.0.tgz#3ab779a027d1495ae21550accd4266bbe99af7a3"
@@ -13508,7 +13501,7 @@ resolve.exports@2.0.3:
   resolved "https://registry.yarnpkg.com/resolve.exports/-/resolve.exports-2.0.3.tgz#41955e6f1b4013b7586f873749a635dea07ebe3f"
   integrity sha512-OcXjMsGdhL4XnbShKpAcSqPMzQoYkYyhbEaeSko47MjRP9NfEQMhZkXL1DoFlt9LWQn4YttrdnV6X2OiyzBi+A==
 
-resolve@^1.1.6, resolve@^1.10.0, resolve@^1.14.2, resolve@^1.19.0, resolve@^1.22.1, resolve@^1.22.11, resolve@^1.3.2, resolve@^1.9.0:
+resolve@^1.1.6, resolve@^1.10.0, resolve@^1.14.2, resolve@^1.19.0, resolve@^1.22.1, resolve@^1.22.11, resolve@^1.3.2:
   version "1.22.11"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.22.11.tgz#aad857ce1ffb8bfa9b0b1ac29f1156383f68c262"
   integrity sha512-RfqAvLnMl313r7c9oclB1HhUEAezcpLjz95wFH4LVuhk9JF/r22qmVP9AMmOU4vMX7Q8pN8jwNg/CSpdFnMjTQ==

@@ -1,6 +1,6 @@
 import CorePlugin from './core_plugin'
-import ErrorMixin from '@/base/error_mixin'
-import Player from '@/components/player'
+import ErrorMixin from '@/base/error_mixin/error_mixin'
+import Player from '@/components/player/player'
 
 describe('Core Plugin', () => {
   describe('#constructor', () => {

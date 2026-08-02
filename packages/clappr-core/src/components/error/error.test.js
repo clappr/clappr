@@ -1,6 +1,6 @@
-import Core from '@/components/core'
+import Core from '@/components/core/core'
 import PlayerError from './error'
-import Events from '@/base/events'
+import Events from '@/base/events/events'
 
 describe('PlayerError', function () {
   let core, playerError, errorData

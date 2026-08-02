@@ -1,7 +1,7 @@
 import Core from './core'
-import Browser from '../browser'
-import Events from '../../base/events'
-import { Fullscreen } from '../../utils'
+import Browser from '../browser/browser'
+import Events from '../../base/events/events'
+import { Fullscreen } from '../../utils/utils'
 
 describe('Core', function () {
   describe('When configure', () => {
