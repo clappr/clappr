@@ -30,6 +30,7 @@ Shared config locations:
 | Config | Path | Notes |
 |--------|------|-------|
 | Babel | `babel.base.json` | Packages extend via `.babelrc` |
+| Jest | `jest.config.base.js` | Packages extend via spread; override `transform` when not resolving sibling ESM source |
 | Browserslist | `.browserslistrc` | Matches autoprefixer `defaults` (`> 0.5%` / `last 2 versions` / `Firefox ESR` / `not dead`); `apps/clappr.io` keeps its own field |
 | ESLint | `eslint.config.js` | Flat config; `eslint` + `@eslint/js` declared at the root. Root `yarn lint` runs `lerna run lint` so package configs (`*.js` at package root) are covered |
 
@@ -37,7 +38,7 @@ Conscious exceptions:
 
 - **`clappr-zepto` `.babelrc`** — stays standalone. Babel merges preset arrays and cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
 - **`dash-shaka-playback` `.babelrc`** — extends the base and overrides `modules: "commonjs"` plus `add-module-exports`.
-- **`clappr-core` Jest transform** — uses `babelrc: false` / `configFile: false`, but reads presets from `babel.base.json` `env.test` (with `modules: 'commonjs'` forced). `env.test` targets `node: current` so the root browserslist does not under-transpile tests.
+- **`jest.config.base.js` sibling-source transform** — default for packages that resolve `@clappr/core` / `@clappr/zepto` to source via `moduleNameMapper`: `babelrc: false` / `configFile: false`, presets from `babel.base.json` `env.test` with `modules: 'commonjs'` forced. **`clappr-zepto` and `clappr-telemetry`** override to plain `babel-jest` (no sibling ESM mapping; zepto's standalone `.babelrc` remains for Rollup).
 - **Deferred to later phases** — `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
 
 The Jest family (`jest`, `babel-jest`, `jest-environment-jsdom`, `jest-mock-console`) is fully unified at the root; no package declares a Jest dependency of its own. Test imports use the full path to the module file (`../base/events/events`), matching `src/` — there is no directory-named resolution in the Jest configs.
