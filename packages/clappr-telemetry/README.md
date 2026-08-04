@@ -62,6 +62,7 @@ With npm/ESM:
 ```javascript
 import Clappr from '@clappr/core'
 import DashShakaPlayback from 'dash-shaka-playback'
+import 'shaka-player' // peer dependency of dash-shaka-playback
 import ClapprTelemetry, {
   ShakaNetworkAdapter, HlsNetworkAdapter,
   BufferSampler, DecodingSampler, PlaybackStateSampler,
