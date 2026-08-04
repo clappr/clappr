@@ -28,6 +28,8 @@
     "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "lint": "eslint *.js ./src",
     "lint:fix": "yarn lint -- --fix",
+    "pretest": "yarn release",
+    "test": "jest ./src --coverage --silent",
     "prepublishOnly": "lerna run release --scope=dash-shaka-playback"
   },
   "files": [
