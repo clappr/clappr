@@ -32,11 +32,6 @@ const plugins = [
   babel(babelOptionsPlugins),
   size(),
   filesize(),
-  serveLocal &&
-    replace({
-      ...replacePluginOptions,
-      'process.env.NODE_ENV': JSON.stringify('development')
-    }),
   serveLocal && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
   reloadEnabled && livereload({ watch: ['dist', 'public'] }),
   analyzeBundle && visualize({ open: true })
@@ -61,6 +56,8 @@ const mainBundle = {
       sourcemap: true,
       plugins: [terser()]
     },
+    // ESM stays on mainBundle (embeds hls.js): player aliases this file via
+    // workspaceDistAlias. dash-shaka puts ESM on externalBundle instead.
     {
       name: 'HlsjsPlayback',
       file: pkg.module,

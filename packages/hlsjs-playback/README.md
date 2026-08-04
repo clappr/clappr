@@ -31,7 +31,7 @@ or as an npm package:
 | Bundler / ESM entry (embeds `hls.js`, leaves `@clappr/core` external) | `dist/hlsjs-playback.esm.js` (package `module` field) |
 | Default CommonJS / UMD entry (embeds `hls.js`) | `dist/hlsjs-playback.js` (package `main` field) |
 
-**Migration note (1.10+):** `hlsjs-playback.min.js` no longer embeds `@clappr/core`. Load core (or player) first so a global `Clappr` exists. Use `.external` builds when you supply your own `hls.js`.
+**Migration note (2.0+):** `hlsjs-playback.min.js` no longer embeds `@clappr/core`. Load core (or player) first so a global `Clappr` exists. Use `.external` builds when you supply your own `hls.js`.
 
 Then just add `HlsjsPlayback` into the list of plugins of your player instance:
 
