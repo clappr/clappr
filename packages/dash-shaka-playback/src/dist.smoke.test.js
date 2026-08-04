@@ -67,7 +67,7 @@ function assertDoesNotEmbedShaka(source) {
   // Closure-compiled shaka leaves these markers when bundled via commonjs.
   expect(source).not.toContain('shakaPlayer_compiled')
   expect(source).not.toContain('ManifestParser')
-  expect(source.length).toBeLessThan(50_000)
+  expect(source.length).toBeLessThan(50000)
 }
 
 describe.each([

@@ -16,7 +16,7 @@ const minimize = !!process.env.MINIMIZE
 
 const babelOptions = {
   exclude: ['node_modules/**', '../../node_modules/**'],
-  babelHelpers: 'bundled',
+  babelHelpers: 'bundled'
 }
 
 const plugins = [
@@ -27,7 +27,7 @@ const plugins = [
   filesize(),
   dev && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
   reloadEnabled && livereload({ watch: ['dist', 'public'] }),
-  analyzeBundle && visualize({ open: true }),
+  analyzeBundle && visualize({ open: true })
 ].filter(Boolean)
 
 const mainBundle = {
@@ -39,7 +39,7 @@ const mainBundle = {
       file: pkg.main,
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
-      sourcemap: true,
+      sourcemap: true
     },
     minimize && {
       name: 'DashShakaPlayback',
@@ -47,10 +47,10 @@ const mainBundle = {
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
       sourcemap: true,
-      plugins: [terser()],
-    },
+      plugins: [terser()]
+    }
   ].filter(Boolean),
-  plugins,
+  plugins
 }
 
 const externalBundle = {
@@ -62,7 +62,7 @@ const externalBundle = {
       file: 'dist/dash-shaka-playback.external.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
-      sourcemap: true,
+      sourcemap: true
     },
     minimize && {
       name: 'DashShakaPlayback',
@@ -70,15 +70,15 @@ const externalBundle = {
       format: 'umd',
       globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
       sourcemap: true,
-      plugins: [terser()],
+      plugins: [terser()]
     },
     {
       file: pkg.module,
       format: 'esm',
-      sourcemap: true,
-    },
+      sourcemap: true
+    }
   ].filter(Boolean),
-  plugins,
+  plugins
 }
 
 export default [mainBundle, externalBundle]
