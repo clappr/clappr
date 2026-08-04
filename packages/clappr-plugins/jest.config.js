@@ -7,6 +7,12 @@ module.exports = {
     ...base.transform,
     '^.+\\.html$': '<rootDir>/src/__mocks__/htmlMock.js'
   },
+  // Dist UMD/min bundles are already CJS-compatible and too large for babel-jest.
+  transformIgnorePatterns: [
+    '/node_modules/',
+    '<rootDir>/dist/clappr-plugins\\.js$',
+    '<rootDir>/dist/clappr-plugins\\.min\\.js$'
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@clappr/core$': '<rootDir>/../clappr-core/src/main.js',
@@ -14,7 +20,7 @@ module.exports = {
     '\\.(scss)$': '<rootDir>/src/__mocks__/styleMock.js',
     '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.js'
   },
-  collectCoverageFrom: ['src/*.js', 'src/**/*.js', 'src/**/**/*.js'],
+  collectCoverageFrom: ['src/*.js', 'src/**/*.js', 'src/**/**/*.js', '!src/**/dist.smoke.test.js'],
   globals: {
     CLAPPR_CORE_VERSION: ClapprCorePkg.version,
     VERSION: ClapprCorePkg.version
