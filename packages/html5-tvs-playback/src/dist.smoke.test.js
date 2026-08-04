@@ -26,15 +26,11 @@ function loadArtifact(name) {
   return require(path.join(DIST, name))
 }
 
-function resolvePlayback(mod) {
-  return mod.default || mod
-}
-
 function assertPlaybackContract(mod) {
   // Must re-require after resetModules so the prototype identity matches the
   // @clappr/core instance the artifact just resolved.
   const { Playback } = require('@clappr/core')
-  const HTML5TVsPlayback = resolvePlayback(mod)
+  const HTML5TVsPlayback = mod.default || mod
 
   expect(typeof HTML5TVsPlayback).toBe('function')
   expect(Object.getPrototypeOf(HTML5TVsPlayback.prototype)).toBe(Playback.prototype)

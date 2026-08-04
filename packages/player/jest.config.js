@@ -3,8 +3,7 @@ const pkg = require('./package.json')
 
 module.exports = {
   ...base,
-  // Player dist bundles are ~1.8 MB and already CJS-compatible; babel-jest
-  // would make smoke tests prohibitively slow.
+  // Dist bundles are too large for babel-jest; they are already CJS-compatible.
   transformIgnorePatterns: [
     '/node_modules/',
     '<rootDir>/dist/clappr\\.js$',

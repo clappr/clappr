@@ -45,14 +45,13 @@ function prototypeChainContains(pluginProto, baseProto) {
 
 function assertSharedBundleContract(C) {
   expect(C.version).toBe(pkg.version)
-  expect(C.Plugins).toBeTruthy()
 
   const bases = [
     C.ContainerPlugin.prototype,
     C.CorePlugin.prototype,
     C.UIContainerPlugin.prototype,
     C.UICorePlugin.prototype
-  ].filter(Boolean)
+  ]
 
   for (const [, Plugin] of Object.entries(C.Plugins)) {
     expect(typeof Plugin).toBe('function')
@@ -74,21 +73,20 @@ describe.each([
   ['plainhtml5 UMD', ARTIFACTS.plainhtml5],
   ['plainhtml5 UMD minified', ARTIFACTS.plainhtml5Min]
 ])('%s (%s)', (_label, filename) => {
-  test('exports a self-consistent Clappr bundle', () => {
+  test('exports plugins that extend the same-bundle plugin bases', () => {
     assertSharedBundleContract(resolveClappr(loadArtifact(filename)))
   })
 })
 
-describe('full player HLS identity', () => {
-  test.each(FULL_PLAYER)('%s wires HLS to the same-bundle HTML5Video', filename => {
+describe('full player HLS', () => {
+  test.each(FULL_PLAYER)('%s HLS extends HTML5Video', filename => {
     const C = resolveClappr(loadArtifact(filename))
-    expect(C.HLS).toBeTruthy()
     expect(Object.getPrototypeOf(C.HLS.prototype)).toBe(C.HTML5Video.prototype)
   })
 })
 
 describe('plainhtml5 bundle', () => {
-  test.each(PLAINHTML5)('%s does not register HLS', filename => {
+  test.each(PLAINHTML5)('%s has no HLS', filename => {
     const C = resolveClappr(loadArtifact(filename))
     expect(C.HLS).toBeUndefined()
   })
