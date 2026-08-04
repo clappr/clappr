@@ -56,8 +56,7 @@ const mainBundle = {
       sourcemap: true,
       plugins: [terser()]
     },
-    // ESM stays on mainBundle (embeds hls.js): player aliases this file via
-    // workspaceDistAlias. dash-shaka puts ESM on externalBundle instead.
+    // ESM embeds hls.js: player aliases dist/hlsjs-playback.esm.js (dash-shaka puts ESM on externalBundle).
     {
       name: 'HlsjsPlayback',
       file: pkg.module,

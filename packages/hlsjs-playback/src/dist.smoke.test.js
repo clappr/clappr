@@ -46,14 +46,12 @@ function assertPlaybackContract(HlsjsPlaybackExport) {
   jest.spyOn(HLSJS, 'isSupported').mockReturnValue(true)
   jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
 
+  expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(true)
+  expect(Playback.canPlay('http://example.com/video.m3u8?token=1')).toBe(true)
+  expect(Playback.canPlay('http://example.com/video.mpd')).toBe(false)
+
   const playback = new Playback({ src: 'http://example.com/video.m3u8' })
-  try {
-    expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(true)
-    expect(Playback.canPlay('http://example.com/video.m3u8?token=1')).toBe(true)
-    expect(Playback.canPlay('http://example.com/video.mpd')).toBe(false)
-  } finally {
-    playback.destroy()
-  }
+  playback.destroy()
 }
 
 function assertDoesNotEmbedCore(source) {
