@@ -72,6 +72,11 @@ const externalBundle = {
       sourcemap: true,
       plugins: [terser()],
     },
+    {
+      file: pkg.module,
+      format: 'esm',
+      sourcemap: true,
+    },
   ].filter(Boolean),
   plugins,
 }
