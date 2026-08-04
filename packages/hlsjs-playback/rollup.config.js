@@ -11,95 +11,87 @@ import visualize from 'rollup-plugin-visualizer'
 import { version as clapprCoreVersion } from '@clappr/core/package.json'
 import pkg from './package.json'
 
-let rollupConfig
-
 const serveLocal = !!process.env.SERVE
 const reloadEnabled = !!process.env.RELOAD
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const minimize = !!process.env.MINIMIZE
 
-const babelOptionsPlugins = { exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled' }
-const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
-const livereloadPluginOptions = { watch: ['dist', 'public'] }
-const replacePluginOptions = { CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion), preventAssignment: false }
+const babelOptionsPlugins = {
+  exclude: ['node_modules/**', '../../node_modules/**'],
+  babelHelpers: 'bundled'
+}
+const replacePluginOptions = {
+  CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
+  preventAssignment: false
+}
 
-let plugins = [
+const plugins = [
   replace(replacePluginOptions),
   resolve(),
   commonjs(),
   babel(babelOptionsPlugins),
   size(),
-  filesize()
-]
-
-serveLocal && (plugins = [...plugins, replace({ ...replacePluginOptions, 'process.env.NODE_ENV': JSON.stringify('development') }), serve(servePluginOptions)])
-reloadEnabled && (plugins = [...plugins, livereload(livereloadPluginOptions)])
-analyzeBundle && plugins.push(visualize({ open: true }))
+  filesize(),
+  serveLocal &&
+    replace({
+      ...replacePluginOptions,
+      'process.env.NODE_ENV': JSON.stringify('development')
+    }),
+  serveLocal && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
+  reloadEnabled && livereload({ watch: ['dist', 'public'] }),
+  analyzeBundle && visualize({ open: true })
+].filter(Boolean)
 
 const mainBundle = {
   external: ['@clappr/core'],
   input: 'src/hls.js',
-  output: {
-    name: 'HlsjsPlayback',
-    file: pkg.main,
-    format: 'umd',
-    globals: { '@clappr/core': 'Clappr' }
-  },
+  output: [
+    {
+      name: 'HlsjsPlayback',
+      file: pkg.main,
+      format: 'umd',
+      globals: { '@clappr/core': 'Clappr' },
+      sourcemap: true
+    },
+    minimize && {
+      name: 'HlsjsPlayback',
+      file: 'dist/hlsjs-playback.min.js',
+      format: 'umd',
+      globals: { '@clappr/core': 'Clappr' },
+      sourcemap: true,
+      plugins: [terser()]
+    },
+    {
+      name: 'HlsjsPlayback',
+      file: pkg.module,
+      format: 'esm',
+      sourcemap: true
+    }
+  ].filter(Boolean),
   plugins
 }
 
-const mainBundleWithoutHLS = {
+const externalBundle = {
   external: ['@clappr/core', 'hls.js'],
   input: 'src/hls.js',
-  output: {
-    name: 'HlsjsPlayback',
-    file: 'dist/hlsjs-playback.external.js',
-    format: 'umd',
-    globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' }
-  },
+  output: [
+    {
+      name: 'HlsjsPlayback',
+      file: 'dist/hlsjs-playback.external.js',
+      format: 'umd',
+      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
+      sourcemap: true
+    },
+    minimize && {
+      name: 'HlsjsPlayback',
+      file: 'dist/hlsjs-playback.external.min.js',
+      format: 'umd',
+      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
+      sourcemap: true,
+      plugins: [terser()]
+    }
+  ].filter(Boolean),
   plugins
 }
 
-const mainBundleMinified = {
-  input: 'src/hls.js',
-  output: {
-    name: 'HlsjsPlayback',
-    file: 'dist/hlsjs-playback.min.js',
-    format: 'iife',
-    sourcemap: true,
-    plugins: terser()
-  },
-  plugins
-}
-
-const mainBundleWithoutHLSMinified = {
-  external: ['@clappr/core', 'hls.js'],
-  input: 'src/hls.js',
-  output: {
-    name: 'HlsjsPlayback',
-    file: 'dist/hlsjs-playback.external.min.js',
-    globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-    format: 'iife',
-    sourcemap: true,
-    plugins: terser()
-  },
-  plugins
-}
-
-const moduleBundle = {
-  external: ['@clappr/core'],
-  input: 'src/hls.js',
-  output: {
-    name: 'HlsjsPlayback',
-    file: pkg.module,
-    format: 'esm',
-    globals: { '@clappr/core': 'Clappr' }
-  },
-  plugins
-}
-
-rollupConfig = [mainBundle, mainBundleWithoutHLS, moduleBundle]
-serveLocal && (rollupConfig = [mainBundle, mainBundleWithoutHLS])
-minimize && rollupConfig.push(mainBundleMinified, mainBundleWithoutHLSMinified)
-
-export default rollupConfig
+export default [mainBundle, externalBundle]
