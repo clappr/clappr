@@ -1,13 +1,19 @@
 const base = require('../../jest.config.base')
-const path = require('path')
+const ClapprCorePkg = require('@clappr/core/package.json')
 
 module.exports = {
   ...base,
   testEnvironmentOptions: {},
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    ...base.transform,
+    '^.+\\.html$': '<rootDir>/../clappr-core/src/__mocks__/htmlMock.js'
   },
   moduleNameMapper: {
-    '^@clappr/core$': path.resolve(__dirname, 'src/test-support/clappr-core-mock.js')
+    '^@clappr/core$': '<rootDir>/../clappr-core/src/main.js',
+    '^@clappr/zepto$': '<rootDir>/../clappr-zepto/src/zepto.js',
+    '\\.(scss)$': '<rootDir>/../clappr-core/src/__mocks__/styleMock.js'
+  },
+  globals: {
+    VERSION: ClapprCorePkg.version
   }
 }
