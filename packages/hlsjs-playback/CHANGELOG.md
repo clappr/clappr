@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%401.9.13...%40clappr%2Fhlsjs-playback%402.0.0) (2026-08-04)
+
+- feat(hlsjs-playback)!: stop embedding @clappr/core in minified UMD builds ([38fae12](https://github.com/clappr/clappr/commit/38fae1259c0d46f9a7cf6865e45557c5272cb0dd))
+
+### Bug Fixes
+
+- **hlsjs-playback:** address review on dead config, ESM comment and migration note ([0feb731](https://github.com/clappr/clappr/commit/0feb73194675deea35b4b0642110a37ebd875976))
+
+### BREAKING CHANGES
+
+- CDN consumers of `hlsjs-playback.min.js` must now load
+  `@clappr/core` (or `@clappr/player`) first so a global `Clappr` exists.
+  The bundler entries (`main`, `module`) and the `.external` builds are
+  unchanged.
+
 ## [1.9.13](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%401.9.12...%40clappr%2Fhlsjs-playback%401.9.13) (2026-08-04)
 
 **Note:** Version bump only for package @clappr/hlsjs-playback
