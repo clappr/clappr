@@ -22,18 +22,21 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on the 
 # Installation
 
 ```bash
-yarn add dash-shaka-playback shaka-player@^3
+yarn add dash-shaka-playback shaka-player@^4
+# or shaka-player@^3 if you need to stay on Shaka 3
 # or
-npm install dash-shaka-playback shaka-player@^3
+npm install dash-shaka-playback shaka-player@^4
 ```
 
-## Breaking change (4.0.0)
+## Peer dependency
 
-`shaka-player` (`^3`) is a **required peer dependency**. npm 7+ / yarn will install it for every consumer of this package — including those who only load the UMD build that already embeds Shaka (`dash-shaka-playback.js` / `.min.js`).
+`shaka-player` (`^3 || ^4`) is a **required peer dependency**. npm 7+ / yarn will install it for every consumer of this package — including those who only load the UMD build that already embeds Shaka (`dash-shaka-playback.js` / `.min.js`).
 
 That is intentional: the package `exports` map routes `import` to the ESM entry (`dash-shaka-playback.esm.mjs`), which keeps `shaka-player` external. A single peer declaration covers bundler and ESM consumers without maintaining a separate optional peer path. CDN / `<script>` users who never install from npm are unaffected.
 
-The `.external` / `.esm` builds expect the peer to be provided by the page or bundler. The default UMD build still embeds Shaka for drop-in script tags.
+The `.external` / `.esm` builds expect the peer (Shaka 3 or 4) to be provided by the page or bundler. The default UMD build still embeds Shaka 3 for drop-in script tags.
+
+Shaka 5+ is not supported yet: APIs this playback still uses (`new shaka.Player(mediaElement)`, `setTextTrackVisibility`) were removed in v5.
 
 ```javascript
 import Clappr from '@clappr/core'
