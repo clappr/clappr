@@ -32,20 +32,20 @@ const plugins = [
 
 const mainBundle = {
   input: 'src/clappr-dash-shaka-playback.js',
-  external: ['clappr'],
+  external: ['@clappr/core'],
   output: [
     {
       name: 'DashShakaPlayback',
       file: pkg.main,
       format: 'umd',
-      globals: { clappr: 'Clappr' },
+      globals: { '@clappr/core': 'Clappr' },
       sourcemap: true,
     },
     minimize && {
       name: 'DashShakaPlayback',
       file: 'dist/dash-shaka-playback.min.js',
       format: 'umd',
-      globals: { clappr: 'Clappr' },
+      globals: { '@clappr/core': 'Clappr' },
       sourcemap: true,
       plugins: [terser()],
     },
@@ -55,20 +55,20 @@ const mainBundle = {
 
 const externalBundle = {
   input: 'src/clappr-dash-shaka-playback.js',
-  external: ['clappr', 'shaka-player'],
+  external: ['@clappr/core', 'shaka-player'],
   output: [
     {
       name: 'DashShakaPlayback',
       file: 'dist/dash-shaka-playback.external.js',
       format: 'umd',
-      globals: { clappr: 'Clappr', 'shaka-player': 'shaka' },
+      globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
       sourcemap: true,
     },
     minimize && {
       name: 'DashShakaPlayback',
       file: 'dist/dash-shaka-playback.external.min.js',
       format: 'umd',
-      globals: { clappr: 'Clappr', 'shaka-player': 'shaka' },
+      globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
       sourcemap: true,
       plugins: [terser()],
     },
