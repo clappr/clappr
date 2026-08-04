@@ -74,11 +74,13 @@ function assertEmbedsHls(source) {
   expect(source.length).toBeGreaterThan(100000)
 }
 
-function assertSourceMap(filename) {
-  const mapName = `${filename}.map`
-  expect(fs.existsSync(path.join(DIST, mapName))).toBe(true)
-  expect(readArtifact(filename)).toContain(`sourceMappingURL=${mapName}`)
+function assertSourceMappingURL(filename) {
+  expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
 }
+
+const EXPECTED_SOURCEMAPS = Object.values(ARTIFACTS)
+  .map(filename => `${filename}.map`)
+  .sort()
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -99,8 +101,18 @@ describe.each([
     assertDoesNotEmbedCore(readArtifact(filename))
   })
 
-  test('publishes a sourcemap', () => {
-    assertSourceMap(filename)
+  test('publishes a sourcemap comment', () => {
+    assertSourceMappingURL(filename)
+  })
+})
+
+describe('dist sourcemap inventory', () => {
+  test('ships exactly the expected .map files', () => {
+    const maps = fs
+      .readdirSync(DIST)
+      .filter(f => f.endsWith('.map'))
+      .sort()
+    expect(maps).toEqual(EXPECTED_SOURCEMAPS)
   })
 })
 
