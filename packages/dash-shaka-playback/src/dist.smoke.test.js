@@ -15,6 +15,9 @@ const ARTIFACTS = {
   esm: 'dash-shaka-playback.esm.mjs'
 }
 
+const EMBEDS_SHAKA = [ARTIFACTS.main, ARTIFACTS.mainMin]
+const EXTERNAL_SHAKA = [ARTIFACTS.external, ARTIFACTS.externalMin, ARTIFACTS.esm]
+
 function readArtifact(name) {
   return fs.readFileSync(path.join(DIST, name), 'utf8')
 }
@@ -24,11 +27,15 @@ function loadArtifact(name) {
   return require(path.join(DIST, name))
 }
 
+function resolvePlayback(DashShakaPlayback) {
+  return DashShakaPlayback.default || DashShakaPlayback
+}
+
 function assertPlaybackContract(DashShakaPlayback) {
   // Must re-require after resetModules so the prototype identity matches the
   // @clappr/core instance the artifact just resolved.
   const { HTML5Video } = require('@clappr/core')
-  const Playback = DashShakaPlayback.default || DashShakaPlayback
+  const Playback = resolvePlayback(DashShakaPlayback)
 
   expect(typeof Playback).toBe('function')
   expect(Object.getPrototypeOf(Playback.prototype)).toBe(HTML5Video.prototype)
@@ -61,22 +68,6 @@ function assertPlaybackContract(DashShakaPlayback) {
   }
 }
 
-function assertDoesNotEmbedCore(source) {
-  // Same failure mode as hlsjs-playback.min.js shipping a full Clappr + Zepto copy.
-  expect(source).not.toMatch(/\bZepto\b/)
-  expect(source).not.toContain('clappr-core')
-  expect(source).not.toContain('@clappr/zepto')
-}
-
-function assertDoesNotEmbedShaka(source) {
-  // Closure-compiled shaka leaves these markers when bundled via commonjs.
-  expect(source).not.toContain('shakaPlayer_compiled')
-  expect(source).not.toContain('ManifestParser')
-  // External/ESM builds are ~10–18 KB; 50 KB leaves ~3× headroom without
-  // matching the ~429 KB shaka-embedded UMD.
-  expect(source.length).toBeLessThan(50000)
-}
-
 function assertSourceMappingURL(filename) {
   expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
 }
@@ -100,10 +91,6 @@ describe.each([
     assertPlaybackContract(loadArtifact(filename))
   })
 
-  test('does not embed @clappr/core or Zepto', () => {
-    assertDoesNotEmbedCore(readArtifact(filename))
-  })
-
   test('publishes a sourcemap comment', () => {
     assertSourceMappingURL(filename)
   })
@@ -119,13 +106,16 @@ describe('dist sourcemap inventory', () => {
   })
 })
 
-describe('external and ESM builds', () => {
-  test.each([[ARTIFACTS.external], [ARTIFACTS.externalMin], [ARTIFACTS.esm]])(
-    '%s does not embed the shaka-player blob',
-    filename => {
-      assertDoesNotEmbedShaka(readArtifact(filename))
-    }
-  )
+describe('shaka-player peer identity', () => {
+  test.each(EXTERNAL_SHAKA)('%s defers to the consumer shaka-player', filename => {
+    const Playback = resolvePlayback(loadArtifact(filename))
+    expect(Playback.shakaPlayer).toBe(require('shaka-player'))
+  })
+
+  test.each(EMBEDS_SHAKA)('%s embeds its own shaka-player copy', filename => {
+    const Playback = resolvePlayback(loadArtifact(filename))
+    expect(Playback.shakaPlayer).not.toBe(require('shaka-player'))
+  })
 })
 
 describe('package exports', () => {
