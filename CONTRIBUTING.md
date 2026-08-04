@@ -34,6 +34,7 @@ Before submitting, make sure CI checks pass locally:
 yarn test
 yarn lint
 yarn format:check
+yarn build:dist && yarn test:smoke
 ```
 
 ## Development setup

@@ -94,7 +94,7 @@ encode this rule once it lands.
 | `dash-shaka-playback` | `.js`, `.min.js`, `.external.js`, `.external.min.js`, `.esm.mjs` |
 | `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js` |
 
-hlsjs/dash smoke tests assert the dist-wide `.map` inventory so missing, unexpected, and
+hlsjs/dash `test:smoke` asserts the dist-wide `.map` inventory so missing, unexpected, and
 stale maps fail CI.
 
 ### Releasing
@@ -171,7 +171,8 @@ Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Reque
 - `yarn build:dist` — Run each package's `release` script (minimized artifacts CI also verifies). Matches `prepublishOnly` for all seven publishable packages
 - `yarn lint` / `yarn lint:fix` — ESLint
 - `yarn format` / `yarn format:check` — Prettier
-- `yarn test` — `lerna run test --no-bail` across packages that define a `test` script
+- `yarn test` — `lerna run test --no-bail` across packages that define a `test` script (unit only)
+- `yarn test:smoke` — dist artifact smoke tests (`hlsjs-playback`, `dash-shaka-playback`, `clappr-zepto`); run after `yarn build:dist` (CI does). Locally: `yarn build:dist && yarn test:smoke`
 - Per package: `lerna run test --scope=@clappr/plugins`, `@clappr/hlsjs-playback`, `dash-shaka-playback`, etc.
 - Single file: `lerna run test --scope=@clappr/core -- path/to/test.test.js`
 - From package root: `jest src/path/to/test.test.js`, `--testNamePattern`, `--watch`, `--coverage`
