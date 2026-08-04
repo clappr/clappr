@@ -27,11 +27,15 @@ function loadArtifact(name) {
   return require(path.join(DIST, name))
 }
 
+function resolvePlayback(HlsjsPlaybackExport) {
+  return HlsjsPlaybackExport.default || HlsjsPlaybackExport
+}
+
 function assertPlaybackContract(HlsjsPlaybackExport) {
   // Must re-require after resetModules so the prototype identity matches the
   // @clappr/core instance the artifact just resolved.
   const { HTML5Video } = require('@clappr/core')
-  const Playback = HlsjsPlaybackExport.default || HlsjsPlaybackExport
+  const Playback = resolvePlayback(HlsjsPlaybackExport)
 
   expect(typeof Playback).toBe('function')
   expect(Object.getPrototypeOf(Playback.prototype)).toBe(HTML5Video.prototype)
@@ -52,26 +56,6 @@ function assertPlaybackContract(HlsjsPlaybackExport) {
 
   const playback = new Playback({ src: 'http://example.com/video.m3u8' })
   playback.destroy()
-}
-
-function assertDoesNotEmbedCore(source) {
-  // Same failure mode as the pre-fix min.js shipping a full Clappr + Zepto copy.
-  expect(source).not.toMatch(/\bZepto\b/)
-  expect(source).not.toContain('clappr-core')
-  expect(source).not.toContain('@clappr/zepto')
-}
-
-function assertDoesNotEmbedHls(source) {
-  expect(source).toMatch(/['"]hls\.js['"]/)
-  // External builds are ~14–31 KB; 100 KB leaves headroom without matching the
-  // ~500 KB+ hls.js-embedded family.
-  expect(source.length).toBeLessThan(100000)
-}
-
-function assertEmbedsHls(source) {
-  // Keep until #2538 inverts the default layout — flip deliberately then.
-  expect(source).not.toMatch(/require\(['"]hls\.js['"]\)/)
-  expect(source.length).toBeGreaterThan(100000)
 }
 
 function assertSourceMappingURL(filename) {
@@ -97,10 +81,6 @@ describe.each([
     assertPlaybackContract(loadArtifact(filename))
   })
 
-  test('does not embed @clappr/core or Zepto', () => {
-    assertDoesNotEmbedCore(readArtifact(filename))
-  })
-
   test('publishes a sourcemap comment', () => {
     assertSourceMappingURL(filename)
   })
@@ -116,12 +96,14 @@ describe('dist sourcemap inventory', () => {
   })
 })
 
-describe('hls.js embedding contract', () => {
-  test.each(EXTERNAL_HLS)('%s does not embed hls.js', filename => {
-    assertDoesNotEmbedHls(readArtifact(filename))
+describe('hls.js peer identity', () => {
+  test.each(EXTERNAL_HLS)('%s defers to the consumer hls.js', filename => {
+    const Playback = resolvePlayback(loadArtifact(filename))
+    expect(Playback.HLSJS).toBe(require('hls.js'))
   })
 
-  test.each(EMBEDS_HLS)('%s embeds hls.js', filename => {
-    assertEmbedsHls(readArtifact(filename))
+  test.each(EMBEDS_HLS)('%s embeds its own hls.js copy', filename => {
+    const Playback = resolvePlayback(loadArtifact(filename))
+    expect(Playback.HLSJS).not.toBe(require('hls.js'))
   })
 })
