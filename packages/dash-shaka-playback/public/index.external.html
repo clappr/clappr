@@ -9,14 +9,15 @@
     <p><a href="index.html">Load bundled shaka version</a></p>
     <script type="text/javascript" charset="utf-8">
         window.onload = function () {
+            var LicenseRequest = shaka.net.NetworkingEngine.RequestType.LICENSE
             var onBeforeLoad = function (shaka_player) {
                 shaka_player.getNetworkingEngine().registerRequestFilter(function (type, request) {
-                    if (type == 2) { // shaka.net.NetworkingEngine.RequestType.LICENSE
+                    if (type === LicenseRequest) {
                         // do something
                     }
                 });
                 shaka_player.getNetworkingEngine().registerResponseFilter(function (type, response) {
-                    if (type == 2) { // shaka.net.NetworkingEngine.RequestType.LICENSE
+                    if (type === LicenseRequest) {
                         // do something
                     }
                 });
@@ -24,9 +25,6 @@
 
             new Clappr.Player({
                 parentId: '#player', autoPlay: true,
-                // LevelSelector@0.2.0 is incompatible with modern @clappr/player
-                // (Class constructor cannot be invoked without new). Re-add when a
-                // compatible build is available — it exercises levels/currentLevel.
                 plugins: [DashShakaPlayback],
                 shakaConfiguration: {
                     preferredAudioLanguage: 'pt-BR',

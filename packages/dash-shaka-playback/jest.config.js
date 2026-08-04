@@ -4,7 +4,8 @@ const ClapprCorePkg = require('@clappr/core/package.json')
 module.exports = {
   ...base,
   transform: {
-    ...base.transform,
+    // Cover the published .esm.mjs artifact as well as source .js
+    '^.+\\.m?js$': base.transform['^.+\\.js$'],
     '^.+\\.html$': '<rootDir>/../clappr-core/src/__mocks__/htmlMock.js'
   },
   // The shaka-embedded UMD builds are Closure-compiled and too large for babel-jest;
@@ -14,6 +15,7 @@ module.exports = {
     '<rootDir>/dist/dash-shaka-playback\\.js$',
     '<rootDir>/dist/dash-shaka-playback\\.min\\.js$'
   ],
+  moduleFileExtensions: ['js', 'mjs', 'json', 'html'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@clappr/core$': '<rootDir>/../clappr-core/src/main.js',

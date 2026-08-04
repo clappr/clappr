@@ -3,10 +3,10 @@
   "version": "3.7.2",
   "description": "clappr dash playback based on shaka player",
   "main": "./dist/dash-shaka-playback.js",
-  "module": "./dist/dash-shaka-playback.esm.js",
+  "module": "./dist/dash-shaka-playback.esm.mjs",
   "exports": {
     ".": {
-      "import": "./dist/dash-shaka-playback.esm.js",
+      "import": "./dist/dash-shaka-playback.esm.mjs",
       "require": "./dist/dash-shaka-playback.js",
       "default": "./dist/dash-shaka-playback.js"
     },
@@ -28,8 +28,8 @@
     "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "lint": "eslint *.js ./src",
     "lint:fix": "yarn lint -- --fix",
-    "pretest": "yarn release",
-    "test": "jest ./src --coverage --silent",
+    "test": "jest ./src --testPathIgnorePatterns=dist.smoke --coverage --silent && yarn release && jest ./src/dist.smoke.test.js --silent",
+    "test:watch": "jest ./src --watch",
     "prepublishOnly": "lerna run release --scope=dash-shaka-playback"
   },
   "files": [
@@ -43,7 +43,7 @@
   "license": "BSD-3-Clause",
   "peerDependencies": {
     "@clappr/core": "*",
-    "shaka-player": "^3 || ^4"
+    "shaka-player": "^3"
   },
   "devDependencies": {
     "@clappr/core": "^0.14.7",
