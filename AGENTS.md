@@ -37,7 +37,6 @@ Shared config locations:
 Conscious exceptions:
 
 - **`clappr-zepto` `.babelrc`** — stays standalone. Babel merges preset arrays and cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
-- **`dash-shaka-playback` `.babelrc`** — extends the base and overrides `modules: "commonjs"` plus `add-module-exports`.
 - **`jest.config.base.js` sibling-source transform** — default for packages that resolve `@clappr/core` / `@clappr/zepto` to source via `moduleNameMapper`: `babelrc: false` / `configFile: false`, presets from `babel.base.json` `env.test` with `modules: 'commonjs'` forced. **`clappr-zepto` and `clappr-telemetry`** override to plain `babel-jest` (no sibling ESM mapping; zepto's standalone `.babelrc` remains for Rollup).
 - **Deferred to later phases** — `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
 
@@ -137,11 +136,11 @@ Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Reque
 ### Build, lint, test
 
 - `yarn build` — Build player and dependencies (dev / contributor path)
-- `yarn build:dist` — Run each package's `release` script (minimized artifacts CI also verifies). For 6 of 7 publishable packages this matches `prepublishOnly`; `dash-shaka-playback` uses `yarn dist` (`lint && build && release`) instead — same webpack output, with package lint already covered by root `yarn lint`
+- `yarn build:dist` — Run each package's `release` script (minimized artifacts CI also verifies). Matches `prepublishOnly` for all seven publishable packages
 - `yarn lint` / `yarn lint:fix` — ESLint
 - `yarn format` / `yarn format:check` — Prettier
-- `yarn test` — Tests for `@clappr/core` (root default)
-- Per package: `lerna run test --scope=@clappr/plugins`, `@clappr/hlsjs-playback`, etc.
+- `yarn test` — `lerna run test --no-bail` across packages that define a `test` script
+- Per package: `lerna run test --scope=@clappr/plugins`, `@clappr/hlsjs-playback`, `dash-shaka-playback`, etc.
 - Single file: `lerna run test --scope=@clappr/core -- path/to/test.test.js`
 - From package root: `jest src/path/to/test.test.js`, `--testNamePattern`, `--watch`, `--coverage`
 

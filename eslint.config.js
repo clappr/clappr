@@ -10,7 +10,6 @@ module.exports = [
       'node_modules/',
       'coverage/',
       '*.min.js',
-      'webpack.config.js',
       'rollup.config.js',
       '# Package-specific ignores',
       'packages/clappr-core/src/base/polyfills.js',
