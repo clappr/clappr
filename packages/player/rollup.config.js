@@ -70,7 +70,7 @@ export default [
       minimize && {
         name: 'Clappr',
         file: 'dist/clappr.plainhtml5.min.js',
-        format: 'iife',
+        format: 'umd',
         sourcemap: true,
         plugins: terser()
       }
@@ -88,7 +88,7 @@ export default [
       },
       minimize && {
         file: 'dist/clappr.min.js',
-        format: 'iife',
+        format: 'umd',
         name: 'Clappr',
         sourcemap: true,
         plugins: terser()
