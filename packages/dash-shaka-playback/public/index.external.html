@@ -1,12 +1,12 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>clappr dash shaka</title>
+    <title>clappr dash shaka (external)</title>
 </head>
 <body>
     <div id="player"></div>
-    <p><a href="index.external.html">Load external (shaka from CDN) version</a></p>
+    <p><a href="index.html">Load bundled shaka version</a></p>
     <script type="text/javascript" charset="utf-8">
         window.onload = function () {
             var onBeforeLoad = function (shaka_player) {
@@ -32,21 +32,15 @@
                     }
                 },
                 shakaOnBeforeLoad: onBeforeLoad,
-                //source: 'http://live.unified-streaming.com/loop/loop.isml/loop.mpd?format=mp4&session_id=25020', //LIVE
-                source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd', //multi audio, sub
-                //source: 'http://dash.edgesuite.net/dash264/TestCases/2c/qualcomm/2/MultiRes.mpd', //VOD multiple qualities
-                //source: 'http://rdmedia.bbc.co.uk/dash/ondemand/elephants_dream/1/client_manifest-all.mpd', //SUB
-                //source: 'http://dash.edgesuite.net/dash264/TestCases/3b/fraunhofer/heaac_stereo_with_video/ElephantsDream/elephants_dream_480p_heaac_stereo_sidx.mpd', //VOD multiple audios
-                //source: 'http://dash.edgesuite.net/dash264/TestCases/4b/qualcomm/2/TearsOfSteel_onDem5secSegSubTitles.mpd', //VOD subtitle
-                //source: 'http://dash.edgesuite.net/akamai/streamroot/050714/Spring_4Ktest.mpd', //4K
-                // for more examples go to: http://dashif.org/reference/players/javascript/v1.5.1/samples/dash-if-reference-player/index.html and https://shaka-player-demo.appspot.com/
+                source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
                 height: 360,
                 width: 640
             })
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="dash-shaka-playback.js"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/shaka-player@3/dist/shaka-player.compiled.js"></script>
+    <script type="text/javascript" charset="utf-8" src="dash-shaka-playback.external.js"> </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/level-selector@0.2.0/dist/level-selector.min.js"></script>
 </body>
 </html>
