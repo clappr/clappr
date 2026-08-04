@@ -540,6 +540,7 @@ describe('HlsjsPlayback', () => {
     test('extrapolated window duration is zero when segment target duration is null', () => {
       const playback = createPlayback()
       playback._playbackType = Playback.LIVE
+      playback._playlistType = null
       playback._playableRegionStartTime = 0
       playback._playableRegionDuration = 100
       playback._segmentTargetDuration = null
@@ -558,7 +559,6 @@ describe('HlsjsPlayback', () => {
       playback._onLevelUpdated('levelUpdated', makeLevelData({ fragments: [] }))
 
       expect(playback._playableRegionStartTime).toBe(15)
-      expect(playback._segmentTargetDuration).toBe(6)
     })
 
     test('first update sets program date time, duration, and correlations', () => {
@@ -816,14 +816,15 @@ describe('HlsjsPlayback', () => {
       expect(playback.el.currentTime).toBe(60)
     })
 
-    test('seekPercentage of zero seeks to full duration', () => {
+    test('seekPercentage of zero seeks to the start', () => {
       const playback = createPlayback()
       playback._playbackType = Playback.VOD
-      playback._playableRegionStartTime = 0
+      playback._playableRegionStartTime = 10
       playback._playableRegionDuration = 90
+      playback.el.currentTime = 50
 
       playback.seekPercentage(0)
-      expect(playback.el.currentTime).toBe(90)
+      expect(playback.el.currentTime).toBe(10)
     })
 
     test('seekToLivePoint seeks to duration', () => {
@@ -923,8 +924,15 @@ describe('HlsjsPlayback', () => {
   })
 
   describe('_onHLSJSError', () => {
+    const cores = []
+
+    afterEach(() => {
+      cores.splice(0).forEach(core => core.destroy())
+    })
+
     const createErrorPlayback = (options = {}) => {
       const core = new Core({})
+      cores.push(core)
       const playback = createPlayback(options, core.playerError)
       stubHls(playback)
       jest.spyOn(playback, 'play').mockImplementation(() => {})

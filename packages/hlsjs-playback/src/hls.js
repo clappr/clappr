@@ -372,8 +372,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   seekPercentage(percentage) {
-    const seekTo = percentage > 0 ? this._duration * (percentage / 100) : this._duration
-    this.seek(seekTo)
+    this.seek(this._duration * (percentage / 100))
   }
 
   seek(time) {
