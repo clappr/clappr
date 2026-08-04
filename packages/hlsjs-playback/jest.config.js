@@ -8,7 +8,7 @@ module.exports = {
     '^.+\\.html$': '<rootDir>/../clappr-core/src/__mocks__/htmlMock.js'
   },
   // The hls.js-embedded UMD builds are too large for babel-jest; they are
-  // already CJS-compatible. ESM stays transformable (.esm.js, not .mjs).
+  // already CJS-compatible.
   transformIgnorePatterns: [
     '/node_modules/',
     '<rootDir>/dist/hlsjs-playback\\.js$',
