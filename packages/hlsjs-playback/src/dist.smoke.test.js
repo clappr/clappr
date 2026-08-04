@@ -46,28 +46,24 @@ function assertPlaybackContract(HlsjsPlaybackExport) {
   jest.spyOn(HLSJS, 'isSupported').mockReturnValue(true)
   jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
 
-  expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(true)
-  expect(Playback.canPlay('http://example.com/video.m3u8?token=1')).toBe(true)
-  expect(Playback.canPlay('http://example.com/video.mpd')).toBe(false)
-
   const playback = new Playback({ src: 'http://example.com/video.m3u8' })
   try {
-    expect(playback).toBeInstanceOf(Playback)
+    expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(true)
+    expect(Playback.canPlay('http://example.com/video.m3u8?token=1')).toBe(true)
+    expect(Playback.canPlay('http://example.com/video.mpd')).toBe(false)
   } finally {
     playback.destroy()
   }
 }
 
 function assertDoesNotEmbedCore(source) {
-  // Same failure mode as the pre-fix hlsjs-playback.min.js shipping a full
-  // Clappr + Zepto copy (#2534).
+  // Same failure mode as the pre-fix min.js shipping a full Clappr + Zepto copy.
   expect(source).not.toMatch(/\bZepto\b/)
   expect(source).not.toContain('clappr-core')
   expect(source).not.toContain('@clappr/zepto')
 }
 
 function assertDoesNotEmbedHls(source) {
-  // External UMD builds must keep the hls.js require/AMD dependency.
   expect(source).toMatch(/['"]hls\.js['"]/)
   // External builds are ~14–31 KB; 100 KB leaves headroom without matching the
   // ~500 KB+ hls.js-embedded family.
@@ -75,8 +71,7 @@ function assertDoesNotEmbedHls(source) {
 }
 
 function assertEmbedsHls(source) {
-  // Positive lock: when the default artifacts stop embedding hls.js (#2538),
-  // this must be updated deliberately — not by a silent layout flip.
+  // Keep until #2538 inverts the default layout — flip deliberately then.
   expect(source).not.toMatch(/require\(['"]hls\.js['"]\)/)
   expect(source.length).toBeGreaterThan(100000)
 }
@@ -112,11 +107,11 @@ describe.each([
 })
 
 describe('hls.js embedding contract', () => {
-  test.each(EXTERNAL_HLS.map(name => [name]))('%s does not embed hls.js', filename => {
+  test.each(EXTERNAL_HLS)('%s does not embed hls.js', filename => {
     assertDoesNotEmbedHls(readArtifact(filename))
   })
 
-  test.each(EMBEDS_HLS.map(name => [name]))('%s embeds hls.js', filename => {
+  test.each(EMBEDS_HLS)('%s embeds hls.js', filename => {
     assertEmbedsHls(readArtifact(filename))
   })
 })
