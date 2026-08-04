@@ -2,6 +2,8 @@ import { Events } from '@clappr/core'
 import PlaybackTimingSampler from './playback_timing_sampler'
 import { EVENT_TYPES } from '../utils/constants'
 
+Events.register('CONTAINER_TELEMETRY_TRACE')
+
 const makePlayback = () => {
   const listeners = {}
   return {
