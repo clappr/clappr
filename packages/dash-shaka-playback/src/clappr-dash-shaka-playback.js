@@ -31,7 +31,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get shakaVersion() {
-    return shaka.player.Player.version
+    return shaka.Player.version
   }
 
   get shakaPlayerInstance() {
