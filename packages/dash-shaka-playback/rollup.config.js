@@ -1,0 +1,79 @@
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import filesize from 'rollup-plugin-filesize'
+import livereload from 'rollup-plugin-livereload'
+import serve from 'rollup-plugin-serve'
+import size from 'rollup-plugin-sizes'
+import { terser } from 'rollup-plugin-terser'
+import visualize from 'rollup-plugin-visualizer'
+import pkg from './package.json'
+
+const dev = !!process.env.DEV
+const reloadEnabled = !!process.env.RELOAD
+const analyzeBundle = !!process.env.ANALYZE_BUNDLE
+const minimize = !!process.env.MINIMIZE
+
+const babelOptions = {
+  exclude: ['node_modules/**', '../../node_modules/**'],
+  babelHelpers: 'bundled',
+}
+
+const plugins = [
+  resolve(),
+  commonjs(),
+  babel(babelOptions),
+  size(),
+  filesize(),
+  dev && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
+  reloadEnabled && livereload({ watch: ['dist', 'public'] }),
+  analyzeBundle && visualize({ open: true }),
+].filter(Boolean)
+
+const mainBundle = {
+  input: 'src/clappr-dash-shaka-playback.js',
+  external: ['clappr'],
+  output: [
+    {
+      name: 'DashShakaPlayback',
+      file: pkg.main,
+      format: 'umd',
+      globals: { clappr: 'Clappr' },
+      sourcemap: true,
+    },
+    minimize && {
+      name: 'DashShakaPlayback',
+      file: 'dist/dash-shaka-playback.min.js',
+      format: 'umd',
+      globals: { clappr: 'Clappr' },
+      sourcemap: true,
+      plugins: [terser()],
+    },
+  ].filter(Boolean),
+  plugins,
+}
+
+const externalBundle = {
+  input: 'src/clappr-dash-shaka-playback.js',
+  external: ['clappr', 'shaka-player'],
+  output: [
+    {
+      name: 'DashShakaPlayback',
+      file: 'dist/dash-shaka-playback.external.js',
+      format: 'umd',
+      globals: { clappr: 'Clappr', 'shaka-player': 'shaka' },
+      sourcemap: true,
+    },
+    minimize && {
+      name: 'DashShakaPlayback',
+      file: 'dist/dash-shaka-playback.external.min.js',
+      format: 'umd',
+      globals: { clappr: 'Clappr', 'shaka-player': 'shaka' },
+      sourcemap: true,
+      plugins: [terser()],
+    },
+  ].filter(Boolean),
+  plugins,
+}
+
+export default [mainBundle, externalBundle]
