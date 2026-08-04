@@ -43,7 +43,7 @@
   "license": "BSD-3-Clause",
   "peerDependencies": {
     "@clappr/core": "*",
-    "shaka-player": "^3"
+    "shaka-player": "^3 || ^4"
   },
   "devDependencies": {
     "@clappr/core": "^0.14.8",
