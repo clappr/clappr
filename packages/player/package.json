@@ -11,6 +11,7 @@
     "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "start": "DEV=true rollup --config --bundleConfigAsCjs --watch",
     "test": "echo 'No tests configured. This project is only for bundling the player components.'",
+    "test:smoke": "jest ./src/dist.smoke.test.js --silent",
     "watch": "rollup --config --bundleConfigAsCjs --watch",
     "prepublishOnly": "lerna run release --scope=@clappr/player"
   },
