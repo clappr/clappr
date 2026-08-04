@@ -70,6 +70,12 @@ function assertDoesNotEmbedShaka(source) {
   expect(source.length).toBeLessThan(50000)
 }
 
+function assertSourceMap(filename) {
+  const mapName = `${filename}.map`
+  expect(fs.existsSync(path.join(DIST, mapName))).toBe(true)
+  expect(readArtifact(filename)).toContain(`sourceMappingURL=${mapName}`)
+}
+
 describe.each([
   ['main UMD', ARTIFACTS.main],
   ['main UMD minified', ARTIFACTS.mainMin],
@@ -83,6 +89,10 @@ describe.each([
 
   test('does not embed @clappr/core or Zepto', () => {
     assertDoesNotEmbedCore(readArtifact(filename))
+  })
+
+  test('publishes a sourcemap', () => {
+    assertSourceMap(filename)
   })
 })
 
