@@ -24,5 +24,14 @@ module.exports = {
     CLAPPR_CORE_VERSION: ClapprCorePkg.version,
     VERSION: ClapprCorePkg.version
   },
-  coveragePathIgnorePatterns: ['/dist/', '/node_modules/']
+  collectCoverageFrom: ['src/hls.js'],
+  coveragePathIgnorePatterns: ['/dist/', '/node_modules/'],
+  coverageThreshold: {
+    global: {
+      statements: 79,
+      branches: 75,
+      functions: 63,
+      lines: 81
+    }
+  }
 }
