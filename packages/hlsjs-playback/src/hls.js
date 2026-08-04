@@ -213,7 +213,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._segmentTargetDuration = null
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
-    this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || DEFAULT_RECOVER_ATTEMPTS
+    this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts ?? DEFAULT_RECOVER_ATTEMPTS
   }
 
   _setup() {
