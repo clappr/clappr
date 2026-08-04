@@ -75,7 +75,7 @@ const mainBundle = {
       exports: 'named',
       name: 'Clappr',
       file: 'dist/clappr-core.min.js',
-      format: 'iife',
+      format: 'umd',
       sourcemap: true,
       plugins: terser()
     }
