@@ -1,6 +1,6 @@
 {
   "name": "@clappr/plugins",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "Main plugins for the Clappr project",
   "main": "./dist/clappr-plugins.js",
   "module": "./dist/clappr-plugins.esm.js",
@@ -39,7 +39,7 @@
     "@clappr/core": "*"
   },
   "devDependencies": {
-    "@clappr/core": "^0.14.7",
+    "@clappr/core": "^0.14.8",
     "@rollup/plugin-replace": "^5.0.2",
     "postcss-url": "^10.1.3",
     "rollup-plugin-named-directory": "^1.0.0",

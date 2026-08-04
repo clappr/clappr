@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/clappr/clappr/compare/dash-shaka-playback%403.7.2...dash-shaka-playback%404.0.0) (2026-08-04)
+
+- feat(dash-shaka-playback)!: add ESM build with shaka-player as a peer dependency ([7cfa67d](https://github.com/clappr/clappr/commit/7cfa67d87b360d1cbb0756400c336cb187a91d45))
+
+### Bug Fixes
+
+- **dash-shaka-playback:** address review on peer, ESM and test hygiene ([2a91878](https://github.com/clappr/clappr/commit/2a91878021e7e5286949a42c6f1d027802c8458f))
+- **dash-shaka-playback:** drop LevelSelector from demos against modern player ([7627b9e](https://github.com/clappr/clappr/commit/7627b9e7d38960924cd2f042c8dd391678b625ef))
+- **dash-shaka-playback:** drop unused player binding in demo pages ([f847d9a](https://github.com/clappr/clappr/commit/f847d9ab888798a3877bfc9555d36d59647532ee))
+- **dash-shaka-playback:** import core from @clappr/core instead of unresolvable clappr ([4e3959c](https://github.com/clappr/clappr/commit/4e3959cf0b9a3e9a19fa98eef70785f873167ac5))
+- **dash-shaka-playback:** read shaka version from shaka.Player ([4e29c16](https://github.com/clappr/clappr/commit/4e29c1609099c526fbccf2b3a8c4f0d8180b0e7a))
+- **dash-shaka-playback:** satisfy eslint for rollup config and smoke test ([2168420](https://github.com/clappr/clappr/commit/216842096e0abb13c1b507badf7d52735d2fc8cc))
+
+### BREAKING CHANGES
+
+- bundler consumers now receive the ESM entry with
+  shaka-player external and must install it. The UMD CDN builds are unchanged.
+
 ## [3.7.2](https://github.com/clappr/clappr/compare/dash-shaka-playback@3.7.1...dash-shaka-playback@3.7.2) (2026-08-01)
 
 ### Bug Fixes

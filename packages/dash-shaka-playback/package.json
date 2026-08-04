@@ -1,6 +1,6 @@
 {
   "name": "dash-shaka-playback",
-  "version": "3.7.2",
+  "version": "4.0.0",
   "description": "clappr dash playback based on shaka player",
   "main": "./dist/dash-shaka-playback.js",
   "module": "./dist/dash-shaka-playback.esm.mjs",
@@ -46,7 +46,7 @@
     "shaka-player": "^3"
   },
   "devDependencies": {
-    "@clappr/core": "^0.14.7",
+    "@clappr/core": "^0.14.8",
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-serve": "^2.0.2",
     "shaka-player": "^3.0.7"

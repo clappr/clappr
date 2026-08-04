@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.8](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.7...%40clappr%2Fclappr-html5-tvs-playback%400.4.8) (2026-08-04)
+
+**Note:** Version bump only for package @clappr/clappr-html5-tvs-playback
+
 ## [0.4.7](https://github.com/clappr/clappr/compare/@clappr/clappr-html5-tvs-playback@0.4.6...@clappr/clappr-html5-tvs-playback@0.4.7) (2026-08-01)
 
 **Note:** Version bump only for package @clappr/clappr-html5-tvs-playback

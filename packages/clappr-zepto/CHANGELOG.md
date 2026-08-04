@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/clappr/clappr/compare/%40clappr%2Fzepto%402.1.2...%40clappr%2Fzepto%402.1.3) (2026-08-04)
+
+**Note:** Version bump only for package @clappr/zepto
+
 ## [2.1.2](https://github.com/clappr/clappr/compare/@clappr/zepto@2.1.1...@clappr/zepto@2.1.2) (2026-08-01)
 
 **Note:** Version bump only for package @clappr/zepto

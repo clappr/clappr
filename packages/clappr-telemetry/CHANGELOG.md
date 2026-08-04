@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.9](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.2.8...%40clappr%2Ftelemetry%400.2.9) (2026-08-04)
+
+### Bug Fixes
+
+- **dash-shaka-playback:** address review on peer, ESM and test hygiene ([2a91878](https://github.com/clappr/clappr/commit/2a91878021e7e5286949a42c6f1d027802c8458f))
+
 ## [0.2.8](https://github.com/clappr/clappr/compare/@clappr/telemetry@0.2.7...@clappr/telemetry@0.2.8) (2026-08-01)
 
 **Note:** Version bump only for package @clappr/telemetry
