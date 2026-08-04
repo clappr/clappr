@@ -11,7 +11,6 @@ A [Clappr](https://github.com/clappr/clappr) playback to play HTTP Live Streamin
   <a href="https://www.jsdelivr.com/package/npm/@clappr/hlsjs-playback"><img alt="jsDelivr hits (npm)" src="https://img.shields.io/jsdelivr/npm/hm/@clappr/hlsjs-playback?color=orange"></a>
 </p>
 
-
 ## Usage
 
 You can use it from JSDelivr:
@@ -22,14 +21,24 @@ or as an npm package:
 
 `yarn add @clappr/hlsjs-playback`
 
+### Which artifact to load
+
+| Scenario                                                              | Artifact                                                  |
+| --------------------------------------------------------------------- | --------------------------------------------------------- |
+| `<script>` / CDN alongside `@clappr/core` (or `@clappr/player`)       | `dist/hlsjs-playback.min.js`                              |
+| Bundler that should resolve `hls.js` itself                           | `dist/hlsjs-playback.external.js` (or `.external.min.js`) |
+| Bundler / ESM entry (embeds `hls.js`, leaves `@clappr/core` external) | `dist/hlsjs-playback.esm.js` (package `module` field)     |
+| Default CommonJS / UMD entry (embeds `hls.js`)                        | `dist/hlsjs-playback.js` (package `main` field)           |
+
+**Migration note (1.10+):** `hlsjs-playback.min.js` no longer ships a private copy of `@clappr/core`. It is a UMD build that expects a global `Clappr` when loaded via `<script>`, the same contract as the non-minified main artifact. Load `@clappr/core` (or `@clappr/player`) first. `hls.js` remains embedded in the main / min / esm family; use the `.external` builds when you want to supply your own `hls.js`.
+
 Then just add `HlsjsPlayback` into the list of plugins of your player instance:
 
 ```javascript
-var player = new Clappr.Player(
-  {
-    source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-    plugins: [HlsjsPlayback],
-  });
+var player = new Clappr.Player({
+  source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+  plugins: [HlsjsPlayback]
+})
 ```
 
 ## Configuration
@@ -37,38 +46,40 @@ var player = new Clappr.Player(
 The options for this playback are shown below:
 
 ```javascript
-var player = new Clappr.Player(
-  {
-    source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-    plugins: [HlsjsPlayback],
-    hlsUseNextLevel: false,
-    hlsMinimumDvrSize: 60,
-    hlsRecoverAttempts: 16,
-    hlsPlayback: {
-      preload: true,
-      customListeners: [],
-    },
-    playback: {
-      extrapolatedWindowNumSegments: 2,
-      triggerFatalErrorOnResourceDenied: false,
-      hlsjsConfig: {
-        // hls.js specific options
-      },
-    },
-  });
+var player = new Clappr.Player({
+  source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+  plugins: [HlsjsPlayback],
+  hlsUseNextLevel: false,
+  hlsMinimumDvrSize: 60,
+  hlsRecoverAttempts: 16,
+  hlsPlayback: {
+    preload: true,
+    customListeners: []
+  },
+  playback: {
+    extrapolatedWindowNumSegments: 2,
+    triggerFatalErrorOnResourceDenied: false,
+    hlsjsConfig: {
+      // hls.js specific options
+    }
+  }
+})
 ```
 
 #### hlsUseNextLevel
+
 > Default value: `false`
 
 The default behavior for the HLS playback is to use [hls.currentLevel](https://github.com/video-dev/hls.js/blob/master/docs/API.md#hlscurrentlevel) to switch current level. To change this behaviour and force HLS playback to use [hls.nextLevel](https://github.com/video-dev/hls.js/blob/master/docs/API.md#hlsnextlevel), add `hlsUseNextLevel: true` to embed parameters.
 
 #### hlsMinimumDvrSize
+
 > Default value: `60 (seconds)`
 
 Option to define the minimum DVR size to active seek on Clappr live mode.
 
 #### extrapolatedWindowNumSegments
+
 > Default value: `2`
 
 Configure the size of the start time extrapolation window measured as a multiple of segments.
@@ -78,17 +89,20 @@ Should be 2 or higher, or 0 to disable. It should only need to be increased abov
 E.g.: If the playlist is cached for 10 seconds and new chunks are added/removed every 5.
 
 #### hlsRecoverAttempts
+
 > Default value: `16`
 
 The `hls.js` have recover approaches for some fatal errors. This option sets the max recovery attempts number for those errors.
 
 #### triggerFatalErrorOnResourceDenied
+
 > Default value: `false`
 
 If this option is set to true, the playback will triggers fatal error event if decrypt key http response code is greater than or equal to 400. This option is used to attempt to reproduce iOS devices behaviour which internally use html5 video playback.
 
 #### hlsPlayback
->  Soon (in a new breaking change version), all options related to this playback that are declared in the scope of the `options` object will have to be declared necessarily within this new scope!
+
+> Soon (in a new breaking change version), all options related to this playback that are declared in the scope of the `options` object will have to be declared necessarily within this new scope!
 
 Groups all options related directly to `HlsjsPlayback` configs.
 
@@ -104,6 +118,7 @@ var player = new Clappr.Player(
 ```
 
 #### `hlsPlayback.preload`
+
 > Default value: `true`
 
 Configures whether the source should be loaded as soon as the `HLS.JS` internal reference is setup or only after the first play.
@@ -128,9 +143,9 @@ var player = new Clappr.Player(
 
 The listener object parameters are:
 
-* `eventName`: A valid event name of `hls.js` [events API](https://github.com/video-dev/hls.js/blob/master/docs/API.md#runtime-events);
-* `callback`: The callback that should be called  when the event listened happen.
-* `once`: Flag to configure if the listener needs to be valid just for one time.
+- `eventName`: A valid event name of `hls.js` [events API](https://github.com/video-dev/hls.js/blob/master/docs/API.md#runtime-events);
+- `callback`: The callback that should be called when the event listened happen.
+- `once`: Flag to configure if the listener needs to be valid just for one time.
 
 #### hlsjsConfig
 
