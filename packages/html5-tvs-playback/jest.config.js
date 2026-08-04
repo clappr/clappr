@@ -15,7 +15,7 @@ module.exports = {
   globals: {
     VERSION: ClapprCorePkg.version
   },
-  collectCoverageFrom: ['src/*.js', 'src/**/*.js'],
+  collectCoverageFrom: ['src/*.js', 'src/**/*.js', '!src/**/dist.smoke.test.js'],
   coverageThreshold: {
     global: {
       branches: 90,
