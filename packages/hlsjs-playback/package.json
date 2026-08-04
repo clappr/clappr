@@ -10,7 +10,7 @@
     "build": "rollup --config --bundleConfigAsCjs",
     "watch": "rollup --config --bundleConfigAsCjs --watch",
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "test": "jest ./src --testPathIgnorePatterns=dist.smoke --coverage --silent && yarn release && jest ./src/dist.smoke.test.js --silent",
     "test:watch": "jest ./src --watch",
     "lint": "eslint *.js ./src",

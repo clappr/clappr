@@ -16,13 +16,15 @@ const output = [
         format: 'umd',
         name: 'ClapprPlugins',
         globals: { '@clappr/core': 'Clappr' },
+        sourcemap: true,
         plugins: terser()
       }
     ]
     : []),
   {
     file: 'dist/clappr-plugins.esm.js',
-    format: 'esm'
+    format: 'esm',
+    sourcemap: true
   }
 ]
 

@@ -33,7 +33,8 @@ const baseConfig = {
       name: 'ClapprPlugins',
       globals: {
         '@clappr/core': 'Clappr'
-      }
+      },
+      sourcemap: true
     }
   ],
   plugins: [
