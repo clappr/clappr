@@ -39,3 +39,6 @@ jobs:
 
       - name: build dist
         run: yarn build:dist
+
+      - name: run dist smoke tests
+        run: yarn test:smoke

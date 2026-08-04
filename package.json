@@ -14,6 +14,7 @@
     "release": "lerna version --include-merged-tags --no-push --yes",
     "prepare": "husky",
     "test": "lerna run test --no-bail",
+    "test:smoke": "lerna run test:smoke --no-bail",
     "build": "lerna run build --scope=@clappr/player --include-dependencies",
     "build:dist": "lerna run release"
   },

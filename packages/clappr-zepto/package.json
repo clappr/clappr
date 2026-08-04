@@ -8,8 +8,9 @@
   "sideEffects": true,
   "scripts": {
     "build": "rollup -c",
-    "pretest": "rollup -c",
-    "test": "jest src/"
+    "test": "jest src/ --testPathIgnorePatterns=dist.smoke",
+    "test:smoke": "jest src/dist.smoke.test.js",
+    "pretest:smoke": "rollup -c"
   },
   "repository": {
     "type": "git",
