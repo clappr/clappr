@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.0.0...dash-shaka-playback%404.1.0) (2026-08-04)
+
+### Features
+
+- **dash-shaka-playback:** accept shaka-player v3 and v4 as peers ([f96d6f4](https://github.com/clappr/clappr/commit/f96d6f4843770543521c43b1144280fa0e8f989e))
+
 # [4.0.0](https://github.com/clappr/clappr/compare/dash-shaka-playback%403.7.2...dash-shaka-playback%404.0.0) (2026-08-04)
 
 - feat(dash-shaka-playback)!: add ESM build with shaka-player as a peer dependency ([7cfa67d](https://github.com/clappr/clappr/commit/7cfa67d87b360d1cbb0756400c336cb187a91d45))
