@@ -12,7 +12,7 @@ const ARTIFACTS = {
   mainMin: 'dash-shaka-playback.min.js',
   external: 'dash-shaka-playback.external.js',
   externalMin: 'dash-shaka-playback.external.min.js',
-  esm: 'dash-shaka-playback.esm.js'
+  esm: 'dash-shaka-playback.esm.mjs'
 }
 
 function readArtifact(name) {
@@ -43,17 +43,22 @@ function assertPlaybackContract(DashShakaPlayback) {
   expect(typeof shaka.Player.version).toBe('string')
   expect(shaka.Player.version.length).toBeGreaterThan(0)
 
-  const playback = new Playback({ src: 'http://example.com/video.mpd' })
-  expect(playback.shakaVersion).toBe(shaka.Player.version)
-  expect(Playback.Events.SHAKA_READY).toBe('shaka:ready')
-
   jest.spyOn(shaka.polyfill, 'installAll').mockImplementation(() => {})
   jest.spyOn(shaka.Player, 'isBrowserSupported').mockReturnValue(true)
+  jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
 
-  expect(Playback.canPlay('http://example.com/video.mpd')).toBe(true)
-  expect(Playback.canPlay('http://example.com/video.mpd?token=1')).toBe(true)
-  expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(false)
-  expect(Playback.canPlay('http://example.com/video', 'application/dash+xml')).toBe(true)
+  const playback = new Playback({ src: 'http://example.com/video.mpd' })
+  try {
+    expect(playback.shakaVersion).toBe(shaka.Player.version)
+    expect(Playback.Events.SHAKA_READY).toBe('shaka:ready')
+
+    expect(Playback.canPlay('http://example.com/video.mpd')).toBe(true)
+    expect(Playback.canPlay('http://example.com/video.mpd?token=1')).toBe(true)
+    expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(false)
+    expect(Playback.canPlay('http://example.com/video', 'application/dash+xml')).toBe(true)
+  } finally {
+    playback.destroy()
+  }
 }
 
 function assertDoesNotEmbedCore(source) {
@@ -67,6 +72,8 @@ function assertDoesNotEmbedShaka(source) {
   // Closure-compiled shaka leaves these markers when bundled via commonjs.
   expect(source).not.toContain('shakaPlayer_compiled')
   expect(source).not.toContain('ManifestParser')
+  // External/ESM builds are ~10–18 KB; 50 KB leaves ~3× headroom without
+  // matching the ~429 KB shaka-embedded UMD.
   expect(source.length).toBeLessThan(50000)
 }
 
@@ -75,6 +82,10 @@ function assertSourceMap(filename) {
   expect(fs.existsSync(path.join(DIST, mapName))).toBe(true)
   expect(readArtifact(filename)).toContain(`sourceMappingURL=${mapName}`)
 }
+
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 
 describe.each([
   ['main UMD', ARTIFACTS.main],
@@ -97,19 +108,18 @@ describe.each([
 })
 
 describe('external and ESM builds', () => {
-  test.each([
-    [ARTIFACTS.external],
-    [ARTIFACTS.externalMin],
-    [ARTIFACTS.esm]
-  ])('%s does not embed the shaka-player blob', (filename) => {
-    assertDoesNotEmbedShaka(readArtifact(filename))
-  })
+  test.each([[ARTIFACTS.external], [ARTIFACTS.externalMin], [ARTIFACTS.esm]])(
+    '%s does not embed the shaka-player blob',
+    filename => {
+      assertDoesNotEmbedShaka(readArtifact(filename))
+    }
+  )
 })
 
 describe('package exports', () => {
   test('resolves the deep dist path used by bundler consumers', () => {
-    expect(
-      require.resolve('dash-shaka-playback/dist/dash-shaka-playback.external.js')
-    ).toBe(path.join(DIST, ARTIFACTS.external))
+    expect(require.resolve('dash-shaka-playback/dist/dash-shaka-playback.external.js')).toBe(
+      path.join(DIST, ARTIFACTS.external)
+    )
   })
 })
