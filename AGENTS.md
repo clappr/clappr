@@ -65,6 +65,38 @@ Packages that do **not** publish to npm:
 | `packages/clappr-zepto/` | Internal only (`private: true`); bundled into `@clappr/core` |
 | `apps/clappr.io/` | Docs site (`clappr-docs`, already `private: true`) |
 
+### Sourcemaps
+
+An artifact in `dist/` gets a sourcemap **iff** it is referenced by `main` / `module` /
+`exports`, **or** documented as a consumer entry point, **or** minified.
+
+Rationale:
+
+- **Package entry points** (`main` / `module` / `exports`) and **documented consumer
+  entry points** (e.g. `.external.js` builds that bundlers import by path) are what
+  consumers load and debug — maps belong with them.
+- **Minified** output is hard to read without a map; keep maps even when the unminified
+  sibling is demo-only and has none (e.g. `clappr.plainhtml5.min.js`).
+- Everything else (demo-only unminified bundles, leftover files in `dist/`) ships no map.
+  `release` scripts wipe `dist/` first so stale maps cannot reach npm.
+
+`clappr-zepto` is `private: true` and outside this policy. Issue
+[#2542](https://github.com/clappr/clappr/issues/2542) (shared Rollup preset) should
+encode this rule once it lands.
+
+| Package | Maps shipped |
+|---------|--------------|
+| `@clappr/core` | `clappr-core.js`, `.min.js`, `.esm.js` |
+| `@clappr/plugins` | `clappr-plugins.js`, `.min.js`, `.esm.js` |
+| `@clappr/telemetry` | `clappr-telemetry.js`, `.min.js`, `.esm.js` |
+| `@clappr/player` | `clappr.js`, `.min.js`, `clappr.plainhtml5.min.js` — not `clappr.plainhtml5.js` (demo-only) |
+| `@clappr/hlsjs-playback` | `.js`, `.min.js`, `.external.js`, `.external.min.js`, `.esm.js` |
+| `dash-shaka-playback` | `.js`, `.min.js`, `.external.js`, `.external.min.js`, `.esm.mjs` |
+| `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js` |
+
+hlsjs/dash smoke tests assert the dist-wide `.map` inventory so missing, unexpected, and
+stale maps fail CI.
+
 ### Releasing
 
 `Release` runs **only by hand** — Actions → **Release** → Run workflow. Merging to main publishes nothing.

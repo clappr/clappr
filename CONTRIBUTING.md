@@ -67,6 +67,7 @@ Commit messages are validated by commitlint via Husky.
 - Clean up timers, listeners, observers, connections, media elements, and Blob URLs.
 - Do not commit secrets, tokens, or `.env` files.
 - Ask maintainers before adding new dependencies — bundle size and maintenance matter in a media player.
+- Sourcemaps: an artifact in `dist/` gets a map iff it is a package/`exports` entry, a documented consumer entry point, or minified — see [AGENTS.md Publishing → Sourcemaps](./AGENTS.md#sourcemaps).
 
 ## Documentation and plugins
 
