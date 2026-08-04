@@ -33,7 +33,7 @@
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
     "build": "rollup --config --bundleConfigAsCjs",
-    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "prepublishOnly": "lerna run release --scope=@clappr/clappr-html5-tvs-playback",
     "start": "DEV=true rollup --config --bundleConfigAsCjs --watch",
     "watch": "rollup --config --bundleConfigAsCjs --watch",

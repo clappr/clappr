@@ -22,7 +22,8 @@ const umdOutput = [
     file: 'dist/clappr-telemetry.js',
     format: 'umd',
     name: 'ClapprTelemetry',
-    globals: umdGlobals
+    globals: umdGlobals,
+    sourcemap: true
   },
   ...(minimize
     ? [
@@ -31,6 +32,7 @@ const umdOutput = [
         format: 'umd',
         name: 'ClapprTelemetry',
         globals: umdGlobals,
+        sourcemap: true,
         plugins: [terser()]
       }
     ]
@@ -39,7 +41,8 @@ const umdOutput = [
 
 const esmOutput = {
   file: 'dist/clappr-telemetry.esm.js',
-  format: 'esm'
+  format: 'esm',
+  sourcemap: true
 }
 
 const plugins = [

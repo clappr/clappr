@@ -6,7 +6,7 @@
   "module": "./dist/clappr-plugins.esm.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true rollup -c",
-    "release": "MINIMIZE=true rollup -c",
+    "release": "rm -rf dist && MINIMIZE=true rollup -c",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
     "test": "jest /src --coverage --silent",

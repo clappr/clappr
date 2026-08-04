@@ -6,7 +6,7 @@
   "module": "./dist/clappr-telemetry.esm.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "build": "rollup --config --bundleConfigAsCjs",
     "watch": "rollup --config --watch --bundleConfigAsCjs",
     "test": "jest src/ --coverage --silent",

@@ -89,7 +89,8 @@ const esmBundle = {
     exports: 'named',
     name: 'Clappr',
     file: pkg.module,
-    format: 'esm'
+    format: 'esm',
+    sourcemap: true
   },
   plugins
 }

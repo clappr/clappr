@@ -65,8 +65,7 @@ export default [
       {
         name: 'Clappr',
         file: 'dist/clappr.plainhtml5.js',
-        format: 'umd',
-        sourcemap: true
+        format: 'umd'
       },
       minimize && {
         name: 'Clappr',

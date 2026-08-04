@@ -35,12 +35,14 @@ const mainBundle = {
       file: pkg.main,
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
+      sourcemap: true,
     },
     minimize && {
       name: 'HTML5TVsPlayback',
       file: 'dist/clappr-html5-tvs-playback.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
+      sourcemap: true,
       plugins: terser(),
     },
   ].filter(Boolean),
@@ -55,6 +57,7 @@ const esmBundle = {
     file: pkg.module,
     format: 'esm',
     globals: { '@clappr/core': 'Clappr' },
+    sourcemap: true,
   },
   plugins: [babel(babelOptionsESM), ...plugins.filter(Boolean)],
 }

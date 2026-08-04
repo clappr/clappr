@@ -8,7 +8,7 @@
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
-    "release": "MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
     "start": "DEV=true rollup --config --bundleConfigAsCjs --watch",
     "test": "echo 'No tests configured. This project is only for bundling the player components.'",
     "watch": "rollup --config --bundleConfigAsCjs --watch",
