@@ -24,7 +24,10 @@
 
             var player = new Clappr.Player({
                 parentId: '#player', autoPlay: true,
-                plugins: [DashShakaPlayback, LevelSelector],
+                // LevelSelector@0.2.0 is incompatible with modern @clappr/player
+                // (Class constructor cannot be invoked without new). Re-add when a
+                // compatible build is available — it exercises levels/currentLevel.
+                plugins: [DashShakaPlayback],
                 shakaConfiguration: {
                     preferredAudioLanguage: 'pt-BR',
                     streaming: {
@@ -41,6 +44,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/shaka-player@3/dist/shaka-player.compiled.js"></script>
     <script type="text/javascript" charset="utf-8" src="dash-shaka-playback.external.js"> </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/level-selector@0.2.0/dist/level-selector.min.js"></script>
 </body>
 </html>
