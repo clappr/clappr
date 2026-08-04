@@ -10,7 +10,7 @@ module.exports = {
     ...base.transform,
     '^.+\\.html$': '<rootDir>/src/__mocks__/htmlMock.js'
   },
-  // Dist UMD/min bundles are already CJS-compatible and too large for babel-jest.
+  // Dist UMD/min builds are too large for babel-jest; they are already CJS-compatible.
   transformIgnorePatterns: [
     '/node_modules/',
     '<rootDir>/dist/clappr-core\\.js$',

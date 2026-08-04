@@ -26,15 +26,11 @@ function loadArtifact(name) {
   return require(path.join(DIST, name))
 }
 
-function resolvePlugin(mod) {
-  return mod.default || mod
-}
-
 function assertTelemetryContract(mod) {
   // Must re-require after resetModules so the prototype identity matches the
   // @clappr/core instance the artifact just resolved.
   const { ContainerPlugin } = require('@clappr/core')
-  const TelemetryPlugin = resolvePlugin(mod)
+  const TelemetryPlugin = mod.default || mod
 
   expect(typeof TelemetryPlugin).toBe('function')
   expect(Object.getPrototypeOf(TelemetryPlugin.prototype)).toBe(ContainerPlugin.prototype)

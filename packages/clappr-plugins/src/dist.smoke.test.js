@@ -46,8 +46,6 @@ function assertPluginsContract(dist) {
     UICorePlugin.prototype
   ]
 
-  expect(dist.Plugins).toBeTruthy()
-
   for (const [, Plugin] of Object.entries(dist.Plugins)) {
     expect(typeof Plugin).toBe('function')
     const matchesBase = bases.some(base =>
