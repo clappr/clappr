@@ -3,6 +3,17 @@
   "version": "3.7.2",
   "description": "clappr dash playback based on shaka player",
   "main": "./dist/dash-shaka-playback.js",
+  "module": "./dist/dash-shaka-playback.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/dash-shaka-playback.esm.js",
+      "require": "./dist/dash-shaka-playback.js",
+      "default": "./dist/dash-shaka-playback.js"
+    },
+    "./dist/*": "./dist/*",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/clappr/clappr.git",
@@ -29,7 +40,8 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "peerDependencies": {
-    "@clappr/core": "*"
+    "@clappr/core": "*",
+    "shaka-player": "^3 || ^4"
   },
   "devDependencies": {
     "@clappr/core": "^0.14.7",
