@@ -4,9 +4,11 @@
  */
 const fs = require('fs')
 const path = require('path')
+const semver = require('semver')
 const { expectNoNativeClasses } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
+const PKG = require('../package.json')
 
 const ARTIFACTS = {
   main: 'clappr-html5-tvs-playback.js',
@@ -18,6 +20,13 @@ const EXPECTED_SOURCEMAPS = Object.values(ARTIFACTS)
   .map(filename => `${filename}.map`)
   .sort()
 
+// First @babel/runtime 7.x that ships each helper path the ESM may import.
+// Keep in sync when Babel starts externalizing newer helpers.
+const HELPER_SINCE = {
+  callSuper: '7.23.9',
+  superPropGet: '7.25.0'
+}
+
 function readArtifact(name) {
   return fs.readFileSync(path.join(DIST, name), 'utf8')
 }
@@ -25,6 +34,12 @@ function readArtifact(name) {
 function loadArtifact(name) {
   jest.resetModules()
   return require(path.join(DIST, name))
+}
+
+function runtimeHelpersIn(code) {
+  return [
+    ...new Set([...code.matchAll(/@babel\/runtime\/helpers\/([A-Za-z0-9_]+)/g)].map(m => m[1]))
+  ].sort()
 }
 
 function assertPlaybackContract(mod) {
@@ -71,3 +86,36 @@ describe('dist sourcemap inventory', () => {
     expect(maps).toEqual(EXPECTED_SOURCEMAPS)
   })
 })
+
+describe('ESM @babel/runtime contract', () => {
+  const helpers = runtimeHelpersIn(readArtifact(ARTIFACTS.esm))
+  const range = PKG.dependencies['@babel/runtime']
+  const requiredFloor = helpers
+    .map(name => HELPER_SINCE[name])
+    .filter(Boolean)
+    .sort(semver.compare)
+    .at(-1)
+
+  test('UMD builds do not import @babel/runtime', () => {
+    expect(readArtifact(ARTIFACTS.main)).not.toMatch(/@babel\/runtime/)
+    expect(readArtifact(ARTIFACTS.mainMin)).not.toMatch(/@babel\/runtime/)
+  })
+
+  test('imports helpers that resolve in the workspace install', () => {
+    expect(helpers.length).toBeGreaterThan(0)
+    for (const name of helpers) {
+      expect(() => require.resolve(`@babel/runtime/helpers/${name}`)).not.toThrow()
+    }
+  })
+
+  test('published range covers the floor implied by imported helpers', () => {
+    expect(requiredFloor).toBeDefined()
+    const floor = semver.parse(requiredFloor)
+    const belowFloor = `${floor.major}.${floor.minor - 1}.0`
+    expect(floor.minor).toBeGreaterThan(0)
+    expect(semver.satisfies(belowFloor, range)).toBe(false)
+    expect(semver.satisfies(requiredFloor, range)).toBe(true)
+    expect(semver.satisfies('8.0.0', range)).toBe(true)
+  })
+})
+
