@@ -5,6 +5,10 @@
 import { Events, HTML5Video, Log, Playback, PlayerError, Utils } from '@clappr/core'
 import HLSJS from 'hls.js'
 
+if (!HLSJS) {
+  throw new Error('@clappr/hlsjs-playback requires hls.js (^1) to be loaded before it')
+}
+
 const { now, listContainsIgnoreCase } = Utils
 const AUTO = -1
 const DEFAULT_RECOVER_ATTEMPTS = 16

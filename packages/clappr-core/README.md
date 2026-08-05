@@ -252,6 +252,7 @@ Example of external plugins config:
 
 ```html
 // Playback
+<script src='https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js'></script>
 
 // Container

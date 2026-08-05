@@ -7714,10 +7714,10 @@ history@^4.9.0:
     tiny-warning "^1.0.0"
     value-equal "^1.0.1"
 
-hls.js@1.6.16:
-  version "1.6.16"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.6.16.tgz#e2e7e79b68357cb3f8aa82dec0a36c9c2701f5c0"
-  integrity sha512-VSIRpLfRwlAAdGL4wiTucx2ScRipo0ed1FBatWkyt832jC4CReKstga6yIhYVwGu9LOBjuX9wzmRMeQdBJtzEA==
+hls.js@^1, hls.js@~1.6.17:
+  version "1.6.17"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.6.17.tgz#0c96c04e620a52970b036361af17b81e3e0be1f3"
+  integrity sha512-NUplVGVuc1hSPwdB/9/cbRkUmLrYi75/hqiXKdA+l300pJNxDu96R7jRb2imDzWJqIUF4I5ThmAdp9GvOCXsuQ==
 
 hoist-non-react-statics@^3.1.0:
   version "3.3.2"

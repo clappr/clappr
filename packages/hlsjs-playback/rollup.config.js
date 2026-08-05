@@ -1,5 +1,3 @@
-import commonjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import babel from '@rollup/plugin-babel'
 import filesize from 'rollup-plugin-filesize'
@@ -27,8 +25,6 @@ const replacePluginOptions = {
 
 const plugins = [
   replace(replacePluginOptions),
-  resolve(),
-  commonjs(),
   babel(babelOptionsPlugins),
   size(),
   filesize(),
@@ -37,26 +33,25 @@ const plugins = [
   analyzeBundle && visualize({ open: true })
 ].filter(Boolean)
 
-const mainBundle = {
-  external: ['@clappr/core'],
+const bundle = {
+  external: ['@clappr/core', 'hls.js'],
   input: 'src/hls.js',
   output: [
     {
       name: 'HlsjsPlayback',
       file: pkg.main,
       format: 'umd',
-      globals: { '@clappr/core': 'Clappr' },
+      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
       sourcemap: true
     },
     minimize && {
       name: 'HlsjsPlayback',
       file: 'dist/hlsjs-playback.min.js',
       format: 'umd',
-      globals: { '@clappr/core': 'Clappr' },
+      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
       sourcemap: true,
       plugins: [terser()]
     },
-    // ESM embeds hls.js: player aliases dist/hlsjs-playback.esm.js (dash-shaka puts ESM on externalBundle).
     {
       name: 'HlsjsPlayback',
       file: pkg.module,
@@ -67,27 +62,4 @@ const mainBundle = {
   plugins
 }
 
-const externalBundle = {
-  external: ['@clappr/core', 'hls.js'],
-  input: 'src/hls.js',
-  output: [
-    {
-      name: 'HlsjsPlayback',
-      file: 'dist/hlsjs-playback.external.js',
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-      sourcemap: true
-    },
-    minimize && {
-      name: 'HlsjsPlayback',
-      file: 'dist/hlsjs-playback.external.min.js',
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-      sourcemap: true,
-      plugins: [terser()]
-    }
-  ].filter(Boolean),
-  plugins
-}
-
-export default [mainBundle, externalBundle]
+export default bundle
