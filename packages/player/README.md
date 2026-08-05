@@ -1,6 +1,6 @@
 <p align=center>
   <a href="https://github.com/clappr/clappr/actions/workflows/ci.yml"><img src="https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://www.npmjs.com/package/@clappr/player"><img src="https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/player/package.json&query=$.version&label=version&color=blue" alt="version"></a>
+  <a href="https://www.npmjs.com/package/@clappr/player"><img src="https://img.shields.io/npm/v/@clappr/player.svg?color=cb3837" alt="npm version"></a>
   <a href="https://github.com/clappr/clappr/blob/main/LICENSE"><img src="https://img.shields.io/github/license/clappr/clappr" alt="License"></a>
   <a href="https://bundlephobia.com/package/@clappr/player"><img src="https://img.shields.io/bundlephobia/min/@clappr/player" alt="minified size"></a>
   <a href="https://www.jsdelivr.com/package/npm/@clappr/player"><img src="https://img.shields.io/jsdelivr/npm/hm/@clappr/player?color=orange" alt="jsDelivr monthly downloads"></a>

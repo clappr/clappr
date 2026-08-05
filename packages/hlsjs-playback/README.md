@@ -3,7 +3,7 @@
 A [Clappr](https://github.com/clappr/clappr) playback to play HTTP Live Streaming (HLS) based on the [hls.js](https://github.com/video-dev/hls.js).
 
 [![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/hlsjs-playback/package.json&query=$.version&label=version&color=blue)](https://www.npmjs.com/package/@clappr/hlsjs-playback)
+[![npm version](https://img.shields.io/npm/v/@clappr/hlsjs-playback.svg?color=cb3837)](https://www.npmjs.com/package/@clappr/hlsjs-playback)
 [![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
 [![minified size](https://img.shields.io/bundlephobia/min/@clappr/hlsjs-playback)](https://bundlephobia.com/package/@clappr/hlsjs-playback)
 [![jsDelivr monthly downloads](https://img.shields.io/jsdelivr/npm/hm/@clappr/hlsjs-playback?color=orange)](https://www.jsdelivr.com/package/npm/@clappr/hlsjs-playback)
