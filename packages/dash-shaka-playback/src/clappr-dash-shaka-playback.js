@@ -1,6 +1,10 @@
 import { HTML5Video, Log, Events, PlayerError, Utils } from '@clappr/core'
 import shaka from 'shaka-player'
 
+if (!shaka) {
+  throw new Error('dash-shaka-playback requires shaka-player to be loaded before it')
+}
+
 const SEND_STATS_INTERVAL_MS = 30 * 1e3
 const DEFAULT_LEVEL_AUTO = -1
 const { now } = Utils

@@ -4,6 +4,14 @@
  */
 const fs = require('fs')
 const path = require('path')
+const vm = require('vm')
+const { TextEncoder, TextDecoder } = require('util')
+
+// jest-environment-jsdom omits these; must run before the require below —
+// jsdom's whatwg-url throws on load without TextEncoder/TextDecoder.
+global.TextEncoder = global.TextEncoder || TextEncoder
+global.TextDecoder = global.TextDecoder || TextDecoder
+const { JSDOM } = require('jsdom')
 const { expectNoNativeClasses } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
@@ -11,13 +19,10 @@ const DIST = path.join(__dirname, '..', 'dist')
 const ARTIFACTS = {
   main: 'dash-shaka-playback.js',
   mainMin: 'dash-shaka-playback.min.js',
-  external: 'dash-shaka-playback.external.js',
-  externalMin: 'dash-shaka-playback.external.min.js',
   esm: 'dash-shaka-playback.esm.mjs'
 }
 
-const EMBEDS_SHAKA = [ARTIFACTS.main, ARTIFACTS.mainMin]
-const EXTERNAL_SHAKA = [ARTIFACTS.external, ARTIFACTS.externalMin, ARTIFACTS.esm]
+const UMD_ARTIFACTS = [ARTIFACTS.main, ARTIFACTS.mainMin]
 
 function readArtifact(name) {
   return fs.readFileSync(path.join(DIST, name), 'utf8')
@@ -30,6 +35,21 @@ function loadArtifact(name) {
 
 function resolvePlayback(DashShakaPlayback) {
   return DashShakaPlayback.default || DashShakaPlayback
+}
+
+function loadUmdInSandbox(filename, { shaka } = {}) {
+  const code = readArtifact(filename)
+  const dom = new JSDOM('<!doctype html><html><body></body></html>', {
+    url: 'http://localhost/',
+    pretendToBeVisual: true,
+    runScripts: 'outside-only'
+  })
+  const sandbox = dom.getInternalVMContext()
+  sandbox.Clappr = require('@clappr/core')
+  if (shaka !== undefined) sandbox.shaka = shaka
+
+  vm.runInContext(code, sandbox, { filename: path.join(DIST, filename) })
+  return sandbox
 }
 
 function assertPlaybackContract(DashShakaPlayback) {
@@ -84,8 +104,6 @@ afterEach(() => {
 describe.each([
   ['main UMD', ARTIFACTS.main],
   ['main UMD minified', ARTIFACTS.mainMin],
-  ['external UMD', ARTIFACTS.external],
-  ['external UMD minified', ARTIFACTS.externalMin],
   ['ESM', ARTIFACTS.esm]
 ])('%s (%s)', (_label, filename) => {
   test('exports a DashShakaPlayback class that extends HTML5Video and exposes shaka', () => {
@@ -112,21 +130,30 @@ describe('dist sourcemap inventory', () => {
 })
 
 describe('shaka-player peer identity', () => {
-  test.each(EXTERNAL_SHAKA)('%s defers to the consumer shaka-player', filename => {
+  test.each(Object.values(ARTIFACTS))('%s defers to the consumer shaka-player', filename => {
     const Playback = resolvePlayback(loadArtifact(filename))
     expect(Playback.shakaPlayer).toBe(require('shaka-player'))
   })
+})
 
-  test.each(EMBEDS_SHAKA)('%s embeds its own shaka-player copy', filename => {
-    const Playback = resolvePlayback(loadArtifact(filename))
-    expect(Playback.shakaPlayer).not.toBe(require('shaka-player'))
+describe('UMD global.shaka branch', () => {
+  test.each(UMD_ARTIFACTS)('%s resolves shaka from window.shaka', filename => {
+    const shaka = require('shaka-player')
+    const sandbox = loadUmdInSandbox(filename, { shaka })
+    expect(sandbox.DashShakaPlayback.shakaPlayer).toBe(shaka)
+  })
+
+  test.each(UMD_ARTIFACTS)('%s throws a clear error when window.shaka is missing', filename => {
+    expect(() => loadUmdInSandbox(filename)).toThrow(
+      'dash-shaka-playback requires shaka-player to be loaded before it'
+    )
   })
 })
 
 describe('package exports', () => {
   test('resolves the deep dist path used by bundler consumers', () => {
-    expect(require.resolve('dash-shaka-playback/dist/dash-shaka-playback.external.js')).toBe(
-      path.join(DIST, ARTIFACTS.external)
+    expect(require.resolve('dash-shaka-playback/dist/dash-shaka-playback.min.js')).toBe(
+      path.join(DIST, ARTIFACTS.mainMin)
     )
   })
 })

@@ -9,13 +9,7 @@ module.exports = {
     '^.+\\.m?js$': base.transform['^.+\\.js$'],
     '^.+\\.html$': '<rootDir>/../clappr-core/src/__mocks__/htmlMock.js'
   },
-  // The shaka-embedded UMD builds are Closure-compiled and too large for babel-jest;
-  // they are already CJS-compatible. Transform the ESM artifact so Jest can load it.
-  transformIgnorePatterns: [
-    '/node_modules/',
-    '<rootDir>/dist/dash-shaka-playback\\.js$',
-    '<rootDir>/dist/dash-shaka-playback\\.min\\.js$'
-  ],
+  transformIgnorePatterns: ['/node_modules/'],
   moduleFileExtensions: ['js', 'mjs', 'json', 'html'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',

@@ -75,16 +75,15 @@ An artifact in `dist/` gets a sourcemap **iff** it is referenced by `main` / `mo
 Rationale:
 
 - **Package entry points** (`main` / `module` / `exports`) and **documented consumer
-  entry points** (e.g. `.external.js` builds that bundlers import by path) are what
-  consumers load and debug — maps belong with them.
+  entry points** (e.g. deep `./dist/*` paths exposed via package `exports` that bundlers
+  import by path) are what consumers load and debug — maps belong with them.
 - **Minified** output is hard to read without a map; keep maps even when the unminified
   sibling is demo-only and has none (e.g. `clappr.plainhtml5.min.js`).
 - Everything else (demo-only unminified bundles, leftover files in `dist/`) ships no map.
   `release` scripts wipe `dist/` first so stale maps cannot reach npm.
 
-`clappr-zepto` is `private: true` and outside this policy. Issue
-[#2542](https://github.com/clappr/clappr/issues/2542) (shared Rollup preset) should
-encode this rule once it lands.
+`clappr-zepto` is `private: true` and outside this policy. The sourcemap inventory is
+enforced by each package's `test:smoke` (see [#2542](https://github.com/clappr/clappr/issues/2542)).
 
 | Package | Maps shipped |
 |---------|--------------|
@@ -93,11 +92,16 @@ encode this rule once it lands.
 | `@clappr/telemetry` | `clappr-telemetry.js`, `.min.js`, `.esm.js` |
 | `@clappr/player` | `clappr.js`, `.min.js`, `clappr.plainhtml5.min.js` — not `clappr.plainhtml5.js` (demo-only) |
 | `@clappr/hlsjs-playback` | `.js`, `.min.js`, `.esm.js` |
-| `dash-shaka-playback` | `.js`, `.min.js`, `.external.js`, `.external.min.js`, `.esm.mjs` |
+| `dash-shaka-playback` | `.js`, `.min.js`, `.esm.mjs` |
 | `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js` |
 
 hlsjs/dash `test:smoke` asserts the dist-wide `.map` inventory so missing, unexpected, and
 stale maps fail CI.
+
+**Never tag the archived `clappr/dash-shaka-playback` repo again.** jsDelivr
+`gh/clappr/dash-shaka-playback@latest` resolves to that archive's tags (today **2.3.6**)
+and still serves tens of millions of hits/month. A new tag would migrate that traffic
+onto an external-first artifact with no consumer deploy.
 
 ### Releasing
 

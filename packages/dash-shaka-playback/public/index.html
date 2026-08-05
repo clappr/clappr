@@ -6,7 +6,6 @@
 </head>
 <body>
     <div id="player"></div>
-    <p><a href="index.external.html">Load external (shaka from CDN) version</a></p>
     <script type="text/javascript" charset="utf-8">
         window.onload = function () {
             var LicenseRequest = DashShakaPlayback.shakaPlayer.net.NetworkingEngine.RequestType.LICENSE
@@ -50,6 +49,7 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/shaka-player@4/dist/shaka-player.compiled.js"></script>
     <script type="text/javascript" charset="utf-8" src="dash-shaka-playback.js"> </script>
 </body>
 </html>
