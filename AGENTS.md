@@ -99,9 +99,9 @@ hlsjs/dash `test:smoke` asserts the dist-wide `.map` inventory so missing, unexp
 stale maps fail CI.
 
 **Never tag the archived `clappr/dash-shaka-playback` repo again.** jsDelivr
-`gh/clappr/dash-shaka-playback@latest` resolves to that archive's tags (today **2.3.6**)
-and still serves tens of millions of hits/month. A new tag would migrate that traffic
-onto an external-first artifact with no consumer deploy.
+`gh/clappr/dash-shaka-playback@latest` resolves to that archive's tags (**2.3.6** as of
+2026-08-05) and still serves tens of millions of hits/month. A new tag would migrate
+that traffic onto an external-first artifact with no consumer deploy.
 
 ### Releasing
 
