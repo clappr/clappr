@@ -19,7 +19,7 @@
     "build:dist": "lerna run release"
   },
   "engines": {
-    "node": ">=24.11.0"
+    "node": ">=24"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
