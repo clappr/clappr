@@ -38,6 +38,7 @@
     "jest": "^30.4.1",
     "jest-environment-jsdom": "^30.4.1",
     "jest-mock-console": "^2.0.0",
+    "jsdom": "^26.1.0",
     "lerna": "^10.0.0",
     "postcss": "^8.4.29",
     "prettier": "^3.6.2",
