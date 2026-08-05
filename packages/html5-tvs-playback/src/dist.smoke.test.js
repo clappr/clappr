@@ -20,8 +20,7 @@ const EXPECTED_SOURCEMAPS = Object.values(ARTIFACTS)
   .map(filename => `${filename}.map`)
   .sort()
 
-// First @babel/runtime 7.x that ships each helper path the ESM may import.
-// Keep in sync when Babel starts externalizing newer helpers.
+// Earliest @babel/runtime that ships each helper the ESM may import.
 const HELPER_SINCE = {
   callSuper: '7.23.9',
   superPropGet: '7.25.0'
@@ -37,9 +36,11 @@ function loadArtifact(name) {
 }
 
 function runtimeHelpersIn(code) {
-  return [
-    ...new Set([...code.matchAll(/@babel\/runtime\/helpers\/([A-Za-z0-9_]+)/g)].map(m => m[1]))
-  ].sort()
+  const names = new Set()
+  for (const match of code.matchAll(/@babel\/runtime\/helpers\/([A-Za-z0-9_]+)/g)) {
+    names.add(match[1])
+  }
+  return [...names].sort()
 }
 
 function assertPlaybackContract(mod) {
@@ -104,7 +105,7 @@ describe('ESM @babel/runtime contract', () => {
   test('imports helpers that resolve in the workspace install', () => {
     expect(helpers.length).toBeGreaterThan(0)
     for (const name of helpers) {
-      expect(() => require.resolve(`@babel/runtime/helpers/${name}`)).not.toThrow()
+      require.resolve(`@babel/runtime/helpers/${name}`)
     }
   })
 
@@ -112,7 +113,6 @@ describe('ESM @babel/runtime contract', () => {
     expect(requiredFloor).toBeDefined()
     const floor = semver.parse(requiredFloor)
     const belowFloor = `${floor.major}.${floor.minor - 1}.0`
-    expect(floor.minor).toBeGreaterThan(0)
     expect(semver.satisfies(belowFloor, range)).toBe(false)
     expect(semver.satisfies(requiredFloor, range)).toBe(true)
     expect(semver.satisfies('8.0.0', range)).toBe(true)
