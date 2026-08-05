@@ -39,7 +39,6 @@
   },
   "homepage": "https://github.com/clappr/clappr-core",
   "devDependencies": {
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.27.1",
     "@clappr/zepto": "^2.1.4",
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-json": "^6.0.0",
