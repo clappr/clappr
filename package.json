@@ -19,15 +19,15 @@
     "build:dist": "lerna run release"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=24.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.17",
-    "@babel/preset-env": "^7.22.15",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^8.49.0",
-    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-babel": "^7.1.0",
     "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-terser": "^1.0.0",
