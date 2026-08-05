@@ -5,6 +5,12 @@
 const fs = require('fs')
 const path = require('path')
 const vm = require('vm')
+const { TextEncoder, TextDecoder } = require('util')
+
+// jest-environment-jsdom does not define these; jsdom's whatwg-url needs them.
+global.TextEncoder = global.TextEncoder || TextEncoder
+global.TextDecoder = global.TextDecoder || TextDecoder
+const { JSDOM } = require('jsdom')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -33,111 +39,20 @@ function namedExportKeys(mod) {
     .sort()
 }
 
-function createBrowserSandbox() {
-  const element = () => ({
-    style: {},
-    classList: {
-      add() {},
-      remove() {},
-      contains() {
-        return false
-      }
-    },
-    setAttribute() {},
-    getAttribute() {
-      return null
-    },
-    removeAttribute() {},
-    appendChild(child) {
-      return child
-    },
-    removeChild(child) {
-      return child
-    },
-    insertBefore(child) {
-      return child
-    },
-    addEventListener() {},
-    removeEventListener() {},
-    getBoundingClientRect: () => ({ top: 0, left: 0, width: 0, height: 0 }),
-    children: [],
-    childNodes: [],
-    parentNode: null,
-    ownerDocument: null
-  })
-
-  const document = {
-    documentElement: element(),
-    head: element(),
-    body: element(),
-    createElement: () => element(),
-    createElementNS: () => element(),
-    createTextNode: text => ({ nodeValue: text }),
-    createDocumentFragment: () => element(),
-    querySelector: () => null,
-    querySelectorAll: () => [],
-    getElementById: () => null,
-    getElementsByTagName: () => [],
-    addEventListener() {},
-    removeEventListener() {},
-    defaultView: null
-  }
-  document.documentElement.ownerDocument = document
-  document.head.ownerDocument = document
-  document.body.ownerDocument = document
-
-  const sandbox = {
-    console,
-    setTimeout,
-    clearTimeout,
-    setInterval,
-    clearInterval,
-    requestAnimationFrame: cb => setTimeout(cb, 0),
-    cancelAnimationFrame: clearTimeout,
-    getComputedStyle: () => new Proxy({}, { get: () => '' }),
-    matchMedia: () => ({
-      matches: false,
-      addListener() {},
-      removeListener() {},
-      addEventListener() {},
-      removeEventListener() {}
-    }),
-    performance: { now: () => Date.now() },
-    navigator: { userAgent: 'Jest', platform: 'node', language: 'en' },
-    location: {
-      href: 'http://localhost/',
-      protocol: 'http:',
-      hostname: 'localhost',
-      pathname: '/'
-    },
-    document,
-    HTMLElement: function HTMLElement() {},
-    HTMLMediaElement: function HTMLMediaElement() {},
-    HTMLVideoElement: function HTMLVideoElement() {},
-    Node: function Node() {},
-    Element: function Element() {},
-    Event: function Event() {},
-    CustomEvent: function CustomEvent() {},
-    MutationObserver: function MutationObserver() {
-      this.observe = () => {}
-      this.disconnect = () => {}
-    },
-    addEventListener() {},
-    removeEventListener() {}
-  }
-
-  sandbox.window = sandbox
-  sandbox.self = sandbox
-  sandbox.globalThis = sandbox
-  document.defaultView = sandbox
-  return sandbox
-}
-
 function loadUmdInSandbox(filename, { amd = false } = {}) {
   const code = readArtifact(filename)
-  const sandbox = createBrowserSandbox()
-  let amdExports
+  const dom = new JSDOM('<!doctype html><html><body></body></html>', {
+    url: 'http://localhost/',
+    pretendToBeVisual: true,
+    runScripts: 'outside-only'
+  })
+  const sandbox = dom.getInternalVMContext()
+  delete sandbox.module
+  delete sandbox.exports
+  delete sandbox.require
+  delete sandbox.define
 
+  let amdExports
   if (amd) {
     sandbox.define = (depsOrFactory, maybeFactory) => {
       if (typeof depsOrFactory === 'function') {
@@ -157,7 +72,7 @@ function loadUmdInSandbox(filename, { amd = false } = {}) {
     sandbox.define.amd = {}
   }
 
-  vm.runInNewContext(code, sandbox, { filename: path.join(DIST, filename) })
+  vm.runInContext(code, sandbox, { filename: path.join(DIST, filename) })
   return { sandbox, amdExports }
 }
 
