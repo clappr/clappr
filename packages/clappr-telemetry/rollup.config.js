@@ -3,8 +3,7 @@ const commonjs = require('@rollup/plugin-commonjs')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const replace = require('@rollup/plugin-replace')
 const terser = require('@rollup/plugin-terser')
-const analyze = require('rollup-plugin-analyzer')
-const filesize = require('rollup-plugin-filesize')
+const { visualizer } = require('rollup-plugin-visualizer')
 const serve = require('rollup-plugin-serve')
 const livereload = require('rollup-plugin-livereload')
 
@@ -16,6 +15,11 @@ const minimize = !!process.env.MINIMIZE
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 
 const umdGlobals = { '@clappr/core': 'Clappr' }
+const visualizePluginOptions = {
+  open: false,
+  filename: 'dist/bundle-stats.html',
+  gzipSize: true
+}
 
 const umdOutput = [
   {
@@ -23,7 +27,8 @@ const umdOutput = [
     format: 'umd',
     name: 'ClapprTelemetry',
     globals: umdGlobals,
-    sourcemap: true
+    sourcemap: true,
+    plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
   },
   ...(minimize
     ? [
@@ -57,8 +62,6 @@ const plugins = [
     exclude: ['node_modules/**', '../../node_modules/**'],
     babelHelpers: 'bundled'
   }),
-  ...(analyzeBundle ? [analyze()] : []),
-  filesize(),
   ...(isDev ? [
     serve({
       open: false,

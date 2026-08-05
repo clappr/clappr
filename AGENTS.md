@@ -39,7 +39,9 @@ Conscious exceptions:
 
 - **`clappr-zepto` `.babelrc`** — stays standalone. Babel merges preset arrays and cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
 - **`jest.config.base.js` sibling-source transform** — default for packages that resolve `@clappr/core` / `@clappr/zepto` to source via `moduleNameMapper`: `babelrc: false` / `configFile: false`, presets from `babel.base.json` `env.test` with `modules: 'commonjs'` forced. **`clappr-zepto` and `clappr-telemetry`** override to plain `babel-jest` (no sibling ESM mapping; zepto's standalone `.babelrc` remains for Rollup).
-- **Deferred to later phases** — `@rollup/plugin-replace`, `rollup-plugin-filesize`, `rollup-plugin-serve` (major divergence).
+- **Deferred to later phases** — `@rollup/plugin-replace`, `rollup-plugin-serve` (major divergence).
+- **`rollup-plugin-analyzer`** — single-use in `clappr-plugins` (`bundle-check`); declared in that package, not the root.
+- **Bundle analysis** — `bundle-check` / `ANALYZE_BUNDLE=true` runs `rollup-plugin-visualizer` on the product UMD output → `dist/bundle-stats.html`. Do not reintroduce `rollup-plugin-filesize` or `rollup-plugin-sizes`.
 - **Browserslist vs Babel targets** — putting the JS floor in `babel.base.json` `targets` and returning `browserslist` only to `html5-tvs-playback` for CSS was evaluated and rejected: clearer separation, but two sources of truth for browser targets.
 
 The Jest family (`jest`, `babel-jest`, `jest-environment-jsdom`, `jest-mock-console`) is fully unified at the root; no package declares a Jest dependency of its own. Test imports use the full path to the module file (`../base/events/events`), matching `src/` — there is no directory-named resolution in the Jest configs.

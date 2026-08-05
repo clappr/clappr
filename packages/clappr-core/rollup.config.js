@@ -8,8 +8,6 @@ import html from 'rollup-plugin-html'
 import postcss from 'rollup-plugin-postcss'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
-import filesize from 'rollup-plugin-filesize'
-import size from 'rollup-plugin-sizes'
 const { visualizer } = require('rollup-plugin-visualizer')
 import terser from '@rollup/plugin-terser'
 import pkg from './package.json'
@@ -43,7 +41,11 @@ const babelPluginOptions = {
 }
 const servePluginOptions = { contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }
 const livereloadPluginOptions = { watch: ['dist', 'public'] }
-const visualizePluginOptions = { open: true, filename: './public/stats.html' }
+const visualizePluginOptions = {
+  open: false,
+  filename: 'dist/bundle-stats.html',
+  gzipSize: true
+}
 
 const plugins = [
   jsonReader(),
@@ -54,11 +56,8 @@ const plugins = [
   babel(babelPluginOptions),
   html(),
   postcss(postcssOptions),
-  size(),
-  filesize(),
   dev && serve(servePluginOptions),
-  dev && livereload(livereloadPluginOptions),
-  analyzeBundle && visualizer(visualizePluginOptions)
+  dev && livereload(livereloadPluginOptions)
 ]
 
 const mainBundle = {
@@ -69,7 +68,8 @@ const mainBundle = {
       name: 'Clappr',
       file: pkg.main,
       format: 'umd',
-      sourcemap: true
+      sourcemap: true,
+      plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
     },
     minimize && {
       exports: 'named',
