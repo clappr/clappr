@@ -3,6 +3,7 @@ const ClapprCorePkg = require('@clappr/core/package.json')
 
 module.exports = {
   ...base,
+  testPathIgnorePatterns: ['/node_modules/', 'dist\\.smoke\\.test\\.js$'],
   transform: {
     // Cover the published .esm.mjs artifact as well as source .js
     '^.+\\.m?js$': base.transform['^.+\\.js$'],

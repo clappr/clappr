@@ -46,7 +46,7 @@ function assertPluginsContract(dist) {
     UICorePlugin.prototype
   ]
 
-  for (const [, Plugin] of Object.entries(dist.Plugins)) {
+  for (const Plugin of Object.values(dist.Plugins)) {
     expect(typeof Plugin).toBe('function')
     const matchesBase = bases.some(base =>
       prototypeChainContains(Object.getPrototypeOf(Plugin.prototype), base)
