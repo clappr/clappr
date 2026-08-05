@@ -118,6 +118,8 @@ describe.each([
   })
 })
 
+// Expects `release` / MINIMIZE=true (CI: yarn build:dist). Plain `yarn build`
+// omits .min.js and fails this inventory — that is not a product bug.
 describe('dist inventory', () => {
   test('ships exactly the expected artifacts', () => {
     const artifacts = fs
