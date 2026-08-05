@@ -17,6 +17,15 @@ Install via npm or yarn:
 yarn add @clappr/player
 ```
 
+## Breaking changes (playback peers)
+
+Recent majors stopped embedding their streaming libraries — you must provide the peer:
+
+| Package | Major | Change |
+| ------- | ----- | ------ |
+| [`@clappr/hlsjs-playback`](packages/hlsjs-playback/README.md) | 3.0.0 | `hls.js` no longer bundled |
+| [`dash-shaka-playback`](packages/dash-shaka-playback/README.md) | 5.0.0 | `shaka-player` no longer bundled |
+
 ## Project Structure
 
 This repository uses a monorepo layout:

@@ -50,6 +50,6 @@
     "@clappr/core": "^0.16.0",
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-serve": "^2.0.2",
-    "shaka-player": "^3.0.7"
+    "shaka-player": "^4"
   }
 }

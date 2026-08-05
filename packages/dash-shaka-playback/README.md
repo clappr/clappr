@@ -1,25 +1,27 @@
-[![npm version](https://badge.fury.io/js/dash-shaka-playback.svg)](https://badge.fury.io/js/dash-shaka-playback)
-[![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
-
 # dash-shaka-playback
 
 A [clappr](https://github.com/clappr/clappr) playback to play dash based on the amazing [shaka-player](https://github.com/google/shaka-player).
 
-> CDN JSDELIVR: https://cdn.jsdelivr.net/gh/clappr/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js
->
-> CDNJS: https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.5/dash-shaka-playback.js
->
-> NPM: https://www.npmjs.com/package/dash-shaka-playback/
+[![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/dash-shaka-playback/package.json&query=$.version&label=version&color=blue)](https://www.npmjs.com/package/dash-shaka-playback)
+[![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
+[![minified size](https://img.shields.io/bundlephobia/min/dash-shaka-playback)](https://bundlephobia.com/package/dash-shaka-playback)
+[![jsDelivr monthly downloads](https://img.shields.io/jsdelivr/npm/hm/dash-shaka-playback?color=orange)](https://www.jsdelivr.com/package/npm/dash-shaka-playback)
 
-## Changelog
+> **Breaking change in 5.0.0 —** `shaka-player` is no longer bundled. Every artifact now expects
+> you to provide it. See the migration note below.
 
-* supports closed caption (subtitles)
+## Usage
 
-# Demo
+You can use it from JSDelivr:
 
-[![dash shaka playback screenshot](https://raw.githubusercontent.com/clappr/dash-shaka-playback/master/public/screen-shot-dash-clappr.png)](https://jsfiddle.net/m8ndduLo/69/)
+```html
+<script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@4/dist/shaka-player.compiled.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dash-shaka-playback@5/dist/dash-shaka-playback.min.js"></script>
+```
 
-# Installation
+or as an npm package:
 
 ```bash
 yarn add dash-shaka-playback shaka-player@^4
@@ -28,63 +30,45 @@ npm install dash-shaka-playback shaka-player@^4
 # Shaka 3 also works: shaka-player@^3
 ```
 
-## Peer dependency
+### Which artifact to load
 
-`shaka-player` (`^3 || ^4`) is a **required peer dependency**. npm 7+ / yarn will install it for every consumer of this package — including those who only load the UMD build that already embeds Shaka (`dash-shaka-playback.js` / `.min.js`).
+| Scenario | Artifact |
+|---|---|
+| `<script>` / CDN, after `@clappr/player` (or `@clappr/core`) and `shaka-player` | `dist/dash-shaka-playback.min.js` |
+| Bundler, CommonJS / UMD entry | `dist/dash-shaka-playback.js` (package `main`) |
+| Bundler, ESM entry | `dist/dash-shaka-playback.esm.mjs` (package `module`) |
 
-That is intentional: the package `exports` map routes `import` to the ESM entry (`dash-shaka-playback.esm.mjs`), which keeps `shaka-player` external. A single peer declaration covers bundler and ESM consumers without maintaining a separate optional peer path. CDN / `<script>` users who never install from npm are unaffected.
+**Migration note (5.0+):** Every artifact now expects `shaka-player` from the page or bundler. If you loaded `dash-shaka-playback.min.js` with a single script tag, add `shaka-player` before it. If you aliased the deep path to avoid the bundled copy, remove that entry from your bundler's `resolve.alias` (webpack) or equivalent (Vite `resolve.alias`, Rollup `alias`) — the default entry is external now:
 
-The `.external` / `.esm` builds expect the peer (Shaka 3 or 4) to be provided by the page or bundler. The default UMD build still embeds Shaka 3 for drop-in script tags. Shaka 5+ is not supported.
+```diff
+- 'dash-shaka-playback': 'dash-shaka-playback/dist/dash-shaka-playback.external.js',
+```
+
+Then just add `DashShakaPlayback` into the list of plugins of your player instance:
 
 ```javascript
 import Clappr from '@clappr/core'
 import DashShakaPlayback from 'dash-shaka-playback'
-// shaka-player is resolved via the peer dependency; no side-effect import needed
 
 const player = new Clappr.Player({
   source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
   plugins: [DashShakaPlayback],
+  shakaConfiguration: {
+    preferredAudioLanguage: 'pt-BR',
+    streaming: { rebufferingGoal: 15 }
+  },
+  shakaOnBeforeLoad: function (shaka_player) {
+    // shaka_player.getNetworkingEngine().registerRequestFilter() ...
+  },
   parentId: '#player'
 })
 ```
 
-Deep imports of specific artifacts (for example to avoid the embedded shaka blob) remain supported:
+`shaka-player` (`^3 || ^4`) is a **required peer dependency**. Shaka 5+ is not supported.
 
-```javascript
-import DashShakaPlayback from 'dash-shaka-playback/dist/dash-shaka-playback.external.js'
-```
+# Demo
 
-# Usage
-
-```html
-<html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js"></script>
-  </head>
-
-  <body>
-    <div id="player"></div>
-    <script>
-      var player = new Clappr.Player(
-        {
-          source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
-          plugins: [DashShakaPlayback],
-          shakaConfiguration: {
-            preferredAudioLanguage: 'pt-BR',
-            streaming: {
-              rebufferingGoal: 15
-            }
-          },
-          shakaOnBeforeLoad: function(shaka_player) {
-            // shaka_player.getNetworkingEngine().registerRequestFilter() ...
-          },
-          parentId: '#player'
-        });
-    </script>
-  </body>
-</html>
-```
+[![dash shaka playback screenshot](https://raw.githubusercontent.com/clappr/dash-shaka-playback/master/public/screen-shot-dash-clappr.png)](https://jsfiddle.net/m8ndduLo/69/)
 
 # DRM
 
@@ -114,7 +98,7 @@ Build the published artifacts (UMD, minified UMD, and ESM):
 
 `yarn release`
 
-By default, Shaka player is bundled with the main UMD plugin. Lightweight builds without shaka embedded — `dash-shaka-playback.external.js` / `.external.min.js` and `dash-shaka-playback.esm.mjs` — expect `shaka-player` to be provided by the page or bundler.
+All artifacts keep `shaka-player` external — provide it from the page or bundler.
 
 # "extra" features
 

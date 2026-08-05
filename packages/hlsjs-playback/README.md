@@ -2,14 +2,11 @@
 
 A [Clappr](https://github.com/clappr/clappr) playback to play HTTP Live Streaming (HLS) based on the [hls.js](https://github.com/video-dev/hls.js).
 
-<p>
-  <a href="https://www.npmjs.com/package/@clappr/hlsjs-playback"><img src="https://badge.fury.io/js/%40clappr%2Fhlsjs-playback.svg"></a>
-  <a href="https://bundlephobia.com/result?p=@clappr/hlsjs-playback@latest"><img src="https://img.shields.io/bundlephobia/min/@clappr/hlsjs-playback"></a>
-  <a href="https://travis-ci.org/clappr/hlsjs-playback"><img src="https://travis-ci.org/clappr/hlsjs-playback.svg?branch=master"></a>
-  <a href="https://coveralls.io/github/clappr/hlsjs-playback?branch=master"><img src="https://coveralls.io/repos/github/clappr/hlsjs-playback/badge.svg?branch=master"></a>
-  <a href="https://github.com/clappr/hlsjs-playback/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
-  <a href="https://www.jsdelivr.com/package/npm/@clappr/hlsjs-playback"><img alt="jsDelivr hits (npm)" src="https://img.shields.io/jsdelivr/npm/hm/@clappr/hlsjs-playback?color=orange"></a>
-</p>
+[![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/hlsjs-playback/package.json&query=$.version&label=version&color=blue)](https://www.npmjs.com/package/@clappr/hlsjs-playback)
+[![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
+[![minified size](https://img.shields.io/bundlephobia/min/@clappr/hlsjs-playback)](https://bundlephobia.com/package/@clappr/hlsjs-playback)
+[![jsDelivr monthly downloads](https://img.shields.io/jsdelivr/npm/hm/@clappr/hlsjs-playback?color=orange)](https://www.jsdelivr.com/package/npm/@clappr/hlsjs-playback)
 
 > **Breaking change in 3.0.0 —** `hls.js` is no longer bundled. Every artifact now expects
 > you to provide it. See the migration note below.

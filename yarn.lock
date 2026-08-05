@@ -6403,11 +6403,6 @@ electron-to-chromium@^1.5.393:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.399.tgz#d4522e98338d65ca4fea49a3c9220474c7c028a7"
   integrity sha512-lEcqhErbHjXRvd41rnWLpzbyU/IXfIYo7QwaFWmxGeLiLyY2TBCdHnWY88vB+p3ubnihRypDm66panXl7TylLA==
 
-eme-encryption-scheme-polyfill@^2.1.1:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/eme-encryption-scheme-polyfill/-/eme-encryption-scheme-polyfill-2.1.5.tgz#86338bdd3b13f04ba02fa36758501c7c6c122efe"
-  integrity sha512-z9BKXV4TCYjmar0wiZLObZ0J8HE13VIg7Zq/iyPWdbEfROtxVXEJalknWKtBR5XNezzy15/zWS964TGbcAWlPg==
-
 emittery@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.13.1.tgz#c04b8c3457490e0847ae51fced3af52d338e3dad"
@@ -12862,12 +12857,10 @@ setprototypeof@1.2.0:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shaka-player@^3.0.7:
-  version "3.3.19"
-  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-3.3.19.tgz#ab94898517cb72b7505e009e462e13b827206252"
-  integrity sha512-tZowO6D2nlKTYQadiAZ5LcjhJSW5/OO8UVkEax3llgDTusFkjoV1CQCXYVks80pDLAwTWC6kwY5JDobWwC9mJw==
-  dependencies:
-    eme-encryption-scheme-polyfill "^2.1.1"
+shaka-player@^4:
+  version "4.16.43"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-4.16.43.tgz#2b6f4d2e56533a5112ed268073c20c6954c38d0e"
+  integrity sha512-Xogdlm4NrdgPXHddL3T1zOTH3Qglq9ZWuxEBipMjxELX1U4edWdRWVysCEslZUgco4R/tWDAVWIPKx0OYJcSsw==
 
 shallow-clone@^3.0.0:
   version "3.0.1"

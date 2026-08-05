@@ -1,6 +1,4 @@
 import babel from '@rollup/plugin-babel'
-import commonjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
 import filesize from 'rollup-plugin-filesize'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
@@ -20,8 +18,6 @@ const babelOptions = {
 }
 
 const plugins = [
-  resolve(),
-  commonjs(),
   babel(babelOptions),
   size(),
   filesize(),
@@ -30,43 +26,20 @@ const plugins = [
   analyzeBundle && visualize({ open: true })
 ].filter(Boolean)
 
-const mainBundle = {
-  input: 'src/clappr-dash-shaka-playback.js',
-  external: ['@clappr/core'],
-  output: [
-    {
-      name: 'DashShakaPlayback',
-      file: pkg.main,
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr' },
-      sourcemap: true
-    },
-    minimize && {
-      name: 'DashShakaPlayback',
-      file: 'dist/dash-shaka-playback.min.js',
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr' },
-      sourcemap: true,
-      plugins: [terser()]
-    }
-  ].filter(Boolean),
-  plugins
-}
-
-const externalBundle = {
+const bundle = {
   input: 'src/clappr-dash-shaka-playback.js',
   external: ['@clappr/core', 'shaka-player'],
   output: [
     {
       name: 'DashShakaPlayback',
-      file: 'dist/dash-shaka-playback.external.js',
+      file: pkg.main,
       format: 'umd',
       globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
       sourcemap: true
     },
     minimize && {
       name: 'DashShakaPlayback',
-      file: 'dist/dash-shaka-playback.external.min.js',
+      file: 'dist/dash-shaka-playback.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
       sourcemap: true,
@@ -81,4 +54,4 @@ const externalBundle = {
   plugins
 }
 
-export default [mainBundle, externalBundle]
+export default bundle
