@@ -7,7 +7,8 @@ const path = require('path')
 const vm = require('vm')
 const { TextEncoder, TextDecoder } = require('util')
 
-// jest-environment-jsdom does not define these; jsdom's whatwg-url needs them.
+// jest-environment-jsdom omits these; must run before the require below —
+// jsdom's whatwg-url throws on load without TextEncoder/TextDecoder.
 global.TextEncoder = global.TextEncoder || TextEncoder
 global.TextDecoder = global.TextDecoder || TextDecoder
 const { JSDOM } = require('jsdom')
@@ -54,10 +55,6 @@ function loadUmdInSandbox(filename, { amd = false } = {}) {
     runScripts: 'outside-only'
   })
   const sandbox = dom.getInternalVMContext()
-  delete sandbox.module
-  delete sandbox.exports
-  delete sandbox.require
-  delete sandbox.define
 
   let amdExports
   if (amd) {
