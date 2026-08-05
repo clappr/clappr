@@ -32,7 +32,7 @@ new Clappr.Player({
 
 ## How can I handle fatal errors in the player?
 
-Player fatal errors can be handled using the [`onError` callback option](/guides/events).
+Player fatal errors can be handled using the [`onError` callback option](./guides/events.md).
 
 ## How can I use Clappr with React?
 
@@ -63,11 +63,11 @@ Clappr.Log.setLevel(Clappr.Log.LEVEL_DEBUG) // or Clappr.Log.setLevel(0)
 
 Format         |HLS|MP4|MP3|WEBM| DASH | RTMP | FLV |
 ---------------|---|---|---|----|------|------|-----|
-Microsoft Edge | ✅ | ✅ | ✅ | ✅ | [🔌](/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Mozilla Firefox| ✅ | ✅ | ✅ | ✅ | [🔌](/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Google Chrome  | ✅ | ✅ | ✅ | ✅ | [🔌](/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Android        | ✅ | ✅ | ✅ | ❌ | [🔌](/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Safari         | ✅ | ✅ | ✅ | ❌ | [🔌](/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Microsoft Edge | ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Mozilla Firefox| ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Google Chrome  | ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Android        | ✅ | ✅ | ✅ | ❌ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Safari         | ✅ | ✅ | ✅ | ❌ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
 iPhone         | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌
 iPad           | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌
 

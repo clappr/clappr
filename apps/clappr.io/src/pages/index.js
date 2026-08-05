@@ -16,7 +16,7 @@ function HomepageHeader() {
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle"><Translate>An extensible media player for web applications</Translate></p>
         <div className={styles.buttons}>
-          <Link className="button button--secondary" to="/docs/intro">
+          <Link className="button button--secondary" to="/docs/getting_started">
             <Translate>Get Started</Translate>
           </Link>
           <Link className="button button--info" href="http://clappr.io/demo">

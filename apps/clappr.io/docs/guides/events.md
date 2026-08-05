@@ -6,7 +6,7 @@ All available events can be checked in the [Events section in Clappr's API docum
 
 ## Mapped Events
 
-When instantiating the Player, [Clappr's configuration](../getting-started/configuration) allows the customizing of callback functions based on mapped events through the use of an `events` option.
+When instantiating the Player, [Clappr's configuration](../getting_started.md#configuration) allows the customizing of callback functions based on mapped events through the use of an `events` option.
 
 | Option | Event | Description |
 | ------ | ----- | ----------- |

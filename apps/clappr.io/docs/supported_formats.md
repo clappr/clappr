@@ -2,13 +2,13 @@
 
 Format         |HLS|MP4|MP3|WEBM| DASH | RTMP | FLV |
 ---------------|---|---|---|----|------|------|-----|
-Microsoft Edge | ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Mozilla Firefox| ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Google Chrome  | ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
-Safari         | ✅ | ✅ | ✅ | ❌ | [🔌](https://github.com/clappr/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Microsoft Edge | ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Mozilla Firefox| ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Google Chrome  | ✅ | ✅ | ✅ | ✅ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Safari         | ✅ | ✅ | ✅ | ❌ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
 iPhone         | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌
 iPad           | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌
-Android        | ✅ | ✅ | ✅ | ❌ | [🔌](https://github.com/clappr/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
+Android        | ✅ | ✅ | ✅ | ❌ | [🔌](https://github.com/clappr/clappr/tree/main/packages/dash-shaka-playback) | [🔌](https://github.com/clappr/clappr-rtmp-plugin) | [🔌](https://github.com/andrefilimono/clappr-flvjs-playback)
 
 :::info
 
