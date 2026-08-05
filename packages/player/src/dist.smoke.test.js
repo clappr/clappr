@@ -4,6 +4,7 @@
  */
 const fs = require('fs')
 const path = require('path')
+const vm = require('vm')
 
 const DIST = path.join(__dirname, '..', 'dist')
 const pkg = require('../package.json')
@@ -17,13 +18,18 @@ const ARTIFACTS = {
 
 const FULL_PLAYER = [ARTIFACTS.main, ARTIFACTS.mainMin]
 const PLAINHTML5 = [ARTIFACTS.plainhtml5, ARTIFACTS.plainhtml5Min]
+const UMD_ARTIFACTS = Object.values(ARTIFACTS)
 
-// plainhtml5.js is demo-only and ships no map by policy.
+// Demo-only unminified entry: no map per AGENTS.md sourcemap policy.
 const EXPECTED_SOURCEMAPS = [
   'clappr.js.map',
   'clappr.min.js.map',
   'clappr.plainhtml5.min.js.map'
 ].sort()
+
+function readArtifact(name) {
+  return fs.readFileSync(path.join(DIST, name), 'utf8')
+}
 
 function loadArtifact(name) {
   jest.resetModules()
@@ -32,6 +38,134 @@ function loadArtifact(name) {
 
 function resolveClappr(mod) {
   return mod.default || mod
+}
+
+function createBrowserSandbox() {
+  const element = () => ({
+    style: {},
+    classList: {
+      add() {},
+      remove() {},
+      contains() {
+        return false
+      }
+    },
+    setAttribute() {},
+    getAttribute() {
+      return null
+    },
+    removeAttribute() {},
+    appendChild(child) {
+      return child
+    },
+    removeChild(child) {
+      return child
+    },
+    insertBefore(child) {
+      return child
+    },
+    addEventListener() {},
+    removeEventListener() {},
+    getBoundingClientRect: () => ({ top: 0, left: 0, width: 0, height: 0 }),
+    children: [],
+    childNodes: [],
+    parentNode: null,
+    ownerDocument: null
+  })
+
+  const document = {
+    documentElement: element(),
+    head: element(),
+    body: element(),
+    createElement: () => element(),
+    createElementNS: () => element(),
+    createTextNode: text => ({ nodeValue: text }),
+    createDocumentFragment: () => element(),
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    getElementById: () => null,
+    getElementsByTagName: () => [],
+    addEventListener() {},
+    removeEventListener() {},
+    defaultView: null
+  }
+  document.documentElement.ownerDocument = document
+  document.head.ownerDocument = document
+  document.body.ownerDocument = document
+
+  const sandbox = {
+    console,
+    setTimeout,
+    clearTimeout,
+    setInterval,
+    clearInterval,
+    requestAnimationFrame: cb => setTimeout(cb, 0),
+    cancelAnimationFrame: clearTimeout,
+    getComputedStyle: () => new Proxy({}, { get: () => '' }),
+    matchMedia: () => ({
+      matches: false,
+      addListener() {},
+      removeListener() {},
+      addEventListener() {},
+      removeEventListener() {}
+    }),
+    performance: { now: () => Date.now() },
+    navigator: { userAgent: 'Jest', platform: 'node', language: 'en' },
+    location: {
+      href: 'http://localhost/',
+      protocol: 'http:',
+      hostname: 'localhost',
+      pathname: '/'
+    },
+    document,
+    HTMLElement: function HTMLElement() {},
+    HTMLMediaElement: function HTMLMediaElement() {},
+    HTMLVideoElement: function HTMLVideoElement() {},
+    Node: function Node() {},
+    Element: function Element() {},
+    Event: function Event() {},
+    CustomEvent: function CustomEvent() {},
+    MutationObserver: function MutationObserver() {
+      this.observe = () => {}
+      this.disconnect = () => {}
+    },
+    addEventListener() {},
+    removeEventListener() {}
+  }
+
+  sandbox.window = sandbox
+  sandbox.self = sandbox
+  sandbox.globalThis = sandbox
+  document.defaultView = sandbox
+  return sandbox
+}
+
+function loadUmdInSandbox(filename, { amd = false } = {}) {
+  const code = readArtifact(filename)
+  const sandbox = createBrowserSandbox()
+  let amdExports
+
+  if (amd) {
+    sandbox.define = (depsOrFactory, maybeFactory) => {
+      if (typeof depsOrFactory === 'function') {
+        amdExports = depsOrFactory()
+        return
+      }
+      const factory = maybeFactory
+      const args = depsOrFactory.map(dep => {
+        if (dep === 'exports') {
+          amdExports = {}
+          return amdExports
+        }
+        return undefined
+      })
+      factory(...args)
+    }
+    sandbox.define.amd = {}
+  }
+
+  vm.runInNewContext(code, sandbox, { filename: path.join(DIST, filename) })
+  return { sandbox, amdExports }
 }
 
 function prototypeChainContains(pluginProto, baseProto) {
@@ -53,7 +187,7 @@ function assertSharedBundleContract(C) {
     C.UICorePlugin.prototype
   ]
 
-  for (const [, Plugin] of Object.entries(C.Plugins)) {
+  for (const Plugin of Object.values(C.Plugins)) {
     expect(typeof Plugin).toBe('function')
     const matchesBase = bases.some(base =>
       prototypeChainContains(Object.getPrototypeOf(Plugin.prototype), base)
@@ -63,8 +197,7 @@ function assertSharedBundleContract(C) {
 }
 
 function assertSourceMappingURL(filename) {
-  const source = fs.readFileSync(path.join(DIST, filename), 'utf8')
-  expect(source).toContain(`sourceMappingURL=${filename}.map`)
+  expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
 }
 
 describe.each([
@@ -89,6 +222,20 @@ describe('plainhtml5 bundle', () => {
   test.each(PLAINHTML5)('%s has no HLS', filename => {
     const C = resolveClappr(loadArtifact(filename))
     expect(C.HLS).toBeUndefined()
+  })
+})
+
+describe('UMD global and AMD branches', () => {
+  test.each(UMD_ARTIFACTS)('%s sets global Clappr without an AMD loader', filename => {
+    const { sandbox } = loadUmdInSandbox(filename, { amd: false })
+    expect(typeof sandbox.Clappr).toBe('object')
+    expect(typeof sandbox.Clappr.Player).toBe('function')
+  })
+
+  test.each(UMD_ARTIFACTS)('%s does not set global Clappr when define.amd is present', filename => {
+    const { sandbox, amdExports } = loadUmdInSandbox(filename, { amd: true })
+    expect(sandbox.Clappr).toBeUndefined()
+    expect(typeof amdExports.Player).toBe('function')
   })
 })
 

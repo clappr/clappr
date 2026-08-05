@@ -4,6 +4,7 @@ const ClapprCorePkg = require('@clappr/core/package.json')
 module.exports = {
   ...base,
   testEnvironmentOptions: {},
+  testPathIgnorePatterns: ['/node_modules/', 'dist\\.smoke\\.test\\.js$'],
   transform: {
     ...base.transform,
     '^.+\\.html$': '<rootDir>/../clappr-core/src/__mocks__/htmlMock.js'
