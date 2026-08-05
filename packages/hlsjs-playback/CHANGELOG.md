@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%402.0.0...%40clappr%2Fhlsjs-playback%402.0.1) (2026-08-05)
+
+### Bug Fixes
+
+- **hlsjs-playback:** honor hlsRecoverAttempts of zero ([70bded0](https://github.com/clappr/clappr/commit/70bded04576c330321173dc74bf1344c89cd7853))
+- **hlsjs-playback:** treat seekPercentage(0) as start of timeline ([57db510](https://github.com/clappr/clappr/commit/57db510159fb8333b925604d04c29cb2938957fe))
+- **test:** harden dist smoke coverage from review feedback ([55a558c](https://github.com/clappr/clappr/commit/55a558ce25d154823294b4aa0fa3460c3b8c77dd))
+
 # [2.0.0](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%401.9.13...%40clappr%2Fhlsjs-playback%402.0.0) (2026-08-04)
 
 - feat(hlsjs-playback)!: stop embedding @clappr/core in minified UMD builds ([38fae12](https://github.com/clappr/clappr/commit/38fae1259c0d46f9a7cf6865e45557c5272cb0dd))

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.14.8...%40clappr%2Fcore%400.15.0) (2026-08-05)
+
+- feat(core)!: emit UMD instead of IIFE for the minified build ([a4a92f2](https://github.com/clappr/clappr/commit/a4a92f245b094abbd217196292e59bda344cc534))
+
+### Bug Fixes
+
+- **test:** declare jsdom for UMD smoke sandboxes ([9afcd38](https://github.com/clappr/clappr/commit/9afcd3800ad84d01153104330a141cd9ec3d8355))
+- **test:** harden dist smoke coverage from review feedback ([55a558c](https://github.com/clappr/clappr/commit/55a558ce25d154823294b4aa0fa3460c3b8c77dd))
+- **test:** load UMD smoke sandboxes via JSDOM ([e2f2be5](https://github.com/clappr/clappr/commit/e2f2be5557786f7cc5d7ce2d477f529f7d96a62c))
+
+### BREAKING CHANGES
+
+- when an AMD loader is present on the page, the
+  minified build no longer sets the global `Clappr` (UMD defers to
+  `define` instead of the previous IIFE assignment).
+
 ## [0.14.8](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.14.7...%40clappr%2Fcore%400.14.8) (2026-08-04)
 
 **Note:** Version bump only for package @clappr/core

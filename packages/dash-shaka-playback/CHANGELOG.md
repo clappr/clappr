@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.1.0...dash-shaka-playback%404.1.1) (2026-08-05)
+
+### Bug Fixes
+
+- **test:** harden dist smoke coverage from review feedback ([55a558c](https://github.com/clappr/clappr/commit/55a558ce25d154823294b4aa0fa3460c3b8c77dd))
+
 # [4.1.0](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.0.0...dash-shaka-playback%404.1.0) (2026-08-04)
 
 ### Features

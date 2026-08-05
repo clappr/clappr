@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.9](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.8...%40clappr%2Fclappr-html5-tvs-playback%400.4.9) (2026-08-05)
+
+### Bug Fixes
+
+- **test:** harden dist smoke coverage from review feedback ([55a558c](https://github.com/clappr/clappr/commit/55a558ce25d154823294b4aa0fa3460c3b8c77dd))
+
 ## [0.4.8](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.7...%40clappr%2Fclappr-html5-tvs-playback%400.4.8) (2026-08-04)
 
 **Note:** Version bump only for package @clappr/clappr-html5-tvs-playback

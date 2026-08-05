@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.10](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.2.9...%40clappr%2Ftelemetry%400.2.10) (2026-08-05)
+
+### Bug Fixes
+
+- **telemetry:** skip babel-jest on UMD dist smoke artifacts ([9c03ad9](https://github.com/clappr/clappr/commit/9c03ad96eba20410847c1711d7d59e16da41899d))
+- **test:** harden dist smoke coverage from review feedback ([55a558c](https://github.com/clappr/clappr/commit/55a558ce25d154823294b4aa0fa3460c3b8c77dd))
+
 ## [0.2.9](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.2.8...%40clappr%2Ftelemetry%400.2.9) (2026-08-04)
 
 ### Bug Fixes

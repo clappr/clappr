@@ -1,6 +1,6 @@
 {
   "name": "@clappr/core",
-  "version": "0.14.8",
+  "version": "0.15.0",
   "description": "Core components of the extensible media player for the web",
   "main": "./dist/clappr-core.js",
   "module": "./dist/clappr-core.esm.js",
@@ -40,7 +40,7 @@
   "homepage": "https://github.com/clappr/clappr-core",
   "devDependencies": {
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.27.1",
-    "@clappr/zepto": "^2.1.3",
+    "@clappr/zepto": "^2.1.4",
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-replace": "^5.0.2",
