@@ -1,11 +1,9 @@
 import replace from '@rollup/plugin-replace'
 import babel from '@rollup/plugin-babel'
-import filesize from 'rollup-plugin-filesize'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
-import size from 'rollup-plugin-sizes'
 import terser from '@rollup/plugin-terser'
-import visualize from 'rollup-plugin-visualizer'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { version as clapprCoreVersion } from '@clappr/core/package.json'
 import pkg from './package.json'
 
@@ -22,15 +20,17 @@ const replacePluginOptions = {
   CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
   preventAssignment: false
 }
+const visualizePluginOptions = {
+  open: false,
+  filename: 'dist/bundle-stats.html',
+  gzipSize: true
+}
 
 const plugins = [
   replace(replacePluginOptions),
   babel(babelOptionsPlugins),
-  size(),
-  filesize(),
   serveLocal && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
-  reloadEnabled && livereload({ watch: ['dist', 'public'] }),
-  analyzeBundle && visualize({ open: true })
+  reloadEnabled && livereload({ watch: ['dist', 'public'] })
 ].filter(Boolean)
 
 const bundle = {
@@ -42,7 +42,8 @@ const bundle = {
       file: pkg.main,
       format: 'umd',
       globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-      sourcemap: true
+      sourcemap: true,
+      plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
     },
     minimize && {
       name: 'HlsjsPlayback',

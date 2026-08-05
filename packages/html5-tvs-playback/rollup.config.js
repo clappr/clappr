@@ -1,11 +1,9 @@
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
-import filesize from 'rollup-plugin-filesize'
 import serve from 'rollup-plugin-serve'
-import size from 'rollup-plugin-sizes'
 import terser from '@rollup/plugin-terser'
-import visualize from 'rollup-plugin-visualizer'
+import { visualizer } from 'rollup-plugin-visualizer'
 import pkg from './package.json'
 
 const dev = !!process.env.DEV
@@ -16,14 +14,16 @@ const babelOptionsUMD = { exclude: ['node_modules/**', '../../node_modules/**'],
 const babelOptionsESM = {
   exclude: ['node_modules/**', '../../node_modules/**'],
   babelHelpers: 'runtime',
-  plugins: ['@babel/plugin-transform-runtime'],
+  plugins: ['@babel/plugin-transform-runtime']
+}
+const visualizePluginOptions = {
+  open: false,
+  filename: 'dist/bundle-stats.html',
+  gzipSize: true
 }
 
 const plugins = [
-  size(),
-  filesize(),
-  dev && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' }),
-  analyzeBundle && visualize({ open: true }),
+  dev && serve({ contentBase: ['dist', 'public'], host: '0.0.0.0', port: '8080' })
 ]
 
 const mainBundle = {
@@ -36,6 +36,7 @@ const mainBundle = {
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
       sourcemap: true,
+      plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
     },
     minimize && {
       name: 'HTML5TVsPlayback',
@@ -43,10 +44,10 @@ const mainBundle = {
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
       sourcemap: true,
-      plugins: terser(),
-    },
+      plugins: terser()
+    }
   ].filter(Boolean),
-  plugins: [babel(babelOptionsUMD), resolve(), commonjs(), ...plugins.filter(Boolean)],
+  plugins: [babel(babelOptionsUMD), resolve(), commonjs(), ...plugins.filter(Boolean)]
 }
 
 const esmBundle = {
@@ -57,9 +58,9 @@ const esmBundle = {
     file: pkg.module,
     format: 'esm',
     globals: { '@clappr/core': 'Clappr' },
-    sourcemap: true,
+    sourcemap: true
   },
-  plugins: [babel(babelOptionsESM), ...plugins.filter(Boolean)],
+  plugins: [babel(babelOptionsESM), ...plugins.filter(Boolean)]
 }
 
 export default [mainBundle, esmBundle]

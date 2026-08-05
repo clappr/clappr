@@ -52,7 +52,6 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^8.0.1",
     "@clappr/core": "^0.16.0",
-    "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-serve": "^1.1.0"
   },
   "publishConfig": {
