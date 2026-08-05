@@ -12,6 +12,7 @@ const { TextEncoder, TextDecoder } = require('util')
 global.TextEncoder = global.TextEncoder || TextEncoder
 global.TextDecoder = global.TextDecoder || TextDecoder
 const { JSDOM } = require('jsdom')
+const { expectNoNativeClasses, expectEs5Subclassable } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -100,6 +101,16 @@ describe.each([
 
   test('publishes a sourcemap comment', () => {
     assertSourceMappingURL(filename)
+  })
+
+  test('does not emit native class syntax', () => {
+    expectNoNativeClasses(readArtifact(filename))
+  })
+
+  test('plugin bases are ES5-subclassable', () => {
+    const dist = loadArtifact(filename)
+    const { BaseObject } = dist.default || dist
+    expectEs5Subclassable(BaseObject)
   })
 })
 

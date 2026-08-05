@@ -12,6 +12,7 @@ const { TextEncoder, TextDecoder } = require('util')
 global.TextEncoder = global.TextEncoder || TextEncoder
 global.TextDecoder = global.TextDecoder || TextDecoder
 const { JSDOM } = require('jsdom')
+const { expectNoNativeClasses, expectEs5Subclassable } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 const pkg = require('../package.json')
@@ -120,6 +121,20 @@ describe.each([
 ])('%s (%s)', (_label, filename) => {
   test('exports plugins that extend the same-bundle plugin bases', () => {
     assertSharedBundleContract(resolveClappr(loadArtifact(filename)))
+  })
+
+  test('plugin bases are ES5-subclassable', () => {
+    const C = resolveClappr(loadArtifact(filename))
+    expectEs5Subclassable(C.BaseObject)
+  })
+})
+
+describe.each([
+  ['plainhtml5 UMD', ARTIFACTS.plainhtml5],
+  ['plainhtml5 UMD minified', ARTIFACTS.plainhtml5Min]
+])('%s (%s)', (_label, filename) => {
+  test('does not emit native class syntax', () => {
+    expectNoNativeClasses(readArtifact(filename))
   })
 })
 
