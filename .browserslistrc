@@ -1,4 +1,7 @@
+# O piso ES5 e do monorepo inteiro, nao so do pacote de TV: o dist publicado
+# e herdado por plugins de terceiros transpilados para ES5. NAO adicione
+# `not dead` — ela remove bb 7/10 e ie_mob 10/11, os unicos alvos que fazem
+# o preset-env rebaixar `class`, e reintroduz a issue #2540.
 > 0.5%
 last 2 versions
-Firefox ESR
-not dead
+not ie <= 11
