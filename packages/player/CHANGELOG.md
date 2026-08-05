@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/clappr/clappr/compare/%40clappr%2Fplayer%400.13.0...%40clappr%2Fplayer%400.14.0) (2026-08-05)
+
+- feat(hlsjs-playback)!: stop embedding hls.js in published artifacts ([8b2e9ae](https://github.com/clappr/clappr/commit/8b2e9aee7a0a308a052a549b038f7c4af6de35ac)), closes [#2538](https://github.com/clappr/clappr/issues/2538)
+
+### Bug Fixes
+
+- **test:** parse dist with Babel when guarding native class ([3de7895](https://github.com/clappr/clappr/commit/3de7895baf114fdda69270d5c98215b497dd497e))
+
+### BREAKING CHANGES
+
+- CDN and script consumers must load hls.js before
+  hlsjs-playback. Bundlers that aliased dist/hlsjs-playback.external.js can
+  drop the alias — the default entry is external now.
+
 # [0.13.0](https://github.com/clappr/clappr/compare/%40clappr%2Fplayer%400.12.10...%40clappr%2Fplayer%400.13.0) (2026-08-05)
 
 - feat(player)!: emit UMD instead of IIFE for the minified builds ([fd074d8](https://github.com/clappr/clappr/commit/fd074d8b7e288b2225a587f98b469601cac1a757))

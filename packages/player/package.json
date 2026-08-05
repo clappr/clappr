@@ -1,6 +1,6 @@
 {
   "name": "@clappr/player",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.js",
   "scripts": {
@@ -34,9 +34,9 @@
   },
   "homepage": "https://github.com/clappr/clappr",
   "devDependencies": {
-    "@clappr/core": "^0.15.0",
-    "@clappr/hlsjs-playback": "^2.0.1",
-    "@clappr/plugins": "^0.9.9",
+    "@clappr/core": "^0.16.0",
+    "@clappr/hlsjs-playback": "^3.0.0",
+    "@clappr/plugins": "^0.9.10",
     "@rollup/plugin-replace": "^2.4.2",
     "hls.js": "^1",
     "rollup-plugin-filesize": "^9.1.1",
