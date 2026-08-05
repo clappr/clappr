@@ -2,16 +2,18 @@ const { parse } = require('acorn')
 const walk = require('acorn-walk')
 
 function parseDist(code) {
-  // No errorRecovery: a parse failure must fail the smoke test visibly.
-  // Emulate Babel's sourceType: 'unambiguous' — try module first, then script.
   try {
     return parse(code, { ecmaVersion: 'latest', sourceType: 'module' })
-  } catch {
-    return parse(code, {
-      ecmaVersion: 'latest',
-      sourceType: 'script',
-      allowReturnOutsideFunction: true
-    })
+  } catch (moduleError) {
+    try {
+      return parse(code, {
+        ecmaVersion: 'latest',
+        sourceType: 'script',
+        allowReturnOutsideFunction: true
+      })
+    } catch {
+      throw moduleError
+    }
   }
 }
 
