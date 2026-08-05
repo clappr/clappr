@@ -1,7 +1,7 @@
 import { HTML5Video, Log, Events, PlayerError, Utils } from '@clappr/core'
 import shaka from 'shaka-player'
 
-if (!shaka) {
+if (!shaka || !shaka.Player) {
   throw new Error('dash-shaka-playback requires shaka-player to be loaded before it')
 }
 

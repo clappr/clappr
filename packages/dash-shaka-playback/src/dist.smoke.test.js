@@ -148,6 +148,12 @@ describe('UMD global.shaka branch', () => {
       'dash-shaka-playback requires shaka-player to be loaded before it'
     )
   })
+
+  test.each(UMD_ARTIFACTS)('%s throws when window.shaka lacks Player', filename => {
+    expect(() => loadUmdInSandbox(filename, { shaka: {} })).toThrow(
+      'dash-shaka-playback requires shaka-player to be loaded before it'
+    )
+  })
 })
 
 describe('package exports', () => {
