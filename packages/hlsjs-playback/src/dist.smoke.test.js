@@ -4,19 +4,24 @@
  */
 const fs = require('fs')
 const path = require('path')
+const vm = require('vm')
+const { TextEncoder, TextDecoder } = require('util')
+
+// jest-environment-jsdom omits these; must run before the require below —
+// jsdom's whatwg-url throws on load without TextEncoder/TextDecoder.
+global.TextEncoder = global.TextEncoder || TextEncoder
+global.TextDecoder = global.TextDecoder || TextDecoder
+const { JSDOM } = require('jsdom')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
 const ARTIFACTS = {
   main: 'hlsjs-playback.js',
   mainMin: 'hlsjs-playback.min.js',
-  external: 'hlsjs-playback.external.js',
-  externalMin: 'hlsjs-playback.external.min.js',
   esm: 'hlsjs-playback.esm.js'
 }
 
-const EMBEDS_HLS = [ARTIFACTS.main, ARTIFACTS.mainMin, ARTIFACTS.esm]
-const EXTERNAL_HLS = [ARTIFACTS.external, ARTIFACTS.externalMin]
+const UMD_ARTIFACTS = [ARTIFACTS.main, ARTIFACTS.mainMin]
 
 function readArtifact(name) {
   return fs.readFileSync(path.join(DIST, name), 'utf8')
@@ -29,6 +34,21 @@ function loadArtifact(name) {
 
 function resolvePlayback(HlsjsPlaybackExport) {
   return HlsjsPlaybackExport.default || HlsjsPlaybackExport
+}
+
+function loadUmdInSandbox(filename, { hls } = {}) {
+  const code = readArtifact(filename)
+  const dom = new JSDOM('<!doctype html><html><body></body></html>', {
+    url: 'http://localhost/',
+    pretendToBeVisual: true,
+    runScripts: 'outside-only'
+  })
+  const sandbox = dom.getInternalVMContext()
+  sandbox.Clappr = require('@clappr/core')
+  if (hls !== undefined) sandbox.Hls = hls
+
+  vm.runInContext(code, sandbox, { filename: path.join(DIST, filename) })
+  return sandbox
 }
 
 function assertPlaybackContract(HlsjsPlaybackExport) {
@@ -73,8 +93,6 @@ afterEach(() => {
 describe.each([
   ['main UMD', ARTIFACTS.main],
   ['main UMD minified', ARTIFACTS.mainMin],
-  ['external UMD', ARTIFACTS.external],
-  ['external UMD minified', ARTIFACTS.externalMin],
   ['ESM', ARTIFACTS.esm]
 ])('%s (%s)', (_label, filename) => {
   test('exports a HlsjsPlayback class that extends HTML5Video and exposes HLSJS', () => {
@@ -97,13 +115,22 @@ describe('dist sourcemap inventory', () => {
 })
 
 describe('hls.js peer identity', () => {
-  test.each(EXTERNAL_HLS)('%s defers to the consumer hls.js', filename => {
+  test.each(Object.values(ARTIFACTS))('%s defers to the consumer hls.js', filename => {
     const Playback = resolvePlayback(loadArtifact(filename))
     expect(Playback.HLSJS).toBe(require('hls.js'))
   })
+})
 
-  test.each(EMBEDS_HLS)('%s embeds its own hls.js copy', filename => {
-    const Playback = resolvePlayback(loadArtifact(filename))
-    expect(Playback.HLSJS).not.toBe(require('hls.js'))
+describe('UMD global.Hls branch', () => {
+  test.each(UMD_ARTIFACTS)('%s resolves HLSJS from window.Hls', filename => {
+    const hls = require('hls.js')
+    const sandbox = loadUmdInSandbox(filename, { hls })
+    expect(sandbox.HlsjsPlayback.HLSJS).toBe(hls)
+  })
+
+  test.each(UMD_ARTIFACTS)('%s throws a clear error when window.Hls is missing', filename => {
+    expect(() => loadUmdInSandbox(filename)).toThrow(
+      '@clappr/hlsjs-playback requires hls.js (^1) to be loaded before it'
+    )
   })
 })

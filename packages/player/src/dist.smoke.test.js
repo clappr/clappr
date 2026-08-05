@@ -128,6 +128,12 @@ describe('full player HLS', () => {
     const C = resolveClappr(loadArtifact(filename))
     expect(Object.getPrototypeOf(C.HLS.prototype)).toBe(C.HTML5Video.prototype)
   })
+
+  test.each(FULL_PLAYER)('%s embeds its own hls.js copy', filename => {
+    const C = resolveClappr(loadArtifact(filename))
+    expect(C.HLS.HLSJS).toBeDefined()
+    expect(C.HLS.HLSJS).not.toBe(require('hls.js'))
+  })
 })
 
 describe('plainhtml5 bundle', () => {

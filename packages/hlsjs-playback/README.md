@@ -11,27 +11,36 @@ A [Clappr](https://github.com/clappr/clappr) playback to play HTTP Live Streamin
   <a href="https://www.jsdelivr.com/package/npm/@clappr/hlsjs-playback"><img alt="jsDelivr hits (npm)" src="https://img.shields.io/jsdelivr/npm/hm/@clappr/hlsjs-playback?color=orange"></a>
 </p>
 
+> **Breaking change in 3.0.0 —** `hls.js` is no longer bundled. Every artifact now expects
+> you to provide it. See the migration note below.
 
 ## Usage
 
 You can use it from JSDelivr:
 
-`https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js`
+```html
+<script src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@3/dist/hlsjs-playback.min.js"></script>
+```
 
 or as an npm package:
 
-`yarn add @clappr/hlsjs-playback`
+`yarn add @clappr/hlsjs-playback hls.js@^1`
 
 ### Which artifact to load
 
 | Scenario | Artifact |
 |---|---|
-| `<script>` / CDN alongside `@clappr/core` (or `@clappr/player`) | `dist/hlsjs-playback.min.js` |
-| Bundler that should resolve `hls.js` itself | `dist/hlsjs-playback.external.js` (or `.external.min.js`) |
-| Bundler / ESM entry (embeds `hls.js`, leaves `@clappr/core` external) | `dist/hlsjs-playback.esm.js` (package `module` field) |
-| Default CommonJS / UMD entry (embeds `hls.js`) | `dist/hlsjs-playback.js` (package `main` field) |
+| `<script>` / CDN, after `@clappr/core` and `hls.js` | `dist/hlsjs-playback.min.js` |
+| Bundler, CommonJS / UMD entry | `dist/hlsjs-playback.js` (package `main`) |
+| Bundler, ESM entry | `dist/hlsjs-playback.esm.js` (package `module`) |
 
-**Migration note (2.0+):** `hlsjs-playback.min.js` no longer embeds `@clappr/core`. Load core (or player) first so a global `Clappr` exists. Use `.external` builds when you supply your own `hls.js`.
+**Migration note (3.0+):** Every artifact now expects `hls.js` from the page or bundler. If you loaded `hlsjs-playback.min.js` with a single script tag, add `hls.js` before it. If you aliased the deep path to avoid the bundled copy, remove that entry from your bundler's `resolve.alias` (webpack) or equivalent (Vite `resolve.alias`, Rollup `alias`) — the default entry is external now:
+
+```diff
+- '@clappr/hlsjs-playback': '@clappr/hlsjs-playback/dist/hlsjs-playback.external.js',
+```
 
 Then just add `HlsjsPlayback` into the list of plugins of your player instance:
 

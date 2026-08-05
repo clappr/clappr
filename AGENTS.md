@@ -90,7 +90,7 @@ encode this rule once it lands.
 | `@clappr/plugins` | `clappr-plugins.js`, `.min.js`, `.esm.js` |
 | `@clappr/telemetry` | `clappr-telemetry.js`, `.min.js`, `.esm.js` |
 | `@clappr/player` | `clappr.js`, `.min.js`, `clappr.plainhtml5.min.js` — not `clappr.plainhtml5.js` (demo-only) |
-| `@clappr/hlsjs-playback` | `.js`, `.min.js`, `.external.js`, `.external.min.js`, `.esm.js` |
+| `@clappr/hlsjs-playback` | `.js`, `.min.js`, `.esm.js` |
 | `dash-shaka-playback` | `.js`, `.min.js`, `.external.js`, `.external.min.js`, `.esm.mjs` |
 | `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js` |
 
