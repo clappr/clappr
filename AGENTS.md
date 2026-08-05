@@ -20,6 +20,7 @@ Monorepo managed by Lerna with Yarn workspaces. Each package has its own `packag
   - `packages/dash-shaka-playback/` — MPEG-DASH via Shaka Player
   - `packages/html5-tvs-playback/` — HTML5 playback for HbbTV smart TVs (`@clappr/clappr-html5-tvs-playback`)
   - `packages/clappr-telemetry/` — Telemetry helpers
+- `test/` — Shared dist smoke helpers (e.g. ES5 subclassing contract for #2540)
 
 ## Dependencies and shared config
 

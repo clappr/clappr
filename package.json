@@ -7,8 +7,8 @@
   ],
   "scripts": {
     "dev": "lerna run start --scope=@clappr/player",
-    "lint": "lerna run lint",
-    "lint:fix": "lerna run lint -- --fix",
+    "lint": "lerna run lint && eslint test/",
+    "lint:fix": "lerna run lint -- --fix && eslint test/ --fix",
     "format": "prettier --write \"**/*.{js,ts,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
     "release": "lerna version --include-merged-tags --no-push --yes",

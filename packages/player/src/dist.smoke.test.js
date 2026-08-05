@@ -124,7 +124,13 @@ describe.each([
   })
 
   test('plugin bases are ES5-subclassable', () => {
-    expectEs5Subclassable(resolveClappr(loadArtifact(filename)).BaseObject)
+    // Behavioral contract for full + plainhtml5: third-party ES5 plugins call
+    // Parent.call(this, ...) on these bases (#2540). Syntax scan below cannot
+    // cover full clappr(.min).js — embedded hls.js ships native classes.
+    const C = resolveClappr(loadArtifact(filename))
+    expectEs5Subclassable(C.BaseObject)
+    expectEs5Subclassable(C.UIObject)
+    expectEs5Subclassable(C.UICorePlugin, { options: {} })
   })
 })
 
@@ -147,6 +153,8 @@ describe('plainhtml5 bundle', () => {
     expect(C.HLS).toBeUndefined()
   })
 
+  // Syntax-only on plainhtml5: full player embeds hls.js (native class). ES5
+  // subclassability of Clappr bases is asserted for all artifacts above.
   test.each(PLAINHTML5)('%s does not emit native class syntax', filename => {
     expectNoNativeClasses(readArtifact(filename))
   })

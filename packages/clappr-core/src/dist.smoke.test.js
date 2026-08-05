@@ -108,7 +108,10 @@ describe.each([
   })
 
   test('plugin bases are ES5-subclassable', () => {
-    expectEs5Subclassable(loadArtifact(filename).BaseObject)
+    const { BaseObject, UIObject, UICorePlugin } = loadArtifact(filename)
+    expectEs5Subclassable(BaseObject)
+    expectEs5Subclassable(UIObject)
+    expectEs5Subclassable(UICorePlugin, { options: {} })
   })
 })
 
