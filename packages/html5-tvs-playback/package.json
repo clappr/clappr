@@ -1,6 +1,6 @@
 {
   "name": "@clappr/clappr-html5-tvs-playback",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "A Clappr HTML5 playback for smart TVs based on HbbTV 2.0.1 specs.",
   "keywords": [
     "clappr",
@@ -47,10 +47,10 @@
     "@clappr/core": "*"
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.8"
+    "@babel/runtime": "^8.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/plugin-transform-runtime": "^8.0.1",
     "@clappr/core": "^0.16.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-serve": "^1.1.0"
