@@ -94,6 +94,11 @@ describe('dist sourcemap inventory', () => {
 describe('ESM @babel/runtime contract', () => {
   const helpers = runtimeHelpersIn(readArtifact(ARTIFACTS.esm))
   const range = PKG.dependencies['@babel/runtime']
+  const requiredFloor = helpers
+    .map(name => HELPER_SINCE[name])
+    .filter(Boolean)
+    .sort(semver.compare)
+    .at(-1)
 
   test('UMD builds do not import @babel/runtime', () => {
     expect(readArtifact(ARTIFACTS.main)).not.toMatch(/@babel\/runtime/)
@@ -102,18 +107,18 @@ describe('ESM @babel/runtime contract', () => {
 
   test('imports helpers that resolve in the workspace install', () => {
     expect(helpers.length).toBeGreaterThan(0)
-    expect(helpers.filter(name => !HELPER_SINCE[name])).toEqual([])
     for (const name of helpers) {
       require.resolve(`@babel/runtime/helpers/${name}`)
     }
   })
 
+  test('every imported helper has a catalogued floor', () => {
+    expect(helpers.filter(name => !(name in HELPER_SINCE))).toEqual([])
+  })
+
   test('published range covers the floor implied by imported helpers', () => {
-    expect(helpers.filter(name => !HELPER_SINCE[name])).toEqual([])
-    const requiredFloor = helpers.map(name => HELPER_SINCE[name]).sort(semver.compare).at(-1)
-    const minVersion = semver.minVersion(range)
-    expect(minVersion).not.toBeNull()
-    expect(semver.gte(minVersion, requiredFloor)).toBe(true)
+    expect(requiredFloor).toBeDefined()
+    expect(semver.gte(semver.minVersion(range), requiredFloor)).toBe(true)
     expect(semver.satisfies('8.0.0', range)).toBe(true)
   })
 })

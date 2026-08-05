@@ -53,7 +53,8 @@
     "rollup-plugin-sizes": "^1.0.5",
     "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-visualizer": "^5.9.2",
-    "sass": "^1.93.2"
+    "sass": "^1.93.2",
+    "semver": "^7.7.3"
   },
   "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
