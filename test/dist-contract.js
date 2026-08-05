@@ -4,7 +4,9 @@ function walk(node, visit) {
   if (!node || typeof node !== 'object') return
   visit(node)
   for (const key of Object.keys(node)) {
-    if (key === 'loc' || key === 'start' || key === 'end' || key === 'range' || key === 'extra') continue
+    if (key === 'loc' || key === 'start' || key === 'end' || key === 'range' || key === 'extra') {
+      continue
+    }
     const child = node[key]
     if (Array.isArray(child)) {
       for (const item of child) walk(item, visit)
@@ -15,9 +17,9 @@ function walk(node, visit) {
 }
 
 function findNativeClasses(code) {
+  // No errorRecovery: a parse failure must fail the smoke test visibly.
   const ast = parse(code, {
     sourceType: 'unambiguous',
-    errorRecovery: true,
     allowReturnOutsideFunction: true
   })
   const classes = []
@@ -30,7 +32,7 @@ function findNativeClasses(code) {
 }
 
 function expectNoNativeClasses(code) {
-  expect(findNativeClasses(code).length).toBe(0)
+  expect(findNativeClasses(code).map(n => n.id?.name ?? '<anonymous>')).toEqual([])
 }
 
 function expectEs5Subclassable(Base, ctorArg) {
