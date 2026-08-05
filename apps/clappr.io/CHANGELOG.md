@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/clappr/clappr/compare/clappr-docs%401.1.1...clappr-docs%401.1.2) (2026-08-05)
+
+### Bug Fixes
+
+- **clappr-docs:** repoint broken documentation links ([ac08d8f](https://github.com/clappr/clappr/commit/ac08d8ff5c32d49912394fcb910dd49cc98dd892))
+
 ## [1.1.1](https://github.com/clappr/clappr/compare/clappr-docs@1.1.0...clappr-docs@1.1.1) (2026-07-31)
 
 **Note:** Version bump only for package clappr-docs

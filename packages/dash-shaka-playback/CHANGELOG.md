@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.1.2...dash-shaka-playback%404.1.3) (2026-08-05)
+
+### Bug Fixes
+
+- **dash-shaka-playback:** assert dist artifacts and clarify Shaka 3 support ([23a7b45](https://github.com/clappr/clappr/commit/23a7b45f6817c42cf27f74c783518fe499c329cf))
+- **dash-shaka-playback:** require shaka.Player in the load-time guard ([9b191f4](https://github.com/clappr/clappr/commit/9b191f41f617afcf9694cd8ba0ef1319238ad4c0))
+
 ## [4.1.2](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.1.1...dash-shaka-playback%404.1.2) (2026-08-05)
 
 **Note:** Version bump only for package dash-shaka-playback

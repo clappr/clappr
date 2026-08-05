@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.11](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.10...%40clappr%2Fclappr-html5-tvs-playback%400.4.11) (2026-08-05)
+
+### Bug Fixes
+
+- **html5-tvs-playback:** accept @babel/runtime 7 or 8 ([9587087](https://github.com/clappr/clappr/commit/9587087b761ec1f92a7f9317c2eda51459ed7c9b))
+- **html5-tvs-playback:** fail closed on uncatalogued runtime helpers ([10a7674](https://github.com/clappr/clappr/commit/10a7674fc1dec4448e855ecab84572ba0cb7f62c))
+- **html5-tvs-playback:** raise @babel/runtime floor to 7.25 ([bfa1e50](https://github.com/clappr/clappr/commit/bfa1e50279974d4a932820be64ca89528754d4ad))
+- **html5-tvs-playback:** require @babel/runtime 8 ([79a9e10](https://github.com/clappr/clappr/commit/79a9e103876a51a8490a5e97f3461940d3e9d998))
+- **html5-tvs-playback:** tighten ESM runtime floor smoke ([988701d](https://github.com/clappr/clappr/commit/988701df0d0690864fc5183f92e9b5b82bc9d9cd))
+
 ## [0.4.10](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.9...%40clappr%2Fclappr-html5-tvs-playback%400.4.10) (2026-08-05)
 
 **Note:** Version bump only for package @clappr/clappr-html5-tvs-playback

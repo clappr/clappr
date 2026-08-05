@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.0.0...%40clappr%2Fhlsjs-playback%403.0.1) (2026-08-05)
+
+### Bug Fixes
+
+- **dash-shaka-playback:** assert dist artifacts and clarify Shaka 3 support ([23a7b45](https://github.com/clappr/clappr/commit/23a7b45f6817c42cf27f74c783518fe499c329cf))
+
 # [3.0.0](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%402.0.1...%40clappr%2Fhlsjs-playback%403.0.0) (2026-08-05)
 
 - feat(hlsjs-playback)!: stop embedding hls.js in published artifacts ([8b2e9ae](https://github.com/clappr/clappr/commit/8b2e9aee7a0a308a052a549b038f7c4af6de35ac)), closes [#2538](https://github.com/clappr/clappr/issues/2538)

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.0...%40clappr%2Ftelemetry%400.3.1) (2026-08-05)
+
+**Note:** Version bump only for package @clappr/telemetry
+
 # [0.3.0](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.2.10...%40clappr%2Ftelemetry%400.3.0) (2026-08-05)
 
 - feat(hlsjs-playback)!: stop embedding hls.js in published artifacts ([8b2e9ae](https://github.com/clappr/clappr/commit/8b2e9aee7a0a308a052a549b038f7c4af6de35ac)), closes [#2538](https://github.com/clappr/clappr/issues/2538)
