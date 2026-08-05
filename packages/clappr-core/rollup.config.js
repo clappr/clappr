@@ -11,7 +11,7 @@ import serve from 'rollup-plugin-serve'
 import filesize from 'rollup-plugin-filesize'
 import size from 'rollup-plugin-sizes'
 const { visualizer } = require('rollup-plugin-visualizer')
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 import pkg from './package.json'
 
 const dev = !!process.env.DEV

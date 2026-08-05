@@ -1,6 +1,6 @@
 
 const analyze = require('rollup-plugin-analyzer')
-const { terser } = require('rollup-plugin-terser')
+const terser = require('@rollup/plugin-terser')
 
 const { baseConfig } = require('./rollup.config.base')
 

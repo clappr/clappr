@@ -1,8 +1,8 @@
-const babel = require('rollup-plugin-babel')
+const babel = require('@rollup/plugin-babel')
 const commonjs = require('@rollup/plugin-commonjs')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const replace = require('@rollup/plugin-replace')
-const { terser } = require('rollup-plugin-terser')
+const terser = require('@rollup/plugin-terser')
 const analyze = require('rollup-plugin-analyzer')
 const filesize = require('rollup-plugin-filesize')
 const serve = require('rollup-plugin-serve')
@@ -54,7 +54,8 @@ const plugins = [
   commonjs(),
   nodeResolve(),
   babel({
-    exclude: ['node_modules/**', '../../node_modules/**']
+    exclude: ['node_modules/**', '../../node_modules/**'],
+    babelHelpers: 'bundled'
   }),
   ...(analyzeBundle ? [analyze()] : []),
   filesize(),
