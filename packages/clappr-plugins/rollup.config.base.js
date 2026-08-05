@@ -1,6 +1,6 @@
 const path = require('path')
 
-const babel = require('rollup-plugin-babel')
+const babel = require('@rollup/plugin-babel')
 const commonjs = require('@rollup/plugin-commonjs')
 const html = require('rollup-plugin-html')
 const namedDirectory = require('rollup-plugin-named-directory')
@@ -47,7 +47,8 @@ const baseConfig = {
     nodeResolve(),
     namedDirectory(),
     babel({
-      exclude: ['node_modules/**', '../../node_modules/**']
+      exclude: ['node_modules/**', '../../node_modules/**'],
+      babelHelpers: 'bundled'
     }),
     html(),
     svg(),

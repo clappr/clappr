@@ -4,7 +4,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import filesize from 'rollup-plugin-filesize'
 import serve from 'rollup-plugin-serve'
 import size from 'rollup-plugin-sizes'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 import visualize from 'rollup-plugin-visualizer'
 import pkg from './package.json'
 

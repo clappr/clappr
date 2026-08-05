@@ -10,7 +10,7 @@ import serve from 'rollup-plugin-serve'
 import filesize from 'rollup-plugin-filesize'
 import size from 'rollup-plugin-sizes'
 import visualize from 'rollup-plugin-visualizer'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 import pkg from './package.json'
 import { version as clapprCoreVersion } from '@clappr/core/package.json'
 
