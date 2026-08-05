@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.17",
-    "@babel/parser": "^7.22.17",
     "@babel/preset-env": "^7.22.15",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
@@ -31,6 +30,8 @@
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^15.2.1",
+    "acorn": "^8.16.0",
+    "acorn-walk": "^8.3.4",
     "autoprefixer": "^10.5.4",
     "babel-jest": "^30.4.1",
     "eslint": "^8.49.0",

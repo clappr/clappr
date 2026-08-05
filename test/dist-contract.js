@@ -1,30 +1,28 @@
-const { parse } = require('@babel/parser')
+const { parse } = require('acorn')
+const walk = require('acorn-walk')
 
-function walk(node, visit) {
-  if (!node || typeof node !== 'object') return
-  visit(node)
-  for (const key of Object.keys(node)) {
-    if (key === 'loc' || key === 'start' || key === 'end' || key === 'range' || key === 'extra') {
-      continue
-    }
-    const child = node[key]
-    if (Array.isArray(child)) {
-      for (const item of child) walk(item, visit)
-    } else if (child && typeof child.type === 'string') {
-      walk(child, visit)
-    }
+function parseDist(code) {
+  // No errorRecovery: a parse failure must fail the smoke test visibly.
+  // Emulate Babel's sourceType: 'unambiguous' — try module first, then script.
+  try {
+    return parse(code, { ecmaVersion: 'latest', sourceType: 'module' })
+  } catch {
+    return parse(code, {
+      ecmaVersion: 'latest',
+      sourceType: 'script',
+      allowReturnOutsideFunction: true
+    })
   }
 }
 
 function findNativeClasses(code) {
-  // No errorRecovery: a parse failure must fail the smoke test visibly.
-  const ast = parse(code, {
-    sourceType: 'unambiguous',
-    allowReturnOutsideFunction: true
-  })
+  const ast = parseDist(code)
   const classes = []
-  walk(ast, node => {
-    if (node.type === 'ClassDeclaration' || node.type === 'ClassExpression') {
+  walk.simple(ast, {
+    ClassDeclaration(node) {
+      classes.push(node)
+    },
+    ClassExpression(node) {
       classes.push(node)
     }
   })
