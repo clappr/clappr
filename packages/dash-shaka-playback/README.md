@@ -3,7 +3,7 @@
 A [clappr](https://github.com/clappr/clappr) playback to play dash based on the amazing [shaka-player](https://github.com/google/shaka-player).
 
 [![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/dash-shaka-playback/package.json&query=$.version&label=version&color=blue)](https://www.npmjs.com/package/dash-shaka-playback)
+[![npm version](https://img.shields.io/npm/v/dash-shaka-playback.svg?color=cb3837)](https://www.npmjs.com/package/dash-shaka-playback)
 [![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
 [![minified size](https://img.shields.io/bundlephobia/min/dash-shaka-playback)](https://bundlephobia.com/package/dash-shaka-playback)
 [![jsDelivr monthly downloads](https://img.shields.io/jsdelivr/npm/hm/dash-shaka-playback?color=orange)](https://www.jsdelivr.com/package/npm/dash-shaka-playback)
@@ -27,7 +27,6 @@ or as an npm package:
 yarn add dash-shaka-playback shaka-player@^4
 # or
 npm install dash-shaka-playback shaka-player@^4
-# Shaka 3 also works: shaka-player@^3
 ```
 
 ### Which artifact to load
@@ -64,7 +63,9 @@ const player = new Clappr.Player({
 })
 ```
 
-`shaka-player` (`^3 || ^4`) is a **required peer dependency**. Shaka 5+ is not supported.
+`shaka-player` (`^3 || ^4`) is a **required peer dependency**. CI and the demo exercise
+Shaka 4 only; 3.x remains in the peer range for existing consumers but is untested.
+Shaka 5+ is not supported.
 
 # Demo
 

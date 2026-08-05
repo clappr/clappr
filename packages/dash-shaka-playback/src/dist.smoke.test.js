@@ -93,9 +93,8 @@ function assertSourceMappingURL(filename) {
   expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
 }
 
-const EXPECTED_SOURCEMAPS = Object.values(ARTIFACTS)
-  .map(filename => `${filename}.map`)
-  .sort()
+const EXPECTED_ARTIFACTS = Object.values(ARTIFACTS).sort()
+const EXPECTED_SOURCEMAPS = EXPECTED_ARTIFACTS.map(filename => `${filename}.map`).sort()
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -119,7 +118,15 @@ describe.each([
   })
 })
 
-describe('dist sourcemap inventory', () => {
+describe('dist inventory', () => {
+  test('ships exactly the expected artifacts', () => {
+    const artifacts = fs
+      .readdirSync(DIST)
+      .filter(f => /\.(js|mjs)$/.test(f))
+      .sort()
+    expect(artifacts).toEqual(EXPECTED_ARTIFACTS)
+  })
+
   test('ships exactly the expected .map files', () => {
     const maps = fs
       .readdirSync(DIST)
