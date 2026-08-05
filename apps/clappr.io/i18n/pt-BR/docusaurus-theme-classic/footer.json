@@ -9,11 +9,7 @@
   },
   "link.item.label.Getting Started": {
     "message": "Iniciar",
-    "description": "The label of footer link with label=Getting Started linking to /getting-started/intro"
-  },
-  "link.item.label.Docs": {
-    "message": "Docs",
-    "description": "The label of footer link with label=Docs linking to /docs/intro"
+    "description": "The label of footer link with label=Getting Started linking to /docs/getting_started"
   },
   "link.item.label.API": {
     "message": "API",

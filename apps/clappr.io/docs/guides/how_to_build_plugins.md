@@ -150,4 +150,4 @@ By creating plugins, you can:
 
 For more details, check out:
 
-- [Architecture Overview](./architecture.md)
+- [Architecture Overview](../architecture.md)
