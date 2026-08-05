@@ -124,17 +124,7 @@ describe.each([
   })
 
   test('plugin bases are ES5-subclassable', () => {
-    const C = resolveClappr(loadArtifact(filename))
-    expectEs5Subclassable(C.BaseObject)
-  })
-})
-
-describe.each([
-  ['plainhtml5 UMD', ARTIFACTS.plainhtml5],
-  ['plainhtml5 UMD minified', ARTIFACTS.plainhtml5Min]
-])('%s (%s)', (_label, filename) => {
-  test('does not emit native class syntax', () => {
-    expectNoNativeClasses(readArtifact(filename))
+    expectEs5Subclassable(resolveClappr(loadArtifact(filename)).BaseObject)
   })
 })
 
@@ -155,6 +145,10 @@ describe('plainhtml5 bundle', () => {
   test.each(PLAINHTML5)('%s has no HLS', filename => {
     const C = resolveClappr(loadArtifact(filename))
     expect(C.HLS).toBeUndefined()
+  })
+
+  test.each(PLAINHTML5)('%s does not emit native class syntax', filename => {
+    expectNoNativeClasses(readArtifact(filename))
   })
 })
 
