@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.12](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.11...%40clappr%2Fclappr-html5-tvs-playback%400.4.12) (2026-08-06)
+
+### Bug Fixes
+
+- address review on eslint override and html5-tvs smoke ([ad78cae](https://github.com/clappr/clappr/commit/ad78cae7a59ac78e38f6c4cd24a9f7f62a92d4d0))
+- **html5-tvs-playback:** bundle babel helpers into the esm build ([6eb27e5](https://github.com/clappr/clappr/commit/6eb27e5ff0fd8cac95b1d3eef53a8dc5197d6b47))
+
 ## [0.4.11](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.10...%40clappr%2Fclappr-html5-tvs-playback%400.4.11) (2026-08-05)
 
 ### Bug Fixes

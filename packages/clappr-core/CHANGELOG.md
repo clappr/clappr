@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.16.2](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.16.1...%40clappr%2Fcore%400.16.2) (2026-08-06)
+
+### Bug Fixes
+
+- address review on eslint override and html5-tvs smoke ([ad78cae](https://github.com/clappr/clappr/commit/ad78cae7a59ac78e38f6c4cd24a9f7f62a92d4d0))
+
 ## [0.16.1](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.16.0...%40clappr%2Fcore%400.16.1) (2026-08-05)
 
 **Note:** Version bump only for package @clappr/core
