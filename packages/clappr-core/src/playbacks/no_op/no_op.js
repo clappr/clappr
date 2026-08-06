@@ -85,6 +85,6 @@ export default class NoOp extends Playback {
   }
 }
 
-NoOp.canPlay = (source) => { // eslint-disable-line no-unused-vars
+NoOp.canPlay = (source) => {
   return true
 }
