@@ -80,7 +80,7 @@ module.exports = [
       // Variables and declarations
       'no-var': 'error',
       'prefer-const': ['error', { destructuring: 'any' }],
-      'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
+      'no-unused-vars': ['error', { args: 'none' }],
       'no-undef': 'error',
       // Other StandardJS rules
       'accessor-pairs': 'error',

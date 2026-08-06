@@ -9,7 +9,7 @@ const hasLocalstorage = function () {
     localStorage.setItem('clappr', 'clappr')
     localStorage.removeItem('clappr')
     return true
-  } catch (e) {
+  } catch {
     return false
   }
 }
@@ -18,7 +18,7 @@ const hasFlash = function () {
   try {
     const fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash')
     return !!fo
-  } catch (e) {
+  } catch {
     return !!(
       navigator.mimeTypes &&
       navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
