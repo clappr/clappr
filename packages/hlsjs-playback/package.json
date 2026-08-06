@@ -43,7 +43,6 @@
   "devDependencies": {
     "@clappr/core": "^0.16.1",
     "@rollup/plugin-replace": "^2.4.2",
-    "hls.js": "~1.6.17",
-    "rollup-plugin-serve": "^1.1.0"
+    "hls.js": "~1.6.17"
   }
 }

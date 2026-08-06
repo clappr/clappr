@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "@clappr/core": "^0.16.1",
-    "rollup-plugin-serve": "^2.0.2",
     "shaka-player": "^4"
   }
 }
