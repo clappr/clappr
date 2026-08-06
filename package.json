@@ -46,7 +46,7 @@
     "lerna": "^10.0.0",
     "postcss": "^8.4.29",
     "prettier": "^3.6.2",
-    "rollup": "^3.30.0",
+    "rollup": "^4.62.4",
     "rollup-plugin-html": "^0.2.1",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",

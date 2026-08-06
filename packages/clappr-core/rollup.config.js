@@ -1,4 +1,3 @@
-import alias from '@rollup/plugin-alias'
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import jsonReader from '@rollup/plugin-json'
@@ -46,24 +45,25 @@ const visualizePluginOptions = {
   gzipSize: true
 }
 
-const plugins = [
-  jsonReader(),
-  alias(aliasPluginOptions),
-  replace(replacePluginOptions),
-  resolve(),
-  commonjs(),
-  babel(babelPluginOptions),
-  html(),
-  postcss(postcssOptions),
-  dev && serve(servePluginOptions),
-  dev && livereload(livereloadPluginOptions)
-]
-
 export default (async () => {
-  // v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
+  // ESM-only packages: dynamic import keeps --bundleConfigAsCjs configs working.
+  const { default: alias } = await import('@rollup/plugin-alias')
   const analyzePlugins = analyzeBundle
     ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
     : []
+
+  const plugins = [
+    jsonReader(),
+    alias(aliasPluginOptions),
+    replace(replacePluginOptions),
+    resolve(),
+    commonjs(),
+    babel(babelPluginOptions),
+    html(),
+    postcss(postcssOptions),
+    dev && serve(servePluginOptions),
+    dev && livereload(livereloadPluginOptions)
+  ]
 
   const mainBundle = {
     input: 'src/main.js',
