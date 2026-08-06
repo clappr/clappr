@@ -51,8 +51,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^8.0.1",
-    "@clappr/core": "^0.16.1",
-    "rollup-plugin-serve": "^1.1.0"
+    "@clappr/core": "^0.16.1"
   },
   "publishConfig": {
     "access": "public"
