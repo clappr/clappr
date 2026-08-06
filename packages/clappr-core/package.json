@@ -42,7 +42,6 @@
     "@clappr/zepto": "^2.1.4",
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-replace": "^5.0.2",
     "typescript": "^5.5.2"
   }
 }
