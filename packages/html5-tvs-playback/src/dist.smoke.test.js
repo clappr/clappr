@@ -60,6 +60,10 @@ describe.each([
   test('does not emit native class syntax', () => {
     expectNoNativeClasses(readArtifact(filename))
   })
+
+  test('does not import @babel/runtime', () => {
+    expect(readArtifact(filename)).not.toMatch(/@babel\/runtime/)
+  })
 })
 
 describe('dist sourcemap inventory', () => {

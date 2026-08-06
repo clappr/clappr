@@ -82,7 +82,6 @@ module.exports = [
       'prefer-const': ['error', { destructuring: 'any' }],
       'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
       'no-undef': 'error',
-      'no-useless-assignment': 'off',
       // Other StandardJS rules
       'accessor-pairs': 'error',
       'constructor-super': 'error',
