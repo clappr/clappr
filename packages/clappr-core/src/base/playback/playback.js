@@ -148,14 +148,14 @@ export default class Playback extends UIObject {
    * @method seek
    * @param {Number} time should be a number between 0 and the video duration
    */
-  seek(time) {} // eslint-disable-line no-unused-vars
+  seek(time) {}
 
   /**
    * seeks the playback to a given `percentage` in percentage
    * @method seekPercentage
    * @param {Number} time should be a number between 0 and 100
    */
-  seekPercentage(percentage) {} // eslint-disable-line no-unused-vars
+  seekPercentage(percentage) {}
 
   /**
    * The time that "0" now represents relative to when playback started.
@@ -232,7 +232,7 @@ export default class Playback extends UIObject {
    * @property closedCaptionsTrackId
    * @type {Number}
    */
-  set closedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
+  set closedCaptionsTrackId(trackId) {}
 
   /**
    * returns a list of the available audio tracks for the playback.
@@ -250,7 +250,7 @@ export default class Playback extends UIObject {
    * switches the current audio track used by the playback.
    * @param {string} id - id of the audio track to be set.
    */
-  switchAudioTrack(id) {} // eslint-disable-line no-unused-vars
+  switchAudioTrack(id) {}
 
   /**
    * gets the playback type (`'vod', 'live', 'aod'`)
@@ -294,7 +294,7 @@ export default class Playback extends UIObject {
    * @method volume
    * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
    */
-  volume(value) {} // eslint-disable-line no-unused-vars
+  volume(value) {}
 
   /**
    * enables to configure the playback after its creation
@@ -310,7 +310,7 @@ export default class Playback extends UIObject {
    * @method attemptAutoPlay
    */
   attemptAutoPlay() {
-    this.canAutoPlay((result, error) => { // eslint-disable-line no-unused-vars
+    this.canAutoPlay((result, error) => {
       result && this.play()
     })
   }
@@ -352,7 +352,7 @@ Playback.extend = function (properties) {
  * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
  * @return {Boolean} `true` if the playback is playable, otherwise `false`
  */
-Playback.canPlay = (source, mimeType) => { // eslint-disable-line no-unused-vars
+Playback.canPlay = (source, mimeType) => {
   return false
 }
 

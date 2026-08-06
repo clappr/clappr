@@ -324,7 +324,7 @@ export default class HlsjsPlayback extends HTML5Video {
 
   // override
   // this playback manages the src on the video element itself
-  _setupSrc(srcUrl) {} // eslint-disable-line no-unused-vars
+  _setupSrc(srcUrl) {}
 
   _startTimeUpdateTimer() {
     if (this._timeUpdateTimer) return
