@@ -1646,14 +1646,6 @@
     babel-plugin-polyfill-regenerator "^0.6.5"
     semver "^6.3.1"
 
-"@babel/plugin-transform-runtime@^8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-8.0.1.tgz#4b199eb337c3bdda9c7e6d6d25ec387e1d4f7dd6"
-  integrity sha512-MPDpKBrxn+thQay3eJmUiSeHswiT7MkINb48hHkX6OzodB149PKq1kred+lpMebrDzHA+G1ekCQnlYSkyEqAOw==
-  dependencies:
-    "@babel/helper-module-imports" "^8.0.0"
-    "@babel/helper-plugin-utils" "^8.0.1"
-
 "@babel/plugin-transform-shorthand-properties@^7.29.7":
   version "7.29.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-shorthand-properties/-/plugin-transform-shorthand-properties-7.29.7.tgz#25c0436b98f4bd9ca4b98e1fbd662743bbaab9bf"
@@ -2006,11 +1998,6 @@
   version "7.29.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.29.7.tgz#12022450c45a4da6d8d8287b18a4ff2ddb23f768"
   integrity sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==
-
-"@babel/runtime@^7.25.0 || ^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-8.0.0.tgz#d7bd513e6843662346552c2798ab895716cf97f2"
-  integrity sha512-sL6cvO2IfkSu/iU+zs2S/w01B7A8V7suXSIKEN4hPFFdZoiPGxrj5pAG0lCaqLWiEIrjKzdznIWuaLcxPR53qw==
 
 "@babel/template@^7.29.7":
   version "7.29.7"

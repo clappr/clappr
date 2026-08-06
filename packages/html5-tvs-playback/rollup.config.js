@@ -9,12 +9,7 @@ const dev = !!process.env.DEV
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const minimize = !!process.env.MINIMIZE
 
-const babelOptionsUMD = { exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled' }
-const babelOptionsESM = {
-  exclude: ['node_modules/**', '../../node_modules/**'],
-  babelHelpers: 'runtime',
-  plugins: ['@babel/plugin-transform-runtime']
-}
+const babelOptions = { exclude: ['node_modules/**', '../../node_modules/**'], babelHelpers: 'bundled' }
 const visualizePluginOptions = {
   open: false,
   filename: 'dist/bundle-stats.html',
@@ -52,12 +47,12 @@ export default (async () => {
         plugins: terser()
       }
     ].filter(Boolean),
-    plugins: [babel(babelOptionsUMD), resolve(), commonjs(), ...plugins.filter(Boolean)]
+    plugins: [babel(babelOptions), resolve(), commonjs(), ...plugins.filter(Boolean)]
   }
 
   const esmBundle = {
     input: 'src/html5_playback.js',
-    external: ['@clappr/core', /@babel\/runtime/],
+    external: ['@clappr/core'],
     output: {
       name: 'HTML5TVsPlayback',
       file: pkg.module,
@@ -65,7 +60,7 @@ export default (async () => {
       globals: { '@clappr/core': 'Clappr' },
       sourcemap: true
     },
-    plugins: [babel(babelOptionsESM), ...plugins.filter(Boolean)]
+    plugins: [babel(babelOptions), ...plugins.filter(Boolean)]
   }
 
   return [mainBundle, esmBundle]
