@@ -7,7 +7,6 @@ import postcss from 'rollup-plugin-postcss'
 import babel from '@rollup/plugin-babel'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
-import { visualizer } from 'rollup-plugin-visualizer'
 import terser from '@rollup/plugin-terser'
 import pkg from './package.json'
 import { version as clapprCoreVersion } from '@clappr/core/package.json'
@@ -57,43 +56,50 @@ const plugins = [
   dev && livereload(livereloadPluginOptions)
 ]
 
-export default [
-  {
-    input: 'src/base_bundle.js',
-    output: [
-      {
-        name: 'Clappr',
-        file: 'dist/clappr.plainhtml5.js',
-        format: 'umd'
-      },
-      minimize && {
-        name: 'Clappr',
-        file: 'dist/clappr.plainhtml5.min.js',
-        format: 'umd',
-        sourcemap: true,
-        plugins: terser()
-      }
-    ],
-    plugins
-  },
-  {
-    input: 'src/main.js',
-    output: [
-      {
-        name: 'Clappr',
-        file: pkg.main,
-        format: 'umd',
-        sourcemap: true,
-        plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
-      },
-      minimize && {
-        file: 'dist/clappr.min.js',
-        format: 'umd',
-        name: 'Clappr',
-        sourcemap: true,
-        plugins: terser()
-      }
-    ],
-    plugins
-  }
-]
+export default (async () => {
+  // v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
+  const analyzePlugins = analyzeBundle
+    ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
+    : []
+
+  return [
+    {
+      input: 'src/base_bundle.js',
+      output: [
+        {
+          name: 'Clappr',
+          file: 'dist/clappr.plainhtml5.js',
+          format: 'umd'
+        },
+        minimize && {
+          name: 'Clappr',
+          file: 'dist/clappr.plainhtml5.min.js',
+          format: 'umd',
+          sourcemap: true,
+          plugins: terser()
+        }
+      ],
+      plugins
+    },
+    {
+      input: 'src/main.js',
+      output: [
+        {
+          name: 'Clappr',
+          file: pkg.main,
+          format: 'umd',
+          sourcemap: true,
+          plugins: analyzePlugins
+        },
+        minimize && {
+          file: 'dist/clappr.min.js',
+          format: 'umd',
+          name: 'Clappr',
+          sourcemap: true,
+          plugins: terser()
+        }
+      ],
+      plugins
+    }
+  ]
+})()

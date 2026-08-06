@@ -8,7 +8,6 @@ import html from 'rollup-plugin-html'
 import postcss from 'rollup-plugin-postcss'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
-const { visualizer } = require('rollup-plugin-visualizer')
 import terser from '@rollup/plugin-terser'
 import pkg from './package.json'
 
@@ -60,39 +59,46 @@ const plugins = [
   dev && livereload(livereloadPluginOptions)
 ]
 
-const mainBundle = {
-  input: 'src/main.js',
-  output: [
-    {
+export default (async () => {
+  // v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
+  const analyzePlugins = analyzeBundle
+    ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
+    : []
+
+  const mainBundle = {
+    input: 'src/main.js',
+    output: [
+      {
+        exports: 'named',
+        name: 'Clappr',
+        file: pkg.main,
+        format: 'umd',
+        sourcemap: true,
+        plugins: analyzePlugins
+      },
+      minimize && {
+        exports: 'named',
+        name: 'Clappr',
+        file: 'dist/clappr-core.min.js',
+        format: 'umd',
+        sourcemap: true,
+        plugins: terser()
+      }
+    ],
+    plugins
+  }
+
+  const esmBundle = {
+    input: 'src/main.js',
+    output: {
       exports: 'named',
       name: 'Clappr',
-      file: pkg.main,
-      format: 'umd',
-      sourcemap: true,
-      plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
+      file: pkg.module,
+      format: 'esm',
+      sourcemap: true
     },
-    minimize && {
-      exports: 'named',
-      name: 'Clappr',
-      file: 'dist/clappr-core.min.js',
-      format: 'umd',
-      sourcemap: true,
-      plugins: terser()
-    }
-  ],
-  plugins
-}
+    plugins
+  }
 
-const esmBundle = {
-  input: 'src/main.js',
-  output: {
-    exports: 'named',
-    name: 'Clappr',
-    file: pkg.module,
-    format: 'esm',
-    sourcemap: true
-  },
-  plugins
-}
-
-export default [mainBundle, esmBundle]
+  return [mainBundle, esmBundle]
+})()
