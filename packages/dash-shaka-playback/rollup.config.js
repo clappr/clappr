@@ -2,7 +2,6 @@ import babel from '@rollup/plugin-babel'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
 import terser from '@rollup/plugin-terser'
-import { visualizer } from 'rollup-plugin-visualizer'
 import pkg from './package.json'
 
 const dev = !!process.env.DEV
@@ -26,33 +25,38 @@ const plugins = [
   reloadEnabled && livereload({ watch: ['dist', 'public'] })
 ].filter(Boolean)
 
-const bundle = {
-  input: 'src/clappr-dash-shaka-playback.js',
-  external: ['@clappr/core', 'shaka-player'],
-  output: [
-    {
-      name: 'DashShakaPlayback',
-      file: pkg.main,
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
-      sourcemap: true,
-      plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
-    },
-    minimize && {
-      name: 'DashShakaPlayback',
-      file: 'dist/dash-shaka-playback.min.js',
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
-      sourcemap: true,
-      plugins: [terser()]
-    },
-    {
-      file: pkg.module,
-      format: 'esm',
-      sourcemap: true
-    }
-  ].filter(Boolean),
-  plugins
-}
+export default (async () => {
+  // v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
+  const analyzePlugins = analyzeBundle
+    ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
+    : []
 
-export default bundle
+  return {
+    input: 'src/clappr-dash-shaka-playback.js',
+    external: ['@clappr/core', 'shaka-player'],
+    output: [
+      {
+        name: 'DashShakaPlayback',
+        file: pkg.main,
+        format: 'umd',
+        globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
+        sourcemap: true,
+        plugins: analyzePlugins
+      },
+      minimize && {
+        name: 'DashShakaPlayback',
+        file: 'dist/dash-shaka-playback.min.js',
+        format: 'umd',
+        globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
+        sourcemap: true,
+        plugins: [terser()]
+      },
+      {
+        file: pkg.module,
+        format: 'esm',
+        sourcemap: true
+      }
+    ].filter(Boolean),
+    plugins
+  }
+})()

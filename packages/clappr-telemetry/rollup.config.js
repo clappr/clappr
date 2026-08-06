@@ -3,7 +3,6 @@ const commonjs = require('@rollup/plugin-commonjs')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const replace = require('@rollup/plugin-replace')
 const terser = require('@rollup/plugin-terser')
-const { visualizer } = require('rollup-plugin-visualizer')
 const serve = require('rollup-plugin-serve')
 const livereload = require('rollup-plugin-livereload')
 
@@ -20,29 +19,6 @@ const visualizePluginOptions = {
   filename: 'dist/bundle-stats.html',
   gzipSize: true
 }
-
-const umdOutput = [
-  {
-    file: 'dist/clappr-telemetry.js',
-    format: 'umd',
-    name: 'ClapprTelemetry',
-    globals: umdGlobals,
-    sourcemap: true,
-    plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
-  },
-  ...(minimize
-    ? [
-      {
-        file: 'dist/clappr-telemetry.min.js',
-        format: 'umd',
-        name: 'ClapprTelemetry',
-        globals: umdGlobals,
-        sourcemap: true,
-        plugins: [terser()]
-      }
-    ]
-    : [])
-]
 
 const esmOutput = {
   file: 'dist/clappr-telemetry.esm.js',
@@ -74,17 +50,47 @@ const plugins = [
   ] : [])
 ]
 
-module.exports = [
-  {
-    input: 'src/main.umd.js',
-    external: ['@clappr/core'],
-    output: umdOutput,
-    plugins
-  },
-  {
-    input: 'src/main.js',
-    external: ['@clappr/core'],
-    output: esmOutput,
-    plugins
-  }
-]
+// v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
+module.exports = (async () => {
+  const analyzePlugins = analyzeBundle
+    ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
+    : []
+
+  const umdOutput = [
+    {
+      file: 'dist/clappr-telemetry.js',
+      format: 'umd',
+      name: 'ClapprTelemetry',
+      globals: umdGlobals,
+      sourcemap: true,
+      plugins: analyzePlugins
+    },
+    ...(minimize
+      ? [
+        {
+          file: 'dist/clappr-telemetry.min.js',
+          format: 'umd',
+          name: 'ClapprTelemetry',
+          globals: umdGlobals,
+          sourcemap: true,
+          plugins: [terser()]
+        }
+      ]
+      : [])
+  ]
+
+  return [
+    {
+      input: 'src/main.umd.js',
+      external: ['@clappr/core'],
+      output: umdOutput,
+      plugins
+    },
+    {
+      input: 'src/main.js',
+      external: ['@clappr/core'],
+      output: esmOutput,
+      plugins
+    }
+  ]
+})()

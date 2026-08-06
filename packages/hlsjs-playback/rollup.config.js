@@ -3,7 +3,6 @@ import babel from '@rollup/plugin-babel'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
 import terser from '@rollup/plugin-terser'
-import { visualizer } from 'rollup-plugin-visualizer'
 import { version as clapprCoreVersion } from '@clappr/core/package.json'
 import pkg from './package.json'
 
@@ -33,34 +32,39 @@ const plugins = [
   reloadEnabled && livereload({ watch: ['dist', 'public'] })
 ].filter(Boolean)
 
-const bundle = {
-  external: ['@clappr/core', 'hls.js'],
-  input: 'src/hls.js',
-  output: [
-    {
-      name: 'HlsjsPlayback',
-      file: pkg.main,
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-      sourcemap: true,
-      plugins: analyzeBundle ? [visualizer(visualizePluginOptions)] : []
-    },
-    minimize && {
-      name: 'HlsjsPlayback',
-      file: 'dist/hlsjs-playback.min.js',
-      format: 'umd',
-      globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-      sourcemap: true,
-      plugins: [terser()]
-    },
-    {
-      name: 'HlsjsPlayback',
-      file: pkg.module,
-      format: 'esm',
-      sourcemap: true
-    }
-  ].filter(Boolean),
-  plugins
-}
+export default (async () => {
+  // v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
+  const analyzePlugins = analyzeBundle
+    ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
+    : []
 
-export default bundle
+  return {
+    external: ['@clappr/core', 'hls.js'],
+    input: 'src/hls.js',
+    output: [
+      {
+        name: 'HlsjsPlayback',
+        file: pkg.main,
+        format: 'umd',
+        globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
+        sourcemap: true,
+        plugins: analyzePlugins
+      },
+      minimize && {
+        name: 'HlsjsPlayback',
+        file: 'dist/hlsjs-playback.min.js',
+        format: 'umd',
+        globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
+        sourcemap: true,
+        plugins: [terser()]
+      },
+      {
+        name: 'HlsjsPlayback',
+        file: pkg.module,
+        format: 'esm',
+        sourcemap: true
+      }
+    ].filter(Boolean),
+    plugins
+  }
+})()
