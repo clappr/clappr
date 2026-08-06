@@ -80,8 +80,11 @@ module.exports = [
       // Variables and declarations
       'no-var': 'error',
       'prefer-const': ['error', { destructuring: 'any' }],
-      'no-unused-vars': ['error', { args: 'none' }],
+      // caughtErrors: ESLint 9+ defaults to 'all'; keep ESLint 8 catch-binding behavior.
+      'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
       'no-undef': 'error',
+      // New in eslint:recommended (ESLint 10); defer enabling until call sites are cleaned up.
+      'no-useless-assignment': 'off',
       // Other StandardJS rules
       'accessor-pairs': 'error',
       'constructor-super': 'error',
