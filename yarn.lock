@@ -4696,10 +4696,10 @@
     "@rollup/pluginutils" "^5.0.1"
     workerpool "^9.0.0"
 
-"@rollup/plugin-commonjs@^28.0.8":
-  version "28.0.9"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-28.0.9.tgz#b875cd1590617a40c4916d561d75761c6ca3c6d1"
-  integrity sha512-PIR4/OHZ79romx0BVVll/PkwWpJ7e5lsqFa3gFfcrFPWwLXLV39JVUzQV9RKjWerE7B845Hqjj9VYlQeieZ2dA==
+"@rollup/plugin-commonjs@^29.0.3":
+  version "29.0.3"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-29.0.3.tgz#e0269126503d218e81e180478355ff740ca9baff"
+  integrity sha512-ZaOxZceP7SOUW7Lqw5IRVweSQYWaeIPnXIGLiB690EBA3FGJTO40EEr2L5yZplJWsgTCogILRSpcAe7+U0Otdg==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     commondir "^1.0.1"
@@ -4716,10 +4716,10 @@
   dependencies:
     "@rollup/pluginutils" "^5.1.0"
 
-"@rollup/plugin-node-resolve@^15.2.1":
-  version "15.3.1"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.3.1.tgz#66008953c2524be786aa319d49e32f2128296a78"
-  integrity sha512-tgg6b91pAybXHJQMAAwW9VuWBO6Thi+q7BCNARLwSqlmsHz0XYURtGvh/AuwSADXSI4h/2uHbs7s4FzlZDGSGA==
+"@rollup/plugin-node-resolve@^16.0.3":
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-16.0.3.tgz#0988e6f2cbb13316b0f5e7213f757bc9ed44928f"
+  integrity sha512-lUYM3UBGuM93CnMPG1YocWu7X802BrNF3jW2zny5gQyLQgRFJhV1Sq0Zi74+dh/6NBx1DxFC4b4GXg9wUCG5Qg==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     "@types/resolve" "1.20.2"
