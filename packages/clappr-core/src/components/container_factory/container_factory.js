@@ -42,9 +42,8 @@ export default class ContainerFactory extends BaseObject {
   }
 
   createContainer(source) {
-    let resolvedSource = null
     let mimeType = this.options.mimeType
-
+    let resolvedSource
     if (typeof source === 'object') {
       resolvedSource = source.source.toString()
       if (source.mimeType) mimeType = source.mimeType
