@@ -46,7 +46,6 @@ const visualizePluginOptions = {
 }
 
 export default (async () => {
-  // ESM-only packages: dynamic import keeps --bundleConfigAsCjs configs working.
   const { default: alias } = await import('@rollup/plugin-alias')
   const analyzePlugins = analyzeBundle
     ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]

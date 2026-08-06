@@ -26,7 +26,6 @@ const plugins = [
 ].filter(Boolean)
 
 export default (async () => {
-  // v7 is ESM-only; dynamic import keeps --bundleConfigAsCjs configs working.
   const analyzePlugins = analyzeBundle
     ? [(await import('rollup-plugin-visualizer')).visualizer(visualizePluginOptions)]
     : []
