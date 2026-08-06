@@ -119,7 +119,7 @@ export class Config {
   static _defaultValueFor(key) {
     try {
       return this._defaultConfig()[key].parse(this._defaultConfig()[key].value)
-    } catch (e) {
+    } catch {
       return undefined
     }
   }
@@ -139,7 +139,7 @@ export class Config {
       try {
         localStorage[this._createKeyspace(key)] = value
         return true
-      } catch (e) {
+      } catch {
         return false
       }
     }
