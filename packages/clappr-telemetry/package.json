@@ -42,7 +42,6 @@
     "@clappr/core": "*"
   },
   "devDependencies": {
-    "@clappr/core": "^0.16.1",
-    "@rollup/plugin-replace": "^5.0.2"
+    "@clappr/core": "^0.16.1"
   }
 }
