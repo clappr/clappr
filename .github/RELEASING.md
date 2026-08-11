@@ -48,8 +48,8 @@ enforced by each package's `test:smoke` (see [#2542](https://github.com/clappr/c
 | `dash-shaka-playback`               | `.js`, `.min.js`, `.esm.mjs`                                                                |
 | `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js`                                                                 |
 
-hlsjs/dash `test:smoke` asserts the dist-wide `.map` inventory so missing, unexpected, and
-stale maps fail CI.
+Each publishable package's `test:smoke` asserts its dist-wide `.map` inventory so missing,
+unexpected, and stale maps fail CI (`clappr-zepto` is outside this policy).
 
 **Never tag the archived `clappr/dash-shaka-playback` repo again.** jsDelivr
 `gh/clappr/dash-shaka-playback@latest` resolves to that archive's tags (**2.3.6** as of
