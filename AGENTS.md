@@ -28,12 +28,13 @@ Monorepo managed by Lerna with Yarn workspaces. Each package has its own `packag
 
 Shared config locations:
 
-| Config | Path | Notes |
-|--------|------|-------|
-| Babel | `babel.base.json` | Packages extend via `.babelrc` |
-| Jest | `jest.config.base.js` | Packages extend via spread; override `transform` when not resolving sibling ESM source |
-| Browserslist | `.browserslistrc` | Monorepo ES5 floor (`> 0.5%` / `last 2 versions` / `not ie <= 11`). Must keep at least one target without `class` support (do **not** add `not dead` — see #2540) because published `dist/` is subclassed by ES5 third-party plugins. Same query drives autoprefixer legacy prefixes required by `html5-tvs-playback`. `apps/clappr.io` keeps its own field |
-| ESLint | `eslint.config.js` | Flat config; `eslint` + `@eslint/js` declared at the root. Root `yarn lint` runs `lerna run lint` so package configs (`*.js` at package root) are covered |
+| Config       | Path                  | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Babel        | `babel.base.json`     | Packages extend via `.babelrc`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Jest         | `jest.config.base.js` | Packages extend via spread; override `transform` when not resolving sibling ESM source                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Browserslist | `.browserslistrc`     | Monorepo ES5 floor (`> 0.5%` / `last 2 versions` / `not ie <= 11`). Must keep at least one target without `class` support (do **not** add `not dead` — see #2540) because published `dist/` is subclassed by ES5 third-party plugins. Same query drives autoprefixer legacy prefixes required by `html5-tvs-playback`. `apps/clappr.io` keeps its own field                                                                                                                                                                                                                                                                                                                                                                            |
+| ESLint       | `eslint.config.js`    | Flat config; `eslint` + `@eslint/js` declared at the root. Root `yarn lint` runs `lerna run lint` so package configs (`*.js` at package root) are covered                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| Knip         | `knip.json`           | Single root config for all workspaces. Force-enables Rollup/Jest/Babel/PostCSS plugins per `packages/*` because those tools live only in the root `devDependencies` (Knip enables plugins from each workspace's own `package.json`). Specific workspace keys replace the glob (they do not merge) — repeat shared keys when overriding. Run only from the repo root (`yarn knip`) so hoisted deps resolve. Temporary suppressions (remove when the linked issue lands): unused core exports (#2558), unused html5-tvs DRM exports (#2559), orphaned `GA4PluginSample` / `load-script-promise` (#2560). `@docusaurus/types` and `@docusaurus/plugin-content-docs` are ignored as JSDoc type-only imports provided by `@docusaurus/core` |
 
 Conscious exceptions:
 
@@ -52,22 +53,22 @@ When adding a shared tool, put it at the root and remove per-package copies. Pre
 
 Packages published to npm (via the Release workflow / Trusted Publishers):
 
-| Package | npm name |
-|---------|----------|
-| `packages/clappr-core/` | `@clappr/core` |
-| `packages/clappr-plugins/` | `@clappr/plugins` |
-| `packages/clappr-telemetry/` | `@clappr/telemetry` |
-| `packages/player/` | `@clappr/player` |
-| `packages/hlsjs-playback/` | `@clappr/hlsjs-playback` |
-| `packages/dash-shaka-playback/` | `dash-shaka-playback` |
-| `packages/html5-tvs-playback/` | `@clappr/clappr-html5-tvs-playback` |
+| Package                         | npm name                            |
+| ------------------------------- | ----------------------------------- |
+| `packages/clappr-core/`         | `@clappr/core`                      |
+| `packages/clappr-plugins/`      | `@clappr/plugins`                   |
+| `packages/clappr-telemetry/`    | `@clappr/telemetry`                 |
+| `packages/player/`              | `@clappr/player`                    |
+| `packages/hlsjs-playback/`      | `@clappr/hlsjs-playback`            |
+| `packages/dash-shaka-playback/` | `dash-shaka-playback`               |
+| `packages/html5-tvs-playback/`  | `@clappr/clappr-html5-tvs-playback` |
 
 Packages that do **not** publish to npm:
 
-| Package | Reason |
-|---------|--------|
+| Package                  | Reason                                                       |
+| ------------------------ | ------------------------------------------------------------ |
 | `packages/clappr-zepto/` | Internal only (`private: true`); bundled into `@clappr/core` |
-| `apps/clappr.io/` | Docs site (`clappr-docs`, already `private: true`) |
+| `apps/clappr.io/`        | Docs site (`clappr-docs`, already `private: true`)           |
 
 ### Sourcemaps
 
@@ -87,15 +88,15 @@ Rationale:
 `clappr-zepto` is `private: true` and outside this policy. The sourcemap inventory is
 enforced by each package's `test:smoke` (see [#2542](https://github.com/clappr/clappr/issues/2542)).
 
-| Package | Maps shipped |
-|---------|--------------|
-| `@clappr/core` | `clappr-core.js`, `.min.js`, `.esm.js` |
-| `@clappr/plugins` | `clappr-plugins.js`, `.min.js`, `.esm.js` |
-| `@clappr/telemetry` | `clappr-telemetry.js`, `.min.js`, `.esm.js` |
-| `@clappr/player` | `clappr.js`, `.min.js`, `clappr.plainhtml5.min.js` — not `clappr.plainhtml5.js` (demo-only) |
-| `@clappr/hlsjs-playback` | `.js`, `.min.js`, `.esm.js` |
-| `dash-shaka-playback` | `.js`, `.min.js`, `.esm.mjs` |
-| `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js` |
+| Package                             | Maps shipped                                                                                |
+| ----------------------------------- | ------------------------------------------------------------------------------------------- |
+| `@clappr/core`                      | `clappr-core.js`, `.min.js`, `.esm.js`                                                      |
+| `@clappr/plugins`                   | `clappr-plugins.js`, `.min.js`, `.esm.js`                                                   |
+| `@clappr/telemetry`                 | `clappr-telemetry.js`, `.min.js`, `.esm.js`                                                 |
+| `@clappr/player`                    | `clappr.js`, `.min.js`, `clappr.plainhtml5.min.js` — not `clappr.plainhtml5.js` (demo-only) |
+| `@clappr/hlsjs-playback`            | `.js`, `.min.js`, `.esm.js`                                                                 |
+| `dash-shaka-playback`               | `.js`, `.min.js`, `.esm.mjs`                                                                |
+| `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js`                                                                 |
 
 hlsjs/dash `test:smoke` asserts the dist-wide `.map` inventory so missing, unexpected, and
 stale maps fail CI.
@@ -120,10 +121,10 @@ If Validate says there is **no CI run** for the tip SHA, GitHub never created on
 
 Resolving zero publishable packages **fails** the run (green only under `dry_run`). You asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green.
 
-| Input | Use |
-|---|---|
-| `dry_run` | Preview only. A pure modifier — combine with `publish_only` to preview that path too |
-| `publish_only` | Recovery: versions and tags already landed on main, publish `package.json` as-is |
+| Input          | Use                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------ |
+| `dry_run`      | Preview only. A pure modifier — combine with `publish_only` to preview that path too |
+| `publish_only` | Recovery: versions and tags already landed on main, publish `package.json` as-is     |
 
 Nothing announces a failed release: the red run in Actions is the only signal.
 
@@ -140,10 +141,10 @@ You can also run Actions → **Generate release notes** manually (updates an exi
 
 **When the player version is missing from npm, the two paths differ on purpose:**
 
-| Path | Missing on npm | Why |
-|---|---|---|
+| Path                                           | Missing on npm                                 | Why                                                                                                                                                                  |
+| ---------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Called by `Release` (`published_in_run: true`) | **Fails** → red `notes` job on the Release run | The publish already succeeded, so absence contradicts the caller's own precondition. Whether it is registry lag or a real incident, a green run would notify nobody. |
-| Manual dispatch | Skips with a warning | You aimed at that tag deliberately; failing would be noise. |
+| Manual dispatch                                | Skips with a warning                           | You aimed at that tag deliberately; failing would be noise.                                                                                                          |
 
 The registry gets ~50s (`REGISTRY_ATTEMPTS: 6`) on the Release path before it counts as missing, so the failure means something is wrong rather than npm being slow.
 
@@ -178,6 +179,7 @@ Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Reque
 - `yarn build` — Build player and dependencies (dev / contributor path)
 - `yarn build:dist` — Run each package's `release` script (minimized artifacts CI also verifies). Matches `prepublishOnly` for all seven publishable packages
 - `yarn lint` / `yarn lint:fix` — ESLint
+- `yarn knip` — Unused files, exports, and dependencies (root `knip.json`; must run from the repo root)
 - `yarn format` / `yarn format:check` — Prettier
 - `yarn test` — `lerna run test --no-bail` across packages that define a `test` script (unit only)
 - `yarn test:smoke` — dist artifact smoke tests (`hlsjs-playback`, `dash-shaka-playback`, `clappr-zepto`); run after `yarn build:dist` (CI does). Locally: `yarn build:dist && yarn test:smoke`
@@ -189,15 +191,15 @@ Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Reque
 
 Do not read these by default — open only when the task involves the topic.
 
-| Topic | Path |
-|-------|------|
-| Architecture | `apps/clappr.io/docs/architecture.md` |
-| Getting started | `apps/clappr.io/docs/getting_started.md` |
-| Player API | `apps/clappr.io/docs/api.md` |
-| Plugin development | `apps/clappr.io/docs/guides/how_to_build_plugins.md` |
-| Events | `apps/clappr.io/docs/guides/events.md` |
-| Supported formats | `apps/clappr.io/docs/supported_formats.md` |
-| FAQ | `apps/clappr.io/docs/faq.md` |
+| Topic                          | Path                                                                                                                   |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| Architecture                   | `apps/clappr.io/docs/architecture.md`                                                                                  |
+| Getting started                | `apps/clappr.io/docs/getting_started.md`                                                                               |
+| Player API                     | `apps/clappr.io/docs/api.md`                                                                                           |
+| Plugin development             | `apps/clappr.io/docs/guides/how_to_build_plugins.md`                                                                   |
+| Events                         | `apps/clappr.io/docs/guides/events.md`                                                                                 |
+| Supported formats              | `apps/clappr.io/docs/supported_formats.md`                                                                             |
+| FAQ                            | `apps/clappr.io/docs/faq.md`                                                                                           |
 | HLS / DASH / Smart TV playback | `packages/hlsjs-playback/README.md`, `packages/dash-shaka-playback/README.md`, `packages/html5-tvs-playback/README.md` |
 
 ### Code map

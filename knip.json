@@ -1,0 +1,55 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "compilers": {
+    "scss": true,
+    "sass": true
+  },
+  "workspaces": {
+    ".": {
+      "entry": ["test/dist-contract.js"],
+      "project": ["test/**/*.{js,scss,sass}"],
+      "jest": { "config": ["jest.config.base.js"] },
+      "babel": { "config": ["babel.base.json"] }
+    },
+    "packages/*": {
+      "project": ["src/**/*.{js,scss,sass}", "*.js"],
+      "rollup": true,
+      "jest": true,
+      "babel": true,
+      "postcss": true
+    },
+    "packages/clappr-core": {
+      "entry": ["src/base/scss/**/*.{scss,sass}"],
+      "project": ["src/**/*.{js,scss,sass}", "*.js"],
+      "paths": {
+        "@/*": ["./src/*"]
+      },
+      "rollup": true,
+      "jest": true,
+      "babel": true,
+      "postcss": true
+    },
+    "packages/clappr-plugins": {
+      "entry": ["src/plugins/*/*.js", "!src/plugins/**/*.test.js"],
+      "project": ["src/**/*.{js,scss,sass}", "*.js"],
+      "rollup": {
+        "config": ["rollup.config.js", "rollup.config.dev.js", "rollup.config.base.js"]
+      },
+      "jest": true,
+      "babel": true,
+      "postcss": true
+    },
+    "apps/clappr.io": {
+      "project": ["**/*.{js,jsx,ts,tsx,mdx,scss,sass}"],
+      "docusaurus": true,
+      "ignoreDependencies": ["@docusaurus/types", "@docusaurus/plugin-content-docs"]
+    }
+  },
+  "ignore": ["apps/clappr.io/src/components/GA4PluginSample/**"],
+  "ignoreDependencies": ["load-script-promise"],
+  "ignoreIssues": {
+    "packages/clappr-core/src/base/media.js": ["exports"],
+    "packages/clappr-core/src/components/browser/browser.js": ["exports"],
+    "packages/html5-tvs-playback/src/drm/drm_handler.js": ["exports"]
+  }
+}

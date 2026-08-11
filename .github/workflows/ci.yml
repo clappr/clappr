@@ -31,6 +31,9 @@ jobs:
       - name: run lint
         run: yarn lint
 
+      - name: run knip
+        run: yarn knip
+
       - name: run unit tests
         run: yarn test
 
