@@ -48,8 +48,6 @@
   "ignore": ["apps/clappr.io/src/components/GA4PluginSample/**"],
   "ignoreDependencies": ["load-script-promise"],
   "ignoreIssues": {
-    "packages/clappr-core/src/base/media.js": ["exports"],
-    "packages/clappr-core/src/components/browser/browser.js": ["exports"],
     "packages/html5-tvs-playback/src/drm/drm_handler.js": ["exports"]
   }
 }
