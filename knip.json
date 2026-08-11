@@ -46,8 +46,5 @@
     }
   },
   "ignore": ["apps/clappr.io/src/components/GA4PluginSample/**"],
-  "ignoreDependencies": ["load-script-promise"],
-  "ignoreIssues": {
-    "packages/html5-tvs-playback/src/drm/drm_handler.js": ["exports"]
-  }
+  "ignoreDependencies": ["load-script-promise"]
 }
