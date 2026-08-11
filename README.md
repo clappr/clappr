@@ -127,17 +127,17 @@ Thanks to all our amazing contributors! 🎉
 		</tr>
 		<tr>
             <td align="center">
-                <a href="https://github.com/tchakabam">
-                    <img src="https://avatars.githubusercontent.com/u/1480052?v=4" width="100;" alt="tchakabam"/>
-                    <br />
-                    <sub><b>tchakabam</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/leaofelipe">
                     <img src="https://avatars.githubusercontent.com/u/1847691?v=4" width="100;" alt="leaofelipe"/>
                     <br />
                     <sub><b>leaofelipe</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/tchakabam">
+                    <img src="https://avatars.githubusercontent.com/u/1480052?v=4" width="100;" alt="tchakabam"/>
+                    <br />
+                    <sub><b>tchakabam</b></sub>
                 </a>
             </td>
             <td align="center">
