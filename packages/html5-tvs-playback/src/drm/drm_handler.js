@@ -54,7 +54,7 @@ const DRMFunctions = {
   createDrmAgent
 }
 
-export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = () => {}) {
+function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = () => {}) {
   const successCallback = onSuccess.bind(this)
   const errorCallback = onFail.bind(this)
   let oipfdrmagent = document.getElementById('oipfdrmagent')
@@ -116,7 +116,7 @@ export function sendLicenseRequest(config = {}, onSuccess = () => {}, onFail = (
   }
 }
 
-export function clearLicenseRequest(onSuccess = () => {}, onFail = () => {}) {
+function clearLicenseRequest(onSuccess = () => {}, onFail = () => {}) {
   const successCallback = onSuccess.bind(this)
   const errorCallback = onFail.bind(this)
   const oipfdrmagent = document.getElementById('oipfdrmagent')
