@@ -44,7 +44,5 @@
       "docusaurus": true,
       "ignoreDependencies": ["@docusaurus/types", "@docusaurus/plugin-content-docs"]
     }
-  },
-  "ignore": ["apps/clappr.io/src/components/GA4PluginSample/**"],
-  "ignoreDependencies": ["load-script-promise"]
+  }
 }

@@ -10741,11 +10741,6 @@ load-json-file@6.2.0:
     strip-bom "^4.0.0"
     type-fest "^0.6.0"
 
-load-script-promise@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/load-script-promise/-/load-script-promise-1.0.4.tgz#85adbd40e6d940217394400c077f28f577a3f0d1"
-  integrity sha512-WCa5M0rkixFb0LRJsE96lpzB638arOWHsafFuJFybhvMzUo/ijQCNK/Cd0njCBn7BCJNYaTzhV4FzofRvRIR7Q==
-
 loader-utils@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-2.0.4.tgz#8b5cb38b5c34a9a018ee1fc0e6a066d1dfcc528c"
