@@ -161,7 +161,7 @@ const setOsVersion = function (version, separator, osObject) {
 }
 
 // Set viewport size
-export const getViewportSize = function () {
+const getViewportSize = function () {
   const viewportObject = {}
 
   viewportObject.width = $(window).width()
