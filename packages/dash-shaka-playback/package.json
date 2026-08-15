@@ -48,6 +48,6 @@
   },
   "devDependencies": {
     "@clappr/core": "^0.16.2",
-    "shaka-player": "^4"
+    "shaka-player": "^5"
   }
 }
