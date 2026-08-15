@@ -9176,7 +9176,7 @@ history@^4.9.0:
     tiny-warning "^1.0.0"
     value-equal "^1.0.1"
 
-hls.js@~1.7.0:
+hls.js@^1:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.7.0.tgz#43506ae3f3ebc3ed3d5c5f92370be3522688af48"
   integrity sha512-NnQpT6Z//+2IB2qovSUbKbrlXY1MOpi0JynZ9L2NNOuTJiNCyMSQj9k2laEj1v7CxU/Hb8oTWR98eT3mVpPQVQ==
