@@ -442,9 +442,9 @@ describe('HlsjsPlayback', () => {
       }
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
       playback.el.currentTime = 5
-      playback._setup()
-      playback.unbindCustomListeners()
-      playback._hls.trigger(HLSJS.Events.FRAG_CHANGED, fragmentMock)
+      // Drive the playback handler directly. hls.js 1.7+ FRAG_CHANGED internals
+      // expect a MediaFragment and swallow a synthetic trigger() payload.
+      playback._onFragmentChanged(HLSJS.Events.FRAG_CHANGED, fragmentMock)
       expect(playback.currentTimestamp).toBe(1556663045) // 'Tue Apr 30 2019 19:24:05'
     })
 
@@ -452,6 +452,46 @@ describe('HlsjsPlayback', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
       playback._setup()
       expect(playback.currentTimestamp).toBe(null)
+    })
+  })
+
+  describe('level and fragment events', () => {
+    test('_onLevelSwitch fills levels and reports bitrate', () => {
+      const playback = createPlayback()
+      playback._hls = {
+        levels: [{ height: 1080, width: 1920, bitrate: 4000000 }]
+      }
+      const onSwitch = jest.fn()
+      const onHd = jest.fn()
+      const onBitrate = jest.fn()
+      playback.on(Events.PLAYBACK_LEVEL_SWITCH, onSwitch)
+      playback.on(Events.PLAYBACK_HIGHDEFINITIONUPDATE, onHd)
+      playback.on(Events.PLAYBACK_BITRATE, onBitrate)
+
+      playback._onLevelSwitch(HLSJS.Events.LEVEL_SWITCHED, { level: 0 })
+
+      expect(playback.levels).toHaveLength(1)
+      expect(playback.highDefinition).toBe(true)
+      expect(onSwitch).toHaveBeenCalled()
+      expect(onHd).toHaveBeenCalledWith(true)
+      expect(onBitrate).toHaveBeenCalledWith(
+        expect.objectContaining({ height: 1080, bitrate: 4000000, level: 0 })
+      )
+    })
+
+    test('_onFragmentLoaded and _onFragmentBuffered forward playback events', () => {
+      const playback = createPlayback()
+      const onLoaded = jest.fn()
+      const onBuffered = jest.fn()
+      playback.on(Events.PLAYBACK_FRAGMENT_LOADED, onLoaded)
+      playback.on(Events.PLAYBACK_FRAGMENT_BUFFERED, onBuffered)
+      const data = { frag: { sn: 1 } }
+
+      playback._onFragmentLoaded(HLSJS.Events.FRAG_LOADED, data)
+      playback._onFragmentBuffered(HLSJS.Events.FRAG_BUFFERED, data)
+
+      expect(onLoaded).toHaveBeenCalledWith(data)
+      expect(onBuffered).toHaveBeenCalledWith(data)
     })
   })
 

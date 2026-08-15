@@ -42,6 +42,6 @@
   },
   "devDependencies": {
     "@clappr/core": "^0.16.2",
-    "hls.js": "~1.6.17"
+    "hls.js": "~1.7.0"
   }
 }

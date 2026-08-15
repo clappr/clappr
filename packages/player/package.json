@@ -37,7 +37,7 @@
     "@clappr/core": "^0.16.2",
     "@clappr/hlsjs-playback": "^3.0.2",
     "@clappr/plugins": "^0.9.12",
-    "hls.js": "^1"
+    "hls.js": "~1.7.0"
   },
   "nx": {
     "targets": {
