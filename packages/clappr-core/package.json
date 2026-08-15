@@ -1,6 +1,6 @@
 {
   "name": "@clappr/core",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "Core components of the extensible media player for the web",
   "main": "./dist/clappr-core.js",
   "module": "./dist/clappr-core.esm.js",

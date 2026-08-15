@@ -1,6 +1,6 @@
 {
   "name": "@clappr/telemetry",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Telemetry package for Clappr player",
   "main": "./dist/clappr-telemetry.js",
   "module": "./dist/clappr-telemetry.esm.js",
@@ -42,6 +42,6 @@
     "@clappr/core": "*"
   },
   "devDependencies": {
-    "@clappr/core": "^0.16.2"
+    "@clappr/core": "^0.16.3"
   }
 }
