@@ -442,8 +442,6 @@ describe('HlsjsPlayback', () => {
       }
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
       playback.el.currentTime = 5
-      // Drive the playback handler directly. hls.js 1.7+ FRAG_CHANGED internals
-      // expect a MediaFragment and swallow a synthetic trigger() payload.
       playback._onFragmentChanged(HLSJS.Events.FRAG_CHANGED, fragmentMock)
       expect(playback.currentTimestamp).toBe(1556663045) // 'Tue Apr 30 2019 19:24:05'
     })
