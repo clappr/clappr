@@ -212,7 +212,7 @@ function clapprPlugins({ compact = false } = {}) {
 function serveConfig(pkgSpec, alias, define, css, cssTarget) {
   const server = pkgSpec.server || {}
   return defineConfig({
-    publicDir: 'public',
+    publicDir: pkgSpec.publicDir === undefined ? 'public' : pkgSpec.publicDir,
     define,
     resolve: { alias },
     css,
@@ -233,8 +233,14 @@ export function defineClapprLib(pkgSpec) {
     assertEntryExists(pkgSpec)
 
     const mode = env.mode || 'production'
-    const alias = pkgSpec.alias || {}
-    const define = viteDefine(resolvedReplace(pkgSpec))
+    const alias = {
+      ...(pkgSpec.alias || {}),
+      ...(env.command === 'serve' ? pkgSpec.serveAlias || {} : {})
+    }
+    const define = viteDefine({
+      ...resolvedReplace(pkgSpec),
+      ...(env.command === 'serve' ? pkgSpec.serveReplace || {} : {})
+    })
     const css = viteCss(pkgSpec)
 
     if (env.command === 'serve') {
