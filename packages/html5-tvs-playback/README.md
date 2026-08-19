@@ -9,12 +9,14 @@ A Clappr HTML5 playback for smart TVs devices that implement the [HbbTV 2.0.1 sp
 ---
 
 ## Features
-* Supports VoD and Live content;
-  * Current mime types: [`video/mp4`, `application/vnd.apple.mpegurl`, `application/vnd.ms-sstr+xml`, `application/dash+xml`].
-* Supports DRM content;
-  * Using [`oipfDrmAgent`](https://www.oipf.tv/docs/OIPF-T1-R2_Specification-Volume-5-Declarative-Application-Environment-v2_3-2014-01-24.pdf#page=121).
+
+- Supports VoD and Live content;
+  - Current mime types: [`video/mp4`, `application/vnd.apple.mpegurl`, `application/vnd.ms-sstr+xml`, `application/dash+xml`].
+- Supports DRM content;
+  - Using [`oipfDrmAgent`](https://www.oipf.tv/docs/OIPF-T1-R2_Specification-Volume-5-Declarative-Application-Environment-v2_3-2014-01-24.pdf#page=121).
 
 ## Configuration
+
 The options for the playback must be placed in the `html5TvsPlayback` property as shown below:
 
 ```javascript
@@ -24,70 +26,77 @@ var player = new Clappr.Player({
   html5TvsPlayback: {
     drm: {
       licenseServerURL: 'https://my-license-server.com/keys/my-key',
-      xmlLicenceAcquisition: '<WRMHEADER xmlns="http://schemas.microsoft.com/DRM/2007/03 PlayReadyHeader" version="4.0.0.0"><DATA><PROTECTINFO><ALGID>AESCTR</ALGID><KEYLEN>16</KEYLEN></PROTECTINFO><KID>base64-encoded kid</KID><CHECKSUM>checksum of the content key for verification</CHECKSUM><LA_URL>URL for license acquisition</LA_URL></DATA></WRMHEADER>',
-    },
-  },
-});
+      xmlLicenceAcquisition:
+        '<WRMHEADER xmlns="http://schemas.microsoft.com/DRM/2007/03 PlayReadyHeader" version="4.0.0.0"><DATA><PROTECTINFO><ALGID>AESCTR</ALGID><KEYLEN>16</KEYLEN></PROTECTINFO><KID>base64-encoded kid</KID><CHECKSUM>checksum of the content key for verification</CHECKSUM><LA_URL>URL for license acquisition</LA_URL></DATA></WRMHEADER>'
+    }
+  }
+})
 ```
 
 ### `drm {Object}`
+
 Group all DRM-related config. The currently available configs are:
 
-* #### `licenseServerURL {String}`
+- #### `licenseServerURL {String}`
+
   The license server URL used on the license acquisition. Only used to do the post acquisition.
 
-* #### `xmlLicenceAcquisition {String}`
+- #### `xmlLicenceAcquisition {String}`
   The part of XML that contains all necessary info to do the full challenge of license acquisition. See more about the PlayReady Header Specification [here](https://docs.microsoft.com/en-us/playready/specifications/playready-header-specification).
 
 ### `disableDRMSetup {Boolean}`
+
 Skips the DRM license request even when `drm` is configured, appending the source element directly. Useful when the license acquisition is handled outside the playback.
 
 ## API Documentation
 
 ### Playback API
-| static method | arguments | description |
-|---------------|-----------|-------------|
+
+| static method              | arguments                                                                           | description                                                                                                                                                                              |
+| -------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `HTML5TVsPlayback.canPlay` | <ul><li>`{String} - resourceUrl`</li><li>`{String} - mimeType (optional)`</li></ul> | Returns a {Boolean} response accordingly to the given media URL (`resourceUrl`). If a `mimeType` is provided then this will be used instead of inferring the mimetype via the given URL. |
 
-| instance method | arguments | description |
-|-----------------|-----------|-------------|
-| `playback.load` | `{String} - resourceUrl` | Loads the media on the video element creating one `<source>` element inside it with the received source URL. |
-| `playback.play` |  | Begins/resume playback of the media. |
-| `playback.pause` |  | Pauses the media playback. |
-| `playback.stop` | | Stops the media playback. This implies on the removing the src attribute from the video element and calling the load() method without a valid source to stop downloading the source that was removed. |
-| `playback.seek` | `{Number} - time in seconds` | Updates the media playback position with the received value. |
-| `playback.destroy` |  | Removes the video component from the DOM. |
-| `playback.getCurrentTime (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer currentTime getter. |
-| `playback.getDuration (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer duration getter. |
-| `playback.isPlaying (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer playing getter. |
-| `playback.getPlaybackType (deprecated)` |  | This method only exists for backward compatibility reasons. Prefer mediaType getter. |
-| `playback.switchAudioTrack` | `{String} - track id` | Updates the current audio track to the one with the provided id. |
+| instance method                         | arguments                    | description                                                                                                                                                                                           |
+| --------------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `playback.load`                         | `{String} - resourceUrl`     | Loads the media on the video element creating one `<source>` element inside it with the received source URL.                                                                                          |
+| `playback.play`                         |                              | Begins/resume playback of the media.                                                                                                                                                                  |
+| `playback.pause`                        |                              | Pauses the media playback.                                                                                                                                                                            |
+| `playback.stop`                         |                              | Stops the media playback. This implies on the removing the src attribute from the video element and calling the load() method without a valid source to stop downloading the source that was removed. |
+| `playback.seek`                         | `{Number} - time in seconds` | Updates the media playback position with the received value.                                                                                                                                          |
+| `playback.destroy`                      |                              | Removes the video component from the DOM.                                                                                                                                                             |
+| `playback.getCurrentTime (deprecated)`  |                              | This method only exists for backward compatibility reasons. Prefer currentTime getter.                                                                                                                |
+| `playback.getDuration (deprecated)`     |                              | This method only exists for backward compatibility reasons. Prefer duration getter.                                                                                                                   |
+| `playback.isPlaying (deprecated)`       |                              | This method only exists for backward compatibility reasons. Prefer playing getter.                                                                                                                    |
+| `playback.getPlaybackType (deprecated)` |                              | This method only exists for backward compatibility reasons. Prefer mediaType getter.                                                                                                                  |
+| `playback.switchAudioTrack`             | `{String} - track id`        | Updates the current audio track to the one with the provided id.                                                                                                                                      |
 
-| getter | description | response |
-|--------|-------------|----------|
-| `playback.config` | Returns the `options.html5TvsPlayback` value. | `{Object}` |
-| `playback.mediaType` | Returns if the media is `live` or `vod`. | `{String}` |
-| `playback.isReady` |  Indicates if the video is  ready to play, checking if [HTMLMediaElement.readyState](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) is greater than or equal [HAVE_FUTURE_DATA](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState#value) value. | `{Boolean}` |
-| `playback.playing` | Indicates if the video is playing or not. | `{Boolean}` |
-| `playback.currentTime` | Returns the position the media is at the current moment. | `{Number} - time in seconds` |
-| `playback.duration` | Returns the duration of the current media. | `{Number} - time in seconds` |
-| `playback.ended` | Indicates whether the media has finished playing. | `{Boolean}` |
-| `playback.buffering` | Indicates whether the media on the buffering state. | `{Boolean}` |
-| `playback.audioTracks` | Returns a list of audio tracks currently available. | [`{AudioTrack[]}`](#audiotrack) |
-| `playback.currentAudioTrack` | Returns the audio track currenlty in use. | [`{AudioTrack}`](#audiotrack) |
-| `playback.isLive` | Indicates whether the media is a live content. | `{Boolean}` |
-| `playback.minimumDvrSizeConfig` | Returns `options.playback.minimumDvrSize` if is configured and is a valid value. | `{Number}` |
-| `playback.dvrSize` | Returns `playback.minimumDvrSizeConfig` if is a valid value or one default value. (Currently, is 60 seconds) | `{Number}` |
-| `playback.dvrEnabled` | Indicates whether the live media is on DVR state. | `{Boolean}` |
-| `playback.playbackType` | Returns if the type of media when this property was not change the value is `live` or `vod`. | `{String}` |
-| `playback.sourceMedia` | Returns a media url in use. | `{String}` |
+| getter                          | description                                                                                                                                                                                                                                                                                             | response                        |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `playback.config`               | Returns the `options.html5TvsPlayback` value.                                                                                                                                                                                                                                                           | `{Object}`                      |
+| `playback.mediaType`            | Returns if the media is `live` or `vod`.                                                                                                                                                                                                                                                                | `{String}`                      |
+| `playback.isReady`              | Indicates if the video is ready to play, checking if [HTMLMediaElement.readyState](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) is greater than or equal [HAVE_FUTURE_DATA](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState#value) value. | `{Boolean}`                     |
+| `playback.playing`              | Indicates if the video is playing or not.                                                                                                                                                                                                                                                               | `{Boolean}`                     |
+| `playback.currentTime`          | Returns the position the media is at the current moment.                                                                                                                                                                                                                                                | `{Number} - time in seconds`    |
+| `playback.duration`             | Returns the duration of the current media.                                                                                                                                                                                                                                                              | `{Number} - time in seconds`    |
+| `playback.ended`                | Indicates whether the media has finished playing.                                                                                                                                                                                                                                                       | `{Boolean}`                     |
+| `playback.buffering`            | Indicates whether the media on the buffering state.                                                                                                                                                                                                                                                     | `{Boolean}`                     |
+| `playback.audioTracks`          | Returns a list of audio tracks currently available.                                                                                                                                                                                                                                                     | [`{AudioTrack[]}`](#audiotrack) |
+| `playback.currentAudioTrack`    | Returns the audio track currenlty in use.                                                                                                                                                                                                                                                               | [`{AudioTrack}`](#audiotrack)   |
+| `playback.isLive`               | Indicates whether the media is a live content.                                                                                                                                                                                                                                                          | `{Boolean}`                     |
+| `playback.minimumDvrSizeConfig` | Returns `options.playback.minimumDvrSize` if is configured and is a valid value.                                                                                                                                                                                                                        | `{Number}`                      |
+| `playback.dvrSize`              | Returns `playback.minimumDvrSizeConfig` if is a valid value or one default value. (Currently, is 60 seconds)                                                                                                                                                                                            | `{Number}`                      |
+| `playback.dvrEnabled`           | Indicates whether the live media is on DVR state.                                                                                                                                                                                                                                                       | `{Boolean}`                     |
+| `playback.playbackType`         | Returns if the type of media when this property was not change the value is `live` or `vod`.                                                                                                                                                                                                            | `{String}`                      |
+| `playback.sourceMedia`          | Returns a media url in use.                                                                                                                                                                                                                                                                             | `{String}`                      |
 
-| setter | description | parameter |
-|--------|-------------|----------|
+| setter                  | description                                          | parameter  |
+| ----------------------- | ---------------------------------------------------- | ---------- |
 | `playback.playbackType` | Set the new value of playback.playbackType property. | `{String}` |
 
 ## Types
+
 #### `AudioTrack`
+
 ```javascript
 /**
  * An object representing a single audio track.
@@ -106,6 +115,7 @@ Skips the DRM license request even when `drm` is configured, appending the sourc
 ```
 
 ## Next Steps
+
 - [x] Media with DRM;
 - [x] Live media;
 - [ ] subtitles/closed captions;
@@ -114,7 +124,7 @@ Skips the DRM license request even when `drm` is configured, appending the sourc
 
 ## Development
 
-From the monorepo root:
+From the monorepo root. Tests run with Vitest; `start` and `build` use Vite:
 
 ```bash
 yarn install

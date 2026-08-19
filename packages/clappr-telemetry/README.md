@@ -36,9 +36,14 @@ Via CDN (jsDelivr):
 <div id="player"></div>
 <script>
   const {
-    ShakaNetworkAdapter, HlsNetworkAdapter,
-    BufferSampler, DecodingSampler, PlaybackStateSampler,
-    NetworkSampler, PlaybackTimingSampler, StreamInfoSampler,
+    ShakaNetworkAdapter,
+    HlsNetworkAdapter,
+    BufferSampler,
+    DecodingSampler,
+    PlaybackStateSampler,
+    NetworkSampler,
+    PlaybackTimingSampler,
+    StreamInfoSampler,
     VideoEventObserver
   } = ClapprTelemetry
 
@@ -47,11 +52,17 @@ Via CDN (jsDelivr):
     source: 'https://example.com/stream.mpd',
     plugins: [DashShakaPlayback, ClapprTelemetry],
     telemetry: {
-      adapters:  [ShakaNetworkAdapter, HlsNetworkAdapter],
-      samplers:  [BufferSampler, DecodingSampler, PlaybackStateSampler,
-                  NetworkSampler, PlaybackTimingSampler, StreamInfoSampler],
+      adapters: [ShakaNetworkAdapter, HlsNetworkAdapter],
+      samplers: [
+        BufferSampler,
+        DecodingSampler,
+        PlaybackStateSampler,
+        NetworkSampler,
+        PlaybackTimingSampler,
+        StreamInfoSampler
+      ],
       observers: [VideoEventObserver],
-      sampleIntervalMs: 1000,
+      sampleIntervalMs: 1000
     }
   })
 </script>
@@ -63,9 +74,14 @@ With npm/ESM:
 import Clappr from '@clappr/core'
 import DashShakaPlayback from 'dash-shaka-playback'
 import ClapprTelemetry, {
-  ShakaNetworkAdapter, HlsNetworkAdapter,
-  BufferSampler, DecodingSampler, PlaybackStateSampler,
-  NetworkSampler, PlaybackTimingSampler, StreamInfoSampler,
+  ShakaNetworkAdapter,
+  HlsNetworkAdapter,
+  BufferSampler,
+  DecodingSampler,
+  PlaybackStateSampler,
+  NetworkSampler,
+  PlaybackTimingSampler,
+  StreamInfoSampler,
   VideoEventObserver
 } from '@clappr/telemetry'
 
@@ -74,11 +90,17 @@ const player = new Clappr.Player({
   source: 'https://example.com/stream.mpd',
   plugins: [DashShakaPlayback, ClapprTelemetry],
   telemetry: {
-    adapters:  [ShakaNetworkAdapter, HlsNetworkAdapter],
-    samplers:  [BufferSampler, DecodingSampler, PlaybackStateSampler,
-                NetworkSampler, PlaybackTimingSampler, StreamInfoSampler],
+    adapters: [ShakaNetworkAdapter, HlsNetworkAdapter],
+    samplers: [
+      BufferSampler,
+      DecodingSampler,
+      PlaybackStateSampler,
+      NetworkSampler,
+      PlaybackTimingSampler,
+      StreamInfoSampler
+    ],
     observers: [VideoEventObserver],
-    sampleIntervalMs: 1000,
+    sampleIntervalMs: 1000
   }
 })
 ```
@@ -97,35 +119,35 @@ Available from `dist/clappr-telemetry.esm.js`:
 
 **Samplers**
 
-| Export                  | Description                                                      |
-| ----------------------- | ---------------------------------------------------------------- |
-| `SamplerRegistry`       | Registry class — use to register custom samplers                 |
-| `BufferSampler`         | Built-in buffer state sampler                                    |
-| `DecodingSampler`       | Built-in decoding quality sampler                                |
-| `PlaybackStateSampler`  | Built-in sampler for `networkState`, `paused`, `playbackRate`, and bitrate |
-| `NetworkSampler`        | Built-in sampler for request counters, throughput, and segment metrics |
-| `PlaybackTimingSampler` | Built-in sampler for `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs` |
+| Export                  | Description                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------ |
+| `SamplerRegistry`       | Registry class — use to register custom samplers                               |
+| `BufferSampler`         | Built-in buffer state sampler                                                  |
+| `DecodingSampler`       | Built-in decoding quality sampler                                              |
+| `PlaybackStateSampler`  | Built-in sampler for `networkState`, `paused`, `playbackRate`, and bitrate     |
+| `NetworkSampler`        | Built-in sampler for request counters, throughput, and segment metrics         |
+| `PlaybackTimingSampler` | Built-in sampler for `timePlayingMs`, `timeWaitingMs`, and `joinTimeMs`        |
 | `StreamInfoSampler`     | Built-in sampler for stream metadata (container format, codecs, variant count) |
 
 **Observers**
 
-| Export               | Description                                                     |
-| -------------------- | --------------------------------------------------------------- |
-| `ObserverRegistry`   | Registry class — use to register custom observers               |
-| `VideoEventObserver` | Built-in observer for native `<video>` DOM events               |
+| Export               | Description                                       |
+| -------------------- | ------------------------------------------------- |
+| `ObserverRegistry`   | Registry class — use to register custom observers |
+| `VideoEventObserver` | Built-in observer for native `<video>` DOM events |
 
 **Utils**
 
-| Export                       | Description                                                      |
-| ---------------------------- | ---------------------------------------------------------------- |
-| `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                       |
-| `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `mse.sample`, etc.)  |
-| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                       |
-| `createEnvelope`             | Builds the versioned envelope object                             |
-| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter |
-| `calculateThroughput`        | Mbps helper used by network adapters                             |
-| `getBufferAhead`             | Returns seconds buffered ahead of the current position           |
-| `getBufferedRanges`          | Converts `TimeRanges` to a compact `[[start, end], ...]` array   |
+| Export                       | Description                                                       |
+| ---------------------------- | ----------------------------------------------------------------- |
+| `TELEMETRY_CONTRACT_VERSION` | Semver string on each envelope (`v` field)                        |
+| `EVENT_TYPES`                | Canonical `type` strings (`request:start`, `mse.sample`, etc.)    |
+| `TELEMETRY_SOURCES`          | Canonical `source` values (e.g. `network`)                        |
+| `createEnvelope`             | Builds the versioned envelope object                              |
+| `emitTelemetry`              | Triggers `Events.Custom.CONTAINER_TELEMETRY_TRACE` on an emitter  |
+| `calculateThroughput`        | Mbps helper used by network adapters                              |
+| `getBufferAhead`             | Returns seconds buffered ahead of the current position            |
+| `getBufferedRanges`          | Converts `TimeRanges` to a compact `[[start, end], ...]` array    |
 | `DEFAULT_VIDEO_EVENTS`       | Array with the 14 default `HTMLVideoElement` event names observed |
 
 The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as the global `ClapprTelemetry`. Adapters must be registered explicitly via `ClapprTelemetry.NetworkAdapters` — no adapter is pre-registered in any build.
@@ -134,16 +156,16 @@ The UMD build (`dist/clappr-telemetry.js` / CDN) exposes **only** the plugin as 
 
 All options are opt-in — nothing is collected by default. Components are activated by including their class in the corresponding array.
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `telemetry.enabled` | Boolean | `true` | Set to `false` to disable the plugin entirely for this player instance |
-| `telemetry.adapters` | Class[] | `[]` | Network adapter classes to activate for this player instance. The first one in the array whose `isSupported(playback)` returns `true` is used |
-| `telemetry.samplers` | Class[] | `[]` | Sampler classes to register for this player instance |
-| `telemetry.observers` | Class[] | `[]` | Observer classes to register for this player instance |
-| `telemetry.sampleIntervalMs` | Number | `0` | Sampling interval in ms. When `0` (default), no automatic interval is started — use `snapshot()` for on-demand collection |
-| `telemetry.<name>.enabled` | Boolean | `true` | Opt-out flag for any registered component. Key is the component's `static get name()` value (e.g. `buffer`, `decoding`, `videoState`) |
-| `telemetry.bufferSample.includeRanges` | Boolean | `true` | Include buffered time ranges in the `mse.sample` payload |
-| `telemetry.videoState.videoEvents` | String[] | 14 events | `HTMLVideoElement` event names for `VideoEventObserver` to observe. Defaults to the full list (see **VideoEventObserver**) |
+| Option                                 | Type     | Default   | Description                                                                                                                                   |
+| -------------------------------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `telemetry.enabled`                    | Boolean  | `true`    | Set to `false` to disable the plugin entirely for this player instance                                                                        |
+| `telemetry.adapters`                   | Class[]  | `[]`      | Network adapter classes to activate for this player instance. The first one in the array whose `isSupported(playback)` returns `true` is used |
+| `telemetry.samplers`                   | Class[]  | `[]`      | Sampler classes to register for this player instance                                                                                          |
+| `telemetry.observers`                  | Class[]  | `[]`      | Observer classes to register for this player instance                                                                                         |
+| `telemetry.sampleIntervalMs`           | Number   | `0`       | Sampling interval in ms. When `0` (default), no automatic interval is started — use `snapshot()` for on-demand collection                     |
+| `telemetry.<name>.enabled`             | Boolean  | `true`    | Opt-out flag for any registered component. Key is the component's `static get name()` value (e.g. `buffer`, `decoding`, `videoState`)         |
+| `telemetry.bufferSample.includeRanges` | Boolean  | `true`    | Include buffered time ranges in the `mse.sample` payload                                                                                      |
+| `telemetry.videoState.videoEvents`     | String[] | 14 events | `HTMLVideoElement` event names for `VideoEventObserver` to observe. Defaults to the full list (see **VideoEventObserver**)                    |
 
 ### Disabling individual components
 
@@ -163,15 +185,15 @@ new Clappr.Player({
 
 The `<name>` key maps to each class's `static get name()` property:
 
-| Class | Key |
-| --- | --- |
-| `BufferSampler` | `buffer` |
-| `DecodingSampler` | `decoding` |
-| `PlaybackStateSampler` | `playbackState` |
-| `NetworkSampler` | `network` |
-| `PlaybackTimingSampler` | `timing` |
-| `StreamInfoSampler` | `streamInfo` |
-| `VideoEventObserver` | `videoState` |
+| Class                   | Key             |
+| ----------------------- | --------------- |
+| `BufferSampler`         | `buffer`        |
+| `DecodingSampler`       | `decoding`      |
+| `PlaybackStateSampler`  | `playbackState` |
+| `NetworkSampler`        | `network`       |
+| `PlaybackTimingSampler` | `timing`        |
+| `StreamInfoSampler`     | `streamInfo`    |
+| `VideoEventObserver`    | `videoState`    |
 
 ## Consuming telemetry events
 
@@ -179,8 +201,12 @@ All telemetry data is emitted on a single event registered by the plugin: `Clapp
 
 ```javascript
 class MyTelemetryConsumer extends Clappr.ContainerPlugin {
-  get name() { return 'my_telemetry_consumer' }
-  get supportedVersion() { return { min: '0.13.1' } }
+  get name() {
+    return 'my_telemetry_consumer'
+  }
+  get supportedVersion() {
+    return { min: '0.13.1' }
+  }
 
   bindEvents() {
     this.listenTo(this.container, Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE, this.onTrace)
@@ -207,7 +233,6 @@ Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE
 
 This event is registered when the TelemetryPlugin is instantiated. It is the public contract of the plugin. Consumers never need to know which adapter or engine is active — they always listen to the same event and receive the same envelope shape.
 
-
 ## Envelope format
 
 Every emission on `CONTAINER_TELEMETRY_TRACE` carries a versioned envelope:
@@ -220,7 +245,6 @@ Every emission on `CONTAINER_TELEMETRY_TRACE` carries a versioned envelope:
 | `t`      | number | Monotonic timestamp from `performance.now()`                |
 | `ts`     | number | Wall-clock timestamp from `Date.now()`                      |
 | `v`      | string | Envelope contract version (`1.0`)                           |
-
 
 ## Adapters
 
@@ -250,36 +274,36 @@ NetworkAdapters.unregister(MyCustomAdapter)
 
 **Adapter contract:**
 
-| Member | Description |
-| --- | --- |
-| `static get name()` | String identifier (optional — used only in log messages) |
-| `static isSupported(playback)` | Returns `true` when this adapter handles the given playback |
-| `constructor(playback, container)` | Receives playback engine and container |
-| `bind()` | Attaches listeners/hooks into the engine |
-| `destroy()` | Detaches listeners and releases resources |
+| Member                             | Description                                                 |
+| ---------------------------------- | ----------------------------------------------------------- |
+| `static get name()`                | String identifier (optional — used only in log messages)    |
+| `static isSupported(playback)`     | Returns `true` when this adapter handles the given playback |
+| `constructor(playback, container)` | Receives playback engine and container                      |
+| `bind()`                           | Attaches listeners/hooks into the engine                    |
+| `destroy()`                        | Detaches listeners and releases resources                   |
 
 ### Sources (`source`)
 
-| `source`               | Area                                                              |
-| ---------------------- | ----------------------------------------------------------------- |
-| `network`              | Network request metrics (segments, manifests, licenses)           |
-| `sampler-registry`     | Periodic MSE metrics (buffer, decoding, playback state)           |
-| `video-event-observer` | Native `<video>` DOM events                                       |
+| `source`               | Area                                                    |
+| ---------------------- | ------------------------------------------------------- |
+| `network`              | Network request metrics (segments, manifests, licenses) |
+| `sampler-registry`     | Periodic MSE metrics (buffer, decoding, playback state) |
+| `video-event-observer` | Native `<video>` DOM events                             |
 
 ### Event types (`type`)
 
-| `type`                   | `source`               | Description                                           |
-| ------------------------ | ---------------------- | ----------------------------------------------------- |
-| `request:start`          | `network`              | A network request was initiated                       |
-| `request:end`            | `network`              | A network request completed                           |
-| `request:error`          | `network`              | A network request failed                              |
-| `bitrate:init`           | `network`              | Initial quality variant is known (first segment loaded) |
-| `bitrate:change`         | `network`              | ABR algorithm switched to a different quality variant |
+| `type`                   | `source`               | Description                                                    |
+| ------------------------ | ---------------------- | -------------------------------------------------------------- |
+| `request:start`          | `network`              | A network request was initiated                                |
+| `request:end`            | `network`              | A network request completed                                    |
+| `request:error`          | `network`              | A network request failed                                       |
+| `bitrate:init`           | `network`              | Initial quality variant is known (first segment loaded)        |
+| `bitrate:change`         | `network`              | ABR algorithm switched to a different quality variant          |
 | `stream:info`            | `network`              | Stream metadata available (manifest loaded or variant changed) |
-| `drm:session:update`     | `network`              | A DRM session was updated                             |
-| `drm:expiration:updated` | `network`              | A DRM license expiration time was updated             |
-| `mse.sample`             | `sampler-registry`     | Periodic snapshot of buffer, decoding and/or playback state |
-| `media.event`            | `video-event-observer` | A native `HTMLVideoElement` DOM event fired           |
+| `drm:session:update`     | `network`              | A DRM session was updated                                      |
+| `drm:expiration:updated` | `network`              | A DRM license expiration time was updated                      |
+| `mse.sample`             | `sampler-registry`     | Periodic snapshot of buffer, decoding and/or playback state    |
+| `media.event`            | `video-event-observer` | A native `HTMLVideoElement` DOM event fired                    |
 
 ### `mse.sample` payload
 
@@ -389,12 +413,12 @@ The sampler registry is extensible. You can add your own sampler and have it par
 
 ### Contract
 
-| Member | Required | Description |
-| --- | --- | --- |
-| `static get name()` | Yes | Unique string key — used as the registry identifier and as the key in the `mse.sample` payload |
-| `collect()` | Yes | Called every tick. Returns a plain object with the data to include, or `null` to skip this tick |
-| `destroy()` | Yes | Called when the registry is destroyed. Clean up any internal state here |
-| `static isEnabled(cfg)` | No | Override the registry's default enable/disable check. `cfg` is `container.options.telemetry`. Omit to use the standard `cfg[name].enabled` opt-out |
+| Member                  | Required | Description                                                                                                                                        |
+| ----------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `static get name()`     | Yes      | Unique string key — used as the registry identifier and as the key in the `mse.sample` payload                                                     |
+| `collect()`             | Yes      | Called every tick. Returns a plain object with the data to include, or `null` to skip this tick                                                    |
+| `destroy()`             | Yes      | Called when the registry is destroyed. Clean up any internal state here                                                                            |
+| `static isEnabled(cfg)` | No       | Override the registry's default enable/disable check. `cfg` is `container.options.telemetry`. Omit to use the standard `cfg[name].enabled` opt-out |
 
 ### Example
 
@@ -402,7 +426,9 @@ The sampler registry is extensible. You can add your own sampler and have it par
 import { SamplerRegistry } from '@clappr/telemetry'
 
 class AudioSampler {
-  static get name() { return 'audio' }
+  static get name() {
+    return 'audio'
+  }
 
   constructor(playback) {
     this._playback = playback
@@ -426,7 +452,7 @@ new Clappr.Player({
   plugins: [ClapprTelemetry],
   telemetry: {
     samplers: [AudioSampler],
-    sampleIntervalMs: 1000,
+    sampleIntervalMs: 1000
   }
 })
 ```
@@ -460,19 +486,18 @@ const data = telemetry.snapshot
 
 Returns an empty object if called before the player is ready.
 
-
 ## Custom observers
 
 The observer registry is extensible. You can add your own observer and have it managed alongside the built-in ones.
 
 ### Contract
 
-| Member | Required | Description |
-| --- | --- | --- |
-| `static get name()` | Yes | Unique string key — used as the registry identifier |
-| `bind()` | Yes | Called after instantiation. Attach event listeners and start collecting |
-| `destroy()` | Yes | Called when the registry is destroyed. Remove listeners and clean up state |
-| `static isEnabled(cfg)` | No | Override the registry's default enable/disable check. Omit to use the standard `cfg[name].enabled` opt-out |
+| Member                  | Required | Description                                                                                                |
+| ----------------------- | -------- | ---------------------------------------------------------------------------------------------------------- |
+| `static get name()`     | Yes      | Unique string key — used as the registry identifier                                                        |
+| `bind()`                | Yes      | Called after instantiation. Attach event listeners and start collecting                                    |
+| `destroy()`             | Yes      | Called when the registry is destroyed. Remove listeners and clean up state                                 |
+| `static isEnabled(cfg)` | No       | Override the registry's default enable/disable check. Omit to use the standard `cfg[name].enabled` opt-out |
 
 The constructor receives `(playback, container, samplerRegistry)` — the same arguments as `VideoEventObserver`.
 
@@ -482,7 +507,9 @@ The constructor receives `(playback, container, samplerRegistry)` — the same a
 import { ObserverRegistry } from '@clappr/telemetry'
 
 class PlaybackEventObserver {
-  static get name() { return 'playbackEvents' }
+  static get name() {
+    return 'playbackEvents'
+  }
 
   constructor(playback, container, samplerRegistry) {
     this._container = container
@@ -507,7 +534,7 @@ ObserverRegistry.register(PlaybackEventObserver)
 new Clappr.Player({
   plugins: [ClapprTelemetry],
   telemetry: {
-    observers: [PlaybackEventObserver],
+    observers: [PlaybackEventObserver]
   }
 })
 ```
@@ -527,12 +554,12 @@ This package lives in the Clappr monorepo under `packages/clappr-telemetry`. Ins
 yarn install
 
 yarn workspace @clappr/telemetry build
-yarn workspace @clappr/telemetry dev        # Rollup watch + demo at http://localhost:8080
-yarn workspace @clappr/telemetry test
+yarn workspace @clappr/telemetry dev        # Vite demo at http://localhost:8080
+yarn workspace @clappr/telemetry test       # Vitest
 yarn workspace @clappr/telemetry test:watch
 ```
 
-The demo page expects UMD builds from sibling packages (for example `@clappr/core` and `dash-shaka-playback`). If those `dist/` folders are missing, build them from the root (for example `lerna run build --scope=@clappr/core` and `lerna run build --scope=dash-shaka-playback`) before opening the dev server.
+The demo resolves sibling packages from source. You do not need to build `@clappr/core` or `dash-shaka-playback` before opening the Vite dev server.
 
 ## License
 
