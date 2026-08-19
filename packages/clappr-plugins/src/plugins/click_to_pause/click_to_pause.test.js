@@ -170,7 +170,7 @@ describe('clickToPause', function () {
         playback: ctx.playback,
         clickToPauseConfig: { onClickPayload: { testing: true } }
       })
-      new ClickToPause(ctx.container)
+      ctx.plugin = new ClickToPause(ctx.container)
 
       vi.spyOn(ctx.container, 'isPlaying').mockImplementation(() => false)
       vi.spyOn(ctx.container, 'isDvrEnabled').mockImplementation(() => true)
@@ -191,7 +191,7 @@ describe('clickToPause', function () {
         playback: ctx.playback,
         clickToPauseConfig: { onClickPayload: { testing: true } }
       })
-      new ClickToPause(ctx.container)
+      ctx.plugin = new ClickToPause(ctx.container)
 
       vi.spyOn(ctx.container, 'isPlaying').mockImplementation(() => true)
       vi.spyOn(ctx.container, 'isDvrEnabled').mockImplementation(() => true)
