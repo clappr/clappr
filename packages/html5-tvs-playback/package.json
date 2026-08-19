@@ -39,9 +39,9 @@
     "watch": "vite build --watch",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "jest ./src --coverage --silent",
-    "test:smoke": "jest ./src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/ --silent",
-    "test:watch": "jest ./src --watch"
+    "test": "vitest run --coverage",
+    "test:smoke": "vitest run src/dist.smoke.test.js",
+    "test:watch": "vitest"
   },
   "peerDependencies": {
     "@clappr/core": "*"
