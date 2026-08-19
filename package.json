@@ -38,6 +38,7 @@
     "acorn-walk": "^8.3.4",
     "autoprefixer": "^10.5.4",
     "babel-jest": "^30.4.1",
+    "browserslist": "^4.28.8",
     "eslint": "^10.8.0",
     "globals": "^17.9.0",
     "husky": "^9.1.6",
