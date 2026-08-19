@@ -14,7 +14,7 @@
     "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
     "release": "lerna version --include-merged-tags --no-push --yes",
     "prepare": "husky",
-    "test": "lerna run test --no-bail",
+    "test": "lerna run test --no-bail && vitest run --dir test --passWithNoTests --globals",
     "test:smoke": "lerna run test:smoke --no-bail",
     "build": "lerna run build --scope=@clappr/player --include-dependencies",
     "build:dist": "lerna run release"
@@ -33,6 +33,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-terser": "^1.0.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "acorn": "^8.16.0",
     "acorn-walk": "^8.3.4",
     "autoprefixer": "^10.5.4",
@@ -55,7 +56,10 @@
     "rollup-plugin-serve": "^2.0.3",
     "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-visualizer": "^7.0.1",
-    "sass": "^1.93.2"
+    "sass": "^1.93.2",
+    "terser": "^5.50.0",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.11"
   },
   "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
