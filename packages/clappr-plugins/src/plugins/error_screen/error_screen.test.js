@@ -1,37 +1,38 @@
 import { Core, Container, Events, Playback, PlayerError } from '@clappr/core'
 
+const ctx = {}
 import ErrorScreen from './error_screen'
 
 describe('ErrorScreen', function () {
   beforeEach(function () {
     localStorage.clear()
-    this.core = new Core({})
-    this.errorScreen = new ErrorScreen(this.core)
-    this.core.addPlugin(this.errorScreen)
+    ctx.core = new Core({})
+    ctx.errorScreen = new ErrorScreen(ctx.core)
+    ctx.core.addPlugin(ctx.errorScreen)
   })
 
   afterEach(function () {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('is named error_screen', function () {
-    expect(this.errorScreen.name).toBe('error_screen')
+    expect(ctx.errorScreen.name).toBe('error_screen')
   })
 
   describe('on ERROR event', function () {
     it('calls onError', function () {
-      const spy = jest.spyOn(this.errorScreen, 'onError')
+      const spy = vi.spyOn(ctx.errorScreen, 'onError')
 
-      this.errorScreen.stopListening()
-      this.errorScreen.bindEvents()
-      this.core.trigger(Events.ERROR, {})
+      ctx.errorScreen.stopListening()
+      ctx.errorScreen.bindEvents()
+      ctx.core.trigger(Events.ERROR, {})
 
       expect(spy).toHaveBeenCalled()
     })
 
     describe('when error level is fatal', function () {
       beforeEach(function () {
-        this.fakeError = {
+        ctx.fakeError = {
           code: '42',
           level: PlayerError.Levels.FATAL,
           UI: {
@@ -39,63 +40,63 @@ describe('ErrorScreen', function () {
             message: 'message'
           }
         }
-        this.playback = new Playback()
-        this.container = new Container({ playback: this.playback })
-        this.core.setupContainers([this.container])
+        ctx.playback = new Playback()
+        ctx.container = new Container({ playback: ctx.playback })
+        ctx.core.setupContainers([ctx.container])
       })
 
       it('disables media control', function () {
-        const containerStopSpy = jest.spyOn(this.container, 'stop')
+        const containerStopSpy = vi.spyOn(ctx.container, 'stop')
 
-        this.errorScreen.onError(this.fakeError)
+        ctx.errorScreen.onError(ctx.fakeError)
 
         expect(containerStopSpy).toHaveBeenCalled()
       })
 
       it('stops media', function () {
-        const containerDisableMediaControlSpy = jest.spyOn(this.container, 'disableMediaControl')
+        const containerDisableMediaControlSpy = vi.spyOn(ctx.container, 'disableMediaControl')
 
-        this.errorScreen.onError(this.fakeError)
+        ctx.errorScreen.onError(ctx.fakeError)
 
         expect(containerDisableMediaControlSpy).toHaveBeenCalled()
       })
 
       it('shows component', function () {
-        const pluginShowSpy = jest.spyOn(this.errorScreen, 'show')
-        const pluginRenderSpy = jest.spyOn(this.errorScreen, 'render')
+        const pluginShowSpy = vi.spyOn(ctx.errorScreen, 'show')
+        const pluginRenderSpy = vi.spyOn(ctx.errorScreen, 'render')
 
-        this.errorScreen.onError(this.fakeError)
+        ctx.errorScreen.onError(ctx.fakeError)
 
         expect(pluginShowSpy).toHaveBeenCalled()
         expect(pluginRenderSpy).toHaveBeenCalled()
       })
 
       it('bind method to reload player', function () {
-        const pluginReloadSpy = jest.spyOn(this.errorScreen, 'bindReload')
+        const pluginReloadSpy = vi.spyOn(ctx.errorScreen, 'bindReload')
 
-        this.errorScreen.onError(this.fakeError)
+        ctx.errorScreen.onError(ctx.fakeError)
 
         expect(pluginReloadSpy).toHaveBeenCalled()
       })
 
       describe('when reload is clicked', function () {
         it('loads media again', function () {
-          this.core.load = jest.fn()
+          ctx.core.load = vi.fn()
 
-          this.errorScreen.reload()
+          ctx.errorScreen.reload()
 
-          expect(this.core.load).toHaveBeenCalled()
+          expect(ctx.core.load).toHaveBeenCalled()
         })
 
         it('plays when core is ready', function () {
-          this.core.load = () => {}
-          const playSpy = jest.fn()
-          this.core.getCurrentContainer = () => ({ play: playSpy })
+          ctx.core.load = () => {}
+          const playSpy = vi.fn()
+          ctx.core.getCurrentContainer = () => ({ play: playSpy })
 
-          this.errorScreen.reload()
-          this.core.trigger(Events.CORE_READY)
+          ctx.errorScreen.reload()
+          ctx.core.trigger(Events.CORE_READY)
 
-          expect(this.errorScreen.container.play).toHaveBeenCalled()
+          expect(ctx.errorScreen.container.play).toHaveBeenCalled()
         })
       })
     })
