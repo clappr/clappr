@@ -12,7 +12,7 @@ const { TextEncoder, TextDecoder } = require('util')
 global.TextEncoder = global.TextEncoder || TextEncoder
 global.TextDecoder = global.TextDecoder || TextDecoder
 const { JSDOM } = require('jsdom')
-const { expectNoNativeClasses } = require('../../../test/dist-contract')
+const { expectEs5Syntax } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -105,7 +105,7 @@ describe.each([
   })
 
   test('does not emit native class syntax', () => {
-    expectNoNativeClasses(readArtifact(filename))
+    expectEs5Syntax(readArtifact(filename), filename)
   })
 })
 

@@ -17,22 +17,62 @@ function parseDist(code) {
   }
 }
 
-function findNativeClasses(code) {
-  const ast = parseDist(code)
-  const classes = []
-  walk.simple(ast, {
-    ClassDeclaration(node) {
-      classes.push(node)
-    },
-    ClassExpression(node) {
-      classes.push(node)
-    }
-  })
-  return classes
+function scanParams(params, note) {
+  for (const param of params) {
+    walk.simple(param, {
+      AssignmentPattern(node) {
+        note('default param', node)
+      },
+      RestElement(node) {
+        note('rest param', node)
+      }
+    })
+  }
 }
 
-function expectNoNativeClasses(code) {
-  expect(findNativeClasses(code).map(n => n.id?.name ?? '<anonymous>')).toEqual([])
+function findPostEs5(code) {
+  const ast = parseDist(code)
+  const hits = []
+  const note = (form, node) => {
+    hits.push({ form, node })
+  }
+
+  walk.simple(ast, {
+    ClassDeclaration(node) {
+      note('class', node)
+    },
+    ClassExpression(node) {
+      note('class', node)
+    },
+    ArrowFunctionExpression(node) {
+      note('arrow', node)
+      scanParams(node.params, note)
+    },
+    VariableDeclaration(node) {
+      if (node.kind === 'const') note('const', node)
+      if (node.kind === 'let') note('let', node)
+    },
+    TemplateLiteral(node) {
+      note('template literal', node)
+    },
+    Property(node) {
+      if (node.shorthand) note('shorthand', node)
+    },
+    FunctionDeclaration(node) {
+      scanParams(node.params, note)
+    },
+    FunctionExpression(node) {
+      scanParams(node.params, note)
+    }
+  })
+
+  return hits
+}
+
+function expectEs5Syntax(code, label) {
+  const forms = [...new Set(findPostEs5(code).map(hit => hit.form))]
+  if (forms.length === 0) return
+  throw new Error(`${label} contains ${forms.join(', ')}`)
 }
 
 function expectEs5Subclassable(Base, ctorArg) {
@@ -47,6 +87,6 @@ function expectEs5Subclassable(Base, ctorArg) {
 }
 
 module.exports = {
-  expectNoNativeClasses,
+  expectEs5Syntax,
   expectEs5Subclassable
 }
