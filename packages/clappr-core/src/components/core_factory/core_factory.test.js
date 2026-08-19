@@ -22,7 +22,7 @@ describe('CoreFactory', () => {
 
   describe('create method', () => {
     const factory = new CoreFactory(barePlayer)
-    jest.spyOn(factory, 'addCorePlugins')
+    vi.spyOn(factory, 'addCorePlugins')
     const coreInstance = factory.create()
 
     test('sets a loader instance into options reference', () => {
@@ -52,7 +52,7 @@ describe('CoreFactory', () => {
     const plugin = CorePlugin.extend({ name: 'test_plugin' })
     factory.loader.corePlugins = [plugin]
     factory.create()
-    jest.spyOn(factory, 'setupExternalInterface')
+    vi.spyOn(factory, 'setupExternalInterface')
     const coreInstance = factory.addCorePlugins()
 
     test('adds registered core plugins into the core instance', () => {

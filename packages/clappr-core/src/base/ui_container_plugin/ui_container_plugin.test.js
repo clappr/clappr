@@ -25,8 +25,8 @@ describe('UI Container Plugin', () => {
 
   test('enables the plugin', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = jest.spyOn(plugin, 'bindEvents')
-    const show = jest.fn()
+    const spy = vi.spyOn(plugin, 'bindEvents')
+    const show = vi.fn()
     plugin.$el = { show: show }
     plugin.enabled = false
 
@@ -51,7 +51,7 @@ describe('UI Container Plugin', () => {
 
   test('ignores enable call if the plugin is already enabled', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = jest.spyOn(plugin, 'bindEvents')
+    const spy = vi.spyOn(plugin, 'bindEvents')
 
     expect(plugin.enabled).toBeTruthy()
 
@@ -64,8 +64,8 @@ describe('UI Container Plugin', () => {
 
   test('disables the plugin', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = jest.spyOn(plugin, 'stopListening')
-    const hide = jest.fn()
+    const spy = vi.spyOn(plugin, 'stopListening')
+    const hide = vi.fn()
     plugin.$el = { hide: hide }
 
     plugin.disable()
@@ -85,7 +85,7 @@ describe('UI Container Plugin', () => {
 
   test('destroys the plugin', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = jest.spyOn(plugin, 'destroy')
+    const spy = vi.spyOn(plugin, 'destroy')
 
     plugin.destroy()
 

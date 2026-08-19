@@ -92,7 +92,7 @@ describe('ContainerFactory', function () {
   })
 
   describe('createContainers method', () => {
-    test('creates a container for each source existent in sources array option', (done) => {
+    test('creates a container for each source existent in sources array option', () => new Promise(done => {
       const sources = ['http://some.url/for/video.mp4', 'http://another.url/for/video.mp4']
       const containerFactory = new ContainerFactory({ sources }, new Loader(), {})
       containerFactory.createContainers().then(containers => {
@@ -101,6 +101,6 @@ describe('ContainerFactory', function () {
         expect(containers[1].options.src).toEqual(sources[1])
         done()
       })
-    })
+    }))
   })
 })

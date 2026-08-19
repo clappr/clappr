@@ -123,7 +123,7 @@ describe('UIObject', () => {
       myClick() {}
     }
     const myButton = new MyButton()
-    jest.spyOn(myButton, 'myClick')
+    vi.spyOn(myButton, 'myClick')
 
     myButton.$el.append($('<div class="class__example" data-example="example"></div>'))
     const $specificSelector = myButton.$('.class__example[data-example]')
@@ -141,7 +141,7 @@ describe('UIObject', () => {
       myClick() {}
     }
     const myButton = new MyButton()
-    jest.spyOn(myButton, 'myClick')
+    vi.spyOn(myButton, 'myClick')
 
     myButton.delegateEvents({ click: null })
     myButton.delegateEvents({ click: 'test' })
@@ -232,12 +232,12 @@ describe('UIObject', () => {
 
     beforeEach(() => {
       uiObject = new UIObject()
-      jest.spyOn(uiObject, 'onResize')
+      vi.spyOn(uiObject, 'onResize')
     })
 
     afterEach(() => {
       uiObject.destroy()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
 
     test('should convert to pixels if parameters are numbers', () => {

@@ -53,7 +53,7 @@ describe('Core Plugin', () => {
 
   test('stops listening when disable an enabled plugin', () => {
     const plugin = new CorePlugin({})
-    const spy = jest.spyOn(plugin, 'stopListening')
+    const spy = vi.spyOn(plugin, 'stopListening')
 
     plugin.disable()
 
@@ -62,7 +62,7 @@ describe('Core Plugin', () => {
 
   test("doesn't stops listening when disable a disabled plugin", () => {
     const plugin = new CorePlugin({})
-    const spy = jest.spyOn(plugin, 'stopListening')
+    const spy = vi.spyOn(plugin, 'stopListening')
 
     plugin.enabled = false
     plugin.disable()
@@ -72,7 +72,7 @@ describe('Core Plugin', () => {
 
   test('stops listening when destroyed', () => {
     const plugin = new CorePlugin({})
-    const spy = jest.spyOn(plugin, 'stopListening')
+    const spy = vi.spyOn(plugin, 'stopListening')
 
     plugin.destroy()
 
@@ -81,7 +81,7 @@ describe('Core Plugin', () => {
 
   test('binds events once', () => {
     const plugin = new CorePlugin({})
-    const spy = jest.spyOn(plugin, 'bindEvents')
+    const spy = vi.spyOn(plugin, 'bindEvents')
 
     plugin.enable()
     plugin.enable()

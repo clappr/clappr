@@ -36,7 +36,7 @@ describe('HTML5Video playback', function () {
   test('triggers PLAYBACK_PLAY_INTENT on play request', () => {
     window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
 
-    const callback = jest.fn()
+    const callback = vi.fn()
     const playback = new HTML5Video(options)
 
     playback.on(Events.PLAYBACK_PLAY_INTENT, callback)
@@ -45,8 +45,8 @@ describe('HTML5Video playback', function () {
     expect(callback).toHaveBeenCalledTimes(1)
   })
 
-  test('trigger PLAYBACK_SEEK on media seeking event', done => {
-    const callback = jest.fn()
+  test('trigger PLAYBACK_SEEK on media seeking event', () => new Promise(done => {
+    const callback = vi.fn()
     const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
 
     playback.on(Events.PLAYBACK_SEEK, callback)
@@ -56,10 +56,10 @@ describe('HTML5Video playback', function () {
     }, this)
 
     playback.el.dispatchEvent(new Event('seeking'))
-  })
+  }))
 
-  test('triggers PLAYBACK_SEEKED on media seeked event', done => {
-    const callback = jest.fn()
+  test('triggers PLAYBACK_SEEKED on media seeked event', () => new Promise(done => {
+    const callback = vi.fn()
     const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
 
     playback.on(Events.PLAYBACK_SEEKED, callback)
@@ -69,12 +69,12 @@ describe('HTML5Video playback', function () {
     }, this)
 
     playback.el.dispatchEvent(new Event('seeked'))
-  })
+  }))
 
-  test('can check autoplay availability', done => {
+  test('can check autoplay availability', () => new Promise(done => {
     // FIXME: find a way to set disableCanAutoPlay to true only if Travis run
     const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true, disableCanAutoPlay: true })
-    const callback = jest.fn((result, error) => {
+    const callback = vi.fn((result, error) => {
       expect(result).toBeTruthy()
       expect(error).toBeNull()
       expect(callback).toHaveBeenCalledTimes(1)
@@ -82,19 +82,19 @@ describe('HTML5Video playback', function () {
     })
 
     playback.canAutoPlay(callback)
-  })
+  }))
 
-  test('can be consented', done => {
+  test('can be consented', () => new Promise(done => {
     window.HTMLMediaElement.prototype.load = () => { /* do nothing */ }
     const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
-    const callback = jest.fn(() => {
+    const callback = vi.fn(() => {
       expect(callback).toHaveBeenCalledTimes(1)
       done()
     })
 
     playback.consent(callback)
     playback.el.dispatchEvent(new Event('loadedmetadata'))
-  })
+  }))
 
   test('setup crossorigin attribute', () => {
     const configuredOptions = $.extend({ playback: { crossOrigin: 'use-credentials' } }, options)
@@ -155,7 +155,7 @@ describe('HTML5Video playback', function () {
       start = [0]
       end = [30]
 
-      callback = jest.fn()
+      callback = vi.fn()
       playback = new HTML5Video(options)
       playback.setElement(fakeEl)
       playback.on(Events.PLAYBACK_PROGRESS, callback)
@@ -189,7 +189,7 @@ describe('HTML5Video playback', function () {
         }
       )
 
-      const callback = jest.fn()
+      const callback = vi.fn()
       const playback = new HTML5Video(options)
 
       playback.on(Events.PLAYBACK_BUFFERING, callback)
@@ -348,7 +348,7 @@ describe('HTML5Video playback', function () {
         get duration() { return 10 },
         get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
       })
-      jest.spyOn(html5Video, 'getDuration')
+      vi.spyOn(html5Video, 'getDuration')
 
       html5Video.getDuration()
       expect(html5Video.getDuration).toHaveReturnedWith(10)
@@ -358,23 +358,23 @@ describe('HTML5Video playback', function () {
         get duration() { return 10 },
         get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
       })
-      jest.spyOn(html5Video, 'getDuration')
-      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      vi.spyOn(html5Video, 'getDuration')
+      vi.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
 
       html5Video.getDuration()
       expect(html5Video.getDuration).toHaveReturnedWith(30)
     })
 
     test('retry to get duration for live media when there is no seekable range', () => {
-      jest.useFakeTimers()
+      vi.useFakeTimers()
       let start = []
       let end = []
       const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
       html5Video.setElement({ get seekable() { return { length: 0 } } })
 
-      jest.spyOn(html5Video, 'getDuration')
-      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
-      jest.spyOn(html5Video, '_updateSettings')
+      vi.spyOn(html5Video, 'getDuration')
+      vi.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      vi.spyOn(html5Video, '_updateSettings')
 
       html5Video.getDuration()
       start = [0]
@@ -384,9 +384,9 @@ describe('HTML5Video playback', function () {
         get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
       })
 
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
       expect(html5Video._updateSettings).toHaveBeenCalled()
-      jest.clearAllTimers()
+      vi.clearAllTimers()
 
       expect(html5Video.getDuration).toHaveReturnedWith(20)
     })
@@ -394,7 +394,7 @@ describe('HTML5Video playback', function () {
 
   describe('_onTimeUpdate', () => {
     test('return el.duration for VoD on PLAYBACK_TIMEUPDATE event', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
       const html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
       html5Video.setElement({
         get duration() { return 10 },
@@ -417,7 +417,7 @@ describe('HTML5Video playback', function () {
     test('return getDuration() for Live on PLAYBACK_TIMEUPDATE event', () => {
       let start = [0]
       let end = [50]
-      const callback = jest.fn()
+      const callback = vi.fn()
       const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
 
       html5Video.setElement({
@@ -431,7 +431,7 @@ describe('HTML5Video playback', function () {
         }
       })
 
-      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      vi.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
 
       html5Video.on(Events.PLAYBACK_TIMEUPDATE, callback)
       html5Video._onTimeUpdate()
@@ -442,8 +442,8 @@ describe('HTML5Video playback', function () {
 
   test('_updateDvr triggers DVR events with current status', () => {
     const DVR_STATUS = 'enabled'
-    const callback1 = jest.fn()
-    const callback2 = jest.fn()
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
     const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
 
     html5Video.on(Events.PLAYBACK_DVR, callback1)
@@ -457,12 +457,12 @@ describe('HTML5Video playback', function () {
 
   test('dvrEnabled getter return current DVR status', () => {
     const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
-    jest.spyOn(html5Video, 'dvrEnabled', 'get')
+    vi.spyOn(html5Video, 'dvrEnabled', 'get')
 
     expect(html5Video.dvrEnabled).toEqual(false)
 
-    jest.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
-    jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+    vi.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
+    vi.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
 
     expect(html5Video.dvrEnabled).toEqual(true)
   })
@@ -490,7 +490,7 @@ describe('HTML5Video playback', function () {
   describe('seek', () => {
     test('use duration when occurs seek with negative values', () => {
       const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
-      jest.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
+      vi.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
       html5Video.seek(-1)
 
       expect(html5Video.el.currentTime).toEqual(5000)
@@ -501,8 +501,8 @@ describe('HTML5Video playback', function () {
       const end = [100]
 
       const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
-      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
-      jest.spyOn(html5Video, '_updateDvr')
+      vi.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      vi.spyOn(html5Video, '_updateDvr')
       html5Video.setElement({
         get seekable() {
           return {

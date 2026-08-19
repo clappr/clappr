@@ -8,7 +8,7 @@ describe('Core', function () {
     let core
     beforeEach(() => {
       core = new Core({})
-      core.load = jest.fn()
+      core.load = vi.fn()
     })
 
     test('should update option', () => {
@@ -32,7 +32,7 @@ describe('Core', function () {
     })
 
     test('shoud trigger options change event', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
       core.on(Events.CORE_OPTIONS_CHANGE, callback)
 
       const newOptions = {
@@ -45,7 +45,7 @@ describe('Core', function () {
     })
 
     test('should trigger options will change event', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
       core.on(Events.CORE_OPTIONS_WILL_CHANGE, callback)
 
       const newOptions = {
@@ -83,20 +83,20 @@ describe('Core', function () {
     })
 
     test('returns false when there\'s no active fullscreen element', () => {
-      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(undefined)
+      vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(undefined)
 
       expect(core.isFullscreen()).toEqual(false)
     })
 
     test('returns false when the active fullscreen element is not the core element', () => {
       const el = document.createElement('div')
-      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
+      vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
 
       expect(core.isFullscreen()).toEqual(false)
     })
 
     test('returns true if the active fullscreen element is the core element', () => {
-      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(core.el)
+      vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(core.el)
 
       expect(core.isFullscreen()).toEqual(true)
     })
@@ -105,7 +105,7 @@ describe('Core', function () {
       const playbackEl = document.createElement('div')
       core.activeContainer = { playback: { el: playbackEl } }
 
-      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(playbackEl)
+      vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(playbackEl)
 
       expect(core.isFullscreen()).toEqual(true)
     })
@@ -126,7 +126,7 @@ describe('Core', function () {
         const playback = { el }
         core.activeContainer = { playback }
 
-        jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
+        vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
 
         expect(core.isFullscreen()).toEqual(true)
       })
@@ -140,7 +140,7 @@ describe('Core', function () {
     })
 
     describe('when is not in fullscreen', () => {
-      beforeEach(() => { jest.spyOn(Fullscreen, 'requestFullscreen') })
+      beforeEach(() => { vi.spyOn(Fullscreen, 'requestFullscreen') })
 
       describe('and is not an iOS Browser', () => {
         test('calls Fullscreen.requestFullscreen with core element', () => {
@@ -153,8 +153,8 @@ describe('Core', function () {
 
         test('adds a class "fullscreen" to core element', () => {
           core.el.requestFullscreen = () => new Promise((resolve, reject) => core.el ? resolve() : reject())
-          jest.spyOn(core.$el, 'addClass')
-          jest.spyOn(core, 'isFullscreen').mockReturnValue(false)
+          vi.spyOn(core.$el, 'addClass')
+          vi.spyOn(core, 'isFullscreen').mockReturnValue(false)
 
           expect(core.$el.addClass).not.toHaveBeenCalled()
 
@@ -165,19 +165,19 @@ describe('Core', function () {
         })
 
         test('removes fullscreen class when requestFullscreen is blocked by permissions policy', async () => {
-          jest.useFakeTimers()
+          vi.useFakeTimers()
           const policyError = new TypeError('Disallowed by permissions policy')
           core.el.requestFullscreen = () => Promise.reject(policyError)
-          jest.spyOn(core.$el, 'removeClass')
-          jest.spyOn(core, 'isFullscreen').mockReturnValue(false)
+          vi.spyOn(core.$el, 'removeClass')
+          vi.spyOn(core, 'isFullscreen').mockReturnValue(false)
 
           core.toggleFullscreen()
 
           await Promise.resolve()
-          jest.advanceTimersByTime(600)
+          vi.advanceTimersByTime(600)
 
           expect(core.$el.removeClass).toHaveBeenCalledWith('fullscreen')
-          jest.useRealTimers()
+          vi.useRealTimers()
           delete core.el.requestFullscreen
         })
       })
@@ -202,12 +202,12 @@ describe('Core', function () {
     describe('when is in fullscreen', () => {
       beforeEach(() => {
         Browser.isiOS = true
-        jest.spyOn(core, 'isFullscreen').mockReturnValue(true)
+        vi.spyOn(core, 'isFullscreen').mockReturnValue(true)
       })
       afterEach(() => { Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) })
 
       test('calls Fullscreen.cancelFullscreen', () => {
-        jest.spyOn(Fullscreen, 'cancelFullscreen')
+        vi.spyOn(Fullscreen, 'cancelFullscreen')
 
         core.toggleFullscreen()
         expect(Fullscreen.cancelFullscreen).toHaveBeenCalled()
@@ -218,7 +218,7 @@ describe('Core', function () {
         afterEach(() => { Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) })
 
         test('removes "fullscreen nocursor" classes from core element', () => {
-          jest.spyOn(core.$el, 'removeClass')
+          vi.spyOn(core.$el, 'removeClass')
           expect(core.$el.removeClass).not.toHaveBeenCalled()
 
           core.toggleFullscreen()
@@ -238,7 +238,7 @@ describe('Core', function () {
         expect(core.isFullscreen()).toEqual(false)
         expect(newInstance.isFullscreen()).toEqual(false)
 
-        jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(fakeContainer1)
+        vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(fakeContainer1)
 
         expect(core.isFullscreen()).toEqual(false)
         expect(newInstance.isFullscreen()).toEqual(true)
@@ -250,7 +250,7 @@ describe('Core', function () {
     let core
     beforeEach(() => {
       core = new Core({})
-      jest.spyOn(core, 'triggerResize')
+      vi.spyOn(core, 'triggerResize')
     })
 
     test('calls #triggerResize every 500 milliseconds', () => {
@@ -305,7 +305,7 @@ describe('Core', function () {
     test('triggers on an event Events.CORE_RESIZE', () => {
       const newSize = { width: '50%', height: '50%' }
       const core = new Core({})
-      jest.spyOn(core, 'trigger')
+      vi.spyOn(core, 'trigger')
       core.triggerResize(newSize)
 
       expect(core.trigger).toHaveBeenCalledWith(Events.CORE_RESIZE, newSize)
@@ -319,7 +319,7 @@ describe('Core', function () {
       core = new Core({})
       currentScreenOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
       core._screenOrientation = currentScreenOrientation
-      jest.spyOn(core, 'triggerResize')
+      vi.spyOn(core, 'triggerResize')
     })
 
     describe('when change the screen orientation', () => {
@@ -328,7 +328,7 @@ describe('Core', function () {
       let mockTriggerResize
       beforeEach(() => {
         core = new Core({})
-        mockTriggerResize = jest.spyOn(core, 'triggerResize')
+        mockTriggerResize = vi.spyOn(core, 'triggerResize')
         currentScreenOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
         core._screenOrientation = currentScreenOrientation
       })
@@ -389,9 +389,9 @@ describe('Core', function () {
 
   test('resize', () => {
     const data = { width: 100, height: 100 }
-    const callback = jest.fn()
+    const callback = vi.fn()
     const core = new Core({})
-    jest.spyOn(core, 'onResize')
+    vi.spyOn(core, 'onResize')
     core.on(Events.CORE_RESIZE, callback)
     core.resize(data)
     expect(core.onResize).toHaveBeenCalledWith(data)

@@ -56,7 +56,7 @@ describe('Player', function () {
     test('should trigger error events', () => {
       const player = new Player({ source: 'http://video.mp4', persistConfig: false })
       const element = document.createElement('div')
-      const onError = jest.fn()
+      const onError = vi.fn()
       player.on(Events.PLAYER_ERROR, onError)
       player.attachTo(element)
       player.trigger(Events.PLAYER_ERROR)
@@ -70,7 +70,7 @@ describe('Player', function () {
       player = new Player({ source: '/video.mp4' })
       const element = document.createElement('div')
       player.attachTo(element)
-      jest.spyOn(player, '_registerOptionEventListeners')
+      vi.spyOn(player, '_registerOptionEventListeners')
     })
 
     test('should register on configure', () => {
@@ -85,8 +85,8 @@ describe('Player', function () {
 
     test('should call only last registered callback', () => {
       const callbacks = {
-        callbackA: jest.fn(),
-        callbackB: jest.fn()
+        callbackA: vi.fn(),
+        callbackB: vi.fn()
       }
       player.configure({
         events: {
@@ -108,7 +108,7 @@ describe('Player', function () {
 
     test('should add a new event callback', () => {
       const callbacks = {
-        callbackC: jest.fn()
+        callbackC: vi.fn()
       }
       player.configure({
         events: {}
@@ -127,8 +127,8 @@ describe('Player', function () {
 
     test('should remove previous event callbacks', () => {
       const callbacks = {
-        callbackA: jest.fn(),
-        callbackB: jest.fn()
+        callbackA: vi.fn(),
+        callbackB: vi.fn()
       }
       player.configure({
         events: {
@@ -151,7 +151,7 @@ describe('Player', function () {
 
     test('does not override events on configure if there are no events', () => {
       const callbacks = {
-        callbackA: jest.fn()
+        callbackA: vi.fn()
       }
       player.configure({
         events: {
@@ -170,8 +170,8 @@ describe('Player', function () {
 
     test('does not interfere with event listeners added through Player.on', () => {
       const callbacks = {
-        callbackA: jest.fn(),
-        callbackB: jest.fn()
+        callbackA: vi.fn(),
+        callbackB: vi.fn()
       }
 
       player.on(Events.PLAYER_PAUSE, callbacks.callbackB)
@@ -193,7 +193,7 @@ describe('Player', function () {
     let onResizeSpy, player
 
     beforeEach(() => {
-      onResizeSpy = jest.fn()
+      onResizeSpy = vi.fn()
 
       player = new Player({
         source: 'http://video.mp4',
@@ -221,9 +221,9 @@ describe('Player', function () {
 
     beforeEach(() => {
       callbacks = {
-        onPlay: jest.fn(),
-        onPause: jest.fn(),
-        onError: jest.fn()
+        onPlay: vi.fn(),
+        onPause: vi.fn(),
+        onError: vi.fn()
       }
       player = new Player({
         source: '/video.mp4',
@@ -253,7 +253,7 @@ describe('Player', function () {
     })
 
     test('should remove listeners added through configure', () => {
-      const configureCallback = jest.fn()
+      const configureCallback = vi.fn()
       player.configure({
         events: {
           onStop: configureCallback

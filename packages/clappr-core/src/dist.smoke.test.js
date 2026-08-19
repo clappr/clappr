@@ -31,7 +31,7 @@ function readArtifact(name) {
 }
 
 function loadArtifact(name) {
-  jest.resetModules()
+  vi.resetModules()
   return require(path.join(DIST, name))
 }
 

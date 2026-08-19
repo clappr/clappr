@@ -123,7 +123,7 @@ describe('Utils', () => {
     })
 
     test('don\'t persist invalid keys', () => {
-      jest.spyOn(utils.Config, '_createKeyspace').mockImplementation(1)
+      vi.spyOn(utils.Config, '_createKeyspace').mockImplementation(1)
       expect(utils.Config.persist()).toBeFalsy()
     })
   })
@@ -347,7 +347,7 @@ describe('Utils', () => {
   })
 
   describe('canAutoPlayMedia module', () => {
-    test('Returns true when auto play feature is available', (done) => {
+    test('Returns true when auto play feature is available', () => new Promise(done => {
       window.HTMLMediaElement.prototype.play = () => {
         return new Promise((resolve) => { setTimeout(() => resolve(), 100) })
       }
@@ -358,9 +358,9 @@ describe('Utils', () => {
       }
 
       utils.canAutoPlayMedia(callback)
-    })
+    }))
 
-    test('Returns false when auto play feature is not available', (done) => {
+    test('Returns false when auto play feature is not available', () => new Promise(done => {
       window.HTMLMediaElement.prototype.play = () => {
         return new Promise((resolve) => { setTimeout(() => resolve(), 300) })
       }
@@ -371,9 +371,9 @@ describe('Utils', () => {
       }
 
       utils.canAutoPlayMedia(callback)
-    })
+    }))
 
-    test('Checks if auto play feature is available for specifics cases', (done) => {
+    test('Checks if auto play feature is available for specifics cases', () => new Promise(done => {
       window.HTMLMediaElement.prototype.play = () => { /* do nothing */ }
       const callback = (result) => {
         expect(result).toBeTruthy()
@@ -381,7 +381,7 @@ describe('Utils', () => {
       }
 
       utils.canAutoPlayMedia(callback, { element: document.createElement('video'), muted: true, inline: true })
-    })
+    }))
   })
 
   describe('DomRecycler module', () => {
@@ -413,9 +413,9 @@ describe('Utils', () => {
   })
 
   describe('DoubleEventHandler module', () => {
-    test('handle double event', (done) => {
+    test('handle double event', () => new Promise(done => {
       const handler = new utils.DoubleEventHandler()
-      const spy = jest.fn()
+      const spy = vi.fn()
       const evt = new Event('touchend')
 
       handler.handle(evt, spy)
@@ -424,6 +424,6 @@ describe('Utils', () => {
         expect(spy).toHaveBeenCalledTimes(1)
         done()
       }, 500 / 2)
-    })
+    }))
   })
 })
