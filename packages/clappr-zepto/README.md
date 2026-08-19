@@ -10,7 +10,7 @@ script that overwrites it.
 
 Internal only (`private: true`); consumed by `@clappr/core` and inlined into its published
 bundle. Version **2.0.0** marks the identity break from the old vendored `clappr-zepto@0.x`
-lineage (new name, owned source, Rollup `dist/` entry) — not a rewrite of Zepto's API.
+lineage (new name, owned source, published `dist/` entry) — not a rewrite of Zepto's API.
 
 ## Build
 
@@ -18,7 +18,7 @@ lineage (new name, owned source, Rollup `dist/` entry) — not a rewrite of Zept
 yarn build
 ```
 
-Runs Rollup and writes UMD + ESM outputs to `dist/`. There is no minified artifact here —
+Runs Vite and writes UMD + ESM outputs to `dist/`. There is no minified artifact here —
 minification is `@clappr/core`'s responsibility.
 
 ## Test
@@ -26,6 +26,8 @@ minification is `@clappr/core`'s responsibility.
 ```shell
 yarn test
 ```
+
+Vitest runs the unit suite.
 
 ## License
 
