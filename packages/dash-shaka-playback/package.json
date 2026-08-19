@@ -20,12 +20,12 @@
     "directory": "packages/dash-shaka-playback"
   },
   "scripts": {
-    "start": "DEV=true rollup --config --bundleConfigAsCjs --watch",
-    "start:with-reload": "DEV=true RELOAD=true rollup --config --bundleConfigAsCjs --watch",
-    "build": "rollup --config --bundleConfigAsCjs",
-    "watch": "rollup --config --bundleConfigAsCjs --watch",
-    "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "start": "vite --mode development",
+    "start:with-reload": "vite --mode development",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "bundle-check": "ANALYZE_BUNDLE=true vite build",
+    "release": "rm -rf dist && vite build && vite build --mode minify",
     "lint": "eslint *.js ./src",
     "lint:fix": "yarn lint -- --fix",
     "test": "jest ./src --coverage --silent",
