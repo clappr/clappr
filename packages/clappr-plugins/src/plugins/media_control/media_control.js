@@ -6,7 +6,7 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import { Kibo } from '../../vendor'
+import { Kibo } from '../../vendor/index'
 
 import { Events, UICorePlugin, Browser, Playback, Utils, template, Styler, $ } from '@clappr/core'
 
