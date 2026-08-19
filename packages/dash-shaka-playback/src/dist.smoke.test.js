@@ -29,7 +29,7 @@ function readArtifact(name) {
 }
 
 function loadArtifact(name) {
-  jest.resetModules()
+  vi.resetModules()
   return require(path.join(DIST, name))
 }
 
@@ -71,9 +71,9 @@ function assertPlaybackContract(DashShakaPlayback) {
   expect(typeof shaka.Player.version).toBe('string')
   expect(shaka.Player.version.length).toBeGreaterThan(0)
 
-  jest.spyOn(shaka.polyfill, 'installAll').mockImplementation(() => {})
-  jest.spyOn(shaka.Player, 'isBrowserSupported').mockReturnValue(true)
-  jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
+  vi.spyOn(shaka.polyfill, 'installAll').mockImplementation(() => {})
+  vi.spyOn(shaka.Player, 'isBrowserSupported').mockReturnValue(true)
+  vi.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
 
   const playback = new Playback({ src: 'http://example.com/video.mpd' })
   try {
@@ -97,7 +97,7 @@ const EXPECTED_ARTIFACTS = Object.values(ARTIFACTS).sort()
 const EXPECTED_SOURCEMAPS = EXPECTED_ARTIFACTS.map(filename => `${filename}.map`).sort()
 
 afterEach(() => {
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
 describe.each([

@@ -13,15 +13,15 @@ describe('DashShakaPlayback', () => {
   let playback
 
   beforeEach(() => {
-    jest.spyOn(shaka.polyfill, 'installAll').mockImplementation(() => {})
-    jest.spyOn(shaka.Player, 'isBrowserSupported').mockReturnValue(true)
-    jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
+    vi.spyOn(shaka.polyfill, 'installAll').mockImplementation(() => {})
+    vi.spyOn(shaka.Player, 'isBrowserSupported').mockReturnValue(true)
+    vi.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
     playback = new DashShakaPlayback({ src: SRC })
   })
 
   afterEach(() => {
     playback.destroy()
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   test('extends HTML5Video', () => {
@@ -86,9 +86,9 @@ describe('DashShakaPlayback', () => {
 
   describe('levels', () => {
     test('enables ABR when currentLevel is set to auto (-1)', () => {
-      const configure = jest.fn()
+      const configure = vi.fn()
       playback._player = mockPlayer({ configure })
-      playback.trigger = jest.fn()
+      playback.trigger = vi.fn()
 
       playback.currentLevel = -1
 
@@ -100,16 +100,16 @@ describe('DashShakaPlayback', () => {
 
     test('disables ABR and selects the matching video track for a fixed level', () => {
       const track = { id: 2, type: 'variant', mimeType: 'video/mp4' }
-      const configure = jest.fn()
-      const selectVariantTrack = jest.fn()
+      const configure = vi.fn()
+      const selectVariantTrack = vi.fn()
       playback._player = mockPlayer({
         configure,
         selectVariantTrack,
         getVariantTracks: () => [track]
       })
       playback._isShakaReadyState = true
-      playback.trigger = jest.fn()
-      playback._onAdaptation = jest.fn()
+      playback.trigger = vi.fn()
+      playback._onAdaptation = vi.fn()
 
       playback.currentLevel = 2
 
@@ -123,10 +123,10 @@ describe('DashShakaPlayback', () => {
   describe('selectTrack', () => {
     beforeEach(() => {
       playback._player = mockPlayer({
-        selectTextTrack: jest.fn(),
-        selectVariantTrack: jest.fn()
+        selectTextTrack: vi.fn(),
+        selectVariantTrack: vi.fn()
       })
-      playback._onAdaptation = jest.fn()
+      playback._onAdaptation = vi.fn()
     })
 
     test('selects text tracks', () => {
@@ -158,8 +158,8 @@ describe('DashShakaPlayback', () => {
     })
 
     test('_onShakaReady marks the playback as ready and triggers events', () => {
-      const ready = jest.fn()
-      const shakaReady = jest.fn()
+      const ready = vi.fn()
+      const shakaReady = vi.fn()
       playback.on(Events.PLAYBACK_READY, ready)
       playback.on(DashShakaPlayback.Events.SHAKA_READY, shakaReady)
 
