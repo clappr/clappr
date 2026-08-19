@@ -149,7 +149,7 @@ describe('html() and tagExpander paths', () => {
     // expander does not match. Old [^>]* swallowed it. Spy replace so we
     // exercise the production tagExpanderRE (jsdom drops both parse outcomes).
     const html = '<div title="unclosed />'
-    const spy = jest.spyOn(String.prototype, 'replace')
+    const spy = vi.spyOn(String.prototype, 'replace')
     try {
       $.zepto.fragment(html)
       const idx = spy.mock.calls.findIndex(
@@ -193,7 +193,7 @@ describe('$.fn.load', () => {
 
   test('without selector inserts the full response including script nodes', () => {
     const html = '<p>hi</p><script type="text/plain">keep</script><span>there</span>'
-    $.ajax = jest.fn(options => {
+    $.ajax = vi.fn(options => {
       options.success(html)
       return {}
     })
@@ -212,7 +212,7 @@ describe('$.fn.load', () => {
       '<script>window.__zeptoLoadSpy=1</script>' +
       '<div class="other">drop</div>' +
       '<div class="item"><script type="text/plain">nested</script>ok</div>'
-    $.ajax = jest.fn(options => {
+    $.ajax = vi.fn(options => {
       expect(options.url).toBe('/x')
       options.success(html)
       return {}
@@ -231,8 +231,8 @@ describe('$.fn.load', () => {
 describe('event handler remove', () => {
   test('off() removes a handler without disturbing later registrations', () => {
     const el = $('<div/>')
-    const first = jest.fn()
-    const second = jest.fn()
+    const first = vi.fn()
+    const second = vi.fn()
     el.on('click', first)
     el.on('click', second)
     el.off('click', first)
@@ -245,7 +245,7 @@ describe('event handler remove', () => {
     const node = document.createElement('div')
     node._zid = '__proto__'
     const el = $(node)
-    const fn = jest.fn()
+    const fn = vi.fn()
     el.on('click', fn)
     el.trigger('click')
     expect(fn).toHaveBeenCalledTimes(1)
@@ -262,7 +262,7 @@ describe('$.ajaxJSONP', () => {
 
   beforeEach(() => {
     appended = []
-    appendSpy = jest.spyOn(document.head, 'appendChild').mockImplementation(node => {
+    appendSpy = vi.spyOn(document.head, 'appendChild').mockImplementation(node => {
       appended.push(node)
       return node
     })
