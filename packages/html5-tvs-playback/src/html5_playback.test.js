@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 /* eslint-disable no-console */
 
 import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
