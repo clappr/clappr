@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import { createRequire } from 'node:module'
-import { clapprResolveAlias, viteDefine } from '../../vite.config.base.mjs'
+import { viteDefine } from '../../vite.config.base.mjs'
 import { defineClapprVitest } from '../../vitest.config.base.mjs'
 
 const require = createRequire(import.meta.url)
@@ -8,9 +8,9 @@ const { version } = require('./package.json')
 const { version: clapprCoreVersion } = require('@clappr/core/package.json')
 
 export default defineClapprVitest({
-  alias: clapprResolveAlias({
+  alias: {
     '@': resolve(process.cwd(), 'src')
-  }),
+  },
   define: viteDefine({
     VERSION: version,
     CLAPPR_CORE_VERSION: clapprCoreVersion

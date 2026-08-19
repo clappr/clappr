@@ -57,7 +57,7 @@ describe.each([
     assertSourceMappingURL(filename)
   })
 
-  test('does not emit native class syntax', () => {
+  test('rejects post-ES5 syntax', () => {
     expectEs5Syntax(readArtifact(filename), filename)
   })
 })
