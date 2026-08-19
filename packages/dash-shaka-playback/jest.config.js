@@ -15,7 +15,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@clappr/core$': '<rootDir>/../clappr-core/src/main.js',
     '^@clappr/zepto$': '<rootDir>/../clappr-zepto/src/zepto.js',
-    '\\.(scss)$': '<rootDir>/../clappr-core/src/__mocks__/styleMock.js'
+    '\\.(scss)(\\?inline)?$': '<rootDir>/../clappr-core/src/__mocks__/styleMock.js',
+    '\\.(html)\\?raw$': '<rootDir>/../clappr-core/src/__mocks__/htmlRawMock.js'
   },
   globals: {
     CLAPPR_CORE_VERSION: ClapprCorePkg.version,
