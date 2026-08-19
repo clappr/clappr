@@ -31,11 +31,14 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 Before submitting, make sure CI checks pass locally:
 
 ```bash
-yarn test
 yarn lint
 yarn format:check
+yarn test
+yarn build
 yarn build:dist && yarn test:smoke
 ```
+
+For a local player demo (`http://localhost:8080`), run `yarn dev`. Sibling packages are resolved from source; do not build them first.
 
 ## Development setup
 
