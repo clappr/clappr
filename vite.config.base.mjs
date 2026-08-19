@@ -184,9 +184,14 @@ export function defineClapprLib(pkgSpec) {
         },
         rolldownOptions: {
           external: pkgSpec.external || [],
+          treeshake:
+            pkgSpec.moduleSideEffects == null
+              ? undefined
+              : { moduleSideEffects: pkgSpec.moduleSideEffects },
           output: {
             globals: pkgSpec.globals || {},
-            name: pkgSpec.name
+            name: pkgSpec.name,
+            exports: pkgSpec.exports
           }
         }
       }
