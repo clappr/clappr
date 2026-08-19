@@ -9,8 +9,27 @@ import { defineConfig } from 'vite'
 const require = createRequire(import.meta.url)
 const babelCore = require('@babel/core')
 const REPO_ROOT = fileURLToPath(new URL('./', import.meta.url))
+const PACKAGES_DIR = fileURLToPath(new URL('./packages/', import.meta.url))
 const BABEL_CONFIG = fileURLToPath(new URL('./babel.base.json', import.meta.url))
 const BROWSERSLISTRC = fileURLToPath(new URL('./.browserslistrc', import.meta.url))
+
+/**
+ * Shared resolve.alias map consumed by defineClapprLib and Vitest.
+ * Callers pass package-specific entries; this is the single merge point.
+ */
+export function clapprResolveAlias(alias = {}) {
+  return alias
+}
+
+/** Sibling source aliases for tests (and for builds that bundle siblings). */
+export function clapprSiblingSourceAlias() {
+  return clapprResolveAlias({
+    '@clappr/core': resolve(PACKAGES_DIR, 'clappr-core/src/main.js'),
+    '@clappr/zepto': resolve(PACKAGES_DIR, 'clappr-zepto/src/zepto.js'),
+    '@clappr/plugins': resolve(PACKAGES_DIR, 'clappr-plugins/src/main.js'),
+    '@clappr/hlsjs-playback': resolve(PACKAGES_DIR, 'hlsjs-playback/src/hls.js')
+  })
+}
 
 const BROWSERSLIST_TO_ESBUILD = {
   chrome: 'chrome',
@@ -99,7 +118,7 @@ function viteCss(pkgSpec) {
   }
 }
 
-function viteDefine(replace) {
+export function viteDefine(replace) {
   if (!replace) return undefined
   return Object.fromEntries(
     Object.entries(replace).map(([key, value]) => [key, JSON.stringify(value)])
@@ -245,7 +264,7 @@ export function defineClapprLib(pkgSpec) {
     assertEntriesExist(pkgSpec)
 
     const mode = env.mode || 'production'
-    const alias = pkgSpec.alias || {}
+    const alias = clapprResolveAlias(pkgSpec.alias)
 
     if (mode === 'development') {
       const server = pkgSpec.server || {}
