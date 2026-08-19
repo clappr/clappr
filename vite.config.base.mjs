@@ -88,6 +88,17 @@ function formatsFor(pkgSpec, mode) {
   return pkgSpec.formats || ['umd', 'es']
 }
 
+function viteCss(pkgSpec) {
+  if (!pkgSpec.cssLoadPaths || pkgSpec.cssLoadPaths.length === 0) return undefined
+  return {
+    preprocessorOptions: {
+      scss: {
+        loadPaths: pkgSpec.cssLoadPaths.map(resolveFromCwd)
+      }
+    }
+  }
+}
+
 function viteDefine(replace) {
   if (!replace) return undefined
   return Object.fromEntries(
@@ -200,6 +211,7 @@ export function defineClapprLib(pkgSpec) {
         publicDir: false,
         define: viteDefine(pkgSpec.replace),
         resolve: { alias },
+        css: viteCss(pkgSpec),
         plugins: [serveContentBase(server.contentBase || ['public', 'dist'])],
         server: {
           host: server.host || '0.0.0.0',
@@ -217,6 +229,7 @@ export function defineClapprLib(pkgSpec) {
       plugins: clapprPlugins(pkgSpec, { compact: isMinify }),
       define: viteDefine(pkgSpec.replace),
       resolve: { alias },
+      css: viteCss(pkgSpec),
       build: {
         target: false,
         cssTarget,

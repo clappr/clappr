@@ -3,8 +3,8 @@ import Styler from '../../base/styler/styler'
 import Playback from '../../base/playback/playback'
 import template from '../../base/template'
 import Events from '../../base/events/events'
-import noOpHTML from './public/error.html'
-import noOpStyle from './public/style.scss'
+import noOpHTML from './public/error.html?raw'
+import noOpStyle from './public/style.scss?inline'
 
 export default class NoOp extends Playback {
   get name() { return 'no_op' }

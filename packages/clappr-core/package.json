@@ -6,17 +6,17 @@
   "module": "./dist/clappr-core.esm.js",
   "types": "./types/main.d.ts",
   "scripts": {
-    "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs && tsc",
-    "build": "rollup --config --bundleConfigAsCjs && tsc",
-    "watch": "rollup --config --watch --bundleConfigAsCjs",
+    "bundle-check": "ANALYZE_BUNDLE=true vite build",
+    "release": "rm -rf dist && vite build && vite build --mode minify && tsc",
+    "build": "vite build && tsc",
+    "watch": "vite build --watch",
     "test": "jest /src --coverage --silent",
     "test:smoke": "jest ./src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/ --silent",
     "test:coverage": "open coverage/lcov-report/index.html",
     "test:watch": "jest /src --watch",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
-    "start": "DEV=true rollup --config --watch --bundleConfigAsCjs",
+    "start": "vite --mode development",
     "prepublishOnly": "lerna run release --scope=@clappr/core"
   },
   "files": [

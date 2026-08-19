@@ -12,8 +12,8 @@ import Browser from '../browser/browser'
 import ContainerFactory from '../container_factory/container_factory'
 import PlayerError from '../error/error'
 import ErrorMixin from '../../base/error_mixin/error_mixin'
-import CoreStyle from './public/style.scss'
-import ResetStyle from './public/optional_reset.scss'
+import CoreStyle from './public/style.scss?inline'
+import ResetStyle from './public/optional_reset.scss?inline'
 
 function isFullscreenPolicyBlocked(error) {
   if (!error) return false

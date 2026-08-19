@@ -9,5 +9,9 @@ module.exports = {
         ([name, options = {}]) => [name, { ...options, modules: 'commonjs' }]
       )
     }]
+  },
+  moduleNameMapper: {
+    '\\.(scss)(\\?inline)?$': '<rootDir>/../clappr-core/src/__mocks__/styleMock.js',
+    '\\.(html)\\?raw$': '<rootDir>/../clappr-core/src/__mocks__/htmlRawMock.js'
   }
 }
