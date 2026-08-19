@@ -10,7 +10,7 @@ describe('GoogleAnalytics', function () {
   })
 
   afterEach(function () {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     delete window._gaq
     delete window._gat
   })

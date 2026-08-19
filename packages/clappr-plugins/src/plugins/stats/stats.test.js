@@ -1,5 +1,6 @@
 import { Container, Events, Playback } from '@clappr/core'
 
+const ctx = {}
 import Stats from './stats'
 
 const FakePlayback = Playback
@@ -7,116 +8,116 @@ const FakePlayback = Playback
 describe('StatsPlugin', function () {
   beforeEach(function () {
     localStorage.clear()
-    this.playback = new FakePlayback()
-    this.container = new Container({ playback: this.playback })
-    this.stats = new Stats(this.container)
-    this.container.addPlugin(this.stats)
-    jest.useFakeTimers()
-    this.startTime = Date.now()
-    jest.setSystemTime(this.startTime)
+    ctx.playback = new FakePlayback()
+    ctx.container = new Container({ playback: ctx.playback })
+    ctx.stats = new Stats(ctx.container)
+    ctx.container.addPlugin(ctx.stats)
+    vi.useFakeTimers()
+    ctx.startTime = Date.now()
+    vi.setSystemTime(ctx.startTime)
   })
 
   afterEach(function () {
-    jest.restoreAllMocks()
-    jest.useRealTimers()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   it('should calculate startup time', function () {
-    this.container.onBuffering()
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
-    expect(this.stats.getStats().startupTime).toBe(1000)
+    ctx.container.onBuffering()
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
+    expect(ctx.stats.getStats().startupTime).toBe(1000)
   })
 
   it('should calculate rebuffer events', function () {
     // to maintain compatibility with the first ping version
     // we'll increment rebuffers even on the startup rebuffer event
-    this.container.onBuffering()
-    this.container.bufferfull()
+    ctx.container.onBuffering()
+    ctx.container.bufferfull()
 
-    this.container.onBuffering()
-    this.container.bufferfull()
+    ctx.container.onBuffering()
+    ctx.container.bufferfull()
 
-    expect(this.stats.getStats().rebuffers).toBe(2)
+    expect(ctx.stats.getStats().rebuffers).toBe(2)
   })
 
   it('should calculate total rebuffer time', function () {
-    this.container.play()
-    this.container.onBuffering() // startup time
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
+    ctx.container.play()
+    ctx.container.onBuffering() // startup time
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
 
-    this.container.onBuffering()
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
+    ctx.container.onBuffering()
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
 
-    this.container.onBuffering()
-    jest.advanceTimersByTime(500)
-    this.container.bufferfull()
+    ctx.container.onBuffering()
+    vi.advanceTimersByTime(500)
+    ctx.container.bufferfull()
 
-    expect(this.stats.getStats().rebufferingTime).toBe(1500)
+    expect(ctx.stats.getStats().rebufferingTime).toBe(1500)
   })
 
   it('should avoid NaN on watching time and rebuffering time when more than one bufferfull is dispatched', function () {
-    this.container.play()
-    this.container.onBuffering() // startup time
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
-    this.container.bufferfull()
+    ctx.container.play()
+    ctx.container.onBuffering() // startup time
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
+    ctx.container.bufferfull()
 
-    jest.advanceTimersByTime(2000) // watching for 2 secs
-    expect(this.stats.getStats().watchingTime).toBe(2000)
-    expect(this.stats.getStats().rebufferingTime).toBe(0)
-    expect(this.stats.getStats().startupTime).toBe(1000)
+    vi.advanceTimersByTime(2000) // watching for 2 secs
+    expect(ctx.stats.getStats().watchingTime).toBe(2000)
+    expect(ctx.stats.getStats().rebufferingTime).toBe(0)
+    expect(ctx.stats.getStats().startupTime).toBe(1000)
   })
 
   it('should calculate total watching time', function () {
-    this.container.play()
-    this.container.onBuffering() // startup time
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
+    ctx.container.play()
+    ctx.container.onBuffering() // startup time
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
 
-    jest.advanceTimersByTime(2000) // watching for 2 secs
-    expect(this.stats.getStats().watchingTime).toBe(2000)
+    vi.advanceTimersByTime(2000) // watching for 2 secs
+    expect(ctx.stats.getStats().watchingTime).toBe(2000)
 
-    this.container.onBuffering()
-    jest.advanceTimersByTime(500)
-    this.container.bufferfull()
+    ctx.container.onBuffering()
+    vi.advanceTimersByTime(500)
+    ctx.container.bufferfull()
 
-    jest.advanceTimersByTime(2000) // watching for 2 secs
-    expect(this.stats.getStats().watchingTime).toBe(4000)
+    vi.advanceTimersByTime(2000) // watching for 2 secs
+    expect(ctx.stats.getStats().watchingTime).toBe(4000)
   })
 
   it('should consider current rebuffering state', function () {
-    this.container.play()
-    this.container.onBuffering() // startup time
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
+    ctx.container.play()
+    ctx.container.onBuffering() // startup time
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
 
-    this.container.onBuffering()
-    jest.advanceTimersByTime(1000)
-    this.container.bufferfull()
-    jest.advanceTimersByTime(10000)
+    ctx.container.onBuffering()
+    vi.advanceTimersByTime(1000)
+    ctx.container.bufferfull()
+    vi.advanceTimersByTime(10000)
 
-    this.container.onBuffering()
-    jest.advanceTimersByTime(500)
+    ctx.container.onBuffering()
+    vi.advanceTimersByTime(500)
     // still rebuffering
 
-    expect(this.stats.getStats().rebufferingTime).toBe(1500)
-    expect(this.stats.getStats().watchingTime).toBe(10000)
+    expect(ctx.stats.getStats().rebufferingTime).toBe(1500)
+    expect(ctx.stats.getStats().watchingTime).toBe(10000)
   })
 
   it('should announce statistics periodically', function () {
-    const statsReportSpy = jest.spyOn(this.container, 'statsReport')
-    this.container.reportInterval = 10
+    const statsReportSpy = vi.spyOn(ctx.container, 'statsReport')
+    ctx.container.reportInterval = 10
 
-    const stats = new Stats(this.container)
-    this.container.addPlugin(stats)
-    this.playback.trigger(Events.PLAYBACK_PLAY)
+    const stats = new Stats(ctx.container)
+    ctx.container.addPlugin(stats)
+    ctx.playback.trigger(Events.PLAYBACK_PLAY)
     // clock.tick freezes when used with {set,clear}Interval and I don't know why
     setTimeout(function () {
       expect(statsReportSpy).toHaveBeenCalledTimes(2)
-      this.container.restore()
+      ctx.container.restore()
     }, 20)
   })
 })
