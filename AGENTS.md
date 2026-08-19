@@ -2,6 +2,8 @@
 
 > **Project:** Clappr — open-source, plugin-oriented HTML5 media player for the web.
 > **Central constraint:** Lerna + Yarn workspaces monorepo. Performance matters (streaming, DOM, bundle size).
+>
+> `CLAUDE.md` is a symlink to this file.
 
 **Authority for style and types:** ESLint, Prettier, package configs, and CI — do not repeat what they already enforce.
 
