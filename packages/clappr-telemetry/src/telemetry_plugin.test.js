@@ -4,27 +4,28 @@ import { NetworkAdapters } from './adapters'
 import MockSamplerRegistryClass from './samplers/sampler_registry'
 import MockObserverRegistryClass from './observers/observer_registry'
 
-jest.mock('./adapters', () => ({
-  NetworkAdapters: { find: jest.fn(), register: jest.fn(() => true), unregister: jest.fn(), has: jest.fn(() => false), size: 0 }
+vi.mock('./adapters', () => ({
+  NetworkAdapters: { find: vi.fn(), register: vi.fn(() => true), unregister: vi.fn(), has: vi.fn(() => false), size: 0 }
 }))
 
-jest.mock('./samplers/sampler_registry', () => {
-  const mock = jest.fn()
-  mock.register = jest.fn(() => true)
-  mock.unregister = jest.fn()
-  mock.has = jest.fn(() => false)
+vi.mock('./samplers/sampler_registry', () => {
+  const mock = vi.fn()
+  mock.register = vi.fn(() => true)
+  mock.unregister = vi.fn()
+  mock.has = vi.fn(() => false)
   return { __esModule: true, default: mock }
 })
 
-jest.mock('./samplers', () => ({
-  SamplerRegistry: jest.requireMock('./samplers/sampler_registry').default
-}))
+vi.mock('./samplers', async () => {
+  const { default: SamplerRegistry } = await vi.importMock('./samplers/sampler_registry')
+  return { SamplerRegistry }
+})
 
-jest.mock('./observers/observer_registry', () => {
-  const mock = jest.fn()
-  mock.register = jest.fn(() => true)
-  mock.unregister = jest.fn()
-  mock.has = jest.fn(() => false)
+vi.mock('./observers/observer_registry', () => {
+  const mock = vi.fn()
+  mock.register = vi.fn(() => true)
+  mock.unregister = vi.fn()
+  mock.has = vi.fn(() => false)
   return { __esModule: true, default: mock }
 })
 
@@ -35,22 +36,22 @@ describe('TelemetryPlugin', () => {
   let plugin, mockContainer, mockPlayback
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     NetworkAdapters.find.mockReturnValue(null)
     NetworkAdapters.size = 0
-    mockSamplerRegistry = { bind: jest.fn(), destroy: jest.fn(), snapshot: jest.fn(() => ({})) }
-    MockSamplerRegistryClass.mockImplementation(() => mockSamplerRegistry)
-    mockObserverRegistry = { bind: jest.fn(), destroy: jest.fn() }
-    MockObserverRegistryClass.mockImplementation(() => mockObserverRegistry)
+    mockSamplerRegistry = { bind: vi.fn(), destroy: vi.fn(), snapshot: vi.fn(() => ({})) }
+    MockSamplerRegistryClass.mockImplementation(function () { return mockSamplerRegistry })
+    mockObserverRegistry = { bind: vi.fn(), destroy: vi.fn() }
+    MockObserverRegistryClass.mockImplementation(function () { return mockObserverRegistry })
 
     mockPlayback = { name: 'dash_shaka_playback' }
     mockContainer = {
-      on: jest.fn(),
-      off: jest.fn(),
+      on: vi.fn(),
+      off: vi.fn(),
       playback: null,
       options: { telemetry: {} }
     }
@@ -76,7 +77,7 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should register listener on CONTAINER_READY event during bindEvents', () => {
-    jest.spyOn(plugin, 'listenTo')
+    vi.spyOn(plugin, 'listenTo')
     plugin.bindEvents()
 
     expect(plugin.listenTo).toHaveBeenCalledWith(
@@ -88,8 +89,8 @@ describe('TelemetryPlugin', () => {
 
   it('should call onPlaybackRead with container.playback when CONTAINER_READY fires', () => {
     mockContainer.playback = mockPlayback
-    jest.spyOn(plugin, 'onPlaybackRead').mockImplementation(() => {})
-    jest.spyOn(plugin, 'listenTo').mockImplementation((_emitter, _event, cb) => cb('container-name'))
+    vi.spyOn(plugin, 'onPlaybackRead').mockImplementation(() => {})
+    vi.spyOn(plugin, 'listenTo').mockImplementation((_emitter, _event, cb) => cb('container-name'))
 
     plugin.bindEvents()
 
@@ -98,8 +99,8 @@ describe('TelemetryPlugin', () => {
 
   it('should not call onPlaybackRead when container.playback is null on CONTAINER_READY', () => {
     mockContainer.playback = null
-    jest.spyOn(plugin, 'onPlaybackRead').mockImplementation(() => {})
-    jest.spyOn(plugin, 'listenTo').mockImplementation((_emitter, _event, cb) => cb('container-name'))
+    vi.spyOn(plugin, 'onPlaybackRead').mockImplementation(() => {})
+    vi.spyOn(plugin, 'listenTo').mockImplementation((_emitter, _event, cb) => cb('container-name'))
 
     plugin.bindEvents()
 
@@ -107,7 +108,7 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should call onPlaybackRead when CONTAINER_READY event fires', () => {
-    jest.spyOn(plugin, 'listenTo')
+    vi.spyOn(plugin, 'listenTo')
     plugin.bindEvents()
 
     const [, event, callback] = plugin.listenTo.mock.calls[0]
@@ -116,8 +117,8 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should instantiate and bind the adapter when playback is available', () => {
-    const mockAdapter = { bind: jest.fn() }
-    const MockAdapterClass = jest.fn(() => mockAdapter)
+    const mockAdapter = { bind: vi.fn() }
+    const MockAdapterClass = vi.fn(function () { return mockAdapter })
     NetworkAdapters.find.mockReturnValue(MockAdapterClass)
 
     plugin.onPlaybackRead(mockPlayback)
@@ -129,8 +130,8 @@ describe('TelemetryPlugin', () => {
 
   it('should not instantiate adapter when telemetry config is missing', () => {
     const noConfigContainer = {
-      on: jest.fn(),
-      off: jest.fn(),
+      on: vi.fn(),
+      off: vi.fn(),
       playback: null,
       options: {}
     }
@@ -159,7 +160,7 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should clean up adapter on destroy', () => {
-    const mockAdapter = { destroy: jest.fn(), bind: jest.fn() }
+    const mockAdapter = { destroy: vi.fn(), bind: vi.fn() }
     plugin.adapter = mockAdapter
 
     plugin.destroy()
@@ -169,7 +170,7 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should call parent destroy method', () => {
-    const parentDestroy = jest.spyOn(
+    const parentDestroy = vi.spyOn(
       Object.getPrototypeOf(Object.getPrototypeOf(plugin)),
       'destroy'
     )
@@ -178,10 +179,10 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should destroy previous adapter when onPlaybackRead is called again', () => {
-    const oldAdapter = { bind: jest.fn(), destroy: jest.fn() }
-    const newAdapter = { bind: jest.fn(), destroy: jest.fn() }
-    const OldClass = jest.fn(() => oldAdapter)
-    const NewClass = jest.fn(() => newAdapter)
+    const oldAdapter = { bind: vi.fn(), destroy: vi.fn() }
+    const newAdapter = { bind: vi.fn(), destroy: vi.fn() }
+    const OldClass = vi.fn(function () { return oldAdapter })
+    const NewClass = vi.fn(function () { return newAdapter })
 
     NetworkAdapters.find.mockReturnValueOnce(OldClass)
     plugin.onPlaybackRead(mockPlayback)
@@ -195,8 +196,8 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should destroy previous adapter when a subsequent onPlaybackRead finds no matching adapter', () => {
-    const oldAdapter = { bind: jest.fn(), destroy: jest.fn() }
-    const OldClass = jest.fn(() => oldAdapter)
+    const oldAdapter = { bind: vi.fn(), destroy: vi.fn() }
+    const OldClass = vi.fn(function () { return oldAdapter })
 
     NetworkAdapters.find.mockReturnValueOnce(OldClass)
     plugin.onPlaybackRead(mockPlayback)
@@ -210,8 +211,8 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should log warning when adapters are provided but none matches the playback engine', () => {
-    jest.spyOn(Log, 'warn').mockImplementation(() => {})
-    const MockAdapterClass = jest.fn()
+    vi.spyOn(Log, 'warn').mockImplementation(() => {})
+    const MockAdapterClass = vi.fn()
     mockContainer.options.telemetry.adapters = [MockAdapterClass]
     NetworkAdapters.find.mockReturnValueOnce(null)
 
@@ -223,7 +224,7 @@ describe('TelemetryPlugin', () => {
   })
 
   it('should not log warning when no adapters are provided', () => {
-    jest.spyOn(Log, 'warn').mockImplementation(() => {})
+    vi.spyOn(Log, 'warn').mockImplementation(() => {})
     mockContainer.options.telemetry.adapters = []
     NetworkAdapters.find.mockReturnValueOnce(null)
 
@@ -233,8 +234,8 @@ describe('TelemetryPlugin', () => {
   })
 
   it('registers adapters from telemetry.adapters config', () => {
-    const AdapterA = jest.fn()
-    const AdapterB = jest.fn()
+    const AdapterA = vi.fn()
+    const AdapterB = vi.fn()
     mockContainer.options.telemetry.adapters = [AdapterA, AdapterB]
 
     plugin.onPlaybackRead(mockPlayback)
@@ -252,7 +253,7 @@ describe('TelemetryPlugin', () => {
   })
 
   it('does not unregister an adapter that failed registration (avoids removing an unrelated class on destroy)', () => {
-    const InvalidAdapter = jest.fn()
+    const InvalidAdapter = vi.fn()
     NetworkAdapters.register.mockReturnValueOnce(false)
     mockContainer.options.telemetry.adapters = [InvalidAdapter]
 
@@ -279,7 +280,7 @@ describe('TelemetryPlugin', () => {
 
   describe('snapshot getter', () => {
     it('delegates to samplerRegistry.snapshot()', () => {
-      mockSamplerRegistry.snapshot = jest.fn(() => ({ buffer: { bufferAhead: 10 } }))
+      mockSamplerRegistry.snapshot = vi.fn(() => ({ buffer: { bufferAhead: 10 } }))
       plugin.onPlaybackRead(mockPlayback)
       expect(plugin.snapshot).toEqual({ buffer: { bufferAhead: 10 } })
       expect(mockSamplerRegistry.snapshot).toHaveBeenCalled()
@@ -329,8 +330,8 @@ describe('TelemetryPlugin', () => {
     })
 
     it('registers samplers from telemetry.samplers config before instantiating SamplerRegistry', () => {
-      const SamplerA = jest.fn()
-      const SamplerB = jest.fn()
+      const SamplerA = vi.fn()
+      const SamplerB = vi.fn()
       mockContainer.options.telemetry.samplers = [SamplerA, SamplerB]
 
       plugin.onPlaybackRead(mockPlayback)
@@ -348,7 +349,7 @@ describe('TelemetryPlugin', () => {
     })
 
     it('calls unregister on destroy for samplers that were pre-registered in the global registry', () => {
-      const SamplerA = jest.fn()
+      const SamplerA = vi.fn()
       MockSamplerRegistryClass.has.mockReturnValue(true)
       mockContainer.options.telemetry.samplers = [SamplerA]
 
@@ -359,7 +360,7 @@ describe('TelemetryPlugin', () => {
     })
 
     it('does not unregister a sampler that failed registration (avoids removing an unrelated class sharing its name)', () => {
-      const InvalidSampler = jest.fn()
+      const InvalidSampler = vi.fn()
       MockSamplerRegistryClass.register.mockReturnValueOnce(false)
       mockContainer.options.telemetry.samplers = [InvalidSampler]
 
@@ -400,7 +401,7 @@ describe('TelemetryPlugin', () => {
     })
 
     it('does not unregister an observer that failed registration (avoids removing an unrelated class sharing its name)', () => {
-      const InvalidObserver = jest.fn()
+      const InvalidObserver = vi.fn()
       MockObserverRegistryClass.register.mockReturnValueOnce(false)
       mockContainer.options.telemetry.observers = [InvalidObserver]
 

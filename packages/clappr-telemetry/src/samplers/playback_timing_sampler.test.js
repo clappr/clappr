@@ -9,15 +9,15 @@ beforeAll(() => {
 const makePlayback = () => {
   const listeners = {}
   return {
-    on: jest.fn((event, handler) => { listeners[event] = handler }),
-    off: jest.fn(),
+    on: vi.fn((event, handler) => { listeners[event] = handler }),
+    off: vi.fn(),
     _emit: (event, data) => listeners[event]?.(data)
   }
 }
 
 const makeContainer = () => ({
-  on: jest.fn(),
-  off: jest.fn()
+  on: vi.fn(),
+  off: vi.fn()
 })
 
 describe('PlaybackTimingSampler', () => {
@@ -26,15 +26,15 @@ describe('PlaybackTimingSampler', () => {
   let container
 
   beforeEach(() => {
-    jest.useFakeTimers()
-    jest.setSystemTime(0)
+    vi.useFakeTimers()
+    vi.setSystemTime(0)
     playback = makePlayback()
     container = makeContainer()
     sampler = new PlaybackTimingSampler(playback, container)
   })
 
   afterEach(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   describe('constructor', () => {
@@ -56,45 +56,45 @@ describe('PlaybackTimingSampler', () => {
     it('accumulates while playing', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
     it('stops accumulating on pause', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       playback._emit(Events.PLAYBACK_PAUSE)
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
       expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
     it('stops accumulating on ended', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       playback._emit(Events.PLAYBACK_ENDED)
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
       expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
     it('stops accumulating during buffering', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       playback._emit(Events.PLAYBACK_BUFFERING)
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
       expect(sampler.collect().timePlayingMs).toBe(100)
     })
 
     it('resumes after buffering', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       playback._emit(Events.PLAYBACK_BUFFERING)
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
       expect(sampler.collect().timePlayingMs).toBe(300)
     })
   })
@@ -103,9 +103,9 @@ describe('PlaybackTimingSampler', () => {
     it('accumulates during buffering', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       playback._emit(Events.PLAYBACK_BUFFERING)
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
       expect(sampler.collect().timeWaitingMs).toBe(50)
     })
 
@@ -113,26 +113,26 @@ describe('PlaybackTimingSampler', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
       playback._emit(Events.PLAYBACK_PAUSE)
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
       expect(sampler.collect().timeWaitingMs).toBe(0)
     })
   })
 
   describe('joinTimeMs', () => {
     it('is the interval between PLAY_INTENT and first PLAY', () => {
-      jest.setSystemTime(100)
+      vi.setSystemTime(100)
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
-      jest.setSystemTime(350)
+      vi.setSystemTime(350)
       playback._emit(Events.PLAYBACK_PLAY)
       expect(sampler.collect().joinTimeMs).toBe(250)
     })
 
     it('does not change on subsequent PLAY events', () => {
-      jest.setSystemTime(100)
+      vi.setSystemTime(100)
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
-      jest.setSystemTime(200)
+      vi.setSystemTime(200)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.setSystemTime(500)
+      vi.setSystemTime(500)
       playback._emit(Events.PLAYBACK_BUFFERING)
       playback._emit(Events.PLAYBACK_PLAY)
       expect(sampler.collect().joinTimeMs).toBe(100)
@@ -207,9 +207,9 @@ describe('PlaybackTimingSampler', () => {
     })
 
     it('equals time since session start when there was no PLAY_INTENT', () => {
-      jest.setSystemTime(0)
+      vi.setSystemTime(0)
       sampler = new PlaybackTimingSampler(playback, container)
-      jest.setSystemTime(2000)
+      vi.setSystemTime(2000)
       playback._emit(Events.PLAYBACK_PLAY)
       expect(sampler.collect().autoplayStartupTimeMs).toBe(2000)
     })
@@ -223,9 +223,9 @@ describe('PlaybackTimingSampler', () => {
     it('includes current state time without requiring a new event', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(150)
+      vi.advanceTimersByTime(150)
       expect(sampler.collect().timePlayingMs).toBe(150)
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
       expect(sampler.collect().timePlayingMs).toBe(200)
     })
 
@@ -239,11 +239,11 @@ describe('PlaybackTimingSampler', () => {
     it('accumulates correctly', () => {
       playback._emit(Events.PLAYBACK_PLAY_INTENT)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
       playback._emit(Events.PLAYBACK_BUFFERING)
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
       playback._emit(Events.PLAYBACK_PLAY)
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
 
       const result = sampler.collect()
       expect(result.timePlayingMs).toBe(300)

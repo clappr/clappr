@@ -2,16 +2,19 @@ import VideoEventObserver from './video_event_observer'
 import { emitTelemetry } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES, DEFAULT_VIDEO_EVENTS } from '../utils/constants'
 
-jest.mock('../utils', () => ({
-  ...jest.requireActual('../utils'),
-  emitTelemetry: jest.fn()
-}))
+vi.mock('../utils', async importOriginal => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    emitTelemetry: vi.fn()
+  }
+})
 
 const makeVideoEl = (overrides = {}) => ({
   currentTime: 10,
   readyState: 4,
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
   ...overrides
 })
 
@@ -19,14 +22,14 @@ const makePlayback = (videoEl) => ({ el: videoEl })
 
 const makeContainer = (cfg = {}) => ({
   options: { telemetry: { videoState: cfg } },
-  trigger: jest.fn()
+  trigger: vi.fn()
 })
 
 describe('VideoEventObserver', () => {
   let observer, container, playback, videoEl
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     videoEl = makeVideoEl()
     playback = makePlayback(videoEl)
     container = makeContainer({ enabled: true })
@@ -78,7 +81,7 @@ describe('VideoEventObserver', () => {
 
     it('includes snapshot from samplerRegistry when provided', () => {
       const snapshotData = { buffer: { bufferAhead: 5 } }
-      const mockSamplerRegistry = { snapshot: jest.fn(() => snapshotData) }
+      const mockSamplerRegistry = { snapshot: vi.fn(() => snapshotData) }
       const o = new VideoEventObserver(playback, container, mockSamplerRegistry)
       o.bind()
       const handler = videoEl.addEventListener.mock.calls.find(([name]) => name === 'waiting')?.[1]
@@ -119,7 +122,7 @@ describe('VideoEventObserver', () => {
     })
 
     it('clears event handlers map even when videoEl is null', () => {
-      observer._eventHandlers.set('waiting', jest.fn())
+      observer._eventHandlers.set('waiting', vi.fn())
       observer._playback = { el: null }
       expect(() => observer.destroy()).not.toThrow()
       expect(observer._eventHandlers.size).toBe(0)
@@ -134,7 +137,7 @@ describe('VideoEventObserver', () => {
     })
 
     it('nulls playback, container and samplerRegistry references', () => {
-      const mockSamplerRegistry = { snapshot: jest.fn() }
+      const mockSamplerRegistry = { snapshot: vi.fn() }
       const o = new VideoEventObserver(playback, container, mockSamplerRegistry)
       o.destroy()
       expect(o._playback).toBeNull()

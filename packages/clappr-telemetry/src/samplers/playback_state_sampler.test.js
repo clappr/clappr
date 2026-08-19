@@ -17,8 +17,8 @@ const makeVideoEl = (overrides = {}) => ({
 const makePlayback = (videoEl) => ({ el: videoEl })
 
 const makeContainer = () => ({
-  on: jest.fn(),
-  off: jest.fn()
+  on: vi.fn(),
+  off: vi.fn()
 })
 
 const trace = (type, data = {}) => ({ type, data })

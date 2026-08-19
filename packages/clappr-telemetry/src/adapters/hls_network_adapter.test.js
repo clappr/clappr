@@ -1,7 +1,10 @@
-jest.mock('../utils', () => ({
-  ...jest.requireActual('../utils'),
-  emitTelemetry: jest.fn()
-}))
+vi.mock('../utils', async importOriginal => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    emitTelemetry: vi.fn()
+  }
+})
 
 import HlsNetworkAdapter, { HLS_EVENTS } from './hls_network_adapter'
 import { emitTelemetry } from '../utils'
@@ -14,8 +17,8 @@ const HLS_ERROR_TYPES = {
 }
 
 const createFakeHls = (levels = []) => ({
-  on: jest.fn(),
-  off: jest.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
   levels
 })
 
@@ -25,9 +28,9 @@ const createFakePlayback = (hls = null) => ({
 })
 
 const createFakeContainer = () => ({
-  trigger: jest.fn(),
-  on: jest.fn(),
-  off: jest.fn()
+  trigger: vi.fn(),
+  on: vi.fn(),
+  off: vi.fn()
 })
 
 const makeFrag = ({ sn = 1, level = 0, type = 'main', url = 'http://ex.com/seg.ts' } = {}) => ({
@@ -48,7 +51,7 @@ describe('HlsNetworkAdapter', () => {
   let container, adapter, playback, fakeHls
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     fakeHls = createFakeHls()
     playback = createFakePlayback(fakeHls)
     container = createFakeContainer()
@@ -258,7 +261,7 @@ describe('HlsNetworkAdapter', () => {
       for (let i = 0; i < 99; i++) {
         fragCb(null, { frag: makeFrag({ sn: i, url: `http://ex.com/seg${i}.ts` }) })
       }
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       fragCb(null, { frag: makeFrag({ sn: 200, url: 'http://ex.com/seg200.ts' }) })
 
@@ -284,7 +287,7 @@ describe('HlsNetworkAdapter', () => {
       const frag = makeFrag()
 
       loadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { frag })
 
       expect(emitTelemetry).toHaveBeenCalledWith(
@@ -302,7 +305,7 @@ describe('HlsNetworkAdapter', () => {
       frag.stats = { loading: { start: 100, end: 350 }, total: 1024 }
 
       loadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { frag })
 
       const [, , data] = emitTelemetry.mock.calls[0]
@@ -316,7 +319,7 @@ describe('HlsNetworkAdapter', () => {
       frag.stats = { loading: { start: 0, end: 100 }, total: 4096 }
 
       loadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { frag })
 
       const [, , data] = emitTelemetry.mock.calls[0]
@@ -329,7 +332,7 @@ describe('HlsNetworkAdapter', () => {
       const frag = makeFrag()
 
       loadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { frag })
 
       const [, , data] = emitTelemetry.mock.calls[0]
@@ -371,7 +374,7 @@ describe('HlsNetworkAdapter', () => {
       const url = 'http://ex.com/playlist.m3u8'
 
       loadingCb(null, { url })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { url, stats: { loading: { start: 0, end: 120 }, total: 512 } })
 
       expect(emitTelemetry).toHaveBeenCalledWith(
@@ -419,7 +422,7 @@ describe('HlsNetworkAdapter', () => {
       const frag = { decryptdata: { uri: 'http://ex.com/key' } }
 
       loadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { frag })
 
       expect(emitTelemetry).toHaveBeenCalledWith(
@@ -436,7 +439,7 @@ describe('HlsNetworkAdapter', () => {
       const frag = { decryptdata: { uri: 'http://ex.com/key' }, stats: { loading: { start: 100, end: 400 } } }
 
       loadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       loadedCb(null, { frag })
 
       expect(emitTelemetry).toHaveBeenCalledWith(
@@ -475,7 +478,7 @@ describe('HlsNetworkAdapter', () => {
       const fragLoadingCb = getHlsHandler(fakeHls, HLS_EVENTS.FRAG_LOADING)
       const errorCb = getHlsHandler(fakeHls, HLS_EVENTS.ERROR)
       fragLoadingCb(null, { frag })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       errorCb(null, { type: HLS_ERROR_TYPES.NETWORK_ERROR, frag, details: 'fragLoadError', fatal: false })
 
@@ -492,7 +495,7 @@ describe('HlsNetworkAdapter', () => {
       const fragLoadingCb = getHlsHandler(fakeHls, HLS_EVENTS.FRAG_LOADING)
       const errorCb = getHlsHandler(fakeHls, HLS_EVENTS.ERROR)
       fragLoadingCb(null, { frag: makeFrag() })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       errorCb(null, { type: HLS_ERROR_TYPES.NETWORK_ERROR })
 
@@ -505,7 +508,7 @@ describe('HlsNetworkAdapter', () => {
       const errorCb = getHlsHandler(fakeHls, HLS_EVENTS.ERROR)
       const url = 'http://ex.com/master.m3u8'
       manifestLoadingCb(null, { url })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       errorCb(null, { type: HLS_ERROR_TYPES.NETWORK_ERROR, url })
 
@@ -523,7 +526,7 @@ describe('HlsNetworkAdapter', () => {
       const errorCb = getHlsHandler(fakeHls, HLS_EVENTS.ERROR)
       const url = 'http://ex.com/master.m3u8?token=abc123'
       manifestLoadingCb(null, { url })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       errorCb(null, { type: HLS_ERROR_TYPES.NETWORK_ERROR, url })
 
@@ -539,7 +542,7 @@ describe('HlsNetworkAdapter', () => {
       const fragLoadingCb = getHlsHandler(fakeHls, HLS_EVENTS.FRAG_LOADING)
       const errorCb = getHlsHandler(fakeHls, HLS_EVENTS.ERROR)
       fragLoadingCb(null, { frag: makeFrag() })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       errorCb(null, { type: HLS_ERROR_TYPES.MEDIA_ERROR })
 
@@ -565,7 +568,7 @@ describe('HlsNetworkAdapter', () => {
       const cb = getHlsHandler(fakeHls, HLS_EVENTS.LEVEL_SWITCHED)
 
       cb(null, { level: 0 })
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       cb(null, { level: 1 })
 
       expect(emitTelemetry).toHaveBeenCalledWith(
@@ -702,7 +705,7 @@ describe('HlsNetworkAdapter', () => {
       adapter.bind()
 
       const cb = getHlsHandler(fakeHls, HLS_EVENTS.LEVEL_SWITCHED)
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       fakeHls.currentLevel = 1
       cb(null, { level: 1 })
 
