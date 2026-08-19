@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 
 import Log from './log'
-import mockConsole from 'jest-mock-console'
 
 describe('Log', () => {
   test('is created with default level', () => {
@@ -61,10 +60,10 @@ describe('Log', () => {
   })
 
   describe('prints log', function () {
-    let restoreConsole
+    let logSpy
 
-    beforeEach(() => { restoreConsole = mockConsole() })
-    afterEach(() => { restoreConsole() })
+    beforeEach(() => { logSpy = vi.spyOn(console, 'log').mockImplementation(() => {}) })
+    afterEach(() => { logSpy.mockRestore() })
 
     test('indicating level and class with the message', () => {
       const logger = new Log()
@@ -110,10 +109,10 @@ describe('Log', () => {
   })
 
   describe('don\'t print log', function () {
-    let restoreConsole
+    let logSpy
 
-    beforeEach(() => { restoreConsole = mockConsole() })
-    afterEach(() => { restoreConsole() })
+    beforeEach(() => { logSpy = vi.spyOn(console, 'log').mockImplementation(() => {}) })
+    afterEach(() => { logSpy.mockRestore() })
 
     test('without the level attribute', () => {
       const logger = new Log()
@@ -131,10 +130,10 @@ describe('Log', () => {
   })
 
   describe('have a static method', function () {
-    let restoreConsole
+    let logSpy
 
-    beforeEach(() => { restoreConsole = mockConsole() })
-    afterEach(() => { restoreConsole() })
+    beforeEach(() => { logSpy = vi.spyOn(console, 'log').mockImplementation(() => {}) })
+    afterEach(() => { logSpy.mockRestore() })
 
     test('to get one Log instance', () => {
       const logger = Log.getInstance()

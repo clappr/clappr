@@ -32,7 +32,7 @@ describe('PlayerError', function () {
 
   describe('when error method is called', () => {
     test('triggers ERROR event', () => {
-      jest.spyOn(core, 'trigger')
+      vi.spyOn(core, 'trigger')
       playerError.createError(errorData)
 
       expect(core.trigger).toHaveBeenCalledWith(Events.ERROR, errorData)
@@ -40,7 +40,7 @@ describe('PlayerError', function () {
 
     describe('when core is not set', () => {
       test('does not trigger ERROR event', () => {
-        jest.spyOn(core, 'trigger')
+        vi.spyOn(core, 'trigger')
         playerError.core = undefined
         playerError.createError(errorData)
 

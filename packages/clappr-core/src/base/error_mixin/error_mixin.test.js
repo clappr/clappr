@@ -115,7 +115,7 @@ describe('ErrorMixin', function () {
   })
 
   test('sends the error for one existing PlayerError instance', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const plugin = new UICorePlugin(new Core({}))
 
     plugin.listenTo(plugin.core, Events.ERROR, callback)

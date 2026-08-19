@@ -33,7 +33,7 @@ describe('Container', function () {
 
   test('delegates audioTracks calls to playback', () => {
     const audioTracks = []
-    jest.spyOn(playback, 'audioTracks', 'get').mockReturnValue(audioTracks)
+    vi.spyOn(playback, 'audioTracks', 'get').mockReturnValue(audioTracks)
 
     const result = container.audioTracks
 
@@ -42,7 +42,7 @@ describe('Container', function () {
 
   test('delegates currentAudioTrack calls to playback', () => {
     const currentAudioTrack = {}
-    jest.spyOn(playback, 'currentAudioTrack', 'get').mockReturnValue(currentAudioTrack)
+    vi.spyOn(playback, 'currentAudioTrack', 'get').mockReturnValue(currentAudioTrack)
 
     const result = container.currentAudioTrack
 
@@ -50,7 +50,7 @@ describe('Container', function () {
   })
 
   test('delegates switchAudioTrack calls to playback', () => {
-    jest.spyOn(playback, 'switchAudioTrack').mockImplementation()
+    vi.spyOn(playback, 'switchAudioTrack').mockImplementation()
 
     container.switchAudioTrack(42)
 
@@ -61,11 +61,11 @@ describe('Container', function () {
   test('destroys all the plugins', () => {
     const fakePlugin = { destroy: () => {} }
 
-    jest.spyOn(playback, 'destroy')
-    jest.spyOn(fakePlugin, 'destroy')
-    jest.spyOn(container, 'stopListening')
-    jest.spyOn(container, 'trigger')
-    jest.spyOn(container.$el, 'remove')
+    vi.spyOn(playback, 'destroy')
+    vi.spyOn(fakePlugin, 'destroy')
+    vi.spyOn(container, 'stopListening')
+    vi.spyOn(container, 'trigger')
+    vi.spyOn(container.$el, 'remove')
     container.addPlugin(fakePlugin)
 
     container.destroy()
@@ -78,7 +78,7 @@ describe('Container', function () {
   })
 
   test('update playback options when configure', () => {
-    jest.spyOn(playback, 'configure')
+    vi.spyOn(playback, 'configure')
     const fakeOptions = { foo: 'bar' }
     container.configure(fakeOptions)
 
@@ -87,7 +87,7 @@ describe('Container', function () {
   })
 
   test('should trigger options will change event', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     container.on(Events.CONTAINER_OPTIONS_WILL_CHANGE, callback)
 
     const newOptions = {
@@ -115,7 +115,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:progress event', () => {
-    jest.spyOn(container, 'onProgress')
+    vi.spyOn(container, 'onProgress')
 
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_PROGRESS, { start: 0, current: 3000, total: 6000 })
@@ -124,7 +124,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:timeupdate event', () => {
-    jest.spyOn(container, 'timeUpdated')
+    vi.spyOn(container, 'timeUpdated')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 2, total: 40 })
 
@@ -134,7 +134,7 @@ describe('Container', function () {
   test('listens to playback:seek event', () => {
     const playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
     const container = new Container({ playback: playback })
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     container.bindEvents()
     container.on(Events.CONTAINER_SEEK, callback)
@@ -148,7 +148,7 @@ describe('Container', function () {
   test('listens to playback:seeked event', () => {
     const playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
     const container = new Container({ playback: playback })
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     container.bindEvents()
     container.on(Events.CONTAINER_SEEKED, callback)
@@ -160,7 +160,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:ready event', () => {
-    jest.spyOn(container, 'ready')
+    vi.spyOn(container, 'ready')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_READY)
     expect(container.isReady).toBeTruthy()
@@ -168,28 +168,28 @@ describe('Container', function () {
   })
 
   test('listens to playback:buffering event', () => {
-    jest.spyOn(container, 'onBuffering')
+    vi.spyOn(container, 'onBuffering')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_BUFFERING)
     expect(container.onBuffering).toHaveBeenCalledTimes(1)
   })
 
   test('listens to playback:bufferfull event', () => {
-    jest.spyOn(container, 'bufferfull')
+    vi.spyOn(container, 'bufferfull')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_BUFFERFULL)
     expect(container.bufferfull).toHaveBeenCalledTimes(1)
   })
 
   test('listens to playback:settingsupdate event', () => {
-    jest.spyOn(container, 'settingsUpdate')
+    vi.spyOn(container, 'settingsUpdate')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_SETTINGSUPDATE)
     expect(container.settingsUpdate).toHaveBeenCalledTimes(1)
   })
 
   test('listens to playback:loadedmetadata event', () => {
-    jest.spyOn(container, 'loadedMetadata')
+    vi.spyOn(container, 'loadedMetadata')
 
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: 45, data: { hold: 'on' } })
@@ -199,7 +199,7 @@ describe('Container', function () {
 
   test('listens to playback:highdefinitionupdate event', () => {
     const isHD = true
-    jest.spyOn(container, 'highDefinitionUpdate')
+    vi.spyOn(container, 'highDefinitionUpdate')
 
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, isHD)
@@ -208,7 +208,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:mediacontrol:disable event', () => {
-    jest.spyOn(container, 'disableMediaControl')
+    vi.spyOn(container, 'disableMediaControl')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_MEDIACONTROL_DISABLE)
 
@@ -216,7 +216,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:mediacontrol:enable event', () => {
-    jest.spyOn(container, 'enableMediaControl')
+    vi.spyOn(container, 'enableMediaControl')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_MEDIACONTROL_ENABLE)
 
@@ -224,7 +224,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:ended event', () => {
-    jest.spyOn(container, 'onEnded')
+    vi.spyOn(container, 'onEnded')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_ENDED)
 
@@ -232,7 +232,7 @@ describe('Container', function () {
   })
 
   test('listens to playback:play event', () => {
-    jest.spyOn(container, 'playing')
+    vi.spyOn(container, 'playing')
     container.bindEvents()
     playback.trigger(Events.PLAYBACK_PLAY)
 
@@ -240,7 +240,7 @@ describe('Container', function () {
   })
 
   test('trigger container:pause with no parameters', () => {
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     container.pause()
     playback.trigger(Events.PLAYBACK_PAUSE)
 
@@ -248,7 +248,7 @@ describe('Container', function () {
   })
 
   test('trigger container:pause with parameters', () => {
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     const parameter = { anyParameter: 'parameter' }
     container.pause(parameter)
     playback.trigger(Events.PLAYBACK_PAUSE)
@@ -257,7 +257,7 @@ describe('Container', function () {
   })
 
   test('trigger container:play with no parameters', () => {
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     container.pause()
     playback.trigger(Events.PLAYBACK_PLAY)
 
@@ -265,7 +265,7 @@ describe('Container', function () {
   })
 
   test('trigger container:play with parameters', () => {
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     const parameter = { anyParameter: 'parameter' }
     container.play(parameter)
     playback.trigger(Events.PLAYBACK_PLAY)
@@ -274,7 +274,7 @@ describe('Container', function () {
   })
 
   test('trigger container:stop with no parameters', () => {
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     container.stop()
     playback.trigger(Events.PLAYBACK_STOP)
 
@@ -282,7 +282,7 @@ describe('Container', function () {
   })
 
   test('trigger container:stop with parameters', () => {
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     const parameter = { anyParameter: 'parameter' }
     container.stop(parameter)
     playback.trigger(Events.PLAYBACK_STOP)
@@ -292,7 +292,7 @@ describe('Container', function () {
 
   test('triggers CONTAINER_AUDIO_AVAILABLE when PLAYBACK_AUDIO_AVAILABLE happens', () => {
     const audioTracks = []
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     container.bindEvents()
 
     playback.trigger(Events.PLAYBACK_AUDIO_AVAILABLE, audioTracks)
@@ -302,7 +302,7 @@ describe('Container', function () {
 
   test('triggers CONTAINER_AUDIO_CHANGED when PLAYBACK_AUDIO_CHANGED happens', () => {
     const audioTracks = []
-    jest.spyOn(container, 'trigger')
+    vi.spyOn(container, 'trigger')
     container.bindEvents()
 
     playback.trigger(Events.PLAYBACK_AUDIO_CHANGED, audioTracks)
@@ -326,7 +326,7 @@ describe('Container', function () {
     test('triggers a CONTAINER_RESIZE event when the size changes', () => {
       const newSize = { width: 320, height: 240 }
 
-      jest.spyOn(container, 'trigger')
+      vi.spyOn(container, 'trigger')
       container.el = { clientWidth: newSize.width, clientHeight: newSize.height }
       container.checkResize()
 
@@ -336,7 +336,7 @@ describe('Container', function () {
     test('doesn\'t trigger CONTAINER_RESIZE if size hasn\'t changed', () => {
       container.checkResize() // this will initialized currentSize AND trigger the first resize
 
-      jest.spyOn(container, 'trigger')
+      vi.spyOn(container, 'trigger')
       container.checkResize()
 
       expect(container.trigger).not.toHaveBeenCalled()
@@ -345,8 +345,8 @@ describe('Container', function () {
 
   test('resize', () => {
     const data = { width: 100, height: 100 }
-    jest.spyOn(container, 'onResize')
-    jest.spyOn(playback, 'resize')
+    vi.spyOn(container, 'onResize')
+    vi.spyOn(playback, 'resize')
     container.resize(data)
     expect(container.onResize).toHaveBeenCalledWith(data)
     expect(playback.resize).toHaveBeenCalledWith(data)

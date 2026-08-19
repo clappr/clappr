@@ -143,30 +143,30 @@ describe('Playback', function () {
     expect(basePlayback.isHighDefinitionInUse()).toBeFalsy()
   })
 
-  test('can be consented', done => {
-    const callback = jest.fn(() => {
+  test('can be consented', () => new Promise(done => {
+    const callback = vi.fn(() => {
       expect(callback).toHaveBeenCalledTimes(1)
       done()
     })
     basePlayback.consent(callback)
-  })
+  }))
 
   test('consider auto play is available as default', () => {
-    const spy = jest.fn()
+    const spy = vi.fn()
     basePlayback.canAutoPlay(spy)
 
     expect(spy).toHaveBeenCalledWith(true, null)
   })
 
   test('can checks if auto play is available', () => {
-    jest.spyOn(basePlayback, 'play')
+    vi.spyOn(basePlayback, 'play')
     basePlayback.attemptAutoPlay()
 
     expect(basePlayback.play).toHaveBeenCalledTimes(1)
   })
 
   test('destroys by removing element from DOM', () => {
-    const spy = jest.fn()
+    const spy = vi.fn()
     basePlayback.$el = { remove: spy, off: () => {} }
 
     basePlayback.destroy()
@@ -276,7 +276,7 @@ describe('Playback', function () {
     })
 
     test('always calls error method to trigger ERROR event', () => {
-      const spy = jest.spyOn(basePlayback.playerError, 'createError')
+      const spy = vi.spyOn(basePlayback.playerError, 'createError')
       basePlayback.createError()
 
       expect(spy).toHaveBeenCalledWith(defaultError)
@@ -285,8 +285,8 @@ describe('Playback', function () {
 
   test('resize', () => {
     const data = { width: 100, height: 100 }
-    const callback = jest.fn()
-    jest.spyOn(basePlayback, 'onResize')
+    const callback = vi.fn()
+    vi.spyOn(basePlayback, 'onResize')
     basePlayback.on(Events.PLAYBACK_RESIZE, callback)
     basePlayback.resize(data)
     expect(basePlayback.onResize).toHaveBeenCalledWith(data)

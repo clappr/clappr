@@ -33,7 +33,7 @@ describe('SourcesPlugin', () => {
   })
 
   test('guarantees only one container rendered', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     const containerOptions = { playback: new Playback() }
 
@@ -50,7 +50,7 @@ describe('SourcesPlugin', () => {
   })
 
   test('destroys containers with NoOp playback', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     const containerOptions = { playback: new NoOp() }
 

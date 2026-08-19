@@ -7,7 +7,7 @@ describe('Events', function () {
 
   beforeEach(() => {
     events = new Events()
-    callback = jest.fn()
+    callback = vi.fn()
     Events.Custom = {}
   })
 
@@ -325,7 +325,7 @@ describe('Events', function () {
 
   describe('does not register an event when eventName is', () => {
     let stubLogError
-    beforeEach(() => { stubLogError = jest.spyOn(Log.getInstance(), 'error') })
+    beforeEach(() => { stubLogError = vi.spyOn(Log.getInstance(), 'error') })
     afterEach(() => { stubLogError.mockClear() })
 
     it('an empty string', () => {
