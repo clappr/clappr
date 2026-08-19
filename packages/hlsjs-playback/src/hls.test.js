@@ -25,17 +25,17 @@ const makeLevelData = ({
 
 const stubHls = playback => {
   playback._hls = {
-    startLoad: jest.fn(),
-    recoverMediaError: jest.fn(),
-    swapAudioCodec: jest.fn(),
-    destroy: jest.fn()
+    startLoad: vi.fn(),
+    recoverMediaError: vi.fn(),
+    swapAudioCodec: vi.fn(),
+    destroy: vi.fn()
   }
   return playback._hls
 }
 
 const freezeNow = (playback, initialMs = 1000000) => {
   let current = initialMs
-  jest.spyOn(playback, '_now', 'get').mockImplementation(() => current)
+  vi.spyOn(playback, '_now', 'get').mockImplementation(() => current)
   return {
     advance(ms) {
       current += ms
@@ -45,12 +45,12 @@ const freezeNow = (playback, initialMs = 1000000) => {
 
 describe('HlsjsPlayback', () => {
   beforeEach(() => {
-    jest.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => {})
-    jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
+    vi.spyOn(window.HTMLMediaElement.prototype, 'play').mockImplementation(() => {})
+    vi.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   test('have a getter called defaultOptions', () => {
@@ -83,7 +83,7 @@ describe('HlsjsPlayback', () => {
   })
 
   test('should be able to identify it can play resources independently of the file extension case', () => {
-    jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
+    vi.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
     expect(HlsjsPlayback.canPlay('/relative/VIDEO.M3U8')).toBeTruthy()
     expect(HlsjsPlayback.canPlay('/relative/video.m3u8?foobarQuery=1234#somefragment')).toBeTruthy()
@@ -102,7 +102,7 @@ describe('HlsjsPlayback', () => {
   })
 
   test('can play regardless of any mime type letter case', () => {
-    jest.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
+    vi.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
     expect(HlsjsPlayback.canPlay('/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL')).toBeTruthy()
     expect(
       HlsjsPlayback.canPlay(
@@ -237,14 +237,14 @@ describe('HlsjsPlayback', () => {
         hlsPlayback: { preload: false }
       })
       playback._setup()
-      jest.spyOn(playback._hls, 'loadSource')
+      vi.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
 
       expect(playback._hls.loadSource).not.toHaveBeenCalled()
 
       playback.options.hlsPlayback.preload = true
       playback._setup()
-      jest.spyOn(playback._hls, 'loadSource')
+      vi.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
 
       expect(playback._hls.loadSource).toHaveBeenCalledTimes(1)
@@ -264,7 +264,7 @@ describe('HlsjsPlayback', () => {
 
     test('calls bindCustomListeners method', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
-      jest.spyOn(playback, 'bindCustomListeners')
+      vi.spyOn(playback, 'bindCustomListeners')
       playback._setup()
 
       expect(playback.bindCustomListeners).toHaveBeenCalledTimes(1)
@@ -275,7 +275,7 @@ describe('HlsjsPlayback', () => {
     test('avoid to run internal logic if _isReadyState flag is true', () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
       playback._isReadyState = true
-      jest.spyOn(playback, '_setup')
+      vi.spyOn(playback, '_setup')
       playback._ready()
 
       expect(playback._setup).not.toHaveBeenCalled()
@@ -283,7 +283,7 @@ describe('HlsjsPlayback', () => {
 
     test("call _setup method if HLS.JS internal don't exists", () => {
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
-      jest.spyOn(playback, '_setup')
+      vi.spyOn(playback, '_setup')
       playback._ready()
 
       expect(playback._setup).toHaveBeenCalledTimes(1)
@@ -302,8 +302,8 @@ describe('HlsjsPlayback', () => {
       expect(playback._isReadyState).toBeTruthy()
     })
 
-    test('triggers PLAYBACK_READY event', done => {
-      const cb = jest.fn()
+    test('triggers PLAYBACK_READY event', () => new Promise(done => {
+      const cb = vi.fn()
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
 
       playback.listenTo(playback, Events.PLAYBACK_READY, cb)
@@ -312,12 +312,12 @@ describe('HlsjsPlayback', () => {
         done()
       })
       playback._ready()
-    })
+    }))
   })
 
   describe('play method', () => {
     test('calls this._hls.loadSource once if _manifestLoading flag and options.hlsPlayback.preload are falsy', () => {
-      jest.spyOn(HLSJS.prototype, 'loadSource').mockImplementation()
+      vi.spyOn(HLSJS.prototype, 'loadSource').mockImplementation()
       const src = 'http://clappr.io/foo.m3u8'
       const playback = new HlsjsPlayback({ src, hlsPlayback: { preload: false } })
       playback._setup()
@@ -350,7 +350,7 @@ describe('HlsjsPlayback', () => {
       })
       const url = 'http://clappr.io/foo2.m3u8'
       playback.load(url)
-      jest.spyOn(playback._hls, 'loadSource')
+      vi.spyOn(playback._hls, 'loadSource')
       playback._hls.trigger(HLSJS.Events.MEDIA_ATTACHED, { media: playback.el })
       expect(playback.options.src).toBe(url)
       expect(playback._hls.loadSource).toHaveBeenCalledWith(url)
@@ -359,7 +359,7 @@ describe('HlsjsPlayback', () => {
 
   describe('bindCustomListeners method', () => {
     test('creates listeners for each item configured on customListeners array', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       const playback = new HlsjsPlayback({
         src: 'http://clappr.io/foo.m3u8',
         hlsPlayback: {
@@ -376,7 +376,7 @@ describe('HlsjsPlayback', () => {
     })
 
     test("don't add one listener without a valid configuration", () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       const playback = new HlsjsPlayback({ src: 'http://clappr.io/foo.m3u8' })
       playback._setup()
 
@@ -398,7 +398,7 @@ describe('HlsjsPlayback', () => {
     })
 
     test('adds a listener for one time when the customListeners array item is configured with the "once" param', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       const playback = new HlsjsPlayback({
         src: 'http://clappr.io/foo.m3u8',
         hlsPlayback: {
@@ -417,7 +417,7 @@ describe('HlsjsPlayback', () => {
 
   describe('unbindCustomListeners method', () => {
     test('remove listeners for each item configured on customListeners array', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       const playback = new HlsjsPlayback({
         src: 'http://clappr.io/foo.m3u8',
         hlsPlayback: {
@@ -459,9 +459,9 @@ describe('HlsjsPlayback', () => {
       playback._hls = {
         levels: [{ height: 1080, width: 1920, bitrate: 4000000 }]
       }
-      const onSwitch = jest.fn()
-      const onHd = jest.fn()
-      const onBitrate = jest.fn()
+      const onSwitch = vi.fn()
+      const onHd = vi.fn()
+      const onBitrate = vi.fn()
       playback.on(Events.PLAYBACK_LEVEL_SWITCH, onSwitch)
       playback.on(Events.PLAYBACK_HIGHDEFINITIONUPDATE, onHd)
       playback.on(Events.PLAYBACK_BITRATE, onBitrate)
@@ -479,8 +479,8 @@ describe('HlsjsPlayback', () => {
 
     test('_onFragmentLoaded and _onFragmentBuffered forward playback events', () => {
       const playback = createPlayback()
-      const onLoaded = jest.fn()
-      const onBuffered = jest.fn()
+      const onLoaded = vi.fn()
+      const onBuffered = vi.fn()
       playback.on(Events.PLAYBACK_FRAGMENT_LOADED, onLoaded)
       playback.on(Events.PLAYBACK_FRAGMENT_BUFFERED, onBuffered)
       const data = { frag: { sn: 1 } }
@@ -778,8 +778,8 @@ describe('HlsjsPlayback', () => {
       const playback = createPlayback()
       playback._playbackType = Playback.LIVE
       freezeNow(playback)
-      jest.spyOn(playback, '_onDurationChange').mockImplementation(() => {})
-      jest.spyOn(playback, '_onProgress').mockImplementation(() => {})
+      vi.spyOn(playback, '_onDurationChange').mockImplementation(() => {})
+      vi.spyOn(playback, '_onProgress').mockImplementation(() => {})
 
       playback._onLevelUpdated(
         'levelUpdated',
@@ -836,7 +836,7 @@ describe('HlsjsPlayback', () => {
       playback._playbackType = Playback.VOD
       playback._playableRegionStartTime = 0
       playback._playableRegionDuration = 80
-      jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
 
       playback.seek(-1)
 
@@ -884,7 +884,7 @@ describe('HlsjsPlayback', () => {
       playback._playableRegionDuration = 100
       playback.el.currentTime = 1
       freezeNow(playback, 1000000)
-      const onTimeUpdate = jest.fn()
+      const onTimeUpdate = vi.fn()
       playback.on(Events.PLAYBACK_TIMEUPDATE, onTimeUpdate)
 
       playback._onTimeUpdate()
@@ -899,7 +899,7 @@ describe('HlsjsPlayback', () => {
       playback._playableRegionDuration = 100
       playback.el.currentTime = 1
       const clock = freezeNow(playback, 1000000)
-      const onTimeUpdate = jest.fn()
+      const onTimeUpdate = vi.fn()
       playback.on(Events.PLAYBACK_TIMEUPDATE, onTimeUpdate)
 
       playback._onTimeUpdate()
@@ -915,7 +915,7 @@ describe('HlsjsPlayback', () => {
       playback._playableRegionDuration = 100
       playback.el.currentTime = 1
       const clock = freezeNow(playback, 1000000)
-      const onTimeUpdate = jest.fn()
+      const onTimeUpdate = vi.fn()
       playback.on(Events.PLAYBACK_TIMEUPDATE, onTimeUpdate)
 
       playback._onTimeUpdate()
@@ -931,7 +931,7 @@ describe('HlsjsPlayback', () => {
       playback._playableRegionDuration = 100
       playback.el.currentTime = 1
       const clock = freezeNow(playback, 1000000)
-      const onTimeUpdate = jest.fn()
+      const onTimeUpdate = vi.fn()
       playback.on(Events.PLAYBACK_TIMEUPDATE, onTimeUpdate)
 
       playback._onTimeUpdate()
@@ -949,7 +949,7 @@ describe('HlsjsPlayback', () => {
       playback._programDateTime = 1000
       playback.el.currentTime = 1
       const clock = freezeNow(playback, 1000000)
-      const onTimeUpdate = jest.fn()
+      const onTimeUpdate = vi.fn()
       playback.on(Events.PLAYBACK_TIMEUPDATE, onTimeUpdate)
 
       playback._onTimeUpdate()
@@ -973,14 +973,14 @@ describe('HlsjsPlayback', () => {
       cores.push(core)
       const playback = createPlayback(options, core.playerError)
       stubHls(playback)
-      jest.spyOn(playback, 'play').mockImplementation(() => {})
-      jest.spyOn(playback, 'stop').mockImplementation(() => {})
+      vi.spyOn(playback, 'play').mockImplementation(() => {})
+      vi.spyOn(playback, 'stop').mockImplementation(() => {})
       return playback
     }
 
     test('recoverable network fatal error calls startLoad', () => {
       const playback = createErrorPlayback()
-      jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
 
       playback._onHLSJSError('hlsError', {
         fatal: true,
@@ -1001,8 +1001,8 @@ describe('HlsjsPlayback', () => {
       HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT
     ])('unrecoverable network fatal %s triggers error and stop', details => {
       const playback = createErrorPlayback()
-      jest.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1018,9 +1018,9 @@ describe('HlsjsPlayback', () => {
 
     test('media fatal error recovers via recoverMediaError then swapAudioCodec then fails', () => {
       const playback = createErrorPlayback()
-      jest.spyOn(Log, 'warn').mockImplementation(() => {})
-      jest.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
       const mediaError = {
         fatal: true,
@@ -1046,8 +1046,8 @@ describe('HlsjsPlayback', () => {
 
     test('other fatal error types trigger error and stop', () => {
       const playback = createErrorPlayback()
-      jest.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1062,8 +1062,8 @@ describe('HlsjsPlayback', () => {
 
     test('exhausted recover attempts trigger error and stop', () => {
       const playback = createErrorPlayback({ hlsRecoverAttempts: 0 })
-      jest.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1081,8 +1081,8 @@ describe('HlsjsPlayback', () => {
       const playback = createErrorPlayback({
         playback: { triggerFatalErrorOnResourceDenied: true }
       })
-      jest.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1098,8 +1098,8 @@ describe('HlsjsPlayback', () => {
 
     test('non-fatal key denial without option only warns', () => {
       const playback = createErrorPlayback()
-      jest.spyOn(Log, 'warn').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1118,8 +1118,8 @@ describe('HlsjsPlayback', () => {
       const playback = createErrorPlayback({
         playback: { triggerFatalErrorOnResourceDenied: true }
       })
-      jest.spyOn(Log, 'warn').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1135,8 +1135,8 @@ describe('HlsjsPlayback', () => {
 
     test('includes response in error description when present', () => {
       const playback = createErrorPlayback()
-      jest.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = jest.fn()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onError = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1190,7 +1190,7 @@ describe('HlsjsPlayback', () => {
 
     test('_updateSettings chooses left controls from playback type and dvr', () => {
       const playback = createPlayback({ hlsMinimumDvrSize: 60 })
-      const onSettings = jest.fn()
+      const onSettings = vi.fn()
       playback.on(Events.PLAYBACK_SETTINGSUPDATE, onSettings)
 
       playback._playbackType = Playback.VOD

@@ -11,9 +11,9 @@
     "watch": "vite build --watch",
     "bundle-check": "ANALYZE_BUNDLE=true vite build",
     "release": "rm -rf dist && vite build && vite build --mode minify",
-    "test": "jest ./src --coverage --silent",
-    "test:smoke": "jest ./src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/ --silent",
-    "test:watch": "jest ./src --watch",
+    "test": "vitest run --coverage",
+    "test:smoke": "vitest run src/dist.smoke.test.js",
+    "test:watch": "vitest",
     "lint": "eslint *.js ./src",
     "lint:fix": "yarn lint -- --fix",
     "prepublishOnly": "lerna run release --scope=@clappr/hlsjs-playback"

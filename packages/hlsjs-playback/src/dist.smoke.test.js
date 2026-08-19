@@ -29,7 +29,7 @@ function readArtifact(name) {
 }
 
 function loadArtifact(name) {
-  jest.resetModules()
+  vi.resetModules()
   return require(path.join(DIST, name))
 }
 
@@ -68,8 +68,8 @@ function assertPlaybackContract(HlsjsPlaybackExport) {
   expect(typeof HLSJS.version).toBe('string')
   expect(HLSJS.version.length).toBeGreaterThan(0)
 
-  jest.spyOn(HLSJS, 'isSupported').mockReturnValue(true)
-  jest.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
+  vi.spyOn(HLSJS, 'isSupported').mockReturnValue(true)
+  vi.spyOn(window.HTMLMediaElement.prototype, 'load').mockImplementation(() => {})
 
   expect(Playback.canPlay('http://example.com/video.m3u8')).toBe(true)
   expect(Playback.canPlay('http://example.com/video.m3u8?token=1')).toBe(true)
@@ -88,7 +88,7 @@ const EXPECTED_SOURCEMAPS = Object.values(ARTIFACTS)
   .sort()
 
 afterEach(() => {
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
 describe.each([
