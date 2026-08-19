@@ -31,12 +31,12 @@
     "directory": "packages/html5-tvs-playback"
   },
   "scripts": {
-    "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "build": "rollup --config --bundleConfigAsCjs",
-    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
+    "bundle-check": "ANALYZE_BUNDLE=true vite build",
+    "build": "vite build",
+    "release": "rm -rf dist && vite build && vite build --mode minify",
     "prepublishOnly": "lerna run release --scope=@clappr/clappr-html5-tvs-playback",
-    "start": "DEV=true rollup --config --bundleConfigAsCjs --watch",
-    "watch": "rollup --config --bundleConfigAsCjs --watch",
+    "start": "vite --mode development",
+    "watch": "vite build --watch",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "jest ./src --coverage --silent",

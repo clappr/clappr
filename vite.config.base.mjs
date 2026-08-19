@@ -1,8 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import babel from '@rollup/plugin-babel'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig } from 'vite'
 
 const require = createRequire(import.meta.url)
@@ -90,14 +91,14 @@ function libFileName(pkgSpec, isMinify) {
   }
 }
 
-function babelEs5Output() {
+function babelEs5Output({ compact = false } = {}) {
   const transform = code =>
     babelCore.transformAsync(code, {
       babelrc: false,
       configFile: BABEL_CONFIG,
       cwd: REPO_ROOT,
       filename: resolve(REPO_ROOT, 'clappr-lib-chunk.js'),
-      compact: false,
+      compact,
       sourceMaps: true,
       inputSourceMap: false
     })
@@ -119,7 +120,27 @@ function babelEs5Output() {
   }
 }
 
-function clapprPlugins(pkgSpec) {
+function serveContentBase(dirs) {
+  return {
+    name: 'clappr-serve-content-base',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+        const rel = urlPath === '/' ? 'index.html' : urlPath.replace(/^\//, '')
+        for (const dir of dirs) {
+          const root = resolve(process.cwd(), dir)
+          const file = resolve(root, rel)
+          if (!file.startsWith(root) || !existsSync(file) || !statSync(file).isFile()) continue
+          createReadStream(file).pipe(res)
+          return
+        }
+        next()
+      })
+    }
+  }
+}
+
+function clapprPlugins(pkgSpec, { compact = false } = {}) {
   const plugins = []
   if (pkgSpec.babel !== false) {
     plugins.push(
@@ -132,7 +153,16 @@ function clapprPlugins(pkgSpec) {
       }),
       // SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk.
       // Reason: generateBundle is the last hook that can reapply babel.base.json to ES5.
-      babelEs5Output()
+      babelEs5Output({ compact })
+    )
+  }
+  if (process.env.ANALYZE_BUNDLE) {
+    plugins.push(
+      visualizer({
+        open: false,
+        filename: 'dist/bundle-stats.html',
+        gzipSize: true
+      })
     )
   }
   return plugins
@@ -152,10 +182,17 @@ export function defineClapprLib(pkgSpec) {
     const alias = pkgSpec.alias || {}
 
     if (mode === 'development') {
+      const server = pkgSpec.server || {}
       return defineConfig({
+        appType: 'custom',
         publicDir: false,
         define: viteDefine(pkgSpec.replace),
         resolve: { alias },
+        plugins: [serveContentBase(server.contentBase || ['public', 'dist'])],
+        server: {
+          host: server.host || '0.0.0.0',
+          port: server.port || 8080
+        },
         build: { write: false, cssTarget }
       })
     }
@@ -165,7 +202,7 @@ export function defineClapprLib(pkgSpec) {
 
     return defineConfig({
       publicDir: false,
-      plugins: clapprPlugins(pkgSpec),
+      plugins: clapprPlugins(pkgSpec, { compact: isMinify }),
       define: viteDefine(pkgSpec.replace),
       resolve: { alias },
       build: {
