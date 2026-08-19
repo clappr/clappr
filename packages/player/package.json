@@ -11,7 +11,7 @@
     "release": "rm -rf dist && vite build && CLAPPR_BUNDLE=plainhtml5 vite build && vite build --mode minify && CLAPPR_BUNDLE=plainhtml5 vite build --mode minify",
     "start": "vite --mode development",
     "test": "echo 'No tests configured. This project is only for bundling the player components.'",
-    "test:smoke": "jest ./src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/ --silent",
+    "test:smoke": "vitest run src/dist.smoke.test.js",
     "watch": "vite build --watch",
     "prepublishOnly": "lerna run release --scope=@clappr/player"
   },
