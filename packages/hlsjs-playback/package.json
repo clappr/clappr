@@ -14,7 +14,7 @@
     "test": "vitest run --coverage",
     "test:smoke": "vitest run src/dist.smoke.test.js",
     "test:watch": "vitest",
-    "lint": "eslint *.js ./src",
+    "lint": "eslint --no-error-on-unmatched-pattern *.js ./src",
     "lint:fix": "yarn lint -- --fix",
     "prepublishOnly": "lerna run release --scope=@clappr/hlsjs-playback"
   },

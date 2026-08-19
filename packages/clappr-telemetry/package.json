@@ -14,7 +14,7 @@
     "test:coverage": "vitest run --coverage",
     "test:coverage:open": "open coverage/lcov-report/index.html",
     "test:watch": "vitest",
-    "lint": "eslint *.js src/",
+    "lint": "eslint --no-error-on-unmatched-pattern *.js src/",
     "lint:fix": "yarn lint -- --fix",
     "start": "vite --mode development",
     "dev": "vite --mode development",
