@@ -8,8 +8,8 @@
   "sideEffects": true,
   "scripts": {
     "build": "vite build",
-    "test": "jest src/",
-    "test:smoke": "jest src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/",
+    "test": "vitest run",
+    "test:smoke": "vitest run src/dist.smoke.test.js",
     "pretest:smoke": "vite build"
   },
   "repository": {

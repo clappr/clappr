@@ -4,7 +4,7 @@
  */
 describe('dist/clappr-zepto.js', () => {
   test('UMD build exports Zepto and sets window globals', () => {
-    jest.resetModules()
+    vi.resetModules()
     delete window.Zepto
     delete window.$
 
