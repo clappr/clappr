@@ -13,22 +13,13 @@ const PACKAGES_DIR = fileURLToPath(new URL('./packages/', import.meta.url))
 const BABEL_CONFIG = fileURLToPath(new URL('./babel.base.json', import.meta.url))
 const BROWSERSLISTRC = fileURLToPath(new URL('./.browserslistrc', import.meta.url))
 
-/**
- * Shared resolve.alias map consumed by defineClapprLib and Vitest.
- * Callers pass package-specific entries; this is the single merge point.
- */
-export function clapprResolveAlias(alias = {}) {
-  return alias
-}
-
-/** Sibling source aliases for tests (and for builds that bundle siblings). */
 export function clapprSiblingSourceAlias() {
-  return clapprResolveAlias({
+  return {
     '@clappr/core': resolve(PACKAGES_DIR, 'clappr-core/src/main.js'),
     '@clappr/zepto': resolve(PACKAGES_DIR, 'clappr-zepto/src/zepto.js'),
     '@clappr/plugins': resolve(PACKAGES_DIR, 'clappr-plugins/src/main.js'),
     '@clappr/hlsjs-playback': resolve(PACKAGES_DIR, 'hlsjs-playback/src/hls.js')
-  })
+  }
 }
 
 const BROWSERSLIST_TO_ESBUILD = {
@@ -237,8 +228,7 @@ function clapprPlugins(pkgSpec, { compact = false } = {}) {
       })
     )
   }
-  // SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk even when
-  // the source is already ES5 (zepto: babel: false, 0 shorthand in src, 7 in dist).
+  // SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk.
   // Reason: generateBundle is the last hook that can reapply babel.base.json to ES5.
   plugins.push(babelEs5Output({ compact }))
   if (process.env.ANALYZE_BUNDLE) {
@@ -254,10 +244,6 @@ function clapprPlugins(pkgSpec, { compact = false } = {}) {
   return plugins
 }
 
-/**
- * @param {object} pkgSpec
- * @returns {(env: { mode?: string }) => import('vite').UserConfig}
- */
 export function defineClapprLib(pkgSpec) {
   const cssTarget = cssTargetFromBrowserslistrc()
 
@@ -265,7 +251,7 @@ export function defineClapprLib(pkgSpec) {
     assertEntriesExist(pkgSpec)
 
     const mode = env.mode || 'production'
-    const alias = clapprResolveAlias(pkgSpec.alias)
+    const alias = pkgSpec.alias || {}
 
     if (mode === 'development') {
       const server = pkgSpec.server || {}
