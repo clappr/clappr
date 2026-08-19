@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 /* eslint-disable no-console */
-import mockConsole from 'jest-mock-console'
 
 import { Events, Core, Container, Playback, UIObject, version } from '@clappr/core'
 import HTML5TVsPlayback from './html5_playback'
@@ -33,8 +32,8 @@ const createAudioTrackListStub = () => {
   const tracks = {}
 
   Object.defineProperties(tracks, {
-    addEventListener: { value: jest.fn() },
-    removeEventListener: { value: jest.fn() },
+    addEventListener: { value: vi.fn() },
+    removeEventListener: { value: vi.fn() },
     getTrackById: { value: id => tracks[id] },
     0: {
       value: {
@@ -73,22 +72,22 @@ const setHTMLMediaElementStubs = () => {
 }
 
 describe('HTML5TVsPlayback', () => {
-  let restoreConsole
+  let logSpy
   let playback
 
   beforeEach(() => {
     setHTMLMediaElementStubs()
 
-    restoreConsole = mockConsole()
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     const response = setupTest()
     const core = response.core
     const container = response.container
     core.activeContainer = container
     playback = container.playback
   })
-  afterEach(() => restoreConsole())
+  afterEach(() => logSpy.mockRestore())
 
   describe('canPlay static method', () => {
     test('checks if one video URL has supported format', () => {
@@ -141,28 +140,28 @@ describe('HTML5TVsPlayback', () => {
   })
 
   test('isReady getter returns the check if video.readyState is greater than or equal HAVE_FUTURE_DATA value', () => {
-    jest.spyOn(playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_NOTHING)
+    vi.spyOn(playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_NOTHING)
 
     expect(playback.isReady).toBeFalsy()
 
-    jest.spyOn(playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_FUTURE_DATA)
+    vi.spyOn(playback.el, 'readyState', 'get').mockReturnValueOnce(READY_STATE_STAGES.HAVE_FUTURE_DATA)
 
     expect(playback.isReady).toBeTruthy()
   })
 
   test('playing getter returns if video it\'s not paused and it\'s not ended', () => {
-    jest.spyOn(playback.el, 'paused', 'get').mockReturnValueOnce(false)
-    jest.spyOn(playback.el, 'ended', 'get').mockReturnValueOnce(true)
+    vi.spyOn(playback.el, 'paused', 'get').mockReturnValueOnce(false)
+    vi.spyOn(playback.el, 'ended', 'get').mockReturnValueOnce(true)
 
     expect(playback.playing).toBeFalsy()
 
-    jest.spyOn(playback.el, 'paused', 'get').mockReturnValueOnce(true)
-    jest.spyOn(playback.el, 'ended', 'get').mockReturnValueOnce(false)
+    vi.spyOn(playback.el, 'paused', 'get').mockReturnValueOnce(true)
+    vi.spyOn(playback.el, 'ended', 'get').mockReturnValueOnce(false)
 
     expect(playback.playing).toBeFalsy()
 
-    jest.spyOn(playback.el, 'paused', 'get').mockReturnValueOnce(false)
-    jest.spyOn(playback.el, 'ended', 'get').mockReturnValueOnce(false)
+    vi.spyOn(playback.el, 'paused', 'get').mockReturnValueOnce(false)
+    vi.spyOn(playback.el, 'ended', 'get').mockReturnValueOnce(false)
 
     expect(playback.playing).toBeTruthy()
   })
@@ -180,7 +179,7 @@ describe('HTML5TVsPlayback', () => {
       const startTimeChunks = [0, 11, 101]
       const endTimeChunks = [10, 100, 1000]
 
-      jest.spyOn(playback, 'isLive', 'get').mockImplementation(() => true)
+      vi.spyOn(playback, 'isLive', 'get').mockImplementation(() => true)
 
       playback.el = {
         seekable: {
@@ -196,7 +195,7 @@ describe('HTML5TVsPlayback', () => {
     test('handle exception if TimeRange access throws error', () => {
       const startTimeChunks = [0, 11, 101]
 
-      jest.spyOn(playback, 'isLive', 'get').mockImplementation(() => true)
+      vi.spyOn(playback, 'isLive', 'get').mockImplementation(() => true)
 
       playback.el = {
         seekable: {
@@ -310,7 +309,7 @@ describe('HTML5TVsPlayback', () => {
 
     test('triggers PLAYBACK_AUDIO_CHANGED event with newer audio track as payload when updated', () => {
       const newerAudioTrack = playback.audioTracks.find(track => track.id !== playback.currentAudioTrack.id)
-      jest.spyOn(playback, 'trigger')
+      vi.spyOn(playback, 'trigger')
 
       playback.switchAudioTrack(newerAudioTrack.id)
 
@@ -318,7 +317,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('does not trigger PLAYBACK_AUDIO_CHANGED event if current audio track has not changed', () => {
-      jest.spyOn(playback, 'trigger')
+      vi.spyOn(playback, 'trigger')
 
       playback.switchAudioTrack(playback.currentAudioTrack.id)
 
@@ -327,7 +326,7 @@ describe('HTML5TVsPlayback', () => {
   })
 
   test('triggers PLAYBACK_AUDIO_AVAILABLE event with current audio tracks when audio tracks are updated', () => {
-    jest.spyOn(playback, 'trigger')
+    vi.spyOn(playback, 'trigger')
 
     playback._onAudioTracksUpdated()
 
@@ -335,11 +334,11 @@ describe('HTML5TVsPlayback', () => {
   })
 
   test('isLive getter returns the check if the mediaType getter returns the Playback.LIVE value', () => {
-    jest.spyOn(playback, 'mediaType', 'get').mockReturnValueOnce(Playback.VOD)
+    vi.spyOn(playback, 'mediaType', 'get').mockReturnValueOnce(Playback.VOD)
 
     expect(playback.isLive).toBeFalsy()
 
-    jest.spyOn(playback, 'mediaType', 'get').mockReturnValueOnce(Playback.LIVE)
+    vi.spyOn(playback, 'mediaType', 'get').mockReturnValueOnce(Playback.LIVE)
 
     expect(playback.isLive).toBeTruthy()
   })
@@ -373,21 +372,21 @@ describe('HTML5TVsPlayback', () => {
   })
 
   test('dvrEnabled getter returns the check of the isLive is truthy and if the duration is greater or equal the dvrSize value', () => {
-    jest.spyOn(playback, 'isLive', 'get').mockReturnValueOnce(false)
-    jest.spyOn(playback, 'duration', 'get').mockReturnValueOnce(100)
-    jest.spyOn(playback, 'dvrSize', 'get').mockReturnValueOnce(60)
+    vi.spyOn(playback, 'isLive', 'get').mockReturnValueOnce(false)
+    vi.spyOn(playback, 'duration', 'get').mockReturnValueOnce(100)
+    vi.spyOn(playback, 'dvrSize', 'get').mockReturnValueOnce(60)
 
     expect(playback.dvrEnabled).toBeFalsy()
 
-    jest.spyOn(playback, 'isLive', 'get').mockReturnValueOnce(true)
-    jest.spyOn(playback, 'duration', 'get').mockReturnValueOnce(10)
-    jest.spyOn(playback, 'dvrSize', 'get').mockReturnValueOnce(60)
+    vi.spyOn(playback, 'isLive', 'get').mockReturnValueOnce(true)
+    vi.spyOn(playback, 'duration', 'get').mockReturnValueOnce(10)
+    vi.spyOn(playback, 'dvrSize', 'get').mockReturnValueOnce(60)
 
     expect(playback.dvrEnabled).toBeFalsy()
 
-    jest.spyOn(playback, 'isLive', 'get').mockReturnValueOnce(true)
-    jest.spyOn(playback, 'duration', 'get').mockReturnValueOnce(120)
-    jest.spyOn(playback, 'dvrSize', 'get').mockReturnValueOnce(60)
+    vi.spyOn(playback, 'isLive', 'get').mockReturnValueOnce(true)
+    vi.spyOn(playback, 'duration', 'get').mockReturnValueOnce(120)
+    vi.spyOn(playback, 'dvrSize', 'get').mockReturnValueOnce(60)
 
     expect(playback.dvrEnabled).toBeTruthy()
   })
@@ -674,7 +673,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls _setupSource with options.src', () => {
-      jest.spyOn(HTML5TVsPlayback.prototype, '_setupSource')
+      vi.spyOn(HTML5TVsPlayback.prototype, '_setupSource')
       setupTest({ src: URL_VIDEO_MP4_EXAMPLE })
 
       expect(HTML5TVsPlayback.prototype._setupSource).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
@@ -683,7 +682,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_setupSource method', () => {
     test('avoids unnecessary video.src updates', () => {
-      jest.spyOn(DRMHandler, 'sendLicenseRequest')
+      vi.spyOn(DRMHandler, 'sendLicenseRequest')
 
       playback.$sourceElement = document.createElement('source')
       playback.$sourceElement.src = URL_VIDEO_MP4_EXAMPLE
@@ -723,7 +722,7 @@ describe('HTML5TVsPlayback', () => {
       const { core, container } = setupTest({ src: URL_VIDEO_MP4_EXAMPLE, html5TvsPlayback: { drm: { licenseServerURL: 'http://fake-domain.com/license_server/playready' } } })
       core.activeContainer = container
 
-      jest.spyOn(DRMHandler, 'sendLicenseRequest')
+      vi.spyOn(DRMHandler, 'sendLicenseRequest')
       container.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
       expect(DRMHandler.sendLicenseRequest).toHaveBeenCalledWith(
@@ -737,7 +736,7 @@ describe('HTML5TVsPlayback', () => {
       const { core, container } = setupTest({ src: URL_VIDEO_MP4_EXAMPLE, html5TvsPlayback: { disableDRMSetup: true, drm: { licenseServerURL: 'http://fake-domain.com/license_server/playready' } } })
       core.activeContainer = container
 
-      jest.spyOn(DRMHandler, 'sendLicenseRequest')
+      vi.spyOn(DRMHandler, 'sendLicenseRequest')
       container.playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
       expect(DRMHandler.sendLicenseRequest).not.toHaveBeenCalled()
@@ -750,7 +749,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls load on playback.el after setting up source', () => {
-      jest.spyOn(playback.el, 'load')
+      vi.spyOn(playback.el, 'load')
       playback._setupSource(URL_VIDEO_MP4_EXAMPLE)
 
       expect(playback.el.load).toHaveBeenCalledTimes(1)
@@ -795,7 +794,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('triggers PLAYBACK_ERROR event with formatted error object', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
 
       playback.listenToOnce(playback, Events.PLAYBACK_ERROR, cb)
       playback._onDrmError('fake error message')
@@ -815,7 +814,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_updateDvr method', () => {
     test('triggers PLAYBACK_DVR event with received status', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_DVR, cb)
       playback._updateDvr(true)
 
@@ -839,7 +838,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('triggers PLAYBACK_BUFFERFULL event if _isBuffering flag value is true', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_BUFFERFULL, cb)
       playback._isBuffering = true
       playback._onCanPlay()
@@ -850,7 +849,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onLoadedMetadata callback', () => {
     test('triggers PLAYBACK_LOADEDMETADATA event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_LOADEDMETADATA, cb)
       playback._onLoadedMetadata({ target: { duration: 0 } })
 
@@ -860,7 +859,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onCanPlay callback', () => {
     test('calls _signalizeReadyState method if _isReady flag has a falsy value', () => {
-      jest.spyOn(playback, '_signalizeReadyState')
+      vi.spyOn(playback, '_signalizeReadyState')
       playback._isReady = true
       playback._onCanPlay()
       playback._isReady = false
@@ -879,7 +878,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('triggers PLAYBACK_BUFFERING event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_BUFFERING, cb)
       playback._onWaiting()
 
@@ -889,7 +888,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onPlay callback', () => {
     test('triggers PLAYBACK_PLAY_INTENT event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_PLAY_INTENT, cb)
       playback._onPlay()
 
@@ -899,7 +898,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onPlaying callback', () => {
     test('triggers PLAYBACK_PLAY event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_PLAY, cb)
       playback._onPlaying()
 
@@ -909,7 +908,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onPause callback', () => {
     test('triggers PLAYBACK_PAUSE event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_PAUSE, cb)
       playback._onPause()
 
@@ -919,7 +918,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onSeeking callback', () => {
     test('triggers PLAYBACK_SEEK event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_SEEK, cb)
       playback._onSeeking()
 
@@ -929,7 +928,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onSeeked callback', () => {
     test('triggers PLAYBACK_SEEKED event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_SEEKED, cb)
       playback._onSeeked()
 
@@ -939,7 +938,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onTimeUpdate callback', () => {
     test('triggers PLAYBACK_TIMEUPDATE event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_TIMEUPDATE, cb)
       playback._onTimeUpdate()
 
@@ -949,24 +948,24 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onEnded callback', () => {
     test('triggers PLAYBACK_ENDED event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_ENDED, cb)
       playback._onEnded()
 
       expect(cb).toHaveBeenCalledTimes(1)
     })
 
-    test('calls _wipeUpMedia method before notifying PLAYBACK_ENDED event', done => {
-      jest.spyOn(playback, '_wipeUpMedia')
+    test('calls _wipeUpMedia method before notifying PLAYBACK_ENDED event', () => new Promise(done => {
+      vi.spyOn(playback, '_wipeUpMedia')
       playback.listenToOnce(playback, Events.PLAYBACK_ENDED, () => {
         expect(playback._wipeUpMedia).toHaveBeenCalledTimes(1)
         done()
       })
       playback._onEnded()
-    })
+    }))
 
     test('calls _wipeUpMedia method', () => {
-      jest.spyOn(playback, '_wipeUpMedia')
+      vi.spyOn(playback, '_wipeUpMedia')
       playback._onEnded()
 
       expect(playback._wipeUpMedia).toHaveBeenCalledTimes(1)
@@ -975,7 +974,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_onError callback', () => {
     test('triggers PLAYBACK_ERROR event with formatted error object', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
 
       playback.listenToOnce(playback, Events.PLAYBACK_ERROR, cb)
       playback.el.error = { code: 171, message: 'É mentirinha!' }
@@ -996,14 +995,14 @@ describe('HTML5TVsPlayback', () => {
 
   describe('load method', () => {
     test('calls _wipeUpMedia method', () => {
-      jest.spyOn(playback, '_wipeUpMedia')
+      vi.spyOn(playback, '_wipeUpMedia')
       playback.load(URL_VIDEO_MP4_EXAMPLE)
 
       expect(playback._wipeUpMedia).toHaveBeenCalledTimes(1)
     })
 
     test('calls _setupSource method with received source URL', () => {
-      jest.spyOn(playback, '_setupSource')
+      vi.spyOn(playback, '_setupSource')
       playback.load(URL_VIDEO_MP4_EXAMPLE)
 
       expect(playback._setupSource).toHaveBeenCalledWith(URL_VIDEO_MP4_EXAMPLE)
@@ -1020,14 +1019,14 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls _setupSource method with video.src internal reference', () => {
-      jest.spyOn(playback, '_setupSource')
+      vi.spyOn(playback, '_setupSource')
       playback.play()
 
       expect(playback._setupSource).toHaveBeenCalledWith(playback._src)
     })
 
     test('calls native video.play method', () => {
-      jest.spyOn(playback.el, 'play')
+      vi.spyOn(playback.el, 'play')
       playback.play()
 
       expect(playback.el.play).toHaveBeenCalledTimes(1)
@@ -1049,15 +1048,15 @@ describe('HTML5TVsPlayback', () => {
 
   describe('pause method', () => {
     test('calls native video.pause method', () => {
-      jest.spyOn(playback.el, 'pause')
+      vi.spyOn(playback.el, 'pause')
       playback.pause()
 
       expect(playback.el.pause).toHaveBeenCalledTimes(1)
     })
 
     test('calls _updateDvr with true value if dvrEnabled getter is truthy', () => {
-      jest.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
-      jest.spyOn(playback, '_updateDvr')
+      vi.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
+      vi.spyOn(playback, '_updateDvr')
       playback.pause()
 
       expect(playback._updateDvr).toHaveBeenCalledTimes(1)
@@ -1077,20 +1076,20 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls _updateDvr method with current DVR status if dvrEnabled getter returns true', () => {
-      jest.spyOn(playback, 'duration', 'get').mockReturnValue(100)
-      jest.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(false)
-      jest.spyOn(playback, '_updateDvr')
+      vi.spyOn(playback, 'duration', 'get').mockReturnValue(100)
+      vi.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(false)
+      vi.spyOn(playback, '_updateDvr')
       playback.seek(10)
 
       expect(playback._updateDvr).not.toHaveBeenCalled()
 
-      jest.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
+      vi.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
       playback.seek(10)
 
       expect(playback._updateDvr).toHaveBeenCalledTimes(1)
       expect(playback._updateDvr).toHaveBeenCalledWith(true)
 
-      jest.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
+      vi.spyOn(playback, 'dvrEnabled', 'get').mockReturnValueOnce(true)
       playback.seek(99)
 
       expect(playback._updateDvr).toHaveBeenCalledTimes(2)
@@ -1100,7 +1099,7 @@ describe('HTML5TVsPlayback', () => {
     test('use video.seekable.start(0) as basis to update current time', () => {
       const startTimeChunks = [10, 50]
 
-      jest.spyOn(playback, 'duration', 'get').mockReturnValueOnce(100)
+      vi.spyOn(playback, 'duration', 'get').mockReturnValueOnce(100)
       playback.el = { seekable: { start: index => startTimeChunks[index] } }
       playback.seek(30)
 
@@ -1116,7 +1115,7 @@ describe('HTML5TVsPlayback', () => {
 
   describe('stop method', () => {
     test('calls pause method', () => {
-      jest.spyOn(playback, 'pause')
+      vi.spyOn(playback, 'pause')
       playback.stop()
 
       expect(playback.pause).toHaveBeenCalledTimes(1)
@@ -1133,14 +1132,14 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls _wipeUpMedia method', () => {
-      jest.spyOn(playback, '_wipeUpMedia')
+      vi.spyOn(playback, '_wipeUpMedia')
       playback.stop()
 
       expect(playback._wipeUpMedia).toHaveBeenCalledTimes(1)
     })
 
     test('triggers PLAYBACK_STOP event', () => {
-      const cb = jest.fn()
+      const cb = vi.fn()
       playback.listenToOnce(playback, Events.PLAYBACK_STOP, cb)
       playback.stop()
 
@@ -1158,7 +1157,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls _wipeUpMedia method', () => {
-      jest.spyOn(playback, '_wipeUpMedia')
+      vi.spyOn(playback, '_wipeUpMedia')
       playback.destroy()
 
       expect(playback._wipeUpMedia).toHaveBeenCalledTimes(1)
@@ -1194,7 +1193,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('removes license server if _drmConfigured flag is true', () => {
-      jest.spyOn(DRMHandler, 'clearLicenseRequest').mockImplementation(() => {})
+      vi.spyOn(DRMHandler, 'clearLicenseRequest').mockImplementation(() => {})
       playback._drmConfigured = true
       playback._wipeUpMedia()
 
@@ -1214,7 +1213,7 @@ describe('HTML5TVsPlayback', () => {
     })
 
     test('calls native video.load method without arguments', () => {
-      jest.spyOn(playback.el, 'load')
+      vi.spyOn(playback.el, 'load')
       playback._wipeUpMedia()
 
       expect(playback.el.load).toHaveBeenCalledTimes(1)
@@ -1223,27 +1222,27 @@ describe('HTML5TVsPlayback', () => {
 
   describe('_signalizeReadyState method', () => {
     test('only trigger PLAYBACK_READY event if isReady getter returns true', () => {
-      const cb = jest.fn()
-      jest.spyOn(playback, '_signalizeReadyState')
-      jest.useFakeTimers()
+      const cb = vi.fn()
+      vi.spyOn(playback, '_signalizeReadyState')
+      vi.useFakeTimers()
 
       playback.listenToOnce(playback, Events.PLAYBACK_READY, cb)
       playback._signalizeReadyState()
 
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(cb).not.toHaveBeenCalled()
       expect(playback._signalizeReadyState).toHaveBeenCalledTimes(4)
 
-      jest.spyOn(playback, 'isReady', 'get').mockReturnValueOnce(true)
-      jest.advanceTimersByTime(500)
+      vi.spyOn(playback, 'isReady', 'get').mockReturnValueOnce(true)
+      vi.advanceTimersByTime(500)
 
       expect(cb).toHaveBeenCalledTimes(1)
       expect(playback._signalizeReadyState).toHaveBeenCalledTimes(5)
     })
 
-    test('sets _isReady flag with true value before triggering PLAYBACK_READY', done => {
-      jest.spyOn(playback, 'isReady', 'get').mockReturnValueOnce(true)
+    test('sets _isReady flag with true value before triggering PLAYBACK_READY', () => new Promise(done => {
+      vi.spyOn(playback, 'isReady', 'get').mockReturnValueOnce(true)
       playback._isReady = false
       playback.listenToOnce(playback, Events.PLAYBACK_READY, () => {
         expect(playback._isReady).toBeTruthy()
@@ -1251,10 +1250,10 @@ describe('HTML5TVsPlayback', () => {
       })
 
       playback._signalizeReadyState()
-    })
+    }))
 
     test('sets _isReady flag with true value', () => {
-      jest.spyOn(playback, 'isReady', 'get').mockReturnValueOnce(true)
+      vi.spyOn(playback, 'isReady', 'get').mockReturnValueOnce(true)
       playback._isReady = false
       playback._signalizeReadyState()
 

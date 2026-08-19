@@ -1,5 +1,3 @@
-import mockConsole from 'jest-mock-console'
-
 import DRMHandler, { DRMFunctions } from './drm_handler'
 
 const {
@@ -19,17 +17,17 @@ const LOG_WARN_STYLE = 'color: #ff8000;font-weight: bold; font-size: 13px;'
 const LOG_WARN_HEAD_MESSAGE = '%c[warn][DRMHandler]'
 
 describe('DRMHandler', () => {
-  let restoreConsole
+  let logSpy
 
   beforeEach(() => {
-    restoreConsole = mockConsole()
-    jest.clearAllMocks()
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.clearAllMocks()
 
     oipfdrmagent = createDrmAgent()
     oipfdrmagent.sendDRMMessage = () => {}
-    jest.spyOn(DRMFunctions, 'createDrmAgent').mockReturnValue(oipfdrmagent)
+    vi.spyOn(DRMFunctions, 'createDrmAgent').mockReturnValue(oipfdrmagent)
   })
-  afterEach(() => restoreConsole())
+  afterEach(() => logSpy.mockRestore())
 
   test('only exports methods to handle with license request', () => {
     expect(DRMHandler.sendLicenseRequest).toBeDefined()
@@ -135,8 +133,8 @@ describe('DRMHandler', () => {
     })
 
     test('calls the successCallback if the sendDRMMessage is not available', () => {
-      const successCb = jest.fn()
-      const errorCb = jest.fn()
+      const successCb = vi.fn()
+      const errorCb = vi.fn()
       oipfdrmagent.sendDRMMessage = undefined
       sendLicenseRequest(config, successCb, errorCb)
 
@@ -156,8 +154,8 @@ describe('DRMHandler', () => {
         document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
 
-        const successCb = jest.fn()
-        const errorCb = jest.fn()
+        const successCb = vi.fn()
+        const errorCb = vi.fn()
         sendLicenseRequest(config, successCb, errorCb)
         drmAgentElement.onDRMRightsError(2)
 
@@ -168,8 +166,8 @@ describe('DRMHandler', () => {
         document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
 
-        const successCb = jest.fn()
-        const errorCb = jest.fn()
+        const successCb = vi.fn()
+        const errorCb = vi.fn()
         sendLicenseRequest(config, successCb, errorCb)
         drmAgentElement.onDRMRightsError(1)
 
@@ -182,8 +180,8 @@ describe('DRMHandler', () => {
         document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
 
-        const successCb = jest.fn()
-        const errorCb = jest.fn()
+        const successCb = vi.fn()
+        const errorCb = vi.fn()
         sendLicenseRequest(config, successCb, errorCb)
         drmAgentElement.onDRMMessageResult(0, 'a error message', 1)
         drmAgentElement.onDRMMessageResult(0, 'success', 0)
@@ -195,7 +193,7 @@ describe('DRMHandler', () => {
         document.body.appendChild(DRMFunctions.createDrmAgent())
         const drmAgentElement = document.getElementById('oipfdrmagent')
 
-        const cb = jest.fn()
+        const cb = vi.fn()
         sendLicenseRequest(config, cb)
         drmAgentElement.onDRMMessageResult(0, 'a success message', 0)
 
@@ -222,16 +220,16 @@ describe('DRMHandler', () => {
     })
 
     test('calls successCallback if no drmAgent element exists', () => {
-      const successCb = jest.fn()
-      const errorCb = jest.fn()
+      const successCb = vi.fn()
+      const errorCb = vi.fn()
       clearLicenseRequest(successCb, errorCb)
 
       expect(successCb).toHaveBeenCalledTimes(1)
     })
 
     test('calls the errorCallback if the sendDRMMessage call fails', () => {
-      const successCb = jest.fn()
-      const errorCb = jest.fn()
+      const successCb = vi.fn()
+      const errorCb = vi.fn()
       oipfdrmagent.sendDRMMessage = undefined
       document.body.appendChild(DRMFunctions.createDrmAgent())
       clearLicenseRequest(successCb, errorCb)
@@ -253,7 +251,7 @@ describe('DRMHandler', () => {
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 
-        const cb = jest.fn()
+        const cb = vi.fn()
         clearLicenseRequest(cb)
         drmAgentElement.onDRMMessageResult()
 
@@ -265,7 +263,7 @@ describe('DRMHandler', () => {
         const drmAgentElement = document.getElementById('oipfdrmagent')
         drmAgentElement.sendDRMMessage = () => {}
 
-        const cb = jest.fn()
+        const cb = vi.fn()
         clearLicenseRequest(cb)
         drmAgentElement.onDRMMessageResult()
 
