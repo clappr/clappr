@@ -2,7 +2,6 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" charset="utf-8" src="clappr.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
   <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
@@ -76,7 +75,11 @@ player.attachTo(playerElement);
     </p>
   </section>
   <footer class="footer"></footer>
-  <script>
+  <script type="module">
+    import C from '/src/main.js'
+    window.Clappr = C.default || C
+    if (window.Clappr.$) window.$ = window.Clappr.$
+
     var urlParams;
     (function () {
       Clappr.Log.setLevel(Clappr.Log.LEVEL_WARN)
@@ -96,7 +99,6 @@ player.attachTo(playerElement);
 
     var player;
 
-    //editor
     window.onload = function () {
 
       if (window.location.hash) {

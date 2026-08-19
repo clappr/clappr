@@ -3,7 +3,6 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="clappr-plugins.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/add-external.js"></script>
@@ -52,8 +51,22 @@ player.attachTo(playerElement);
     </div>
   </section>
   <footer class="footer"></footer>
-  <script type="text/javascript" charset="utf-8" src="j/clappr-config.js"></script>
-  <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
+  <script type="module">
+    import * as Plugins from '/src/main.js'
+    window.ClapprPlugins = Plugins
+
+    function loadScript(src) {
+      return new Promise(function (resolve, reject) {
+        var script = document.createElement('script')
+        script.src = src
+        script.onload = resolve
+        script.onerror = reject
+        document.body.appendChild(script)
+      })
+    }
+
+    await loadScript('/j/clappr-config.js')
+  </script>
 </body>
 
 </html>

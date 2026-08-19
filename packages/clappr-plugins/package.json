@@ -13,9 +13,9 @@
     "test:smoke": "vitest run src/dist.smoke.test.js",
     "test:coverage": "open coverage/lcov-report/index.html",
     "test:watch": "vitest",
-    "lint": "eslint *.js src/",
+    "lint": "eslint --no-error-on-unmatched-pattern *.js src/",
     "lint:fix": "npm run lint -- --fix",
-    "start": "vite --mode development",
+    "start": "vite",
     "prepublishOnly": "lerna run release --scope=@clappr/plugins"
   },
   "files": [
@@ -40,8 +40,7 @@
     "@clappr/core": "*"
   },
   "devDependencies": {
-    "@clappr/core": "^0.16.3",
-    "postcss-url": "^10.1.3"
+    "@clappr/core": "^0.16.3"
   },
   "nyc": {
     "exclude": [

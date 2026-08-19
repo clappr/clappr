@@ -6,15 +6,14 @@ const { version: clapprCoreVersion } = require('@clappr/core/package.json')
 
 export default defineClapprLib({
   name: 'ClapprTelemetry',
-  entry: 'src/main.umd.js',
+  entry: 'src/main.js',
   fileName: {
-    umd: 'clappr-telemetry.js',
-    min: 'clappr-telemetry.min.js'
+    es: 'clappr-telemetry.esm.js'
   },
-  formats: ['umd'],
+  formats: ['es'],
   external: ['@clappr/core'],
-  globals: { '@clappr/core': 'Clappr' },
   replace: {
     CLAPPR_CORE_VERSION: clapprCoreVersion
-  }
+  },
+  emptyOutDir: false
 })

@@ -12,7 +12,11 @@ const { TextEncoder, TextDecoder } = require('util')
 global.TextEncoder = global.TextEncoder || TextEncoder
 global.TextDecoder = global.TextDecoder || TextDecoder
 const { JSDOM } = require('jsdom')
-const { expectEs5Syntax, expectEs5Subclassable } = require('../../../test/dist-contract')
+const {
+  expectEs5Syntax,
+  expectEs5Subclassable,
+  expectSourcemapFromSrc
+} = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -89,6 +93,7 @@ async function assertCoreContract(dist) {
 
 function assertSourceMappingURL(filename) {
   expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
+  expectSourcemapFromSrc(readArtifact(`${filename}.map`), filename)
 }
 
 describe.each([

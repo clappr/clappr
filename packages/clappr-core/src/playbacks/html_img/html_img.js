@@ -5,7 +5,7 @@
 import Playback from '../../base/playback/playback'
 import Events from '../../base/events/events'
 import Styler from '../../base/styler/styler'
-import HTMLImgStyle from './public/style.scss?inline'
+import HTMLImgStyle from './public/style.scss'
 
 export default class HTMLImg extends Playback {
   get name() { return 'html_img' }

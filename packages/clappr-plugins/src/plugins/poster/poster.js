@@ -4,9 +4,9 @@
 
 import { Events, Playback, PlayerError, UIContainerPlugin, template, Styler } from '@clappr/core'
 
-import posterHTML from './public/poster.html?raw'
-import playIcon from '../../icons/01-play.svg?raw'
-import posterStyle from './public/poster.scss?inline'
+import posterHTML from './public/poster.html'
+import playIcon from '../../icons/01-play.svg'
+import posterStyle from './public/poster.scss'
 
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }

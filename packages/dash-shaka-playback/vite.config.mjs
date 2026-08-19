@@ -9,5 +9,6 @@ export default defineClapprLib({
     min: 'dash-shaka-playback.min.js'
   },
   external: ['@clappr/core', 'shaka-player'],
-  globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' }
+  globals: { '@clappr/core': 'Clappr', 'shaka-player': 'shaka' },
+  server: { host: '0.0.0.0' }
 })

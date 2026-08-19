@@ -11,7 +11,7 @@ import UIObject from '../../base/ui_object/ui_object'
 import ErrorMixin from '../../base/error_mixin/error_mixin'
 import Styler from '../../base/styler/styler'
 import { DoubleEventHandler } from '../../utils/utils'
-import ContainerStyle from './public/style.scss?inline'
+import ContainerStyle from './public/style.scss'
 import $ from '@clappr/zepto'
 
 /**

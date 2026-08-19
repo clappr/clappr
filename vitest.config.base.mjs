@@ -1,5 +1,5 @@
 import { defineConfig, defaultExclude } from 'vitest/config'
-import { clapprSiblingSourceAlias } from './vite.config.base.mjs'
+import { clapprAssetStrings, clapprSiblingSourceAlias } from './vite.config.base.mjs'
 
 const SMOKE_GLOB = '**/dist.smoke.test.js'
 
@@ -33,6 +33,7 @@ export function defineClapprVitest(options = {}) {
   return defineConfig({
     define: options.define,
     resolve: { alias },
+    plugins: [clapprAssetStrings()],
     test
   })
 }
