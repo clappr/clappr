@@ -163,6 +163,48 @@ function serveContentBase(dirs) {
   }
 }
 
+function rewriteDemoEntry(entry) {
+  const entryUrl = `/${entry.replace(/^\.\//, '')}`
+  return {
+    name: 'clappr-rewrite-demo-entry',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+        if (urlPath !== '/' && urlPath !== '/index.html') {
+          next()
+          return
+        }
+        const index = resolve(process.cwd(), 'public/index.html')
+        if (!existsSync(index)) {
+          next()
+          return
+        }
+        const html = readFileSync(index, 'utf8').replace(
+          /<script[^>]*\ssrc="clappr\.js"[^>]*><\/script>/,
+          `<script type="module">import C from '${entryUrl}'; window.Clappr = C.default || C;</script>`
+        )
+        res.setHeader('Content-Type', 'text/html')
+        res.end(html)
+      })
+    }
+  }
+}
+
+function umdAmdDefine() {
+  return {
+    name: 'clappr-umd-amd-define',
+    generateBundle(_options, bundle) {
+      for (const item of Object.values(bundle)) {
+        if (item.type !== 'chunk') continue
+        item.code = item.code.replace(
+          /define\.amd\s*\?\s*define\(\s*\[\s*\]\s*,/g,
+          'define.amd ? define('
+        )
+      }
+    }
+  }
+}
+
 function clapprPlugins(pkgSpec, { compact = false } = {}) {
   const plugins = []
   if (pkgSpec.babel !== false) {
@@ -188,6 +230,7 @@ function clapprPlugins(pkgSpec, { compact = false } = {}) {
       })
     )
   }
+  plugins.push(umdAmdDefine())
   return plugins
 }
 
@@ -206,16 +249,20 @@ export function defineClapprLib(pkgSpec) {
 
     if (mode === 'development') {
       const server = pkgSpec.server || {}
+      const plugins = []
+      if (pkgSpec.devEntry) plugins.push(rewriteDemoEntry(pkgSpec.devEntry))
+      plugins.push(serveContentBase(server.contentBase || ['public', 'dist']))
       return defineConfig({
         appType: 'custom',
         publicDir: false,
         define: viteDefine(pkgSpec.replace),
         resolve: { alias },
         css: viteCss(pkgSpec),
-        plugins: [serveContentBase(server.contentBase || ['public', 'dist'])],
+        plugins,
         server: {
           host: server.host || '0.0.0.0',
-          port: server.port || 8080
+          port: server.port || 8080,
+          fs: { allow: [REPO_ROOT] }
         },
         build: { write: false, cssTarget }
       })
@@ -233,10 +280,10 @@ export function defineClapprLib(pkgSpec) {
       build: {
         target: false,
         cssTarget,
-        sourcemap: true,
+        sourcemap: isMinify || pkgSpec.sourcemap !== false,
         minify: isMinify ? 'terser' : false,
         terserOptions: isMinify ? { ecma: 5 } : undefined,
-        emptyOutDir: mode === 'production',
+        emptyOutDir: pkgSpec.emptyOutDir === false ? false : mode === 'production',
         copyPublicDir: false,
         lib: {
           entry: resolveFromCwd(entryFor(pkgSpec, mode)),
