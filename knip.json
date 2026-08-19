@@ -6,7 +6,7 @@
   },
   "workspaces": {
     ".": {
-      "entry": ["test/dist-contract.js", "vite.config.base.mjs"],
+      "entry": ["test/dist-contract.js", "vite.config.base.mjs", "vitest.config.base.mjs"],
       "project": ["test/**/*.{js,scss,sass}"],
       "jest": { "config": ["jest.config.base.js"] },
       "babel": { "config": ["babel.base.json"] }
