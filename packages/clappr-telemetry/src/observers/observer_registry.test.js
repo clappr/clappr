@@ -3,12 +3,12 @@ import { Log } from '@clappr/core'
 
 const makeContainer = (cfg = {}) => ({
   options: { telemetry: { ...cfg } },
-  trigger: jest.fn()
+  trigger: vi.fn()
 })
 
 const makeObserverClass = (name = 'MockObserver', overrides = {}) => {
-  const instance = { bind: jest.fn(), destroy: jest.fn(), ...overrides }
-  const Cls = jest.fn(() => instance)
+  const instance = { bind: vi.fn(), destroy: vi.fn(), ...overrides }
+  const Cls = vi.fn(function () { return instance })
   Cls.prototype.bind = instance.bind
   Cls.prototype.destroy = instance.destroy
   Object.defineProperty(Cls, 'name', { get: () => name, configurable: true })
@@ -24,9 +24,9 @@ describe('ObserverRegistry', () => {
 
   describe('register()', () => {
     it('skips and warns when bind() is missing', () => {
-      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
-      const Bad = jest.fn()
-      Bad.prototype.destroy = jest.fn()
+      const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const Bad = vi.fn()
+      Bad.prototype.destroy = vi.fn()
       Object.defineProperty(Bad, 'name', { get: () => 'Bad', configurable: true })
       expect(ObserverRegistry.register(Bad)).toBe(false)
       expect(warnSpy).toHaveBeenCalled()
@@ -34,9 +34,9 @@ describe('ObserverRegistry', () => {
     })
 
     it('skips and warns when destroy() is missing', () => {
-      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
-      const Bad = jest.fn()
-      Bad.prototype.bind = jest.fn()
+      const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const Bad = vi.fn()
+      Bad.prototype.bind = vi.fn()
       Object.defineProperty(Bad, 'name', { get: () => 'Bad', configurable: true })
       expect(ObserverRegistry.register(Bad)).toBe(false)
       expect(warnSpy).toHaveBeenCalled()
@@ -44,7 +44,7 @@ describe('ObserverRegistry', () => {
     })
 
     it('skips and warns when the class relies on the auto-assigned name (no static get name())', () => {
-      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       class NoNameGetter {
         bind() {}
         destroy() {}
@@ -144,7 +144,7 @@ describe('ObserverRegistry', () => {
 
     it('defers to static isEnabled(cfg) when defined on the class', () => {
       const { Cls } = makeObserverClass()
-      Cls.isEnabled = jest.fn(() => false)
+      Cls.isEnabled = vi.fn(() => false)
       ObserverRegistry.register(Cls)
       new ObserverRegistry({}, makeContainer({ observers: [Cls] }), null) // eslint-disable-line no-new
       expect(Cls.isEnabled).toHaveBeenCalled()
@@ -153,7 +153,7 @@ describe('ObserverRegistry', () => {
 
     it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
       const { Cls } = makeObserverClass()
-      Cls.isEnabled = jest.fn(() => true)
+      Cls.isEnabled = vi.fn(() => true)
       ObserverRegistry.register(Cls)
       const registry = new ObserverRegistry({}, makeContainer({ observers: [Cls], MockObserver: { enabled: false } }), null)
       expect(Cls.isEnabled).toHaveBeenCalled()
@@ -203,7 +203,7 @@ describe('ObserverRegistry', () => {
     it('passes samplerRegistry to each observer', () => {
       const { Cls } = makeObserverClass()
       ObserverRegistry.register(Cls)
-      const fakeSamplerRegistry = { snapshot: jest.fn() }
+      const fakeSamplerRegistry = { snapshot: vi.fn() }
       new ObserverRegistry({}, makeContainer({ observers: [Cls] }), fakeSamplerRegistry) // eslint-disable-line no-new
       expect(Cls).toHaveBeenCalledWith(
         expect.anything(),

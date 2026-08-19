@@ -14,7 +14,7 @@ const makePlayback = videoEl => ({ el: videoEl })
 
 describe('DecodingSampler', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('exposes a static name used as payload key', () => {
@@ -23,7 +23,7 @@ describe('DecodingSampler', () => {
 
   describe('collect()', () => {
     it('returns data on the first call — seed happens in constructor', () => {
-      jest
+      vi
         .spyOn(performance, 'now')
         .mockReturnValueOnce(0) // constructor _seed()
         .mockReturnValueOnce(1000) // collect()
@@ -32,14 +32,14 @@ describe('DecodingSampler', () => {
     })
 
     it('computes correct fps and dropRatio', () => {
-      jest
+      vi
         .spyOn(performance, 'now')
         .mockReturnValueOnce(0) // constructor _seed()
         .mockReturnValueOnce(1000) // collect()
 
       const el = {
         currentTime: 5,
-        getVideoPlaybackQuality: jest
+        getVideoPlaybackQuality: vi
           .fn()
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 0, droppedVideoFrames: 0 })) // constructor
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 24, droppedVideoFrames: 6 })) // collect
@@ -55,11 +55,11 @@ describe('DecodingSampler', () => {
     })
 
     it('returns dropRatio of 0 when no frames were processed', () => {
-      jest.spyOn(performance, 'now').mockReturnValueOnce(0).mockReturnValueOnce(1000)
+      vi.spyOn(performance, 'now').mockReturnValueOnce(0).mockReturnValueOnce(1000)
 
       const el = {
         currentTime: 0,
-        getVideoPlaybackQuality: jest
+        getVideoPlaybackQuality: vi
           .fn()
           .mockReturnValueOnce(makeQuality()) // constructor
           .mockReturnValueOnce(makeQuality()) // collect
@@ -69,8 +69,8 @@ describe('DecodingSampler', () => {
     })
 
     it('returns null when elapsed time is zero (timer precision edge case)', () => {
-      jest.spyOn(performance, 'now').mockReturnValue(0)
-      const el = { currentTime: 0, getVideoPlaybackQuality: jest.fn().mockReturnValue(makeQuality()) }
+      vi.spyOn(performance, 'now').mockReturnValue(0)
+      const el = { currentTime: 0, getVideoPlaybackQuality: vi.fn().mockReturnValue(makeQuality()) }
       const sampler = new DecodingSampler({ el })
       expect(sampler.collect()).toBeNull()
     })
@@ -88,7 +88,7 @@ describe('DecodingSampler', () => {
     })
 
     it('returns null and re-seeds when droppedVideoFrames delta exceeds totalVideoFrames delta', () => {
-      jest
+      vi
         .spyOn(performance, 'now')
         .mockReturnValueOnce(0)// constructor _seed()
         .mockReturnValueOnce(1000) // collect()
@@ -96,7 +96,7 @@ describe('DecodingSampler', () => {
 
       const el = {
         currentTime: 5,
-        getVideoPlaybackQuality: jest
+        getVideoPlaybackQuality: vi
           .fn()
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 100, droppedVideoFrames: 10 })) // constructor
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 105, droppedVideoFrames: 0 })) // collect — dropped reset
@@ -108,7 +108,7 @@ describe('DecodingSampler', () => {
     })
 
     it('returns null and re-seeds when counters reset (source change)', () => {
-      jest
+      vi
         .spyOn(performance, 'now')
         .mockReturnValueOnce(0) // constructor _seed()
         .mockReturnValueOnce(1000) // collect()
@@ -116,7 +116,7 @@ describe('DecodingSampler', () => {
 
       const el = {
         currentTime: 5,
-        getVideoPlaybackQuality: jest
+        getVideoPlaybackQuality: vi
           .fn()
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 100, droppedVideoFrames: 2 })) // constructor
           .mockReturnValueOnce(makeQuality({ totalVideoFrames: 10, droppedVideoFrames: 0 })) // collect — counters reset
@@ -128,7 +128,7 @@ describe('DecodingSampler', () => {
     })
 
     it('returns null on first collect() when element was unavailable at construction', () => {
-      jest.spyOn(performance, 'now').mockReturnValue(1000)
+      vi.spyOn(performance, 'now').mockReturnValue(1000)
       const playback = { el: { currentTime: 0 } } // no getVideoPlaybackQuality at construction
       const s = new DecodingSampler(playback)
       playback.el.getVideoPlaybackQuality = () => makeQuality() // becomes available later
@@ -138,14 +138,14 @@ describe('DecodingSampler', () => {
 
   describe('destroy()', () => {
     it('collect() returns null after destroy', () => {
-      jest.spyOn(performance, 'now').mockReturnValue(0)
+      vi.spyOn(performance, 'now').mockReturnValue(0)
       const sampler = new DecodingSampler(makePlayback(makeVideoEl()))
       sampler.destroy()
       expect(sampler.collect()).toBeNull()
     })
 
     it('is safe to call multiple times', () => {
-      jest.spyOn(performance, 'now').mockReturnValue(0)
+      vi.spyOn(performance, 'now').mockReturnValue(0)
       const sampler = new DecodingSampler(makePlayback(makeVideoEl()))
       expect(() => {
         sampler.destroy()

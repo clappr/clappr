@@ -1,49 +1,52 @@
-jest.mock('../utils', () => ({
-  emitTelemetry: jest.fn(),
-  calculateThroughput: jest.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0)),
-  sanitizeLicenseUri: jest.requireActual('../utils').sanitizeLicenseUri,
-  parseVideoCodec: jest.requireActual('../utils').parseVideoCodec,
-  parseAudioCodec: jest.requireActual('../utils').parseAudioCodec
-}))
+vi.mock('../utils', async importOriginal => {
+  const actual = await importOriginal()
+  return {
+    emitTelemetry: vi.fn(),
+    calculateThroughput: vi.fn((bytes, ms) => (ms > 0 ? (bytes * 8) / (ms * 1000) : 0)),
+    sanitizeLicenseUri: actual.sanitizeLicenseUri,
+    parseVideoCodec: actual.parseVideoCodec,
+    parseAudioCodec: actual.parseAudioCodec
+  }
+})
 
 import ShakaNetworkAdapter from './shaka_network_adapter'
 import { emitTelemetry } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
 const createFakeNetworkEngine = () => ({
-  registerRequestFilter: jest.fn(),
-  registerResponseFilter: jest.fn(),
-  unregisterRequestFilter: jest.fn(),
-  unregisterResponseFilter: jest.fn()
+  registerRequestFilter: vi.fn(),
+  registerResponseFilter: vi.fn(),
+  unregisterRequestFilter: vi.fn(),
+  unregisterResponseFilter: vi.fn()
 })
 
 const createFakeShakaPlayer = (engine) => ({
-  getNetworkingEngine: jest.fn(() => engine),
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-  keySystem: jest.fn(() => 'com.widevine.alpha'),
-  drmInfo: jest.fn(() => ({ licenseServerUri: 'https://drm.example.com/wvs' })),
-  getExpiration: jest.fn(() => Infinity),
-  getStats: jest.fn(() => ({ estimatedBandwidth: 5000000 })),
-  getVariantTracks: jest.fn(() => [])
+  getNetworkingEngine: vi.fn(() => engine),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  keySystem: vi.fn(() => 'com.widevine.alpha'),
+  drmInfo: vi.fn(() => ({ licenseServerUri: 'https://drm.example.com/wvs' })),
+  getExpiration: vi.fn(() => Infinity),
+  getStats: vi.fn(() => ({ estimatedBandwidth: 5000000 })),
+  getVariantTracks: vi.fn(() => [])
 })
 
 const createFakePlayback = (shakaPlayer = null) => ({
   constructor: { name: 'DashShakaPlayback' },
   shakaPlayerInstance: shakaPlayer,
-  on: jest.fn(),
-  off: jest.fn()
+  on: vi.fn(),
+  off: vi.fn()
 })
 
 const createFakeContainer = () => ({
-  trigger: jest.fn()
+  trigger: vi.fn()
 })
 
 describe('ShakaNetworkAdapter', () => {
   let container, adapter, playback, fakeEngine, fakeShakaPlayer
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     fakeEngine = createFakeNetworkEngine()
     fakeShakaPlayer = createFakeShakaPlayer(fakeEngine)
     playback = createFakePlayback(fakeShakaPlayer)
@@ -255,7 +258,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits BITRATE_CHANGE with previous and current when variantchanged fires', () => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onVariantChanged({
         oldTrack: { bandwidth: 1200000, width: 1280, height: 720 },
@@ -275,7 +278,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits null bitrate and null dimensions when tracks are missing', () => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onVariantChanged({})
 
@@ -290,7 +293,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits null fields for missing track when only one track is present', () => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onVariantChanged({ newTrack: { bandwidth: 3000000, width: 1920, height: 1080 } })
 
@@ -321,7 +324,7 @@ describe('ShakaNetworkAdapter', () => {
     })
 
     it('emits BITRATE_INIT with active track data on attachFilters', () => {
-      fakeShakaPlayer.getVariantTracks = jest.fn(() => [
+      fakeShakaPlayer.getVariantTracks = vi.fn(() => [
         { active: false, bandwidth: 800000, width: 640, height: 360 },
         { active: true, bandwidth: 2400000, width: 1920, height: 1080 }
       ])
@@ -336,7 +339,7 @@ describe('ShakaNetworkAdapter', () => {
     })
 
     it('does not emit BITRATE_INIT when no active track', () => {
-      fakeShakaPlayer.getVariantTracks = jest.fn(() => [
+      fakeShakaPlayer.getVariantTracks = vi.fn(() => [
         { active: false, bandwidth: 800000, width: 640, height: 360 }
       ])
       adapter.bind()
@@ -357,7 +360,7 @@ describe('ShakaNetworkAdapter', () => {
       adapter.bind()
 
       const [, cb] = fakeShakaPlayer.addEventListener.mock.calls.find(([evt]) => evt === 'trackschanged')
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       fakeShakaPlayer.getVariantTracks.mockReturnValue([
         { id: 1, active: true, bandwidth: 1500000, width: 1280, height: 720 }
@@ -415,7 +418,7 @@ describe('ShakaNetworkAdapter', () => {
     it('emits DRM_SESSION_UPDATE with keySystem, licenseServerOrigin and licenseServerParams', () => {
       fakeShakaPlayer.drmInfo.mockReturnValueOnce({ licenseServerUri: 'https://drm.example.com/wvs?deviceId=abc&token=xyz' })
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onDrmSessionUpdate()
 
@@ -434,7 +437,7 @@ describe('ShakaNetworkAdapter', () => {
     it('emits licenseServerOrigin=null and empty params when drmInfo returns null', () => {
       fakeShakaPlayer.drmInfo.mockReturnValueOnce(null)
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onDrmSessionUpdate()
 
@@ -447,7 +450,7 @@ describe('ShakaNetworkAdapter', () => {
       const expiration = Date.now() + 60000
       fakeShakaPlayer.getExpiration.mockReturnValueOnce(expiration)
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onExpirationUpdated()
 
@@ -457,7 +460,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits expirationTime=Infinity when license has no expiration', () => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onExpirationUpdated()
 
@@ -467,7 +470,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('does not emit DRM_SESSION_UPDATE when data is identical to previous emission', () => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onDrmSessionUpdate()
       adapter._onDrmSessionUpdate()
@@ -477,7 +480,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits DRM_SESSION_UPDATE again when keySystem changes', () => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._onDrmSessionUpdate()
       fakeShakaPlayer.keySystem.mockReturnValueOnce('com.apple.fps')
@@ -508,7 +511,7 @@ describe('ShakaNetworkAdapter', () => {
   describe('requestFilter', () => {
     beforeEach(() => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
 
     it('emits CONTAINER_TELEMETRY_REQUEST_START via emitTelemetry', () => {
@@ -557,20 +560,20 @@ describe('ShakaNetworkAdapter', () => {
     })
 
     it('overwrites startT for a second request to the same URI', () => {
-      jest.useFakeTimers()
+      vi.useFakeTimers()
       const uri = 'https://example.com/seg.ts'
 
       adapter.requestFilter(1, { uris: [uri] })
       const first = adapter.pendingRequests.get(uri)
 
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
       adapter.requestFilter(1, { uris: [uri] })
       const second = adapter.pendingRequests.get(uri)
 
       expect(adapter.pendingRequests.size).toBe(1)
       expect(second).toBeGreaterThan(first)
 
-      jest.useRealTimers()
+      vi.useRealTimers()
     })
 
     it('does not track requests without uris', () => {
@@ -587,7 +590,7 @@ describe('ShakaNetworkAdapter', () => {
 
     beforeEach(() => {
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       requestFilter = adapter.requestFilter.bind(adapter)
       responseFilter = adapter.responseFilter.bind(adapter)
     })
@@ -600,7 +603,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits CONTAINER_TELEMETRY_REQUEST_END via emitTelemetry', () => {
       requestFilter(1, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(1, makeResponse())
 
@@ -614,7 +617,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits bytes equal to response data byteLength', () => {
       requestFilter(1, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(1, makeResponse())
 
@@ -624,7 +627,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits durationMs >= 0', () => {
       requestFilter(1, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(1, makeResponse('https://example.com/seg.ts', new ArrayBuffer(512)))
 
@@ -641,7 +644,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('emits bytes=0 when response data is null', () => {
       requestFilter(1, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(1, makeResponse('https://example.com/seg.ts', null))
 
@@ -651,7 +654,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('includes throughputMbps in the payload', () => {
       requestFilter(1, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(1, makeResponse())
 
@@ -670,7 +673,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('segment response includes chunk with seq and variantId', () => {
       requestFilter(1, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(1, makeResponse())
 
@@ -680,7 +683,7 @@ describe('ShakaNetworkAdapter', () => {
 
     it('non-segment response has chunk=undefined', () => {
       requestFilter(0, makeRequest())
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       responseFilter(0, makeResponse())
 
@@ -704,7 +707,7 @@ describe('ShakaNetworkAdapter', () => {
       playback.shakaPlayerInstance = fakeShakaPlayer
       adapter = new ShakaNetworkAdapter(playback, container)
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
       adapter.responseFilter(1, makeResponse())
 
       const [, , data] = emitTelemetry.mock.calls[0]
@@ -770,7 +773,7 @@ describe('ShakaNetworkAdapter', () => {
       adapter.bind()
 
       const [, cb] = fakeShakaPlayer.addEventListener.mock.calls.find(([evt]) => evt === 'trackschanged')
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       fakeShakaPlayer.getVariantTracks.mockReturnValue([
         { id: 1, active: true, bandwidth: 2000000, videoCodec: 'hvc1.1.6.L93', audioCodec: 'ec-3' }
@@ -796,7 +799,7 @@ describe('ShakaNetworkAdapter', () => {
         { id: 2, active: true, bandwidth: 2000000, videoCodec: 'av01.0.04M.08', audioCodec: 'opus' }
       ])
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       fakeShakaPlayer.getVariantTracks.mockReturnValue([
         { id: 1, active: false, bandwidth: 800000, videoCodec: 'avc1.42001f', audioCodec: 'mp4a.40.2' },
@@ -822,7 +825,7 @@ describe('ShakaNetworkAdapter', () => {
         { id: 1, active: false, bandwidth: 800000 }
       ])
       adapter.bind()
-      jest.clearAllMocks()
+      vi.clearAllMocks()
 
       adapter._emitStreamInfo()
 

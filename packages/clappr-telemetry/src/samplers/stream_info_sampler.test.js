@@ -7,8 +7,8 @@ beforeAll(() => {
 })
 
 const makeContainer = () => ({
-  on: jest.fn(),
-  off: jest.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
   options: { telemetry: { streamInfoSample: { enabled: true } } }
 })
 

@@ -2,7 +2,7 @@ import NetworkAdapters from './network_adapters'
 
 const makeAdapter = (name, supported = false) => ({
   name,
-  isSupported: jest.fn(() => supported)
+  isSupported: vi.fn(() => supported)
 })
 
 let _registered = []
@@ -77,7 +77,7 @@ describe('NetworkAdapters', () => {
 
     it('defers to static isEnabled(cfg) when defined on the adapter', () => {
       const adapter = makeAdapter('custom', true)
-      adapter.isEnabled = jest.fn(() => false)
+      adapter.isEnabled = vi.fn(() => false)
       register(adapter)
 
       expect(NetworkAdapters.find({}, { adapters: [adapter] })).toBeNull()

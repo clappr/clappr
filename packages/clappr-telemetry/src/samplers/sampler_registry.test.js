@@ -5,30 +5,33 @@ import { emitTelemetry } from '../utils'
 import { EVENT_TYPES } from '../utils/constants'
 import { Log } from '@clappr/core'
 
-jest.mock('./buffer_sampler', () => {
-  const mock = jest.fn()
+vi.mock('./buffer_sampler', () => {
+  const mock = vi.fn()
   Object.defineProperty(mock, 'name', { get: () => 'buffer', configurable: true })
-  mock.prototype.collect = jest.fn()
-  mock.prototype.destroy = jest.fn()
+  mock.prototype.collect = vi.fn()
+  mock.prototype.destroy = vi.fn()
   return { __esModule: true, default: mock }
 })
 
-jest.mock('./decoding_sampler', () => {
-  const mock = jest.fn()
+vi.mock('./decoding_sampler', () => {
+  const mock = vi.fn()
   Object.defineProperty(mock, 'name', { get: () => 'decoding', configurable: true })
-  mock.prototype.collect = jest.fn()
-  mock.prototype.destroy = jest.fn()
+  mock.prototype.collect = vi.fn()
+  mock.prototype.destroy = vi.fn()
   return { __esModule: true, default: mock }
 })
 
-jest.mock('../utils', () => ({
-  ...jest.requireActual('../utils'),
-  emitTelemetry: jest.fn()
-}))
+vi.mock('../utils', async importOriginal => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    emitTelemetry: vi.fn()
+  }
+})
 
 const makeContainer = (cfg = {}) => ({
   options: { telemetry: { sampleIntervalMs: 1000, samplers: [BufferSampler, DecodingSampler], ...cfg } },
-  trigger: jest.fn()
+  trigger: vi.fn()
 })
 
 describe('SamplerRegistry', () => {
@@ -36,14 +39,14 @@ describe('SamplerRegistry', () => {
   let mockDecodingInstance
 
   beforeEach(() => {
-    jest.useFakeTimers()
-    jest.clearAllMocks()
+    vi.useFakeTimers()
+    vi.clearAllMocks()
 
-    mockBufferInstance = { collect: jest.fn(() => ({ bufferAhead: 20, currentTime: 10 })), destroy: jest.fn() }
-    mockDecodingInstance = { collect: jest.fn(() => ({ decodedFps: 24, droppedFps: 0, dropRatio: 0, totalDecoded: 100, totalDropped: 0, currentTime: 10 })), destroy: jest.fn() }
+    mockBufferInstance = { collect: vi.fn(() => ({ bufferAhead: 20, currentTime: 10 })), destroy: vi.fn() }
+    mockDecodingInstance = { collect: vi.fn(() => ({ decodedFps: 24, droppedFps: 0, dropRatio: 0, totalDecoded: 100, totalDropped: 0, currentTime: 10 })), destroy: vi.fn() }
 
-    BufferSampler.mockImplementation(() => mockBufferInstance)
-    DecodingSampler.mockImplementation(() => mockDecodingInstance)
+    BufferSampler.mockImplementation(function () { return mockBufferInstance })
+    DecodingSampler.mockImplementation(function () { return mockDecodingInstance })
 
     SamplerRegistry.register(BufferSampler)
     SamplerRegistry.register(DecodingSampler)
@@ -52,21 +55,21 @@ describe('SamplerRegistry', () => {
   afterEach(() => {
     SamplerRegistry.unregister(BufferSampler)
     SamplerRegistry.unregister(DecodingSampler)
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   describe('bind()', () => {
     it('does not start a timer when sampleIntervalMs is 0', () => {
       const scheduler = new SamplerRegistry({}, makeContainer({ sampleIntervalMs: 0 }))
       scheduler.bind()
-      jest.advanceTimersByTime(10000)
+      vi.advanceTimersByTime(10000)
       expect(emitTelemetry).not.toHaveBeenCalled()
     })
 
     it('emits MSE_SAMPLE with grouped data on each tick', () => {
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(emitTelemetry).toHaveBeenCalledWith(
         expect.any(Object),
@@ -79,7 +82,7 @@ describe('SamplerRegistry', () => {
     it('fires every 1000ms when configured', () => {
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
-      jest.advanceTimersByTime(3000)
+      vi.advanceTimersByTime(3000)
 
       expect(emitTelemetry).toHaveBeenCalledTimes(3)
     })
@@ -87,7 +90,7 @@ describe('SamplerRegistry', () => {
     it('respects custom sampleIntervalMs', () => {
       const scheduler = new SamplerRegistry({}, makeContainer({ sampleIntervalMs: 500 }))
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(emitTelemetry).toHaveBeenCalledTimes(2)
     })
@@ -96,7 +99,7 @@ describe('SamplerRegistry', () => {
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(emitTelemetry).toHaveBeenCalledTimes(1)
     })
@@ -108,7 +111,7 @@ describe('SamplerRegistry', () => {
 
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data).not.toHaveProperty('buffer')
@@ -120,7 +123,7 @@ describe('SamplerRegistry', () => {
 
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data).toHaveProperty('buffer')
@@ -133,7 +136,7 @@ describe('SamplerRegistry', () => {
 
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(emitTelemetry).not.toHaveBeenCalled()
     })
@@ -141,7 +144,7 @@ describe('SamplerRegistry', () => {
     it('does not emit when cfg.samplers is empty', () => {
       const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [] }))
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(emitTelemetry).not.toHaveBeenCalled()
     })
@@ -151,10 +154,10 @@ describe('SamplerRegistry', () => {
     let CustomSampler
 
     beforeEach(() => {
-      CustomSampler = jest.fn()
+      CustomSampler = vi.fn()
       Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
-      CustomSampler.prototype.collect = jest.fn()
-      CustomSampler.prototype.destroy = jest.fn()
+      CustomSampler.prototype.collect = vi.fn()
+      CustomSampler.prototype.destroy = vi.fn()
     })
 
     afterEach(() => {
@@ -162,7 +165,7 @@ describe('SamplerRegistry', () => {
     })
 
     it('skips registration and warns when required methods are missing', () => {
-      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       class NoMethods {}
       expect(SamplerRegistry.register(NoMethods)).toBe(false)
       expect(warnSpy).toHaveBeenCalled()
@@ -170,7 +173,7 @@ describe('SamplerRegistry', () => {
     })
 
     it('warns and returns false when the class relies on the auto-assigned name (no static get name())', () => {
-      const warnSpy = jest.spyOn(Log, 'warn').mockImplementation(() => {})
+      const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       class NoNameGetter {
         collect() {}
         destroy() {}
@@ -181,14 +184,14 @@ describe('SamplerRegistry', () => {
     })
 
     it('returns true and includes a registered external sampler in the tick', () => {
-      const customInstance = { collect: jest.fn(() => ({ foo: 'bar' })), destroy: jest.fn() }
-      CustomSampler.mockImplementation(() => customInstance)
+      const customInstance = { collect: vi.fn(() => ({ foo: 'bar' })), destroy: vi.fn() }
+      CustomSampler.mockImplementation(function () { return customInstance })
 
       expect(SamplerRegistry.register(CustomSampler)).toBe(true)
 
       const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler] }))
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data).toHaveProperty('custom')
@@ -198,10 +201,10 @@ describe('SamplerRegistry', () => {
     })
 
     it('instantiates the exact class from its own cfg.samplers, unaffected by a name collision overwrite elsewhere', () => {
-      const NewSampler = jest.fn()
+      const NewSampler = vi.fn()
       Object.defineProperty(NewSampler, 'name', { get: () => 'custom', configurable: true })
-      NewSampler.prototype.collect = jest.fn()
-      NewSampler.prototype.destroy = jest.fn()
+      NewSampler.prototype.collect = vi.fn()
+      NewSampler.prototype.destroy = vi.fn()
 
       SamplerRegistry.register(CustomSampler) // this container's own class
       SamplerRegistry.register(NewSampler) // registered elsewhere, same name — overwrites the registry map entry
@@ -221,7 +224,7 @@ describe('SamplerRegistry', () => {
 
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data).not.toHaveProperty('buffer')
@@ -234,15 +237,15 @@ describe('SamplerRegistry', () => {
 
   describe('isolation between instances', () => {
     it('only instantiates samplers listed in this container own cfg.samplers, even if others are globally registered', () => {
-      const CustomSampler = jest.fn()
+      const CustomSampler = vi.fn()
       Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
-      CustomSampler.prototype.collect = jest.fn()
-      CustomSampler.prototype.destroy = jest.fn()
+      CustomSampler.prototype.collect = vi.fn()
+      CustomSampler.prototype.destroy = vi.fn()
       SamplerRegistry.register(CustomSampler) // registered globally, e.g. by another player instance
 
       const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [BufferSampler] }))
       scheduler.bind()
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       const [, , data] = emitTelemetry.mock.calls[0]
       expect(data).toHaveProperty('buffer')
@@ -255,10 +258,10 @@ describe('SamplerRegistry', () => {
     })
 
     it('does not instantiate a sampler present in cfg.samplers but never registered', () => {
-      const Unregistered = jest.fn()
+      const Unregistered = vi.fn()
       Object.defineProperty(Unregistered, 'name', { get: () => 'unregistered', configurable: true })
-      Unregistered.prototype.collect = jest.fn()
-      Unregistered.prototype.destroy = jest.fn()
+      Unregistered.prototype.collect = vi.fn()
+      Unregistered.prototype.destroy = vi.fn()
 
       const scheduler = new SamplerRegistry({}, makeContainer({ samplers: [Unregistered] }))
       expect(Unregistered).not.toHaveBeenCalled()
@@ -288,11 +291,11 @@ describe('SamplerRegistry', () => {
     })
 
     it('defers to static isEnabled(cfg) when defined on the class', () => {
-      const CustomSampler = jest.fn()
+      const CustomSampler = vi.fn()
       Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
-      CustomSampler.prototype.collect = jest.fn()
-      CustomSampler.prototype.destroy = jest.fn()
-      CustomSampler.isEnabled = jest.fn(() => false)
+      CustomSampler.prototype.collect = vi.fn()
+      CustomSampler.prototype.destroy = vi.fn()
+      CustomSampler.isEnabled = vi.fn(() => false)
 
       SamplerRegistry.register(CustomSampler)
       new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler] })) // eslint-disable-line no-new
@@ -304,11 +307,11 @@ describe('SamplerRegistry', () => {
     })
 
     it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
-      const CustomSampler = jest.fn()
+      const CustomSampler = vi.fn()
       Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
-      CustomSampler.prototype.collect = jest.fn()
-      CustomSampler.prototype.destroy = jest.fn()
-      CustomSampler.isEnabled = jest.fn(() => true)
+      CustomSampler.prototype.collect = vi.fn()
+      CustomSampler.prototype.destroy = vi.fn()
+      CustomSampler.isEnabled = vi.fn(() => true)
 
       SamplerRegistry.register(CustomSampler)
       const registry = new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler], custom: { enabled: false } }))
@@ -323,10 +326,10 @@ describe('SamplerRegistry', () => {
 
   describe('ref counting', () => {
     it('is reference-counted — class removed only after all registrations are released', () => {
-      const CustomSampler = jest.fn()
+      const CustomSampler = vi.fn()
       Object.defineProperty(CustomSampler, 'name', { get: () => 'counted', configurable: true })
-      CustomSampler.prototype.collect = jest.fn()
-      CustomSampler.prototype.destroy = jest.fn()
+      CustomSampler.prototype.collect = vi.fn()
+      CustomSampler.prototype.destroy = vi.fn()
 
       SamplerRegistry.register(CustomSampler) // refCount → 1
       SamplerRegistry.register(CustomSampler) // refCount → 2
@@ -365,7 +368,7 @@ describe('SamplerRegistry', () => {
       const scheduler = new SamplerRegistry({}, makeContainer())
       scheduler.bind()
       scheduler.destroy()
-      jest.advanceTimersByTime(2000)
+      vi.advanceTimersByTime(2000)
 
       expect(emitTelemetry).not.toHaveBeenCalled()
     })

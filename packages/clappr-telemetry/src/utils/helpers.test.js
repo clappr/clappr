@@ -59,7 +59,7 @@ describe('createEnvelope', () => {
 
 describe('emitTelemetry', () => {
   it('should trigger telemetry trace event with envelope', () => {
-    const emitter = { trigger: jest.fn() }
+    const emitter = { trigger: vi.fn() }
 
     emitTelemetry(emitter, EVENT_TYPES.REQUEST_START, { url: 'video.ts' }, 'test-plugin')
 
@@ -73,9 +73,9 @@ describe('emitTelemetry', () => {
   })
 
   it('should log and not rethrow when trigger fails', () => {
-    jest.spyOn(Log, 'warn').mockImplementation(() => {})
+    vi.spyOn(Log, 'warn').mockImplementation(() => {})
     const emitter = {
-      trigger: jest.fn(() => {
+      trigger: vi.fn(() => {
         throw new Error('boom')
       })
     }
