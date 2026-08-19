@@ -7,10 +7,10 @@
   "module": "./dist/clappr-zepto.esm.js",
   "sideEffects": true,
   "scripts": {
-    "build": "rollup -c",
+    "build": "vite build",
     "test": "jest src/",
     "test:smoke": "jest src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/",
-    "pretest:smoke": "rollup -c"
+    "pretest:smoke": "vite build"
   },
   "repository": {
     "type": "git",
