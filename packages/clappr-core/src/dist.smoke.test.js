@@ -74,10 +74,11 @@ function loadUmdInSandbox(filename, { amd = false } = {}) {
   return { sandbox, amdExports }
 }
 
-function assertCoreContract(dist) {
-  const src = require('../src/main.js')
+async function assertCoreContract(dist) {
+  const src = await import('../src/main.js')
+  const srcDefault = src.default || src
 
-  expect(Object.keys(dist.default).sort()).toEqual(Object.keys(src.default).sort())
+  expect(Object.keys(dist.default).sort()).toEqual(Object.keys(srcDefault).sort())
   expect(namedExportKeys(dist)).toEqual(namedExportKeys(src))
 
   const { HTML5Video, Playback, UIObject, $ } = dist
@@ -95,8 +96,8 @@ describe.each([
   ['main UMD minified', ARTIFACTS.mainMin],
   ['ESM', ARTIFACTS.esm]
 ])('%s (%s)', (_label, filename) => {
-  test('exports the core surface with a consistent internal prototype chain', () => {
-    assertCoreContract(loadArtifact(filename))
+  test('exports the core surface with a consistent internal prototype chain', async () => {
+    await assertCoreContract(loadArtifact(filename))
   })
 
   test('publishes a sourcemap comment', () => {

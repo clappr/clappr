@@ -26,7 +26,7 @@
     "watch": "vite build --watch",
     "bundle-check": "ANALYZE_BUNDLE=true vite build",
     "release": "rm -rf dist && vite build && vite build --mode minify",
-    "lint": "eslint *.js ./src",
+    "lint": "eslint --no-error-on-unmatched-pattern *.js ./src",
     "lint:fix": "yarn lint -- --fix",
     "test": "vitest run --coverage",
     "test:smoke": "vitest run src/dist.smoke.test.js",

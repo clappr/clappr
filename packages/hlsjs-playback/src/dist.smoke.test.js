@@ -120,9 +120,15 @@ describe('dist sourcemap inventory', () => {
 })
 
 describe('hls.js peer identity', () => {
-  test.each(Object.values(ARTIFACTS))('%s defers to the consumer hls.js', filename => {
+  test.each(UMD_ARTIFACTS)('%s defers to the consumer hls.js', filename => {
     const Playback = resolvePlayback(loadArtifact(filename))
     expect(Playback.HLSJS).toBe(require('hls.js'))
+  })
+
+  test(`${ARTIFACTS.esm} defers to the consumer hls.js`, async () => {
+    const Playback = resolvePlayback(loadArtifact(ARTIFACTS.esm))
+    const { default: hls } = await import('hls.js')
+    expect(Playback.HLSJS).toBe(hls)
   })
 })
 

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build && CLAPPR_BUNDLE=plainhtml5 vite build",
     "bundle-check": "ANALYZE_BUNDLE=true vite build",
-    "lint": "eslint *.js src/",
+    "lint": "eslint --no-error-on-unmatched-pattern *.js src/",
     "lint:fix": "npm run lint -- --fix",
     "release": "rm -rf dist && vite build && CLAPPR_BUNDLE=plainhtml5 vite build && vite build --mode minify && CLAPPR_BUNDLE=plainhtml5 vite build --mode minify",
     "start": "vite --mode development",
