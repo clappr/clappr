@@ -20,7 +20,7 @@ module.exports = {
     '^@clappr/zepto$': '<rootDir>/../clappr-zepto/src/zepto.js',
     '\\.(scss)(\\?inline)?$': '<rootDir>/src/__mocks__/styleMock.js',
     '\\.(html)\\?raw$': '<rootDir>/../clappr-core/src/__mocks__/htmlRawMock.js',
-    '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.js'
+    '\\.(svg)(\\?raw)?$': '<rootDir>/src/__mocks__/svgMock.js'
   },
   collectCoverageFrom: ['src/*.js', 'src/**/*.js', 'src/**/**/*.js', '!src/**/dist.smoke.test.js'],
   globals: {

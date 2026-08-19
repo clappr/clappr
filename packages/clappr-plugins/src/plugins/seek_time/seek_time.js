@@ -3,8 +3,8 @@
 // license that can be found in the LICENSE file.
 
 import { Events, Playback, UICorePlugin, Utils, template, Styler } from '@clappr/core'
-import seekTimeHTML from './public/seek_time.html'
-import seekTimeStyle from './public/seek_time.scss'
+import seekTimeHTML from './public/seek_time.html?raw'
+import seekTimeStyle from './public/seek_time.scss?inline'
 
 const { formatTime } = Utils
 

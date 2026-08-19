@@ -1,7 +1,7 @@
 import { Events, UICorePlugin, template, Styler } from '@clappr/core'
-import ccIcon from '../../icons/09-cc.svg'
-import ccHTML from './public/closed_captions.html'
-import ccStyle from './public/closed_captions.scss'
+import ccIcon from '../../icons/09-cc.svg?raw'
+import ccHTML from './public/closed_captions.html?raw'
+import ccStyle from './public/closed_captions.scss?inline'
 
 export default class ClosedCaptions extends UICorePlugin {
   get name() { return 'closed_captions' }
