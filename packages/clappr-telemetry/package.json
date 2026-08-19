@@ -5,10 +5,10 @@
   "main": "./dist/clappr-telemetry.js",
   "module": "./dist/clappr-telemetry.esm.js",
   "scripts": {
-    "bundle-check": "ANALYZE_BUNDLE=true rollup --config --bundleConfigAsCjs",
-    "release": "rm -rf dist && MINIMIZE=true rollup --config --bundleConfigAsCjs",
-    "build": "rollup --config --bundleConfigAsCjs",
-    "watch": "rollup --config --watch --bundleConfigAsCjs",
+    "bundle-check": "ANALYZE_BUNDLE=true vite build",
+    "release": "rm -rf dist && vite build && vite build --mode es && vite build --mode minify",
+    "build": "vite build && vite build --mode es",
+    "watch": "vite build --watch",
     "test": "jest src/ --coverage --silent",
     "test:smoke": "jest ./src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/ --silent",
     "test:coverage": "jest src/ --coverage",
@@ -16,8 +16,8 @@
     "test:watch": "jest src/ --watch",
     "lint": "eslint *.js src/",
     "lint:fix": "yarn lint -- --fix",
-    "start": "DEV=true rollup --config --watch --bundleConfigAsCjs",
-    "dev": "DEV=true rollup --config --watch --bundleConfigAsCjs",
+    "start": "vite --mode development",
+    "dev": "vite --mode development",
     "prepublishOnly": "lerna run release --scope=@clappr/telemetry"
   },
   "files": [

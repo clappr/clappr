@@ -70,10 +70,22 @@ function assertEntriesExist(pkgSpec) {
   }
 }
 
+function hasSplitEntries(pkgSpec) {
+  return typeof pkgSpec.entry === 'object' && !!(pkgSpec.entry.es && pkgSpec.entry.umd)
+}
+
 function entryFor(pkgSpec, mode) {
   if (typeof pkgSpec.entry === 'string') return pkgSpec.entry
+  if (mode === 'es') return pkgSpec.entry.es
   if (mode === 'minify') return pkgSpec.entry.umd
   return pkgSpec.entry.umd || pkgSpec.entry.es
+}
+
+function formatsFor(pkgSpec, mode) {
+  if (mode === 'minify') return ['umd']
+  if (mode === 'es') return ['es']
+  if (hasSplitEntries(pkgSpec)) return ['umd']
+  return pkgSpec.formats || ['umd', 'es']
 }
 
 function viteDefine(replace) {
@@ -198,7 +210,7 @@ export function defineClapprLib(pkgSpec) {
     }
 
     const isMinify = mode === 'minify'
-    const formats = isMinify ? ['umd'] : pkgSpec.formats || ['umd', 'es']
+    const formats = formatsFor(pkgSpec, mode)
 
     return defineConfig({
       publicDir: false,
@@ -211,7 +223,7 @@ export function defineClapprLib(pkgSpec) {
         sourcemap: true,
         minify: isMinify ? 'terser' : false,
         terserOptions: isMinify ? { ecma: 5 } : undefined,
-        emptyOutDir: !isMinify,
+        emptyOutDir: mode === 'production',
         copyPublicDir: false,
         lib: {
           entry: resolveFromCwd(entryFor(pkgSpec, mode)),
