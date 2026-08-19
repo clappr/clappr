@@ -4,8 +4,8 @@
 
 import { Events, UIContainerPlugin, template, Styler } from '@clappr/core'
 
-import watermarkHTML from './public/watermark.html'
-import watermarkStyle from './public/watermark.scss'
+import watermarkHTML from './public/watermark.html?raw'
+import watermarkStyle from './public/watermark.scss?inline'
 
 export default class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }

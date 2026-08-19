@@ -10,17 +10,17 @@ import { Kibo } from '../../vendor/index'
 
 import { Events, UICorePlugin, Browser, Playback, Utils, template, Styler, $ } from '@clappr/core'
 
-import mediaControlStyle from './public/media-control.scss'
-import mediaControlHTML from './public/media-control.html'
+import mediaControlStyle from './public/media-control.scss?inline'
+import mediaControlHTML from './public/media-control.html?raw'
 
-import playIcon from '../../icons/01-play.svg'
-import pauseIcon from '../../icons/02-pause.svg'
-import stopIcon from '../../icons/03-stop.svg'
-import volumeIcon from '../../icons/04-volume.svg'
-import volumeMuteIcon from '../../icons/05-mute.svg'
-import fullscreenIcon from '../../icons/06-expand.svg'
-import exitFullscreenIcon from '../../icons/07-shrink.svg'
-import hdIcon from '../../icons/08-hd.svg'
+import playIcon from '../../icons/01-play.svg?raw'
+import pauseIcon from '../../icons/02-pause.svg?raw'
+import stopIcon from '../../icons/03-stop.svg?raw'
+import volumeIcon from '../../icons/04-volume.svg?raw'
+import volumeMuteIcon from '../../icons/05-mute.svg?raw'
+import fullscreenIcon from '../../icons/06-expand.svg?raw'
+import exitFullscreenIcon from '../../icons/07-shrink.svg?raw'
+import hdIcon from '../../icons/08-hd.svg?raw'
 
 const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 

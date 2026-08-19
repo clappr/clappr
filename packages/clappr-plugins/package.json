@@ -5,17 +5,17 @@
   "main": "./dist/clappr-plugins.js",
   "module": "./dist/clappr-plugins.esm.js",
   "scripts": {
-    "bundle-check": "ANALYZE_BUNDLE=true rollup -c",
-    "release": "rm -rf dist && MINIMIZE=true rollup -c",
-    "build": "rollup -c",
-    "watch": "rollup -c --watch",
+    "bundle-check": "ANALYZE_BUNDLE=true vite build",
+    "release": "rm -rf dist && vite build && vite build --mode minify",
+    "build": "vite build",
+    "watch": "vite build --watch",
     "test": "jest /src --coverage --silent",
     "test:smoke": "jest ./src/dist.smoke.test.js --testPathIgnorePatterns=/node_modules/ --silent",
     "test:coverage": "open coverage/lcov-report/index.html",
     "test:watch": "jest /src --watch",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
-    "start": "rollup -c rollup.config.dev.js --watch",
+    "start": "vite --mode development",
     "prepublishOnly": "lerna run release --scope=@clappr/plugins"
   },
   "files": [
@@ -41,9 +41,7 @@
   },
   "devDependencies": {
     "@clappr/core": "^0.16.3",
-    "postcss-url": "^10.1.3",
-    "rollup-plugin-analyzer": "^4.0.0",
-    "rollup-plugin-named-directory": "^1.0.0"
+    "postcss-url": "^10.1.3"
   },
   "nyc": {
     "exclude": [

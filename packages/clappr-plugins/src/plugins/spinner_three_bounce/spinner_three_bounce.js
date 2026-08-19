@@ -4,8 +4,8 @@
 
 import { Events, UIContainerPlugin, template, Styler } from '@clappr/core'
 
-import spinnerHTML from './public/spinner.html'
-import spinnerStyle from './public/spinner.scss'
+import spinnerHTML from './public/spinner.html?raw'
+import spinnerStyle from './public/spinner.scss?inline'
 
 export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }

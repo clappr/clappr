@@ -14708,11 +14708,6 @@ rolldown@~1.2.1:
     "@rolldown/binding-win32-arm64-msvc" "1.2.5"
     "@rolldown/binding-win32-x64-msvc" "1.2.5"
 
-rollup-plugin-analyzer@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-analyzer/-/rollup-plugin-analyzer-4.0.0.tgz#96b757ed64a098b59d72f085319e68cdd86d5798"
-  integrity sha512-LL9GEt3bkXp6Wa19SNR5MWcvHNMvuTFYg+eYBZN2OIFhSWN+pEJUQXEKu5BsOeABob3x9PDaLKW7w5iOJnsESQ==
-
 rollup-plugin-html@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/rollup-plugin-html/-/rollup-plugin-html-0.2.1.tgz#a1862eca87ae54b677689d0d4133911e8226463d"
@@ -14727,11 +14722,6 @@ rollup-plugin-livereload@^2.0.5:
   integrity sha512-vqQZ/UQowTW7VoiKEM5ouNW90wE5/GZLfdWuR0ELxyKOJUIaj+uismPZZaICU4DnWPVjnpCDDxEqwU7pcKY/PA==
   dependencies:
     livereload "^0.9.1"
-
-rollup-plugin-named-directory@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-named-directory/-/rollup-plugin-named-directory-1.0.0.tgz#644d9d013c1fc077db9a892b9065f5e57afaecbe"
-  integrity sha512-BgTKj4VMkFziVZZiu3naB3az5LjYUf008QyyEzVmS3fKMQLYWdn4QsgDKggxe2Xkio00Qb5EXXHH2fwCllM2oA==
 
 rollup-plugin-postcss@^4.0.2:
   version "4.0.2"
@@ -15090,10 +15080,10 @@ setprototypeof@1.2.0, setprototypeof@~1.2.0:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shaka-player@^4:
-  version "4.16.43"
-  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-4.16.43.tgz#2b6f4d2e56533a5112ed268073c20c6954c38d0e"
-  integrity sha512-Xogdlm4NrdgPXHddL3T1zOTH3Qglq9ZWuxEBipMjxELX1U4edWdRWVysCEslZUgco4R/tWDAVWIPKx0OYJcSsw==
+shaka-player@^5:
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-5.2.6.tgz#07dd1b134e533cf0e09a58677f6d6630d12f65f7"
+  integrity sha512-/AIgm9CzhTJu5Ba5l6kKczQn7k6MeMqpQmbtvRrUfgYnWxnQfZ20bhQd7TtD5sCypE9x+nr9vxA6bVBlz+nP8A==
 
 shallow-clone@^3.0.0:
   version "3.0.1"
