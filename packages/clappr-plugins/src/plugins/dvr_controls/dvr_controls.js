@@ -1,6 +1,6 @@
 import { Events, Playback, UICorePlugin, template, Styler } from '@clappr/core'
-import dvrHTML from './public/index.html?raw'
-import dvrStyle from './public/dvr_controls.scss?inline'
+import dvrHTML from './public/index.html'
+import dvrStyle from './public/dvr_controls.scss'
 
 export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }

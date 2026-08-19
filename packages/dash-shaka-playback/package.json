@@ -20,8 +20,7 @@
     "directory": "packages/dash-shaka-playback"
   },
   "scripts": {
-    "start": "vite --mode development",
-    "start:with-reload": "vite --mode development",
+    "start": "vite",
     "build": "vite build",
     "watch": "vite build --watch",
     "bundle-check": "ANALYZE_BUNDLE=true vite build",

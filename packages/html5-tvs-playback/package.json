@@ -35,7 +35,7 @@
     "build": "vite build",
     "release": "rm -rf dist && vite build && vite build --mode minify",
     "prepublishOnly": "lerna run release --scope=@clappr/clappr-html5-tvs-playback",
-    "start": "vite --mode development",
+    "start": "vite",
     "watch": "vite build --watch",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",

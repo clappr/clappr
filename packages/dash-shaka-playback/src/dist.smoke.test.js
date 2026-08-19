@@ -12,7 +12,7 @@ const { TextEncoder, TextDecoder } = require('util')
 global.TextEncoder = global.TextEncoder || TextEncoder
 global.TextDecoder = global.TextDecoder || TextDecoder
 const { JSDOM } = require('jsdom')
-const { expectEs5Syntax } = require('../../../test/dist-contract')
+const { expectEs5Syntax, expectSourcemapFromSrc } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -91,6 +91,7 @@ function assertPlaybackContract(DashShakaPlayback) {
 
 function assertSourceMappingURL(filename) {
   expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
+  expectSourcemapFromSrc(readArtifact(`${filename}.map`), filename)
 }
 
 const EXPECTED_ARTIFACTS = Object.values(ARTIFACTS).sort()

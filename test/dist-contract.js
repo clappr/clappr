@@ -86,7 +86,21 @@ function expectEs5Subclassable(Base, ctorArg) {
   expect(() => new Es5Subclass(ctorArg)).not.toThrow()
 }
 
+function expectSourcemapFromSrc(mapJson, label) {
+  const map = typeof mapJson === 'string' ? JSON.parse(mapJson) : mapJson
+  const sources = map.sources || []
+  if (sources.some(source => String(source).includes('clappr-lib-chunk.js'))) {
+    throw new Error(`${label} sourcemap still points at clappr-lib-chunk.js`)
+  }
+  if (!sources.some(source => /(^|[\\/])src[\\/]/.test(source))) {
+    throw new Error(
+      `${label} sourcemap has no src/ files (${sources.slice(0, 5).join(', ') || 'none'})`
+    )
+  }
+}
+
 module.exports = {
   expectEs5Syntax,
-  expectEs5Subclassable
+  expectEs5Subclassable,
+  expectSourcemapFromSrc
 }

@@ -1,4 +1,4 @@
-const { expectEs5Syntax } = require('./dist-contract')
+const { expectEs5Syntax, expectSourcemapFromSrc } = require('./dist-contract')
 
 const LABEL = 'artifact.js'
 
@@ -83,7 +83,41 @@ describe('expectEs5Syntax', () => {
     })
 
     it('rejects rest param and names the form and artifact', () => {
-      expectRejection('function f(a) { return a }; function h() {}; function g(...a) { return a }', 'rest param')
+      expectRejection(
+        'function f(a) { return a }; function h() {}; function g(...a) { return a }',
+        'rest param'
+      )
     })
+  })
+})
+
+describe('expectSourcemapFromSrc', () => {
+  it('accepts maps that list src/ files', () => {
+    const map = JSON.stringify({
+      version: 3,
+      sources: ['../../src/main.js'],
+      mappings: ''
+    })
+    expect(() => expectSourcemapFromSrc(map, LABEL)).not.toThrow()
+  })
+
+  it('rejects maps that still point at clappr-lib-chunk.js', () => {
+    const map = JSON.stringify({
+      version: 3,
+      sources: ['clappr-lib-chunk.js'],
+      mappings: ''
+    })
+    expect(() => expectSourcemapFromSrc(map, LABEL)).toThrow(
+      `${LABEL} sourcemap still points at clappr-lib-chunk.js`
+    )
+  })
+
+  it('rejects maps without src/ files', () => {
+    const map = JSON.stringify({
+      version: 3,
+      sources: ['node_modules/foo.js'],
+      mappings: ''
+    })
+    expect(() => expectSourcemapFromSrc(map, LABEL)).toThrow(`${LABEL} sourcemap has no src/ files`)
   })
 })

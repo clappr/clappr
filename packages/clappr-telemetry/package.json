@@ -6,8 +6,8 @@
   "module": "./dist/clappr-telemetry.esm.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true vite build",
-    "release": "rm -rf dist && vite build && vite build --mode es && vite build --mode minify",
-    "build": "vite build && vite build --mode es",
+    "release": "rm -rf dist && vite build && vite build --config vite.es.config.mjs && vite build --mode minify",
+    "build": "vite build && vite build --config vite.es.config.mjs",
     "watch": "vite build --watch",
     "test": "vitest run --coverage",
     "test:smoke": "vitest run src/dist.smoke.test.js",
@@ -16,8 +16,8 @@
     "test:watch": "vitest",
     "lint": "eslint --no-error-on-unmatched-pattern *.js src/",
     "lint:fix": "yarn lint -- --fix",
-    "start": "vite --mode development",
-    "dev": "vite --mode development",
+    "start": "vite",
+    "dev": "vite",
     "prepublishOnly": "lerna run release --scope=@clappr/telemetry"
   },
   "files": [

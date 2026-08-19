@@ -11,10 +11,19 @@
     </style>
   </head>
   <body>
-    <script src="http://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js" defer></script>
-    <script src="http://cdn.jsdelivr.net/npm/@joaopaulo.vieira/clappr-tvs-key-mapping-plugin@latest/dist/clappr-tvs-key-mapping-plugin.min.js" defer></script>
-    <script src="clappr-html5-tvs-playback.js" defer></script>
-    <script src="/javascript/clappr-config.js" defer></script>
+    <script src="http://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/@joaopaulo.vieira/clappr-tvs-key-mapping-plugin@latest/dist/clappr-tvs-key-mapping-plugin.min.js"></script>
+    <script type="module">
+      import HTML5TVsPlayback from '/src/html5_playback.js'
+      window.HTML5TVsPlayback = HTML5TVsPlayback.default || HTML5TVsPlayback
+      await new Promise(function (resolve, reject) {
+        var script = document.createElement('script')
+        script.src = '/javascript/clappr-config.js'
+        script.onload = resolve
+        script.onerror = reject
+        document.body.appendChild(script)
+      })
+    </script>
     <div class="snackbar"></div>
     <div class="loading-hint"> LOADING !</div>
   </body>

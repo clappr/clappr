@@ -11,9 +11,9 @@ import Log from '../../components/log/log'
 import PlayerError from '../../components/error/error'
 import $ from '@clappr/zepto'
 import template from '../../base/template'
-import tracksHTML from './public/tracks.html?raw'
+import tracksHTML from './public/tracks.html'
 import Styler from '../../base/styler/styler'
-import HTML5VideoStyle from './public/style.scss?inline'
+import HTML5VideoStyle from './public/style.scss'
 
 const MIMETYPES = {
   mp4: [

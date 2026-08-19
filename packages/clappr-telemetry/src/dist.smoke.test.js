@@ -4,7 +4,7 @@
  */
 const fs = require('fs')
 const path = require('path')
-const { expectEs5Syntax } = require('../../../test/dist-contract')
+const { expectEs5Syntax, expectSourcemapFromSrc } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -42,6 +42,7 @@ function assertTelemetryContract(mod) {
 
 function assertSourceMappingURL(filename) {
   expect(readArtifact(filename)).toContain(`sourceMappingURL=${filename}.map`)
+  expectSourcemapFromSrc(readArtifact(`${filename}.map`), filename)
 }
 
 describe.each([

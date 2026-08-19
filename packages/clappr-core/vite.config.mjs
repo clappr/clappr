@@ -1,9 +1,5 @@
 import { resolve } from 'node:path'
-import { createRequire } from 'node:module'
 import { defineClapprLib } from '../../vite.config.base.mjs'
-
-const require = createRequire(import.meta.url)
-const { version } = require('./package.json')
 
 export default defineClapprLib({
   name: 'Clappr',
@@ -17,7 +13,6 @@ export default defineClapprLib({
     '@': resolve(process.cwd(), 'src'),
     '@clappr/zepto': resolve(process.cwd(), '../clappr-zepto/src/zepto.js')
   },
-  replace: { VERSION: version },
   cssLoadPaths: ['src/base/scss'],
   exports: 'named'
 })

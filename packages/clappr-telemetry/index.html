@@ -3,15 +3,10 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Clappr Telemetry</title>
-  <script src="/packages/player/dist/clappr.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
-  <script src="/packages/hlsjs-playback/dist/hlsjs-playback.js"></script>
-  <script src="/packages/dash-shaka-playback/dist/dash-shaka-playback.js"></script>
-  <script src="/packages/clappr-telemetry/dist/clappr-telemetry.js"></script>
-  <script src="/packages/player/public/j/editor/ace.js"></script>
-  <link rel="stylesheet" href="/packages/player/public/stylesheets/bootstrap.min.css" type="text/css" media="screen">
-  <link rel="stylesheet" href="/packages/player/public/stylesheets/bootstrap-theme.min.css" type="text/css" media="screen">
-  <link rel="stylesheet" href="/packages/player/public/stylesheets/style.css" type="text/css" media="screen">
+  <script src="../player/public/j/editor/ace.js"></script>
+  <link rel="stylesheet" href="../player/public/stylesheets/bootstrap.min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="../player/public/stylesheets/bootstrap-theme.min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="../player/public/stylesheets/style.css" type="text/css" media="screen">
   <style>
     .presets { margin-bottom: 8px; }
     .presets .btn { margin-right: 4px; }
@@ -50,13 +45,23 @@
     </div>
   </section>
 
-  <script>
+  <script type="module">
+    import ClapprNS from '../player/src/main.js'
+    import HlsjsPlayback from '../hlsjs-playback/src/hls.js'
+    import DashShakaPlayback from '../dash-shaka-playback/src/clappr-dash-shaka-playback.js'
+    import ClapprTelemetryNS from '/src/main.umd.js'
+
+    window.Clappr = ClapprNS.default || ClapprNS
+    window.HlsjsPlayback = HlsjsPlayback.default || HlsjsPlayback
+    window.DashShakaPlayback = DashShakaPlayback.default || DashShakaPlayback
+    window.ClapprTelemetry = ClapprTelemetryNS.default || ClapprTelemetryNS
+
     const {
       ShakaNetworkAdapter, HlsNetworkAdapter,
       BufferSampler, DecodingSampler, PlaybackStateSampler,
       NetworkSampler, PlaybackTimingSampler, StreamInfoSampler,
       VideoEventObserver
-    } = ClapprTelemetry
+    } = window.ClapprTelemetry
 
     const TELEMETRY_TRACE_EVENT = Clappr.Events.Custom.CONTAINER_TELEMETRY_TRACE
 
@@ -67,6 +72,10 @@
         this.listenTo(this.container, TELEMETRY_TRACE_EVENT, (e) => console.log('[TELEMETRY]', e))
       }
     }
+
+    window.SimpleTelemetryLogger = SimpleTelemetryLogger
+    window.selectMedia = selectMedia
+    window.snapshot = snapshot
 
     const SAMPLERS = `[BufferSampler, DecodingSampler, PlaybackStateSampler,
                 NetworkSampler, PlaybackTimingSampler, StreamInfoSampler]`
@@ -169,26 +178,24 @@
       }
     }
 
-    window.onload = function () {
-      const select = document.getElementById('media-select')
-      Object.entries(MEDIAS).forEach(([key, { label }]) => {
-        const opt = document.createElement('option')
-        opt.value = key
-        opt.textContent = label
-        select.appendChild(opt)
-      })
+    const select = document.getElementById('media-select')
+    Object.entries(MEDIAS).forEach(([key, { label }]) => {
+      const opt = document.createElement('option')
+      opt.value = key
+      opt.textContent = label
+      select.appendChild(opt)
+    })
 
-      editor = ace.edit('editor')
-      const session = editor.getSession()
-      editor.setTheme('ace/theme/katzenmilch')
-      session.setMode('ace/mode/javascript')
-      session.setTabSize(2)
-      session.setUseSoftTabs(true)
-      editor.getSession().setValue(MEDIAS.hls.code)
+    editor = ace.edit('editor')
+    const session = editor.getSession()
+    editor.setTheme('ace/theme/katzenmilch')
+    session.setMode('ace/mode/javascript')
+    session.setTabSize(2)
+    session.setUseSoftTabs(true)
+    editor.getSession().setValue(MEDIAS.hls.code)
 
-      document.querySelector('.run').addEventListener('click', run)
-      run()
-    }
+    document.querySelector('.run').addEventListener('click', run)
+    run()
   </script>
 </body>
 

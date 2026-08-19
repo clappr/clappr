@@ -12,13 +12,6 @@
       "vitest": { "config": ["vitest.config.base.mjs"] },
       "babel": { "config": ["babel.base.json"] }
     },
-    "packages/*": {
-      "entry": ["vite.config.mjs", "vitest.config.mjs"],
-      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
-      "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
-    },
     "packages/clappr-core": {
       "entry": [
         "src/main.js",
@@ -31,8 +24,7 @@
         "@/*": ["./src/*"]
       },
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/clappr-plugins": {
       "entry": [
@@ -45,50 +37,55 @@
       ],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/clappr-telemetry": {
-      "entry": ["src/main.js", "src/main.umd.js", "vite.config.mjs", "vitest.config.mjs"],
+      "entry": [
+        "src/main.js",
+        "src/main.umd.js",
+        "vite.config.mjs",
+        "vite.es.config.mjs",
+        "vitest.config.mjs"
+      ],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/clappr-zepto": {
       "entry": ["src/zepto.js", "vite.config.mjs", "vitest.config.mjs"],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/hlsjs-playback": {
       "entry": ["src/hls.js", "vite.config.mjs", "vitest.config.mjs"],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/dash-shaka-playback": {
       "entry": ["src/clappr-dash-shaka-playback.js", "vite.config.mjs", "vitest.config.mjs"],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/html5-tvs-playback": {
       "entry": ["src/html5_playback.js", "vite.config.mjs", "vitest.config.mjs"],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "packages/player": {
-      "entry": ["src/main.js", "src/base_bundle.js", "vite.config.mjs", "vitest.config.mjs"],
+      "entry": [
+        "src/main.js",
+        "src/base_bundle.js",
+        "vite.config.mjs",
+        "vite.plainhtml5.config.mjs",
+        "vitest.config.mjs"
+      ],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
-      "babel": true,
-      "postcss": true
+      "babel": true
     },
     "apps/clappr.io": {
       "project": ["**/*.{js,jsx,ts,tsx,mdx,scss,sass}"],

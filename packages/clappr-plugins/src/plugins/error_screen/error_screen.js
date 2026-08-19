@@ -1,8 +1,8 @@
 import { Events, PlayerError, UICorePlugin, template, Styler } from '@clappr/core'
 
-import reloadIcon from '../../icons/10-reload.svg?raw'
-import templateHtml from './public/error_screen.html?raw'
-import errorScreenStyle from './public/error_screen.scss?inline'
+import reloadIcon from '../../icons/10-reload.svg'
+import templateHtml from './public/error_screen.html'
+import errorScreenStyle from './public/error_screen.scss'
 
 export default class ErrorScreen extends UICorePlugin {
   get name() { return 'error_screen' }

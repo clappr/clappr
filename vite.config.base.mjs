@@ -1,8 +1,9 @@
-import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import babel from '@rollup/plugin-babel'
+import autoprefixer from 'autoprefixer'
+import postcssUrl from 'postcss-url'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig } from 'vite'
 
@@ -55,57 +56,54 @@ function cssTargetFromBrowserslistrc() {
   return [...new Set(targets)]
 }
 
-function listedEntries(pkgSpec) {
-  if (typeof pkgSpec.entry === 'string') return [pkgSpec.entry]
-  if (!pkgSpec.entry || typeof pkgSpec.entry !== 'object') {
-    throw new Error('defineClapprLib: PackageSpec.entry is required')
-  }
-  return [pkgSpec.entry.es, pkgSpec.entry.umd].filter(Boolean)
-}
-
 function resolveFromCwd(entryPath) {
   return isAbsolute(entryPath) ? entryPath : resolve(process.cwd(), entryPath)
 }
 
-function assertEntriesExist(pkgSpec) {
-  const entries = listedEntries(pkgSpec)
-  if (entries.length === 0) {
+function assertEntryExists(pkgSpec) {
+  if (typeof pkgSpec.entry !== 'string' || !pkgSpec.entry) {
     throw new Error('defineClapprLib: PackageSpec.entry is required')
   }
-  for (const entry of entries) {
-    const abs = resolveFromCwd(entry)
-    if (!existsSync(abs)) {
-      throw new Error(`defineClapprLib: missing entry "${entry}" (resolved: ${abs})`)
-    }
+  const abs = resolveFromCwd(pkgSpec.entry)
+  if (!existsSync(abs)) {
+    throw new Error(`defineClapprLib: missing entry "${pkgSpec.entry}" (resolved: ${abs})`)
   }
 }
 
-function hasSplitEntries(pkgSpec) {
-  return typeof pkgSpec.entry === 'object' && !!(pkgSpec.entry.es && pkgSpec.entry.umd)
-}
-
-function entryFor(pkgSpec, mode) {
-  if (typeof pkgSpec.entry === 'string') return pkgSpec.entry
-  if (mode === 'es') return pkgSpec.entry.es
-  if (mode === 'minify') return pkgSpec.entry.umd
-  return pkgSpec.entry.umd || pkgSpec.entry.es
-}
-
-function formatsFor(pkgSpec, mode) {
-  if (mode === 'minify') return ['umd']
-  if (mode === 'es') return ['es']
-  if (hasSplitEntries(pkgSpec)) return ['umd']
+function formatsFor(pkgSpec, isMinify) {
+  if (isMinify) return ['umd']
   return pkgSpec.formats || ['umd', 'es']
 }
 
 function viteCss(pkgSpec) {
-  if (!pkgSpec.cssLoadPaths || pkgSpec.cssLoadPaths.length === 0) return undefined
-  return {
-    preprocessorOptions: {
+  const css = {
+    postcss: {
+      plugins: [autoprefixer(), postcssUrl({ url: 'rebase' })]
+    }
+  }
+  if (pkgSpec.cssLoadPaths && pkgSpec.cssLoadPaths.length > 0) {
+    css.preprocessorOptions = {
       scss: {
         loadPaths: pkgSpec.cssLoadPaths.map(resolveFromCwd)
       }
     }
+  }
+  return css
+}
+
+function packageVersion() {
+  try {
+    return require(resolve(process.cwd(), 'package.json')).version
+  } catch {
+    return undefined
+  }
+}
+
+function resolvedReplace(pkgSpec) {
+  const version = packageVersion()
+  return {
+    ...(version ? { VERSION: version } : {}),
+    ...(pkgSpec.replace || {})
   }
 }
 
@@ -124,18 +122,16 @@ function libFileName(pkgSpec, isMinify) {
   }
 }
 
-function babelEs5Output({ compact = false } = {}) {
-  const transform = code =>
-    babelCore.transformAsync(code, {
-      babelrc: false,
-      configFile: BABEL_CONFIG,
-      cwd: REPO_ROOT,
-      filename: resolve(REPO_ROOT, 'clappr-lib-chunk.js'),
-      compact,
-      sourceMaps: true,
-      inputSourceMap: false
-    })
+function toInputSourceMap(map) {
+  if (!map) return false
+  if (typeof map === 'string') return JSON.parse(map)
+  if (typeof map.toJSON === 'function') return map.toJSON()
+  return map
+}
 
+// SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk, so ES5
+// must be applied in generateBundle — the last hook that still sees final code.
+function babelEs5Output({ compact = false } = {}) {
   return {
     name: 'clappr-babel-es5-output',
     enforce: 'post',
@@ -144,7 +140,15 @@ function babelEs5Output({ compact = false } = {}) {
         Object.values(bundle)
           .filter(item => item.type === 'chunk')
           .map(async chunk => {
-            const result = await transform(chunk.code)
+            const result = await babelCore.transformAsync(chunk.code, {
+              babelrc: false,
+              configFile: BABEL_CONFIG,
+              cwd: REPO_ROOT,
+              filename: resolveFromCwd(chunk.fileName),
+              compact,
+              sourceMaps: true,
+              inputSourceMap: toInputSourceMap(chunk.map)
+            })
             chunk.code = result.code
             if (result.map) chunk.map = result.map
           })
@@ -153,49 +157,23 @@ function babelEs5Output({ compact = false } = {}) {
   }
 }
 
-function serveContentBase(dirs) {
+export function clapprAssetStrings() {
   return {
-    name: 'clappr-serve-content-base',
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
-        const rel = urlPath === '/' ? 'index.html' : urlPath.replace(/^\//, '')
-        for (const dir of dirs) {
-          const root = resolve(process.cwd(), dir)
-          const file = resolve(root, rel)
-          if (!file.startsWith(root) || !existsSync(file) || !statSync(file).isFile()) continue
-          createReadStream(file).pipe(res)
-          return
-        }
-        next()
-      })
-    }
-  }
-}
-
-function rewriteDemoEntry(entry) {
-  const entryUrl = `/${entry.replace(/^\.\//, '')}`
-  return {
-    name: 'clappr-rewrite-demo-entry',
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
-        if (urlPath !== '/' && urlPath !== '/index.html') {
-          next()
-          return
-        }
-        const index = resolve(process.cwd(), 'public/index.html')
-        if (!existsSync(index)) {
-          next()
-          return
-        }
-        const html = readFileSync(index, 'utf8').replace(
-          /<script[^>]*\ssrc="clappr\.js"[^>]*><\/script>/,
-          `<script type="module">import C from '${entryUrl}'; window.Clappr = C.default || C;</script>`
-        )
-        res.setHeader('Content-Type', 'text/html')
-        res.end(html)
-      })
+    name: 'clappr-asset-strings',
+    enforce: 'pre',
+    resolveId(source, importer, options) {
+      if (options?.isEntry || options?.scan || !importer || source.includes('?')) return null
+      // Relative specifiers only. Absolute paths (Unix `/Users/.../index.html`)
+      // are Vite HTML entries; rewriting those to `?raw` breaks html-proxy.
+      if (!source.startsWith('.')) return null
+      if (!/\.[cm]?jsx?$/.test(importer.split('?')[0])) return null
+      if (/\.(html|svg)$/.test(source)) {
+        return this.resolve(`${source}?raw`, importer, { ...options, skipSelf: true })
+      }
+      if (/\.scss$/.test(source)) {
+        return this.resolve(`${source}?inline`, importer, { ...options, skipSelf: true })
+      }
+      return null
     }
   }
 }
@@ -206,6 +184,7 @@ function umdAmdDefine() {
     generateBundle(_options, bundle) {
       for (const item of Object.values(bundle)) {
         if (item.type !== 'chunk') continue
+        // Vite UMD emits define([]) ; smoke tests require define(factory) for AMD.
         item.code = item.code.replace(
           /define\.amd\s*\?\s*define\(\s*\[\s*\]\s*,/g,
           'define.amd ? define('
@@ -215,22 +194,8 @@ function umdAmdDefine() {
   }
 }
 
-function clapprPlugins(pkgSpec, { compact = false } = {}) {
-  const plugins = []
-  if (pkgSpec.babel !== false) {
-    plugins.push(
-      babel({
-        babelHelpers: 'bundled',
-        exclude: /node_modules/,
-        extensions: ['.js', '.jsx', '.mjs'],
-        configFile: BABEL_CONFIG,
-        cwd: REPO_ROOT
-      })
-    )
-  }
-  // SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk.
-  // Reason: generateBundle is the last hook that can reapply babel.base.json to ES5.
-  plugins.push(babelEs5Output({ compact }))
+function clapprPlugins({ compact = false } = {}) {
+  const plugins = [clapprAssetStrings(), babelEs5Output({ compact })]
   if (process.env.ANALYZE_BUNDLE) {
     plugins.push(
       visualizer({
@@ -244,45 +209,47 @@ function clapprPlugins(pkgSpec, { compact = false } = {}) {
   return plugins
 }
 
+function serveConfig(pkgSpec, alias, define, css, cssTarget) {
+  const server = pkgSpec.server || {}
+  return defineConfig({
+    publicDir: 'public',
+    define,
+    resolve: { alias },
+    css,
+    plugins: [clapprAssetStrings()],
+    server: {
+      host: server.host || 'localhost',
+      port: server.port || 8080,
+      fs: { allow: [REPO_ROOT] }
+    },
+    build: { cssTarget }
+  })
+}
+
 export function defineClapprLib(pkgSpec) {
   const cssTarget = cssTargetFromBrowserslistrc()
 
   return function clapprViteConfig(env = {}) {
-    assertEntriesExist(pkgSpec)
+    assertEntryExists(pkgSpec)
 
     const mode = env.mode || 'production'
     const alias = pkgSpec.alias || {}
+    const define = viteDefine(resolvedReplace(pkgSpec))
+    const css = viteCss(pkgSpec)
 
-    if (mode === 'development') {
-      const server = pkgSpec.server || {}
-      const plugins = []
-      if (pkgSpec.devEntry) plugins.push(rewriteDemoEntry(pkgSpec.devEntry))
-      plugins.push(serveContentBase(server.contentBase || ['public', 'dist']))
-      return defineConfig({
-        appType: 'custom',
-        publicDir: false,
-        define: viteDefine(pkgSpec.replace),
-        resolve: { alias },
-        css: viteCss(pkgSpec),
-        plugins,
-        server: {
-          host: server.host || '0.0.0.0',
-          port: server.port || 8080,
-          fs: { allow: [REPO_ROOT] }
-        },
-        build: { write: false, cssTarget }
-      })
+    if (env.command === 'serve') {
+      return serveConfig(pkgSpec, alias, define, css, cssTarget)
     }
 
     const isMinify = mode === 'minify'
-    const formats = formatsFor(pkgSpec, mode)
+    const formats = formatsFor(pkgSpec, isMinify)
 
     return defineConfig({
       publicDir: false,
-      plugins: clapprPlugins(pkgSpec, { compact: isMinify }),
-      define: viteDefine(pkgSpec.replace),
+      plugins: clapprPlugins({ compact: isMinify }),
+      define,
       resolve: { alias },
-      css: viteCss(pkgSpec),
+      css,
       build: {
         target: false,
         cssTarget,
@@ -292,7 +259,7 @@ export function defineClapprLib(pkgSpec) {
         emptyOutDir: pkgSpec.emptyOutDir === false ? false : mode === 'production',
         copyPublicDir: false,
         lib: {
-          entry: resolveFromCwd(entryFor(pkgSpec, mode)),
+          entry: resolveFromCwd(pkgSpec.entry),
           name: pkgSpec.name,
           formats,
           fileName: libFileName(pkgSpec, isMinify)

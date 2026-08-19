@@ -14,5 +14,6 @@ export default defineClapprLib({
   },
   external: ['@clappr/core', 'hls.js'],
   globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
-  replace: { CLAPPR_CORE_VERSION: clapprCoreVersion }
+  replace: { CLAPPR_CORE_VERSION: clapprCoreVersion },
+  server: { host: '0.0.0.0' }
 })

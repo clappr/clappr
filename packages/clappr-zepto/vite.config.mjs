@@ -7,7 +7,6 @@ export default defineClapprLib({
     umd: 'clappr-zepto.js',
     es: 'clappr-zepto.esm.js'
   },
-  babel: false,
   moduleSideEffects: true,
   exports: 'default'
 })
