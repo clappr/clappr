@@ -28,21 +28,18 @@ Monorepo managed by Lerna with Yarn workspaces. Each package has its own `packag
 
 Shared config locations:
 
-| Config       | Path                  | Notes                                                                                                                                                                                                                                                                                                                                                       |
-| ------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Babel        | `babel.base.json`     | Packages extend via `.babelrc`                                                                                                                                                                                                                                                                                                                              |
-| Jest         | `jest.config.base.js` | Packages extend via spread; override `transform` when not resolving sibling ESM source                                                                                                                                                                                                                                                                      |
-| Browserslist | `.browserslistrc`     | Monorepo ES5 floor (`> 0.5%` / `last 2 versions` / `not ie <= 11`). Must keep at least one target without `class` support (do **not** add `not dead` — see #2540) because published `dist/` is subclassed by ES5 third-party plugins. Same query drives autoprefixer legacy prefixes required by `html5-tvs-playback`. `apps/clappr.io` keeps its own field |
-| ESLint       | `eslint.config.js`    | Flat config; `eslint` + `@eslint/js` declared at the root. Root `yarn lint` runs `lerna run lint` so package configs (`*.js` at package root) are covered                                                                                                                                                                                                   |
-| Knip         | `knip.json`           | Single root config for all workspaces; run only from the repo root (`yarn knip`) so hoisted deps resolve. Specific workspace keys replace the `packages/*` glob (they do not merge) — repeat shared keys when overriding                                                                                                                                    |
+| Config       | Path                     | Notes                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Babel        | `babel.base.json`        | Build preset with `modules: false`; the Vite factory applies it to published `dist/`                                                                                                                                                                                                                                                                                      |
+| Vite         | `vite.config.base.mjs`   | Shared library-mode factory; each package has `vite.config.mjs`                                                                                                                                                                                                                                                                                                           |
+| Vitest       | `vitest.config.base.mjs` | Shared test config (`jsdom`, `globals`, coverage v8); each package has `vitest.config.mjs`                                                                                                                                                                                                                                                                                |
+| Browserslist | `.browserslistrc`        | Monorepo ES5 floor (`> 0.5%` / `last 2 versions` / `not ie <= 11`). Must keep at least one target without `class` support (do **not** add `not dead` — see #2540) because published `dist/` is subclassed by ES5 third-party plugins. Same query drives autoprefixer legacy prefixes required by `clappr-core` and `clappr-plugins`. `apps/clappr.io` keeps its own field |
+| ESLint       | `eslint.config.js`       | Flat config; `eslint` + `@eslint/js` declared at the root. Root `yarn lint` runs `lerna run lint` so package configs (`*.js` at package root) are covered                                                                                                                                                                                                                 |
+| Knip         | `knip.json`              | Single root config for all workspaces; run only from the repo root (`yarn knip`) so hoisted deps resolve. Specific workspace keys replace the `packages/*` glob (they do not merge) — repeat shared keys when overriding                                                                                                                                                  |
 
 Exceptions worth knowing:
 
-- **`clappr-zepto` `.babelrc`** stays standalone — Babel cannot clear the inherited `modules: false`, which would change zepto's Rollup build.
-- **Jest transform:** the base config assumes sibling ESM source resolved via `moduleNameMapper`; `clappr-zepto` and `clappr-telemetry` override to plain `babel-jest`. No package declares a Jest dependency of its own.
-- **Bundle analysis:** `bundle-check` / `ANALYZE_BUNDLE=true` uses `rollup-plugin-visualizer`, except `@clappr/plugins` which uses `rollup-plugin-analyzer`.
-
-Test imports use the full path to the module file (`../base/events/events`), matching `src/` — there is no directory-named resolution in the Jest configs.
+- **Bundle analysis:** every `bundle-check` / `ANALYZE_BUNDLE=true` uses `rollup-plugin-visualizer`.
 
 When adding a shared tool, put it at the root and remove per-package copies. Prefer this over Yarn `resolutions`.
 
@@ -71,11 +68,11 @@ When adding a shared tool, put it at the root and remove per-package copies. Pre
 - `yarn lint` / `yarn lint:fix` — ESLint
 - `yarn knip` — Unused files, exports, and dependencies (root `knip.json`; must run from the repo root)
 - `yarn format` / `yarn format:check` — Prettier
-- `yarn test` — `lerna run test --no-bail` across packages that define a `test` script (unit only)
+- `yarn test` — Vitest via `lerna run test --no-bail` across packages that define a `test` script, then a root `vitest run --dir test` pass
 - `yarn test:smoke` — dist artifact smoke tests (`hlsjs-playback`, `dash-shaka-playback`, `clappr-zepto`); run after `yarn build:dist` (CI does). Locally: `yarn build:dist && yarn test:smoke`
 - Per package: `lerna run test --scope=@clappr/plugins`, `@clappr/hlsjs-playback`, `dash-shaka-playback`, etc.
 - Single file: `lerna run test --scope=@clappr/core -- path/to/test.test.js`
-- From package root: `jest src/path/to/test.test.js`, `--testNamePattern`, `--watch`, `--coverage`
+- From package root: `vitest run src/path/to/test.test.js`, `--testNamePattern`, `--watch`, `--coverage`
 
 ## Documentation (load on demand)
 
