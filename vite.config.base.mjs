@@ -234,12 +234,13 @@ function clapprPlugins(pkgSpec, { compact = false } = {}) {
         extensions: ['.js', '.jsx', '.mjs'],
         configFile: BABEL_CONFIG,
         cwd: REPO_ROOT
-      }),
-      // SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk.
-      // Reason: generateBundle is the last hook that can reapply babel.base.json to ES5.
-      babelEs5Output({ compact })
+      })
     )
   }
+  // SPEC_DEVIATION: Rolldown reprints object shorthand after renderChunk even when
+  // the source is already ES5 (zepto: babel: false, 0 shorthand in src, 7 in dist).
+  // Reason: generateBundle is the last hook that can reapply babel.base.json to ES5.
+  plugins.push(babelEs5Output({ compact }))
   if (process.env.ANALYZE_BUNDLE) {
     plugins.push(
       visualizer({

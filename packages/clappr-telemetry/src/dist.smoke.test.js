@@ -1,9 +1,10 @@
 /**
- * Smoke-tests the published dist/ artifacts. Core Jest maps @clappr/core to
- * source, so without this the Rollup entry points have no CI signal.
+ * Smoke-tests the published dist/ artifacts. Unit tests resolve source
+ * modules, so without this the Vite entry points have no CI signal.
  */
 const fs = require('fs')
 const path = require('path')
+const { expectEs5Syntax } = require('../../../test/dist-contract')
 
 const DIST = path.join(__dirname, '..', 'dist')
 
@@ -54,6 +55,10 @@ describe.each([
 
   test('publishes a sourcemap comment', () => {
     assertSourceMappingURL(filename)
+  })
+
+  test('does not emit native class syntax', () => {
+    expectEs5Syntax(readArtifact(filename), filename)
   })
 })
 
