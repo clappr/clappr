@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
+  "vite": false,
   "compilers": {
     "scss": true,
     "sass": true
@@ -8,34 +9,84 @@
     ".": {
       "entry": ["test/dist-contract.js", "vite.config.base.mjs", "vitest.config.base.mjs"],
       "project": ["test/**/*.{js,scss,sass}"],
-      "jest": { "config": ["jest.config.base.js"] },
+      "vitest": { "config": ["vitest.config.base.mjs"] },
       "babel": { "config": ["babel.base.json"] }
     },
     "packages/*": {
-      "project": ["src/**/*.{js,scss,sass}", "*.js"],
-      "rollup": true,
-      "jest": true,
+      "entry": ["vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
       "babel": true,
       "postcss": true
     },
     "packages/clappr-core": {
-      "entry": ["src/base/scss/**/*.{scss,sass}"],
-      "project": ["src/**/*.{js,scss,sass}", "*.js"],
+      "entry": [
+        "src/main.js",
+        "src/base/scss/**/*.{scss,sass}",
+        "vite.config.mjs",
+        "vitest.config.mjs"
+      ],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "paths": {
         "@/*": ["./src/*"]
       },
-      "rollup": true,
-      "jest": true,
+      "vitest": { "config": ["vitest.config.mjs"] },
       "babel": true,
       "postcss": true
     },
     "packages/clappr-plugins": {
-      "entry": ["src/plugins/*/*.js", "!src/plugins/**/*.test.js"],
-      "project": ["src/**/*.{js,scss,sass}", "*.js"],
-      "rollup": {
-        "config": ["rollup.config.js", "rollup.config.dev.js", "rollup.config.base.js"]
-      },
-      "jest": true,
+      "entry": [
+        "src/main.js",
+        "src/plugins/*/*.js",
+        "src/plugins/*.js",
+        "!src/plugins/**/*.test.js",
+        "vite.config.mjs",
+        "vitest.config.mjs"
+      ],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true,
+      "postcss": true
+    },
+    "packages/clappr-telemetry": {
+      "entry": ["src/main.js", "src/main.umd.js", "vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true,
+      "postcss": true
+    },
+    "packages/clappr-zepto": {
+      "entry": ["src/zepto.js", "vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true,
+      "postcss": true
+    },
+    "packages/hlsjs-playback": {
+      "entry": ["src/hls.js", "vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true,
+      "postcss": true
+    },
+    "packages/dash-shaka-playback": {
+      "entry": ["src/clappr-dash-shaka-playback.js", "vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true,
+      "postcss": true
+    },
+    "packages/html5-tvs-playback": {
+      "entry": ["src/html5_playback.js", "vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true,
+      "postcss": true
+    },
+    "packages/player": {
+      "entry": ["src/main.js", "src/base_bundle.js", "vite.config.mjs", "vitest.config.mjs"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
       "babel": true,
       "postcss": true
     },
