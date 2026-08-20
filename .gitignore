@@ -28,3 +28,7 @@ packages/**/types/
 # PhpStorm
 .idea
 
+# Local, machine-specific agent instructions (not shared with the team)
+.agents/*.local.*
+.claude/*.local.*
+
