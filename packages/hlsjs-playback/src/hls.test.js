@@ -1,4 +1,4 @@
-import { Core, Events, Log, Playback } from '@clappr/core'
+import { Core, Events, Log, Playback, PlayerError } from '@clappr/core'
 import HlsjsPlayback from './hls.js'
 import HLSJS from 'hls.js'
 
@@ -154,9 +154,11 @@ describe('HlsjsPlayback', () => {
   })
 
   test('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', () => {
-    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual(
-      'playbackFragmentParsingMetadata'
-    )
+    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
+  })
+
+  test('registers PLAYBACK_ERROR_WARNING event', () => {
+    expect(Events.Custom.PLAYBACK_ERROR_WARNING).toEqual('playbackErrorWarning')
   })
 
   test('levels supports specifying the level', () => {
@@ -1147,6 +1149,96 @@ describe('HlsjsPlayback', () => {
       })
 
       expect(onError.mock.calls[0][0].description).toContain('response:')
+    })
+
+    test('trigger PLAYBACK_ERROR_WARNING for an error', () => {
+      const playback = createErrorPlayback()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const onWarning = vi.fn()
+      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+
+      // non-fatal
+      playback._onHLSJSError('hlsError', {
+        fatal: false,
+        type: HLSJS.ErrorTypes.NETWORK_ERROR,
+        details: HLSJS.ErrorDetails.FRAG_LOAD_ERROR,
+        response: { code: 500 }
+      })
+
+      expect(onWarning).toHaveBeenCalledTimes(1)
+    })
+
+    test('set level FATAL on PLAYBACK_ERROR_WARNING when data.fatal is true', () => {
+      const playback = createErrorPlayback()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onWarning = vi.fn()
+      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+
+      playback._onHLSJSError('hlsError', {
+        fatal: true,
+        type: HLSJS.ErrorTypes.NETWORK_ERROR,
+        details: HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR,
+        response: { code: 500 }
+      })
+
+      expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.FATAL)
+    })
+
+    test('set level WARN on PLAYBACK_ERROR_WARNING when data.fatal is false', () => {
+      const playback = createErrorPlayback()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const onWarning = vi.fn()
+      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+
+      playback._onHLSJSError('hlsError', {
+        fatal: false,
+        type: HLSJS.ErrorTypes.NETWORK_ERROR,
+        details: HLSJS.ErrorDetails.FRAG_LOAD_TIMEOUT
+      })
+
+      expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.WARN)
+    })
+
+    test('fire PLAYBACK_ERROR_WARNING  for unrecoverable fatal manifest/level errors', () => {
+      const playback = createErrorPlayback()
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
+      const onWarning = vi.fn()
+      const onError = vi.fn()
+      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+      playback.on(Events.PLAYBACK_ERROR, onError)
+
+      playback._onHLSJSError('hlsError', {
+        fatal: true,
+        type: HLSJS.ErrorTypes.NETWORK_ERROR,
+        details: HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT,
+        response: { code: 504 }
+      })
+
+      expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onError).toHaveBeenCalledTimes(1)
+      expect(playback.stop).toHaveBeenCalled()
+    })
+
+    test('fire PLAYBACK_ERROR_WARNING for a recoverable fatal network error without triggering PLAYBACK_ERROR', () => {
+      const playback = createErrorPlayback()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const onWarning = vi.fn()
+      const onError = vi.fn()
+      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+      playback.on(Events.PLAYBACK_ERROR, onError)
+
+      playback._onHLSJSError('hlsError', {
+        fatal: true,
+        type: HLSJS.ErrorTypes.NETWORK_ERROR,
+        details: HLSJS.ErrorDetails.FRAG_LOAD_ERROR,
+        response: { code: 500 }
+      })
+
+      expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onError).not.toHaveBeenCalled()
+      expect(playback._hls.startLoad).toHaveBeenCalled()
     })
   })
 
