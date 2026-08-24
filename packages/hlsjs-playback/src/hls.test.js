@@ -51,6 +51,7 @@ describe('HlsjsPlayback', () => {
 
   afterEach(() => {
     vi.restoreAllMocks()
+    vi.clearAllTimers()
   })
 
   test('have a getter called defaultOptions', () => {
