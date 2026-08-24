@@ -15,6 +15,7 @@ const DEFAULT_RECOVER_ATTEMPTS = 16
 
 Events.register('PLAYBACK_FRAGMENT_CHANGED')
 Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA')
+Events.register('PLAYBACK_ERROR_WARNING')
 
 export default class HlsjsPlayback extends HTML5Video {
   get name() {
@@ -415,6 +416,10 @@ export default class HlsjsPlayback extends HTML5Video {
     }
     let formattedError
     if (data.response) error.description += `, response: ${JSON.stringify(data.response)}`
+    this.trigger(Events.Custom.PLAYBACK_ERROR_WARNING, {
+      ...error,
+      level: data.fatal ? PlayerError.Levels.FATAL : PlayerError.Levels.WARN
+    })
     // only report/handle errors if they are fatal
     // hlsjs should automatically handle non fatal errors
     if (data.fatal) {
