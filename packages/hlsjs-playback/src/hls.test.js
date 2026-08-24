@@ -1167,6 +1167,10 @@ describe('HlsjsPlayback', () => {
       })
 
       expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onWarning.mock.calls[0][0]).toMatchObject({
+        code: `${HLSJS.ErrorTypes.NETWORK_ERROR}_${HLSJS.ErrorDetails.FRAG_LOAD_ERROR}`,
+        raw: { response: { code: 500 } }
+      })
     })
 
     test('set level FATAL on PLAYBACK_ERROR_WARNING when data.fatal is true', () => {
