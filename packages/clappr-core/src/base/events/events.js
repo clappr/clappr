@@ -581,7 +581,15 @@ Events.PLAYBACK_SEEKED = 'playback:seeked'
  */
 Events.PLAYBACK_STOP = 'playback:stop'
 /**
- * Fired if an error occurs in the playback.
+ * Fired if a non-fatal error occurs in the playback.
+ *
+ * @event PLAYBACK_WARNING
+ * @param {Object} error An object containing the error details
+ * @param {String} name Playback name
+ */
+Events.PLAYBACK_WARNING = 'playback:warning'
+/**
+ * Fired if a fatal error occurs in the playback.
  *
  * @event PLAYBACK_ERROR
  * @param {Object} error An object containing the error details
