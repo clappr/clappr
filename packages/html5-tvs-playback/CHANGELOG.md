@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.14](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.13...%40clappr%2Fclappr-html5-tvs-playback%400.4.14) (2026-08-27)
+
+### Bug Fixes
+
+- **html5-tvs:** load demo CDN scripts over HTTPS ([9cb5866](https://github.com/clappr/clappr/commit/9cb5866282680e968a8dc79f85dbdeefcadc79cc))
+- **vite:** serve package demos as HTML entries without query suffixes in src ([ce3534d](https://github.com/clappr/clappr/commit/ce3534dfd004a34a8943ac907b74dce14a896a00))
+
 ## [0.4.13](https://github.com/clappr/clappr/compare/%40clappr%2Fclappr-html5-tvs-playback%400.4.12...%40clappr%2Fclappr-html5-tvs-playback%400.4.13) (2026-08-15)
 
 **Note:** Version bump only for package @clappr/clappr-html5-tvs-playback

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.5](https://github.com/clappr/clappr/compare/%40clappr%2Fzepto%402.1.4...%40clappr%2Fzepto%402.1.5) (2026-08-27)
+
+### Bug Fixes
+
+- **vite:** serve package demos as HTML entries without query suffixes in src ([ce3534d](https://github.com/clappr/clappr/commit/ce3534dfd004a34a8943ac907b74dce14a896a00))
+
 ## [2.1.4](https://github.com/clappr/clappr/compare/%40clappr%2Fzepto%402.1.3...%40clappr%2Fzepto%402.1.4) (2026-08-05)
 
 ### Bug Fixes

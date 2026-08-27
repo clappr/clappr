@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.3...%40clappr%2Ftelemetry%400.3.4) (2026-08-27)
+
+### Bug Fixes
+
+- **telemetry:** serve the Vite playground from player source ([08d420c](https://github.com/clappr/clappr/commit/08d420c10083ba2a5deb4402029cb21d32a96c79))
+- **vite:** serve package demos as HTML entries without query suffixes in src ([ce3534d](https://github.com/clappr/clappr/commit/ce3534dfd004a34a8943ac907b74dce14a896a00))
+
 ## [0.3.3](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.2...%40clappr%2Ftelemetry%400.3.3) (2026-08-15)
 
 **Note:** Version bump only for package @clappr/telemetry

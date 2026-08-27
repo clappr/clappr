@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.0.3...%40clappr%2Fhlsjs-playback%403.1.0) (2026-08-27)
+
+### Bug Fixes
+
+- **vite:** serve package demos as HTML entries without query suffixes in src ([ce3534d](https://github.com/clappr/clappr/commit/ce3534dfd004a34a8943ac907b74dce14a896a00))
+
+### Features
+
+- **hls:** add PLAYBACK_ERROR_WARNING event ([bed7502](https://github.com/clappr/clappr/commit/bed75020c68a597d7498f3f649facce06678d21b))
+
 ## [3.0.3](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.0.2...%40clappr%2Fhlsjs-playback%403.0.3) (2026-08-15)
 
 **Note:** Version bump only for package @clappr/hlsjs-playback

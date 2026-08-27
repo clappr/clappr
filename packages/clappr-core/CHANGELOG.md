@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.17.0](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.16.3...%40clappr%2Fcore%400.17.0) (2026-08-27)
+
+### Bug Fixes
+
+- **vite:** serve package demos as HTML entries without query suffixes in src ([ce3534d](https://github.com/clappr/clappr/commit/ce3534dfd004a34a8943ac907b74dce14a896a00))
+
+### Features
+
+- **events:** create PLAYBACK_WARNING event ([f7f7694](https://github.com/clappr/clappr/commit/f7f769485bd87b3be0529c0b0c4ace014c6f4f15))
+
 ## [0.16.3](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.16.2...%40clappr%2Fcore%400.16.3) (2026-08-15)
 
 **Note:** Version bump only for package @clappr/core
