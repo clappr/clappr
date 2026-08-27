@@ -158,10 +158,6 @@ describe('HlsjsPlayback', () => {
     expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
   })
 
-  test('registers PLAYBACK_ERROR_WARNING event', () => {
-    expect(Events.Custom.PLAYBACK_ERROR_WARNING).toEqual('playbackErrorWarning')
-  })
-
   test('levels supports specifying the level', () => {
     const playback = createPlayback({ src: 'http://clappr.io/foo.m3u8' })
     playback._setup()
@@ -1152,13 +1148,12 @@ describe('HlsjsPlayback', () => {
       expect(onError.mock.calls[0][0].description).toContain('response:')
     })
 
-    test('trigger PLAYBACK_ERROR_WARNING for an error', () => {
+    test('triggers PLAYBACK_WARNING for a non-fatal error', () => {
       const playback = createErrorPlayback()
       vi.spyOn(Log, 'warn').mockImplementation(() => {})
       const onWarning = vi.fn()
-      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+      playback.on(Events.PLAYBACK_WARNING, onWarning)
 
-      // non-fatal
       playback._onHLSJSError('hlsError', {
         fatal: false,
         type: HLSJS.ErrorTypes.NETWORK_ERROR,
@@ -1169,49 +1164,17 @@ describe('HlsjsPlayback', () => {
       expect(onWarning).toHaveBeenCalledTimes(1)
       expect(onWarning.mock.calls[0][0]).toMatchObject({
         code: `${HLSJS.ErrorTypes.NETWORK_ERROR}_${HLSJS.ErrorDetails.FRAG_LOAD_ERROR}`,
+        level: PlayerError.Levels.WARN,
         raw: { response: { code: 500 } }
       })
     })
 
-    test('set level FATAL on PLAYBACK_ERROR_WARNING when data.fatal is true', () => {
-      const playback = createErrorPlayback()
-      vi.spyOn(Log, 'error').mockImplementation(() => {})
-      const onWarning = vi.fn()
-      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
-
-      playback._onHLSJSError('hlsError', {
-        fatal: true,
-        type: HLSJS.ErrorTypes.NETWORK_ERROR,
-        details: HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR,
-        response: { code: 500 }
-      })
-
-      expect(onWarning).toHaveBeenCalledTimes(1)
-      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.FATAL)
-    })
-
-    test('set level WARN on PLAYBACK_ERROR_WARNING when data.fatal is false', () => {
-      const playback = createErrorPlayback()
-      vi.spyOn(Log, 'warn').mockImplementation(() => {})
-      const onWarning = vi.fn()
-      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
-
-      playback._onHLSJSError('hlsError', {
-        fatal: false,
-        type: HLSJS.ErrorTypes.NETWORK_ERROR,
-        details: HLSJS.ErrorDetails.FRAG_LOAD_TIMEOUT
-      })
-
-      expect(onWarning).toHaveBeenCalledTimes(1)
-      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.WARN)
-    })
-
-    test('fire PLAYBACK_ERROR_WARNING  for unrecoverable fatal manifest/level errors', () => {
+    test('does not trigger PLAYBACK_WARNING for a fatal error', () => {
       const playback = createErrorPlayback()
       vi.spyOn(Log, 'error').mockImplementation(() => {})
       const onWarning = vi.fn()
       const onError = vi.fn()
-      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+      playback.on(Events.PLAYBACK_WARNING, onWarning)
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
@@ -1221,29 +1184,48 @@ describe('HlsjsPlayback', () => {
         response: { code: 504 }
       })
 
-      expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onWarning).not.toHaveBeenCalled()
       expect(onError).toHaveBeenCalledTimes(1)
       expect(playback.stop).toHaveBeenCalled()
     })
 
-    test('fire PLAYBACK_ERROR_WARNING for a recoverable fatal network error without triggering PLAYBACK_ERROR', () => {
-      const playback = createErrorPlayback()
-      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+    test('does not trigger PLAYBACK_WARNING when non-fatal key denial escalates to fatal', () => {
+      const playback = createErrorPlayback({
+        playback: { triggerFatalErrorOnResourceDenied: true }
+      })
+      vi.spyOn(Log, 'error').mockImplementation(() => {})
       const onWarning = vi.fn()
       const onError = vi.fn()
-      playback.on(Events.Custom.PLAYBACK_ERROR_WARNING, onWarning)
+      playback.on(Events.PLAYBACK_WARNING, onWarning)
       playback.on(Events.PLAYBACK_ERROR, onError)
 
       playback._onHLSJSError('hlsError', {
-        fatal: true,
+        fatal: false,
         type: HLSJS.ErrorTypes.NETWORK_ERROR,
-        details: HLSJS.ErrorDetails.FRAG_LOAD_ERROR,
-        response: { code: 500 }
+        details: HLSJS.ErrorDetails.KEY_LOAD_ERROR,
+        response: { code: 403 }
+      })
+
+      // fatal escalation returns early — must not also fire PLAYBACK_WARNING
+      expect(onWarning).not.toHaveBeenCalled()
+      expect(onError).toHaveBeenCalledTimes(1)
+    })
+
+    test('triggers PLAYBACK_WARNING for a non-fatal key denial that does not escalate', () => {
+      const playback = createErrorPlayback()
+      vi.spyOn(Log, 'warn').mockImplementation(() => {})
+      const onWarning = vi.fn()
+      playback.on(Events.PLAYBACK_WARNING, onWarning)
+
+      playback._onHLSJSError('hlsError', {
+        fatal: false,
+        type: HLSJS.ErrorTypes.NETWORK_ERROR,
+        details: HLSJS.ErrorDetails.KEY_LOAD_ERROR,
+        response: { code: 403 }
       })
 
       expect(onWarning).toHaveBeenCalledTimes(1)
-      expect(onError).not.toHaveBeenCalled()
-      expect(playback._hls.startLoad).toHaveBeenCalled()
+      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.WARN)
     })
   })
 
