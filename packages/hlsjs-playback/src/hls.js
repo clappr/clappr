@@ -479,7 +479,7 @@ export default class HlsjsPlayback extends HTML5Video {
 
       error.level = PlayerError.Levels.WARN
       Log.warn('hlsjs: non-fatal error occurred', { evt, data })
-      this.trigger(Events.PLAYBACK_WARNING, error)
+      this.trigger(Events.PLAYBACK_WARNING, error, this.name)
     }
   }
 

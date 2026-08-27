@@ -1206,7 +1206,6 @@ describe('HlsjsPlayback', () => {
         response: { code: 403 }
       })
 
-      // fatal escalation returns early — must not also fire PLAYBACK_WARNING
       expect(onWarning).not.toHaveBeenCalled()
       expect(onError).toHaveBeenCalledTimes(1)
     })
