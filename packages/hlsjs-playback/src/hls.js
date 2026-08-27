@@ -15,7 +15,6 @@ const DEFAULT_RECOVER_ATTEMPTS = 16
 
 Events.register('PLAYBACK_FRAGMENT_CHANGED')
 Events.register('PLAYBACK_FRAGMENT_PARSING_METADATA')
-Events.register('PLAYBACK_WARNING')
 
 export default class HlsjsPlayback extends HTML5Video {
   get name() {
