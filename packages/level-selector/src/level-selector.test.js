@@ -82,6 +82,22 @@ function selectableIds(plugin) {
     .map(node => node.getAttribute('data-level-selector-select'))
 }
 
+function selectorFor(plugin, id) {
+  return plugin.el.querySelector(`[data-level-selector-select="${id}"]`)
+}
+
+function rowFor(plugin, id) {
+  return selectorFor(plugin, id).parentElement
+}
+
+function buttonOf(plugin) {
+  return plugin.el.querySelector('[data-level-selector-button]')
+}
+
+function menuOf(plugin) {
+  return plugin.el.querySelector('ul')
+}
+
 describe('LevelSelector', () => {
   afterEach(() => {
     vi.restoreAllMocks()
@@ -204,5 +220,137 @@ describe('LevelSelector', () => {
 
     expect(isMounted(core, plugin)).toBe(true)
     expect(selectableIds(plugin)).toEqual(['-1', '0', '1'])
+  })
+
+  it('selects Auto when the Auto row is activated', () => {
+    const { playback, plugin } = mountLevelSelector({ currentLevel: 1 })
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    selectorFor(plugin, AUTO).click()
+
+    expect(playback.currentLevel).toBe(AUTO)
+  })
+
+  it('selects a quality level when its row is activated', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    selectorFor(plugin, 1).click()
+
+    expect(playback.currentLevel).toBe(1)
+  })
+
+  it('does not assign the current level again when the same quality is activated', () => {
+    const { playback, plugin } = mountLevelSelector({ currentLevel: 1 })
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    selectorFor(plugin, 1).click()
+
+    expect(playback.currentLevelAssignments).toEqual([])
+  })
+
+  it('labels the button AUTO while no current level is known', () => {
+    const { playback, plugin } = mountLevelSelector()
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    expect(buttonOf(plugin).textContent).toBe('AUTO')
+  })
+
+  it('labels the button with the current level while Auto is selected', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    playback.trigger(Events.PLAYBACK_BITRATE, { level: 1 })
+
+    expect(buttonOf(plugin).textContent).toBe('AUTO (720p)')
+  })
+
+  it('labels the button with the selected quality level', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    selectorFor(plugin, 1).click()
+    playback.trigger(Events.PLAYBACK_BITRATE, { level: 0 })
+
+    expect(buttonOf(plugin).textContent).toBe('720p')
+  })
+
+  it('marks the button as changing while the level switch runs', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    playback.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
+
+    expect(buttonOf(plugin).classList.contains('changing')).toBe(true)
+  })
+
+  it('clears the changing mark when the level switch ends', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    playback.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
+    playback.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
+
+    expect(buttonOf(plugin).classList.contains('changing')).toBe(false)
+  })
+
+  it('marks the reported bitrate level as the current row', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    playback.trigger(Events.PLAYBACK_BITRATE, { level: 1 })
+
+    expect(rowFor(plugin, 1).classList.contains('current')).toBe(true)
+    expect(rowFor(plugin, 0).classList.contains('current')).toBe(false)
+  })
+
+  it('clears a stale current row when the reported bitrate level is unknown', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+    playback.trigger(Events.PLAYBACK_BITRATE, { level: 1 })
+
+    expect(() => playback.trigger(Events.PLAYBACK_BITRATE, { level: 99 })).not.toThrow()
+
+    expect(rowFor(plugin, 1).classList.contains('current')).toBe(false)
+    expect(rowFor(plugin, 0).classList.contains('current')).toBe(false)
+  })
+
+  it('toggles the menu when the button is activated', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    expect(menuOf(plugin).style.display).toBe('none')
+
+    buttonOf(plugin).click()
+    expect(menuOf(plugin).style.display).not.toBe('none')
+
+    buttonOf(plugin).click()
+    expect(menuOf(plugin).style.display).toBe('none')
+  })
+
+  it('hides the menu when the media control hides', () => {
+    const { core, playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+    buttonOf(plugin).click()
+    expect(menuOf(plugin).style.display).not.toBe('none')
+
+    core.mediaControl.trigger(Events.MEDIACONTROL_HIDE)
+
+    expect(menuOf(plugin).style.display).toBe('none')
+  })
+
+  it('binds level events on the new playback only when the active container changes', () => {
+    const { core, playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    const nextPlayback = new PlaybackStub({ currentLevel: AUTO })
+    core.activeContainer = { playback: nextPlayback }
+
+    nextPlayback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, [{ id: 7, label: '4K' }, { id: 8, label: '8K' }])
+    expect(selectableIds(plugin)).toEqual(['-1', '7', '8'])
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, [{ id: 3, label: '240p' }, { id: 4, label: '480p' }])
+    expect(selectableIds(plugin)).toEqual(['-1', '7', '8'])
   })
 })
