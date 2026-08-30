@@ -2,7 +2,6 @@
 
 A [Clappr](https://github.com/clappr/clappr) plugin that adds a quality picker for adaptive streams on the official MediaControl.
 
-[![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@clappr/level-selector.svg?color=cb3837)](https://www.npmjs.com/package/@clappr/level-selector)
 [![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
 [![minified size](https://img.shields.io/bundlephobia/min/@clappr/level-selector)](https://bundlephobia.com/package/@clappr/level-selector)
