@@ -61,8 +61,34 @@ export default class LevelSelector extends UICorePlugin {
   fillLevels(levels, initialLevel = AUTO) {
     if (this.selectedLevelId === undefined) this.selectedLevelId = initialLevel
 
-    this.levels = levels
+    this.levels = this.applyLevelsCallback(levels)
+    this.configureLevelsLabels()
     this.render()
+  }
+
+  applyLevelsCallback(levels) {
+    const onLevelsAvailable = this.levelSelectorConfig.onLevelsAvailable
+    if (!onLevelsAvailable) return levels
+
+    if (typeof onLevelsAvailable !== 'function') throw new TypeError('onLevelsAvailable must be a function')
+
+    const customLevels = onLevelsAvailable(levels.slice())
+    if (!Array.isArray(customLevels)) throw new TypeError('onLevelsAvailable must return an array')
+
+    return customLevels
+  }
+
+  configureLevelsLabels() {
+    const { labelCallback, labels } = this.levelSelectorConfig
+    if (labelCallback && typeof labelCallback !== 'function') throw new TypeError('labelCallback must be a function')
+    if (!labelCallback && !labels) return
+
+    const customLabels = labels || {}
+    this.levels.forEach(level => {
+      const customLabel = customLabels[level.id]
+      if (labelCallback) level.label = labelCallback(level, customLabel)
+      else if (customLabel) level.label = customLabel
+    })
   }
 
   findLevelBy(id) {

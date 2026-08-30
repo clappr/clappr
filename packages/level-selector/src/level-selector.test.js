@@ -82,6 +82,12 @@ function selectableIds(plugin) {
     .map(node => node.getAttribute('data-level-selector-select'))
 }
 
+function qualityLabels(plugin) {
+  return Array.from(plugin.el.querySelectorAll('ul [data-level-selector-select]'))
+    .filter(node => node.getAttribute('data-level-selector-select') !== String(AUTO))
+    .map(node => node.textContent)
+}
+
 function selectorFor(plugin, id) {
   return plugin.el.querySelector(`[data-level-selector-select="${id}"]`)
 }
@@ -352,5 +358,104 @@ describe('LevelSelector', () => {
 
     playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, [{ id: 3, label: '240p' }, { id: 4, label: '480p' }])
     expect(selectableIds(plugin)).toEqual(['-1', '7', '8'])
+  })
+
+  it('labels the menu rows from the configured labels map', () => {
+    const { playback, plugin } = mountLevelSelector({
+      levelSelectorConfig: { labels: { 0: 'Low', 1: 'High' } }
+    })
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    expect(qualityLabels(plugin)).toEqual(['Low', 'High'])
+  })
+
+  it('labels the menu rows with the configured label callback', () => {
+    const { playback, plugin } = mountLevelSelector({
+      levelSelectorConfig: {
+        labels: { 0: 'Low' },
+        labelCallback: (level, customLabel) => `${customLabel || level.label} (${level.id})`
+      }
+    })
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    expect(qualityLabels(plugin)).toEqual(['Low (0)', '720p (1)'])
+  })
+
+  it('rejects a label callback that is not a function', () => {
+    const { plugin } = mountLevelSelector({ levelSelectorConfig: { labelCallback: 'nope' } })
+
+    const fillLevels = () => plugin.fillLevels(fakeLevels(2))
+
+    expect(fillLevels).toThrow(TypeError)
+    expect(fillLevels).toThrow('labelCallback must be a function')
+  })
+
+  it('rejects an onLevelsAvailable hook that is not a function', () => {
+    const { plugin } = mountLevelSelector({ levelSelectorConfig: { onLevelsAvailable: 'nope' } })
+
+    const fillLevels = () => plugin.fillLevels(fakeLevels(2))
+
+    expect(fillLevels).toThrow(TypeError)
+    expect(fillLevels).toThrow('onLevelsAvailable must be a function')
+  })
+
+  it('hands onLevelsAvailable a copy of the playback levels', () => {
+    let received
+    const { playback } = mountLevelSelector({
+      levelSelectorConfig: {
+        onLevelsAvailable: levels => {
+          received = levels
+          return levels
+        }
+      }
+    })
+    const delivered = fakeLevels(2)
+    playback.levels = delivered
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, delivered)
+
+    expect(received).not.toBe(playback.levels)
+    expect(received).toEqual(delivered)
+  })
+
+  it('renders the array returned by onLevelsAvailable', () => {
+    const { playback, plugin } = mountLevelSelector({
+      levelSelectorConfig: { onLevelsAvailable: levels => levels.slice().reverse() }
+    })
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(3))
+
+    expect(selectableIds(plugin)).toEqual(['-1', '2', '1', '0'])
+  })
+
+  it('rejects an onLevelsAvailable hook that does not return an array', () => {
+    const { plugin } = mountLevelSelector({
+      levelSelectorConfig: { onLevelsAvailable: () => 'nope' }
+    })
+
+    const fillLevels = () => plugin.fillLevels(fakeLevels(2))
+
+    expect(fillLevels).toThrow(TypeError)
+    expect(fillLevels).toThrow('onLevelsAvailable must return an array')
+  })
+
+  it('renders playback labels when no levelSelectorConfig is given', () => {
+    const { core, playback, plugin } = mountLevelSelector()
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    expect(isMounted(core, plugin)).toBe(true)
+    expect(qualityLabels(plugin)).toEqual(['360p', '720p'])
+  })
+
+  it('renders the playback levels when onLevelsAvailable is omitted', () => {
+    const { playback, plugin } = mountLevelSelector({ levelSelectorConfig: { title: 'Quality' } })
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    expect(selectableIds(plugin)).toEqual(['-1', '0', '1'])
+    expect(qualityLabels(plugin)).toEqual(['360p', '720p'])
   })
 })
