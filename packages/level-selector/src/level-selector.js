@@ -29,8 +29,6 @@ export default class LevelSelector extends UICorePlugin {
 
   get playback() { return this.core.activePlayback }
 
-  // Read at use time: UICorePlugin runs bindEvents/render inside super(core),
-  // before any subclass constructor body could cache this.
   get levelSelectorConfig() { return this.core.options.levelSelectorConfig || {} }
 
   bindEvents() {
@@ -61,21 +59,16 @@ export default class LevelSelector extends UICorePlugin {
   fillLevels(levels, initialLevel = AUTO) {
     if (this.selectedLevelId === undefined) this.selectedLevelId = initialLevel
 
-    this.levels = this.applyLevelsCallback(levels)
+    const onLevelsAvailable = this.levelSelectorConfig.onLevelsAvailable
+    if (onLevelsAvailable) {
+      if (typeof onLevelsAvailable !== 'function') throw new TypeError('onLevelsAvailable must be a function')
+      levels = onLevelsAvailable(levels.slice())
+      if (!Array.isArray(levels)) throw new TypeError('onLevelsAvailable must return an array')
+    }
+
+    this.levels = levels
     this.configureLevelsLabels()
     this.render()
-  }
-
-  applyLevelsCallback(levels) {
-    const onLevelsAvailable = this.levelSelectorConfig.onLevelsAvailable
-    if (!onLevelsAvailable) return levels
-
-    if (typeof onLevelsAvailable !== 'function') throw new TypeError('onLevelsAvailable must be a function')
-
-    const customLevels = onLevelsAvailable(levels.slice())
-    if (!Array.isArray(customLevels)) throw new TypeError('onLevelsAvailable must return an array')
-
-    return customLevels
   }
 
   configureLevelsLabels() {
@@ -108,7 +101,7 @@ export default class LevelSelector extends UICorePlugin {
 
   rightPanel() {
     const mediaControl = this.core.mediaControl
-    if (!mediaControl || typeof mediaControl.$ !== 'function') return { length: 0 }
+    if (typeof mediaControl.$ !== 'function') return { length: 0 }
 
     return mediaControl.$('.media-control-right-panel')
   }
@@ -139,8 +132,6 @@ export default class LevelSelector extends UICorePlugin {
 
   menuElement() { return this.$el.find('ul')[0] }
 
-  // The menu is driven by an explicit inline display so that opening it always
-  // overrides the stylesheet default, whatever the host page cascade looks like.
   toggleContextMenu() {
     const menu = this.menuElement()
     if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none'

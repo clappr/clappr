@@ -37,17 +37,12 @@ class PlaybackStub extends BaseObject {
 
 function setupCore(options = {}) {
   const core = new Core({ levelSelectorConfig: options.levelSelectorConfig })
+  const mediaControl = options.mediaControl || MEDIA_CONTROL_WITH_PANEL
 
-  switch (options.mediaControl || MEDIA_CONTROL_WITH_PANEL) {
-    case MEDIA_CONTROL_WITH_PANEL:
-      core._mediaControl = new MediaControlStub(core)
-      break
-    case MEDIA_CONTROL_WITHOUT_QUERY:
-      core._mediaControl = new BaseObject({})
-      break
-    default:
-      // Falls back to the core dummy media control, which has no right panel.
-      break
+  if (mediaControl === MEDIA_CONTROL_WITH_PANEL) {
+    core._mediaControl = new MediaControlStub(core)
+  } else if (mediaControl === MEDIA_CONTROL_WITHOUT_QUERY) {
+    core._mediaControl = new BaseObject({})
   }
 
   const playback = new PlaybackStub(options)
