@@ -84,7 +84,7 @@ You can check the plugins used on Clappr player via `@clappr/plugins` [here](htt
 |Video Queue (Playlist) | Ready | Yes | https://github.com/joaopaulovieira/clappr-queue-plugin |
 |Thumbnails on seekbar| Ready | Yes | https://github.com/tjenkinson/clappr-thumbnails-plugin |
 |Markers       | Ready | Yes | https://github.com/tjenkinson/clappr-markers-plugin |
-|Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-plugin |
+|Level Selector (`@clappr/level-selector`)| Ready | Yes | https://www.npmjs.com/package/@clappr/level-selector |
 |360 videos| Ready | Yes | https://github.com/thiagopnts/video-360 |
 |Chromecast| Ready | Yes | https://github.com/clappr/clappr-chromecast-plugin |
 |DASH with shaka| Ready | Yes | https://github.com/clappr/dash-shaka-playback |
