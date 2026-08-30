@@ -1,0 +1,10 @@
+<button type="button" data-level-selector-button>AUTO</button>
+<ul>
+  <% if (title) { %>
+  <li data-title><%= title %></li>
+  <% } %>
+  <li><a href="#" data-level-selector-select="-1">AUTO</a></li>
+  <% for (var i = 0; i < levels.length; i++) { %>
+    <li><a href="#" data-level-selector-select="<%= levels[i].id %>"><%= levels[i].label %></a></li>
+  <% } %>
+</ul>
