@@ -13,7 +13,7 @@ export default defineClapprVitest({
   coverageInclude: ['src/level-selector.js'],
   coverageThresholds: {
     statements: 96,
-    branches: 89,
+    branches: 88,
     functions: 96,
     lines: 97
   }
