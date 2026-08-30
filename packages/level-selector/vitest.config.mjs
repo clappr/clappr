@@ -10,5 +10,11 @@ export default defineClapprVitest({
     VERSION: clapprCoreVersion,
     CLAPPR_CORE_VERSION: clapprCoreVersion
   }),
-  coverageInclude: ['src/level-selector.js']
+  coverageInclude: ['src/level-selector.js'],
+  coverageThresholds: {
+    statements: 96,
+    branches: 89,
+    functions: 96,
+    lines: 97
+  }
 })
