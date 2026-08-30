@@ -385,6 +385,15 @@ describe('LevelSelector', () => {
     expect(selectableIds(plugin)).toEqual(['-1', '7', '8'])
   })
 
+  it('unmounts the control when the new playback has no levels', () => {
+    const { core, playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    core.activeContainer = { playback: new PlaybackStub({ currentLevel: AUTO, levels: [] }) }
+
+    expect(isMounted(core, plugin)).toBe(false)
+  })
+
   it('labels the menu rows from the configured labels map', () => {
     const { playback, plugin } = mountLevelSelector({
       levelSelectorConfig: { labels: { 0: 'Low', 1: 'High' } }
