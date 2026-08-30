@@ -75,6 +75,12 @@
       "vitest": { "config": ["vitest.config.mjs"] },
       "babel": true
     },
+    "packages/level-selector": {
+      "entry": ["src/level-selector.js"],
+      "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
+      "vitest": { "config": ["vitest.config.mjs"] },
+      "babel": true
+    },
     "packages/player": {
       "entry": [
         "src/main.js",
