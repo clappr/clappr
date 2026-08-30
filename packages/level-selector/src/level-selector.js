@@ -1,6 +1,6 @@
-import { Events, UICorePlugin, template } from '@clappr/core'
+import { Events, Styler, UICorePlugin, template } from '@clappr/core'
 import pluginHtml from './public/level-selector.html'
-import './public/level-selector.scss'
+import pluginStyle from './public/level-selector.scss'
 
 export default class LevelSelector extends UICorePlugin {
   static get version() { return VERSION }
@@ -38,12 +38,56 @@ export default class LevelSelector extends UICorePlugin {
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hideSelectLevelMenu)
   }
 
-  bindPlaybackEvents() {}
+  bindPlaybackEvents() {
+    if (!this.playback) return
+
+    this.listenTo(this.playback, Events.PLAYBACK_LEVELS_AVAILABLE, this.fillLevels)
+
+    const levelsAlreadyAvailable = this.playback.levels && this.playback.levels.length > 0
+    if (levelsAlreadyAvailable) this.fillLevels(this.playback.levels)
+  }
 
   reload() {
     this.stopListening()
     this.bindEvents()
     this.bindPlaybackEvents()
+  }
+
+  fillLevels(levels) {
+    this.levels = levels
+    this.render()
+  }
+
+  getTitle() { return this.levelSelectorConfig.title }
+
+  shouldRender() {
+    if (!this.playback) return false
+
+    const respondsToCurrentLevel = this.playback.currentLevel !== undefined
+    const hasLevels = !!(this.levels && this.levels.length > 1)
+
+    return respondsToCurrentLevel && hasLevels
+  }
+
+  rightPanel() {
+    const mediaControl = this.core.mediaControl
+    if (!mediaControl || typeof mediaControl.$ !== 'function') return { length: 0 }
+
+    return mediaControl.$('.media-control-right-panel')
+  }
+
+  render() {
+    if (!this.shouldRender()) return this
+
+    const panel = this.rightPanel()
+    if (panel.length === 0) return this
+
+    const style = Styler.getStyleFor(pluginStyle, { baseUrl: this.core.options.baseUrl })
+    this.$el.html(this.template({ levels: this.levels, title: this.getTitle() }))
+    this.$el.append(style[0])
+    panel.append(this.el)
+
+    return this
   }
 
   onLevelSelect() {}
