@@ -14,6 +14,7 @@ Packages published to npm (via the Release workflow / Trusted Publishers):
 | `packages/clappr-telemetry/`    | `@clappr/telemetry`                 |
 | `packages/player/`              | `@clappr/player`                    |
 | `packages/hlsjs-playback/`      | `@clappr/hlsjs-playback`            |
+| `packages/level-selector/`      | `@clappr/level-selector`            |
 | `packages/dash-shaka-playback/` | `dash-shaka-playback`               |
 | `packages/html5-tvs-playback/`  | `@clappr/clappr-html5-tvs-playback` |
 
@@ -45,6 +46,7 @@ enforced by each package's `test:smoke` (see [#2542](https://github.com/clappr/c
 | `@clappr/telemetry`                 | `clappr-telemetry.js`, `.min.js`, `.esm.js`                                                 |
 | `@clappr/player`                    | `clappr.js`, `.min.js`, `clappr.plainhtml5.min.js` — not `clappr.plainhtml5.js` (demo-only) |
 | `@clappr/hlsjs-playback`            | `.js`, `.min.js`, `.esm.js`                                                                 |
+| `@clappr/level-selector`            | `.js`, `.min.js`, `.esm.js`                                                                 |
 | `dash-shaka-playback`               | `.js`, `.min.js`, `.esm.mjs`                                                                |
 | `@clappr/clappr-html5-tvs-playback` | `.js`, `.min.js`, `.esm.js`                                                                 |
 
