@@ -2,6 +2,8 @@ import { Events, Styler, UICorePlugin, template } from '@clappr/core'
 import pluginHtml from './public/level-selector.html'
 import pluginStyle from './public/level-selector.scss'
 
+const AUTO = -1
+
 export default class LevelSelector extends UICorePlugin {
   static get version() { return VERSION }
 
@@ -42,6 +44,9 @@ export default class LevelSelector extends UICorePlugin {
     if (!this.playback) return
 
     this.listenTo(this.playback, Events.PLAYBACK_LEVELS_AVAILABLE, this.fillLevels)
+    this.listenTo(this.playback, Events.PLAYBACK_LEVEL_SWITCH_START, this.startLevelSwitch)
+    this.listenTo(this.playback, Events.PLAYBACK_LEVEL_SWITCH_END, this.stopLevelSwitch)
+    this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateCurrentLevel)
 
     const levelsAlreadyAvailable = this.playback.levels && this.playback.levels.length > 0
     if (levelsAlreadyAvailable) this.fillLevels(this.playback.levels)
@@ -53,9 +58,15 @@ export default class LevelSelector extends UICorePlugin {
     this.bindPlaybackEvents()
   }
 
-  fillLevels(levels) {
+  fillLevels(levels, initialLevel = AUTO) {
+    if (this.selectedLevelId === undefined) this.selectedLevelId = initialLevel
+
     this.levels = levels
     this.render()
+  }
+
+  findLevelBy(id) {
+    return this.levels.find(level => level.id === id)
   }
 
   getTitle() { return this.levelSelectorConfig.title }
@@ -86,13 +97,70 @@ export default class LevelSelector extends UICorePlugin {
     this.$el.html(this.template({ levels: this.levels, title: this.getTitle() }))
     this.$el.append(style[0])
     panel.append(this.el)
+    this.hideSelectLevelMenu()
+    this.highlightCurrentLevel()
 
     return this
   }
 
-  onLevelSelect() {}
+  buttonElement() { return this.$el.find('button[data-level-selector-button]') }
 
-  onShowLevelSelectMenu() {}
+  levelElement(id) {
+    const selector = isNaN(id) ? '' : `[data-level-selector-select="${id}"]`
 
-  hideSelectLevelMenu() {}
+    return this.$el.find(`ul a${selector}`).parent()
+  }
+
+  menuElement() { return this.$el.find('ul')[0] }
+
+  // The menu is driven by an explicit inline display so that opening it always
+  // overrides the stylesheet default, whatever the host page cascade looks like.
+  toggleContextMenu() {
+    const menu = this.menuElement()
+    if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none'
+  }
+
+  onLevelSelect(event) {
+    this.selectedLevelId = parseInt(event.target.dataset.levelSelectorSelect, 10)
+    if (this.playback.currentLevel === this.selectedLevelId) return false
+
+    this.playback.currentLevel = this.selectedLevelId
+    this.toggleContextMenu()
+    event.stopPropagation()
+
+    return false
+  }
+
+  onShowLevelSelectMenu() { this.toggleContextMenu() }
+
+  hideSelectLevelMenu() {
+    const menu = this.menuElement()
+    if (menu) menu.style.display = 'none'
+  }
+
+  startLevelSwitch() { this.buttonElement().addClass('changing') }
+
+  stopLevelSwitch() { this.buttonElement().removeClass('changing') }
+
+  updateText(selectedLevelId) {
+    if (selectedLevelId === AUTO) {
+      this.buttonElement().text(this.currentLevel ? `AUTO (${this.currentLevel.label})` : 'AUTO')
+      return
+    }
+
+    const selectedLevel = this.findLevelBy(selectedLevelId)
+    if (selectedLevel) this.buttonElement().text(selectedLevel.label)
+  }
+
+  updateCurrentLevel(info) {
+    this.currentLevel = this.findLevelBy(info.level) || null
+    this.highlightCurrentLevel()
+  }
+
+  highlightCurrentLevel() {
+    this.levelElement().removeClass('current')
+    if (this.currentLevel) this.levelElement(this.currentLevel.id).addClass('current')
+
+    this.updateText(this.selectedLevelId)
+  }
 }
