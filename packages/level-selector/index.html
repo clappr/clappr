@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>@clappr/level-selector demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+    }
+
+    #player {
+      max-width: 640px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Level Selector demo</h1>
+  <div id="player"></div>
+  <script type="module">
+    import LevelSelector from '/src/level-selector.js'
+    const Plugin = LevelSelector.default || LevelSelector
+
+    var player = new Clappr.Player({
+      source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+      plugins: [Plugin],
+      parentId: '#player'
+    })
+  </script>
+</body>
+
+</html>
