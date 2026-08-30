@@ -52,6 +52,9 @@ export default class LevelSelector extends UICorePlugin {
 
   reload() {
     this.stopListening()
+    this.levels = []
+    this.currentLevel = null
+    this.render()
     this.bindEvents()
     this.bindPlaybackEvents()
   }
