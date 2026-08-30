@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.5](https://github.com/clappr/clappr/compare/%40clappr%2Fplayer%400.14.4...%40clappr%2Fplayer%400.14.5) (2026-08-30)
+
+**Note:** Version bump only for package @clappr/player
+
 ## [0.14.4](https://github.com/clappr/clappr/compare/%40clappr%2Fplayer%400.14.3...%40clappr%2Fplayer%400.14.4) (2026-08-27)
 
 ### Bug Fixes
