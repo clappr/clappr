@@ -13,7 +13,7 @@ You can use it from JSDelivr:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@clappr/level-selector@1/dist/level-selector.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@clappr/level-selector@latest/dist/level-selector.min.js"></script>
 ```
 
 or as an npm package:
