@@ -76,7 +76,7 @@
       "babel": true
     },
     "packages/level-selector": {
-      "entry": ["src/level-selector.js"],
+      "entry": ["src/level-selector.js", "vite.config.mjs"],
       "project": ["src/**/*.{js,scss,sass}", "*.{js,mjs}"],
       "vitest": { "config": ["vitest.config.mjs"] },
       "babel": true
