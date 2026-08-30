@@ -68,6 +68,7 @@ export default class LevelSelector extends UICorePlugin {
 
     this.levels = levels
     this.configureLevelsLabels()
+    if (this.currentLevel) this.currentLevel = this.findLevelBy(this.currentLevel.id) || null
     this.render()
   }
 
@@ -107,7 +108,10 @@ export default class LevelSelector extends UICorePlugin {
   }
 
   render() {
-    if (!this.shouldRender()) return this
+    if (!this.shouldRender()) {
+      this.$el.remove()
+      return this
+    }
 
     const panel = this.rightPanel()
     if (panel.length === 0) return this

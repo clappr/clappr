@@ -158,6 +158,24 @@ describe('LevelSelector', () => {
     expect(isMounted(core, plugin)).toBe(false)
   })
 
+  it('removes the control when playback later reports a single level', () => {
+    const { core, playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(1))
+
+    expect(isMounted(core, plugin)).toBe(false)
+  })
+
+  it('removes the control when playback later reports no levels', () => {
+    const { core, playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, [])
+
+    expect(isMounted(core, plugin)).toBe(false)
+  })
+
   it('does not throw or append when the media control has no right panel', () => {
     const withoutPanel = mountLevelSelector({ mediaControl: MEDIA_CONTROL_WITHOUT_PANEL })
     const withoutQuery = mountLevelSelector({ mediaControl: MEDIA_CONTROL_WITHOUT_QUERY })
@@ -315,6 +333,18 @@ describe('LevelSelector', () => {
 
     expect(rowFor(plugin, 1).classList.contains('current')).toBe(false)
     expect(rowFor(plugin, 0).classList.contains('current')).toBe(false)
+  })
+
+  it('clears a stale current level when a replacement list drops that id', () => {
+    const { playback, plugin } = mountLevelSelector()
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, fakeLevels(2))
+    playback.trigger(Events.PLAYBACK_BITRATE, { level: 1 })
+
+    playback.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, [{ id: 7, label: '4K' }, { id: 8, label: '8K' }])
+
+    expect(buttonOf(plugin).textContent).toBe('AUTO')
+    expect(rowFor(plugin, 7).classList.contains('current')).toBe(false)
+    expect(rowFor(plugin, 8).classList.contains('current')).toBe(false)
   })
 
   it('toggles the menu when the button is activated', () => {
