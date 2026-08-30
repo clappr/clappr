@@ -1,0 +1,44 @@
+{
+  "name": "@clappr/level-selector",
+  "version": "1.0.0",
+  "description": "Quality level selector plugin for Clappr",
+  "main": "./dist/level-selector.js",
+  "module": "./dist/level-selector.esm.js",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "bundle-check": "ANALYZE_BUNDLE=true vite build",
+    "release": "rm -rf dist && vite build && vite build --mode minify",
+    "test": "vitest run --coverage",
+    "test:smoke": "vitest run src/dist.smoke.test.js",
+    "test:watch": "vitest",
+    "lint": "eslint --no-error-on-unmatched-pattern *.js ./src",
+    "lint:fix": "yarn lint -- --fix",
+    "prepublishOnly": "lerna run release --scope=@clappr/level-selector"
+  },
+  "files": [
+    "/dist",
+    "/src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clappr/clappr.git",
+    "directory": "packages/level-selector"
+  },
+  "author": "Globo.com",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/clappr/clappr/issues"
+  },
+  "homepage": "https://github.com/clappr/clappr/tree/main/packages/level-selector",
+  "peerDependencies": {
+    "@clappr/core": "*"
+  },
+  "devDependencies": {
+    "@clappr/core": "^0.16.3"
+  }
+}
