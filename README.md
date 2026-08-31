@@ -4,6 +4,7 @@ An extensible, plugin-oriented, HTML5-first media player for the web.
 It provides a modular architecture to build powerful playback experiences with ease.
 
 [![CI](https://github.com/clappr/clappr/actions/workflows/ci.yml/badge.svg)](https://github.com/clappr/clappr/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=clappr_clappr&metric=alert_status)](https://sonarcloud.io/summary/overall?id=clappr_clappr)
 [![Player Version](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/clappr/clappr/main/packages/player/package.json&query=$.version&label=Player%20Version&color=blue)](https://raw.githubusercontent.com/clappr/clappr/main/packages/player/package.json)
 [![License](https://img.shields.io/github/license/clappr/clappr)](https://github.com/clappr/clappr/blob/main/LICENSE)
 [![minified size](https://img.shields.io/bundlephobia/min/@clappr/player)](https://bundlephobia.com/package/@clappr/player)
