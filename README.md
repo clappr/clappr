@@ -118,19 +118,19 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/jhonatangcavalcanti">
-                    <img src="https://avatars.githubusercontent.com/u/14154066?v=4" width="100;" alt="jhonatangcavalcanti"/>
+                <a href="https://github.com/leaofelipe">
+                    <img src="https://avatars.githubusercontent.com/u/1847691?v=4" width="100;" alt="leaofelipe"/>
                     <br />
-                    <sub><b>jhonatangcavalcanti</b></sub>
+                    <sub><b>leaofelipe</b></sub>
                 </a>
             </td>
 		</tr>
 		<tr>
             <td align="center">
-                <a href="https://github.com/leaofelipe">
-                    <img src="https://avatars.githubusercontent.com/u/1847691?v=4" width="100;" alt="leaofelipe"/>
+                <a href="https://github.com/jhonatangcavalcanti">
+                    <img src="https://avatars.githubusercontent.com/u/14154066?v=4" width="100;" alt="jhonatangcavalcanti"/>
                     <br />
-                    <sub><b>leaofelipe</b></sub>
+                    <sub><b>jhonatangcavalcanti</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -280,17 +280,17 @@ Thanks to all our amazing contributors! 🎉
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/guilhermebruzzi">
-                    <img src="https://avatars.githubusercontent.com/u/1321766?v=4" width="100;" alt="guilhermebruzzi"/>
-                    <br />
-                    <sub><b>guilhermebruzzi</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/stanogurnik">
                     <img src="https://avatars.githubusercontent.com/u/2771618?v=4" width="100;" alt="stanogurnik"/>
                     <br />
                     <sub><b>stanogurnik</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/guilhermebruzzi">
+                    <img src="https://avatars.githubusercontent.com/u/1321766?v=4" width="100;" alt="guilhermebruzzi"/>
+                    <br />
+                    <sub><b>guilhermebruzzi</b></sub>
                 </a>
             </td>
             <td align="center">
