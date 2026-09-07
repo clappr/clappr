@@ -6,6 +6,29 @@ import Events from '../../base/events/events'
 import noOpHTML from './public/error.html'
 import noOpStyle from './public/style.scss'
 
+const RANDOM_POOL_SIZE = 4096
+const UINT32_RANGE = 4294967296
+
+function getCryptoRandomValues() {
+  const cryptoObj = globalThis.crypto
+  return cryptoObj && typeof cryptoObj.getRandomValues === 'function'
+    ? cryptoObj.getRandomValues.bind(cryptoObj)
+    : null
+}
+
+function createRandomFloat(getRandomValues) {
+  const pool = new Uint32Array(RANDOM_POOL_SIZE)
+  let index = RANDOM_POOL_SIZE
+
+  return function randomFloat() {
+    if (index >= RANDOM_POOL_SIZE) {
+      getRandomValues(pool)
+      index = 0
+    }
+    return pool[index++] / UINT32_RANGE
+  }
+}
+
 export default class NoOp extends Playback {
   get name() { return 'no_op' }
   get supportedVersion() { return { min: VERSION } }
@@ -38,6 +61,14 @@ export default class NoOp extends Playback {
       return
     }
 
+    const getRandomValues = getCryptoRandomValues()
+    if (!getRandomValues) { return }
+
+    if (!this._randomFloat) {
+      this._randomFloat = createRandomFloat(getRandomValues)
+    }
+    const random = this._randomFloat
+
     const idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
     let buffer32
     try {
@@ -49,13 +80,13 @@ export default class NoOp extends Playback {
     }
 
     const len = buffer32.length
-    const m = Math.random() * 6 + 4
+    const m = random() * 6 + 4
     let run = 0
     let color = 0
     for (let i = 0; i < len;) {
       if (run < 0) {
-        run = m * Math.random()
-        const p = Math.pow(Math.random(), 0.4)
+        run = m * random()
+        const p = Math.pow(random(), 0.4)
         color = (255 * p) << 24
       }
       run -= 1
