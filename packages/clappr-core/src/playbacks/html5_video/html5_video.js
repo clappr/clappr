@@ -320,7 +320,7 @@ export default class HTML5Video extends Playback {
   }
 
   isSeekEnabled() {
-    return isFinite(this.getDuration())
+    return Number.isFinite(this.getDuration())
   }
 
   getPlaybackType() {

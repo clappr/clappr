@@ -29,7 +29,7 @@ export default class BufferSampler {
     if (!videoEl) return null
 
     const currentTime = videoEl.currentTime
-    if (!isFinite(currentTime)) return null
+    if (!Number.isFinite(currentTime)) return null
 
     const data = {
       bufferAhead: round1(getBufferAhead(videoEl)),

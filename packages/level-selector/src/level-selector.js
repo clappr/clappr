@@ -132,7 +132,7 @@ export default class LevelSelector extends UICorePlugin {
   buttonElement() { return this.$el.find('button[data-level-selector-button]') }
 
   levelElement(id) {
-    const selector = isNaN(id) ? '' : `[data-level-selector-select="${id}"]`
+    const selector = id == null || Number.isNaN(id) ? '' : `[data-level-selector-select="${id}"]`
 
     return this.$el.find(`ul a${selector}`).parent()
   }
