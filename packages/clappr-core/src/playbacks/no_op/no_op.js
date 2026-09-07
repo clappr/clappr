@@ -7,26 +7,15 @@ import noOpHTML from './public/error.html'
 import noOpStyle from './public/style.scss'
 
 const RANDOM_POOL_SIZE = 4096
-const UINT32_RANGE = 4294967296
+const randomPool = new Uint32Array(RANDOM_POOL_SIZE)
+let randomPoolIndex = RANDOM_POOL_SIZE
 
-function getCryptoRandomValues() {
-  const cryptoObj = window.crypto
-  return cryptoObj && typeof cryptoObj.getRandomValues === 'function'
-    ? cryptoObj.getRandomValues.bind(cryptoObj)
-    : null
-}
-
-function createRandomFloat(getRandomValues) {
-  const pool = new Uint32Array(RANDOM_POOL_SIZE)
-  let index = RANDOM_POOL_SIZE
-
-  return function randomFloat() {
-    if (index >= RANDOM_POOL_SIZE) {
-      getRandomValues(pool)
-      index = 0
-    }
-    return pool[index++] / UINT32_RANGE
+function random() {
+  if (randomPoolIndex >= RANDOM_POOL_SIZE) {
+    window.crypto.getRandomValues(randomPool)
+    randomPoolIndex = 0
   }
+  return randomPool[randomPoolIndex++] / 0x100000000
 }
 
 export default class NoOp extends Playback {
@@ -60,14 +49,6 @@ export default class NoOp extends Playback {
       // only update noise every 5 frames to save cpu
       return
     }
-
-    const getRandomValues = getCryptoRandomValues()
-    if (!getRandomValues) { return }
-
-    if (!this._randomFloat) {
-      this._randomFloat = createRandomFloat(getRandomValues)
-    }
-    const random = this._randomFloat
 
     const idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
     let buffer32

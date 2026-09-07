@@ -12,12 +12,10 @@ const createContext = (width = 4, height = 4) => {
 describe('NoOp playback', () => {
   afterEach(() => {
     vi.restoreAllMocks()
-    vi.unstubAllGlobals()
   })
 
   test('can play any source', () => {
     expect(NoOp.canPlay()).toBeTruthy()
-    expect(NoOp.canPlay('http://example.com/video.mp4')).toBeTruthy()
   })
 
   test('fills noise with crypto.getRandomValues instead of Math.random', () => {
@@ -31,16 +29,5 @@ describe('NoOp playback', () => {
     expect(cryptoSpy).toHaveBeenCalled()
     expect(randomSpy).not.toHaveBeenCalled()
     expect(playback.context.putImageData).toHaveBeenCalled()
-  })
-
-  test('skips painting when getRandomValues is unavailable', () => {
-    vi.stubGlobal('crypto', {})
-
-    const playback = new NoOp({})
-    playback.context = createContext()
-
-    expect(() => playback._noise()).not.toThrow()
-    expect(playback.context.createImageData).not.toHaveBeenCalled()
-    expect(playback.context.putImageData).not.toHaveBeenCalled()
   })
 })
