@@ -8,7 +8,8 @@ const ErrorMixin = {
    * @param {Object} error should be an object with code, description, level and raw error.
    * @return {Object} Object with formatted error data including origin and scope
    */
-  createError(error, options = { useCodePrefix: true }) {
+  createError(error, options) {
+    options = options || { useCodePrefix: true }
     const scope = (this.constructor && this.constructor.type) || ''
     const origin = this.name || scope
     const i18n =

@@ -117,7 +117,7 @@ export default class Events {
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this
     const off = () => this.off(name, once)
     const once = function () {
-      off(name, once)
+      off()
       callback.apply(this, arguments)
     }
     once._callback = callback

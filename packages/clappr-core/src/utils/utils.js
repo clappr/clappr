@@ -49,7 +49,7 @@ export function extend(parent, properties) {
  * @returns
  */
 export function formatTime(time, paddedHours) {
-  if (!isFinite(time)) return '--:--'
+  if (!Number.isFinite(time)) return '--:--'
 
   time = time * 1000
   time = Number.parseInt(time / 1000, 10)

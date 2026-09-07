@@ -92,7 +92,8 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   contextMenuElement(id) {
-    return this.$el.find('ul a' + (!isNaN(id) ? '[data-cc-select="' + id + '"]' : '')).parent()
+    const hasId = id != null && !Number.isNaN(id)
+    return this.$el.find('ul a' + (hasId ? '[data-cc-select="' + id + '"]' : '')).parent()
   }
 
   setCurrentContextMenuElement(trackId) {
