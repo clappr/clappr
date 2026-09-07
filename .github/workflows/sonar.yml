@@ -1,0 +1,42 @@
+# Independent of ci.yml: Release gates on that workflow run, so a failed scan
+# must not turn CI red. After this lands on main, disable Automatic Analysis
+# on clappr_clappr (project Administration → Analysis Method) or Activity
+# duplicates. New Code: prefer 30 days over Previous version.
+#
+# Fork PRs cannot read SONAR_TOKEN; skip them rather than fail the check.
+
+name: Sonar
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  sonar:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Resolve player version
+        id: version
+        run: echo "player=$(jq -r .version packages/player/package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ steps.version.outputs.player }}
