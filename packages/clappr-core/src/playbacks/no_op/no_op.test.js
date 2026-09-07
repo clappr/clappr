@@ -22,7 +22,7 @@ describe('NoOp playback', () => {
 
   test('fills noise with crypto.getRandomValues instead of Math.random', () => {
     const randomSpy = vi.spyOn(Math, 'random')
-    const cryptoSpy = vi.spyOn(globalThis.crypto, 'getRandomValues')
+    const cryptoSpy = vi.spyOn(window.crypto, 'getRandomValues')
     const playback = new NoOp({})
     playback.context = createContext()
 

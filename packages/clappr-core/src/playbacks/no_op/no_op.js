@@ -10,7 +10,7 @@ const RANDOM_POOL_SIZE = 4096
 const UINT32_RANGE = 4294967296
 
 function getCryptoRandomValues() {
-  const cryptoObj = globalThis.crypto
+  const cryptoObj = window.crypto
   return cryptoObj && typeof cryptoObj.getRandomValues === 'function'
     ? cryptoObj.getRandomValues.bind(cryptoObj)
     : null
