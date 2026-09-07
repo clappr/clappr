@@ -10,9 +10,9 @@ export default class Version {
   }
 
   constructor(major, minor, patch) {
-    this.major = parseInt(major || 0, 10)
-    this.minor = parseInt(minor || 0, 10)
-    this.patch = parseInt(patch || 0, 10)
+    this.major = Number.parseInt(major || 0, 10)
+    this.minor = Number.parseInt(minor || 0, 10)
+    this.patch = Number.parseInt(patch || 0, 10)
   }
 
   compare(other) {

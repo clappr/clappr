@@ -442,7 +442,7 @@ export default class Container extends UIObject {
   }
 
   setVolume(value) {
-    this.volume = parseFloat(value)
+    this.volume = Number.parseFloat(value)
     this.trigger(Events.CONTAINER_VOLUME, this.volume, this.name)
     this.playback.volume(this.volume)
   }

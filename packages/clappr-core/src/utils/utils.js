@@ -52,13 +52,13 @@ export function formatTime(time, paddedHours) {
   if (!isFinite(time)) return '--:--'
 
   time = time * 1000
-  time = parseInt(time / 1000)
+  time = Number.parseInt(time / 1000, 10)
   const seconds = time % 60
-  time = parseInt(time / 60)
+  time = Number.parseInt(time / 60, 10)
   const minutes = time % 60
-  time = parseInt(time / 60)
+  time = Number.parseInt(time / 60, 10)
   const hours = time % 24
-  const days = parseInt(time / 24)
+  const days = Number.parseInt(time / 24, 10)
   let out = ''
   if (days && days > 0) {
     out += days + ':'
@@ -111,7 +111,7 @@ export class Config {
     return {
       volume: {
         value: 100,
-        parse: parseInt
+        parse: (value) => Number.parseInt(value, 10)
       }
     }
   }
@@ -187,11 +187,11 @@ export function seekStringToSeconds(paramName = 't') {
     parts.forEach(function (el) {
       if (el) {
         const suffix = el[el.length - 1]
-        const time = parseInt(el.slice(0, el.length - 1), 10)
+        const time = Number.parseInt(el.slice(0, el.length - 1), 10)
         seconds += time * (factor[suffix])
       }
     })
-  } else if (seekString) { seconds = parseInt(seekString, 10) }
+  } else if (seekString) { seconds = Number.parseInt(seekString, 10) }
 
   return seconds
 }
@@ -203,7 +203,7 @@ export function uniqueId(prefix) {
 }
 
 export function isNumber(value) {
-  return value - parseFloat(value) + 1 >= 0
+  return value - Number.parseFloat(value) + 1 >= 0
 }
 
 export function currentScriptUrl() {

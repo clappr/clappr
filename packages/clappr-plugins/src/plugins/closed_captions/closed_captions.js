@@ -71,7 +71,7 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   onTrackSelect(event) {
-    const trackId = parseInt(event.target.dataset.ccSelect, 10)
+    const trackId = Number.parseInt(event.target.dataset.ccSelect, 10)
     this.container.closedCaptionsTrackId = trackId
     this.hideContextMenu()
     event.stopPropagation()

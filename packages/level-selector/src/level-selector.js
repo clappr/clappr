@@ -145,7 +145,7 @@ export default class LevelSelector extends UICorePlugin {
   }
 
   onLevelSelect(event) {
-    this.selectedLevelId = parseInt(event.target.dataset.levelSelectorSelect, 10)
+    this.selectedLevelId = Number.parseInt(event.target.dataset.levelSelectorSelect, 10)
     if (this.playback.currentLevel === this.selectedLevelId) return false
 
     this.playback.currentLevel = this.selectedLevelId
