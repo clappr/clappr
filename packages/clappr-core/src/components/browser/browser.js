@@ -36,14 +36,14 @@ export const getBrowserInfo = function (ua) {
     extra = /\brv[ :]+(\d+)/g.exec(ua) || []
     return {
       name: 'IE',
-      version: parseInt(extra[1] || '')
+      version: Number.parseInt(extra[1] || '', 10)
     }
   } else if (parts[1] === 'Chrome') {
     extra = ua.match(/\bOPR\/(\d+)/)
-    if (extra != null) return { name: 'Opera', version: parseInt(extra[1]) }
+    if (extra != null) return { name: 'Opera', version: Number.parseInt(extra[1], 10) }
 
     extra = ua.match(/\bEdge\/(\d+)/)
-    if (extra != null) return { name: 'Edge', version: parseInt(extra[1]) }
+    if (extra != null) return { name: 'Edge', version: Number.parseInt(extra[1], 10) }
   } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
     parts.splice(1, 1, 'Android WebView')
     parts.splice(2, 1, extra[1])
@@ -52,7 +52,7 @@ export const getBrowserInfo = function (ua) {
 
   return {
     name: parts[0],
-    version: parseInt(parts[1])
+    version: Number.parseInt(parts[1], 10)
   }
 }
 
@@ -93,10 +93,10 @@ const setBrowserVersion = function (version, browserObject) {
   browserObject.fullVersion = version
 
   // Major version
-  if (splitVersion[0]) browserObject.majorVersion = parseInt(splitVersion[0])
+  if (splitVersion[0]) browserObject.majorVersion = Number.parseInt(splitVersion[0], 10)
 
   // Minor version
-  if (splitVersion[1]) browserObject.minorVersion = parseInt(splitVersion[1])
+  if (splitVersion[1]) browserObject.minorVersion = Number.parseInt(splitVersion[1], 10)
 }
 
 //  Get OS data
@@ -151,12 +151,12 @@ const setOsVersion = function (version, separator, osObject) {
 
   // Major version
   if (splitVersion && splitVersion[0]) {
-    osObject.majorVersion = parseInt(splitVersion[0])
+    osObject.majorVersion = Number.parseInt(splitVersion[0], 10)
   }
 
   // Minor version
   if (splitVersion && splitVersion[1]) {
-    osObject.minorVersion = parseInt(splitVersion[1])
+    osObject.minorVersion = Number.parseInt(splitVersion[1], 10)
   }
 }
 
