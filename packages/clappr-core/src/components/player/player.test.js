@@ -215,6 +215,35 @@ describe('Player', function () {
     })
   })
 
+  describe('queries', () => {
+    test('returns empty values when constructed without a parent', () => {
+      const player = new Player({ source: '/video.mp4' })
+
+      expect(player.isPlaying()).toBe(false)
+      expect(player.ended).toBe(false)
+      expect(player.getCurrentTime()).toBe(0)
+      expect(player.getPlugin('missing')).toBeUndefined()
+    })
+
+    test('gets plugins from core when there is no activeContainer', () => {
+      const player = new Player({ source: '/video.mp4' })
+      const plugin = { name: 'fake' }
+      player.core = { plugins: [plugin] }
+
+      expect(player.isPlaying()).toBe(false)
+      expect(player.getPlugin('fake')).toEqual(plugin)
+    })
+
+    test('delegates isPlaying to the active container', () => {
+      const player = new Player({ source: '/video.mp4' })
+      const isPlaying = vi.fn().mockReturnValue(true)
+      player.core = { activeContainer: { isPlaying } }
+
+      expect(player.isPlaying()).toBe(true)
+      expect(isPlaying).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('destroy', () => {
     let player
     let callbacks
