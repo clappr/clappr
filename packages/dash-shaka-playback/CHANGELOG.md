@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.7](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.1.6...dash-shaka-playback%404.1.7) (2026-09-09)
+
+**Note:** Version bump only for package dash-shaka-playback
+
 ## [4.1.6](https://github.com/clappr/clappr/compare/dash-shaka-playback%404.1.5...dash-shaka-playback%404.1.6) (2026-08-27)
 
 ### Bug Fixes

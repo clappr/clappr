@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/clappr/clappr/compare/%40clappr%2Flevel-selector%401.1.0...%40clappr%2Flevel-selector%401.1.1) (2026-09-09)
+
+### Bug Fixes
+
+- resolve first-party Sonar hygiene outside Zepto ([7410a66](https://github.com/clappr/clappr/commit/7410a66af49cb55232f5654f1a395d55e94f007c))
+
 # 1.1.0 (2026-08-30)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.15](https://github.com/clappr/clappr/compare/%40clappr%2Fplugins%400.9.14...%40clappr%2Fplugins%400.9.15) (2026-09-09)
+
+### Bug Fixes
+
+- resolve first-party Sonar hygiene outside Zepto ([7410a66](https://github.com/clappr/clappr/commit/7410a66af49cb55232f5654f1a395d55e94f007c))
+
 ## [0.9.14](https://github.com/clappr/clappr/compare/%40clappr%2Fplugins%400.9.13...%40clappr%2Fplugins%400.9.14) (2026-08-27)
 
 ### Bug Fixes

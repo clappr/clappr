@@ -1,6 +1,6 @@
 {
   "name": "@clappr/hlsjs-playback",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "HLS Playback based on hls.js",
   "main": "./dist/hlsjs-playback.js",
   "module": "./dist/hlsjs-playback.esm.js",
@@ -40,7 +40,7 @@
     "hls.js": "^1"
   },
   "devDependencies": {
-    "@clappr/core": "^0.17.0",
+    "@clappr/core": "^0.17.1",
     "hls.js": "^1"
   }
 }

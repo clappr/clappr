@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.17.1](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.17.0...%40clappr%2Fcore%400.17.1) (2026-09-09)
+
+### Bug Fixes
+
+- **core:** read Web Crypto from window instead of globalThis ([0b6384a](https://github.com/clappr/clappr/commit/0b6384abf60cfd803ca0d9bf15544f89255b1b2a))
+- **core:** replace Math.random in NoOp noise with a crypto pool ([ac586bd](https://github.com/clappr/clappr/commit/ac586bd4f45631c33aa09c9ffcfbe6b7803d1b65))
+- **core:** return empty Player query values when core is missing ([eec0c8e](https://github.com/clappr/clappr/commit/eec0c8e5f83adce31a7560ab91107d5fac165fc0)), closes [#2588](https://github.com/clappr/clappr/issues/2588)
+- resolve first-party Sonar hygiene outside Zepto ([7410a66](https://github.com/clappr/clappr/commit/7410a66af49cb55232f5654f1a395d55e94f007c))
+
 # [0.17.0](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.16.3...%40clappr%2Fcore%400.17.0) (2026-08-27)
 
 ### Bug Fixes
