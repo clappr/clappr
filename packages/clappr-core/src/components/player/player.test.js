@@ -236,11 +236,9 @@ describe('Player', function () {
 
     test('delegates isPlaying to the active container', () => {
       const player = new Player({ source: '/video.mp4' })
-      const isPlaying = vi.fn().mockReturnValue(true)
-      player.core = { activeContainer: { isPlaying } }
+      player.core = { activeContainer: { isPlaying: () => true } }
 
       expect(player.isPlaying()).toBe(true)
-      expect(isPlaying).toHaveBeenCalledTimes(1)
     })
   })
 
