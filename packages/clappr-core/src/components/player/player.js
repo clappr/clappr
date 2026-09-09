@@ -55,7 +55,7 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get ended() {
-    return this.core.activeContainer.ended
+    return this.core?.activeContainer?.ended ?? false
   }
 
   /**
@@ -66,7 +66,7 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get buffering() {
-    return this.core.activeContainer.buffering
+    return this.core?.activeContainer?.buffering ?? false
   }
 
   /*
@@ -548,7 +548,7 @@ export default class Player extends BaseObject {
    * @return {Boolean} `true` if the current source is playing, otherwise `false`
    */
   isPlaying() {
-    return this.core.activeContainer.isPlaying()
+    return this.core?.activeContainer?.isPlaying() ?? false
   }
 
   /**
@@ -557,7 +557,7 @@ export default class Player extends BaseObject {
    * @return {Boolean}
    */
   isDvrEnabled() {
-    return this.core.activeContainer.isDvrEnabled()
+    return this.core?.activeContainer?.isDvrEnabled() ?? false
   }
 
   /**
@@ -566,7 +566,7 @@ export default class Player extends BaseObject {
    * @return {Boolean}
    */
   isDvrInUse() {
-    return this.core.activeContainer.isDvrInUse()
+    return this.core?.activeContainer?.isDvrInUse() ?? false
   }
 
   /**
@@ -593,7 +593,7 @@ export default class Player extends BaseObject {
    * ```
    */
   getPlugin(name) {
-    const plugins = this.core.plugins.concat(this.core.activeContainer.plugins)
+    const plugins = (this.core?.plugins ?? []).concat(this.core?.activeContainer?.plugins ?? [])
     return plugins.filter(plugin => plugin.name === name)[0]
   }
 
@@ -603,7 +603,7 @@ export default class Player extends BaseObject {
    * @return {Number} current time (in seconds) of the current source
    */
   getCurrentTime() {
-    return this.core.activeContainer.getCurrentTime()
+    return this.core?.activeContainer?.getCurrentTime() ?? 0
   }
 
   /**
@@ -614,7 +614,7 @@ export default class Player extends BaseObject {
    * @return {Number} time (in seconds) that time "0" represents.
    */
   getStartTimeOffset() {
-    return this.core.activeContainer.getStartTimeOffset()
+    return this.core?.activeContainer?.getStartTimeOffset() ?? 0
   }
 
   /**
@@ -623,7 +623,7 @@ export default class Player extends BaseObject {
    * @return {Number} duration time (in seconds) of the current source
    */
   getDuration() {
-    return this.core.activeContainer.getDuration()
+    return this.core?.activeContainer?.getDuration() ?? 0
   }
 }
 
