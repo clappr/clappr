@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.5...%40clappr%2Ftelemetry%400.3.6) (2026-09-25)
+
+### Bug Fixes
+
+- **telemetry:** rename static name getter to id ([c5a1aef](https://github.com/clappr/clappr/commit/c5a1aef678638a05a91538fc5a067b7f514cd426))
+
 ## [0.3.5](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.4...%40clappr%2Ftelemetry%400.3.5) (2026-09-09)
 
 ### Bug Fixes
