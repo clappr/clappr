@@ -24,7 +24,7 @@ describe('BufferSampler', () => {
   })
 
   it('exposes a static name used as payload key', () => {
-    expect(BufferSampler.name).toBe('buffer')
+    expect(BufferSampler.id).toBe('buffer')
   })
 
   describe('collect()', () => {

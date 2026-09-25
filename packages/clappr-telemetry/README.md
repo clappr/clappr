@@ -163,27 +163,27 @@ All options are opt-in — nothing is collected by default. Components are activ
 | `telemetry.samplers`                   | Class[]  | `[]`      | Sampler classes to register for this player instance                                                                                          |
 | `telemetry.observers`                  | Class[]  | `[]`      | Observer classes to register for this player instance                                                                                         |
 | `telemetry.sampleIntervalMs`           | Number   | `0`       | Sampling interval in ms. When `0` (default), no automatic interval is started — use `snapshot()` for on-demand collection                     |
-| `telemetry.<name>.enabled`             | Boolean  | `true`    | Opt-out flag for any registered component. Key is the component's `static get name()` value (e.g. `buffer`, `decoding`, `videoState`)         |
+| `telemetry.<id>.enabled`               | Boolean  | `true`    | Opt-out flag for any registered component. Key is the component's `static get id()` value (e.g. `buffer`, `decoding`, `videoState`)           |
 | `telemetry.bufferSample.includeRanges` | Boolean  | `true`    | Include buffered time ranges in the `mse.sample` payload                                                                                      |
 | `telemetry.videoState.videoEvents`     | String[] | 14 events | `HTMLVideoElement` event names for `VideoEventObserver` to observe. Defaults to the full list (see **VideoEventObserver**)                    |
 
 ### Disabling individual components
 
-Each instance only activates its own `samplers`/`observers`/`adapters` arrays. When sharing a config object across players, use `<name>.enabled: false` to disable a component for one instance without touching the shared array:
+Each instance only activates its own `samplers`/`observers`/`adapters` arrays. When sharing a config object across players, use `<id>.enabled: false` to disable a component for one instance without touching the shared array:
 
 ```javascript
 new Clappr.Player({
   telemetry: {
     samplers:  [BufferSampler, DecodingSampler, NetworkSampler, ...],
     observers: [VideoEventObserver],
-    // disable specific components by their static get name() value:
+    // disable specific components by their static get id() value:
     decoding:   { enabled: false },
     videoState: { enabled: false },
   }
 })
 ```
 
-The `<name>` key maps to each class's `static get name()` property:
+The `<id>` key maps to each class's `static get id()` property:
 
 | Class                   | Key             |
 | ----------------------- | --------------- |
@@ -276,7 +276,7 @@ NetworkAdapters.unregister(MyCustomAdapter)
 
 | Member                             | Description                                                 |
 | ---------------------------------- | ----------------------------------------------------------- |
-| `static get name()`                | String identifier (optional — used only in log messages)    |
+| `static get id()`                | String identifier (optional — used only in log messages)    |
 | `static isSupported(playback)`     | Returns `true` when this adapter handles the given playback |
 | `constructor(playback, container)` | Receives playback engine and container                      |
 | `bind()`                           | Attaches listeners/hooks into the engine                    |
@@ -415,10 +415,10 @@ The sampler registry is extensible. You can add your own sampler and have it par
 
 | Member                  | Required | Description                                                                                                                                        |
 | ----------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `static get name()`     | Yes      | Unique string key — used as the registry identifier and as the key in the `mse.sample` payload                                                     |
+| `static get id()`     | Yes      | Unique string key — used as the registry identifier and as the key in the `mse.sample` payload                                                     |
 | `collect()`             | Yes      | Called every tick. Returns a plain object with the data to include, or `null` to skip this tick                                                    |
 | `destroy()`             | Yes      | Called when the registry is destroyed. Clean up any internal state here                                                                            |
-| `static isEnabled(cfg)` | No       | Override the registry's default enable/disable check. `cfg` is `container.options.telemetry`. Omit to use the standard `cfg[name].enabled` opt-out |
+| `static isEnabled(cfg)` | No       | Override the registry's default enable/disable check. `cfg` is `container.options.telemetry`. Omit to use the standard `cfg[id].enabled` opt-out |
 
 ### Example
 
@@ -426,7 +426,7 @@ The sampler registry is extensible. You can add your own sampler and have it par
 import { SamplerRegistry } from '@clappr/telemetry'
 
 class AudioSampler {
-  static get name() {
+  static get id() {
     return 'audio'
   }
 
@@ -494,10 +494,10 @@ The observer registry is extensible. You can add your own observer and have it m
 
 | Member                  | Required | Description                                                                                                |
 | ----------------------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `static get name()`     | Yes      | Unique string key — used as the registry identifier                                                        |
+| `static get id()`     | Yes      | Unique string key — used as the registry identifier                                                        |
 | `bind()`                | Yes      | Called after instantiation. Attach event listeners and start collecting                                    |
 | `destroy()`             | Yes      | Called when the registry is destroyed. Remove listeners and clean up state                                 |
-| `static isEnabled(cfg)` | No       | Override the registry's default enable/disable check. Omit to use the standard `cfg[name].enabled` opt-out |
+| `static isEnabled(cfg)` | No       | Override the registry's default enable/disable check. Omit to use the standard `cfg[id].enabled` opt-out |
 
 The constructor receives `(playback, container, samplerRegistry)` — the same arguments as `VideoEventObserver`.
 
@@ -507,7 +507,7 @@ The constructor receives `(playback, container, samplerRegistry)` — the same a
 import { ObserverRegistry } from '@clappr/telemetry'
 
 class PlaybackEventObserver {
-  static get name() {
+  static get id() {
     return 'playbackEvents'
   }
 

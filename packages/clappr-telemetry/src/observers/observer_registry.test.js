@@ -6,19 +6,19 @@ const makeContainer = (cfg = {}) => ({
   trigger: vi.fn()
 })
 
-const makeObserverClass = (name = 'MockObserver', overrides = {}) => {
+const makeObserverClass = (id = 'MockObserver', overrides = {}) => {
   const instance = { bind: vi.fn(), destroy: vi.fn(), ...overrides }
   const Cls = vi.fn(function () { return instance })
   Cls.prototype.bind = instance.bind
   Cls.prototype.destroy = instance.destroy
-  Object.defineProperty(Cls, 'name', { get: () => name, configurable: true })
+  Object.defineProperty(Cls, 'id', { get: () => id, configurable: true })
   return { Cls, instance }
 }
 
 describe('ObserverRegistry', () => {
   afterEach(() => {
-    while (ObserverRegistry.has({ name: 'MockObserver' })) {
-      ObserverRegistry.unregister({ name: 'MockObserver' })
+    while (ObserverRegistry.has({ id: 'MockObserver' })) {
+      ObserverRegistry.unregister({ id: 'MockObserver' })
     }
   })
 
@@ -27,7 +27,7 @@ describe('ObserverRegistry', () => {
       const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       const Bad = vi.fn()
       Bad.prototype.destroy = vi.fn()
-      Object.defineProperty(Bad, 'name', { get: () => 'Bad', configurable: true })
+      Object.defineProperty(Bad, 'id', { get: () => 'Bad', configurable: true })
       expect(ObserverRegistry.register(Bad)).toBe(false)
       expect(warnSpy).toHaveBeenCalled()
       warnSpy.mockRestore()
@@ -37,13 +37,13 @@ describe('ObserverRegistry', () => {
       const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       const Bad = vi.fn()
       Bad.prototype.bind = vi.fn()
-      Object.defineProperty(Bad, 'name', { get: () => 'Bad', configurable: true })
+      Object.defineProperty(Bad, 'id', { get: () => 'Bad', configurable: true })
       expect(ObserverRegistry.register(Bad)).toBe(false)
       expect(warnSpy).toHaveBeenCalled()
       warnSpy.mockRestore()
     })
 
-    it('skips and warns when the class relies on the auto-assigned name (no static get name())', () => {
+    it('skips and warns when static get id() is missing', () => {
       const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       class NoNameGetter {
         bind() {}
@@ -118,7 +118,7 @@ describe('ObserverRegistry', () => {
   })
 
   describe('isEnabled filtering', () => {
-    it('does not instantiate when cfg[name].enabled is false', () => {
+    it('does not instantiate when cfg[id].enabled is false', () => {
       const { Cls } = makeObserverClass()
       ObserverRegistry.register(Cls)
       const registry = new ObserverRegistry({}, makeContainer({ observers: [Cls], MockObserver: { enabled: false } }), null)
@@ -134,7 +134,7 @@ describe('ObserverRegistry', () => {
       registry.destroy()
     })
 
-    it('instantiates when cfg[name].enabled is true', () => {
+    it('instantiates when cfg[id].enabled is true', () => {
       const { Cls } = makeObserverClass()
       ObserverRegistry.register(Cls)
       const registry = new ObserverRegistry({}, makeContainer({ observers: [Cls], MockObserver: { enabled: true } }), null)
@@ -151,7 +151,7 @@ describe('ObserverRegistry', () => {
       expect(Cls).not.toHaveBeenCalled()
     })
 
-    it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
+    it('does not instantiate when isEnabled returns true but cfg[id].enabled is false', () => {
       const { Cls } = makeObserverClass()
       Cls.isEnabled = vi.fn(() => true)
       ObserverRegistry.register(Cls)

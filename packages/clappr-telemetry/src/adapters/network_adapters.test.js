@@ -1,7 +1,7 @@
 import NetworkAdapters from './network_adapters'
 
-const makeAdapter = (name, supported = false) => ({
-  name,
+const makeAdapter = (id, supported = false) => ({
+  id,
   isSupported: vi.fn(() => supported)
 })
 
@@ -48,14 +48,14 @@ describe('NetworkAdapters', () => {
       expect(adapter.isSupported).toHaveBeenCalledWith(playback)
     })
 
-    it('returns null when adapter is disabled via cfg[name].enabled = false', () => {
+    it('returns null when adapter is disabled via cfg[id].enabled = false', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 
       expect(NetworkAdapters.find({}, { adapters: [adapter], custom: { enabled: false } })).toBeNull()
     })
 
-    it('finds adapter when cfg[name] is not set', () => {
+    it('finds adapter when cfg[id] is not set', () => {
       const adapter = makeAdapter('custom', true)
       register(adapter)
 

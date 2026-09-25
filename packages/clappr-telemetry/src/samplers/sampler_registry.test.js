@@ -7,7 +7,7 @@ import { Log } from '@clappr/core'
 
 vi.mock('./buffer_sampler', () => {
   const mock = vi.fn()
-  Object.defineProperty(mock, 'name', { get: () => 'buffer', configurable: true })
+  Object.defineProperty(mock, 'id', { get: () => 'buffer', configurable: true })
   mock.prototype.collect = vi.fn()
   mock.prototype.destroy = vi.fn()
   return { __esModule: true, default: mock }
@@ -15,7 +15,7 @@ vi.mock('./buffer_sampler', () => {
 
 vi.mock('./decoding_sampler', () => {
   const mock = vi.fn()
-  Object.defineProperty(mock, 'name', { get: () => 'decoding', configurable: true })
+  Object.defineProperty(mock, 'id', { get: () => 'decoding', configurable: true })
   mock.prototype.collect = vi.fn()
   mock.prototype.destroy = vi.fn()
   return { __esModule: true, default: mock }
@@ -75,7 +75,7 @@ describe('SamplerRegistry', () => {
         expect.any(Object),
         EVENT_TYPES.MSE_SAMPLE,
         { buffer: expect.any(Object), decoding: expect.any(Object) },
-        SamplerRegistry.name
+        SamplerRegistry.id
       )
     })
 
@@ -155,7 +155,7 @@ describe('SamplerRegistry', () => {
 
     beforeEach(() => {
       CustomSampler = vi.fn()
-      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'id', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = vi.fn()
       CustomSampler.prototype.destroy = vi.fn()
     })
@@ -172,7 +172,7 @@ describe('SamplerRegistry', () => {
       warnSpy.mockRestore()
     })
 
-    it('warns and returns false when the class relies on the auto-assigned name (no static get name())', () => {
+    it('warns and returns false when static get id() is missing', () => {
       const warnSpy = vi.spyOn(Log, 'warn').mockImplementation(() => {})
       class NoNameGetter {
         collect() {}
@@ -200,14 +200,14 @@ describe('SamplerRegistry', () => {
       scheduler.destroy()
     })
 
-    it('instantiates the exact class from its own cfg.samplers, unaffected by a name collision overwrite elsewhere', () => {
+    it('instantiates the exact class from its own cfg.samplers, unaffected by an id collision overwrite elsewhere', () => {
       const NewSampler = vi.fn()
-      Object.defineProperty(NewSampler, 'name', { get: () => 'custom', configurable: true })
+      Object.defineProperty(NewSampler, 'id', { get: () => 'custom', configurable: true })
       NewSampler.prototype.collect = vi.fn()
       NewSampler.prototype.destroy = vi.fn()
 
       SamplerRegistry.register(CustomSampler) // this container's own class
-      SamplerRegistry.register(NewSampler) // registered elsewhere, same name — overwrites the registry map entry
+      SamplerRegistry.register(NewSampler) // registered elsewhere, same id — overwrites the registry map entry
 
       new SamplerRegistry({}, makeContainer({ samplers: [CustomSampler] })) // eslint-disable-line no-new
 
@@ -238,7 +238,7 @@ describe('SamplerRegistry', () => {
   describe('isolation between instances', () => {
     it('only instantiates samplers listed in this container own cfg.samplers, even if others are globally registered', () => {
       const CustomSampler = vi.fn()
-      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'id', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = vi.fn()
       CustomSampler.prototype.destroy = vi.fn()
       SamplerRegistry.register(CustomSampler) // registered globally, e.g. by another player instance
@@ -259,7 +259,7 @@ describe('SamplerRegistry', () => {
 
     it('does not instantiate a sampler present in cfg.samplers but never registered', () => {
       const Unregistered = vi.fn()
-      Object.defineProperty(Unregistered, 'name', { get: () => 'unregistered', configurable: true })
+      Object.defineProperty(Unregistered, 'id', { get: () => 'unregistered', configurable: true })
       Unregistered.prototype.collect = vi.fn()
       Unregistered.prototype.destroy = vi.fn()
 
@@ -270,7 +270,7 @@ describe('SamplerRegistry', () => {
   })
 
   describe('isEnabled filtering', () => {
-    it('does not instantiate a sampler when cfg[name].enabled is false', () => {
+    it('does not instantiate a sampler when cfg[id].enabled is false', () => {
       const registry = new SamplerRegistry({}, makeContainer({ buffer: { enabled: false } }))
       expect(BufferSampler).not.toHaveBeenCalled()
       expect(DecodingSampler).toHaveBeenCalledTimes(1)
@@ -284,7 +284,7 @@ describe('SamplerRegistry', () => {
       registry.destroy()
     })
 
-    it('instantiates when cfg[name].enabled is true', () => {
+    it('instantiates when cfg[id].enabled is true', () => {
       const registry = new SamplerRegistry({}, makeContainer({ buffer: { enabled: true } }))
       expect(BufferSampler).toHaveBeenCalledTimes(1)
       registry.destroy()
@@ -292,7 +292,7 @@ describe('SamplerRegistry', () => {
 
     it('defers to static isEnabled(cfg) when defined on the class', () => {
       const CustomSampler = vi.fn()
-      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'id', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = vi.fn()
       CustomSampler.prototype.destroy = vi.fn()
       CustomSampler.isEnabled = vi.fn(() => false)
@@ -306,9 +306,9 @@ describe('SamplerRegistry', () => {
       SamplerRegistry.unregister(CustomSampler)
     })
 
-    it('does not instantiate when isEnabled returns true but cfg[name].enabled is false', () => {
+    it('does not instantiate when isEnabled returns true but cfg[id].enabled is false', () => {
       const CustomSampler = vi.fn()
-      Object.defineProperty(CustomSampler, 'name', { get: () => 'custom', configurable: true })
+      Object.defineProperty(CustomSampler, 'id', { get: () => 'custom', configurable: true })
       CustomSampler.prototype.collect = vi.fn()
       CustomSampler.prototype.destroy = vi.fn()
       CustomSampler.isEnabled = vi.fn(() => true)
@@ -327,7 +327,7 @@ describe('SamplerRegistry', () => {
   describe('ref counting', () => {
     it('is reference-counted — class removed only after all registrations are released', () => {
       const CustomSampler = vi.fn()
-      Object.defineProperty(CustomSampler, 'name', { get: () => 'counted', configurable: true })
+      Object.defineProperty(CustomSampler, 'id', { get: () => 'counted', configurable: true })
       CustomSampler.prototype.collect = vi.fn()
       CustomSampler.prototype.destroy = vi.fn()
 

@@ -78,7 +78,7 @@ describe('ShakaNetworkAdapter', () => {
 
   describe('name', () => {
     it('returns the correct static name', () => {
-      expect(ShakaNetworkAdapter.name).toBe('shaka_network_adapter')
+      expect(ShakaNetworkAdapter.id).toBe('shaka_network_adapter')
     })
   })
 
