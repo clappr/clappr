@@ -12,7 +12,7 @@ const _refCounts = new Map()
  *
  * Samplers are registered via `SamplerRegistry.register()` and instantiated
  * on construction. On every tick, calls `collect()` on each sampler and emits
- * a single `MSE_SAMPLE` event with the results grouped by name. Keys are
+ * a single `MSE_SAMPLE` event with the results grouped by id. Keys are
  * omitted when the sampler returns `null` (e.g. decoding seed call).
  *
  * **Configuration** via `container.options.telemetry`:
@@ -23,22 +23,21 @@ const _refCounts = new Map()
  * instantiates its own container's `telemetry.samplers`.
  */
 export default class SamplerRegistry {
-  static get name() { return 'sampler-registry' }
+  static get id() { return 'sampler-registry' }
 
-  /** True if `Cls` declares its own `static get name()`, not the auto-assigned one. */
-  static _hasOwnNameGetter(Cls) {
-    return typeof Cls === 'function' &&
-      typeof Object.getOwnPropertyDescriptor(Cls, 'name')?.get === 'function'
+  /** True if `Cls` exposes a non-empty static id. */
+  static _hasId(Cls) {
+    return typeof Cls?.id === 'string' && Cls.id !== ''
   }
 
   /**
-   * Registers a sampler class, keyed by `static get name()`. Ref-counted.
+   * Registers a sampler class, keyed by `static get id()`. Ref-counted.
    * @returns {boolean} false if validation failed
    */
   static register(SamplerClass) {
     const proto = SamplerClass?.prototype
     const missing = [
-      !SamplerRegistry._hasOwnNameGetter(SamplerClass) && 'static get name()',
+      !SamplerRegistry._hasId(SamplerClass) && 'static get id()',
       typeof proto?.collect !== 'function' && 'collect()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
@@ -47,12 +46,12 @@ export default class SamplerRegistry {
       Log.warn('[SamplerRegistry]', `missing ${missing.join(', ')} — skipping`)
       return false
     }
-    const name = SamplerClass.name
-    if (_registry.has(name) && _registry.get(name) !== SamplerClass) {
-      Log.warn('[SamplerRegistry]', `name collision on '${name}' — overwriting existing class`)
+    const id = SamplerClass.id
+    if (_registry.has(id) && _registry.get(id) !== SamplerClass) {
+      Log.warn('[SamplerRegistry]', `id collision on '${id}' — overwriting existing class`)
     }
-    _registry.set(name, SamplerClass)
-    _refCounts.set(name, (_refCounts.get(name) || 0) + 1)
+    _registry.set(id, SamplerClass)
+    _refCounts.set(id, (_refCounts.get(id) || 0) + 1)
     return true
   }
 
@@ -63,25 +62,25 @@ export default class SamplerRegistry {
    * @param {Function} SamplerClass - The class reference used when registering
    */
   static unregister(SamplerClass) {
-    if (!SamplerClass?.name) return
-    const name = SamplerClass.name
-    const count = (_refCounts.get(name) || 0) - 1
+    if (!SamplerClass?.id) return
+    const id = SamplerClass.id
+    const count = (_refCounts.get(id) || 0) - 1
     if (count <= 0) {
-      _registry.delete(name)
-      _refCounts.delete(name)
+      _registry.delete(id)
+      _refCounts.delete(id)
     } else {
-      _refCounts.set(name, count)
+      _refCounts.set(id, count)
     }
   }
 
   /**
-   * Returns true if a sampler with the given class's name is already registered.
+   * Returns true if a sampler with the given class's id is already registered.
    *
    * @param {Function} SamplerClass
    * @returns {boolean}
    */
   static has(SamplerClass) {
-    return _registry.has(SamplerClass?.name)
+    return _registry.has(SamplerClass?.id)
   }
 
   constructor(playback, container) {
@@ -92,7 +91,7 @@ export default class SamplerRegistry {
     const samplers = cfg.samplers || []
     this._samplers = samplers
       .filter(S => S != null && SamplerRegistry.has(S) && isComponentEnabled(S, cfg))
-      .map(S => [S.name, new S(playback, container)])
+      .map(S => [S.id, new S(playback, container)])
     this._timerId = null
   }
 
@@ -110,7 +109,7 @@ export default class SamplerRegistry {
    * Collects data from all active samplers and returns it directly.
    * Can be called at any time regardless of the interval state.
    *
-   * @returns {Object} Snapshot of all active samplers, keyed by sampler name
+   * @returns {Object} Snapshot of all active samplers, keyed by sampler id
    */
   snapshot() {
     const data = {}
@@ -128,7 +127,7 @@ export default class SamplerRegistry {
   _tick() {
     const data = this.snapshot()
     if (Object.keys(data).length > 0) {
-      emitTelemetry(this._container, EVENT_TYPES.MSE_SAMPLE, data, SamplerRegistry.name)
+      emitTelemetry(this._container, EVENT_TYPES.MSE_SAMPLE, data, SamplerRegistry.id)
     }
   }
 

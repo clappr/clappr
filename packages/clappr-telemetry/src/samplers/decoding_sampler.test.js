@@ -18,7 +18,7 @@ describe('DecodingSampler', () => {
   })
 
   it('exposes a static name used as payload key', () => {
-    expect(DecodingSampler.name).toBe('decoding')
+    expect(DecodingSampler.id).toBe('decoding')
   })
 
   describe('collect()', () => {

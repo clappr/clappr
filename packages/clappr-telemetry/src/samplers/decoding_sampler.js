@@ -9,7 +9,7 @@
 import { round1, round4 } from '../utils/helpers'
 
 export default class DecodingSampler {
-  static get name() { return 'decoding' }
+  static get id() { return 'decoding' }
 
   constructor(playback, _container) {
     this._playback = playback

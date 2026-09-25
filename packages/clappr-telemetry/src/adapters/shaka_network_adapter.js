@@ -35,7 +35,7 @@ function variantIndex(tracks, targetId) {
  * through the container's telemetry bus.
  */
 export default class ShakaNetworkAdapter {
-  static get name() {
+  static get id() {
     return 'shaka_network_adapter'
   }
 

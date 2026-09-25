@@ -2,7 +2,7 @@ import { Events } from '@clappr/core'
 import { EVENT_TYPES } from '../utils/constants'
 
 export default class StreamInfoSampler {
-  static get name() { return 'streamInfo' }
+  static get id() { return 'streamInfo' }
 
   constructor(_playback, container) {
     this._destroyed = false

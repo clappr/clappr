@@ -16,22 +16,21 @@ const _refCounts = new Map()
  * instantiates its own container's `telemetry.observers`.
  */
 export default class ObserverRegistry {
-  static get name() { return 'observer-registry' }
+  static get id() { return 'observer-registry' }
 
-  /** True if `Cls` declares its own `static get name()`, not the auto-assigned one. */
-  static _hasOwnNameGetter(Cls) {
-    return typeof Cls === 'function' &&
-      typeof Object.getOwnPropertyDescriptor(Cls, 'name')?.get === 'function'
+  /** True if `Cls` exposes a non-empty static id. */
+  static _hasId(Cls) {
+    return typeof Cls?.id === 'string' && Cls.id !== ''
   }
 
   /**
-   * Registers an observer class, keyed by `static get name()`. Ref-counted.
+   * Registers an observer class, keyed by `static get id()`. Ref-counted.
    * @returns {boolean} false if validation failed
    */
   static register(ObserverClass) {
     const proto = ObserverClass?.prototype
     const missing = [
-      !ObserverRegistry._hasOwnNameGetter(ObserverClass) && 'static get name()',
+      !ObserverRegistry._hasId(ObserverClass) && 'static get id()',
       typeof proto?.bind !== 'function' && 'bind()',
       typeof proto?.destroy !== 'function' && 'destroy()'
     ].filter(Boolean)
@@ -40,12 +39,12 @@ export default class ObserverRegistry {
       Log.warn('[ObserverRegistry]', `missing ${missing.join(', ')} — skipping`)
       return false
     }
-    const name = ObserverClass.name
-    if (_registry.has(name) && _registry.get(name) !== ObserverClass) {
-      Log.warn('[ObserverRegistry]', `name collision on '${name}' — overwriting existing class`)
+    const id = ObserverClass.id
+    if (_registry.has(id) && _registry.get(id) !== ObserverClass) {
+      Log.warn('[ObserverRegistry]', `id collision on '${id}' — overwriting existing class`)
     }
-    _registry.set(name, ObserverClass)
-    _refCounts.set(name, (_refCounts.get(name) || 0) + 1)
+    _registry.set(id, ObserverClass)
+    _refCounts.set(id, (_refCounts.get(id) || 0) + 1)
     return true
   }
 
@@ -56,25 +55,25 @@ export default class ObserverRegistry {
    * @param {Function} ObserverClass - The class reference used when registering
    */
   static unregister(ObserverClass) {
-    if (!ObserverClass?.name) return
-    const name = ObserverClass.name
-    const count = (_refCounts.get(name) || 0) - 1
+    if (!ObserverClass?.id) return
+    const id = ObserverClass.id
+    const count = (_refCounts.get(id) || 0) - 1
     if (count <= 0) {
-      _registry.delete(name)
-      _refCounts.delete(name)
+      _registry.delete(id)
+      _refCounts.delete(id)
     } else {
-      _refCounts.set(name, count)
+      _refCounts.set(id, count)
     }
   }
 
   /**
-   * Returns true if an observer with the given class's name is already registered.
+   * Returns true if an observer with the given class's id is already registered.
    *
    * @param {Function} ObserverClass
    * @returns {boolean}
    */
   static has(ObserverClass) {
-    return _registry.has(ObserverClass?.name)
+    return _registry.has(ObserverClass?.id)
   }
 
   constructor(playback, container, samplerRegistry) {

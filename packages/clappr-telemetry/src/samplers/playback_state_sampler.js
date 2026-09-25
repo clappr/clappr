@@ -3,7 +3,7 @@ import { round1 } from '../utils/helpers'
 import { EVENT_TYPES } from '../utils/constants'
 
 export default class PlaybackStateSampler {
-  static get name() { return 'playbackState' }
+  static get id() { return 'playbackState' }
 
   constructor(playback, container) {
     this._playback = playback

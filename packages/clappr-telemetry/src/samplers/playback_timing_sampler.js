@@ -2,7 +2,7 @@ import { Events } from '@clappr/core'
 import { EVENT_TYPES } from '../utils/constants'
 
 export default class PlaybackTimingSampler {
-  static get name() { return 'timing' }
+  static get id() { return 'timing' }
 
   constructor(playback, container) {
     this._playback = playback

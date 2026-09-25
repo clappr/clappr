@@ -73,7 +73,7 @@ const calcDurationMs = (loadingStats, pendingEntry) => {
  * and same telemetry event types (REQUEST_START, REQUEST_END, REQUEST_ERROR, BITRATE_CHANGE).
  */
 export default class HlsNetworkAdapter {
-  static get name() {
+  static get id() {
     return 'hls_network_adapter'
   }
 

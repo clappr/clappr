@@ -82,7 +82,7 @@ describe('HlsNetworkAdapter', () => {
 
   describe('name', () => {
     it('returns the correct static name', () => {
-      expect(HlsNetworkAdapter.name).toBe('hls_network_adapter')
+      expect(HlsNetworkAdapter.id).toBe('hls_network_adapter')
     })
   })
 

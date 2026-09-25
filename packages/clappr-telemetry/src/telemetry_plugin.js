@@ -43,7 +43,7 @@ export default class TelemetryPlugin extends ContainerPlugin {
    * Returns a snapshot of all active samplers at the current moment.
    * Returns an empty object if the registry is not yet initialized.
    *
-   * @returns {Object} Sampler data keyed by sampler name (e.g. `{ buffer: {...}, decoding: {...} }`)
+   * @returns {Object} Sampler data keyed by sampler id (e.g. `{ buffer: {...}, decoding: {...} }`)
    */
   get snapshot() {
     return this.samplerRegistry?.snapshot() ?? {}

@@ -9,7 +9,7 @@ import { getBufferAhead, getBufferedRanges, round1 } from '../utils/helpers'
  * - `includeRanges` {boolean} — whether to include buffered ranges in the payload (default: true)
  */
 export default class BufferSampler {
-  static get name() { return 'buffer' }
+  static get id() { return 'buffer' }
 
   constructor(playback, container) {
     this._playback = playback

@@ -57,7 +57,7 @@ export default class NetworkAdapters {
     return adapters.find(adapter => {
       if (adapter == null || !NetworkAdapters.has(adapter)) return false
       if (typeof adapter.isEnabled === 'function' && !adapter.isEnabled(cfg)) return false
-      if (cfg[adapter.name]?.enabled === false) return false
+      if (cfg[adapter.id]?.enabled === false) return false
       return typeof adapter.isSupported === 'function' && adapter.isSupported(playback)
     }) ?? null
   }

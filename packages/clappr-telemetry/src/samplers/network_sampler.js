@@ -53,7 +53,7 @@ function _classifyNetworkAdequacy(mbps, bitrateKbps) {
 }
 
 export default class NetworkSampler {
-  static get name() { return 'network' }
+  static get id() { return 'network' }
 
   constructor(_playback, container) {
     this._destroyed = false
