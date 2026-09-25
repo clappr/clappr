@@ -276,7 +276,7 @@ NetworkAdapters.unregister(MyCustomAdapter)
 
 | Member                             | Description                                                 |
 | ---------------------------------- | ----------------------------------------------------------- |
-| `static get id()`                | String identifier (optional — used only in log messages)    |
+| `static get id()`                  | Opt-out key (`<id>.enabled`) read by `NetworkAdapters.find()`. Required for that opt-out |
 | `static isSupported(playback)`     | Returns `true` when this adapter handles the given playback |
 | `constructor(playback, container)` | Receives playback engine and container                      |
 | `bind()`                           | Attaches listeners/hooks into the engine                    |
