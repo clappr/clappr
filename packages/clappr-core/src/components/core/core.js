@@ -15,12 +15,6 @@ import ErrorMixin from '../../base/error_mixin/error_mixin'
 import CoreStyle from './public/style.scss'
 import ResetStyle from './public/optional_reset.scss'
 
-function isFullscreenPolicyBlocked(error) {
-  if (!error) return false
-  const message = error.message || String(error)
-  return /disallowed by permissions policy|permissions policy|fullscreen is not allowed/i.test(message)
-}
-
 /**
  * The Core is responsible to manage Containers and the player state.
  * @class Core
@@ -362,14 +356,10 @@ export default class Core extends UIObject {
 
         promise.then(
           () => {},
-          (error) => {
+          () => {
             setTimeout(() => {
               // fixes the issue https://github.com/clappr/clappr/issues/1860
-              if (!this.isFullscreen()) {
-                this.$el.removeClass('fullscreen')
-                if (isFullscreenPolicyBlocked(error)) return
-                throw new ReferenceError(error.message || String(error))
-              }
+              if (!this.isFullscreen()) this.$el.removeClass('fullscreen')
             }, 600)
           }
         )
