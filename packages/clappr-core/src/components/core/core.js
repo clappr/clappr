@@ -358,7 +358,6 @@ export default class Core extends UIObject {
           () => {},
           () => {
             setTimeout(() => {
-              // fixes the issue https://github.com/clappr/clappr/issues/1860
               if (!this.isFullscreen()) this.$el.removeClass('fullscreen')
             }, 600)
           }
