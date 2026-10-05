@@ -164,38 +164,28 @@ describe('Core', function () {
           delete core.el.requestFullscreen
         })
 
-        test('removes fullscreen class when requestFullscreen is blocked by permissions policy', async () => {
-          vi.useFakeTimers()
-          const policyError = new TypeError('Disallowed by permissions policy')
-          core.el.requestFullscreen = () => Promise.reject(policyError)
-          vi.spyOn(core.$el, 'removeClass')
-          vi.spyOn(core, 'isFullscreen').mockReturnValue(false)
+        test.each([
+          ['blocked by permissions policy', 'Disallowed by permissions policy'],
+          ['Fullscreen request denied', 'Fullscreen request denied'],
+          ['initiated by a user gesture', 'API can only be initiated by a user gesture']
+        ])(
+          'does not throw and removes the fullscreen class when requestFullscreen rejects with %s',
+          async (_label, message) => {
+            vi.useFakeTimers()
+            core.el.requestFullscreen = () => Promise.reject(new TypeError(message))
+            vi.spyOn(core.$el, 'removeClass')
+            vi.spyOn(core, 'isFullscreen').mockReturnValue(false)
 
-          core.toggleFullscreen()
+            core.toggleFullscreen()
 
-          await Promise.resolve()
-          expect(() => vi.advanceTimersByTime(600)).not.toThrow()
+            await Promise.resolve()
+            expect(() => vi.advanceTimersByTime(600)).not.toThrow()
 
-          expect(core.$el.removeClass).toHaveBeenCalledWith('fullscreen')
-          vi.useRealTimers()
-          delete core.el.requestFullscreen
-        })
-
-        test('does not throw and removes the fullscreen class when requestFullscreen rejects with Fullscreen request denied', async () => {
-          vi.useFakeTimers()
-          core.el.requestFullscreen = () => Promise.reject(new TypeError('Fullscreen request denied'))
-          vi.spyOn(core.$el, 'removeClass')
-          vi.spyOn(core, 'isFullscreen').mockReturnValue(false)
-
-          core.toggleFullscreen()
-
-          await Promise.resolve()
-          expect(() => vi.advanceTimersByTime(600)).not.toThrow()
-
-          expect(core.$el.removeClass).toHaveBeenCalledWith('fullscreen')
-          vi.useRealTimers()
-          delete core.el.requestFullscreen
-        })
+            expect(core.$el.removeClass).toHaveBeenCalledWith('fullscreen')
+            vi.useRealTimers()
+            delete core.el.requestFullscreen
+          }
+        )
 
         test('does not throw and keeps the fullscreen class when isFullscreen becomes true before 600ms', async () => {
           vi.useFakeTimers()
@@ -211,22 +201,6 @@ describe('Core', function () {
           expect(() => vi.advanceTimersByTime(600)).not.toThrow()
 
           expect(core.$el.removeClass).not.toHaveBeenCalledWith('fullscreen')
-          vi.useRealTimers()
-          delete core.el.requestFullscreen
-        })
-
-        test('does not throw and removes the fullscreen class when requestFullscreen rejects because the API can only be initiated by a user gesture', async () => {
-          vi.useFakeTimers()
-          core.el.requestFullscreen = () => Promise.reject(new TypeError('API can only be initiated by a user gesture'))
-          vi.spyOn(core.$el, 'removeClass')
-          vi.spyOn(core, 'isFullscreen').mockReturnValue(false)
-
-          core.toggleFullscreen()
-
-          await Promise.resolve()
-          expect(() => vi.advanceTimersByTime(600)).not.toThrow()
-
-          expect(core.$el.removeClass).toHaveBeenCalledWith('fullscreen')
           vi.useRealTimers()
           delete core.el.requestFullscreen
         })
