@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.17.2](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.17.1...%40clappr%2Fcore%400.17.2) (2026-10-05)
+
+### Bug Fixes
+
+- **core:** stop rethrowing a denied fullscreen request ([65ab4ac](https://github.com/clappr/clappr/commit/65ab4ac5c078a6e493b6c8932bc4b9cd29c2134d))
+
 ## [0.17.1](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.17.0...%40clappr%2Fcore%400.17.1) (2026-09-09)
 
 ### Bug Fixes
