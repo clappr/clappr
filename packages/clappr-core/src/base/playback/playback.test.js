@@ -292,4 +292,15 @@ describe('Playback', function () {
     expect(basePlayback.onResize).toHaveBeenCalledWith(data)
     expect(callback).toHaveBeenCalledWith(data)
   })
+
+  test('setDisplayRect is a no-op', () => {
+    const callback = vi.fn()
+    basePlayback.on('all', callback)
+
+    const result = basePlayback.setDisplayRect({ x: 20, y: 20, width: 640, height: 360 })
+
+    expect(result).toBeUndefined()
+    expect(callback).not.toHaveBeenCalled()
+    expect(basePlayback.el.getAttribute('style')).toBeNull()
+  })
 })
