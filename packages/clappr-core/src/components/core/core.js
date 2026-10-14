@@ -118,6 +118,7 @@ export default class Core extends UIObject {
     this.styleRendered = false
     this.plugins = []
     this.containers = []
+    this.listenTo(this, Events.CORE_RESIZE, this.reapplyContainerViewports)
     // FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
     this._boundHandleWindowResize = (o) => this.handleWindowResize(o)
@@ -203,6 +204,10 @@ export default class Core extends UIObject {
   disableResizeObserver() {
     this.resizeObserverInterval && clearInterval(this.resizeObserverInterval)
     this.resizeObserverInterval = null
+  }
+
+  reapplyContainerViewports() {
+    this.containers.forEach((container) => container.reapplyViewport())
   }
 
   resolveOnContainersReady(containers) {
