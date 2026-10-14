@@ -334,6 +334,18 @@ export default class Playback extends UIObject {
     this.trigger(Events.PLAYBACK_RESIZE, options)
     return this
   }
+
+  /**
+   * hook called by the container when its viewport changes with px (no `useTransform`).
+   * It does nothing by default: playbacks that draw outside the DOM override it to place their output.
+   * @method setDisplayRect
+   * @param {Object} rect the area the video occupies, in integer px from the core's top-left corner
+   * @param {Number} rect.x
+   * @param {Number} rect.y
+   * @param {Number} rect.width
+   * @param {Number} rect.height
+   */
+  setDisplayRect(rect) {}
 }
 
 Object.assign(Playback.prototype, ErrorMixin)
