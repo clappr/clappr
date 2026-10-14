@@ -14,6 +14,7 @@ const sidebars = {
       items: [
         'guides/events',
         'guides/how_to_build_plugins',
+        'guides/container_viewport',
       ],
     },
     'supported_formats',
