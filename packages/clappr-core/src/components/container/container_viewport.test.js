@@ -1,0 +1,603 @@
+import Container from './container'
+import Playback from '../../base/playback/playback'
+import Events from '../../base/events/events'
+
+const FULL = { x: 0, y: 0, width: 1280, height: 720 }
+const RECT_HALF_CENTER = { x: 320, y: 180, width: 640, height: 360 }
+const RECT_HALF_TOP_LEFT = { x: 20, y: 20, width: 640, height: 360 }
+const TRANSFORM_ANIMATED = { scale: 0.5, useTransform: true, animate: true }
+const VIEWPORT_EVENTS = [Events.CONTAINER_VIEWPORT_WILL_CHANGE, Events.CONTAINER_VIEWPORT_DID_CHANGE]
+
+const measure = (el, width, height) => {
+  Object.defineProperty(el, 'clientWidth', { value: width, configurable: true })
+  Object.defineProperty(el, 'clientHeight', { value: height, configurable: true })
+}
+
+const createContainer = ({ width = 1280, height = 720 } = {}) => {
+  const parent = document.createElement('div')
+  measure(parent, width, height)
+  const playback = new Playback({})
+  vi.spyOn(playback, 'setDisplayRect')
+  vi.spyOn(playback, 'resize')
+  const container = new Container({ playback })
+  parent.appendChild(container.el)
+  return { parent, playback, container }
+}
+
+const recordEvents = (container) => {
+  const recorded = []
+  VIEWPORT_EVENTS.forEach((name) => container.on(name, (payload) => recorded.push({ name, payload })))
+  return recorded
+}
+
+const track = (promise) => {
+  const state = { settled: false, value: undefined }
+  promise.then((value) => { state.settled = true; state.value = value })
+  return state
+}
+
+const flush = async () => {
+  for (let i = 0; i < 5; i++) await Promise.resolve()
+}
+
+const fireTransitionEnd = (target, propertyName, type = 'transitionend') => {
+  const event = new Event(type, { bubbles: true })
+  Object.defineProperty(event, 'propertyName', { value: propertyName })
+  target.dispatchEvent(event)
+}
+
+const inlineStyle = (container) => {
+  const { style } = container.el
+  return {
+    top: style.top,
+    left: style.left,
+    width: style.width,
+    height: style.height,
+    transform: style.transform,
+    transformOrigin: style.transformOrigin,
+    transition: style.transition
+  }
+}
+
+const replaceStyle = (container, style) => {
+  Object.defineProperty(container.el, 'style', { value: style, configurable: true })
+  return style
+}
+
+const errorOf = (fn) => {
+  try {
+    fn()
+  } catch (error) {
+    return error
+  }
+  return undefined
+}
+
+describe('Container viewport', () => {
+  let playback
+  let container
+  let parent
+  let events
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    ;({ parent, playback, container } = createContainer())
+    events = recordEvents(container)
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
+
+  describe('S1 - px viewport', () => {
+    test('px path applies top-left styles and display rect', () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+
+      expect(inlineStyle(container)).toMatchObject({ top: '20px', left: '20px', width: '640px', height: '360px' })
+      expect(playback.setDisplayRect).toHaveBeenCalledTimes(1)
+      expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_TOP_LEFT)
+    })
+
+    test('px path leaves playback resize and styles alone', () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+
+      expect(playback.resize).toHaveBeenCalledTimes(0)
+      const { style } = playback.el
+      expect([style.top, style.left, style.width, style.height]).toEqual(['', '', '', ''])
+    })
+
+    test('px path defaults to center and zero margin', () => {
+      container.setViewport({ scale: 0.5 })
+
+      expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_CENTER)
+    })
+
+    test('px path clamps the default scale to the margin box', () => {
+      container.setViewport({ position: 'top-left', margin: { right: 320, bottom: 180 } })
+
+      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 0, y: 0, width: 960, height: 540 })
+    })
+
+    test('px path clamps and rounds margin 100', () => {
+      container.setViewport({ margin: 100 })
+
+      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 178, y: 100, width: 924, height: 520 })
+    })
+
+    test('px path collapses margin 700 to a zero rect', () => {
+      expect(() => container.setViewport({ margin: 700 })).not.toThrow()
+
+      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 640, y: 360, width: 0, height: 0 })
+    })
+
+    test.each([
+      ['top-left', 20, 20],
+      ['top-center', 320, 20],
+      ['top-right', 620, 20],
+      ['center-left', 20, 180],
+      ['center', 320, 180],
+      ['center-right', 620, 180],
+      ['bottom-left', 20, 340],
+      ['bottom-center', 320, 340],
+      ['bottom-right', 620, 340]
+    ])('px path rect for position %s', (position, x, y) => {
+      container.setViewport({ scale: 0.5, position, margin: 20 })
+
+      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x, y, width: 640, height: 360 })
+    })
+
+    test('px path triggers will then did and resolves', async () => {
+      const result = container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+
+      const payload = {
+        rect: RECT_HALF_TOP_LEFT,
+        viewport: {
+          scale: 0.5,
+          position: 'top-left',
+          margin: { top: 20, right: 20, bottom: 20, left: 20 },
+          useTransform: false,
+          animate: false,
+          duration: 300,
+          easing: 'ease'
+        }
+      }
+      expect(events).toEqual([
+        { name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload },
+        { name: Events.CONTAINER_VIEWPORT_DID_CHANGE, payload }
+      ])
+      await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_TOP_LEFT })
+    })
+
+    test('px path ignores animate', async () => {
+      const result = container.setViewport({ scale: 0.5, animate: true })
+
+      expect(container.el.style.transition).toBe('')
+      await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+    })
+
+    test('getter matches the last will payload', () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+
+      const willPayload = events.find(({ name }) => name === Events.CONTAINER_VIEWPORT_WILL_CHANGE).payload
+      expect(container.viewport).toEqual(willPayload)
+    })
+
+    test('normalizes a partial margin object', () => {
+      container.setViewport({ margin: { top: 10 } })
+
+      const expected = { top: 10, right: 0, bottom: 0, left: 0 }
+      expect(container.viewport.viewport.margin).toEqual(expected)
+      expect(events).toHaveLength(2)
+      events.forEach(({ payload }) => expect(payload.viewport.margin).toEqual(expected))
+    })
+  })
+
+  describe('S2 - argument validation', () => {
+    test.each([0, -0.5, 1.01, NaN])('rejects scale %s', (scale) => {
+      expect(() => container.setViewport({ scale })).toThrow(RangeError)
+    })
+
+    test.each([-1, { left: -1 }])('rejects a negative margin %j', (margin) => {
+      expect(() => container.setViewport({ margin })).toThrow(RangeError)
+    })
+
+    test.each(['middle', 'top', 'Top-Left', 'top_left'])('rejects an unknown position %s', (position) => {
+      expect(() => container.setViewport({ position })).toThrow(RangeError)
+    })
+
+    test.each([
+      ['setViewport', -1], ['setViewport', Infinity], ['setViewport', NaN],
+      ['resetViewport', -1], ['resetViewport', Infinity], ['resetViewport', NaN]
+    ])('rejects duration on %s with %s', (method, duration) => {
+      expect(() => container[method]({ duration })).toThrow(RangeError)
+    })
+
+    test.each([
+      ['options string', 'big'],
+      ['options number', 42],
+      ['scale', { scale: '0.5' }],
+      ['duration', { duration: '300' }],
+      ['margin', { margin: '20px' }],
+      ['position', { position: 1 }],
+      ['easing', { easing: 1 }]
+    ])('wrong type on set: %s', (_, options) => {
+      expect(() => container.setViewport(options)).toThrow(TypeError)
+    })
+
+    test.each([
+      ['options string', 'big'],
+      ['duration', { duration: '300' }],
+      ['easing', { easing: 1 }]
+    ])('wrong type on reset: %s', (_, options) => {
+      expect(() => container.resetViewport(options)).toThrow(TypeError)
+    })
+
+    test('throws Error without parentElement', () => {
+      container.el.remove()
+
+      const error = errorOf(() => container.setViewport({ scale: 0.5 }))
+
+      expect(error).toBeInstanceOf(Error)
+      expect(error.constructor).toBe(Error)
+    })
+
+    describe('rejected call leaves state untouched', () => {
+      const detach = (c) => c.el.remove()
+      const rejected = [
+        ['scale 0', 'setViewport', { scale: 0 }],
+        ['scale -0.5', 'setViewport', { scale: -0.5 }],
+        ['scale 1.01', 'setViewport', { scale: 1.01 }],
+        ['scale NaN', 'setViewport', { scale: NaN }],
+        ['margin -1', 'setViewport', { margin: -1 }],
+        ['margin {left: -1}', 'setViewport', { margin: { left: -1 } }],
+        ['position middle', 'setViewport', { position: 'middle' }],
+        ['position top', 'setViewport', { position: 'top' }],
+        ['position Top-Left', 'setViewport', { position: 'Top-Left' }],
+        ['position top_left', 'setViewport', { position: 'top_left' }],
+        ['duration -1 on set', 'setViewport', { duration: -1 }],
+        ['duration Infinity on set', 'setViewport', { duration: Infinity }],
+        ['duration NaN on set', 'setViewport', { duration: NaN }],
+        ['duration -1 on reset', 'resetViewport', { duration: -1 }],
+        ['duration Infinity on reset', 'resetViewport', { duration: Infinity }],
+        ['duration NaN on reset', 'resetViewport', { duration: NaN }],
+        ['options big', 'setViewport', 'big'],
+        ['options 42', 'setViewport', 42],
+        ['scale string', 'setViewport', { scale: '0.5' }],
+        ['duration string', 'setViewport', { duration: '300' }],
+        ['margin string', 'setViewport', { margin: '20px' }],
+        ['position number', 'setViewport', { position: 1 }],
+        ['easing number', 'setViewport', { easing: 1 }],
+        ['reset options big', 'resetViewport', 'big'],
+        ['reset duration string', 'resetViewport', { duration: '300' }],
+        ['reset easing number', 'resetViewport', { easing: 1 }],
+        ['no parentElement', 'setViewport', { scale: 0.5 }, detach]
+      ]
+
+      test.each(rejected)('rejected call leaves state untouched: %s', async (_, method, options, prepare) => {
+        const pending = track(container.setViewport(TRANSFORM_ANIMATED))
+        events.length = 0
+        prepare && prepare(container)
+        const styleBefore = container.el.getAttribute('style')
+        const getterBefore = container.viewport
+
+        expect(() => container[method](options)).toThrow()
+
+        expect(container.el.getAttribute('style')).toBe(styleBefore)
+        expect(container.viewport).toEqual(getterBefore)
+        expect(events).toEqual([])
+        await vi.advanceTimersByTimeAsync(399)
+        expect(pending.settled).toBe(false)
+        await vi.advanceTimersByTimeAsync(1)
+        expect(pending.value.interrupted).toBe(false)
+      })
+    })
+  })
+
+  describe('S3 - transform viewport and animation', () => {
+    test('transform path top-left', async () => {
+      const result = container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: true })
+
+      expect(container.el.style.transformOrigin).toBe('0% 0%')
+      expect(container.el.style.transform).toBe('translate(20px, 20px) scale(0.5)')
+      const { top, left, width, height } = inlineStyle(container)
+      expect([top, left, width, height]).toEqual(['', '', '', ''])
+      expect(playback.setDisplayRect).toHaveBeenCalledTimes(0)
+      await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_TOP_LEFT })
+    })
+
+    test('transform path center with a left margin', async () => {
+      const result = container.setViewport({ scale: 0.5, margin: { left: 40 }, useTransform: true })
+
+      expect(container.el.style.transformOrigin).toBe('50% 50%')
+      expect(container.el.style.transform).toBe('translate(20px, 0px) scale(0.5)')
+      await expect(result).resolves.toEqual({ interrupted: false, rect: { x: 340, y: 180, width: 640, height: 360 } })
+    })
+
+    test('transform path bottom-right keeps scale unrounded', async () => {
+      const result = container.setViewport({ scale: 0.333, position: 'bottom-right', margin: 10, useTransform: true })
+
+      expect(container.el.style.transformOrigin).toBe('100% 100%')
+      expect(container.el.style.transform).toBe('translate(-10px, -10px) scale(0.333)')
+      await expect(result).resolves.toEqual({ interrupted: false, rect: { x: 844, y: 470, width: 426, height: 240 } })
+    })
+
+    test.each([
+      ['top-left', '0% 0%', 'translate(20px, 20px)', 20, 20],
+      ['top-center', '50% 0%', 'translate(0px, 20px)', 320, 20],
+      ['top-right', '100% 0%', 'translate(-20px, 20px)', 620, 20],
+      ['center-left', '0% 50%', 'translate(20px, 0px)', 20, 180],
+      ['center', '50% 50%', 'translate(0px, 0px)', 320, 180],
+      ['center-right', '100% 50%', 'translate(-20px, 0px)', 620, 180],
+      ['bottom-left', '0% 100%', 'translate(20px, -20px)', 20, 340],
+      ['bottom-center', '50% 100%', 'translate(0px, -20px)', 320, 340],
+      ['bottom-right', '100% 100%', 'translate(-20px, -20px)', 620, 340]
+    ])('transform path origin and rect for position %s', async (position, origin, translate, x, y) => {
+      const result = container.setViewport({ scale: 0.5, position, margin: 20, useTransform: true })
+
+      expect(container.el.style.transformOrigin).toBe(origin)
+      expect(container.el.style.transform).toBe(`${translate} scale(0.5)`)
+      await expect(result).resolves.toEqual({ interrupted: false, rect: { x, y, width: 640, height: 360 } })
+    })
+
+    describe('animated call', () => {
+      const animated = { scale: 0.5, useTransform: true, animate: true, duration: 500, easing: 'linear' }
+
+      test('animated call settles on its own transitionend', async () => {
+        const call = track(container.setViewport(animated))
+
+        expect(container.el.style.transition).toBe('transform 500ms linear')
+        expect(events.map(({ name }) => name)).toEqual([Events.CONTAINER_VIEWPORT_WILL_CHANGE])
+        await flush()
+        expect(call.settled).toBe(false)
+
+        fireTransitionEnd(container.el, 'transform')
+        await flush()
+
+        expect(events.map(({ name }) => name)).toEqual(VIEWPORT_EVENTS)
+        expect(call.value).toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+        expect(container.el.style.transition).toBe('')
+      })
+
+      test('ignores a foreign transitionend', async () => {
+        const call = track(container.setViewport(animated))
+        const child = document.createElement('span')
+        container.el.appendChild(child)
+
+        fireTransitionEnd(child, 'transform')
+        fireTransitionEnd(container.el, 'opacity')
+        await flush()
+
+        expect(events.map(({ name }) => name)).toEqual([Events.CONTAINER_VIEWPORT_WILL_CHANGE])
+        expect(call.settled).toBe(false)
+      })
+
+      test('animated call settles at duration plus 100', async () => {
+        const call = track(container.setViewport(animated))
+
+        await vi.advanceTimersByTimeAsync(599)
+        expect(call.settled).toBe(false)
+        await vi.advanceTimersByTimeAsync(1)
+
+        expect(events.map(({ name }) => name)).toEqual(VIEWPORT_EVENTS)
+        expect(call.value).toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+      })
+    })
+
+    describe('is interrupted by', () => {
+      const settledTransform = (c) => c.setViewport({ scale: 0.5, useTransform: true })
+      const pendingKinds = {
+        setViewport: {
+          start: (c) => c.setViewport(TRANSFORM_ANIMATED),
+          rect: RECT_HALF_CENTER
+        },
+        resetViewport: {
+          start: (c) => {
+            settledTransform(c)
+            return c.resetViewport({ animate: true })
+          },
+          rect: FULL
+        }
+      }
+      const newKinds = {
+        setViewport: {
+          call: (c) => c.setViewport({ scale: 0.25, useTransform: true }),
+          result: { interrupted: false, rect: { x: 480, y: 270, width: 320, height: 180 } },
+          verify: (c, recorded) => {
+            expect(c.el.style.transform).toBe('translate(0px, 0px) scale(0.25)')
+            expect(recorded.map(({ payload }) => payload.rect)).toEqual([
+              { x: 480, y: 270, width: 320, height: 180 },
+              { x: 480, y: 270, width: 320, height: 180 }
+            ])
+          }
+        },
+        resetViewport: {
+          call: (c) => c.resetViewport(),
+          result: { interrupted: false, rect: FULL },
+          verify: (c, recorded) => {
+            const { transform, transformOrigin, transition } = inlineStyle(c)
+            expect([transform, transformOrigin, transition]).toEqual(['', '', ''])
+            expect(recorded).toEqual([
+              { name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload: { rect: FULL, viewport: null } },
+              { name: Events.CONTAINER_VIEWPORT_DID_CHANGE, payload: { rect: FULL, viewport: null } }
+            ])
+          }
+        }
+      }
+
+      test.each([
+        ['setViewport', 'setViewport'],
+        ['setViewport', 'resetViewport'],
+        ['resetViewport', 'setViewport'],
+        ['resetViewport', 'resetViewport']
+      ])('%s is interrupted by %s', async (pendingName, newName) => {
+        const pendingCall = track(pendingKinds[pendingName].start(container))
+        events.length = 0
+
+        const newCall = track(newKinds[newName].call(container))
+        await flush()
+
+        expect(pendingCall.value).toEqual({ interrupted: true, rect: pendingKinds[pendingName].rect })
+        expect(newCall.value).toEqual(newKinds[newName].result)
+        newKinds[newName].verify(container, events)
+        const didEvents = events.filter(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE)
+        expect(didEvents).toHaveLength(1)
+        expect(didEvents[0].payload.rect).toEqual(newKinds[newName].result.rect)
+      })
+    })
+
+    test('uses the webkit prefixed transform', async () => {
+      const style = replaceStyle(container, { webkitTransform: '', webkitTransformOrigin: '', webkitTransition: '' })
+
+      const call = track(container.setViewport({ scale: 0.5, useTransform: true, animate: true, duration: 500, easing: 'linear' }))
+
+      expect(style.webkitTransform).toBe('translate(0px, 0px) scale(0.5)')
+      expect(style.webkitTransformOrigin).toBe('50% 50%')
+      expect(style.webkitTransition).toBe('-webkit-transform 500ms linear')
+      fireTransitionEnd(container.el, 'transform', 'transitionend')
+      await flush()
+      expect(call.settled).toBe(false)
+
+      fireTransitionEnd(container.el, '-webkit-transform', 'webkitTransitionEnd')
+      await flush()
+
+      expect(call.value).toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+    })
+
+    test('falls back to px without transform support', async () => {
+      const style = replaceStyle(container, {})
+
+      const result = container.setViewport({ scale: 0.5, useTransform: true })
+
+      expect(style).toMatchObject({ top: '180px', left: '320px', width: '640px', height: '360px' })
+      expect(Object.keys(style).filter((key) => /transform/i.test(key))).toEqual([])
+      expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_CENTER)
+      expect(container.viewport.viewport.useTransform).toBe(false)
+      await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+    })
+  })
+
+  describe('S5 - reset and lifecycle', () => {
+    test('reset removes a px viewport', async () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      playback.setDisplayRect.mockClear()
+      events.length = 0
+
+      const result = container.resetViewport()
+
+      const { top, left, width, height } = inlineStyle(container)
+      expect([top, left, width, height]).toEqual(['', '', '', ''])
+      expect(playback.setDisplayRect).toHaveBeenCalledWith(FULL)
+      const payload = { rect: FULL, viewport: null }
+      expect(events).toEqual([
+        { name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload },
+        { name: Events.CONTAINER_VIEWPORT_DID_CHANGE, payload }
+      ])
+      await expect(result).resolves.toEqual({ interrupted: false, rect: FULL })
+    })
+
+    describe('animated reset', () => {
+      const startAnimatedReset = () => {
+        container.setViewport({ scale: 0.5, useTransform: true })
+        events.length = 0
+        const call = track(container.resetViewport({ animate: true, duration: 500 }))
+        expect(container.el.style.transform).toBe('translate(0px, 0px) scale(1)')
+        return call
+      }
+
+      const expectSettled = (call) => {
+        const { transform, transformOrigin, transition } = inlineStyle(container)
+        expect([transform, transformOrigin, transition]).toEqual(['', '', ''])
+        expect(events.map(({ name }) => name)).toContain(Events.CONTAINER_VIEWPORT_DID_CHANGE)
+        expect(events.find(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE).payload).toEqual({ rect: FULL, viewport: null })
+        expect(call.value).toEqual({ interrupted: false, rect: FULL })
+      }
+
+      test('animated reset settles on transitionend', async () => {
+        const call = startAnimatedReset()
+        await flush()
+        expect(call.settled).toBe(false)
+
+        fireTransitionEnd(container.el, 'transform')
+        await flush()
+
+        expectSettled(call)
+      })
+
+      test('animated reset settles at the timeout', async () => {
+        const call = startAnimatedReset()
+
+        await vi.advanceTimersByTimeAsync(599)
+        expect(call.settled).toBe(false)
+        await vi.advanceTimersByTimeAsync(1)
+
+        expectSettled(call)
+      })
+    })
+
+    test('reset without a viewport', async () => {
+      const styleBefore = container.el.getAttribute('style')
+
+      const result = container.resetViewport()
+
+      expect(container.el.getAttribute('style')).toBe(styleBefore)
+      expect(events).toEqual([])
+      await expect(result).resolves.toEqual({ interrupted: false, rect: FULL })
+    })
+
+    test('switches from px to transform', () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      const snapshots = []
+      playback.setDisplayRect.mockImplementation((rect) => snapshots.push({ rect, ...inlineStyle(container) }))
+
+      container.setViewport({ scale: 0.5, useTransform: true })
+
+      expect(snapshots).toHaveLength(1)
+      expect(snapshots[0]).toMatchObject({ rect: FULL, top: '', left: '', width: '', height: '', transform: '' })
+      expect(container.el.style.transform).toBe('translate(0px, 0px) scale(0.5)')
+    })
+
+    test('switches from transform to px', async () => {
+      container.setViewport(TRANSFORM_ANIMATED)
+      await vi.advanceTimersByTimeAsync(400)
+
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+
+      expect(inlineStyle(container)).toEqual({
+        top: '20px', left: '20px', width: '640px', height: '360px', transform: '', transformOrigin: '', transition: ''
+      })
+    })
+
+    test('destroy resolves a pending call as interrupted', async () => {
+      const timersBefore = vi.getTimerCount()
+      const addSpy = vi.spyOn(container.el, 'addEventListener')
+      const removeSpy = vi.spyOn(container.el, 'removeEventListener')
+      const call = track(container.setViewport(TRANSFORM_ANIMATED))
+      events.length = 0
+
+      container.destroy()
+      await flush()
+
+      expect(call.value).toEqual({ interrupted: true, rect: RECT_HALF_CENTER })
+      expect(events).toEqual([])
+      expect(vi.getTimerCount()).toBe(timersBefore)
+      const isTransitionEnd = ([type]) => type === 'transitionend' || type === 'webkitTransitionEnd'
+      const added = addSpy.mock.calls.filter(isTransitionEnd)
+      const removed = removeSpy.mock.calls.filter(isTransitionEnd)
+      expect(added.length).toBeGreaterThan(0)
+      added.forEach(([type, handler]) => {
+        expect(removed.some(([removedType, removedHandler]) => removedType === type && removedHandler === handler)).toBe(true)
+      })
+    })
+
+    test('getter without a viewport', () => {
+      expect(container.viewport).toEqual({ rect: FULL, viewport: null })
+    })
+
+    test('getter when detached', () => {
+      parent.removeChild(container.el)
+
+      expect(container.viewport).toEqual({ rect: null, viewport: null })
+    })
+  })
+})
