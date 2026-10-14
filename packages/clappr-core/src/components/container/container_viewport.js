@@ -184,12 +184,8 @@ export default class ContainerViewport {
     const geometry = computeGeometry(viewport, size)
 
     this._begin(viewport, geometry.rect)
-    if (!viewport.useTransform) {
-      this._applyPx(geometry.rect)
-      return this._finish()
-    }
-    if (!viewport.animate) {
-      this._applyTransform(geometry, size, '')
+    if (!(viewport.useTransform && viewport.animate)) {
+      this._apply(viewport, geometry, size, '')
       return this._finish()
     }
     const transition = this._transitionFor(viewport)
@@ -221,16 +217,13 @@ export default class ContainerViewport {
 
     this._rect = geometry.rect
     this._notify(Events.CONTAINER_VIEWPORT_WILL_CHANGE)
+    // A pending animated call retargets in place: its own settle fires DID
     if (this._pending) {
       this._applyTransform(geometry, size, this._pending.transition)
       return
     }
 
-    if (this._viewport.useTransform) {
-      this._applyTransform(geometry, size, '')
-    } else {
-      this._applyPx(geometry.rect)
-    }
+    this._apply(this._viewport, geometry, size, '')
     this._notify(Events.CONTAINER_VIEWPORT_DID_CHANGE)
   }
 
@@ -269,6 +262,14 @@ export default class ContainerViewport {
   _transitionFor({ duration, easing }) {
     const { property } = findTransformStyles(this._container.el.style)
     return `${property} ${duration}ms ${easing}`
+  }
+
+  _apply(viewport, geometry, size, transition) {
+    if (viewport.useTransform) {
+      this._applyTransform(geometry, size, transition)
+    } else {
+      this._applyPx(geometry.rect)
+    }
   }
 
   _applyPx(rect) {
