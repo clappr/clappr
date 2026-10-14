@@ -217,9 +217,10 @@ export default class ContainerViewport {
 
     this._rect = geometry.rect
     this._notify(Events.CONTAINER_VIEWPORT_WILL_CHANGE)
-    // A pending animated call retargets in place: its own settle fires DID
+    // A pending animated call retargets in place and restarts its settle timer; its own settle fires DID
     if (this._pending) {
       this._applyTransform(geometry, size, this._pending.transition)
+      this._restartSettleTimer()
       return
     }
 
@@ -323,15 +324,15 @@ export default class ContainerViewport {
       const listener = (event) => {
         if (event.target === el && event.propertyName === property) this._settle()
       }
-      this._pending = {
-        resolve,
-        listener,
-        onSettle,
-        transition,
-        timer: setTimeout(() => this._settle(), duration + SETTLE_MARGIN_MS)
-      }
+      this._pending = { resolve, listener, onSettle, transition, duration, timer: null }
+      this._restartSettleTimer()
       TRANSITION_END_EVENTS.forEach((type) => el.addEventListener(type, listener))
     })
+  }
+
+  _restartSettleTimer() {
+    clearTimeout(this._pending.timer)
+    this._pending.timer = setTimeout(() => this._settle(), this._pending.duration + SETTLE_MARGIN_MS)
   }
 
   _release() {

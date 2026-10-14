@@ -189,6 +189,31 @@ describe('Core container viewport', () => {
     expect(call.value).toEqual({ interrupted: false, rect })
   })
 
+  test('restarts the settle timer when a resize retargets a pending animation', async () => {
+    const [container] = core.containers
+    const events = watch(container)
+    const call = track(container.setViewport({ ...PX_VIEWPORT, useTransform: true, animate: true, duration: 1000 }))
+    events.length = 0
+
+    await vi.advanceTimersByTimeAsync(900)
+    setSize(FULL_HD)
+    triggerCoreResize()
+    await flush()
+
+    const rect = { x: 20, y: 20, width: 960, height: 540 }
+    await vi.advanceTimersByTimeAsync(1099)
+    await flush()
+    expect(call.settled).toBe(false)
+    expect(events.map(({ name }) => name)).toEqual([Events.CONTAINER_VIEWPORT_WILL_CHANGE])
+
+    await vi.advanceTimersByTimeAsync(1)
+    await flush()
+
+    expect(call.value).toEqual({ interrupted: false, rect })
+    expect(events.map(({ name }) => name)).toEqual(VIEWPORT_EVENTS)
+    expect(events[1].payload.rect).toEqual(rect)
+  })
+
   test('ignores core resize without parentElement', () => {
     const [container] = core.containers
     const events = watch(container)
@@ -241,5 +266,36 @@ describe('Core container viewport', () => {
     expect(fresh.viewport).toEqual({ rect: { x: 0, y: 0, ...HD }, viewport: null })
     const { top, left, width, height, transform, transformOrigin, transition } = fresh.el.style
     expect([top, left, width, height, transform, transformOrigin, transition]).toEqual(['', '', '', '', '', '', ''])
+  })
+})
+
+describe('Core container viewport set during setup', () => {
+  test('reapplies a viewport set before the core is attached', () => {
+    vi.useFakeTimers()
+    const parent = document.createElement('div')
+    document.body.appendChild(parent)
+    const options = {
+      width: HD.width,
+      height: HD.height,
+      parentElement: parent,
+      sources: ['one.mp4'],
+      loader: { playbackPlugins: [], containerPlugins: [] }
+    }
+    const core = new Core(options)
+    const measured = () => (core.el.isConnected ? HD : { width: 0, height: 0 })
+    Object.defineProperty(core.el, 'clientWidth', { get: () => measured().width, configurable: true })
+    Object.defineProperty(core.el, 'clientHeight', { get: () => measured().height, configurable: true })
+    core.on(Events.CORE_ACTIVE_CONTAINER_CHANGED, (container) => container.setViewport(PX_VIEWPORT))
+
+    core.createContainers(options)
+
+    const { rect } = core.activeContainer.viewport
+    expect(rect).toEqual({ x: 20, y: 20, width: 640, height: 360 })
+    expect(core.activeContainer.el.style.width).toBe('640px')
+    expect(core.activeContainer.el.style.height).toBe('360px')
+
+    core.destroy()
+    parent.remove()
+    vi.useRealTimers()
   })
 })
