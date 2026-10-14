@@ -67,6 +67,19 @@ describe('Core container viewport', () => {
     vi.restoreAllMocks()
   })
 
+  test('core polling triggers CORE_RESIZE every 500 ms with the measured size', () => {
+    const callback = vi.fn()
+    core.on(Events.CORE_RESIZE, callback)
+    setSize({ width: 1500, height: 800 })
+
+    vi.advanceTimersByTime(499)
+    expect(callback).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+
+    expect(callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledWith({ width: 1500, height: 800 })
+  })
+
   test('reapplies on core resize', () => {
     const [container] = core.containers
     const events = watch(container)

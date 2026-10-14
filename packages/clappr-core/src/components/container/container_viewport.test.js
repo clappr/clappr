@@ -125,6 +125,12 @@ describe('Container viewport', () => {
       expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 178, y: 100, width: 924, height: 520 })
     })
 
+    test('px path clamps by the width of the margin box', () => {
+      container.setViewport({ margin: { left: 200, right: 200 } })
+
+      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 200, y: 113, width: 880, height: 495 })
+    })
+
     test('px path collapses margin 700 to a zero rect', () => {
       expect(() => container.setViewport({ margin: 700 })).not.toThrow()
 
@@ -474,6 +480,23 @@ describe('Container viewport', () => {
       expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_CENTER)
       expect(container.viewport.viewport.useTransform).toBe(false)
       await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+    })
+  })
+
+  describe('S4 - existing resize contract', () => {
+    test('container polling triggers CONTAINER_RESIZE every 500 ms with the measured size', () => {
+      measure(container.el, 800, 450)
+      const callback = vi.fn()
+      container.on(Events.CONTAINER_RESIZE, callback)
+      container.enableResizeObserver()
+
+      vi.advanceTimersByTime(499)
+      expect(callback).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(1)
+
+      expect(callback).toHaveBeenCalledTimes(1)
+      expect(callback).toHaveBeenCalledWith({ width: 800, height: 450 })
+      container.disableResizeObserver()
     })
   })
 
