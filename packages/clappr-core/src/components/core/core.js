@@ -288,6 +288,8 @@ export default class Core extends UIObject {
     this.activeContainer = containers[0]
     this.render()
     this.appendToParent()
+    // A viewport set before this point measured a detached core, so recompute it now that the core is in the page
+    this.reapplyContainerViewports()
     return this.containers
   }
 
