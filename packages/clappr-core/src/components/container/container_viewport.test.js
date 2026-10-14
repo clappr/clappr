@@ -107,34 +107,16 @@ describe('Container viewport', () => {
       expect([style.top, style.left, style.width, style.height]).toEqual(['', '', '', ''])
     })
 
-    test('px path defaults to center and zero margin', () => {
-      container.setViewport({ scale: 0.5 })
+    test.each([
+      ['defaults to center and zero margin', { scale: 0.5 }, RECT_HALF_CENTER],
+      ['clamps the default scale to the margin box', { position: 'top-left', margin: { right: 320, bottom: 180 } }, { x: 0, y: 0, width: 960, height: 540 }],
+      ['clamps and rounds margin 100', { margin: 100 }, { x: 178, y: 100, width: 924, height: 520 }],
+      ['clamps by the width of the margin box', { margin: { left: 200, right: 200 } }, { x: 200, y: 113, width: 880, height: 495 }],
+      ['collapses margin 700 to a zero rect', { margin: 700 }, { x: 640, y: 360, width: 0, height: 0 }]
+    ])('px path %s', (_, options, rect) => {
+      expect(() => container.setViewport(options)).not.toThrow()
 
-      expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_CENTER)
-    })
-
-    test('px path clamps the default scale to the margin box', () => {
-      container.setViewport({ position: 'top-left', margin: { right: 320, bottom: 180 } })
-
-      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 0, y: 0, width: 960, height: 540 })
-    })
-
-    test('px path clamps and rounds margin 100', () => {
-      container.setViewport({ margin: 100 })
-
-      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 178, y: 100, width: 924, height: 520 })
-    })
-
-    test('px path clamps by the width of the margin box', () => {
-      container.setViewport({ margin: { left: 200, right: 200 } })
-
-      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 200, y: 113, width: 880, height: 495 })
-    })
-
-    test('px path collapses margin 700 to a zero rect', () => {
-      expect(() => container.setViewport({ margin: 700 })).not.toThrow()
-
-      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x: 640, y: 360, width: 0, height: 0 })
+      expect(playback.setDisplayRect).toHaveBeenCalledWith(rect)
     })
 
     test.each([
@@ -312,20 +294,15 @@ describe('Container viewport', () => {
       await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_TOP_LEFT })
     })
 
-    test('transform path center with a left margin', async () => {
-      const result = container.setViewport({ scale: 0.5, margin: { left: 40 }, useTransform: true })
+    test.each([
+      ['center with a left margin', { scale: 0.5, margin: { left: 40 } }, '50% 50%', 'translate(20px, 0px) scale(0.5)', { x: 340, y: 180, width: 640, height: 360 }],
+      ['bottom-right keeps scale unrounded', { scale: 0.333, position: 'bottom-right', margin: 10 }, '100% 100%', 'translate(-10px, -10px) scale(0.333)', { x: 844, y: 470, width: 426, height: 240 }]
+    ])('transform path %s', async (_, options, origin, transform, rect) => {
+      const result = container.setViewport({ ...options, useTransform: true })
 
-      expect(container.el.style.transformOrigin).toBe('50% 50%')
-      expect(container.el.style.transform).toBe('translate(20px, 0px) scale(0.5)')
-      await expect(result).resolves.toEqual({ interrupted: false, rect: { x: 340, y: 180, width: 640, height: 360 } })
-    })
-
-    test('transform path bottom-right keeps scale unrounded', async () => {
-      const result = container.setViewport({ scale: 0.333, position: 'bottom-right', margin: 10, useTransform: true })
-
-      expect(container.el.style.transformOrigin).toBe('100% 100%')
-      expect(container.el.style.transform).toBe('translate(-10px, -10px) scale(0.333)')
-      await expect(result).resolves.toEqual({ interrupted: false, rect: { x: 844, y: 470, width: 426, height: 240 } })
+      expect(container.el.style.transformOrigin).toBe(origin)
+      expect(container.el.style.transform).toBe(transform)
+      await expect(result).resolves.toEqual({ interrupted: false, rect })
     })
 
     test.each([
