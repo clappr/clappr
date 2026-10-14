@@ -52,6 +52,7 @@ const POSITIONS = {
 }
 const ORIGINS = { start: '0%', center: '50%', end: '100%' }
 const PX_STYLES = ['top', 'left', 'width', 'height']
+const IDENTITY_TRANSFORM = 'translate(0px, 0px) scale(1)'
 const TRANSFORM_STYLES = [
   { transform: 'transform', origin: 'transformOrigin', transition: 'transition', property: 'transform' },
   { transform: 'webkitTransform', origin: 'webkitTransformOrigin', transition: 'webkitTransition', property: '-webkit-transform' }
@@ -147,8 +148,6 @@ const computeGeometry = ({ scale, position, margin }, { width, height }) => {
     origin: `${ORIGINS[horizontal]} ${ORIGINS[vertical]}`
   }
 }
-
-const IDENTITY_TRANSFORM = 'translate(0px, 0px) scale(1)'
 
 /**
  * Places the video of a container inside the core: it validates the request, computes the display rect
