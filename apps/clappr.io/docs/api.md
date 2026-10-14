@@ -107,3 +107,9 @@ Enables to configure a player after its creation. The `options` parameter should
 player.configure({ autoPlay: true, mute: false })
 ```
 
+## Container viewport
+
+Shrink and place the video inside the player with `setViewport`, take it back with `resetViewport`, and read the current state from the `viewport` getter.
+They live on the container, so you reach them through `player.core.activeContainer`.
+See the [Container viewport guide](guides/container_viewport.md).
+
