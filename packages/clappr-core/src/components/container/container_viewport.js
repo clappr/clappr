@@ -197,10 +197,13 @@ export default class ContainerViewport {
 
   reset(options) {
     const { animate, duration, easing } = normalizeAnimation(readOptions(options))
+    if (!this._viewport && !this._pending) {
+      return Promise.resolve({ interrupted: false, rect: this._fullRect(this._measure()) })
+    }
+
     const size = this._measure()
-    if (!size && (this._viewport || this._pending)) throw new Error('The container has no parentElement to measure')
+    if (!size) throw new Error('The container has no parentElement to measure')
     const rect = this._fullRect(size)
-    if (!this._viewport && !this._pending) return Promise.resolve({ interrupted: false, rect })
 
     this._begin(null, rect)
     if (!(animate && this._strategy === 'transform')) {
