@@ -79,8 +79,10 @@ const assertString = (name, value) => {
 
 const assertNonNegative = (name, value) => {
   assertNumber(name, value)
-  if (!(isFinite(value) && value >= 0)) throw new RangeError(`${name} must be a finite number >= 0`)
+  if (!(Number.isFinite(value) && value >= 0)) throw new RangeError(`${name} must be a finite number >= 0`)
 }
+
+const flushLayout = (element) => element.offsetWidth
 
 const readOptions = (options) => {
   if (options === undefined) return {}
@@ -302,7 +304,7 @@ export default class ContainerViewport {
     // The transition has to be painted before the new value, or the change is instant.
     if (values.transition && moves && !el.style[names.transition]) {
       el.style[names.transition] = values.transition
-      el.offsetWidth
+      flushLayout(el)
     }
     Object.keys(values).forEach((key) => { el.style[names[key]] = values[key] })
   }
