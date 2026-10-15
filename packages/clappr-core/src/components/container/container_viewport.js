@@ -79,7 +79,9 @@ const assertString = (name, value) => {
 
 const assertNonNegative = (name, value) => {
   assertNumber(name, value)
-  if (!(Number.isFinite(value) && value >= 0)) throw new RangeError(`${name} must be a finite number >= 0`)
+  const message = `${name} must be a finite number >= 0`
+  if (!Number.isFinite(value)) throw new RangeError(message)
+  if (value < 0) throw new RangeError(message)
 }
 
 const flushLayout = (element) => element.offsetWidth
@@ -94,7 +96,10 @@ const readOption = (options, key) => options[key] === undefined ? DEFAULTS[key] 
 
 const normalizeScale = (scale) => {
   assertNumber('scale', scale)
-  if (!(scale > 0 && scale <= 1)) throw new RangeError('scale must be greater than 0 and at most 1')
+  const message = 'scale must be greater than 0 and at most 1'
+  if (!Number.isFinite(scale)) throw new RangeError(message)
+  if (scale <= 0) throw new RangeError(message)
+  if (scale > 1) throw new RangeError(message)
   return scale
 }
 
@@ -186,7 +191,8 @@ export default class ContainerViewport {
     const geometry = computeGeometry(viewport, size)
 
     this._begin(viewport, geometry.rect)
-    if (!(viewport.useTransform && viewport.animate)) {
+    const animated = viewport.useTransform && viewport.animate
+    if (!animated) {
       this._apply(viewport, geometry, size, '')
       return this._finish()
     }
@@ -197,16 +203,16 @@ export default class ContainerViewport {
 
   reset(options) {
     const { animate, duration, easing } = normalizeAnimation(readOptions(options))
-    if (!this._viewport && !this._pending) {
-      return Promise.resolve({ interrupted: false, rect: this._fullRect(this._measure()) })
-    }
+    const active = this._viewport || this._pending
+    if (!active) return Promise.resolve({ interrupted: false, rect: this._fullRect(this._measure()) })
 
     const size = this._measure()
     if (!size) throw new Error('The container has no parentElement to measure')
     const rect = this._fullRect(size)
 
     this._begin(null, rect)
-    if (!(animate && this._strategy === 'transform')) {
+    const animated = animate && this._strategy === 'transform'
+    if (!animated) {
       this._clearApplied(rect)
       return this._finish()
     }
@@ -216,7 +222,8 @@ export default class ContainerViewport {
   }
 
   reapply() {
-    const size = this._viewport && this._measure()
+    if (!this._viewport) return
+    const size = this._measure()
     if (!size) return
     const geometry = computeGeometry(this._viewport, size)
     if (sameRect(geometry.rect, this._rect)) return
@@ -247,7 +254,8 @@ export default class ContainerViewport {
   }
 
   _fullRect(size) {
-    return size && { x: 0, y: 0, width: size.width, height: size.height }
+    if (!size) return null
+    return { x: 0, y: 0, width: size.width, height: size.height }
   }
 
   _begin(viewport, rect) {
@@ -304,9 +312,12 @@ export default class ContainerViewport {
   _writeTransform(values) {
     const el = this._container.el
     const names = findTransformStyles(el.style)
-    const moves = ['transform', 'origin'].some((key) => key in values && values[key] !== el.style[names[key]])
+    const changes = (key) => key in values && values[key] !== el.style[names[key]]
+    const moves = ['transform', 'origin'].some(changes)
+    const running = Boolean(el.style[names.transition])
+    const arming = Boolean(values.transition) && moves
     // The transition has to be painted before the new value, or the change is instant.
-    if (values.transition && moves && !el.style[names.transition]) {
+    if (arming && !running) {
       el.style[names.transition] = values.transition
       flushLayout(el)
     }
@@ -325,7 +336,7 @@ export default class ContainerViewport {
   _clearApplied(rect) {
     if (this._strategy === 'px') {
       this._clearPx()
-      rect && this._container.playback.setDisplayRect(copyRect(rect))
+      if (rect) this._container.playback.setDisplayRect(copyRect(rect))
     }
     if (this._strategy === 'transform') this._clearTransform()
     this._strategy = null
@@ -336,7 +347,9 @@ export default class ContainerViewport {
       const el = this._container.el
       const { property, originProperty } = findTransformStyles(el.style)
       const listener = (event) => {
-        if (event.target === el && (event.propertyName === property || event.propertyName === originProperty)) this._settle()
+        if (event.target !== el) return
+        if (event.propertyName === property) this._settle()
+        if (event.propertyName === originProperty) this._settle()
       }
       this._pending = { resolve, listener, onSettle, transition, duration, timer: null }
       this._restartSettleTimer()
