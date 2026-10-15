@@ -198,6 +198,7 @@ export default class ContainerViewport {
   reset(options) {
     const { animate, duration, easing } = normalizeAnimation(readOptions(options))
     const size = this._measure()
+    if (!size && (this._viewport || this._pending)) throw new Error('The container has no parentElement to measure')
     const rect = this._fullRect(size)
     if (!this._viewport && !this._pending) return Promise.resolve({ interrupted: false, rect })
 
