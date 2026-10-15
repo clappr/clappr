@@ -547,6 +547,22 @@ describe('Container viewport', () => {
       })
     })
 
+    test('reset throws without parentElement while a viewport is set', () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      playback.setDisplayRect.mockClear()
+      container.el.remove()
+
+      const error = errorOf(() => container.resetViewport())
+
+      expect(error).toBeInstanceOf(Error)
+      expect(error.constructor).toBe(Error)
+      expect(error.message).toBe('The container has no parentElement to measure')
+      expect(playback.setDisplayRect).not.toHaveBeenCalled()
+      parent.appendChild(container.el)
+      expect(container.viewport.viewport.scale).toBe(0.5)
+      expect(container.el.style.width).toBe('640px')
+    })
+
     test('reset without a viewport', async () => {
       const styleBefore = container.el.getAttribute('style')
 

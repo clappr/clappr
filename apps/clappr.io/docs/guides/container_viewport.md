@@ -53,7 +53,7 @@ A call that throws does so synchronously, before any style, event or Promise exi
 
 ### resetViewport(options)
 
-Removes the viewport and gives the whole player back to the video. It returns the same `{ interrupted, rect }` Promise, with the full rect. `options` takes `animate`, `duration` and `easing`, validated like above; `animate` only has an effect after a `useTransform: true` viewport. With no viewport it changes nothing and fires no event.
+Removes the viewport and gives the whole player back to the video. It returns the same `{ interrupted, rect }` Promise, with the full rect. `options` takes `animate`, `duration` and `easing`, validated like above; `animate` only has an effect after a `useTransform: true` viewport. With no viewport it changes nothing and fires no event. With a viewport and no parent element it throws the same `Error` as `setViewport` and leaves the viewport in place, because the full rect cannot be measured.
 
 ### viewport
 
