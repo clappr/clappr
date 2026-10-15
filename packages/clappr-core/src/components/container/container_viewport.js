@@ -175,10 +175,8 @@ export default class ContainerViewport {
   get current() {
     const size = this._measure()
     if (!size) return { rect: null, viewport: null }
-    return {
-      rect: this._viewport ? copyRect(this._rect) : this._fullRect(size),
-      viewport: copyViewport(this._viewport)
-    }
+    if (!this._viewport) return { rect: this._fullRect(size), viewport: null }
+    return { rect: copyRect(this._rect), viewport: copyViewport(this._viewport) }
   }
 
   set(options) {
@@ -248,7 +246,8 @@ export default class ContainerViewport {
 
   _measure() {
     const parent = this._container.el.parentElement
-    return parent ? { width: parent.clientWidth, height: parent.clientHeight } : null
+    if (!parent) return null
+    return { width: parent.clientWidth, height: parent.clientHeight }
   }
 
   _fullRect(size) {
@@ -280,11 +279,11 @@ export default class ContainerViewport {
   }
 
   _apply(viewport, geometry, size, transition) {
-    if (viewport.useTransform) {
-      this._applyTransform(geometry, size, transition)
-    } else {
+    if (!viewport.useTransform) {
       this._applyPx(geometry.rect)
+      return
     }
+    this._applyTransform(geometry, size, transition)
   }
 
   _applyPx(rect) {
@@ -310,16 +309,19 @@ export default class ContainerViewport {
   _writeTransform(values) {
     const el = this._container.el
     const names = findTransformStyles(el.style)
+    this._armTransition(el, names, values)
+    Object.keys(values).forEach((key) => { el.style[names[key]] = values[key] })
+  }
+
+  _armTransition(el, names, values) {
+    if (!values.transition) return
     const changes = (key) => key in values && values[key] !== el.style[names[key]]
     const moves = ['transform', 'origin'].some(changes)
-    const running = Boolean(el.style[names.transition])
-    const arming = Boolean(values.transition) && moves
+    if (!moves) return
+    if (el.style[names.transition]) return
     // The transition has to be painted before the new value, or the change is instant.
-    if (arming && !running) {
-      el.style[names.transition] = values.transition
-      flushLayout(el)
-    }
-    Object.keys(values).forEach((key) => { el.style[names[key]] = values[key] })
+    el.style[names.transition] = values.transition
+    flushLayout(el)
   }
 
   _clearPx() {
@@ -335,6 +337,8 @@ export default class ContainerViewport {
     if (this._strategy === 'px') {
       this._clearPx()
       if (rect) this._container.playback.setDisplayRect(copyRect(rect))
+      this._strategy = null
+      return
     }
     if (this._strategy === 'transform') this._clearTransform()
     this._strategy = null
