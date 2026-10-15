@@ -79,9 +79,8 @@ const assertString = (name, value) => {
 
 const assertNonNegative = (name, value) => {
   assertNumber(name, value)
-  const message = `${name} must be a finite number >= 0`
-  if (!Number.isFinite(value)) throw new RangeError(message)
-  if (value < 0) throw new RangeError(message)
+  if (!Number.isFinite(value)) throw new RangeError(`${name} must be a finite number >= 0`)
+  if (value < 0) throw new RangeError(`${name} must be a finite number >= 0`)
 }
 
 const flushLayout = (element) => element.offsetWidth
@@ -96,10 +95,9 @@ const readOption = (options, key) => options[key] === undefined ? DEFAULTS[key] 
 
 const normalizeScale = (scale) => {
   assertNumber('scale', scale)
-  const message = 'scale must be greater than 0 and at most 1'
-  if (!Number.isFinite(scale)) throw new RangeError(message)
-  if (scale <= 0) throw new RangeError(message)
-  if (scale > 1) throw new RangeError(message)
+  if (!Number.isFinite(scale)) throw new RangeError('scale must be greater than 0 and at most 1')
+  if (scale <= 0) throw new RangeError('scale must be greater than 0 and at most 1')
+  if (scale > 1) throw new RangeError('scale must be greater than 0 and at most 1')
   return scale
 }
 
