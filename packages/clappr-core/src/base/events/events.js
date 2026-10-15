@@ -958,18 +958,18 @@ Events.CONTAINER_OPTIONS_WILL_CHANGE = 'container:options:will:change'
 Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'
 
 /**
- * Fired before the container's viewport changes, with the target of the change
+ * Fired before the container viewport changes.
  *
  * @event CONTAINER_VIEWPORT_WILL_CHANGE
- * @param {Object} viewport change `{rect, viewport}`: the display rect in px from the core's top-left corner, and the normalized viewport options (`null` after a reset)
+ * @param {Object} payload `{ rect, viewport }`. `viewport` is null after a reset.
  */
 Events.CONTAINER_VIEWPORT_WILL_CHANGE = 'container:viewport:will:change'
 
 /**
- * Fired once the container's viewport is visually applied
+ * Fired once the container viewport is visually applied.
  *
  * @event CONTAINER_VIEWPORT_DID_CHANGE
- * @param {Object} viewport change `{rect, viewport}`: the display rect in px from the core's top-left corner, and the normalized viewport options (`null` after a reset)
+ * @param {Object} payload `{ rect, viewport }`. `viewport` is null after a reset.
  */
 Events.CONTAINER_VIEWPORT_DID_CHANGE = 'container:viewport:did:change'
 

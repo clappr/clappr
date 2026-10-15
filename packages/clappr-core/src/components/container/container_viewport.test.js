@@ -326,10 +326,22 @@ describe('Container viewport', () => {
     describe('animated call', () => {
       const animated = { scale: 0.5, useTransform: true, animate: true, duration: 500, easing: 'linear' }
 
+      test('animates from a transform that was applied without animation', () => {
+        container.setViewport({ scale: 0.5, position: 'bottom-right', useTransform: true })
+        const flushLayout = vi.spyOn(container.el, 'offsetWidth', 'get')
+
+        container.setViewport({ scale: 0.5, position: 'center', useTransform: true, animate: true, duration: 400, easing: 'ease-out' })
+
+        expect(container.el.style.transform).toBe('translate(0px, 0px) scale(0.5)')
+        expect(container.el.style.transformOrigin).toBe('50% 50%')
+        expect(flushLayout).toHaveBeenCalled()
+        expect(container.el.style.transition).toBe('transform 400ms ease-out, transform-origin 400ms ease-out')
+      })
+
       test('animated call settles on its own transitionend', async () => {
         const call = track(container.setViewport(animated))
 
-        expect(container.el.style.transition).toBe('transform 500ms linear')
+        expect(container.el.style.transition).toBe('transform 500ms linear, transform-origin 500ms linear')
         expect(events.map(({ name }) => name)).toEqual([Events.CONTAINER_VIEWPORT_WILL_CHANGE])
         await flush()
         expect(call.settled).toBe(false)
@@ -436,7 +448,7 @@ describe('Container viewport', () => {
 
       expect(style.webkitTransform).toBe('translate(0px, 0px) scale(0.5)')
       expect(style.webkitTransformOrigin).toBe('50% 50%')
-      expect(style.webkitTransition).toBe('-webkit-transform 500ms linear')
+      expect(style.webkitTransition).toBe('-webkit-transform 500ms linear, -webkit-transform-origin 500ms linear')
       fireTransitionEnd(container.el, 'transform', 'transitionend')
       await flush()
       expect(call.settled).toBe(false)
