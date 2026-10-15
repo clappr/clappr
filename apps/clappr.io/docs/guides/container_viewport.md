@@ -100,7 +100,7 @@ On the px strategy the container calls `playback.setDisplayRect({ x, y, width, h
 - **Fullscreen**: entering and leaving fullscreen resize the player, so the viewport is reapplied, and the video keeps its place in both.
 - **Interruption**: a call made while an animated call is pending resolves that one with `interrupted: true` and its own target rect, without `CONTAINER_VIEWPORT_DID_CHANGE`, and the new call proceeds. A resize while an animation runs does not interrupt it: the transition is retargeted to the new rect.
 - **Timeout**: an animated call settles on the container's own `transitionend`, or `duration + 100` ms after the call if none arrives, because some TV engines drop the event. A resize that retargets the animation restarts that wait. A timeout settles as completed, with `interrupted: false`.
-- **`resetViewport`**: it brings back the full box. A pending animated call counts as an active viewport until it settles.
+- **`resetViewport`**: it brings back the full box. A pending animated call counts as an active viewport until it settles. A resize during an animated reset keeps the identity transform and fires `CONTAINER_VIEWPORT_WILL_CHANGE` when the full rect changes. The reset then reports that rect, without restarting its wait.
 - **`destroy`**: destroying the container resolves a pending call with `interrupted: true`, fires no event, and clears the timer and the listeners. A later resize never reaches it.
 - **`load()`**: a container created by `player.load()` starts with no viewport, even if the previous one had one.
 - **`animate` without `useTransform`**: it is ignored. The px strategy applies at once and the Promise resolves right away.

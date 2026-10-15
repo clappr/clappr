@@ -218,9 +218,12 @@ export default class ContainerViewport {
   }
 
   reapply() {
-    if (!this._viewport) return
     const size = this._measure()
     if (!size) return
+    if (!this._viewport) {
+      this._refreshPendingReset(size)
+      return
+    }
     const geometry = computeGeometry(this._viewport, size)
     if (sameRect(geometry.rect, this._rect)) return
 
@@ -242,6 +245,15 @@ export default class ContainerViewport {
     this._viewport = null
     this._rect = null
     this._strategy = null
+  }
+
+  _refreshPendingReset(size) {
+    if (!this._pending) return
+    const rect = this._fullRect(size)
+    if (sameRect(rect, this._rect)) return
+    // The identity transform does not depend on the parent size, but the reported full rect does.
+    this._rect = rect
+    this._notify(Events.CONTAINER_VIEWPORT_WILL_CHANGE)
   }
 
   _measure() {

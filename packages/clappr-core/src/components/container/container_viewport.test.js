@@ -545,6 +545,29 @@ describe('Container viewport', () => {
 
         expectSettled(call)
       })
+
+      test('resize during an animated reset reports the new full rect', async () => {
+        const call = startAnimatedReset()
+        await vi.advanceTimersByTimeAsync(500)
+        events.length = 0
+        measure(parent, 640, 360)
+
+        container.reapplyViewport()
+
+        const rect = { x: 0, y: 0, width: 640, height: 360 }
+        expect(container.el.style.transform).toBe('translate(0px, 0px) scale(1)')
+        expect(events).toEqual([{ name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload: { rect, viewport: null } }])
+        expect(call.settled).toBe(false)
+
+        await vi.advanceTimersByTimeAsync(99)
+        expect(call.settled).toBe(false)
+        await vi.advanceTimersByTimeAsync(1)
+        await flush()
+
+        expect(call.value).toEqual({ interrupted: false, rect })
+        expect(events.map(({ name }) => name)).toEqual(VIEWPORT_EVENTS)
+        expect(events[1].payload).toEqual({ rect, viewport: null })
+      })
     })
 
     test('reset throws without parentElement while a viewport is set', () => {
