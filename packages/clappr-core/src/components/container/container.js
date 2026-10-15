@@ -304,15 +304,11 @@ export default class Container extends UIObject {
   }
 
   /**
-   * shrinks and places the video inside the core, and tells the playback the area it occupies.
-   * Without `useTransform` it resizes the container box in px and calls `Playback#setDisplayRect`;
-   * with it, it moves the video with a CSS transform and leaves the layout box alone.
-   * Misuse throws synchronously: `TypeError` for a wrong type, `RangeError` for an out-of-range or unknown value,
-   * and `Error` when the container has no parent element.
+   * shrinks and places the video inside the core.
+   * Throws synchronously on a bad argument or when the container has no parent element.
    * @method setViewport
    * @param {import('./container_viewport').ViewportOptions} [options]
    * @return {Promise<import('./container_viewport').ViewportResult>}
-   * resolves when the change is visible, with `interrupted: true` if a newer call replaced it first
    */
   setViewport(options) {
     return this._viewportController.set(options)

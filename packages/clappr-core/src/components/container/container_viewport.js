@@ -54,8 +54,8 @@ const ORIGINS = { start: '0%', center: '50%', end: '100%' }
 const PX_STYLES = ['top', 'left', 'width', 'height']
 const IDENTITY_TRANSFORM = 'translate(0px, 0px) scale(1)'
 const TRANSFORM_STYLES = [
-  { transform: 'transform', origin: 'transformOrigin', transition: 'transition', property: 'transform' },
-  { transform: 'webkitTransform', origin: 'webkitTransformOrigin', transition: 'webkitTransition', property: '-webkit-transform' }
+  { transform: 'transform', origin: 'transformOrigin', transition: 'transition', property: 'transform', originProperty: 'transform-origin' },
+  { transform: 'webkitTransform', origin: 'webkitTransformOrigin', transition: 'webkitTransition', property: '-webkit-transform', originProperty: '-webkit-transform-origin' }
 ]
 const TRANSITION_END_EVENTS = ['transitionend', 'webkitTransitionEnd']
 // Old smart TV engines drop `transitionend`, so a call also settles on a timeout
@@ -217,7 +217,7 @@ export default class ContainerViewport {
 
     this._rect = geometry.rect
     this._notify(Events.CONTAINER_VIEWPORT_WILL_CHANGE)
-    // A pending animated call retargets in place and restarts its settle timer; its own settle fires DID
+    // A pending animated call retargets in place and restarts its settle timer; its own settle fires the did event.
     if (this._pending) {
       this._applyTransform(geometry, size, this._pending.transition)
       this._restartSettleTimer()
@@ -261,8 +261,10 @@ export default class ContainerViewport {
   }
 
   _transitionFor({ duration, easing }) {
-    const { property } = findTransformStyles(this._container.el.style)
-    return `${property} ${duration}ms ${easing}`
+    const { property, originProperty } = findTransformStyles(this._container.el.style)
+    const timing = `${duration}ms ${easing}`
+    // Position with no margin lives in transform-origin, so the same translate would not move.
+    return `${property} ${timing}, ${originProperty} ${timing}`
   }
 
   _apply(viewport, geometry, size, transition) {
@@ -294,9 +296,15 @@ export default class ContainerViewport {
   }
 
   _writeTransform(values) {
-    const { style } = this._container.el
-    const names = findTransformStyles(style)
-    Object.keys(values).forEach((key) => { style[names[key]] = values[key] })
+    const el = this._container.el
+    const names = findTransformStyles(el.style)
+    const moves = ['transform', 'origin'].some((key) => key in values && values[key] !== el.style[names[key]])
+    // The transition has to be painted before the new value, or the change is instant.
+    if (values.transition && moves && !el.style[names.transition]) {
+      el.style[names.transition] = values.transition
+      el.offsetWidth
+    }
+    Object.keys(values).forEach((key) => { el.style[names[key]] = values[key] })
   }
 
   _clearPx() {
@@ -320,9 +328,9 @@ export default class ContainerViewport {
   _awaitSettle(duration, transition, onSettle) {
     return new Promise((resolve) => {
       const el = this._container.el
-      const { property } = findTransformStyles(el.style)
+      const { property, originProperty } = findTransformStyles(el.style)
       const listener = (event) => {
-        if (event.target === el && event.propertyName === property) this._settle()
+        if (event.target === el && (event.propertyName === property || event.propertyName === originProperty)) this._settle()
       }
       this._pending = { resolve, listener, onSettle, transition, duration, timer: null }
       this._restartSettleTimer()
