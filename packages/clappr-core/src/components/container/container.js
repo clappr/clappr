@@ -11,7 +11,7 @@ import UIObject from '../../base/ui_object/ui_object'
 import ErrorMixin from '../../base/error_mixin/error_mixin'
 import Styler from '../../base/styler/styler'
 import { DoubleEventHandler } from '../../utils/utils'
-import ContainerViewport from './container_viewport'
+import ContainerViewport from './container_viewport/container_viewport'
 import ContainerStyle from './public/style.scss'
 import $ from '@clappr/zepto'
 
@@ -139,7 +139,7 @@ export default class Container extends UIObject {
   /**
    * the display rect and the viewport options currently in effect.
    * `viewport` is `null` when none is set, and both are `null` while the container has no parent element.
-   * @type {{rect: import('./container_viewport').DisplayRect|null, viewport: import('./container_viewport').ViewportOptions|null}}
+   * @type {{rect: import('./container_viewport/container_viewport').DisplayRect|null, viewport: import('./container_viewport/container_viewport').ViewportOptions|null}}
    */
   get viewport() {
     return this._viewportController.current
@@ -307,8 +307,8 @@ export default class Container extends UIObject {
    * shrinks and places the video inside the core.
    * Throws synchronously on a bad argument or when the container has no parent element.
    * @method setViewport
-   * @param {import('./container_viewport').ViewportOptions} [options]
-   * @return {Promise<import('./container_viewport').ViewportResult>}
+   * @param {import('./container_viewport/container_viewport').ViewportOptions} [options]
+   * @return {Promise<import('./container_viewport/container_viewport').ViewportResult>}
    */
   setViewport(options) {
     return this._viewportController.set(options)
@@ -321,7 +321,7 @@ export default class Container extends UIObject {
    * @param {Boolean} [options.animate=false] transition the change, only if the viewport uses a transform
    * @param {Number} [options.duration=300] transition time in ms
    * @param {String} [options.easing='ease'] CSS timing function
-   * @return {Promise<import('./container_viewport').ViewportResult>}
+   * @return {Promise<import('./container_viewport/container_viewport').ViewportResult>}
    */
   resetViewport(options) {
     return this._viewportController.reset(options)
