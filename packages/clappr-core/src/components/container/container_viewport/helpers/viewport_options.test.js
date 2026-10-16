@@ -79,16 +79,13 @@ describe('normalizeViewport', () => {
     )
   })
 
-  test.each([-1, Infinity, NaN])('rejects margin %s', margin => {
-    expect(errorOf(() => normalizeViewport({ margin }))).toEqual(
-      new RangeError('margin must be a finite number >= 0')
-    )
-  })
-
-  test('rejects a negative margin edge', () => {
-    const error = errorOf(() => normalizeViewport({ margin: { left: -1 } }))
-
-    expect(error).toEqual(new RangeError('margin.left must be a finite number >= 0'))
+  test.each([
+    ['-1', -1, 'margin must be a finite number >= 0'],
+    ['Infinity', Infinity, 'margin must be a finite number >= 0'],
+    ['NaN', NaN, 'margin must be a finite number >= 0'],
+    ['{left: -1}', { left: -1 }, 'margin.left must be a finite number >= 0']
+  ])('rejects margin %s', (_, margin, message) => {
+    expect(errorOf(() => normalizeViewport({ margin }))).toEqual(new RangeError(message))
   })
 
   test.each(['middle', 'top', 'Top-Left', 'top_left'])('rejects position %s', position => {
