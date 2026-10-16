@@ -1,6 +1,6 @@
-import Container from './container'
-import Playback from '../../base/playback/playback'
-import Events from '../../base/events/events'
+import Container from '../container'
+import Playback from '../../../base/playback/playback'
+import Events from '../../../base/events/events'
 
 const FULL = { x: 0, y: 0, width: 1280, height: 720 }
 const RECT_HALF_CENTER = { x: 320, y: 180, width: 640, height: 360 }

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Events from '../../base/events/events'
+import Events from '../../../base/events/events'
 import { computeGeometry } from './helpers/viewport_geometry'
 import { normalizeAnimation, normalizeViewport } from './helpers/viewport_options'
 import { copyRect, copyViewport, sameRect } from './helpers/viewport_rect'
