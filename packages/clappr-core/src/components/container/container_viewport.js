@@ -3,6 +3,17 @@
 // license that can be found in the LICENSE file.
 
 import Events from '../../base/events/events'
+import { computeGeometry } from './helpers/viewport_geometry'
+import { normalizeAnimation, normalizeViewport } from './helpers/viewport_options'
+import { copyRect, copyViewport, sameRect } from './helpers/viewport_rect'
+import {
+  IDENTITY_TRANSFORM,
+  PX_STYLES,
+  SETTLE_MARGIN_MS,
+  TRANSITION_END_EVENTS,
+  findTransformStyles,
+  flushLayout
+} from './helpers/viewport_style'
 
 /**
  * @typedef {Object} ViewportMargin
@@ -37,123 +48,6 @@ import Events from '../../base/events/events'
  * @property {DisplayRect|null} rect
  */
 
-const DEFAULTS = { scale: 1, position: 'center', margin: 0, useTransform: false, animate: false, duration: 300, easing: 'ease' }
-const EDGES = ['top', 'right', 'bottom', 'left']
-const POSITIONS = {
-  'top-left': ['start', 'start'],
-  'top-center': ['start', 'center'],
-  'top-right': ['start', 'end'],
-  'center-left': ['center', 'start'],
-  'center': ['center', 'center'],
-  'center-right': ['center', 'end'],
-  'bottom-left': ['end', 'start'],
-  'bottom-center': ['end', 'center'],
-  'bottom-right': ['end', 'end']
-}
-const ORIGINS = { start: '0%', center: '50%', end: '100%' }
-const PX_STYLES = ['top', 'left', 'width', 'height']
-const IDENTITY_TRANSFORM = 'translate(0px, 0px) scale(1)'
-const TRANSFORM_STYLES = [
-  { transform: 'transform', origin: 'transformOrigin', transition: 'transition', property: 'transform', originProperty: 'transform-origin' },
-  { transform: 'webkitTransform', origin: 'webkitTransformOrigin', transition: 'webkitTransition', property: '-webkit-transform', originProperty: '-webkit-transform-origin' }
-]
-const TRANSITION_END_EVENTS = ['transitionend', 'webkitTransitionEnd']
-// Old smart TV engines drop `transitionend`, so a call also settles on a timeout
-const SETTLE_MARGIN_MS = 100
-
-const isObject = (value) => value !== null && typeof value === 'object'
-const copyRect = (rect) => rect && { ...rect }
-const copyViewport = (viewport) => viewport && { ...viewport, margin: { ...viewport.margin } }
-const sameRect = (a, b) => a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height
-const toPx = (value) => Math.round(value) || 0
-const fitRatio = (inner, total) => total > 0 ? inner / total : 0
-const findTransformStyles = (style) => TRANSFORM_STYLES.filter((names) => names.transform in style)[0] || null
-
-const assertNumber = (name, value) => {
-  if (typeof value !== 'number') throw new TypeError(`${name} must be a number`)
-}
-
-const assertString = (name, value) => {
-  if (typeof value !== 'string') throw new TypeError(`${name} must be a string`)
-}
-
-const assertNonNegative = (name, value) => {
-  assertNumber(name, value)
-  if (!Number.isFinite(value)) throw new RangeError(`${name} must be a finite number >= 0`)
-  if (value < 0) throw new RangeError(`${name} must be a finite number >= 0`)
-}
-
-const flushLayout = (element) => element.offsetWidth
-
-const readOptions = (options) => {
-  if (options === undefined) return {}
-  if (!isObject(options)) throw new TypeError('options must be an object')
-  return options
-}
-
-const readOption = (options, key) => options[key] === undefined ? DEFAULTS[key] : options[key]
-
-const normalizeScale = (scale) => {
-  assertNumber('scale', scale)
-  if (!Number.isFinite(scale)) throw new RangeError('scale must be greater than 0 and at most 1')
-  if (scale <= 0) throw new RangeError('scale must be greater than 0 and at most 1')
-  if (scale > 1) throw new RangeError('scale must be greater than 0 and at most 1')
-  return scale
-}
-
-const normalizePosition = (position) => {
-  assertString('position', position)
-  if (!Object.prototype.hasOwnProperty.call(POSITIONS, position)) throw new RangeError(`unknown position "${position}"`)
-  return position
-}
-
-const normalizeMargin = (margin) => {
-  if (typeof margin === 'number') {
-    assertNonNegative('margin', margin)
-    return { top: margin, right: margin, bottom: margin, left: margin }
-  }
-  if (!isObject(margin)) throw new TypeError('margin must be a number or an object')
-  return EDGES.reduce((normalized, edge) => {
-    const value = margin[edge] === undefined ? 0 : margin[edge]
-    assertNonNegative(`margin.${edge}`, value)
-    return { ...normalized, [edge]: value }
-  }, {})
-}
-
-const normalizeAnimation = (options) => {
-  const duration = readOption(options, 'duration')
-  assertNonNegative('duration', duration)
-  const easing = readOption(options, 'easing')
-  assertString('easing', easing)
-  return { animate: !!options.animate, duration, easing }
-}
-
-const normalizeViewport = (options) => ({
-  scale: normalizeScale(readOption(options, 'scale')),
-  position: normalizePosition(readOption(options, 'position')),
-  margin: normalizeMargin(readOption(options, 'margin')),
-  useTransform: !!options.useTransform,
-  ...normalizeAnimation(options)
-})
-
-const placeOnAxis = (align, startMargin, endMargin, total, size) => {
-  if (align === 'start') return { offset: startMargin, shift: startMargin }
-  if (align === 'end') return { offset: total - endMargin - size, shift: -endMargin }
-  return { offset: startMargin + (total - startMargin - endMargin - size) / 2, shift: (startMargin - endMargin) / 2 }
-}
-
-const computeGeometry = ({ scale, position, margin }, { width, height }) => {
-  const fit = Math.max(0, Math.min(scale, fitRatio(width - margin.left - margin.right, width), fitRatio(height - margin.top - margin.bottom, height)))
-  const [vertical, horizontal] = POSITIONS[position]
-  const x = placeOnAxis(horizontal, margin.left, margin.right, width, fit * width)
-  const y = placeOnAxis(vertical, margin.top, margin.bottom, height, fit * height)
-  return {
-    rect: { x: toPx(x.offset), y: toPx(y.offset), width: toPx(fit * width), height: toPx(fit * height) },
-    transform: `translate(${x.shift}px, ${y.shift}px) scale(${fit})`,
-    origin: `${ORIGINS[horizontal]} ${ORIGINS[vertical]}`
-  }
-}
-
 /**
  * Places the video of a container inside the core: it validates the request, computes the display rect
  * and applies it either as inline px on the container (and the playback's `setDisplayRect` hook) or as a CSS transform.
@@ -180,7 +74,7 @@ export default class ContainerViewport {
   }
 
   set(options) {
-    const viewport = normalizeViewport(readOptions(options))
+    const viewport = normalizeViewport(options)
     const size = this._measure()
     if (!size) throw new Error('The container has no parentElement to measure')
     viewport.useTransform = viewport.useTransform && !!findTransformStyles(this._container.el.style)
@@ -198,7 +92,7 @@ export default class ContainerViewport {
   }
 
   reset(options) {
-    const { animate, duration, easing } = normalizeAnimation(readOptions(options))
+    const { animate, duration, easing } = normalizeAnimation(options)
     const active = this._viewport || this._pending
     if (!active) return Promise.resolve({ interrupted: false, rect: this._fullRect(this._measure()) })
 
