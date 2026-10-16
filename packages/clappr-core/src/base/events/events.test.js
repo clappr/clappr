@@ -341,4 +341,9 @@ describe('Events', function () {
       expect(stubLogError.mock.calls.length).toEqual(5)
     })
   })
+
+  test('container viewport event names', () => {
+    expect(Events.CONTAINER_VIEWPORT_WILL_CHANGE).toBe('container:viewport:will:change')
+    expect(Events.CONTAINER_VIEWPORT_DID_CHANGE).toBe('container:viewport:did:change')
+  })
 })

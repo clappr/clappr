@@ -54,3 +54,5 @@ The `CONTAINER_STATE_BUFFERING` event is triggered by the Player's Container. If
 ```javascript
 player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function() { ... })
 ```
+
+The container's viewport events, `CONTAINER_VIEWPORT_WILL_CHANGE` and `CONTAINER_VIEWPORT_DID_CHANGE`, are unmapped too. Their `{ rect, viewport }` payload is described in the [Container viewport guide](./container_viewport.md#events).

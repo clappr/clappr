@@ -1,0 +1,31 @@
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+export const PX_STYLES = ['top', 'left', 'width', 'height']
+export const IDENTITY_TRANSFORM = 'translate(0px, 0px) scale(1)'
+export const TRANSITION_END_EVENTS = ['transitionend', 'webkitTransitionEnd']
+// Old smart TV engines drop `transitionend`, so a call also settles on a timeout
+export const SETTLE_MARGIN_MS = 100
+
+const TRANSFORM_STYLES = [
+  {
+    transform: 'transform',
+    origin: 'transformOrigin',
+    transition: 'transition',
+    property: 'transform',
+    originProperty: 'transform-origin'
+  },
+  {
+    transform: 'webkitTransform',
+    origin: 'webkitTransformOrigin',
+    transition: 'webkitTransition',
+    property: '-webkit-transform',
+    originProperty: '-webkit-transform-origin'
+  }
+]
+
+export const findTransformStyles = style =>
+  TRANSFORM_STYLES.filter(names => names.transform in style)[0] || null
+
+export const flushLayout = element => element.offsetWidth

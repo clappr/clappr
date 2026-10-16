@@ -117,6 +117,8 @@ player.attachTo(playerElement);
           height: 360,
           width: 640
         });
+        // Module scope does not leak `var player` to the console.
+        window.player = player;
 
         player.attachTo(playerElement);
       }

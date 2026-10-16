@@ -118,6 +118,7 @@ export default class Core extends UIObject {
     this.styleRendered = false
     this.plugins = []
     this.containers = []
+    this.listenTo(this, Events.CORE_RESIZE, this.reapplyContainerViewports)
     // FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
     this._boundHandleWindowResize = (o) => this.handleWindowResize(o)
@@ -205,6 +206,10 @@ export default class Core extends UIObject {
     this.resizeObserverInterval = null
   }
 
+  reapplyContainerViewports() {
+    this.containers.forEach((container) => container.reapplyViewport())
+  }
+
   resolveOnContainersReady(containers) {
     $.when.apply($, containers).done(() => {
       this.defer.resolve(this)
@@ -283,6 +288,8 @@ export default class Core extends UIObject {
     this.activeContainer = containers[0]
     this.render()
     this.appendToParent()
+    // A viewport set before this point measured a detached core, so recompute it now that the core is in the page
+    this.reapplyContainerViewports()
     return this.containers
   }
 

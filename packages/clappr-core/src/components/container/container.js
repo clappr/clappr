@@ -11,6 +11,7 @@ import UIObject from '../../base/ui_object/ui_object'
 import ErrorMixin from '../../base/error_mixin/error_mixin'
 import Styler from '../../base/styler/styler'
 import { DoubleEventHandler } from '../../utils/utils'
+import ContainerViewport from './container_viewport/container_viewport'
 import ContainerStyle from './public/style.scss'
 import $ from '@clappr/zepto'
 
@@ -136,6 +137,15 @@ export default class Container extends UIObject {
   }
 
   /**
+   * the display rect and the viewport options currently in effect.
+   * `viewport` is `null` when none is set, and both are `null` while the container has no parent element.
+   * @type {{rect: import('./container_viewport/container_viewport').DisplayRect|null, viewport: import('./container_viewport/container_viewport').ViewportOptions|null}}
+   */
+  get viewport() {
+    return this._viewportController.current
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
@@ -156,6 +166,7 @@ export default class Container extends UIObject {
     this.clickTimer = null
     this.clickDelay = 200 // FIXME: could be a player option
     this.actionsMetadata = {}
+    this._viewportController = new ContainerViewport(this)
     this.bindEvents()
   }
 
@@ -279,6 +290,7 @@ export default class Container extends UIObject {
    * @method destroy
    */
   destroy() {
+    this._viewportController.destroy()
     this.disableResizeObserver()
     this.trigger(Events.CONTAINER_DESTROYED, this, this.name)
     this.stopListening()
@@ -289,6 +301,39 @@ export default class Container extends UIObject {
 
   setStyle(style) {
     this.$el.css(style)
+  }
+
+  /**
+   * shrinks and places the video inside the core.
+   * Throws synchronously on a bad argument or when the container has no parent element.
+   * @method setViewport
+   * @param {import('./container_viewport/container_viewport').ViewportOptions} [options]
+   * @return {Promise<import('./container_viewport/container_viewport').ViewportResult>}
+   */
+  setViewport(options) {
+    return this._viewportController.set(options)
+  }
+
+  /**
+   * removes the viewport and gives the video the whole core again.
+   * @method resetViewport
+   * @param {Object} [options]
+   * @param {Boolean} [options.animate=false] transition the change, only if the viewport uses a transform
+   * @param {Number} [options.duration=300] transition time in ms
+   * @param {String} [options.easing='ease'] CSS timing function
+   * @return {Promise<import('./container_viewport/container_viewport').ViewportResult>}
+   */
+  resetViewport(options) {
+    return this._viewportController.reset(options)
+  }
+
+  /**
+   * recomputes the viewport from the current size of the parent element. The core calls it on its own `CORE_RESIZE`.
+   * @method reapplyViewport
+   * @private
+   */
+  reapplyViewport() {
+    this._viewportController.reapply()
   }
 
   ready() {
