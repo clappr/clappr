@@ -684,6 +684,50 @@ describe('Container viewport', () => {
       expect(container.el.style.transform).toBe('translate(0px, 0px) scale(0.5)')
     })
 
+    test('animates from the current px rect', () => {
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
+      const writes = []
+      const style = new Proxy({
+        top: '20px',
+        left: '20px',
+        width: '640px',
+        height: '360px',
+        transform: '',
+        transformOrigin: '',
+        transition: ''
+      }, {
+        set(target, prop, value) {
+          writes.push([prop, value])
+          target[prop] = value
+          return true
+        }
+      })
+      replaceStyle(container, style)
+
+      container.setViewport({
+        scale: 0.5,
+        position: 'bottom-right',
+        margin: 20,
+        useTransform: true,
+        animate: true
+      })
+
+      const initial = writes.findIndex(([prop, value]) => prop === 'transform' && value === 'translate(-620px, -340px) scale(0.5)')
+      const transitionAt = writes.findIndex(([prop]) => prop === 'transition')
+      const cleared = writes.findIndex(([prop, value]) => prop === 'width' && value === '')
+      const finalAt = writes.findIndex(([prop, value]) => prop === 'transform' && value === 'translate(-20px, -20px) scale(0.5)')
+
+      expect(initial).toBeGreaterThanOrEqual(0)
+      expect(initial).toBeLessThan(cleared)
+      expect(cleared).toBeLessThan(transitionAt)
+      expect(transitionAt).toBeLessThan(finalAt)
+      expect(style.top).toBe('')
+      expect(style.left).toBe('')
+      expect(style.width).toBe('')
+      expect(style.height).toBe('')
+      expect(style.transform).toBe('translate(-20px, -20px) scale(0.5)')
+    })
+
     test('switches from transform to px', async () => {
       container.setViewport(TRANSFORM_ANIMATED)
       await vi.advanceTimersByTimeAsync(400)

@@ -5,6 +5,7 @@
 import { POSITIONS } from './viewport_options'
 
 const ORIGINS = { start: '0%', center: '50%', end: '100%' }
+const ORIGIN_FRACTION = { start: 0, center: 0.5, end: 1 }
 
 const toPx = value => Math.round(value) || 0
 const fitRatio = (inner, total) => (total > 0 ? inner / total : 0)
@@ -42,4 +43,19 @@ export const computeGeometry = ({ scale, position, margin }, { width, height }) 
     transform: `translate(${x.shift}px, ${y.shift}px) scale(${fit})`,
     origin: `${ORIGINS[horizontal]} ${ORIGINS[vertical]}`
   }
+}
+
+/**
+ * Builds the CSS transform that places `rect` inside `size` using the origin of `position`.
+ * @param {{x: Number, y: Number, width: Number, height: Number}} rect
+ * @param {{width: Number, height: Number}} size
+ * @param {String} position
+ * @return {String}
+ */
+export const transformForRect = (rect, { width, height }, position) => {
+  const [vertical, horizontal] = POSITIONS[position]
+  const scale = fitRatio(rect.width, width)
+  const shiftX = rect.x - ORIGIN_FRACTION[horizontal] * width * (1 - scale)
+  const shiftY = rect.y - ORIGIN_FRACTION[vertical] * height * (1 - scale)
+  return `translate(${shiftX}px, ${shiftY}px) scale(${scale})`
 }
