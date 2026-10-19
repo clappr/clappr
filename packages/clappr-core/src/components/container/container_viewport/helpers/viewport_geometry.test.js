@@ -65,22 +65,7 @@ describe('computeGeometry', () => {
     ]
   ])('places %s', (position, origin, transform, rect) => {
     expect(place({ scale: 0.5, position, margin: margin(20) })).toEqual({ rect, transform, origin })
-  })
-
-  test.each([
-    'top-left',
-    'top-center',
-    'top-right',
-    'center-left',
-    'center',
-    'center-right',
-    'bottom-left',
-    'bottom-center',
-    'bottom-right'
-  ])('rebuilds the %s transform from its rect', position => {
-    const geometry = place({ scale: 0.5, position, margin: margin(20) })
-
-    expect(transformForRect(geometry.rect, SIZE, position)).toBe(geometry.transform)
+    expect(transformForRect(rect, SIZE, position)).toBe(transform)
   })
 
   test('shifts toward the larger margin', () => {

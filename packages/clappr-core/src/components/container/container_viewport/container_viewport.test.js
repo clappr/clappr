@@ -64,6 +64,18 @@ const replaceStyle = (container, style) => {
   return style
 }
 
+const recordStyle = (initial) => {
+  const writes = []
+  const style = new Proxy(initial, {
+    set(target, prop, value) {
+      writes.push([prop, value])
+      target[prop] = value
+      return true
+    }
+  })
+  return { writes, style }
+}
+
 const errorOf = (fn) => {
   try {
     fn()
@@ -327,14 +339,7 @@ describe('Container viewport', () => {
       const animated = { scale: 0.5, useTransform: true, animate: true, duration: 500, easing: 'linear' }
 
       test('pins transform-origin before the first scale animation', () => {
-        const writes = []
-        const style = new Proxy({ transform: '', transformOrigin: '', transition: '' }, {
-          set(target, prop, value) {
-            writes.push([prop, value])
-            target[prop] = value
-            return true
-          }
-        })
+        const { writes, style } = recordStyle({ transform: '', transformOrigin: '', transition: '' })
         replaceStyle(container, style)
 
         container.setViewport({ scale: 0.5, position: 'top-left', animate: true, duration: 400, easing: 'ease-out' })
@@ -686,22 +691,7 @@ describe('Container viewport', () => {
 
     test('animates from the current px rect', () => {
       container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
-      const writes = []
-      const style = new Proxy({
-        top: '20px',
-        left: '20px',
-        width: '640px',
-        height: '360px',
-        transform: '',
-        transformOrigin: '',
-        transition: ''
-      }, {
-        set(target, prop, value) {
-          writes.push([prop, value])
-          target[prop] = value
-          return true
-        }
-      })
+      const { writes, style } = recordStyle(inlineStyle(container))
       replaceStyle(container, style)
 
       container.setViewport({
@@ -721,11 +711,13 @@ describe('Container viewport', () => {
       expect(initial).toBeLessThan(cleared)
       expect(cleared).toBeLessThan(transitionAt)
       expect(transitionAt).toBeLessThan(finalAt)
-      expect(style.top).toBe('')
-      expect(style.left).toBe('')
-      expect(style.width).toBe('')
-      expect(style.height).toBe('')
-      expect(style.transform).toBe('translate(-20px, -20px) scale(0.5)')
+      expect(inlineStyle(container)).toMatchObject({
+        top: '',
+        left: '',
+        width: '',
+        height: '',
+        transform: 'translate(-20px, -20px) scale(0.5)'
+      })
     })
 
     test('switches from transform to px', async () => {
