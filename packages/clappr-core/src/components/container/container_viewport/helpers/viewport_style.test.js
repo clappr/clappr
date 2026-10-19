@@ -8,8 +8,10 @@ describe('findTransformStyles', () => {
       transform: 'transform',
       origin: 'transformOrigin',
       transition: 'transition',
+      borderRadius: 'borderRadius',
       property: 'transform',
-      originProperty: 'transform-origin'
+      originProperty: 'transform-origin',
+      radiusProperty: 'border-radius'
     })
     expect(findTransformStyles(inherited).property).toBe('transform')
   })
@@ -19,8 +21,10 @@ describe('findTransformStyles', () => {
       transform: 'webkitTransform',
       origin: 'webkitTransformOrigin',
       transition: 'webkitTransition',
+      borderRadius: 'borderRadius',
       property: '-webkit-transform',
-      originProperty: '-webkit-transform-origin'
+      originProperty: '-webkit-transform-origin',
+      radiusProperty: 'border-radius'
     })
   })
 
