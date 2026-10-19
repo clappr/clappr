@@ -36,7 +36,7 @@ import {
  * @property {Number} [scale=1] in (0, 1]
  * @property {'top-left'|'top-center'|'top-right'|'center-left'|'center'|'center-right'|'bottom-left'|'bottom-center'|'bottom-right'} [position='center']
  * @property {Number|ViewportMargin} [margin=0] px kept free around the video
- * @property {Boolean} [useTransform=false] move the video with a CSS transform instead of resizing the container box
+ * @property {Boolean} [useTransform=true] move the video with a CSS transform. `false` resizes the container box
  * @property {Boolean} [animate=false] transition the change, only with `useTransform`
  * @property {Number} [duration=300] transition time in ms
  * @property {String} [easing='ease'] CSS timing function

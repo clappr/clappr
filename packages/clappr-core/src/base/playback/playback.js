@@ -336,7 +336,7 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * hook called by the container when its viewport changes with px (no `useTransform`).
+   * hook called by the container when its viewport changes with px (`useTransform: false`).
    * It does nothing by default: playbacks that draw outside the DOM override it to place their output.
    * @method setDisplayRect
    * @param {Object} rect the area the video occupies, in integer px from the core's top-left corner

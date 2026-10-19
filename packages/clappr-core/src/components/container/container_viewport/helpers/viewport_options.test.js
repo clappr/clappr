@@ -5,7 +5,7 @@ const DEFAULT_VIEWPORT = {
   scale: 1,
   position: 'center',
   margin: ZERO_MARGIN,
-  useTransform: false,
+  useTransform: true,
   animate: false,
   duration: 300,
   easing: 'ease'
@@ -48,6 +48,10 @@ describe('normalizeViewport', () => {
       easing: 'linear'
     })
     expect(options.margin).toEqual({ left: 8 })
+  })
+
+  test('keeps an explicit px request', () => {
+    expect(normalizeViewport({ useTransform: false }).useTransform).toBe(false)
   })
 
   test('expands a numeric margin into four edges', () => {

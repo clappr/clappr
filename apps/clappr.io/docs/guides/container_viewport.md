@@ -20,7 +20,7 @@ The video is now half the size of the player, in its bottom-right corner, 16 px 
 
 There are two ways to apply a viewport, and you choose per call with `useTransform`:
 
-|                            | px (default)                                                                                             | `useTransform: true`                                                              |
+|                            | px (`useTransform: false`)                                                                               | transform (default)                                                               |
 | -------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | What moves                 | the container box gets inline `top`, `left`, `width` and `height`                                        | the container gets a CSS `transform`, with `transform-origin` set from `position` |
 | Layout changes             | yes, the box really shrinks                                                                              | no, the layout box keeps its size and only the paint moves                        |
@@ -29,7 +29,7 @@ There are two ways to apply a viewport, and you choose per call with `useTransfo
 | `CONTAINER_RESIZE` fires   | yes, the container's own polling reports the viewport's width and height                                 | never, the box does not change                                                    |
 | When to pick it            | the playback must know the area (for example, it draws outside the DOM), or the box must match the video | you want an animation, or a DOM video moved without a layout cost                 |
 
-If the engine supports neither `transform` nor `webkitTransform`, `useTransform: true` is applied as px and the `viewport` getter reports `useTransform: false`, so you can tell which strategy ran.
+Omitted, `useTransform` is `true`. If the engine supports neither `transform` nor `webkitTransform`, that call is applied as px and the `viewport` getter reports `useTransform: false`, so you can tell which strategy ran.
 
 ## Reference
 
@@ -44,8 +44,8 @@ Returns a `Promise` that resolves with `{ interrupted, rect }`. All options are 
 | `scale`        | number           | `1`        | greater than 0 and at most 1; clamped so the video fits inside the margins                                      | `RangeError` out of range or `NaN`, `TypeError` not a number               |
 | `position`     | string           | `'center'` | one of the nine [positions](#positions)                                                                         | `RangeError` unknown value, `TypeError` not a string                       |
 | `margin`       | number or object | `0`        | px free around the video, `>= 0`; an object takes `top`, `right`, `bottom` and `left`, and a missing key is `0` | `RangeError` negative or not finite, `TypeError` not a number or an object |
-| `useTransform` | boolean          | `false`    | `true` moves the video with a CSS transform                                                                     | -                                                                          |
-| `animate`      | boolean          | `false`    | `true` transitions the change, only with `useTransform: true`                                                   | -                                                                          |
+| `useTransform` | boolean          | `true`     | `false` sizes the container box with inline px. Omitted uses a CSS transform                                    | -                                                                          |
+| `animate`      | boolean          | `false`    | `true` transitions the change. Ignored when `useTransform` is `false`                                           | -                                                                          |
 | `duration`     | number           | `300`      | ms, finite and `>= 0`                                                                                           | `RangeError` negative or not finite, `TypeError` not a number              |
 | `easing`       | string           | `'ease'`   | any CSS timing function, not checked                                                                            | `TypeError` not a string                                                   |
 
@@ -103,7 +103,7 @@ On the px strategy the container calls `playback.setDisplayRect({ x, y, width, h
 - **`resetViewport`**: it brings back the full box. A pending animated call counts as an active viewport until it settles. A resize during an animated reset keeps the identity transform and fires `CONTAINER_VIEWPORT_WILL_CHANGE` when the full rect changes. The reset then reports that rect, without restarting its wait.
 - **`destroy`**: destroying the container resolves a pending call with `interrupted: true`, fires no event, and clears the timer and the listeners. A later resize never reaches it.
 - **`load()`**: a container created by `player.load()` starts with no viewport, even if the previous one had one.
-- **`animate` without `useTransform`**: it is ignored. The px strategy applies at once and the Promise resolves right away.
+- **`animate` with `useTransform: false`**: it is ignored. The px strategy applies at once and the Promise resolves right away.
 - **`resize()` and `setStyle()`**: calling them on the container while a viewport is active has no guarantee, because the next reapplication overwrites them.
 
 ## Recipes

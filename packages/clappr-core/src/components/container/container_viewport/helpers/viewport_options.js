@@ -100,7 +100,7 @@ export const normalizeViewport = options => {
     scale,
     position,
     margin,
-    useTransform: !!source.useTransform,
+    useTransform: source.useTransform === undefined ? true : !!source.useTransform,
     ...normalizeAnimation(source)
   }
 }
