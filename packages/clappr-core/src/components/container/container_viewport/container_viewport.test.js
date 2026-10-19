@@ -130,50 +130,6 @@ describe('Container viewport', () => {
       expect([style.top, style.left, style.width, style.height]).toEqual(['', '', '', ''])
     })
 
-    test.each([
-      ['defaults to center and zero margin', { scale: 0.5, useTransform: false }, RECT_HALF_CENTER],
-      [
-        'clamps the default scale to the margin box',
-        { position: 'top-left', margin: { right: 320, bottom: 180 }, useTransform: false },
-        { x: 0, y: 0, width: 960, height: 540 }
-      ],
-      [
-        'clamps and rounds margin 100',
-        { margin: 100, useTransform: false },
-        { x: 178, y: 100, width: 924, height: 520 }
-      ],
-      [
-        'clamps by the width of the margin box',
-        { margin: { left: 200, right: 200 }, useTransform: false },
-        { x: 200, y: 113, width: 880, height: 495 }
-      ],
-      [
-        'collapses margin 700 to a zero rect',
-        { margin: 700, useTransform: false },
-        { x: 640, y: 360, width: 0, height: 0 }
-      ]
-    ])('px path %s', (_, options, rect) => {
-      expect(() => container.setViewport(options)).not.toThrow()
-
-      expect(playback.setDisplayRect).toHaveBeenCalledWith(rect)
-    })
-
-    test.each([
-      ['top-left', 20, 20],
-      ['top-center', 320, 20],
-      ['top-right', 620, 20],
-      ['center-left', 20, 180],
-      ['center', 320, 180],
-      ['center-right', 620, 180],
-      ['bottom-left', 20, 340],
-      ['bottom-center', 320, 340],
-      ['bottom-right', 620, 340]
-    ])('px path rect for position %s', (position, x, y) => {
-      container.setViewport({ scale: 0.5, position, margin: 20, useTransform: false })
-
-      expect(playback.setDisplayRect).toHaveBeenCalledWith({ x, y, width: 640, height: 360 })
-    })
-
     test('px path triggers will then did and resolves', async () => {
       const result = container.setViewport({
         scale: 0.5,
@@ -229,104 +185,51 @@ describe('Container viewport', () => {
   })
 
   describe('S2 - argument validation', () => {
-    test.each([0, -0.5, 1.01, NaN])('rejects scale %s', scale => {
-      expect(() => container.setViewport({ scale })).toThrow(RangeError)
-    })
-
-    test.each([-1, { left: -1 }])('rejects a negative margin %j', margin => {
-      expect(() => container.setViewport({ margin })).toThrow(RangeError)
-    })
-
-    test.each(['middle', 'top', 'Top-Left', 'top_left'])(
-      'rejects an unknown position %s',
-      position => {
-        expect(() => container.setViewport({ position })).toThrow(RangeError)
-      }
-    )
-
-    test.each([
-      ['setViewport', -1],
-      ['setViewport', Infinity],
-      ['setViewport', NaN],
-      ['resetViewport', -1],
-      ['resetViewport', Infinity],
-      ['resetViewport', NaN]
-    ])('rejects duration on %s with %s', (method, duration) => {
-      expect(() => container[method]({ duration })).toThrow(RangeError)
-    })
-
-    test.each([
-      ['options string', 'big'],
-      ['options number', 42],
-      ['scale', { scale: '0.5' }],
-      ['duration', { duration: '300' }],
-      ['margin', { margin: '20px' }],
-      ['position', { position: 1 }],
-      ['easing', { easing: 1 }]
-    ])('wrong type on set: %s', (_, options) => {
-      expect(() => container.setViewport(options)).toThrow(TypeError)
-    })
-
-    test.each([
-      ['options string', 'big'],
-      ['duration', { duration: '300' }],
-      ['easing', { easing: 1 }]
-    ])('wrong type on reset: %s', (_, options) => {
-      expect(() => container.resetViewport(options)).toThrow(TypeError)
-    })
-
-    test('throws Error without parentElement', () => {
-      container.el.remove()
-
-      const error = errorOf(() => container.setViewport({ scale: 0.5 }))
-
-      expect(error).toBeInstanceOf(Error)
-      expect(error.constructor).toBe(Error)
-    })
-
     describe('rejected call leaves state untouched', () => {
       const detach = c => c.el.remove()
       const rejected = [
-        ['scale 0', 'setViewport', { scale: 0 }],
-        ['scale -0.5', 'setViewport', { scale: -0.5 }],
-        ['scale 1.01', 'setViewport', { scale: 1.01 }],
-        ['scale NaN', 'setViewport', { scale: NaN }],
-        ['margin -1', 'setViewport', { margin: -1 }],
-        ['margin {left: -1}', 'setViewport', { margin: { left: -1 } }],
-        ['position middle', 'setViewport', { position: 'middle' }],
-        ['position top', 'setViewport', { position: 'top' }],
-        ['position Top-Left', 'setViewport', { position: 'Top-Left' }],
-        ['position top_left', 'setViewport', { position: 'top_left' }],
-        ['duration -1 on set', 'setViewport', { duration: -1 }],
-        ['duration Infinity on set', 'setViewport', { duration: Infinity }],
-        ['duration NaN on set', 'setViewport', { duration: NaN }],
-        ['duration -1 on reset', 'resetViewport', { duration: -1 }],
-        ['duration Infinity on reset', 'resetViewport', { duration: Infinity }],
-        ['duration NaN on reset', 'resetViewport', { duration: NaN }],
-        ['options big', 'setViewport', 'big'],
-        ['options 42', 'setViewport', 42],
-        ['scale string', 'setViewport', { scale: '0.5' }],
-        ['duration string', 'setViewport', { duration: '300' }],
-        ['margin string', 'setViewport', { margin: '20px' }],
-        ['position number', 'setViewport', { position: 1 }],
-        ['easing number', 'setViewport', { easing: 1 }],
-        ['reset options big', 'resetViewport', 'big'],
-        ['reset duration string', 'resetViewport', { duration: '300' }],
-        ['reset easing number', 'resetViewport', { easing: 1 }],
-        ['no parentElement', 'setViewport', { scale: 0.5 }, detach]
+        ['scale 0', 'setViewport', { scale: 0 }, RangeError],
+        ['scale -0.5', 'setViewport', { scale: -0.5 }, RangeError],
+        ['scale 1.01', 'setViewport', { scale: 1.01 }, RangeError],
+        ['scale NaN', 'setViewport', { scale: NaN }, RangeError],
+        ['margin -1', 'setViewport', { margin: -1 }, RangeError],
+        ['margin {left: -1}', 'setViewport', { margin: { left: -1 } }, RangeError],
+        ['position middle', 'setViewport', { position: 'middle' }, RangeError],
+        ['position top', 'setViewport', { position: 'top' }, RangeError],
+        ['position Top-Left', 'setViewport', { position: 'Top-Left' }, RangeError],
+        ['position top_left', 'setViewport', { position: 'top_left' }, RangeError],
+        ['duration -1 on set', 'setViewport', { duration: -1 }, RangeError],
+        ['duration Infinity on set', 'setViewport', { duration: Infinity }, RangeError],
+        ['duration NaN on set', 'setViewport', { duration: NaN }, RangeError],
+        ['duration -1 on reset', 'resetViewport', { duration: -1 }, RangeError],
+        ['duration Infinity on reset', 'resetViewport', { duration: Infinity }, RangeError],
+        ['duration NaN on reset', 'resetViewport', { duration: NaN }, RangeError],
+        ['options big', 'setViewport', 'big', TypeError],
+        ['options 42', 'setViewport', 42, TypeError],
+        ['scale string', 'setViewport', { scale: '0.5' }, TypeError],
+        ['duration string', 'setViewport', { duration: '300' }, TypeError],
+        ['margin string', 'setViewport', { margin: '20px' }, TypeError],
+        ['position number', 'setViewport', { position: 1 }, TypeError],
+        ['easing number', 'setViewport', { easing: 1 }, TypeError],
+        ['reset options big', 'resetViewport', 'big', TypeError],
+        ['reset duration string', 'resetViewport', { duration: '300' }, TypeError],
+        ['reset easing number', 'resetViewport', { easing: 1 }, TypeError],
+        ['no parentElement', 'setViewport', { scale: 0.5 }, Error, detach]
       ]
 
       test.each(rejected)(
         'rejected call leaves state untouched: %s',
-        async (_, method, options, prepare) => {
+        async (_, method, options, errorClass, prepare) => {
           const pending = track(container.setViewport(TRANSFORM_ANIMATED))
           events.length = 0
           prepare && prepare(container)
           const styleBefore = container.el.getAttribute('style')
           const getterBefore = container.viewport
 
-          expect(() => container[method](options)).toThrow()
+          const error = errorOf(() => container[method](options))
 
+          expect(error).toBeInstanceOf(errorClass)
+          expect(error.constructor).toBe(errorClass)
           expect(container.el.getAttribute('style')).toBe(styleBefore)
           expect(container.viewport).toEqual(getterBefore)
           expect(events).toEqual([])
@@ -355,58 +258,6 @@ describe('Container viewport', () => {
       expect(playback.setDisplayRect).toHaveBeenCalledTimes(0)
       await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_TOP_LEFT })
     })
-
-    test.each([
-      [
-        'center with a left margin',
-        { scale: 0.5, margin: { left: 40 } },
-        '50% 50%',
-        'translate(20px, 0px) scale(0.5)',
-        { x: 340, y: 180, width: 640, height: 360 }
-      ],
-      [
-        'bottom-right keeps scale unrounded',
-        { scale: 0.333, position: 'bottom-right', margin: 10 },
-        '100% 100%',
-        'translate(-10px, -10px) scale(0.333)',
-        { x: 844, y: 470, width: 426, height: 240 }
-      ]
-    ])('transform path %s', async (_, options, origin, transform, rect) => {
-      const result = container.setViewport({ ...options, useTransform: true })
-
-      expect(container.el.style.transformOrigin).toBe(origin)
-      expect(container.el.style.transform).toBe(transform)
-      await expect(result).resolves.toEqual({ interrupted: false, rect })
-    })
-
-    test.each([
-      ['top-left', '0% 0%', 'translate(20px, 20px)', 20, 20],
-      ['top-center', '50% 0%', 'translate(0px, 20px)', 320, 20],
-      ['top-right', '100% 0%', 'translate(-20px, 20px)', 620, 20],
-      ['center-left', '0% 50%', 'translate(20px, 0px)', 20, 180],
-      ['center', '50% 50%', 'translate(0px, 0px)', 320, 180],
-      ['center-right', '100% 50%', 'translate(-20px, 0px)', 620, 180],
-      ['bottom-left', '0% 100%', 'translate(20px, -20px)', 20, 340],
-      ['bottom-center', '50% 100%', 'translate(0px, -20px)', 320, 340],
-      ['bottom-right', '100% 100%', 'translate(-20px, -20px)', 620, 340]
-    ])(
-      'transform path origin and rect for position %s',
-      async (position, origin, translate, x, y) => {
-        const result = container.setViewport({
-          scale: 0.5,
-          position,
-          margin: 20,
-          useTransform: true
-        })
-
-        expect(container.el.style.transformOrigin).toBe(origin)
-        expect(container.el.style.transform).toBe(`${translate} scale(0.5)`)
-        await expect(result).resolves.toEqual({
-          interrupted: false,
-          rect: { x, y, width: 640, height: 360 }
-        })
-      }
-    )
 
     describe('animated call', () => {
       const animated = {

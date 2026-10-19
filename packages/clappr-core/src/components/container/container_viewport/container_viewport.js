@@ -89,8 +89,6 @@ export default class ContainerViewport {
     if (!size) throw new Error('The container has no parentElement to measure')
     viewport.useTransform = viewport.useTransform && !!findTransformStyles(this._container.el.style)
     const geometry = computeGeometry(viewport, size)
-    const radiusCss = borderRadiusFor(viewport.radius, geometry.fit, viewport.useTransform)
-    const clearingRadius = viewport.radius == null && this._radiusOwned
 
     this._begin(viewport, geometry.rect)
     const animated = viewport.useTransform && viewport.animate
@@ -100,11 +98,12 @@ export default class ContainerViewport {
     }
     // Commit the origin before the transition. In the same frame the browser would slide it.
     const pinned = this._pinOrigin(geometry.origin)
+    const radiusCss = borderRadiusFor(viewport.radius, geometry.fit, true)
     const transition = this._transitionFor(viewport, !pinned, radiusCss)
     this._applyTransform(geometry, size, transition)
     return this._awaitSettle(viewport.duration, transition, () => {
       this._writeTransform({ transition: '' })
-      if (clearingRadius) this._clearOwnedRadius()
+      if (this._viewport.radius == null) this._clearOwnedRadius()
     })
   }
 
@@ -125,11 +124,10 @@ export default class ContainerViewport {
       this._clearApplied(rect)
       return this._finish()
     }
-    const transition = this._transitionFor({ duration, easing }, true, null)
+    const transition = this._transitionFor({ duration, easing })
     const values = { transform: IDENTITY_TRANSFORM, transition }
-    const radiusWrite = this._ownedRadiusWrite(null, true)
+    const radiusWrite = this._syncRadius(null, null, true)
     if (radiusWrite != null) values.borderRadius = radiusWrite
-    this._syncOverflow(null, radiusWrite === '0px')
     this._writeTransform(values)
     return this._awaitSettle(duration, transition, () => this._clearApplied(rect))
   }
@@ -213,14 +211,14 @@ export default class ContainerViewport {
   }
 
   _transitionFor({ duration, easing }, includeOrigin = true, radiusCss = null) {
-    const { property, originProperty } = findTransformStyles(this._container.el.style)
+    const names = findTransformStyles(this._container.el.style)
     const timing = `${duration}ms ${easing}`
     // Position with no margin lives in transform-origin, so the same translate would not move.
-    const parts = [`${property} ${timing}`]
-    if (includeOrigin) parts.push(`${originProperty} ${timing}`)
+    const parts = [`${names.property} ${timing}`]
+    if (includeOrigin) parts.push(`${names.originProperty} ${timing}`)
     const radiusWrite = this._ownedRadiusWrite(radiusCss, true)
-    if (radiusWrite != null && this._container.el.style.borderRadius !== radiusWrite) {
-      parts.push(`border-radius ${timing}`)
+    if (radiusWrite != null && this._container.el.style[names.borderRadius] !== radiusWrite) {
+      parts.push(`${names.radiusProperty} ${timing}`)
     }
     return parts.join(', ')
   }
@@ -228,11 +226,12 @@ export default class ContainerViewport {
   _apply(viewport, geometry, size, transition) {
     if (!viewport.useTransform) {
       this._applyPx(geometry.rect)
-      this._writeRadius(
+      const radiusWrite = this._syncRadius(
         viewport.radius,
         borderRadiusFor(viewport.radius, geometry.fit, false),
-        transition
+        false
       )
+      if (radiusWrite != null) this._container.el.style.borderRadius = radiusWrite
       return
     }
     this._applyTransform(geometry, size, transition)
@@ -262,14 +261,14 @@ export default class ContainerViewport {
       if (transition) flushLayout(this._container.el)
     }
     this._strategy = 'transform'
-    const radius = this._viewport ? this._viewport.radius : null
-    const radiusCss = this._viewport ? borderRadiusFor(radius, geometry.fit, true) : null
     const values = { origin: geometry.origin, transform: geometry.transform, transition }
-    const radiusWrite = this._ownedRadiusWrite(radiusCss, !!transition)
+    const radiusWrite = this._syncRadius(
+      this._viewport.radius,
+      borderRadiusFor(this._viewport.radius, geometry.fit, true),
+      !!transition
+    )
     if (radiusWrite != null) values.borderRadius = radiusWrite
-    this._syncOverflow(radius, radius == null && radiusWrite === '0px' && !!transition)
     this._writeTransform(values)
-    if (radiusWrite != null) this._radiusOwned = radiusWrite !== ''
   }
 
   _ownedRadiusWrite(radiusCss, animated) {
@@ -278,23 +277,15 @@ export default class ContainerViewport {
     return animated ? '0px' : ''
   }
 
-  _syncOverflow(radius, keepDuringClear) {
-    if (radius == null && !this._radiusOwned) return
-    if (radius > 0) {
-      this._container.el.style.overflow = 'hidden'
-      return
-    }
+  _syncRadius(radius, radiusCss, animated) {
+    const write = this._ownedRadiusWrite(radiusCss, animated)
+    if (write == null) return null
     // The curve is still visible while it eases back to 0, so the clip stays until settle.
-    if (keepDuringClear) return
-    this._container.el.style.overflow = ''
-  }
-
-  _writeRadius(radius, radiusCss, transition) {
-    const radiusWrite = this._ownedRadiusWrite(radiusCss, !!transition)
-    if (radiusWrite == null) return
-    this._syncOverflow(radius, radius == null && radiusWrite === '0px' && !!transition)
-    this._container.el.style.borderRadius = radiusWrite
-    this._radiusOwned = radiusWrite !== ''
+    const clearing = radius == null && write === '0px'
+    if (radius > 0) this._container.el.style.overflow = 'hidden'
+    else if (!clearing) this._container.el.style.overflow = ''
+    this._radiusOwned = write !== ''
+    return write
   }
 
   _clearOwnedRadius() {
@@ -305,29 +296,18 @@ export default class ContainerViewport {
     this._radiusOwned = false
   }
 
-  _readStyle(el, names, key) {
-    if (key === 'borderRadius') return el.style.borderRadius
-    return el.style[names[key]]
-  }
-
-  _assignStyle(el, names, key, value) {
-    if (key === 'borderRadius') {
-      el.style.borderRadius = value
-      return
-    }
-    el.style[names[key]] = value
-  }
-
   _writeTransform(values) {
     const el = this._container.el
     const names = findTransformStyles(el.style)
     const before = {
       transform: el.style[names.transform],
       origin: el.style[names.origin],
-      borderRadius: el.style.borderRadius
+      borderRadius: el.style[names.borderRadius]
     }
     this._armTransition(el, names, values)
-    Object.keys(values).forEach(key => this._assignStyle(el, names, key, values[key]))
+    Object.keys(values).forEach(key => {
+      el.style[names[key]] = values[key]
+    })
     this._trackRunning(names, values, before)
   }
 
@@ -343,11 +323,11 @@ export default class ContainerViewport {
     const tracked = [
       ['transform', names.property],
       ['origin', names.originProperty],
-      ['borderRadius', 'border-radius']
+      ['borderRadius', names.radiusProperty]
     ]
     tracked.forEach(([key, prop]) => {
       if (!(key in values)) return
-      const changed = before[key] !== this._readStyle(this._container.el, names, key)
+      const changed = before[key] !== this._container.el.style[names[key]]
       if (changed && listed.indexOf(prop) !== -1) {
         // Rewriting a moving property cancels its old transition. That cancel is not the new end.
         if (this._running[prop]) this._ignoreCancel[prop] = true
@@ -363,7 +343,7 @@ export default class ContainerViewport {
 
   _armTransition(el, names, values) {
     if (!values.transition) return
-    const changes = key => key in values && values[key] !== this._readStyle(el, names, key)
+    const changes = key => key in values && values[key] !== el.style[names[key]]
     const moves = ['transform', 'origin', 'borderRadius'].some(changes)
     if (!moves) return
     if (el.style[names.transition]) return
@@ -388,11 +368,7 @@ export default class ContainerViewport {
     if (this._strategy === 'px') {
       this._clearPx()
       if (rect) this._container.playback.setDisplayRect(copyRect(rect))
-      this._strategy = null
-      this._clearOwnedRadius()
-      return
-    }
-    if (this._strategy === 'transform') this._clearTransform()
+    } else if (this._strategy === 'transform') this._clearTransform()
     this._strategy = null
     this._clearOwnedRadius()
   }

@@ -14,15 +14,19 @@ const TRANSFORM_STYLES = [
     transform: 'transform',
     origin: 'transformOrigin',
     transition: 'transition',
+    borderRadius: 'borderRadius',
     property: 'transform',
-    originProperty: 'transform-origin'
+    originProperty: 'transform-origin',
+    radiusProperty: 'border-radius'
   },
   {
     transform: 'webkitTransform',
     origin: 'webkitTransformOrigin',
     transition: 'webkitTransition',
+    borderRadius: 'borderRadius',
     property: '-webkit-transform',
-    originProperty: '-webkit-transform-origin'
+    originProperty: '-webkit-transform-origin',
+    radiusProperty: 'border-radius'
   }
 ]
 
