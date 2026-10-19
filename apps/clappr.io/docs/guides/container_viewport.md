@@ -103,6 +103,7 @@ On the px strategy the container calls `playback.setDisplayRect({ x, y, width, h
 - **`resetViewport`**: it brings back the full box. A pending animated call counts as an active viewport until it settles. A resize during an animated reset keeps the identity transform and fires `CONTAINER_VIEWPORT_WILL_CHANGE` when the full rect changes. The reset then reports that rect, without restarting its wait.
 - **`destroy`**: destroying the container resolves a pending call with `interrupted: true`, fires no event, and clears the timer and the listeners. A later resize never reaches it.
 - **`load()`**: a container created by `player.load()` starts with no viewport, even if the previous one had one.
+- **First animated call**: `transform-origin` is painted before the transition, and that transition covers only `transform`. The video scales around `position` instead of sliding there from the center. A later call still transitions `transform-origin`, because a move between positions can live entirely in that property.
 - **`animate` with `useTransform: false`**: it is ignored. The px strategy applies at once and the Promise resolves right away.
 - **`resize()` and `setStyle()`**: calling them on the container while a viewport is active has no guarantee, because the next reapplication overwrites them.
 

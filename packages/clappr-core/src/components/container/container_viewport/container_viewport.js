@@ -86,7 +86,9 @@ export default class ContainerViewport {
       this._apply(viewport, geometry, size, '')
       return this._finish()
     }
-    const transition = this._transitionFor(viewport)
+    // Commit the origin before the transition. In the same frame the browser would slide it.
+    const pinned = this._pinOrigin(geometry.origin)
+    const transition = this._transitionFor(viewport, !pinned)
     this._applyTransform(geometry, size, transition)
     return this._awaitSettle(viewport.duration, transition, () => this._writeTransform({ transition: '' }))
   }
@@ -177,10 +179,20 @@ export default class ContainerViewport {
     this._container.trigger(eventName, { rect: copyRect(this._rect), viewport: copyViewport(this._viewport) })
   }
 
-  _transitionFor({ duration, easing }) {
+  _pinOrigin(origin) {
+    const el = this._container.el
+    const names = findTransformStyles(el.style)
+    if (!names || el.style[names.transform]) return false
+    el.style[names.origin] = origin
+    flushLayout(el)
+    return true
+  }
+
+  _transitionFor({ duration, easing }, includeOrigin = true) {
     const { property, originProperty } = findTransformStyles(this._container.el.style)
     const timing = `${duration}ms ${easing}`
     // Position with no margin lives in transform-origin, so the same translate would not move.
+    if (!includeOrigin) return `${property} ${timing}`
     return `${property} ${timing}, ${originProperty} ${timing}`
   }
 
