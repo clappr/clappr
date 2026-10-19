@@ -6,7 +6,10 @@ const FULL = { x: 0, y: 0, width: 1280, height: 720 }
 const RECT_HALF_CENTER = { x: 320, y: 180, width: 640, height: 360 }
 const RECT_HALF_TOP_LEFT = { x: 20, y: 20, width: 640, height: 360 }
 const TRANSFORM_ANIMATED = { scale: 0.5, useTransform: true, animate: true }
-const VIEWPORT_EVENTS = [Events.CONTAINER_VIEWPORT_WILL_CHANGE, Events.CONTAINER_VIEWPORT_DID_CHANGE]
+const VIEWPORT_EVENTS = [
+  Events.CONTAINER_VIEWPORT_WILL_CHANGE,
+  Events.CONTAINER_VIEWPORT_DID_CHANGE
+]
 
 const measure = (el, width, height) => {
   Object.defineProperty(el, 'clientWidth', { value: width, configurable: true })
@@ -24,15 +27,18 @@ const createContainer = ({ width = 1280, height = 720 } = {}) => {
   return { parent, playback, container }
 }
 
-const recordEvents = (container) => {
+const recordEvents = container => {
   const recorded = []
-  VIEWPORT_EVENTS.forEach((name) => container.on(name, (payload) => recorded.push({ name, payload })))
+  VIEWPORT_EVENTS.forEach(name => container.on(name, payload => recorded.push({ name, payload })))
   return recorded
 }
 
-const track = (promise) => {
+const track = promise => {
   const state = { settled: false, value: undefined }
-  promise.then((value) => { state.settled = true; state.value = value })
+  promise.then(value => {
+    state.settled = true
+    state.value = value
+  })
   return state
 }
 
@@ -46,7 +52,7 @@ const fireTransitionEnd = (target, propertyName, type = 'transitionend') => {
   target.dispatchEvent(event)
 }
 
-const inlineStyle = (container) => {
+const inlineStyle = container => {
   const { style } = container.el
   return {
     top: style.top,
@@ -64,7 +70,7 @@ const replaceStyle = (container, style) => {
   return style
 }
 
-const recordStyle = (initial) => {
+const recordStyle = initial => {
   const writes = []
   const style = new Proxy(initial, {
     set(target, prop, value) {
@@ -76,7 +82,7 @@ const recordStyle = (initial) => {
   return { writes, style }
 }
 
-const errorOf = (fn) => {
+const errorOf = fn => {
   try {
     fn()
   } catch (error) {
@@ -106,7 +112,12 @@ describe('Container viewport', () => {
     test('px path applies top-left styles and display rect', () => {
       container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
-      expect(inlineStyle(container)).toMatchObject({ top: '20px', left: '20px', width: '640px', height: '360px' })
+      expect(inlineStyle(container)).toMatchObject({
+        top: '20px',
+        left: '20px',
+        width: '640px',
+        height: '360px'
+      })
       expect(playback.setDisplayRect).toHaveBeenCalledTimes(1)
       expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_TOP_LEFT)
     })
@@ -121,10 +132,26 @@ describe('Container viewport', () => {
 
     test.each([
       ['defaults to center and zero margin', { scale: 0.5, useTransform: false }, RECT_HALF_CENTER],
-      ['clamps the default scale to the margin box', { position: 'top-left', margin: { right: 320, bottom: 180 }, useTransform: false }, { x: 0, y: 0, width: 960, height: 540 }],
-      ['clamps and rounds margin 100', { margin: 100, useTransform: false }, { x: 178, y: 100, width: 924, height: 520 }],
-      ['clamps by the width of the margin box', { margin: { left: 200, right: 200 }, useTransform: false }, { x: 200, y: 113, width: 880, height: 495 }],
-      ['collapses margin 700 to a zero rect', { margin: 700, useTransform: false }, { x: 640, y: 360, width: 0, height: 0 }]
+      [
+        'clamps the default scale to the margin box',
+        { position: 'top-left', margin: { right: 320, bottom: 180 }, useTransform: false },
+        { x: 0, y: 0, width: 960, height: 540 }
+      ],
+      [
+        'clamps and rounds margin 100',
+        { margin: 100, useTransform: false },
+        { x: 178, y: 100, width: 924, height: 520 }
+      ],
+      [
+        'clamps by the width of the margin box',
+        { margin: { left: 200, right: 200 }, useTransform: false },
+        { x: 200, y: 113, width: 880, height: 495 }
+      ],
+      [
+        'collapses margin 700 to a zero rect',
+        { margin: 700, useTransform: false },
+        { x: 640, y: 360, width: 0, height: 0 }
+      ]
     ])('px path %s', (_, options, rect) => {
       expect(() => container.setViewport(options)).not.toThrow()
 
@@ -148,7 +175,12 @@ describe('Container viewport', () => {
     })
 
     test('px path triggers will then did and resolves', async () => {
-      const result = container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
+      const result = container.setViewport({
+        scale: 0.5,
+        position: 'top-left',
+        margin: 20,
+        useTransform: false
+      })
 
       const payload = {
         rect: RECT_HALF_TOP_LEFT,
@@ -156,6 +188,7 @@ describe('Container viewport', () => {
           scale: 0.5,
           position: 'top-left',
           margin: { top: 20, right: 20, bottom: 20, left: 20 },
+          radius: null,
           useTransform: false,
           animate: false,
           duration: 300,
@@ -179,7 +212,9 @@ describe('Container viewport', () => {
     test('getter matches the last will payload', () => {
       container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
-      const willPayload = events.find(({ name }) => name === Events.CONTAINER_VIEWPORT_WILL_CHANGE).payload
+      const willPayload = events.find(
+        ({ name }) => name === Events.CONTAINER_VIEWPORT_WILL_CHANGE
+      ).payload
       expect(container.viewport).toEqual(willPayload)
     })
 
@@ -194,21 +229,28 @@ describe('Container viewport', () => {
   })
 
   describe('S2 - argument validation', () => {
-    test.each([0, -0.5, 1.01, NaN])('rejects scale %s', (scale) => {
+    test.each([0, -0.5, 1.01, NaN])('rejects scale %s', scale => {
       expect(() => container.setViewport({ scale })).toThrow(RangeError)
     })
 
-    test.each([-1, { left: -1 }])('rejects a negative margin %j', (margin) => {
+    test.each([-1, { left: -1 }])('rejects a negative margin %j', margin => {
       expect(() => container.setViewport({ margin })).toThrow(RangeError)
     })
 
-    test.each(['middle', 'top', 'Top-Left', 'top_left'])('rejects an unknown position %s', (position) => {
-      expect(() => container.setViewport({ position })).toThrow(RangeError)
-    })
+    test.each(['middle', 'top', 'Top-Left', 'top_left'])(
+      'rejects an unknown position %s',
+      position => {
+        expect(() => container.setViewport({ position })).toThrow(RangeError)
+      }
+    )
 
     test.each([
-      ['setViewport', -1], ['setViewport', Infinity], ['setViewport', NaN],
-      ['resetViewport', -1], ['resetViewport', Infinity], ['resetViewport', NaN]
+      ['setViewport', -1],
+      ['setViewport', Infinity],
+      ['setViewport', NaN],
+      ['resetViewport', -1],
+      ['resetViewport', Infinity],
+      ['resetViewport', NaN]
     ])('rejects duration on %s with %s', (method, duration) => {
       expect(() => container[method]({ duration })).toThrow(RangeError)
     })
@@ -243,7 +285,7 @@ describe('Container viewport', () => {
     })
 
     describe('rejected call leaves state untouched', () => {
-      const detach = (c) => c.el.remove()
+      const detach = c => c.el.remove()
       const rejected = [
         ['scale 0', 'setViewport', { scale: 0 }],
         ['scale -0.5', 'setViewport', { scale: -0.5 }],
@@ -274,29 +316,37 @@ describe('Container viewport', () => {
         ['no parentElement', 'setViewport', { scale: 0.5 }, detach]
       ]
 
-      test.each(rejected)('rejected call leaves state untouched: %s', async (_, method, options, prepare) => {
-        const pending = track(container.setViewport(TRANSFORM_ANIMATED))
-        events.length = 0
-        prepare && prepare(container)
-        const styleBefore = container.el.getAttribute('style')
-        const getterBefore = container.viewport
+      test.each(rejected)(
+        'rejected call leaves state untouched: %s',
+        async (_, method, options, prepare) => {
+          const pending = track(container.setViewport(TRANSFORM_ANIMATED))
+          events.length = 0
+          prepare && prepare(container)
+          const styleBefore = container.el.getAttribute('style')
+          const getterBefore = container.viewport
 
-        expect(() => container[method](options)).toThrow()
+          expect(() => container[method](options)).toThrow()
 
-        expect(container.el.getAttribute('style')).toBe(styleBefore)
-        expect(container.viewport).toEqual(getterBefore)
-        expect(events).toEqual([])
-        await vi.advanceTimersByTimeAsync(399)
-        expect(pending.settled).toBe(false)
-        await vi.advanceTimersByTimeAsync(1)
-        expect(pending.value.interrupted).toBe(false)
-      })
+          expect(container.el.getAttribute('style')).toBe(styleBefore)
+          expect(container.viewport).toEqual(getterBefore)
+          expect(events).toEqual([])
+          await vi.advanceTimersByTimeAsync(399)
+          expect(pending.settled).toBe(false)
+          await vi.advanceTimersByTimeAsync(1)
+          expect(pending.value.interrupted).toBe(false)
+        }
+      )
     })
   })
 
   describe('S3 - transform viewport and animation', () => {
     test('transform path top-left', async () => {
-      const result = container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: true })
+      const result = container.setViewport({
+        scale: 0.5,
+        position: 'top-left',
+        margin: 20,
+        useTransform: true
+      })
 
       expect(container.el.style.transformOrigin).toBe('0% 0%')
       expect(container.el.style.transform).toBe('translate(20px, 20px) scale(0.5)')
@@ -307,8 +357,20 @@ describe('Container viewport', () => {
     })
 
     test.each([
-      ['center with a left margin', { scale: 0.5, margin: { left: 40 } }, '50% 50%', 'translate(20px, 0px) scale(0.5)', { x: 340, y: 180, width: 640, height: 360 }],
-      ['bottom-right keeps scale unrounded', { scale: 0.333, position: 'bottom-right', margin: 10 }, '100% 100%', 'translate(-10px, -10px) scale(0.333)', { x: 844, y: 470, width: 426, height: 240 }]
+      [
+        'center with a left margin',
+        { scale: 0.5, margin: { left: 40 } },
+        '50% 50%',
+        'translate(20px, 0px) scale(0.5)',
+        { x: 340, y: 180, width: 640, height: 360 }
+      ],
+      [
+        'bottom-right keeps scale unrounded',
+        { scale: 0.333, position: 'bottom-right', margin: 10 },
+        '100% 100%',
+        'translate(-10px, -10px) scale(0.333)',
+        { x: 844, y: 470, width: 426, height: 240 }
+      ]
     ])('transform path %s', async (_, options, origin, transform, rect) => {
       const result = container.setViewport({ ...options, useTransform: true })
 
@@ -327,22 +389,49 @@ describe('Container viewport', () => {
       ['bottom-left', '0% 100%', 'translate(20px, -20px)', 20, 340],
       ['bottom-center', '50% 100%', 'translate(0px, -20px)', 320, 340],
       ['bottom-right', '100% 100%', 'translate(-20px, -20px)', 620, 340]
-    ])('transform path origin and rect for position %s', async (position, origin, translate, x, y) => {
-      const result = container.setViewport({ scale: 0.5, position, margin: 20, useTransform: true })
+    ])(
+      'transform path origin and rect for position %s',
+      async (position, origin, translate, x, y) => {
+        const result = container.setViewport({
+          scale: 0.5,
+          position,
+          margin: 20,
+          useTransform: true
+        })
 
-      expect(container.el.style.transformOrigin).toBe(origin)
-      expect(container.el.style.transform).toBe(`${translate} scale(0.5)`)
-      await expect(result).resolves.toEqual({ interrupted: false, rect: { x, y, width: 640, height: 360 } })
-    })
+        expect(container.el.style.transformOrigin).toBe(origin)
+        expect(container.el.style.transform).toBe(`${translate} scale(0.5)`)
+        await expect(result).resolves.toEqual({
+          interrupted: false,
+          rect: { x, y, width: 640, height: 360 }
+        })
+      }
+    )
 
     describe('animated call', () => {
-      const animated = { scale: 0.5, useTransform: true, animate: true, duration: 500, easing: 'linear' }
+      const animated = {
+        scale: 0.5,
+        useTransform: true,
+        animate: true,
+        duration: 500,
+        easing: 'linear'
+      }
 
       test('pins transform-origin before the first scale animation', () => {
-        const { writes, style } = recordStyle({ transform: '', transformOrigin: '', transition: '' })
+        const { writes, style } = recordStyle({
+          transform: '',
+          transformOrigin: '',
+          transition: ''
+        })
         replaceStyle(container, style)
 
-        container.setViewport({ scale: 0.5, position: 'top-left', animate: true, duration: 400, easing: 'ease-out' })
+        container.setViewport({
+          scale: 0.5,
+          position: 'top-left',
+          animate: true,
+          duration: 400,
+          easing: 'ease-out'
+        })
 
         const originAt = writes.findIndex(([prop]) => prop === 'transformOrigin')
         const transitionAt = writes.findIndex(([prop]) => prop === 'transition')
@@ -356,12 +445,21 @@ describe('Container viewport', () => {
         container.setViewport({ scale: 0.5, position: 'bottom-right', useTransform: true })
         const flushLayout = vi.spyOn(container.el, 'offsetWidth', 'get')
 
-        container.setViewport({ scale: 0.5, position: 'center', useTransform: true, animate: true, duration: 400, easing: 'ease-out' })
+        container.setViewport({
+          scale: 0.5,
+          position: 'center',
+          useTransform: true,
+          animate: true,
+          duration: 400,
+          easing: 'ease-out'
+        })
 
         expect(container.el.style.transform).toBe('translate(0px, 0px) scale(0.5)')
         expect(container.el.style.transformOrigin).toBe('50% 50%')
         expect(flushLayout).toHaveBeenCalled()
-        expect(container.el.style.transition).toBe('transform 400ms ease-out, transform-origin 400ms ease-out')
+        expect(container.el.style.transition).toBe(
+          'transform 400ms ease-out, transform-origin 400ms ease-out'
+        )
       })
 
       test('animated call settles on its own transitionend', async () => {
@@ -407,11 +505,20 @@ describe('Container viewport', () => {
       test('waits for transform-origin when a same-scale move interrupts an animation', async () => {
         const topLeft = { x: 0, y: 0, width: 640, height: 360 }
         const bottomRight = { x: 640, y: 360, width: 640, height: 360 }
-        const first = track(container.setViewport({ scale: 0.5, position: 'top-left', animate: true, duration: 300 }))
+        const first = track(
+          container.setViewport({ scale: 0.5, position: 'top-left', animate: true, duration: 300 })
+        )
         await vi.advanceTimersByTimeAsync(100)
         events.length = 0
 
-        const second = track(container.setViewport({ scale: 0.5, position: 'bottom-right', animate: true, duration: 300 }))
+        const second = track(
+          container.setViewport({
+            scale: 0.5,
+            position: 'bottom-right',
+            animate: true,
+            duration: 300
+          })
+        )
         await flush()
 
         expect(first.value).toEqual({ interrupted: true, rect: topLeft })
@@ -425,7 +532,9 @@ describe('Container viewport', () => {
         await flush()
 
         expect(second.value).toEqual({ interrupted: false, rect: bottomRight })
-        expect(events.filter(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE)).toHaveLength(1)
+        expect(
+          events.filter(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE)
+        ).toHaveLength(1)
       })
 
       test('animated call settles on transitioncancel', async () => {
@@ -439,12 +548,14 @@ describe('Container viewport', () => {
       })
 
       test('a retargeted animation does not settle on the cancelled transition', async () => {
-        const call = track(container.setViewport({
-          position: 'top-left',
-          margin: { right: 320, bottom: 180 },
-          animate: true,
-          duration: 500
-        }))
+        const call = track(
+          container.setViewport({
+            position: 'top-left',
+            margin: { right: 320, bottom: 180 },
+            animate: true,
+            duration: 500
+          })
+        )
         measure(parent, 2560, 1440)
 
         container.reapplyViewport()
@@ -456,19 +567,22 @@ describe('Container viewport', () => {
         fireTransitionEnd(container.el, 'transform')
         await flush()
 
-        expect(call.value).toEqual({ interrupted: false, rect: { x: 0, y: 0, width: 2240, height: 1260 } })
+        expect(call.value).toEqual({
+          interrupted: false,
+          rect: { x: 0, y: 0, width: 2240, height: 1260 }
+        })
       })
     })
 
     describe('is interrupted by', () => {
-      const settledTransform = (c) => c.setViewport({ scale: 0.5, useTransform: true })
+      const settledTransform = c => c.setViewport({ scale: 0.5, useTransform: true })
       const pendingKinds = {
         setViewport: {
-          start: (c) => c.setViewport(TRANSFORM_ANIMATED),
+          start: c => c.setViewport(TRANSFORM_ANIMATED),
           rect: RECT_HALF_CENTER
         },
         resetViewport: {
-          start: (c) => {
+          start: c => {
             settledTransform(c)
             return c.resetViewport({ animate: true })
           },
@@ -477,7 +591,7 @@ describe('Container viewport', () => {
       }
       const newKinds = {
         setViewport: {
-          call: (c) => c.setViewport({ scale: 0.25, useTransform: true }),
+          call: c => c.setViewport({ scale: 0.25, useTransform: true }),
           result: { interrupted: false, rect: { x: 480, y: 270, width: 320, height: 180 } },
           verify: (c, recorded) => {
             expect(c.el.style.transform).toBe('translate(0px, 0px) scale(0.25)')
@@ -488,14 +602,20 @@ describe('Container viewport', () => {
           }
         },
         resetViewport: {
-          call: (c) => c.resetViewport(),
+          call: c => c.resetViewport(),
           result: { interrupted: false, rect: FULL },
           verify: (c, recorded) => {
             const { transform, transformOrigin, transition } = inlineStyle(c)
             expect([transform, transformOrigin, transition]).toEqual(['', '', ''])
             expect(recorded).toEqual([
-              { name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload: { rect: FULL, viewport: null } },
-              { name: Events.CONTAINER_VIEWPORT_DID_CHANGE, payload: { rect: FULL, viewport: null } }
+              {
+                name: Events.CONTAINER_VIEWPORT_WILL_CHANGE,
+                payload: { rect: FULL, viewport: null }
+              },
+              {
+                name: Events.CONTAINER_VIEWPORT_DID_CHANGE,
+                payload: { rect: FULL, viewport: null }
+              }
             ])
           }
         }
@@ -513,7 +633,10 @@ describe('Container viewport', () => {
         const newCall = track(newKinds[newName].call(container))
         await flush()
 
-        expect(pendingCall.value).toEqual({ interrupted: true, rect: pendingKinds[pendingName].rect })
+        expect(pendingCall.value).toEqual({
+          interrupted: true,
+          rect: pendingKinds[pendingName].rect
+        })
         expect(newCall.value).toEqual(newKinds[newName].result)
         newKinds[newName].verify(container, events)
         const didEvents = events.filter(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE)
@@ -523,9 +646,21 @@ describe('Container viewport', () => {
     })
 
     test('uses the webkit prefixed transform', async () => {
-      const style = replaceStyle(container, { webkitTransform: '', webkitTransformOrigin: '', webkitTransition: '' })
+      const style = replaceStyle(container, {
+        webkitTransform: '',
+        webkitTransformOrigin: '',
+        webkitTransition: ''
+      })
 
-      const call = track(container.setViewport({ scale: 0.5, useTransform: true, animate: true, duration: 500, easing: 'linear' }))
+      const call = track(
+        container.setViewport({
+          scale: 0.5,
+          useTransform: true,
+          animate: true,
+          duration: 500,
+          easing: 'linear'
+        })
+      )
 
       expect(style.webkitTransform).toBe('translate(0px, 0px) scale(0.5)')
       expect(style.webkitTransformOrigin).toBe('50% 50%')
@@ -546,7 +681,7 @@ describe('Container viewport', () => {
       const result = container.setViewport({ scale: 0.5, useTransform: true })
 
       expect(style).toMatchObject({ top: '180px', left: '320px', width: '640px', height: '360px' })
-      expect(Object.keys(style).filter((key) => /transform/i.test(key))).toEqual([])
+      expect(Object.keys(style).filter(key => /transform/i.test(key))).toEqual([])
       expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_CENTER)
       expect(container.viewport.viewport.useTransform).toBe(false)
       await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
@@ -598,11 +733,13 @@ describe('Container viewport', () => {
         return call
       }
 
-      const expectSettled = (call) => {
+      const expectSettled = call => {
         const { transform, transformOrigin, transition } = inlineStyle(container)
         expect([transform, transformOrigin, transition]).toEqual(['', '', ''])
         expect(events.map(({ name }) => name)).toContain(Events.CONTAINER_VIEWPORT_DID_CHANGE)
-        expect(events.find(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE).payload).toEqual({ rect: FULL, viewport: null })
+        expect(
+          events.find(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE).payload
+        ).toEqual({ rect: FULL, viewport: null })
         expect(call.value).toEqual({ interrupted: false, rect: FULL })
       }
 
@@ -637,7 +774,9 @@ describe('Container viewport', () => {
 
         const rect = { x: 0, y: 0, width: 640, height: 360 }
         expect(container.el.style.transform).toBe('translate(0px, 0px) scale(1)')
-        expect(events).toEqual([{ name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload: { rect, viewport: null } }])
+        expect(events).toEqual([
+          { name: Events.CONTAINER_VIEWPORT_WILL_CHANGE, payload: { rect, viewport: null } }
+        ])
         expect(call.settled).toBe(false)
 
         await vi.advanceTimersByTimeAsync(99)
@@ -680,12 +819,21 @@ describe('Container viewport', () => {
     test('switches from px to transform', () => {
       container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
       const snapshots = []
-      playback.setDisplayRect.mockImplementation((rect) => snapshots.push({ rect, ...inlineStyle(container) }))
+      playback.setDisplayRect.mockImplementation(rect =>
+        snapshots.push({ rect, ...inlineStyle(container) })
+      )
 
       container.setViewport({ scale: 0.5, useTransform: true })
 
       expect(snapshots).toHaveLength(1)
-      expect(snapshots[0]).toMatchObject({ rect: FULL, top: '', left: '', width: '', height: '', transform: '' })
+      expect(snapshots[0]).toMatchObject({
+        rect: FULL,
+        top: '',
+        left: '',
+        width: '',
+        height: '',
+        transform: ''
+      })
       expect(container.el.style.transform).toBe('translate(0px, 0px) scale(0.5)')
     })
 
@@ -702,10 +850,14 @@ describe('Container viewport', () => {
         animate: true
       })
 
-      const initial = writes.findIndex(([prop, value]) => prop === 'transform' && value === 'translate(-620px, -340px) scale(0.5)')
+      const initial = writes.findIndex(
+        ([prop, value]) => prop === 'transform' && value === 'translate(-620px, -340px) scale(0.5)'
+      )
       const transitionAt = writes.findIndex(([prop]) => prop === 'transition')
       const cleared = writes.findIndex(([prop, value]) => prop === 'width' && value === '')
-      const finalAt = writes.findIndex(([prop, value]) => prop === 'transform' && value === 'translate(-20px, -20px) scale(0.5)')
+      const finalAt = writes.findIndex(
+        ([prop, value]) => prop === 'transform' && value === 'translate(-20px, -20px) scale(0.5)'
+      )
 
       expect(initial).toBeGreaterThanOrEqual(0)
       expect(initial).toBeLessThan(cleared)
@@ -727,7 +879,13 @@ describe('Container viewport', () => {
       container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
       expect(inlineStyle(container)).toEqual({
-        top: '20px', left: '20px', width: '640px', height: '360px', transform: '', transformOrigin: '', transition: ''
+        top: '20px',
+        left: '20px',
+        width: '640px',
+        height: '360px',
+        transform: '',
+        transformOrigin: '',
+        transition: ''
       })
     })
 
@@ -744,15 +902,20 @@ describe('Container viewport', () => {
       expect(call.value).toEqual({ interrupted: true, rect: RECT_HALF_CENTER })
       expect(events).toEqual([])
       expect(vi.getTimerCount()).toBe(timersBefore)
-      const isTransitionEvent = ([type]) => (
-        type === 'transitionend' || type === 'webkitTransitionEnd' ||
-        type === 'transitioncancel' || type === 'webkitTransitionCancel'
-      )
+      const isTransitionEvent = ([type]) =>
+        type === 'transitionend' ||
+        type === 'webkitTransitionEnd' ||
+        type === 'transitioncancel' ||
+        type === 'webkitTransitionCancel'
       const added = addSpy.mock.calls.filter(isTransitionEvent)
       const removed = removeSpy.mock.calls.filter(isTransitionEvent)
       expect(added.length).toBeGreaterThan(0)
       added.forEach(([type, handler]) => {
-        expect(removed.some(([removedType, removedHandler]) => removedType === type && removedHandler === handler)).toBe(true)
+        expect(
+          removed.some(
+            ([removedType, removedHandler]) => removedType === type && removedHandler === handler
+          )
+        ).toBe(true)
       })
     })
 
@@ -764,6 +927,167 @@ describe('Container viewport', () => {
       parent.removeChild(container.el)
 
       expect(container.viewport).toEqual({ rect: null, viewport: null })
+    })
+  })
+
+  describe('S6 - radius', () => {
+    test('an omitted radius leaves an existing border-radius alone', () => {
+      container.el.style.borderRadius = '4px'
+      container.el.style.overflow = 'scroll'
+
+      container.setViewport({ scale: 0.5 })
+      measure(parent, 640, 360)
+      container.reapplyViewport()
+
+      expect(container.el.style.borderRadius).toBe('4px')
+      expect(container.el.style.overflow).toBe('scroll')
+      expect(container.el.style.transition).toBe('')
+      expect(container.viewport.viewport.radius).toBeNull()
+    })
+
+    test('transform path writes the visual radius divided by fit', () => {
+      container.setViewport({ scale: 0.5, radius: 16 })
+
+      expect(container.el.style.borderRadius).toBe('32px')
+      expect(container.el.style.overflow).toBe('hidden')
+      expect(container.viewport.viewport.radius).toBe(16)
+      expect(playback.setDisplayRect).not.toHaveBeenCalled()
+    })
+
+    test('px path writes the visual radius', () => {
+      container.setViewport({ scale: 0.5, radius: 16, useTransform: false })
+
+      expect(container.el.style.borderRadius).toBe('16px')
+      expect(container.el.style.overflow).toBe('hidden')
+      expect(playback.setDisplayRect).toHaveBeenCalledWith(RECT_HALF_CENTER)
+    })
+
+    test('an explicit 0 clears the clip', () => {
+      container.setViewport({ scale: 0.5, radius: 16 })
+
+      container.setViewport({ scale: 0.5, radius: 0 })
+
+      expect(container.el.style.borderRadius).toBe('0px')
+      expect(container.el.style.overflow).toBe('')
+      expect(container.viewport.viewport.radius).toBe(0)
+    })
+
+    test('a later call without radius removes the one we wrote', () => {
+      container.setViewport({ scale: 0.5, radius: 16 })
+
+      container.setViewport({ scale: 0.5 })
+
+      expect(container.el.style.borderRadius).toBe('')
+      expect(container.el.style.overflow).toBe('')
+      expect(container.viewport.viewport.radius).toBeNull()
+    })
+
+    test('an invalid radius leaves the previous style', () => {
+      container.setViewport({ scale: 0.5, radius: 16 })
+
+      expect(() => container.setViewport({ radius: -1 })).toThrow(RangeError)
+
+      expect(container.el.style.borderRadius).toBe('32px')
+      expect(container.viewport.viewport.radius).toBe(16)
+    })
+
+    test('resize rewrites the compensated radius without a transition', () => {
+      container.setViewport({ scale: 1, margin: 100, radius: 16 })
+      expect(container.el.style.borderRadius).toBe(`${16 / (520 / 720)}px`)
+
+      measure(parent, 1000, 1000)
+      container.reapplyViewport()
+
+      expect(container.el.style.borderRadius).toBe('20px')
+      expect(container.el.style.transition).toBe('')
+      expect(container.viewport.viewport.radius).toBe(16)
+    })
+
+    test('an animated radius waits for border-radius and keeps it after settle', async () => {
+      const call = track(
+        container.setViewport({
+          scale: 0.5,
+          radius: 16,
+          animate: true,
+          duration: 400,
+          easing: 'ease-out'
+        })
+      )
+
+      expect(container.el.style.borderRadius).toBe('32px')
+      expect(container.el.style.overflow).toBe('hidden')
+      expect(container.el.style.transition).toBe(
+        'transform 400ms ease-out, border-radius 400ms ease-out'
+      )
+      await flush()
+      expect(call.settled).toBe(false)
+
+      fireTransitionEnd(container.el, 'transform')
+      await flush()
+      expect(call.settled).toBe(false)
+
+      fireTransitionEnd(container.el, 'border-radius')
+      await flush()
+
+      expect(call.value).toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+      expect(container.el.style.transition).toBe('')
+      expect(container.el.style.borderRadius).toBe('32px')
+      expect(container.viewport.viewport.radius).toBe(16)
+    })
+
+    test('a radius added to a settled transform is animated', () => {
+      container.setViewport({ scale: 0.5, useTransform: true })
+      const flushLayout = vi.spyOn(container.el, 'offsetWidth', 'get')
+
+      container.setViewport({ scale: 0.5, radius: 16, animate: true, duration: 300 })
+
+      expect(flushLayout).toHaveBeenCalled()
+      expect(container.el.style.borderRadius).toBe('32px')
+      expect(container.el.style.transition).toBe(
+        'transform 300ms ease, transform-origin 300ms ease, border-radius 300ms ease'
+      )
+    })
+
+    test('an animated reset eases the radius out and then clears it', async () => {
+      container.setViewport({ scale: 0.5, radius: 16 })
+      const call = track(container.resetViewport({ animate: true, duration: 400 }))
+
+      expect(container.el.style.borderRadius).toBe('0px')
+      expect(container.el.style.overflow).toBe('hidden')
+      expect(container.el.style.transition).toContain('border-radius 400ms ease')
+      await flush()
+      expect(call.settled).toBe(false)
+
+      fireTransitionEnd(container.el, 'transform')
+      await flush()
+      expect(call.settled).toBe(false)
+
+      fireTransitionEnd(container.el, 'border-radius')
+      await flush()
+
+      expect(call.value).toEqual({ interrupted: false, rect: FULL })
+      expect(container.el.style.borderRadius).toBe('')
+      expect(container.el.style.overflow).toBe('')
+      expect(container.el.style.transition).toBe('')
+    })
+
+    test('reset removes a px radius immediately', () => {
+      container.setViewport({ scale: 0.5, radius: 16, useTransform: false })
+
+      container.resetViewport()
+
+      expect(container.el.style.borderRadius).toBe('')
+      expect(container.el.style.overflow).toBe('')
+    })
+
+    test('falls back to the visual radius when the engine has no transform', () => {
+      const style = replaceStyle(container, {})
+
+      container.setViewport({ scale: 0.5, radius: 16, useTransform: true })
+
+      expect(style.borderRadius).toBe('16px')
+      expect(style.overflow).toBe('hidden')
+      expect(container.viewport.viewport.useTransform).toBe(false)
     })
   })
 })

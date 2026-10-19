@@ -64,7 +64,12 @@ describe('computeGeometry', () => {
       { x: 620, y: 340, width: 640, height: 360 }
     ]
   ])('places %s', (position, origin, transform, rect) => {
-    expect(place({ scale: 0.5, position, margin: margin(20) })).toEqual({ rect, transform, origin })
+    expect(place({ scale: 0.5, position, margin: margin(20) })).toEqual({
+      rect,
+      transform,
+      origin,
+      fit: 0.5
+    })
     expect(transformForRect(rect, SIZE, position)).toBe(transform)
   })
 
@@ -72,7 +77,8 @@ describe('computeGeometry', () => {
     expect(place({ scale: 0.5, margin: { top: 0, right: 0, bottom: 0, left: 40 } })).toEqual({
       rect: { x: 340, y: 180, width: 640, height: 360 },
       transform: 'translate(20px, 0px) scale(0.5)',
-      origin: '50% 50%'
+      origin: '50% 50%',
+      fit: 0.5
     })
   })
 
@@ -83,7 +89,8 @@ describe('computeGeometry', () => {
       {
         rect: { x: 0, y: 0, width: 960, height: 540 },
         transform: 'translate(0px, 0px) scale(0.75)',
-        origin: '0% 0%'
+        origin: '0% 0%',
+        fit: 0.75
       }
     ],
     [
@@ -92,7 +99,8 @@ describe('computeGeometry', () => {
       {
         rect: { x: 178, y: 100, width: 924, height: 520 },
         transform: 'translate(0px, 0px) scale(0.7222222222222222)',
-        origin: '50% 50%'
+        origin: '50% 50%',
+        fit: 0.7222222222222222
       }
     ],
     [
@@ -101,7 +109,8 @@ describe('computeGeometry', () => {
       {
         rect: { x: 200, y: 113, width: 880, height: 495 },
         transform: 'translate(0px, 0px) scale(0.6875)',
-        origin: '50% 50%'
+        origin: '50% 50%',
+        fit: 0.6875
       }
     ],
     [
@@ -110,7 +119,8 @@ describe('computeGeometry', () => {
       {
         rect: { x: 640, y: 360, width: 0, height: 0 },
         transform: 'translate(0px, 0px) scale(0)',
-        origin: '50% 50%'
+        origin: '50% 50%',
+        fit: 0
       }
     ]
   ])('clamps the fit to %s', (_, options, geometry) => {
@@ -121,7 +131,8 @@ describe('computeGeometry', () => {
     expect(place({ scale: 0.333, position: 'bottom-right', margin: margin(10) })).toEqual({
       rect: { x: 844, y: 470, width: 426, height: 240 },
       transform: 'translate(-10px, -10px) scale(0.333)',
-      origin: '100% 100%'
+      origin: '100% 100%',
+      fit: 0.333
     })
   })
 
@@ -129,7 +140,8 @@ describe('computeGeometry', () => {
     expect(place({}, { width: 0, height: 0 })).toEqual({
       rect: { x: 0, y: 0, width: 0, height: 0 },
       transform: 'translate(0px, 0px) scale(0)',
-      origin: '50% 50%'
+      origin: '50% 50%',
+      fit: 0
     })
   })
 })

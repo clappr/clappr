@@ -31,6 +31,14 @@ export const findTransformStyles = style =>
 
 export const flushLayout = element => element.offsetWidth
 
+// A transform scales the curve, so the inline value is the visual radius divided by fit.
+export const borderRadiusFor = (radius, fit, useTransform) => {
+  if (radius == null) return null
+  if (fit === 0) return '0px'
+  if (!useTransform) return `${radius}px`
+  return `${radius / fit}px`
+}
+
 // The first token is the property, so `transform` does not match `transform-origin`.
 export const transitionedProperties = transition => {
   if (!transition) return []

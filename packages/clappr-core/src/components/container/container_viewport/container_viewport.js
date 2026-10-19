@@ -12,6 +12,7 @@ import {
   SETTLE_MARGIN_MS,
   TRANSITION_CANCEL_EVENTS,
   TRANSITION_END_EVENTS,
+  borderRadiusFor,
   findTransformStyles,
   flushLayout,
   transitionedProperties
@@ -40,6 +41,7 @@ const TRANSITION_EVENTS = TRANSITION_END_EVENTS.concat(TRANSITION_CANCEL_EVENTS)
  * @property {Number} [scale=1] in (0, 1]
  * @property {'top-left'|'top-center'|'top-right'|'center-left'|'center'|'center-right'|'bottom-left'|'bottom-center'|'bottom-right'} [position='center']
  * @property {Number|ViewportMargin} [margin=0] px kept free around the video
+ * @property {Number|null} [radius=null] visual corner radius in px. Omitted applies no border-radius
  * @property {Boolean} [useTransform=true] move the video with a CSS transform. `false` resizes the container box
  * @property {Boolean} [animate=false] transition the change, only with `useTransform`
  * @property {Number} [duration=300] transition time in ms
@@ -68,6 +70,7 @@ export default class ContainerViewport {
     this._pending = null
     this._running = {}
     this._ignoreCancel = {}
+    this._radiusOwned = false
   }
 
   /**
@@ -86,6 +89,8 @@ export default class ContainerViewport {
     if (!size) throw new Error('The container has no parentElement to measure')
     viewport.useTransform = viewport.useTransform && !!findTransformStyles(this._container.el.style)
     const geometry = computeGeometry(viewport, size)
+    const radiusCss = borderRadiusFor(viewport.radius, geometry.fit, viewport.useTransform)
+    const clearingRadius = viewport.radius == null && this._radiusOwned
 
     this._begin(viewport, geometry.rect)
     const animated = viewport.useTransform && viewport.animate
@@ -95,15 +100,20 @@ export default class ContainerViewport {
     }
     // Commit the origin before the transition. In the same frame the browser would slide it.
     const pinned = this._pinOrigin(geometry.origin)
-    const transition = this._transitionFor(viewport, !pinned)
+    const transition = this._transitionFor(viewport, !pinned, radiusCss)
     this._applyTransform(geometry, size, transition)
-    return this._awaitSettle(viewport.duration, transition, () => this._writeTransform({ transition: '' }))
+    return this._awaitSettle(viewport.duration, transition, () => {
+      this._writeTransform({ transition: '' })
+      if (clearingRadius) this._clearOwnedRadius()
+    })
   }
 
   reset(options) {
     const { animate, duration, easing } = normalizeAnimation(options)
     const active = this._viewport || this._pending
-    if (!active) return Promise.resolve({ interrupted: false, rect: this._fullRect(this._measure()) })
+    if (!active) {
+      return Promise.resolve({ interrupted: false, rect: this._fullRect(this._measure()) })
+    }
 
     const size = this._measure()
     if (!size) throw new Error('The container has no parentElement to measure')
@@ -115,8 +125,12 @@ export default class ContainerViewport {
       this._clearApplied(rect)
       return this._finish()
     }
-    const transition = this._transitionFor({ duration, easing })
-    this._writeTransform({ transform: IDENTITY_TRANSFORM, transition })
+    const transition = this._transitionFor({ duration, easing }, true, null)
+    const values = { transform: IDENTITY_TRANSFORM, transition }
+    const radiusWrite = this._ownedRadiusWrite(null, true)
+    if (radiusWrite != null) values.borderRadius = radiusWrite
+    this._syncOverflow(null, radiusWrite === '0px')
+    this._writeTransform(values)
     return this._awaitSettle(duration, transition, () => this._clearApplied(rect))
   }
 
@@ -183,7 +197,10 @@ export default class ContainerViewport {
   }
 
   _notify(eventName) {
-    this._container.trigger(eventName, { rect: copyRect(this._rect), viewport: copyViewport(this._viewport) })
+    this._container.trigger(eventName, {
+      rect: copyRect(this._rect),
+      viewport: copyViewport(this._viewport)
+    })
   }
 
   _pinOrigin(origin) {
@@ -195,17 +212,27 @@ export default class ContainerViewport {
     return true
   }
 
-  _transitionFor({ duration, easing }, includeOrigin = true) {
+  _transitionFor({ duration, easing }, includeOrigin = true, radiusCss = null) {
     const { property, originProperty } = findTransformStyles(this._container.el.style)
     const timing = `${duration}ms ${easing}`
     // Position with no margin lives in transform-origin, so the same translate would not move.
-    if (!includeOrigin) return `${property} ${timing}`
-    return `${property} ${timing}, ${originProperty} ${timing}`
+    const parts = [`${property} ${timing}`]
+    if (includeOrigin) parts.push(`${originProperty} ${timing}`)
+    const radiusWrite = this._ownedRadiusWrite(radiusCss, true)
+    if (radiusWrite != null && this._container.el.style.borderRadius !== radiusWrite) {
+      parts.push(`border-radius ${timing}`)
+    }
+    return parts.join(', ')
   }
 
   _apply(viewport, geometry, size, transition) {
     if (!viewport.useTransform) {
       this._applyPx(geometry.rect)
+      this._writeRadius(
+        viewport.radius,
+        borderRadiusFor(viewport.radius, geometry.fit, false),
+        transition
+      )
       return
     }
     this._applyTransform(geometry, size, transition)
@@ -235,7 +262,60 @@ export default class ContainerViewport {
       if (transition) flushLayout(this._container.el)
     }
     this._strategy = 'transform'
-    this._writeTransform({ origin: geometry.origin, transform: geometry.transform, transition })
+    const radius = this._viewport ? this._viewport.radius : null
+    const radiusCss = this._viewport ? borderRadiusFor(radius, geometry.fit, true) : null
+    const values = { origin: geometry.origin, transform: geometry.transform, transition }
+    const radiusWrite = this._ownedRadiusWrite(radiusCss, !!transition)
+    if (radiusWrite != null) values.borderRadius = radiusWrite
+    this._syncOverflow(radius, radius == null && radiusWrite === '0px' && !!transition)
+    this._writeTransform(values)
+    if (radiusWrite != null) this._radiusOwned = radiusWrite !== ''
+  }
+
+  _ownedRadiusWrite(radiusCss, animated) {
+    if (radiusCss != null) return radiusCss
+    if (!this._radiusOwned) return null
+    return animated ? '0px' : ''
+  }
+
+  _syncOverflow(radius, keepDuringClear) {
+    if (radius == null && !this._radiusOwned) return
+    if (radius > 0) {
+      this._container.el.style.overflow = 'hidden'
+      return
+    }
+    // The curve is still visible while it eases back to 0, so the clip stays until settle.
+    if (keepDuringClear) return
+    this._container.el.style.overflow = ''
+  }
+
+  _writeRadius(radius, radiusCss, transition) {
+    const radiusWrite = this._ownedRadiusWrite(radiusCss, !!transition)
+    if (radiusWrite == null) return
+    this._syncOverflow(radius, radius == null && radiusWrite === '0px' && !!transition)
+    this._container.el.style.borderRadius = radiusWrite
+    this._radiusOwned = radiusWrite !== ''
+  }
+
+  _clearOwnedRadius() {
+    if (!this._radiusOwned) return
+    const { style } = this._container.el
+    style.borderRadius = ''
+    style.overflow = ''
+    this._radiusOwned = false
+  }
+
+  _readStyle(el, names, key) {
+    if (key === 'borderRadius') return el.style.borderRadius
+    return el.style[names[key]]
+  }
+
+  _assignStyle(el, names, key, value) {
+    if (key === 'borderRadius') {
+      el.style.borderRadius = value
+      return
+    }
+    el.style[names[key]] = value
   }
 
   _writeTransform(values) {
@@ -243,10 +323,11 @@ export default class ContainerViewport {
     const names = findTransformStyles(el.style)
     const before = {
       transform: el.style[names.transform],
-      origin: el.style[names.origin]
+      origin: el.style[names.origin],
+      borderRadius: el.style.borderRadius
     }
     this._armTransition(el, names, values)
-    Object.keys(values).forEach((key) => { el.style[names[key]] = values[key] })
+    Object.keys(values).forEach(key => this._assignStyle(el, names, key, values[key]))
     this._trackRunning(names, values, before)
   }
 
@@ -256,15 +337,17 @@ export default class ContainerViewport {
       this._ignoreCancel = {}
       return
     }
-    const transition = 'transition' in values ? values.transition : this._container.el.style[names.transition]
+    const transition =
+      'transition' in values ? values.transition : this._container.el.style[names.transition]
     const listed = transitionedProperties(transition)
     const tracked = [
       ['transform', names.property],
-      ['origin', names.originProperty]
+      ['origin', names.originProperty],
+      ['borderRadius', 'border-radius']
     ]
     tracked.forEach(([key, prop]) => {
       if (!(key in values)) return
-      const changed = before[key] !== this._container.el.style[names[key]]
+      const changed = before[key] !== this._readStyle(this._container.el, names, key)
       if (changed && listed.indexOf(prop) !== -1) {
         // Rewriting a moving property cancels its old transition. That cancel is not the new end.
         if (this._running[prop]) this._ignoreCancel[prop] = true
@@ -280,8 +363,8 @@ export default class ContainerViewport {
 
   _armTransition(el, names, values) {
     if (!values.transition) return
-    const changes = (key) => key in values && values[key] !== el.style[names[key]]
-    const moves = ['transform', 'origin'].some(changes)
+    const changes = key => key in values && values[key] !== this._readStyle(el, names, key)
+    const moves = ['transform', 'origin', 'borderRadius'].some(changes)
     if (!moves) return
     if (el.style[names.transition]) return
     // The transition has to be painted before the new value, or the change is instant.
@@ -291,7 +374,9 @@ export default class ContainerViewport {
 
   _clearPx() {
     const { style } = this._container.el
-    PX_STYLES.forEach((name) => { style[name] = '' })
+    PX_STYLES.forEach(name => {
+      style[name] = ''
+    })
     this._pxRect = null
   }
 
@@ -304,20 +389,23 @@ export default class ContainerViewport {
       this._clearPx()
       if (rect) this._container.playback.setDisplayRect(copyRect(rect))
       this._strategy = null
+      this._clearOwnedRadius()
       return
     }
     if (this._strategy === 'transform') this._clearTransform()
     this._strategy = null
+    this._clearOwnedRadius()
   }
 
   _awaitSettle(duration, transition, onSettle) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const el = this._container.el
-      const listener = (event) => {
+      const listener = event => {
         if (event.target !== el) return
         const prop = event.propertyName
         if (!this._running[prop]) return
-        const cancelled = event.type === 'transitioncancel' || event.type === 'webkitTransitionCancel'
+        const cancelled =
+          event.type === 'transitioncancel' || event.type === 'webkitTransitionCancel'
         if (cancelled && this._ignoreCancel[prop]) {
           delete this._ignoreCancel[prop]
           return
@@ -328,20 +416,23 @@ export default class ContainerViewport {
       }
       this._pending = { resolve, listener, onSettle, transition, duration, timer: null }
       this._restartSettleTimer()
-      TRANSITION_EVENTS.forEach((type) => el.addEventListener(type, listener))
+      TRANSITION_EVENTS.forEach(type => el.addEventListener(type, listener))
     })
   }
 
   _restartSettleTimer() {
     clearTimeout(this._pending.timer)
-    this._pending.timer = setTimeout(() => this._settle(), this._pending.duration + SETTLE_MARGIN_MS)
+    this._pending.timer = setTimeout(
+      () => this._settle(),
+      this._pending.duration + SETTLE_MARGIN_MS
+    )
   }
 
   _release() {
     const pending = this._pending
     const el = this._container.el
     clearTimeout(pending.timer)
-    TRANSITION_EVENTS.forEach((type) => el.removeEventListener(type, pending.listener))
+    TRANSITION_EVENTS.forEach(type => el.removeEventListener(type, pending.listener))
     this._pending = null
     return pending
   }

@@ -44,6 +44,7 @@ Returns a `Promise` that resolves with `{ interrupted, rect }`. All options are 
 | `scale`        | number           | `1`        | greater than 0 and at most 1; clamped so the video fits inside the margins                                      | `RangeError` out of range or `NaN`, `TypeError` not a number               |
 | `position`     | string           | `'center'` | one of the nine [positions](#positions)                                                                         | `RangeError` unknown value, `TypeError` not a string                       |
 | `margin`       | number or object | `0`        | px free around the video, `>= 0`; an object takes `top`, `right`, `bottom` and `left`, and a missing key is `0` | `RangeError` negative or not finite, `TypeError` not a number or an object |
+| `radius`       | number           | omitted    | visual corner radius in px, `>= 0`, the same on all four corners. Omitted does not set `border-radius`          | `RangeError` negative or not finite, `TypeError` not a number              |
 | `useTransform` | boolean          | `true`     | `false` sizes the container box with inline px. Omitted uses a CSS transform                                    | -                                                                          |
 | `animate`      | boolean          | `false`    | `true` transitions the change. Ignored when `useTransform` is `false`                                           | -                                                                          |
 | `duration`     | number           | `300`      | ms, finite and `>= 0`                                                                                           | `RangeError` negative or not finite, `TypeError` not a number              |
@@ -57,7 +58,7 @@ Removes the viewport and gives the whole player back to the video. It returns th
 
 ### viewport
 
-A read-only getter that returns `{ rect, viewport }`: the rect in effect and the options, normalized to all seven keys with `margin` expanded to `top`, `right`, `bottom` and `left`. Without a viewport it returns the full rect and `viewport: null`, and while the container is not inside the player it returns `{ rect: null, viewport: null }`.
+A read-only getter that returns `{ rect, viewport }`: the rect in effect and the options, normalized to all eight keys with `margin` expanded to `top`, `right`, `bottom` and `left`. `radius` is `null` when the call omitted it. Without a viewport it returns the full rect and `viewport: null`, and while the container is not inside the player it returns `{ rect: null, viewport: null }`.
 
 ### Positions
 
@@ -106,6 +107,7 @@ On the px strategy the container calls `playback.setDisplayRect({ x, y, width, h
 - **`load()`**: a container created by `player.load()` starts with no viewport, even if the previous one had one.
 - **First animated call**: `transform-origin` is painted before the transition, and that transition covers only `transform`. The video scales around `position` instead of sliding there from the center. A later call still transitions `transform-origin`, because a move between positions can live entirely in that property.
 - **`animate` with `useTransform: false`**: it is ignored. The px strategy applies at once and the Promise resolves right away.
+- **`radius`**: omitted, the call does not write `border-radius` or `overflow`. A number is the visual radius in px. The transform strategy writes `radius / fit` (`fit` is the scale actually applied after the margins), because the transform scales the curve: `radius: 16` at `scale: 0.5` is inline `32px`. The px strategy writes `radius` px. `overflow: hidden` is set only when the radius is greater than 0. `0` writes `0px` and clears that clip. A later call that omits `radius`, and `resetViewport`, remove a radius this viewport wrote. An animated transform eases `border-radius` with the same duration and easing, and the reset clears the inline style when that transition settles. A resize rewrites the compensated value with no new transition. The rect does not include the radius.
 - **`resize()` and `setStyle()`**: calling them on the container while a viewport is active has no guarantee, because the next reapplication overwrites them.
 
 ## Recipes
@@ -119,6 +121,7 @@ await container.setViewport({
   scale: 0.3,
   position: 'bottom-right',
   margin: 24,
+  radius: 16,
   useTransform: true,
   animate: true,
   duration: 400,

@@ -5,6 +5,7 @@ const DEFAULT_VIEWPORT = {
   scale: 1,
   position: 'center',
   margin: ZERO_MARGIN,
+  radius: null,
   useTransform: true,
   animate: false,
   duration: 300,
@@ -42,12 +43,18 @@ describe('normalizeViewport', () => {
       scale: 0.5,
       position: 'bottom-right',
       margin: { top: 0, right: 0, bottom: 0, left: 8 },
+      radius: null,
       useTransform: true,
       animate: true,
       duration: 0,
       easing: 'linear'
     })
     expect(options.margin).toEqual({ left: 8 })
+  })
+
+  test('keeps an explicit radius and treats 0 as a value', () => {
+    expect(normalizeViewport({ radius: 16 }).radius).toBe(16)
+    expect(normalizeViewport({ radius: 0 }).radius).toBe(0)
   })
 
   test('keeps an explicit px request', () => {
@@ -75,6 +82,12 @@ describe('normalizeViewport', () => {
     'bottom-right'
   ])('accepts position %s', position => {
     expect(normalizeViewport({ position }).position).toBe(position)
+  })
+
+  test.each([-1, NaN, Infinity])('rejects radius %s', radius => {
+    expect(errorOf(() => normalizeViewport({ radius }))).toEqual(
+      new RangeError('radius must be a finite number >= 0')
+    )
   })
 
   test.each([0, -0.5, 1.01, NaN, Infinity])('rejects scale %s', scale => {
@@ -106,7 +119,9 @@ describe('normalizeViewport', () => {
     ['margin', { margin: '20px' }, 'margin must be a number or an object'],
     ['margin edge', { margin: { top: '10' } }, 'margin.top must be a number'],
     ['position', { position: 1 }, 'position must be a string'],
-    ['easing', { easing: 1 }, 'easing must be a string']
+    ['easing', { easing: 1 }, 'easing must be a string'],
+    ['radius', { radius: '16' }, 'radius must be a number'],
+    ['radius null', { radius: null }, 'radius must be a number']
   ])('wrong type on %s', (_, options, message) => {
     expect(errorOf(() => normalizeViewport(options))).toEqual(new TypeError(message))
   })

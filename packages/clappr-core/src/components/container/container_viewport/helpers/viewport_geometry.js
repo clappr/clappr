@@ -24,7 +24,7 @@ const placeOnAxis = (align, startMargin, endMargin, total, size) => {
  * The rect is integer px; the transform keeps the unrounded fit.
  * @param {{scale: Number, position: String, margin: {top: Number, right: Number, bottom: Number, left: Number}}} viewport
  * @param {{width: Number, height: Number}} size
- * @return {{rect: {x: Number, y: Number, width: Number, height: Number}, transform: String, origin: String}}
+ * @return {{rect: {x: Number, y: Number, width: Number, height: Number}, transform: String, origin: String, fit: Number}}
  */
 export const computeGeometry = ({ scale, position, margin }, { width, height }) => {
   const horizontalRoom = fitRatio(width - margin.left - margin.right, width)
@@ -41,7 +41,8 @@ export const computeGeometry = ({ scale, position, margin }, { width, height }) 
       height: toPx(fit * height)
     },
     transform: `translate(${x.shift}px, ${y.shift}px) scale(${fit})`,
-    origin: `${ORIGINS[horizontal]} ${ORIGINS[vertical]}`
+    origin: `${ORIGINS[horizontal]} ${ORIGINS[vertical]}`,
+    fit
   }
 }
 
