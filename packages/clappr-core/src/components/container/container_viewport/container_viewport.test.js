@@ -398,6 +398,61 @@ describe('Container viewport', () => {
         expect(events.map(({ name }) => name)).toEqual(VIEWPORT_EVENTS)
         expect(call.value).toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
       })
+
+      test('waits for transform-origin when a same-scale move interrupts an animation', async () => {
+        const topLeft = { x: 0, y: 0, width: 640, height: 360 }
+        const bottomRight = { x: 640, y: 360, width: 640, height: 360 }
+        const first = track(container.setViewport({ scale: 0.5, position: 'top-left', animate: true, duration: 300 }))
+        await vi.advanceTimersByTimeAsync(100)
+        events.length = 0
+
+        const second = track(container.setViewport({ scale: 0.5, position: 'bottom-right', animate: true, duration: 300 }))
+        await flush()
+
+        expect(first.value).toEqual({ interrupted: true, rect: topLeft })
+        fireTransitionEnd(container.el, 'transform')
+        await flush()
+
+        expect(second.settled).toBe(false)
+        expect(events.map(({ name }) => name)).toEqual([Events.CONTAINER_VIEWPORT_WILL_CHANGE])
+
+        fireTransitionEnd(container.el, 'transform-origin')
+        await flush()
+
+        expect(second.value).toEqual({ interrupted: false, rect: bottomRight })
+        expect(events.filter(({ name }) => name === Events.CONTAINER_VIEWPORT_DID_CHANGE)).toHaveLength(1)
+      })
+
+      test('animated call settles on transitioncancel', async () => {
+        const call = track(container.setViewport(animated))
+
+        fireTransitionEnd(container.el, 'transform', 'transitioncancel')
+        await flush()
+
+        expect(call.value).toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
+        expect(events.map(({ name }) => name)).toEqual(VIEWPORT_EVENTS)
+      })
+
+      test('a retargeted animation does not settle on the cancelled transition', async () => {
+        const call = track(container.setViewport({
+          position: 'top-left',
+          margin: { right: 320, bottom: 180 },
+          animate: true,
+          duration: 500
+        }))
+        measure(parent, 2560, 1440)
+
+        container.reapplyViewport()
+        fireTransitionEnd(container.el, 'transform', 'transitioncancel')
+        await flush()
+
+        expect(call.settled).toBe(false)
+
+        fireTransitionEnd(container.el, 'transform')
+        await flush()
+
+        expect(call.value).toEqual({ interrupted: false, rect: { x: 0, y: 0, width: 2240, height: 1260 } })
+      })
     })
 
     describe('is interrupted by', () => {
@@ -653,9 +708,12 @@ describe('Container viewport', () => {
       expect(call.value).toEqual({ interrupted: true, rect: RECT_HALF_CENTER })
       expect(events).toEqual([])
       expect(vi.getTimerCount()).toBe(timersBefore)
-      const isTransitionEnd = ([type]) => type === 'transitionend' || type === 'webkitTransitionEnd'
-      const added = addSpy.mock.calls.filter(isTransitionEnd)
-      const removed = removeSpy.mock.calls.filter(isTransitionEnd)
+      const isTransitionEvent = ([type]) => (
+        type === 'transitionend' || type === 'webkitTransitionEnd' ||
+        type === 'transitioncancel' || type === 'webkitTransitionCancel'
+      )
+      const added = addSpy.mock.calls.filter(isTransitionEvent)
+      const removed = removeSpy.mock.calls.filter(isTransitionEvent)
       expect(added.length).toBeGreaterThan(0)
       added.forEach(([type, handler]) => {
         expect(removed.some(([removedType, removedHandler]) => removedType === type && removedHandler === handler)).toBe(true)

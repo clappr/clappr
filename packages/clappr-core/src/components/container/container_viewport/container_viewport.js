@@ -10,10 +10,14 @@ import {
   IDENTITY_TRANSFORM,
   PX_STYLES,
   SETTLE_MARGIN_MS,
+  TRANSITION_CANCEL_EVENTS,
   TRANSITION_END_EVENTS,
   findTransformStyles,
-  flushLayout
+  flushLayout,
+  transitionedProperties
 } from './helpers/viewport_style'
+
+const TRANSITION_EVENTS = TRANSITION_END_EVENTS.concat(TRANSITION_CANCEL_EVENTS)
 
 /**
  * @typedef {Object} ViewportMargin
@@ -61,6 +65,8 @@ export default class ContainerViewport {
     this._rect = null
     this._strategy = null
     this._pending = null
+    this._running = {}
+    this._ignoreCancel = {}
   }
 
   /**
@@ -227,8 +233,41 @@ export default class ContainerViewport {
   _writeTransform(values) {
     const el = this._container.el
     const names = findTransformStyles(el.style)
+    const before = {
+      transform: el.style[names.transform],
+      origin: el.style[names.origin]
+    }
     this._armTransition(el, names, values)
     Object.keys(values).forEach((key) => { el.style[names[key]] = values[key] })
+    this._trackRunning(names, values, before)
+  }
+
+  _trackRunning(names, values, before) {
+    if ('transition' in values && !values.transition) {
+      this._running = {}
+      this._ignoreCancel = {}
+      return
+    }
+    const transition = 'transition' in values ? values.transition : this._container.el.style[names.transition]
+    const listed = transitionedProperties(transition)
+    const tracked = [
+      ['transform', names.property],
+      ['origin', names.originProperty]
+    ]
+    tracked.forEach(([key, prop]) => {
+      if (!(key in values)) return
+      const changed = before[key] !== this._container.el.style[names[key]]
+      if (changed && listed.indexOf(prop) !== -1) {
+        // Rewriting a moving property cancels its old transition. That cancel is not the new end.
+        if (this._running[prop]) this._ignoreCancel[prop] = true
+        this._running[prop] = true
+        return
+      }
+      if (listed.indexOf(prop) === -1) {
+        delete this._running[prop]
+        delete this._ignoreCancel[prop]
+      }
+    })
   }
 
   _armTransition(el, names, values) {
@@ -265,15 +304,22 @@ export default class ContainerViewport {
   _awaitSettle(duration, transition, onSettle) {
     return new Promise((resolve) => {
       const el = this._container.el
-      const { property, originProperty } = findTransformStyles(el.style)
       const listener = (event) => {
         if (event.target !== el) return
-        if (event.propertyName === property) this._settle()
-        if (event.propertyName === originProperty) this._settle()
+        const prop = event.propertyName
+        if (!this._running[prop]) return
+        const cancelled = event.type === 'transitioncancel' || event.type === 'webkitTransitionCancel'
+        if (cancelled && this._ignoreCancel[prop]) {
+          delete this._ignoreCancel[prop]
+          return
+        }
+        delete this._running[prop]
+        delete this._ignoreCancel[prop]
+        if (Object.keys(this._running).length === 0) this._settle()
       }
       this._pending = { resolve, listener, onSettle, transition, duration, timer: null }
       this._restartSettleTimer()
-      TRANSITION_END_EVENTS.forEach((type) => el.addEventListener(type, listener))
+      TRANSITION_EVENTS.forEach((type) => el.addEventListener(type, listener))
     })
   }
 
@@ -286,7 +332,7 @@ export default class ContainerViewport {
     const pending = this._pending
     const el = this._container.el
     clearTimeout(pending.timer)
-    TRANSITION_END_EVENTS.forEach((type) => el.removeEventListener(type, pending.listener))
+    TRANSITION_EVENTS.forEach((type) => el.removeEventListener(type, pending.listener))
     this._pending = null
     return pending
   }
