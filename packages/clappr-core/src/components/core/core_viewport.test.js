@@ -3,7 +3,7 @@ import Events from '../../base/events/events'
 
 const FULL_HD = { width: 1920, height: 1080 }
 const HD = { width: 1280, height: 720 }
-const PX_VIEWPORT = { scale: 0.5, position: 'top-left', margin: 20 }
+const PX_VIEWPORT = { scale: 0.5, position: 'top-left', margin: 20, useTransform: false }
 const RESIZE_PAYLOAD = { width: '100%', height: '100%' }
 const VIEWPORT_EVENTS = [Events.CONTAINER_VIEWPORT_WILL_CHANGE, Events.CONTAINER_VIEWPORT_DID_CHANGE]
 

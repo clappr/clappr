@@ -92,7 +92,7 @@ describe('Container viewport', () => {
 
   describe('S1 - px viewport', () => {
     test('px path applies top-left styles and display rect', () => {
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
       expect(inlineStyle(container)).toMatchObject({ top: '20px', left: '20px', width: '640px', height: '360px' })
       expect(playback.setDisplayRect).toHaveBeenCalledTimes(1)
@@ -100,7 +100,7 @@ describe('Container viewport', () => {
     })
 
     test('px path leaves playback resize and styles alone', () => {
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
       expect(playback.resize).toHaveBeenCalledTimes(0)
       const { style } = playback.el
@@ -108,11 +108,11 @@ describe('Container viewport', () => {
     })
 
     test.each([
-      ['defaults to center and zero margin', { scale: 0.5 }, RECT_HALF_CENTER],
-      ['clamps the default scale to the margin box', { position: 'top-left', margin: { right: 320, bottom: 180 } }, { x: 0, y: 0, width: 960, height: 540 }],
-      ['clamps and rounds margin 100', { margin: 100 }, { x: 178, y: 100, width: 924, height: 520 }],
-      ['clamps by the width of the margin box', { margin: { left: 200, right: 200 } }, { x: 200, y: 113, width: 880, height: 495 }],
-      ['collapses margin 700 to a zero rect', { margin: 700 }, { x: 640, y: 360, width: 0, height: 0 }]
+      ['defaults to center and zero margin', { scale: 0.5, useTransform: false }, RECT_HALF_CENTER],
+      ['clamps the default scale to the margin box', { position: 'top-left', margin: { right: 320, bottom: 180 }, useTransform: false }, { x: 0, y: 0, width: 960, height: 540 }],
+      ['clamps and rounds margin 100', { margin: 100, useTransform: false }, { x: 178, y: 100, width: 924, height: 520 }],
+      ['clamps by the width of the margin box', { margin: { left: 200, right: 200 }, useTransform: false }, { x: 200, y: 113, width: 880, height: 495 }],
+      ['collapses margin 700 to a zero rect', { margin: 700, useTransform: false }, { x: 640, y: 360, width: 0, height: 0 }]
     ])('px path %s', (_, options, rect) => {
       expect(() => container.setViewport(options)).not.toThrow()
 
@@ -130,13 +130,13 @@ describe('Container viewport', () => {
       ['bottom-center', 320, 340],
       ['bottom-right', 620, 340]
     ])('px path rect for position %s', (position, x, y) => {
-      container.setViewport({ scale: 0.5, position, margin: 20 })
+      container.setViewport({ scale: 0.5, position, margin: 20, useTransform: false })
 
       expect(playback.setDisplayRect).toHaveBeenCalledWith({ x, y, width: 640, height: 360 })
     })
 
     test('px path triggers will then did and resolves', async () => {
-      const result = container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      const result = container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
       const payload = {
         rect: RECT_HALF_TOP_LEFT,
@@ -158,14 +158,14 @@ describe('Container viewport', () => {
     })
 
     test('px path ignores animate', async () => {
-      const result = container.setViewport({ scale: 0.5, animate: true })
+      const result = container.setViewport({ scale: 0.5, useTransform: false, animate: true })
 
       expect(container.el.style.transition).toBe('')
       await expect(result).resolves.toEqual({ interrupted: false, rect: RECT_HALF_CENTER })
     })
 
     test('getter matches the last will payload', () => {
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
       const willPayload = events.find(({ name }) => name === Events.CONTAINER_VIEWPORT_WILL_CHANGE).payload
       expect(container.viewport).toEqual(willPayload)
@@ -491,7 +491,7 @@ describe('Container viewport', () => {
 
   describe('S5 - reset and lifecycle', () => {
     test('reset removes a px viewport', async () => {
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
       playback.setDisplayRect.mockClear()
       events.length = 0
 
@@ -571,7 +571,7 @@ describe('Container viewport', () => {
     })
 
     test('reset throws without parentElement while a viewport is set', () => {
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
       playback.setDisplayRect.mockClear()
       container.el.remove()
 
@@ -597,7 +597,7 @@ describe('Container viewport', () => {
     })
 
     test('switches from px to transform', () => {
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
       const snapshots = []
       playback.setDisplayRect.mockImplementation((rect) => snapshots.push({ rect, ...inlineStyle(container) }))
 
@@ -612,7 +612,7 @@ describe('Container viewport', () => {
       container.setViewport(TRANSFORM_ANIMATED)
       await vi.advanceTimersByTimeAsync(400)
 
-      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20 })
+      container.setViewport({ scale: 0.5, position: 'top-left', margin: 20, useTransform: false })
 
       expect(inlineStyle(container)).toEqual({
         top: '20px', left: '20px', width: '640px', height: '360px', transform: '', transformOrigin: '', transition: ''
