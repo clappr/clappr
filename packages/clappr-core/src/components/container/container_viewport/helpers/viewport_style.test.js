@@ -1,4 +1,4 @@
-import { findTransformStyles } from './viewport_style'
+import { findTransformStyles, transitionedProperties } from './viewport_style'
 
 describe('findTransformStyles', () => {
   test('prefers the unprefixed transform', () => {
@@ -26,5 +26,18 @@ describe('findTransformStyles', () => {
 
   test('returns null when the style cannot transform', () => {
     expect(findTransformStyles({})).toBeNull()
+  })
+})
+
+describe('transitionedProperties', () => {
+  test('reads each property without matching transform inside transform-origin', () => {
+    expect(transitionedProperties('transform 300ms ease, transform-origin 300ms ease')).toEqual([
+      'transform',
+      'transform-origin'
+    ])
+  })
+
+  test('returns nothing for an empty transition', () => {
+    expect(transitionedProperties('')).toEqual([])
   })
 })
