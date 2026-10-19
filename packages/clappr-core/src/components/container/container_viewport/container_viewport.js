@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import Events from '../../../base/events/events'
-import { computeGeometry } from './helpers/viewport_geometry'
+import { computeGeometry, transformForRect } from './helpers/viewport_geometry'
 import { normalizeAnimation, normalizeViewport } from './helpers/viewport_options'
 import { copyRect, copyViewport, sameRect } from './helpers/viewport_rect'
 import {
@@ -63,6 +63,7 @@ export default class ContainerViewport {
     this._container = container
     this._viewport = null
     this._rect = null
+    this._pxRect = null
     this._strategy = null
     this._pending = null
     this._running = {}
@@ -218,13 +219,20 @@ export default class ContainerViewport {
     style.width = `${rect.width}px`
     style.height = `${rect.height}px`
     this._strategy = 'px'
+    this._pxRect = copyRect(rect)
     this._container.playback.setDisplayRect(copyRect(rect))
   }
 
   _applyTransform(geometry, size, transition) {
     if (this._strategy === 'px') {
+      // The px box is where the transition starts. Clearing it first would jump to the full player.
+      if (transition) {
+        const start = transformForRect(this._pxRect, size, this._viewport.position)
+        this._writeTransform({ transform: start })
+      }
       this._clearPx()
       this._container.playback.setDisplayRect(this._fullRect(size))
+      if (transition) flushLayout(this._container.el)
     }
     this._strategy = 'transform'
     this._writeTransform({ origin: geometry.origin, transform: geometry.transform, transition })
@@ -284,6 +292,7 @@ export default class ContainerViewport {
   _clearPx() {
     const { style } = this._container.el
     PX_STYLES.forEach((name) => { style[name] = '' })
+    this._pxRect = null
   }
 
   _clearTransform() {
