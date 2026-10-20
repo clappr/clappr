@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.17.2...%40clappr%2Fcore%400.18.0) (2026-10-20)
+
+### Bug Fixes
+
+- **core:** animate viewport moves that only change the origin ([99a7915](https://github.com/clappr/clappr/commit/99a7915f8684d00e2a749fa107fb027984ac8c02))
+- **core:** clear the viewport quality gate findings ([252c229](https://github.com/clappr/clappr/commit/252c229aa43cec6ce0096ccdd67b8b1b0198448f))
+- **core:** keep a detached viewport in place on reset ([11cfd51](https://github.com/clappr/clappr/commit/11cfd512859c2b485342e5d1c9ad13ad02620b0e))
+- **core:** recover a viewport set before attach and on resize ([7ae4a7d](https://github.com/clappr/clappr/commit/7ae4a7dc4209f414abd602e2b30653fd0a644338))
+- **core:** refresh the rect of a pending viewport reset ([89484f1](https://github.com/clappr/clappr/commit/89484f147cd3bdec7248e984b93c1818655fa69e))
+- **core:** start an animated transform from the current px rect ([63c18e4](https://github.com/clappr/clappr/commit/63c18e45ef0c3b26e223e8941142fec5e7bf3e8b))
+- **core:** wait for every running viewport transition ([edc6f85](https://github.com/clappr/clappr/commit/edc6f853d99fc63ad178515df5d01aac7d26a32b))
+
+### Features
+
+- **core:** add an optional visual radius to the container viewport ([a73756d](https://github.com/clappr/clappr/commit/a73756d36b855d8cf2b681ca6a23651f370c5816))
+- **core:** add setViewport and resetViewport to the container ([237a61b](https://github.com/clappr/clappr/commit/237a61b6c04d9aad1b062ae852e5a38960e6e512))
+- **core:** add the viewport events and the display rect hook ([5a514c2](https://github.com/clappr/clappr/commit/5a514c2737919a4c47f96f71c168a8527011300d))
+- **core:** default an omitted viewport useTransform to true ([d6e776b](https://github.com/clappr/clappr/commit/d6e776b29051755535c5405960ee4870eedaef80))
+- **core:** pin the viewport origin before the first scale animation ([d251091](https://github.com/clappr/clappr/commit/d25109175ccf2e6070333fd36b41f5fc2b301f53))
+- **core:** reapply container viewports on core resize ([f6eab10](https://github.com/clappr/clappr/commit/f6eab105d8815f7c8b1320d9a3a003b7eef61baa))
+
 ## [0.17.2](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.17.1...%40clappr%2Fcore%400.17.2) (2026-10-05)
 
 ### Bug Fixes

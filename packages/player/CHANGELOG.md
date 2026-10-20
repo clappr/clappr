@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.8](https://github.com/clappr/clappr/compare/%40clappr%2Fplayer%400.14.7...%40clappr%2Fplayer%400.14.8) (2026-10-20)
+
+### Bug Fixes
+
+- **player:** expose the dev demo instance as window.player ([7247c64](https://github.com/clappr/clappr/commit/7247c64fb6a81e1f8a19df627ef39955c21d0629))
+
 ## [0.14.7](https://github.com/clappr/clappr/compare/%40clappr%2Fplayer%400.14.6...%40clappr%2Fplayer%400.14.7) (2026-10-05)
 
 **Note:** Version bump only for package @clappr/player
