@@ -1,5 +1,5 @@
 import { Log, Events } from '@clappr/core'
-import { emitTelemetry, calculateThroughput, hashUrl, parseVideoCodec, parseAudioCodec } from '../utils'
+import { emitTelemetry, calculateThroughput, parseVideoCodec, parseAudioCodec } from '../utils'
 import { EVENT_TYPES, TELEMETRY_SOURCES } from '../utils/constants'
 
 // HLS.js event name constants — kept local to avoid bundling hls.js into this package
@@ -193,13 +193,11 @@ export default class HlsNetworkAdapter {
     let removed = 0
     for (const [key, entry] of this.pendingRequests) {
       if (removed++ >= EVICTION_BATCH_SIZE) break
-      const isUrl = entry.kind != null
       emitTelemetry(
         this.container,
         EVENT_TYPES.REQUEST_ERROR,
         {
           kind: entry.kind ?? 'unknown',
-          urlHash: isUrl ? hashUrl(key) : null,
           details: 'evicted',
           fatal: false
         },
@@ -212,7 +210,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_START} source: network
-   * @data {{ kind: 'segment'|'init'|'subtitle', urlHash: string, chunk: object }}
+   * @data {{ kind: 'segment'|'init'|'subtitle', chunk: object }}
    */
   _onFragLoading(_evt, { frag }) {
     if (!frag?.url) return
@@ -222,7 +220,7 @@ export default class HlsNetworkAdapter {
     emitTelemetry(
       this.container,
       EVENT_TYPES.REQUEST_START,
-      { kind: fragKind(frag), urlHash: hashUrl(frag.url), chunk: fragChunk(frag) },
+      { kind: fragKind(frag), chunk: fragChunk(frag) },
       TELEMETRY_SOURCES.NETWORK
     )
   }
@@ -230,7 +228,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_END} source: network
-   * @data {{ kind: 'segment'|'init'|'subtitle', urlHash: string, chunk: object, durationMs: number, bytes: number, throughputMbps: number }}
+   * @data {{ kind: 'segment'|'init'|'subtitle', chunk: object, durationMs: number, bytes: number, throughputMbps: number }}
    */
   _onFragLoaded(_evt, { frag }) {
     if (!frag?.url) return
@@ -247,7 +245,6 @@ export default class HlsNetworkAdapter {
       EVENT_TYPES.REQUEST_END,
       {
         kind: fragKind(frag),
-        urlHash: hashUrl(frag.url),
         chunk: fragChunk(frag),
         durationMs,
         bytes,
@@ -263,7 +260,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_START} source: network
-   * @data {{ kind: 'manifest', urlHash: string }}
+   * @data {{ kind: 'manifest' }}
    */
   _onManifestLoading(_evt, { url }) {
     if (!url) return
@@ -273,7 +270,7 @@ export default class HlsNetworkAdapter {
     emitTelemetry(
       this.container,
       EVENT_TYPES.REQUEST_START,
-      { kind: 'manifest', urlHash: hashUrl(url) },
+      { kind: 'manifest' },
       TELEMETRY_SOURCES.NETWORK
     )
   }
@@ -281,7 +278,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_END} source: network
-   * @data {{ kind: 'manifest', urlHash: string, durationMs: number, bytes: number, throughputMbps: number }}
+   * @data {{ kind: 'manifest', durationMs: number, bytes: number, throughputMbps: number }}
    */
   _onManifestLoaded(_evt, { url, stats }) {
     if (!url) return
@@ -297,7 +294,6 @@ export default class HlsNetworkAdapter {
       EVENT_TYPES.REQUEST_END,
       {
         kind: 'manifest',
-        urlHash: hashUrl(url),
         durationMs,
         bytes,
         throughputMbps: calculateThroughput(bytes, durationMs)
@@ -309,7 +305,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_START} source: network
-   * @data {{ kind: 'key', urlHash: string }}
+   * @data {{ kind: 'key' }}
    */
   _onKeyLoading(_evt, { frag }) {
     const url = frag?.decryptdata?.uri
@@ -321,7 +317,7 @@ export default class HlsNetworkAdapter {
     emitTelemetry(
       this.container,
       EVENT_TYPES.REQUEST_START,
-      { kind: 'key', urlHash: hashUrl(url) },
+      { kind: 'key' },
       TELEMETRY_SOURCES.NETWORK
     )
   }
@@ -329,7 +325,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_END} source: network
-   * @data {{ kind: 'key', urlHash: string, durationMs: number, bytes: 0, throughputMbps: number }}
+   * @data {{ kind: 'key', durationMs: number, bytes: 0, throughputMbps: number }}
    */
   _onKeyLoaded(_evt, { frag }) {
     const url = frag?.decryptdata?.uri
@@ -345,7 +341,6 @@ export default class HlsNetworkAdapter {
       EVENT_TYPES.REQUEST_END,
       {
         kind: 'key',
-        urlHash: hashUrl(url),
         durationMs,
         bytes: 0,
         throughputMbps: calculateThroughput(0, durationMs)
@@ -357,7 +352,7 @@ export default class HlsNetworkAdapter {
   /**
    * @emits CONTAINER_TELEMETRY_TRACE
    * @type {EVENT_TYPES.REQUEST_ERROR} source: network
-   * @data {{ kind: 'segment'|'init'|'subtitle'|'manifest'|'key', urlHash: string, chunk?: object, details: string, fatal: boolean }}
+   * @data {{ kind: 'segment'|'init'|'subtitle'|'manifest'|'key', chunk?: object, details: string, fatal: boolean }}
    */
   _onHlsError(_evt, data) {
     if (data.type !== HLS_NETWORK_ERROR_TYPE) return
@@ -370,7 +365,6 @@ export default class HlsNetworkAdapter {
         EVENT_TYPES.REQUEST_ERROR,
         {
           kind: fragKind(frag),
-          urlHash: hashUrl(frag.url),
           chunk: fragChunk(frag),
           details: data.details,
           fatal: data.fatal
@@ -389,7 +383,6 @@ export default class HlsNetworkAdapter {
         EVENT_TYPES.REQUEST_ERROR,
         {
           kind: pending?.kind ?? 'unknown',
-          urlHash: hashUrl(url),
           details: data.details,
           fatal: data.fatal
         },
