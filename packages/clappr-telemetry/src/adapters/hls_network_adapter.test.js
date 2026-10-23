@@ -240,7 +240,7 @@ describe('HlsNetworkAdapter', () => {
       expect(adapter.pendingRequests.size).toBe(100)
     })
 
-    it('emits REQUEST_ERROR for each evicted frag request with kind=unknown and urlHash=null', () => {
+    it('emits REQUEST_ERROR for each evicted frag request with kind=unknown', () => {
       const cb = getHlsHandler(fakeHls, HLS_EVENTS.FRAG_LOADING)
       for (let i = 0; i < 120; i++) {
         cb(null, { frag: makeFrag({ sn: i, url: `http://ex.com/seg${i}.ts` }) })
@@ -250,10 +250,10 @@ describe('HlsNetworkAdapter', () => {
         ([, type]) => type === EVENT_TYPES.REQUEST_ERROR
       )
       expect(evictionCalls).toHaveLength(20)
-      expect(evictionCalls[0][2]).toEqual({ kind: 'unknown', urlHash: null, details: 'evicted', fatal: false })
+      expect(evictionCalls[0][2]).toEqual({ kind: 'unknown', details: 'evicted', fatal: false })
     })
 
-    it('emits REQUEST_ERROR with kind and urlHash for evicted manifest/key requests', () => {
+    it('emits REQUEST_ERROR with kind for evicted manifest/key requests', () => {
       const fragCb = getHlsHandler(fakeHls, HLS_EVENTS.FRAG_LOADING)
       const manifestCb = getHlsHandler(fakeHls, HLS_EVENTS.MANIFEST_LOADING)
 
@@ -271,8 +271,7 @@ describe('HlsNetworkAdapter', () => {
       expect(evictionCalls).toHaveLength(20)
       const manifestEviction = evictionCalls.find(([, , payload]) => payload.kind === 'manifest')
       expect(manifestEviction).toBeDefined()
-      expect(manifestEviction[2].urlHash).not.toBeNull()
-      expect(manifestEviction[2].details).toBe('evicted')
+      expect(manifestEviction[2]).toEqual({ kind: 'manifest', details: 'evicted', fatal: false })
     })
   })
 
@@ -510,13 +509,13 @@ describe('HlsNetworkAdapter', () => {
       manifestLoadingCb(null, { url })
       vi.clearAllMocks()
 
-      errorCb(null, { type: HLS_ERROR_TYPES.NETWORK_ERROR, url })
+      errorCb(null, { type: HLS_ERROR_TYPES.NETWORK_ERROR, url, details: 'manifestLoadError', fatal: true })
 
       expect(adapter.pendingRequests.size).toBe(0)
       expect(emitTelemetry).toHaveBeenCalledWith(
         container,
         EVENT_TYPES.REQUEST_ERROR,
-        expect.objectContaining({ kind: 'manifest', urlHash: expect.any(String) }),
+        { kind: 'manifest', details: 'manifestLoadError', fatal: true },
         TELEMETRY_SOURCES.NETWORK
       )
     })
