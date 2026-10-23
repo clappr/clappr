@@ -4,7 +4,6 @@ export {
   emitTelemetry,
   calculateThroughput,
   sanitizeLicenseUri,
-  hashUrl,
   getBufferAhead,
   getBufferedRanges,
   parseVideoCodec,
