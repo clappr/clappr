@@ -14,19 +14,15 @@ const TRANSFORM_STYLES = [
     transform: 'transform',
     origin: 'transformOrigin',
     transition: 'transition',
-    borderRadius: 'borderRadius',
     property: 'transform',
-    originProperty: 'transform-origin',
-    radiusProperty: 'border-radius'
+    originProperty: 'transform-origin'
   },
   {
     transform: 'webkitTransform',
     origin: 'webkitTransformOrigin',
     transition: 'webkitTransition',
-    borderRadius: 'borderRadius',
     property: '-webkit-transform',
-    originProperty: '-webkit-transform-origin',
-    radiusProperty: 'border-radius'
+    originProperty: '-webkit-transform-origin'
   }
 ]
 
@@ -34,14 +30,6 @@ export const findTransformStyles = style =>
   TRANSFORM_STYLES.filter(names => names.transform in style)[0] || null
 
 export const flushLayout = element => element.offsetWidth
-
-// A transform scales the curve, so the inline value is the visual radius divided by fit.
-export const borderRadiusFor = (radius, fit, useTransform) => {
-  if (radius == null) return null
-  if (fit === 0) return '0px'
-  if (!useTransform) return `${radius}px`
-  return `${radius / fit}px`
-}
 
 // The first token is the property, so `transform` does not match `transform-origin`.
 export const transitionedProperties = transition => {

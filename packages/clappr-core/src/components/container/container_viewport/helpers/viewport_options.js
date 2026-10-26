@@ -58,12 +58,6 @@ const normalizePosition = position => {
   return position
 }
 
-const normalizeRadius = radius => {
-  if (radius === undefined) return null
-  assertNonNegative('radius', radius)
-  return radius
-}
-
 const normalizeMargin = margin => {
   if (typeof margin === 'number') {
     assertNonNegative('margin', margin)
@@ -102,12 +96,10 @@ export const normalizeViewport = options => {
   const scale = normalizeScale(readOption(source, 'scale'))
   const position = normalizePosition(readOption(source, 'position'))
   const margin = normalizeMargin(readOption(source, 'margin'))
-  const radius = normalizeRadius(source.radius)
   return {
     scale,
     position,
     margin,
-    radius,
     useTransform: source.useTransform === undefined ? true : !!source.useTransform,
     ...normalizeAnimation(source)
   }

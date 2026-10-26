@@ -1,4 +1,4 @@
-import { borderRadiusFor, findTransformStyles, transitionedProperties } from './viewport_style'
+import { findTransformStyles, transitionedProperties } from './viewport_style'
 
 describe('findTransformStyles', () => {
   test('prefers the unprefixed transform', () => {
@@ -8,10 +8,8 @@ describe('findTransformStyles', () => {
       transform: 'transform',
       origin: 'transformOrigin',
       transition: 'transition',
-      borderRadius: 'borderRadius',
       property: 'transform',
-      originProperty: 'transform-origin',
-      radiusProperty: 'border-radius'
+      originProperty: 'transform-origin'
     })
     expect(findTransformStyles(inherited).property).toBe('transform')
   })
@@ -21,37 +19,13 @@ describe('findTransformStyles', () => {
       transform: 'webkitTransform',
       origin: 'webkitTransformOrigin',
       transition: 'webkitTransition',
-      borderRadius: 'borderRadius',
       property: '-webkit-transform',
-      originProperty: '-webkit-transform-origin',
-      radiusProperty: 'border-radius'
+      originProperty: '-webkit-transform-origin'
     })
   })
 
   test('returns null when the style cannot transform', () => {
     expect(findTransformStyles({})).toBeNull()
-  })
-})
-
-describe('borderRadiusFor', () => {
-  test('returns null when radius is absent', () => {
-    expect(borderRadiusFor(null, 0.5, true)).toBeNull()
-    expect(borderRadiusFor(undefined, 0.5, false)).toBeNull()
-  })
-
-  test('divides by fit on the transform path', () => {
-    expect(borderRadiusFor(16, 0.5, true)).toBe('32px')
-    expect(borderRadiusFor(16, 1, true)).toBe('16px')
-  })
-
-  test('keeps the visual px when the box is not scaled', () => {
-    expect(borderRadiusFor(16, 0.5, false)).toBe('16px')
-    expect(borderRadiusFor(0, 0.5, true)).toBe('0px')
-  })
-
-  test('writes 0px when the video has no size', () => {
-    expect(borderRadiusFor(16, 0, true)).toBe('0px')
-    expect(borderRadiusFor(16, 0, false)).toBe('0px')
   })
 })
 
