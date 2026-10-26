@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.18.1](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.18.0...%40clappr%2Fcore%400.18.1) (2026-10-26)
+
+### Bug Fixes
+
+- **core:** remove the black core background ([d2d4be6](https://github.com/clappr/clappr/commit/d2d4be6b64ed0a42ed493b5ff2fbbac9cb232e51))
+
 # [0.18.0](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.17.2...%40clappr%2Fcore%400.18.0) (2026-10-20)
 
 ### Bug Fixes
