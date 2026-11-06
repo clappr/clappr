@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.10](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.9...%40clappr%2Ftelemetry%400.3.10) (2026-11-06)
+
+### Bug Fixes
+
+- **telemetry:** drop urlHash from HLS network events ([4ebe7ec](https://github.com/clappr/clappr/commit/4ebe7ec9f284871689c7c15a4ebb84c861e400d9))
+
 ## [0.3.9](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.8...%40clappr%2Ftelemetry%400.3.9) (2026-10-26)
 
 **Note:** Version bump only for package @clappr/telemetry
