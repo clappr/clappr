@@ -218,8 +218,7 @@ export default class HlsjsPlayback extends HTML5Video {
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts ?? DEFAULT_RECOVER_ATTEMPTS
-    // hls.js instance whose fatal error is waiting to be delivered
-    this._hlsPendingStop = null
+    this._isFatalErrorPending = false
   }
 
   _setup() {
@@ -318,7 +317,7 @@ export default class HlsjsPlayback extends HTML5Video {
     } else {
       Log.error('hlsjs: failed to recover', { evt, data })
       error.level = PlayerError.Levels.FATAL
-      this._handleFatalError(error)
+      this._deferFatalError(error)
     }
   }
 
@@ -408,7 +407,7 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _onHLSJSError(evt, data) {
-    if (this._hlsPendingStop && this._hlsPendingStop === this._hls) return
+    if (this._isFatalErrorPending) return
 
     const error = {
       code: `${data.type}_${data.details}`,
@@ -433,7 +432,7 @@ export default class HlsjsPlayback extends HTML5Video {
               case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
               case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
                 Log.error('hlsjs: unrecoverable network fatal error.', { evt, data })
-                this._handleFatalError(error)
+                this._deferFatalError(error)
                 break
               default:
                 Log.warn('hlsjs: trying to recover from network error.', { evt, data })
@@ -449,7 +448,7 @@ export default class HlsjsPlayback extends HTML5Video {
             break
           default:
             Log.error('hlsjs: could not recover from error.', { evt, data })
-            this._handleFatalError(error)
+            this._deferFatalError(error)
             break
         }
       } else {
@@ -457,7 +456,7 @@ export default class HlsjsPlayback extends HTML5Video {
           evt,
           data
         })
-        this._handleFatalError(error)
+        this._deferFatalError(error)
       }
     } else {
       // Transforms HLSJS.ErrorDetails.KEY_LOAD_ERROR non-fatal error to
@@ -466,7 +465,7 @@ export default class HlsjsPlayback extends HTML5Video {
       // and therefore already handled.
       if (this.options.playback.triggerFatalErrorOnResourceDenied && this._keyIsDenied(data)) {
         Log.error('hlsjs: could not load decrypt key.', { evt, data })
-        this._handleFatalError(error)
+        this._deferFatalError(error)
         return
       }
 
@@ -479,10 +478,10 @@ export default class HlsjsPlayback extends HTML5Video {
   // hls.js keeps using its own state after dispatching ERROR (e.g. the BUFFER_APPENDING loop in
   // StreamController), so destroying it here, or letting a PLAYBACK_ERROR listener call load(),
   // makes it throw. The fatal outcome is delivered after hls.js returns, one microtask later.
-  _handleFatalError(error) {
+  _deferFatalError(error) {
     const hls = this._hls
     hls.stopLoad()
-    this._hlsPendingStop = hls
+    this._isFatalErrorPending = true
     Promise.resolve().then(() => this._deliverFatalError(hls, error))
   }
 
@@ -493,6 +492,7 @@ export default class HlsjsPlayback extends HTML5Video {
     }
 
     this.trigger(Events.PLAYBACK_ERROR, this.createError(error))
+    // a PLAYBACK_ERROR listener may have called load(), which must keep its new instance
     if (this._hls === hls) this.stop()
   }
 

@@ -303,18 +303,17 @@ describe('HlsjsPlayback', () => {
       expect(playback._isReadyState).toBeTruthy()
     })
 
-    test('triggers PLAYBACK_READY event', () =>
-      new Promise(done => {
-        const cb = vi.fn()
-        const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+    test('triggers PLAYBACK_READY event', () => new Promise(done => {
+      const cb = vi.fn()
+      const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
 
-        playback.listenTo(playback, Events.PLAYBACK_READY, cb)
-        playback.listenTo(playback, Events.PLAYBACK_READY, () => {
-          expect(cb).toHaveBeenCalledTimes(1)
-          done()
-        })
-        playback._ready()
-      }))
+      playback.listenTo(playback, Events.PLAYBACK_READY, cb)
+      playback.listenTo(playback, Events.PLAYBACK_READY, () => {
+        expect(cb).toHaveBeenCalledTimes(1)
+        done()
+      })
+      playback._ready()
+    }))
   })
 
   describe('play method', () => {
@@ -1365,9 +1364,11 @@ describe('HlsjsPlayback', () => {
 
       raise(playback, networkError(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR))
       playback.destroy()
+      Log.warn.mockClear()
+      await Promise.resolve()
 
-      await expect(Promise.resolve()).resolves.toBeUndefined()
       expect(onError).not.toHaveBeenCalled()
+      expect(Log.warn).toHaveBeenCalledTimes(1)
     })
 
     test('keeps the instance created by a PLAYBACK_ERROR listener calling load', async () => {
@@ -1389,7 +1390,8 @@ describe('HlsjsPlayback', () => {
       const playback = createRealPlayback()
       const hls = playback._hls
       const { streamController } = hls
-      playback.on(Events.PLAYBACK_ERROR, () => playback.load(NEW_SRC))
+      const onError = vi.fn(() => playback.load(NEW_SRC))
+      playback.on(Events.PLAYBACK_ERROR, onError)
       // hls.js's own buffer listener throws on this synthetic payload, so only ours runs
       hls.removeAllListeners(HLSJS.Events.BUFFER_APPENDING)
       hls.once(HLSJS.Events.BUFFER_APPENDING, () =>
@@ -1408,6 +1410,7 @@ describe('HlsjsPlayback', () => {
       }).not.toThrow()
       await Promise.resolve()
 
+      expect(onError).toHaveBeenCalledTimes(1)
       expect(playback._hls).not.toBe(hls)
     })
 
