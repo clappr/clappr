@@ -84,34 +84,33 @@ describe('HlsjsPlayback', () => {
     expect(playback.customListeners).toEqual(playback.options.hlsPlayback.customListeners)
   })
 
-  test('should be able to identify it can play resources independently of the file extension case', () => {
+  test.each([
+    ['lowercase extension', '/relative/video.m3u8', undefined],
+    ['uppercase extension', '/relative/VIDEO.M3U8', undefined],
+    [
+      'extension with query and fragment',
+      '/relative/video.m3u8?foobarQuery=1234#somefragment',
+      undefined
+    ],
+    [
+      'no extension with mime',
+      'whatever_no_extension?foobarQuery=1234#somefragment',
+      'application/x-mpegURL'
+    ],
+    [
+      'protocol-relative with mime',
+      '//whatever_no_extension?foobarQuery=1234#somefragment',
+      'application/x-mpegURL'
+    ],
+    ['uppercase mime', '/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL'],
+    [
+      'lowercase mime',
+      'whatever_no_extension?foobarQuery=1234#somefragment',
+      'application/x-mpegurl'
+    ]
+  ])('can play %s case-insensitively: %s', (_label, src, mimeType) => {
     vi.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
-    expect(HlsjsPlayback.canPlay('/relative/video.m3u8')).toBeTruthy()
-    expect(HlsjsPlayback.canPlay('/relative/VIDEO.M3U8')).toBeTruthy()
-    expect(HlsjsPlayback.canPlay('/relative/video.m3u8?foobarQuery=1234#somefragment')).toBeTruthy()
-    expect(
-      HlsjsPlayback.canPlay(
-        'whatever_no_extension?foobarQuery=1234#somefragment',
-        'application/x-mpegURL'
-      )
-    ).toBeTruthy()
-    expect(
-      HlsjsPlayback.canPlay(
-        '//whatever_no_extension?foobarQuery=1234#somefragment',
-        'application/x-mpegURL'
-      )
-    ).toBeTruthy()
-  })
-
-  test('can play regardless of any mime type letter case', () => {
-    vi.spyOn(HLSJS, 'isSupported').mockImplementation(() => true)
-    expect(HlsjsPlayback.canPlay('/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL')).toBeTruthy()
-    expect(
-      HlsjsPlayback.canPlay(
-        'whatever_no_extension?foobarQuery=1234#somefragment',
-        'application/x-mpegurl'
-      )
-    ).toBeTruthy()
+    expect(HlsjsPlayback.canPlay(src, mimeType)).toBeTruthy()
   })
 
   test('should ensure it does not create an audio tag if audioOnly is not set', () => {
@@ -156,7 +155,9 @@ describe('HlsjsPlayback', () => {
   })
 
   test('registers PLAYBACK_FRAGMENT_PARSING_METADATA event', () => {
-    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual('playbackFragmentParsingMetadata')
+    expect(Events.Custom.PLAYBACK_FRAGMENT_PARSING_METADATA).toEqual(
+      'playbackFragmentParsingMetadata'
+    )
   })
 
   test('levels supports specifying the level', () => {
@@ -302,17 +303,18 @@ describe('HlsjsPlayback', () => {
       expect(playback._isReadyState).toBeTruthy()
     })
 
-    test('triggers PLAYBACK_READY event', () => new Promise(done => {
-      const cb = vi.fn()
-      const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
+    test('triggers PLAYBACK_READY event', () =>
+      new Promise(done => {
+        const cb = vi.fn()
+        const playback = new HlsjsPlayback({ src: 'http://clappr.io/video.m3u8' })
 
-      playback.listenTo(playback, Events.PLAYBACK_READY, cb)
-      playback.listenTo(playback, Events.PLAYBACK_READY, () => {
-        expect(cb).toHaveBeenCalledTimes(1)
-        done()
-      })
-      playback._ready()
-    }))
+        playback.listenTo(playback, Events.PLAYBACK_READY, cb)
+        playback.listenTo(playback, Events.PLAYBACK_READY, () => {
+          expect(cb).toHaveBeenCalledTimes(1)
+          done()
+        })
+        playback._ready()
+      }))
   })
 
   describe('play method', () => {
@@ -993,31 +995,6 @@ describe('HlsjsPlayback', () => {
       expect(playback._recoverAttemptsRemaining).toBe(15)
     })
 
-    test.each([
-      HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR,
-      HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT,
-      HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR,
-      HLSJS.ErrorDetails.LEVEL_LOAD_ERROR,
-      HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT
-    ])('unrecoverable network fatal %s triggers error and stop', async details => {
-      const playback = createErrorPlayback()
-      vi.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = vi.fn()
-      playback.on(Events.PLAYBACK_ERROR, onError)
-
-      playback._onHLSJSError('hlsError', {
-        fatal: true,
-        type: HLSJS.ErrorTypes.NETWORK_ERROR,
-        details
-      })
-
-      await Promise.resolve()
-
-      expect(onError).toHaveBeenCalledTimes(1)
-      expect(playback.stop).toHaveBeenCalled()
-      expect(playback._hls.startLoad).not.toHaveBeenCalled()
-    })
-
     test('media fatal error recovers via recoverMediaError then swapAudioCodec then fails', async () => {
       const playback = createErrorPlayback()
       vi.spyOn(Log, 'warn').mockImplementation(() => {})
@@ -1048,24 +1025,6 @@ describe('HlsjsPlayback', () => {
       expect(playback.stop).toHaveBeenCalled()
     })
 
-    test('other fatal error types trigger error and stop', async () => {
-      const playback = createErrorPlayback()
-      vi.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = vi.fn()
-      playback.on(Events.PLAYBACK_ERROR, onError)
-
-      playback._onHLSJSError('hlsError', {
-        fatal: true,
-        type: HLSJS.ErrorTypes.OTHER_ERROR,
-        details: 'whatever'
-      })
-
-      await Promise.resolve()
-
-      expect(onError).toHaveBeenCalledTimes(1)
-      expect(playback.stop).toHaveBeenCalled()
-    })
-
     test('exhausted recover attempts trigger error and stop', async () => {
       const playback = createErrorPlayback({ hlsRecoverAttempts: 0 })
       vi.spyOn(Log, 'error').mockImplementation(() => {})
@@ -1085,32 +1044,13 @@ describe('HlsjsPlayback', () => {
       expect(playback._hls.recoverMediaError).not.toHaveBeenCalled()
     })
 
-    test('non-fatal key denial with option triggers fatal error and stop', async () => {
-      const playback = createErrorPlayback({
-        playback: { triggerFatalErrorOnResourceDenied: true }
-      })
-      vi.spyOn(Log, 'error').mockImplementation(() => {})
-      const onError = vi.fn()
-      playback.on(Events.PLAYBACK_ERROR, onError)
-
-      playback._onHLSJSError('hlsError', {
-        fatal: false,
-        type: HLSJS.ErrorTypes.NETWORK_ERROR,
-        details: HLSJS.ErrorDetails.KEY_LOAD_ERROR,
-        response: { code: 403 }
-      })
-
-      await Promise.resolve()
-
-      expect(onError).toHaveBeenCalledTimes(1)
-      expect(playback.stop).toHaveBeenCalled()
-    })
-
     test('non-fatal key denial without option only warns', () => {
       const playback = createErrorPlayback()
       vi.spyOn(Log, 'warn').mockImplementation(() => {})
       const onError = vi.fn()
+      const onWarning = vi.fn()
       playback.on(Events.PLAYBACK_ERROR, onError)
+      playback.on(Events.PLAYBACK_WARNING, onWarning)
 
       playback._onHLSJSError('hlsError', {
         fatal: false,
@@ -1122,6 +1062,8 @@ describe('HlsjsPlayback', () => {
       expect(onError).not.toHaveBeenCalled()
       expect(playback.stop).not.toHaveBeenCalled()
       expect(Log.warn).toHaveBeenCalled()
+      expect(onWarning).toHaveBeenCalledTimes(1)
+      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.WARN)
     })
 
     test('non-fatal key load with response below 400 only warns', () => {
@@ -1226,23 +1168,6 @@ describe('HlsjsPlayback', () => {
       expect(onWarning).not.toHaveBeenCalled()
       expect(onError).toHaveBeenCalledTimes(1)
     })
-
-    test('triggers PLAYBACK_WARNING for a non-fatal key denial that does not escalate', () => {
-      const playback = createErrorPlayback()
-      vi.spyOn(Log, 'warn').mockImplementation(() => {})
-      const onWarning = vi.fn()
-      playback.on(Events.PLAYBACK_WARNING, onWarning)
-
-      playback._onHLSJSError('hlsError', {
-        fatal: false,
-        type: HLSJS.ErrorTypes.NETWORK_ERROR,
-        details: HLSJS.ErrorDetails.KEY_LOAD_ERROR,
-        response: { code: 403 }
-      })
-
-      expect(onWarning).toHaveBeenCalledTimes(1)
-      expect(onWarning.mock.calls[0][0].level).toBe(PlayerError.Levels.WARN)
-    })
   })
 
   describe('deferred fatal error', () => {
@@ -1326,9 +1251,9 @@ describe('HlsjsPlayback', () => {
       })
     })
 
-    test('calls stopLoad synchronously and defers error and destroy for every unrecovered error', () => {
-      expect(unrecoveredErrors).toHaveLength(9)
-      unrecoveredErrors.forEach(([label, options, data, prepare]) => {
+    test.each(unrecoveredErrors)(
+      '%s stops loading now and delivers PLAYBACK_ERROR then destroy after a microtask',
+      async (_label, options, data, prepare) => {
         const playback = createRealPlayback(options)
         const hls = spyOnHls(playback._hls)
         const onError = vi.fn()
@@ -1337,36 +1262,24 @@ describe('HlsjsPlayback', () => {
 
         raise(playback, data)
 
-        expect(hls.stopLoad, label).toHaveBeenCalledTimes(1)
-        expect(hls.destroy, label).not.toHaveBeenCalled()
-        expect(onError, label).not.toHaveBeenCalled()
-        expect(playback._hls, label).toBe(hls)
-      })
-    })
+        expect(hls.stopLoad).toHaveBeenCalledTimes(1)
+        expect(hls.destroy).not.toHaveBeenCalled()
+        expect(onError).not.toHaveBeenCalled()
+        expect(playback._hls).toBe(hls)
 
-    test('triggers PLAYBACK_ERROR once then destroys after a microtask for every unrecovered error', async () => {
-      for (const [label, options, data, prepare] of unrecoveredErrors) {
-        const playback = createRealPlayback(options)
-        const hls = spyOnHls(playback._hls)
-        const onError = vi.fn()
-        playback.on(Events.PLAYBACK_ERROR, onError)
-        prepare?.(playback)
-
-        raise(playback, data)
         await Promise.resolve()
 
-        expect(onError, label).toHaveBeenCalledTimes(1)
-        expect(onError.mock.calls[0][0].code, label).toBe(
-          `${playback.name}:${data.type}_${data.details}`
-        )
-        expect(onError.mock.calls[0][0].level, label).toBe(PlayerError.Levels.FATAL)
-        expect(hls.destroy, label).toHaveBeenCalledTimes(1)
-        expect(onError.mock.invocationCallOrder[0], label).toBeLessThan(
+        expect(onError).toHaveBeenCalledTimes(1)
+        expect(onError.mock.calls[0][0].code).toBe(`${playback.name}:${data.type}_${data.details}`)
+        expect(onError.mock.calls[0][0].level).toBe(PlayerError.Levels.FATAL)
+        expect(hls.destroy).toHaveBeenCalledTimes(1)
+        expect(onError.mock.invocationCallOrder[0]).toBeLessThan(
           hls.destroy.mock.invocationCallOrder[0]
         )
-        expect(playback._hls, label).toBeNull()
+        expect(hls.startLoad).not.toHaveBeenCalled()
+        expect(playback._hls).toBeNull()
       }
-    })
+    )
 
     test('triggers a single PLAYBACK_ERROR for consecutive fatal errors', async () => {
       const playback = createRealPlayback()
