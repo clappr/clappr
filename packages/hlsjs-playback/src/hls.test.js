@@ -1348,9 +1348,7 @@ describe('HlsjsPlayback', () => {
       for (const [label, options, data, prepare] of unrecoveredErrors) {
         const playback = createRealPlayback(options)
         const hls = spyOnHls(playback._hls)
-        const onError = vi.fn(() => {
-          expect(hls.destroy).not.toHaveBeenCalled()
-        })
+        const onError = vi.fn()
         playback.on(Events.PLAYBACK_ERROR, onError)
         prepare?.(playback)
 
@@ -1358,11 +1356,14 @@ describe('HlsjsPlayback', () => {
         await Promise.resolve()
 
         expect(onError, label).toHaveBeenCalledTimes(1)
-        expect(onError.mock.calls[0][0].code.endsWith(`${data.type}_${data.details}`), label).toBe(
-          true
+        expect(onError.mock.calls[0][0].code, label).toBe(
+          `${playback.name}:${data.type}_${data.details}`
         )
         expect(onError.mock.calls[0][0].level, label).toBe(PlayerError.Levels.FATAL)
         expect(hls.destroy, label).toHaveBeenCalledTimes(1)
+        expect(onError.mock.invocationCallOrder[0], label).toBeLessThan(
+          hls.destroy.mock.invocationCallOrder[0]
+        )
         expect(playback._hls, label).toBeNull()
       }
     })
