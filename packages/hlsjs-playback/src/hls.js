@@ -482,7 +482,9 @@ export default class HlsjsPlayback extends HTML5Video {
     const hls = this._hls
     hls.stopLoad()
     this._isFatalErrorPending = true
-    Promise.resolve().then(() => this._deliverFatalError(hls, error))
+    Promise.resolve()
+      .then(() => this._deliverFatalError(hls, error))
+      .catch(err => Log.error('hlsjs: failed to deliver fatal error.', err))
   }
 
   _deliverFatalError(hls, error) {
