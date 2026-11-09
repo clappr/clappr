@@ -218,6 +218,8 @@ export default class HlsjsPlayback extends HTML5Video {
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts ?? DEFAULT_RECOVER_ATTEMPTS
+    // hls.js instance whose fatal error is waiting to be delivered
+    this._hlsPendingStop = null
   }
 
   _setup() {
@@ -316,9 +318,7 @@ export default class HlsjsPlayback extends HTML5Video {
     } else {
       Log.error('hlsjs: failed to recover', { evt, data })
       error.level = PlayerError.Levels.FATAL
-      const formattedError = this.createError(error)
-      this.trigger(Events.PLAYBACK_ERROR, formattedError)
-      this.stop()
+      this._handleFatalError(error)
     }
   }
 
@@ -408,12 +408,13 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _onHLSJSError(evt, data) {
+    if (this._hlsPendingStop && this._hlsPendingStop === this._hls) return
+
     const error = {
       code: `${data.type}_${data.details}`,
       description: `${this.name} error: type: ${data.type}, details: ${data.details}`,
       raw: data
     }
-    let formattedError
     if (data.response) error.description += `, response: ${JSON.stringify(data.response)}`
     // only handle errors if they are fatal
     // hlsjs should automatically handle non fatal errors
@@ -432,9 +433,7 @@ export default class HlsjsPlayback extends HTML5Video {
               case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
               case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
                 Log.error('hlsjs: unrecoverable network fatal error.', { evt, data })
-                formattedError = this.createError(error)
-                this.trigger(Events.PLAYBACK_ERROR, formattedError)
-                this.stop()
+                this._handleFatalError(error)
                 break
               default:
                 Log.warn('hlsjs: trying to recover from network error.', { evt, data })
@@ -450,9 +449,7 @@ export default class HlsjsPlayback extends HTML5Video {
             break
           default:
             Log.error('hlsjs: could not recover from error.', { evt, data })
-            formattedError = this.createError(error)
-            this.trigger(Events.PLAYBACK_ERROR, formattedError)
-            this.stop()
+            this._handleFatalError(error)
             break
         }
       } else {
@@ -460,9 +457,7 @@ export default class HlsjsPlayback extends HTML5Video {
           evt,
           data
         })
-        formattedError = this.createError(error)
-        this.trigger(Events.PLAYBACK_ERROR, formattedError)
-        this.stop()
+        this._handleFatalError(error)
       }
     } else {
       // Transforms HLSJS.ErrorDetails.KEY_LOAD_ERROR non-fatal error to
@@ -471,9 +466,7 @@ export default class HlsjsPlayback extends HTML5Video {
       // and therefore already handled.
       if (this.options.playback.triggerFatalErrorOnResourceDenied && this._keyIsDenied(data)) {
         Log.error('hlsjs: could not load decrypt key.', { evt, data })
-        formattedError = this.createError(error)
-        this.trigger(Events.PLAYBACK_ERROR, formattedError)
-        this.stop()
+        this._handleFatalError(error)
         return
       }
 
@@ -481,6 +474,26 @@ export default class HlsjsPlayback extends HTML5Video {
       Log.warn('hlsjs: non-fatal error occurred', { evt, data })
       this.trigger(Events.PLAYBACK_WARNING, error, this.name)
     }
+  }
+
+  // hls.js keeps using its own state after dispatching ERROR (e.g. the BUFFER_APPENDING loop in
+  // StreamController), so destroying it here, or letting a PLAYBACK_ERROR listener call load(),
+  // makes it throw. The fatal outcome is delivered after hls.js returns, one microtask later.
+  _handleFatalError(error) {
+    const hls = this._hls
+    hls.stopLoad()
+    this._hlsPendingStop = hls
+    Promise.resolve().then(() => this._deliverFatalError(hls, error))
+  }
+
+  _deliverFatalError(hls, error) {
+    if (this._hls !== hls) {
+      Log.warn('hlsjs: dropping fatal error, the hls.js instance that raised it is gone.', error)
+      return
+    }
+
+    this.trigger(Events.PLAYBACK_ERROR, this.createError(error))
+    if (this._hls === hls) this.stop()
   }
 
   _keyIsDenied(data) {
