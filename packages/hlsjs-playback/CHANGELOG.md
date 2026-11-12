@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.5](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.1.4...%40clappr%2Fhlsjs-playback%403.1.5) (2026-11-12)
+
+### Bug Fixes
+
+- **hlsjs-playback:** defer fatal error handling ([d6e1243](https://github.com/clappr/clappr/commit/d6e12431bf5f5e0515706d798443d01de7f3e48c))
+- **hlsjs-playback:** flag pending fatal error before stopping loaders ([792970e](https://github.com/clappr/clappr/commit/792970e9cd7ef7bc150d55de97d241df903264ec))
+- **hlsjs-playback:** handle rejection of deferred fatal error delivery ([d0d2f59](https://github.com/clappr/clappr/commit/d0d2f59c50069e1979ee0acd20452ce72e11927b))
+
 ## [3.1.4](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.1.3...%40clappr%2Fhlsjs-playback%403.1.4) (2026-10-26)
 
 **Note:** Version bump only for package @clappr/hlsjs-playback
