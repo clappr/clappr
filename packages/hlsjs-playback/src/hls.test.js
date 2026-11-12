@@ -102,7 +102,7 @@ describe('HlsjsPlayback', () => {
       '//whatever_no_extension?foobarQuery=1234#somefragment',
       'application/x-mpegURL'
     ],
-    ['uppercase mime', '/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL'],
+    ['uppercase mime', '/path/list', 'APPLICATION/VND.APPLE.MPEGURL'],
     [
       'lowercase mime',
       'whatever_no_extension?foobarQuery=1234#somefragment',

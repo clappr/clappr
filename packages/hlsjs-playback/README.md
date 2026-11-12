@@ -178,7 +178,7 @@ var player = new Clappr.Player(
 
 ## Fatal errors
 
-`PLAYBACK_ERROR` for fatal `hls.js` errors is triggered asynchronously, one microtask after `hls.js` reports the error, and the `hls.js` instance is destroyed right after it. `hls.js` keeps using its own state after dispatching `ERROR` (e.g. while appending the video and audio tracks), so destroying the instance, or loading a new source from a `PLAYBACK_ERROR` listener, inside that dispatch makes `hls.js` throw. `hls.stopLoad()` is still called synchronously, and errors from the failing instance are ignored until the microtask runs. The `ERROR` event from the player core is delayed the same way. Calling `stop()` yourself still destroys the instance synchronously.
+Fatal `hls.js` errors that the playback recovers from (by restarting loading or media recovery) do not trigger `PLAYBACK_ERROR`. For unrecoverable ones, `PLAYBACK_ERROR` is triggered asynchronously, one microtask after `hls.js` reports the error, and the `hls.js` instance is destroyed right after it, unless a listener has already replaced it (e.g. by calling `load()`). If the instance that raised the error is replaced before the microtask runs, the error is dropped. `hls.js` keeps using its own state after dispatching `ERROR` (e.g. while appending the video and audio tracks), so destroying the instance, or loading a new source from a `PLAYBACK_ERROR` listener, inside that dispatch makes `hls.js` throw. `hls.stopLoad()` is still called synchronously, and errors from the failing instance are ignored until the microtask runs. The `ERROR` event from the player core is delayed the same way. Calling `stop()` yourself still destroys the instance synchronously.
 
 ## Development
 
