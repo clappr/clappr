@@ -480,8 +480,8 @@ export default class HlsjsPlayback extends HTML5Video {
   // makes it throw. The fatal outcome is delivered after hls.js returns, one microtask later.
   _deferFatalError(error) {
     const hls = this._hls
-    hls.stopLoad()
     this._isFatalErrorPending = true
+    hls.stopLoad()
     Promise.resolve()
       .then(() => this._deliverFatalError(hls, error))
       .catch(err => Log.error('hlsjs: failed to deliver fatal error.', err))
