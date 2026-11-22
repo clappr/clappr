@@ -32,3 +32,6 @@ packages/**/types/
 .agents/*.local.*
 .claude/*.local.*
 
+
+# Local spec-driven planning artifacts
+.specs/
