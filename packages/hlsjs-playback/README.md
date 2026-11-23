@@ -204,14 +204,6 @@ This command will start a Vite dev server on port 8080. You can check a sample p
 
 ## Release
 
-To release a new version, first create a new tag by running:
-
-`npm version [patch | minor | major]`
-
-Choose between `patch`, `minor`, or `major` according to the changes for the new version.
-
-After that, publish the new version to NPM by running:
-
-`npm publish`
+Releases are published from CI, not from a developer machine: Actions → **Release** releases one package per run, with the bump you choose and a `preview` that plans and stops. The Player's GitHub Release is drafted separately by Actions → **Release notes**. See [`.github/RELEASING.md`](../../.github/RELEASING.md) for the steps.
 
 Check the new version on [npmjs @clappr/hlsjs-playback](https://www.npmjs.com/package/@clappr/hlsjs-playback).

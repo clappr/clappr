@@ -33,25 +33,13 @@ Use Yarn with Lerna.
 
 `Release` is **manual only** (Actions → **Release** → Run workflow); merging to main publishes nothing. It refuses to run unless it is on main and CI for that exact commit concluded `success` — a CI run still in progress is refused too. There is no override. If Validate finds no CI run (e.g. a past `[skip ci]` tip), Actions → **CI** → Run workflow on `main`, then re-dispatch Release.
 
-Ritual: merge → wait for CI green → dispatch with `dry_run` to see the computed versions → dispatch again without it. `dry_run` is a pure modifier (nothing is committed, tagged or published) and combines with `publish_only`, the recovery path for versions and tags already on main. Resolving zero publishable packages fails the run, except under `dry_run`.
+Each run releases **one package** (`package` input) with the `bump` you choose (`patch`, `minor`, `major`). Ritual: merge → wait for CI green → dispatch with `preview` checked (the default) to see the version and the changelog section → dispatch again with it unchecked. The changelog section lists the title of each merged PR that touched the package. The `@clappr/player` run fails while `@clappr/core`, `@clappr/plugins` or `@clappr/hlsjs-playback` has unreleased PRs. If a tag is on main but its version is missing from npm, dispatching the same package again only publishes it.
 
 Failures are not announced anywhere — the red run in Actions is the only signal.
 
 # Release notes
 
-After `Release` successfully publishes `@clappr/player` to npm, it calls **Generate release notes**, which creates a **draft** GitHub Release anchored on `@clappr/player@*`. Manual dispatch (Actions → **Generate release notes**) can regenerate/update a draft.
-
-This is intentional: `@clappr/player` is the public umbrella announcement. Empty Release runs, non-player-only publishes, and runs where the player version was already on npm (nothing new published) do **not** create a GitHub Release — npm + package CHANGELOGs remain the source of truth for those. Manual dispatch is the way to regenerate notes in those cases.
-
-A player version missing from npm is handled differently per path: called by `Release` it **fails** (the publish had already succeeded, so absence is an anomaly — a green run would notify nobody); on manual dispatch it skips with a warning, since you aimed at that tag on purpose.
-
-If a draft was opened for a player tag that is not on npm: delete the draft, recover with Release `publish_only`, then re-run **Generate release notes** if needed.
-
-Optional repo secret for prose Highlights:
-
-- `COPILOT_GITHUB_TOKEN` — fine-grained PAT with **Copilot Requests: Read** (token owner needs an active Copilot license). Without it, the draft still ships with a mechanical Highlights fallback.
-- Style guide: `.github/release-notes-instructions.md`
-- Logic: `.github/scripts/generate-release-notes.sh`
+`Release notes` is a separate **manual** workflow (Actions → **Release notes** → Run workflow); `Release` never calls it. It drafts a **draft** GitHub Release anchored on a `@clappr/player@*` tag (`player_tag` input, empty = latest) with the section `Release` wrote to the Player changelog. A draft is updated, a published release is left untouched, and a tag without a changelog section fails.
 
 # Running Projects
 

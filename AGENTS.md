@@ -54,7 +54,7 @@ When adding a shared tool, put it at the root and remove per-package copies. Pre
 - `yarn workspace <package-name> add <dependency>` — Package-specific dependency
 - `lerna run <command>` — All packages
 - `lerna run <command> --scope=<package-name>` — Single package
-- `yarn release` — Version packages (`lerna version`); npm publish is done by the Release workflow via OIDC
+- Releases are manual: Actions → **Release** (one package per run, `bump` chosen, `preview` by default) and Actions → **Release notes** (drafts the Player GitHub Release); see `.github/RELEASING.md`
 
 ### Running projects
 

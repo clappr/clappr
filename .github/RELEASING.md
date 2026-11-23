@@ -62,48 +62,50 @@ that traffic onto an external-first artifact with no consumer deploy.
 
 `Release` runs **only by hand** — Actions → **Release** → Run workflow. Merging to main publishes nothing.
 
+Each run releases **one package** with the bump you choose.
+
 1. Merge to main, wait for **CI** to go green on the resulting commit.
-2. Dispatch **Release** with `dry_run` checked. The job summary lists every package with its current and next version; nothing is committed, tagged or published.
-3. Read the table. Wrong or missing bumps are almost always commits without a conventional prefix.
-4. Dispatch again with `dry_run` unchecked.
+2. Dispatch **Release** with the `package` and `bump` you want, leaving `preview` checked (the default). The job summary shows the version change and the changelog section; nothing is committed, tagged or published.
+3. Read the plan. The section lists one line per merged PR that touched the package, taken from the PR title.
+4. Dispatch again with `preview` unchecked. The run commits `chore(release): <tag>`, pushes the commit and then the tag, and publishes to npm.
+
+| Input     | Use                                                                   |
+| --------- | --------------------------------------------------------------------- |
+| `package` | The package to release (default `@clappr/player`)                     |
+| `bump`    | `patch`, `minor` or `major` (default `patch`)                         |
+| `preview` | On by default. Plan and stop; every step that changes something skips |
 
 The run refuses to start unless it is on main **and** CI for that exact commit concluded `success`. A CI run still in progress is refused too, so a dispatch fired seconds after merging fails on purpose — wait and dispatch again. There is no override input; fix the cause instead.
 
-If Validate says there is **no CI run** for the tip SHA, GitHub never created one — usually a `[skip ci]` commit (or equivalent). `contributors.yml` no longer uses that marker; for any leftover or future case, Actions → **CI** → Run workflow on `main`, wait for green, then dispatch **Release**. That is still a real CI pass on the tip, not a gate bypass.
+If Validate says there is **no CI run** for the tip SHA, GitHub never created one — usually a `[skip ci]` commit (or equivalent). For any such case, Actions → **CI** → Run workflow on `main`, wait for green, then dispatch **Release**. That is still a real CI pass on the tip, not a gate bypass.
 
-Resolving zero publishable packages **fails** the run (green only under `dry_run`). You asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green.
+A package with no merged PR since its last tag fails the run (`Nothing to release`): you asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green.
 
-| Input          | Use                                                                                  |
-| -------------- | ------------------------------------------------------------------------------------ |
-| `dry_run`      | Preview only. A pure modifier — combine with `publish_only` to preview that path too |
-| `publish_only` | Recovery: versions and tags already landed on main, publish `package.json` as-is     |
+### Releasing the Player
+
+`@clappr/player` bundles `@clappr/core` (with `clappr-zepto`), `@clappr/plugins` and `@clappr/hlsjs-playback`. The Player run **fails** while any of them has PRs merged since its own last tag, naming the package and the PRs. Release those first, then the Player. The Player section lists the version of each bundled package before and now, and every PR since the previous Player tag with the packages it touched.
+
+### Recovering a failed publish
+
+If the tag is on main but the version is missing from npm, dispatch the same package again. The plan sees the tag without the version on npm and only publishes it; the `bump` is ignored.
 
 Nothing announces a failed release: the red run in Actions is the only signal.
 
 ## GitHub Release notes
 
-After `Release` **successfully publishes `@clappr/player` to npm**, it calls **Generate release notes**, which opens a **draft** GitHub Release anchored on `@clappr/player@*`. That tag is the public umbrella announcement.
+`Release notes` is a separate workflow, **manual only** — Actions → **Release notes** → Run workflow. `Release` never calls it, so releasing a package never drafts anything on its own.
 
-Notes do **not** run when:
+Run it after the Player is released. It reads the section `Release` wrote to `packages/player/CHANGELOG.md` for the chosen Player tag and opens a **draft** GitHub Release anchored on that `@clappr/player@*` tag.
 
-- The Release run published nothing, or only non-player packages (e.g. `@clappr/telemetry` alone)
-- The run did not actually publish the player — the version was already on npm and got skipped (common on `publish_only` recovery)
+| Input        | Use                                                       |
+| ------------ | --------------------------------------------------------- |
+| `player_tag` | Tag to draft notes for. Empty means the latest Player tag |
 
-You can also run Actions → **Generate release notes** manually (updates an existing draft) — that is the way to regenerate notes in the cases above. `resolve` still requires the player version on npm; aimed by hand at a git-only tag it skips with a warning.
+| Situation                         | Result                                              |
+| --------------------------------- | --------------------------------------------------- |
+| No GitHub Release for the tag     | A draft is created from the changelog section       |
+| A draft already exists            | Its body is replaced with the current section       |
+| The release is already published  | Left untouched, with a warning                      |
+| The changelog has no such section | The run fails with `No changelog section for <tag>` |
 
-**When the player version is missing from npm, the two paths differ on purpose:**
-
-| Path                                           | Missing on npm                                 | Why                                                                                                                                                                  |
-| ---------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Called by `Release` (`published_in_run: true`) | **Fails** → red `notes` job on the Release run | The publish already succeeded, so absence contradicts the caller's own precondition. Whether it is registry lag or a real incident, a green run would notify nobody. |
-| Manual dispatch                                | Skips with a warning                           | You aimed at that tag deliberately; failing would be noise.                                                                                                          |
-
-The registry gets ~50s (`REGISTRY_ATTEMPTS: 6`) on the Release path before it counts as missing, so the failure means something is wrong rather than npm being slow.
-
-Not finding a version and not being able to ask are also different things: if the npm registry cannot answer at all, the notes job **fails** on both paths instead of quietly skipping the draft.
-
-Nothing needs re-publishing for any notes failure — "Re-run failed jobs" on the Release run re-runs only the notes job.
-
-Optional repo secret `COPILOT_GITHUB_TOKEN` (fine-grained PAT with Copilot Requests: Read) enables prose Highlights via Copilot; without it the draft uses a mechanical fallback. See [`release-notes-instructions.md`](release-notes-instructions.md) and [`scripts/generate-release-notes.sh`](scripts/generate-release-notes.sh).
-
-**Cleanup if a draft was created for a git-only player tag** (tag pushed, npm publish failed): delete that draft GitHub Release, recover with Release `workflow_dispatch` + `publish_only`, then run **Generate release notes** manually if needed.
+Edit the draft by hand before publishing: it carries the changelog section as written, with no generated prose.

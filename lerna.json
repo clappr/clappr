@@ -1,13 +1,5 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "npmClient": "yarn",
-  "version": "independent",
-  "command": {
-    "version": {
-      "allowBranch": "main",
-      "ciBehindBehavior": "error",
-      "conventionalCommits": true,
-      "message": "chore: publish"
-    }
-  }
+  "version": "independent"
 }
