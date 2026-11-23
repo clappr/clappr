@@ -18,9 +18,12 @@ function renderLine({ prefix, title, number }) {
   return `- ${scope}${title} (#${number})`
 }
 
+const NO_CHANGES_LINE = 'No significant changes in this version.'
+
 export function renderSection({ version, date, preface, entries }) {
   const blocks = [`## ${version} (${date})`]
   if (preface) blocks.push(preface)
+  if (entries.length === 0) blocks.push(NO_CHANGES_LINE)
 
   for (const group of GROUPS) {
     const lines = entries.filter(entry => groupOf(entry.labels) === group).map(renderLine)

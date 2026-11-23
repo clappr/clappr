@@ -37,7 +37,14 @@ function pr(number, title, labels = []) {
 // `commits` maps a tag to the commits after it; `pulls` maps a sha to its merged PR.
 function plan(
   packageName,
-  { commits = {}, pulls = {}, tags = ALL_TAGS, published = ALL_TAGS, versionsAt = {} } = {}
+  {
+    commits = {},
+    pulls = {},
+    tags = ALL_TAGS,
+    published = ALL_TAGS,
+    versionsAt = {},
+    allowEmpty = false
+  } = {}
 ) {
   const git = {
     tagExists: tag => tags.includes(tag),
@@ -50,6 +57,7 @@ function plan(
   return planRelease({
     packageName,
     bump: 'minor',
+    allowEmpty,
     now: NOW,
     workspaces: WORKSPACES,
     git,
@@ -114,6 +122,16 @@ describe('planRelease', () => {
       plan('@clappr/core', { commits: { '@clappr/core@0.18.1': [{ sha: 'x', files: [CORE] }] } })
     ).rejects.toThrow('Nothing to release for @clappr/core')
     await expect(plan('@clappr/core')).rejects.toThrow('Nothing to release for @clappr/core')
+  })
+
+  it('releases an empty package only with allowEmpty', async () => {
+    const empty = await plan('@clappr/core', { allowEmpty: true })
+    expect(empty.mode).toBe('release')
+    expect(empty.section).toBe('## 0.19.0 (2026-11-22)\n\nNo significant changes in this version.')
+
+    const player = await plan('@clappr/player', { allowEmpty: true })
+    expect(player.section).toContain('| Package | Before | Now |')
+    expect(player.section.endsWith('No significant changes in this version.')).toBe(true)
   })
 
   it('blocks the player on unreleased bundle PRs', async () => {

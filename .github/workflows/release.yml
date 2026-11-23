@@ -34,6 +34,10 @@ on:
         description: 'Preview only: show the plan and stop (nothing is committed, tagged or published)'
         type: boolean
         default: true
+      allow_empty:
+        description: 'Release even with no merged PRs since the last tag (changelog says no significant changes)'
+        type: boolean
+        default: false
 
 # Never cancel in progress: a cancel landing between the push and the publish leaves a tag
 # on main with nothing on npm.
@@ -107,9 +111,11 @@ jobs:
           PACKAGE: ${{ inputs.package }}
           BUMP: ${{ inputs.bump }}
           PREVIEW: ${{ inputs.preview }}
+          ALLOW_EMPTY: ${{ inputs.allow_empty }}
         run: |
           node .github/scripts/release/cli.mjs plan \
             --package "$PACKAGE" --bump "$BUMP" --preview "$PREVIEW" \
+            --allow-empty "$ALLOW_EMPTY" \
             --out "$RUNNER_TEMP/plan.json"
 
       # Recovery publishes what was tagged, not whatever landed on main since. The plan

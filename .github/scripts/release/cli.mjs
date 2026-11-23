@@ -36,11 +36,12 @@ async function validate() {
   console.log(`CI passed for ${sha}`)
 }
 
-async function plan({ package: packageName, bump, preview, out }) {
+async function plan({ package: packageName, bump, preview, 'allow-empty': allowEmpty, out }) {
   const { request } = githubFromEnv()
   const releasePlan = await planRelease({
     packageName,
     bump,
+    allowEmpty: allowEmpty === 'true',
     now: new Date(),
     workspaces: readWorkspaces(ROOT),
     git: createGit(ROOT),
@@ -94,6 +95,7 @@ async function main() {
       package: { type: 'string' },
       bump: { type: 'string' },
       preview: { type: 'string' },
+      'allow-empty': { type: 'string' },
       out: { type: 'string' },
       plan: { type: 'string' },
       tag: { type: 'string', default: '' }

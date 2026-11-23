@@ -67,15 +67,16 @@ describe('release workflow', () => {
   const steps = stepsOf(workflow)
   const indexOfStep = predicate => steps.findIndex(predicate)
 
-  it('exposes package, bump and preview inputs with their defaults', () => {
+  it('exposes package, bump, preview and allow_empty inputs with their defaults', () => {
     const inputs = inputsOf(workflow)
 
-    expect(Object.keys(inputs)).toEqual(['package', 'bump', 'preview'])
+    expect(Object.keys(inputs)).toEqual(['package', 'bump', 'preview', 'allow_empty'])
     expect(inputs.package).toMatchObject({ type: 'choice', default: '@clappr/player' })
     expect(inputs.package.options).toEqual(PACKAGES)
     expect(inputs.bump).toMatchObject({ type: 'choice', default: 'patch' })
     expect(inputs.bump.options).toEqual(['patch', 'minor', 'major'])
     expect(inputs.preview).toMatchObject({ type: 'boolean', default: 'true' })
+    expect(inputs.allow_empty).toMatchObject({ type: 'boolean', default: 'false' })
   })
 
   it('validates the dispatch before minting the app token', () => {
@@ -111,6 +112,8 @@ describe('release workflow', () => {
 
     const named = name => steps.find(step => step.name === name)
     expect(named('Plan release').condition).toBe('')
+    expect(named('Plan release').text).toContain('ALLOW_EMPTY: ${{ inputs.allow_empty }}')
+    expect(named('Plan release').text).toContain('--allow-empty "$ALLOW_EMPTY"')
     expect(named('Apply release').condition).toContain("steps.plan.outputs.mode == 'release'")
     expect(named('Push commit, then tag').condition).toContain(
       "steps.plan.outputs.mode == 'release'"

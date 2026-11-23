@@ -69,17 +69,18 @@ Each run releases **one package** with the bump you choose.
 3. Read the plan. The section lists one line per merged PR that touched the package, taken from the PR title.
 4. Dispatch again with `preview` unchecked. The run commits `chore(release): <tag>`, pushes the commit and then the tag, and publishes to npm.
 
-| Input     | Use                                                                   |
-| --------- | --------------------------------------------------------------------- |
-| `package` | The package to release (default `@clappr/player`)                     |
-| `bump`    | `patch`, `minor` or `major` (default `patch`)                         |
-| `preview` | On by default. Plan and stop; every step that changes something skips |
+| Input         | Use                                                                                                                                             |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `package`     | The package to release (default `@clappr/player`)                                                                                               |
+| `bump`        | `patch`, `minor` or `major` (default `patch`)                                                                                                   |
+| `preview`     | On by default. Plan and stop; every step that changes something skips                                                                           |
+| `allow_empty` | Off by default. Releases a package with no merged PRs since its last tag; the changelog section reads `No significant changes in this version.` |
 
 The run refuses to start unless it is on main **and** CI for that exact commit concluded `success`. A CI run still in progress is refused too, so a dispatch fired seconds after merging fails on purpose — wait and dispatch again. There is no override input; fix the cause instead.
 
 If Validate says there is **no CI run** for the tip SHA, GitHub never created one — usually a `[skip ci]` commit (or equivalent). For any such case, Actions → **CI** → Run workflow on `main`, wait for green, then dispatch **Release**. That is still a real CI pass on the tip, not a gate bypass.
 
-A package with no merged PR since its last tag fails the run (`Nothing to release`): you asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green.
+A package with no merged PR since its last tag fails the run (`Nothing to release`): you asked for a release, so nothing to release is a mismatch worth surfacing rather than a silent green. To publish anyway, tick `allow_empty`. The Player gate still applies: unreleased bundle PRs block the Player either way.
 
 ### Releasing the Player
 

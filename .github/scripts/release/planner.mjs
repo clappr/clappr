@@ -135,7 +135,16 @@ async function planRecovery({ workspace, currentTag, git, npm }) {
   }
 }
 
-export async function planRelease({ packageName, bump, now, workspaces, git, github, npm }) {
+export async function planRelease({
+  packageName,
+  bump,
+  allowEmpty = false,
+  now,
+  workspaces,
+  git,
+  github,
+  npm
+}) {
   const workspace = workspaceOf(workspaces, packageName)
   if (!workspace || workspace.isPrivate) {
     throw new Error(`Unknown publishable package "${packageName}"`)
@@ -158,7 +167,8 @@ export async function planRelease({ packageName, bump, now, workspaces, git, git
     tag: currentTag,
     groups: groupsFor({ packageName, workspace })
   })
-  if (pullRequests.length === 0) throw new Error(`Nothing to release for ${packageName}`)
+  if (pullRequests.length === 0 && !allowEmpty)
+    throw new Error(`Nothing to release for ${packageName}`)
 
   const version = nextVersion(current, bump)
   const section = renderSection({
