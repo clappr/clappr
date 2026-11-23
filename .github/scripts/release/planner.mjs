@@ -4,7 +4,7 @@ import { nextVersion } from './version.mjs'
 const PLAYER = '@clappr/player'
 const LOOKUP_CHUNK_SIZE = 10
 
-// AD-004: what the Player bundle is built from (`clapprSiblingSourceAlias` in vite.config.base.mjs).
+// What the Player bundle is built from (`clapprSiblingSourceAlias` in vite.config.base.mjs).
 // zepto is private and published inside core, so its PRs are attributed to core.
 const BUNDLE = [
   { name: PLAYER, prefix: 'player', dirs: ['packages/player'] },
