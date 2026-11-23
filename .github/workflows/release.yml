@@ -99,10 +99,6 @@ jobs:
         if: ${{ !inputs.preview }}
         run: npm install -g npm@^11.5.0
 
-      - name: Install dependencies
-        if: ${{ !inputs.preview }}
-        run: yarn --frozen-lockfile
-
       - name: Plan release
         id: plan
         env:
@@ -115,6 +111,18 @@ jobs:
           node .github/scripts/release/cli.mjs plan \
             --package "$PACKAGE" --bump "$BUMP" --preview "$PREVIEW" \
             --out "$RUNNER_TEMP/plan.json"
+
+      # Recovery publishes what was tagged, not whatever landed on main since. The plan
+      # file lives in RUNNER_TEMP, so moving HEAD does not affect it.
+      - name: Check out the tag to recover
+        if: ${{ !inputs.preview && steps.plan.outputs.mode == 'recover' }}
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
+        run: git checkout "refs/tags/$TAG"
+
+      - name: Install dependencies
+        if: ${{ !inputs.preview }}
+        run: yarn --frozen-lockfile
 
       - name: Apply release
         if: ${{ !inputs.preview && steps.plan.outputs.mode == 'release' }}

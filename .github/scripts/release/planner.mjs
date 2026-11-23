@@ -104,13 +104,35 @@ function renderVersionTable({ workspaces, git, previousTag }) {
   return ['| Package | Before | Now |', '| --- | --- | --- |', ...rows].join('\n')
 }
 
-function describeEntries(pullRequests) {
-  return pullRequests.map(({ prefix, title, number, labels }) => ({
-    prefix,
-    title,
-    number,
-    labels
-  }))
+function pullRequestLookup(github) {
+  const memo = new Map()
+  return sha => {
+    if (!memo.has(sha)) memo.set(sha, github.findPullRequest(sha))
+    return memo.get(sha)
+  }
+}
+
+function groupsFor({ packageName, workspace }) {
+  if (packageName === PLAYER) return BUNDLE.map(({ prefix, dirs }) => ({ prefix, dirs }))
+
+  const dirs = BUNDLE.find(entry => entry.name === packageName)?.dirs ?? [workspace.dir]
+  return [{ prefix: '', dirs }]
+}
+
+// The tag exists but npm lacks the version: a previous run failed between push and publish.
+async function planRecovery({ workspace, currentTag, git, npm }) {
+  if (!git.tagExists(currentTag)) return undefined
+
+  const isPublished = await npm.isPublished({ name: workspace.name, version: workspace.version })
+  if (isPublished) return undefined
+
+  return {
+    mode: 'recover',
+    name: workspace.name,
+    dir: workspace.dir,
+    version: workspace.version,
+    tag: currentTag
+  }
 }
 
 export async function planRelease({ packageName, bump, now, workspaces, git, github, npm }) {
@@ -122,40 +144,20 @@ export async function planRelease({ packageName, bump, now, workspaces, git, git
   const current = workspace.version
   const currentTag = `${packageName}@${current}`
 
-  // The tag exists but npm lacks the version: a previous run failed between push and publish.
-  if (
-    git.tagExists(currentTag) &&
-    !(await npm.isPublished({ name: packageName, version: current }))
-  ) {
-    return {
-      mode: 'recover',
-      name: packageName,
-      dir: workspace.dir,
-      version: current,
-      tag: currentTag
-    }
-  }
+  const recovery = await planRecovery({ workspace, currentTag, git, npm })
+  if (recovery) return recovery
   requireTag(git, currentTag)
 
-  const memo = new Map()
-  const pullRequestOf = sha => {
-    if (!memo.has(sha)) memo.set(sha, github.findPullRequest(sha))
-    return memo.get(sha)
-  }
-
+  const pullRequestOf = pullRequestLookup(github)
   const isPlayer = packageName === PLAYER
   if (isPlayer) await assertBundleReleased({ workspaces, git, npm, pullRequestOf })
 
-  const groups = isPlayer
-    ? BUNDLE.map(({ prefix, dirs }) => ({ prefix, dirs }))
-    : [
-        {
-          prefix: '',
-          dirs: BUNDLE.find(entry => entry.name === packageName)?.dirs ?? [workspace.dir]
-        }
-      ]
-  const pullRequests = await collectPullRequests({ git, pullRequestOf, tag: currentTag, groups })
-
+  const pullRequests = await collectPullRequests({
+    git,
+    pullRequestOf,
+    tag: currentTag,
+    groups: groupsFor({ packageName, workspace })
+  })
   if (pullRequests.length === 0) throw new Error(`Nothing to release for ${packageName}`)
 
   const version = nextVersion(current, bump)
@@ -165,7 +167,7 @@ export async function planRelease({ packageName, bump, now, workspaces, git, git
     preface: isPlayer
       ? renderVersionTable({ workspaces, git, previousTag: currentTag })
       : undefined,
-    entries: describeEntries(pullRequests)
+    entries: pullRequests
   })
 
   return {

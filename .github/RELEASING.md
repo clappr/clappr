@@ -87,7 +87,7 @@ A package with no merged PR since its last tag fails the run (`Nothing to releas
 
 ### Recovering a failed publish
 
-If the tag is on main but the version is missing from npm, dispatch the same package again. The plan sees the tag without the version on npm and only publishes it; the `bump` is ignored.
+If the tag is on main but the version is missing from npm, dispatch the same package again. The plan sees the tag without the version on npm and only publishes it; the `bump` is ignored. The run checks out the tag first, so npm receives the tagged commit even if main moved on.
 
 Nothing announces a failed release: the red run in Actions is the only signal.
 
