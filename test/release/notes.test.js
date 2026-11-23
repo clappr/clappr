@@ -50,8 +50,6 @@ const BODY = SECTION.split('\n').slice(1).join('\n').trim()
 describe('extractSection', () => {
   it('returns the section the release wrote', () => {
     expect(extractSection(CHANGELOG, '0.15.0')).toBe(BODY)
-    expect(extractSection(CHANGELOG, '0.15.0')).not.toContain('## 0.15.0')
-    expect(extractSection(CHANGELOG, '0.15.0')).not.toContain('0.14.10')
     expect(extractSection(CHANGELOG, '9.9.9')).toBeNull()
   })
 })

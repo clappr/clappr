@@ -96,7 +96,6 @@ describe('planRelease', () => {
     expect(core.section).toBe(
       '## 0.19.0 (2026-11-22)\n\n- Add viewport API (#2609)\n- Share a type (#2611)\n- Patch zepto (#2612)'
     )
-    expect(core.section).not.toContain('Tune telemetry')
     expect(telemetry.section).toContain('- Tune telemetry (#2610)')
     expect(telemetry.section).toContain('- Share a type (#2611)')
     expect(telemetry.section).not.toContain('Add viewport API')
