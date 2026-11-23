@@ -63,4 +63,8 @@ describe('prependSection', () => {
     history.split('\n').forEach(line => expect(resultLines).toContain(line))
     expect(result.replace(`${section}\n\n`, '')).toBe(history)
   })
+
+  it('starts the file with the section when the changelog is empty', () => {
+    expect(prependSection('', '## 1.0.0 (d)')).toBe('## 1.0.0 (d)\n')
+  })
 })

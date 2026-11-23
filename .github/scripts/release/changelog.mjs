@@ -34,7 +34,10 @@ export function renderSection({ version, date, preface, entries }) {
 
 export function prependSection(changelog, section) {
   const newest = changelog.search(VERSION_HEADING)
-  if (newest === -1) return `${changelog.trimEnd()}\n\n${section}\n`
+  if (newest === -1) {
+    const head = changelog.trimEnd()
+    return head ? `${head}\n\n${section}\n` : `${section}\n`
+  }
 
   return `${changelog.slice(0, newest)}${section}\n\n${changelog.slice(newest)}`
 }
