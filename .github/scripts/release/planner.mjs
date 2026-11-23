@@ -14,8 +14,13 @@ const BUNDLE = [
 ]
 const PUBLISHED_WITH_PLAYER = BUNDLE.filter(entry => entry.name !== PLAYER)
 
+// Docs-only changes ship nothing a consumer runs, so they neither block the Player nor earn a changelog line.
+function isDocs(file) {
+  return file.endsWith('.md')
+}
+
 function touches(files, dirs) {
-  return files.some(file => dirs.some(dir => file.startsWith(`${dir}/`)))
+  return files.some(file => !isDocs(file) && dirs.some(dir => file.startsWith(`${dir}/`)))
 }
 
 async function inChunks(items, lookup) {
@@ -167,8 +172,9 @@ export async function planRelease({
     tag: currentTag,
     groups: groupsFor({ packageName, workspace })
   })
-  if (pullRequests.length === 0 && !allowEmpty)
+  if (pullRequests.length === 0 && !allowEmpty) {
     throw new Error(`Nothing to release for ${packageName}`)
+  }
 
   const version = nextVersion(current, bump)
   const section = renderSection({

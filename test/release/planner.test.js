@@ -158,6 +158,17 @@ describe('planRelease', () => {
     )
   })
 
+  it('does not block the player on docs-only bundle PRs', async () => {
+    const commits = {
+      '@clappr/hlsjs-playback@3.1.5': [{ sha: 'd1', files: ['packages/hlsjs-playback/README.md'] }]
+    }
+    const pulls = { d1: pr(2627, 'Docs only') }
+
+    await expect(
+      plan('@clappr/player', { commits, pulls, allowEmpty: true })
+    ).resolves.toBeDefined()
+  })
+
   it('blocks the player on a bundled version missing from npm', async () => {
     await expect(
       plan('@clappr/player', { published: ALL_TAGS.filter(tag => tag !== '@clappr/core@0.18.1') })
