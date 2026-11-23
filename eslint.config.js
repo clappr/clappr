@@ -161,5 +161,10 @@ module.exports = [
       yoda: ['error', 'never'],
       'no-console': ['warn', { allow: ['warn', 'error'] }]
     }
+  },
+  {
+    // GitHub Actions reads `::error::` and `::warning::` annotations from stdout.
+    files: ['.github/scripts/release/cli.mjs'],
+    rules: { 'no-console': 'off' }
   }
 ]
