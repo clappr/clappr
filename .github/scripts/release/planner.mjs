@@ -47,9 +47,14 @@ async function collectPullRequests({ git, pullRequestOf, tag, groups }) {
     found.set(pullRequest.number, entry)
   })
 
+  const order = groups.map(({ prefix }) => prefix)
+
   return [...found.values()]
     .sort((first, second) => first.number - second.number)
-    .map(({ prefixes, ...pullRequest }) => ({ ...pullRequest, prefix: [...prefixes].join(', ') }))
+    .map(({ prefixes, ...pullRequest }) => ({
+      ...pullRequest,
+      prefix: [...prefixes].sort((a, b) => order.indexOf(a) - order.indexOf(b)).join(', ')
+    }))
 }
 
 function requireTag(git, tag) {
@@ -62,12 +67,18 @@ function workspaceOf(workspaces, name) {
   return workspaces.find(workspace => workspace.name === name)
 }
 
-async function assertBundleReleased({ workspaces, git, pullRequestOf }) {
+async function assertBundleReleased({ workspaces, git, npm, pullRequestOf }) {
   const unreleased = []
 
   for (const bundled of PUBLISHED_WITH_PLAYER) {
-    const tag = `${bundled.name}@${workspaceOf(workspaces, bundled.name).version}`
+    const { version } = workspaceOf(workspaces, bundled.name)
+    const tag = `${bundled.name}@${version}`
     requireTag(git, tag)
+
+    if (!(await npm.isPublished({ name: bundled.name, version }))) {
+      unreleased.push(`${tag} is tagged but not on npm. Publish it first.`)
+      continue
+    }
 
     const pullRequests = await collectPullRequests({
       git,
@@ -133,7 +144,7 @@ export async function planRelease({ packageName, bump, now, workspaces, git, git
   }
 
   const isPlayer = packageName === PLAYER
-  if (isPlayer) await assertBundleReleased({ workspaces, git, pullRequestOf })
+  if (isPlayer) await assertBundleReleased({ workspaces, git, npm, pullRequestOf })
 
   const groups = isPlayer
     ? BUNDLE.map(({ prefix, dirs }) => ({ prefix, dirs }))

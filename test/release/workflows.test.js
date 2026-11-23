@@ -108,6 +108,15 @@ describe('release workflow', () => {
 
     expect(mutating.length).toBeGreaterThanOrEqual(4)
     mutating.forEach(step => expect(step.condition).toContain('!inputs.preview'))
+
+    const named = name => steps.find(step => step.name === name)
+    expect(named('Plan release').condition).toBe('')
+    expect(named('Apply release').condition).toContain("steps.plan.outputs.mode == 'release'")
+    expect(named('Push commit, then tag').condition).toContain(
+      "steps.plan.outputs.mode == 'release'"
+    )
+    expect(named('Publish').condition).not.toContain('mode')
+    expect(named('Publish').text).toContain('steps.plan.outputs.name')
   })
 
   it('fails the run when publish fails', () => {
@@ -164,7 +173,13 @@ describe('repository', () => {
       const text = read(doc)
 
       expect(text, doc).toContain('Release notes')
-      for (const stale of ['dry_run', 'publish_only', 'lerna version', 'yarn release']) {
+      for (const stale of [
+        'dry_run',
+        'publish_only',
+        'lerna version',
+        'lerna publish',
+        'yarn release'
+      ]) {
         expect(text, `${doc} mentions ${stale}`).not.toContain(stale)
       }
     }

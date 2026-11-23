@@ -27,7 +27,6 @@ Use Yarn with Lerna.
 - `yarn workspace <package-name> add <dependency>` - Add dependency to specific package
 - `lerna run <command>` - Run command in all packages
 - `lerna run <command> --scope=<package-name>` - Run command in specific package
-- `lerna publish` - Publish packages (independent versioning)
 
 # Release
 

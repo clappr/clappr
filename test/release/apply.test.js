@@ -48,5 +48,8 @@ describe('applyRelease', () => {
       git('rev-parse', 'HEAD')
     )
     expect(git('status', '--porcelain')).toBe('')
+    expect(readFileSync(join(repo.root, 'packages/clappr-core/CHANGELOG.md'), 'utf8')).toContain(
+      PLAN.section
+    )
   })
 })

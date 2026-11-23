@@ -83,13 +83,15 @@ A package with no merged PR since its last tag fails the run (`Nothing to releas
 
 ### Releasing the Player
 
-`@clappr/player` bundles `@clappr/core` (with `clappr-zepto`), `@clappr/plugins` and `@clappr/hlsjs-playback`. The Player run **fails** while any of them has PRs merged since its own last tag, naming the package and the PRs. Release those first, then the Player. The Player section lists the version of each bundled package before and now, and every PR since the previous Player tag with the packages it touched.
+`@clappr/player` bundles `@clappr/core` (with `clappr-zepto`), `@clappr/plugins` and `@clappr/hlsjs-playback`. The Player run **fails** while any of them has PRs merged since its own last tag, naming the package and the PRs, or while a bundled version is tagged but not on npm. Release or publish those first, then the Player. The Player section lists the version of each bundled package before and now, and every PR since the previous Player tag with the packages it touched.
 
 ### Recovering a failed publish
 
 If the tag is on main but the version is missing from npm, dispatch the same package again. The plan sees the tag without the version on npm and only publishes it; the `bump` is ignored.
 
 Nothing announces a failed release: the red run in Actions is the only signal.
+
+If the commit push succeeds but the tag push fails, main holds the new version with no tag, and the next dispatch fails with `Tag <tag> not found`. Tag that commit by hand (`git tag <tag> <sha> && git push origin <tag>`), then dispatch the same package again to publish it.
 
 ## GitHub Release notes
 

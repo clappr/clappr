@@ -27,6 +27,7 @@ const ALL_TAGS = WORKSPACES.filter(({ isPrivate }) => !isPrivate).map(
 const CORE = 'packages/clappr-core/src/a.js'
 const ZEPTO = 'packages/clappr-zepto/src/zepto.js'
 const HLS = 'packages/hlsjs-playback/src/hls.js'
+const PLUGINS = 'packages/clappr-plugins/src/p.js'
 const TELEMETRY = 'packages/clappr-telemetry/src/t.js'
 
 function pr(number, title, labels = []) {
@@ -122,18 +123,49 @@ describe('planRelease', () => {
         { sha: 'k2', files: [ZEPTO] }
       ],
       '@clappr/hlsjs-playback@3.1.5': [{ sha: 'h1', files: [HLS] }],
+      '@clappr/plugins@0.9.18': [{ sha: 'g1', files: [PLUGINS] }],
       '@clappr/player@0.14.10': [{ sha: 'p1', files: ['packages/player/src/main.js'] }]
     }
     const pulls = {
       k1: pr(2601, 'Core one'),
       k2: pr(2602, 'Core two'),
       h1: pr(2603, 'Hls one'),
+      g1: pr(2605, 'Plugins one'),
       p1: pr(2604, 'Player one')
     }
 
     await expect(plan('@clappr/player', { commits, pulls })).rejects.toThrow(
       '@clappr/core has unreleased PRs: #2601, #2602. Release it first.\n' +
+        '@clappr/plugins has unreleased PRs: #2605. Release it first.\n' +
         '@clappr/hlsjs-playback has unreleased PRs: #2603. Release it first.'
+    )
+  })
+
+  it('blocks the player on a bundled version missing from npm', async () => {
+    await expect(
+      plan('@clappr/player', { published: ALL_TAGS.filter(tag => tag !== '@clappr/core@0.18.1') })
+    ).rejects.toThrow('@clappr/core@0.18.1 is tagged but not on npm. Publish it first.')
+  })
+
+  it('dates the section in UTC whatever the runner zone', async () => {
+    const zone = process.env.TZ
+    process.env.TZ = 'Pacific/Auckland'
+
+    try {
+      const { section } = await plan('@clappr/core', { commits: coreCommits, pulls: corePulls })
+      expect(section.startsWith('## 0.19.0 (2026-11-22)\n')).toBe(true)
+    } finally {
+      if (zone === undefined) delete process.env.TZ
+      else process.env.TZ = zone
+    }
+  })
+
+  it('rejects a private or unknown package and a missing tag', async () => {
+    await expect(plan('@clappr/zepto')).rejects.toThrow(
+      'Unknown publishable package "@clappr/zepto"'
+    )
+    await expect(plan('@clappr/core', { tags: [] })).rejects.toThrow(
+      'Tag @clappr/core@0.18.1 not found'
     )
   })
 
@@ -145,7 +177,9 @@ describe('planRelease', () => {
         { sha: 'p3', files: [ZEPTO] },
         { sha: 'p4', files: ['packages/player/src/main.js'] },
         { sha: 'p5', files: [HLS] },
-        { sha: 'p6', files: [HLS] }
+        { sha: 'p6', files: [HLS] },
+        { sha: 'p7', files: [HLS] },
+        { sha: 'p8', files: [CORE] }
       ]
     },
     pulls: {
@@ -154,7 +188,9 @@ describe('planRelease', () => {
       p3: pr(2611, 'Patch zepto', ['bug']),
       p4: pr(2612, 'Retitle the demo'),
       p5: pr(2613, 'Bump hls.js', ['dependencies']),
-      p6: pr(2613, 'Bump hls.js', ['dependencies'])
+      p6: pr(2613, 'Bump hls.js', ['dependencies']),
+      p7: pr(2614, 'Share the clock'),
+      p8: pr(2614, 'Share the clock')
     },
     versionsAt: {
       '@clappr/player@0.14.10:packages/clappr-core': '0.18.0',
@@ -182,6 +218,7 @@ describe('planRelease', () => {
     const { section } = await plan('@clappr/player', playerWorld)
 
     expect(section).toContain('- **core, hlsjs-playback:** Handle seek on live (#2602)')
+    expect(section).toContain('- **core, hlsjs-playback:** Share the clock (#2614)')
     expect(section).toContain('- **player:** Retitle the demo (#2612)')
     expect(section).toContain('### Bug Fixes\n\n- **core:** Patch zepto (#2611)')
     expect(section).toContain('### Dependency updates\n\n- **hlsjs-playback:** Bump hls.js (#2613)')
@@ -211,9 +248,9 @@ describe('planRelease', () => {
     const core = await plan('@clappr/core', { commits: coreCommits, pulls: corePulls })
     const summary = renderSummary(core, { isPreview: true })
 
-    expect(summary).toContain('@clappr/core')
-    expect(summary).toContain('0.18.1')
-    expect(summary).toContain('0.19.0')
+    expect(summary).toContain('- **Package:** `@clappr/core`')
+    expect(summary).toContain('- **Current version:** 0.18.1')
+    expect(summary).toContain('- **Next version:** 0.19.0')
     expect(summary).toContain(core.section)
     expect(summary).not.toContain('Player gate')
 
