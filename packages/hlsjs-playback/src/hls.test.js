@@ -831,8 +831,6 @@ describe('HlsjsPlayback', () => {
       }
     }
 
-    // Each read of `buffered` returns a new TimeRanges, like a media element: the first read sees
-    // `firstRanges`, every later read sees `laterRanges`.
     const setupProgress = ({
       firstRanges,
       laterRanges = firstRanges,

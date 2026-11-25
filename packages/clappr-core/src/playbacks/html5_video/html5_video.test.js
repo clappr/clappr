@@ -234,8 +234,6 @@ describe('HTML5Video playback', function () {
       }
     }
 
-    // Each read of `buffered` returns a new TimeRanges, like a media element: the first read
-    // sees `firstRanges`, every later read sees `laterRanges`.
     const setupReads = (firstRanges, laterRanges = firstRanges) => {
       const reads = { count: 0 }
       playback.setElement({
