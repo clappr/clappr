@@ -870,30 +870,16 @@ describe('HlsjsPlayback', () => {
       expect(empty.reads.count).toBe(1)
     })
 
-    test('does not throw and emits the first read when a range disappears', () => {
+    test.each([
+      ['a range disappears', [[0, 10]]],
+      ['every range disappears', []]
+    ])('does not throw and emits the first read when %s', (_, laterRanges) => {
       const { playback, callback } = setupProgress({
         firstRanges: [
           [0, 10],
           [20, 30]
         ],
-        laterRanges: [[0, 10]]
-      })
-
-      expect(() => playback._onProgress()).not.toThrow()
-      expect(callback).toHaveBeenCalledTimes(1)
-      expect(callback.mock.calls[0][1]).toEqual([
-        { start: 0, end: 10 },
-        { start: 20, end: 30 }
-      ])
-    })
-
-    test('does not throw and emits the first read when every range disappears', () => {
-      const { playback, callback } = setupProgress({
-        firstRanges: [
-          [0, 10],
-          [20, 30]
-        ],
-        laterRanges: []
+        laterRanges
       })
 
       expect(() => playback._onProgress()).not.toThrow()
