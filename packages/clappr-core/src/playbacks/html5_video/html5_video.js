@@ -660,7 +660,6 @@ export default class HTML5Video extends Playback {
   }
 
   _onProgress() {
-    // Every read of `buffered` is a new TimeRanges; reading it once keeps `length` and `start(i)` from disagreeing (#2615)
     const ranges = this.el.buffered
     if (!ranges.length) {
       return
