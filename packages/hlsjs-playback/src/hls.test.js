@@ -808,6 +808,147 @@ describe('HlsjsPlayback', () => {
     })
   })
 
+  describe('_onProgress', () => {
+    const makeTimeRanges = ranges => {
+      const checkIndex = i => {
+        if (i >= ranges.length) {
+          throw new DOMException(
+            'Index or size is negative or greater than the allowed amount',
+            'IndexSizeError'
+          )
+        }
+      }
+      return {
+        length: ranges.length,
+        start: i => {
+          checkIndex(i)
+          return ranges[i][0]
+        },
+        end: i => {
+          checkIndex(i)
+          return ranges[i][1]
+        }
+      }
+    }
+
+    // Each read of `buffered` returns a new TimeRanges, like a media element: the first read sees
+    // `firstRanges`, every later read sees `laterRanges`.
+    const setupProgress = ({
+      firstRanges,
+      laterRanges = firstRanges,
+      currentTime = 0,
+      playableRegionStartTime = 0
+    }) => {
+      const playback = createPlayback()
+      const reads = { count: 0 }
+      playback.setElement({
+        get currentTime() {
+          return currentTime
+        },
+        get buffered() {
+          reads.count++
+          return makeTimeRanges(reads.count === 1 ? firstRanges : laterRanges)
+        }
+      })
+      playback._playableRegionStartTime = playableRegionStartTime
+      vi.spyOn(playback, 'getDuration').mockReturnValue(120)
+      const callback = vi.fn()
+      playback.on(Events.PLAYBACK_PROGRESS, callback)
+      return { playback, reads, callback }
+    }
+
+    test('reads el.buffered once per call', () => {
+      const withRanges = setupProgress({
+        firstRanges: [
+          [0, 10],
+          [20, 30]
+        ]
+      })
+      withRanges.playback._onProgress()
+      expect(withRanges.reads.count).toBe(1)
+
+      const empty = setupProgress({ firstRanges: [] })
+      empty.playback._onProgress()
+      expect(empty.reads.count).toBe(1)
+    })
+
+    test('does not throw and emits the first read when a range disappears', () => {
+      const { playback, callback } = setupProgress({
+        firstRanges: [
+          [0, 10],
+          [20, 30]
+        ],
+        laterRanges: [[0, 10]]
+      })
+
+      expect(() => playback._onProgress()).not.toThrow()
+      expect(callback).toHaveBeenCalledTimes(1)
+      expect(callback.mock.calls[0][1]).toEqual([
+        { start: 0, end: 10 },
+        { start: 20, end: 30 }
+      ])
+    })
+
+    test('does not throw and emits the first read when every range disappears', () => {
+      const { playback, callback } = setupProgress({
+        firstRanges: [
+          [0, 10],
+          [20, 30]
+        ],
+        laterRanges: []
+      })
+
+      expect(() => playback._onProgress()).not.toThrow()
+      expect(callback).toHaveBeenCalledTimes(1)
+      expect(callback.mock.calls[0][1]).toEqual([
+        { start: 0, end: 10 },
+        { start: 20, end: 30 }
+      ])
+    })
+
+    test('shifts ranges by the playable region start and reports the range containing currentTime', () => {
+      const { playback, callback } = setupProgress({
+        firstRanges: [
+          [0, 10],
+          [20, 30]
+        ],
+        currentTime: 22,
+        playableRegionStartTime: 5
+      })
+
+      playback._onProgress()
+
+      const [progress, buffered] = callback.mock.calls[0]
+      expect(buffered).toEqual([
+        { start: 0, end: 5 },
+        { start: 15, end: 25 }
+      ])
+      expect(progress).toEqual({ start: 15, current: 25, total: 120 })
+    })
+
+    test('reports the first range when currentTime is in no range', () => {
+      const { playback, callback } = setupProgress({
+        firstRanges: [
+          [0, 10],
+          [20, 30]
+        ],
+        currentTime: 15
+      })
+
+      playback._onProgress()
+
+      expect(callback.mock.calls[0][0]).toEqual({ start: 0, current: 10, total: 120 })
+    })
+
+    test('does not trigger PLAYBACK_PROGRESS without buffered ranges', () => {
+      const { playback, callback } = setupProgress({ firstRanges: [] })
+
+      playback._onProgress()
+
+      expect(callback).not.toHaveBeenCalled()
+    })
+  })
+
   describe('time API', () => {
     test('getCurrentTime offsets by start time and never goes below zero', () => {
       const playback = createPlayback()
