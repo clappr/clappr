@@ -542,16 +542,18 @@ export default class HlsjsPlayback extends HTML5Video {
   }
 
   _onProgress() {
-    if (!this.el.buffered.length) return
+    // Every read of `buffered` is a new TimeRanges; reading it once keeps `length` and `start(i)` from disagreeing (#2615)
+    const ranges = this.el.buffered
+    if (!ranges.length) return
     let buffered = []
     let bufferedPos = 0
-    for (let i = 0; i < this.el.buffered.length; i++) {
+    for (let i = 0; i < ranges.length; i++) {
       buffered = [
         ...buffered,
         {
           // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
-          start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
-          end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
+          start: Math.max(0, ranges.start(i) - this._playableRegionStartTime),
+          end: Math.max(0, ranges.end(i) - this._playableRegionStartTime)
         }
       ]
       if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
