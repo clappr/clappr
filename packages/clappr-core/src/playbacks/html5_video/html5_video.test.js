@@ -211,6 +211,86 @@ describe('HTML5Video playback', function () {
       expect(buffered[1]).toEqual({ start: start[1], end: end[1] })
       expect(buffered[2]).toEqual({ start: start[2], end: end[2] })
     })
+
+    const makeTimeRanges = ranges => {
+      const checkIndex = i => {
+        if (i >= ranges.length) {
+          throw new DOMException(
+            'Index or size is negative or greater than the allowed amount',
+            'IndexSizeError'
+          )
+        }
+      }
+      return {
+        length: ranges.length,
+        start: i => {
+          checkIndex(i)
+          return ranges[i][0]
+        },
+        end: i => {
+          checkIndex(i)
+          return ranges[i][1]
+        }
+      }
+    }
+
+    // Each read of `buffered` returns a new TimeRanges, like a media element: the first read
+    // sees `firstRanges`, every later read sees `laterRanges`.
+    const setupReads = (firstRanges, laterRanges = firstRanges) => {
+      const reads = { count: 0 }
+      playback.setElement({
+        get currentTime() {
+          return currentTime
+        },
+        get duration() {
+          return duration
+        },
+        get buffered() {
+          reads.count++
+          return makeTimeRanges(reads.count === 1 ? firstRanges : laterRanges)
+        }
+      })
+      return reads
+    }
+
+    test('reads el.buffered once per call', () => {
+      const reads = setupReads([
+        [0, 30],
+        [50, 90],
+        [180, 280]
+      ])
+
+      playback._onProgress()
+
+      expect(reads.count).toBe(1)
+    })
+
+    test('does not throw and emits the first read when ranges disappear', () => {
+      setupReads(
+        [
+          [0, 30],
+          [50, 90],
+          [180, 280]
+        ],
+        [[0, 30]]
+      )
+
+      expect(() => playback._onProgress()).not.toThrow()
+      expect(callback).toHaveBeenCalledTimes(1)
+      expect(callback.mock.calls[0][1]).toEqual([
+        { start: 0, end: 30 },
+        { start: 50, end: 90 },
+        { start: 180, end: 280 }
+      ])
+    })
+
+    test('does not trigger PLAYBACK_PROGRESS without buffered ranges', () => {
+      setupReads([])
+
+      playback._onProgress()
+
+      expect(callback).not.toHaveBeenCalled()
+    })
   })
 
   describe('options', () => {

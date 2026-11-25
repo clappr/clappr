@@ -660,14 +660,16 @@ export default class HTML5Video extends Playback {
   }
 
   _onProgress() {
-    if (!this.el.buffered.length) {
+    // Every read of `buffered` is a new TimeRanges; reading it once keeps `length` and `start(i)` from disagreeing (#2615)
+    const ranges = this.el.buffered
+    if (!ranges.length) {
       return
     }
 
     let buffered = []
     let bufferedPos = 0
-    for (let i = 0; i < this.el.buffered.length; i++) {
-      buffered = [...buffered, { start: this.el.buffered.start(i), end: this.el.buffered.end(i) }]
+    for (let i = 0; i < ranges.length; i++) {
+      buffered = [...buffered, { start: ranges.start(i), end: ranges.end(i) }]
       if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
         bufferedPos = i
       }
