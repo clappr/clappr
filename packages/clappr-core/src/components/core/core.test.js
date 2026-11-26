@@ -421,4 +421,25 @@ describe('Core', function () {
     expect(core.onResize).toHaveBeenCalledWith(data)
     expect(callback).toHaveBeenCalledWith(data)
   })
+
+  test('ignores fullscreenchange before render', () => {
+    const core = new Core({})
+    onTestFinished(() => core.destroy())
+    vi.spyOn(core, 'resize')
+
+    document.dispatchEvent(new Event('fullscreenchange'))
+
+    expect(core.resize).not.toHaveBeenCalled()
+  })
+
+  test('resizes to the stored size on setPlayerSize after render', () => {
+    const core = new Core({ width: 640, height: 360 })
+    onTestFinished(() => core.destroy())
+    core.render()
+    vi.spyOn(core, 'resize')
+
+    core.setPlayerSize()
+
+    expect(core.resize).toHaveBeenCalledExactlyOnceWith({ width: 640, height: 360 })
+  })
 })

@@ -161,6 +161,8 @@ export default class Core extends UIObject {
 
   setPlayerSize() {
     this.$el.removeClass('fullscreen')
+    if (!this.previousSize) return
+
     this.currentSize = this.previousSize
     this.previousSize = { width: $(window).width(), height: $(window).height() }
     this.resize(this.currentSize)
