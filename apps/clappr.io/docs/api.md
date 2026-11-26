@@ -79,7 +79,7 @@ player.resize({ height: 360, width: 640 })
 
 ## player.destroy()
 
-Destroy the current player and removes it from the DOM.
+Destroy the current player and removes it from the DOM. After destroy(), the player's methods do nothing; create a new Player to play again.
 
 ## player.load(source)
 

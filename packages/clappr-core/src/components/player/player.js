@@ -409,7 +409,7 @@ export default class Player extends BaseObject {
    * ```
    */
   resize(size) {
-    this.core.resize(size)
+    this.core?.resize(size)
     return this
   }
 
@@ -427,19 +427,21 @@ export default class Player extends BaseObject {
       this.configure({ autoPlay: !!autoPlay })
     }
 
-    this.core.load(sources, mimeType)
+    this.core?.load(sources, mimeType)
     return this
   }
 
   /**
    * destroys the current player and removes it from the DOM.
+   * After destroy(), the player's methods do nothing; create a new Player to play again.
    * @method destroy
    * @return {Player} itself
    */
   destroy() {
     this._unregisterOptionEventListeners()
     this.stopListening()
-    this.core.destroy()
+    this.core?.destroy()
+    this.core = null
     return this
   }
 
@@ -453,6 +455,12 @@ export default class Player extends BaseObject {
    * ```
    */
   consent(cb) {
+    if (!this.core) {
+      // cb means "go on", not "consent granted": skipping it could leave the page waiting forever
+      typeof cb === 'function' && cb()
+      return
+    }
+
     this.core.getCurrentPlayback().consent(cb)
   }
 
@@ -463,7 +471,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   play(customData = {}) {
-    this.core.activeContainer.play(customData)
+    this.core?.activeContainer?.play(customData)
     return this
   }
 
@@ -474,7 +482,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   pause(customData = {}) {
-    this.core.activeContainer.pause(customData)
+    this.core?.activeContainer?.pause(customData)
     return this
   }
 
@@ -485,7 +493,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   stop(customData = {}) {
-    this.core.activeContainer.stop(customData)
+    this.core?.activeContainer?.stop(customData)
     return this
   }
 
@@ -496,7 +504,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seek(time) {
-    this.core.activeContainer.seek(time)
+    this.core?.activeContainer?.seek(time)
     return this
   }
 
@@ -507,7 +515,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seekPercentage(percentage) {
-    this.core.activeContainer.seekPercentage(percentage)
+    this.core?.activeContainer?.seekPercentage(percentage)
     return this
   }
 
@@ -517,7 +525,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   mute() {
-    this.core.activePlayback.mute()
+    this.core?.activePlayback?.mute()
     return this
   }
 
@@ -527,7 +535,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   unmute() {
-    this.core.activePlayback.unmute()
+    this.core?.activePlayback?.unmute()
     return this
   }
 
@@ -538,7 +546,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   setVolume(value) {
-    this.core.activeContainer.setVolume(value)
+    this.core?.activeContainer?.setVolume(value)
     return this
   }
 
@@ -576,6 +584,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   configure(options = {}) {
+    if (!this.core) return this
+
     this._registerOptionEventListeners(options.events, this.options.events)
     this.core.configure(options)
     return this
