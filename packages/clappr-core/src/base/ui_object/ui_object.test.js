@@ -253,5 +253,17 @@ describe('UIObject', () => {
       expect(uiObject.el.style.height).toEqual('100%')
       expect(uiObject.onResize).toHaveBeenCalledWith({ width: '100%', height: '100%' })
     })
+
+    test('returns itself without touching the element when options are missing', () => {
+      uiObject.el.style.width = '10px'
+      uiObject.el.style.height = '20px'
+
+      expect(uiObject.resize()).toBe(uiObject)
+      expect(uiObject.resize(null)).toBe(uiObject)
+
+      expect(uiObject.el.style.width).toEqual('10px')
+      expect(uiObject.el.style.height).toEqual('20px')
+      expect(uiObject.onResize).not.toHaveBeenCalled()
+    })
   })
 })
