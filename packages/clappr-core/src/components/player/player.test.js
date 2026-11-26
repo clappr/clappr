@@ -1,22 +1,37 @@
 import Player from '../player/player'
 import Events from '../../base/events/events'
 
-const CONTAINER_CALLS = {
-  play: player => player.play(),
-  pause: player => player.pause(),
-  stop: player => player.stop(),
-  seek: player => player.seek(10),
-  seekPercentage: player => player.seekPercentage(50),
-  setVolume: player => player.setVolume(50)
+const CONTAINER_ARGS = {
+  play: [{ reason: 'test' }],
+  pause: [{ reason: 'test' }],
+  stop: [{ reason: 'test' }],
+  seek: [10],
+  seekPercentage: [50],
+  setVolume: [50]
 }
 
-const CONTROL_CALLS = {
-  ...CONTAINER_CALLS,
-  mute: player => player.mute(),
-  unmute: player => player.unmute(),
-  resize: player => player.resize({ width: 640, height: 360 }),
-  load: player => player.load('/other.mp4'),
-  configure: player => player.configure({ autoPlay: true })
+const CONTROL_ARGS = {
+  ...CONTAINER_ARGS,
+  mute: [],
+  unmute: [],
+  resize: [{ width: 640, height: 360 }],
+  load: ['/other.mp4'],
+  configure: [{ autoPlay: true }]
+}
+
+const expectEveryControlToReturnPlayer = player =>
+  Object.entries(CONTROL_ARGS).forEach(([name, args]) =>
+    expect(player[name](...args), name).toBe(player)
+  )
+
+const expectConsentToCallBackOnce = player => {
+  const callback = vi.fn()
+
+  expect(player.consent(callback)).toBeUndefined()
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(() => player.consent()).not.toThrow()
+  expect(() => player.consent('not a function')).not.toThrow()
 }
 
 describe('Player', function () {
@@ -333,41 +348,30 @@ describe('Player', function () {
     })
 
     test('returns the player without throwing from every control method', () => {
-      throwWhenReached(container, Object.keys(CONTAINER_CALLS))
+      throwWhenReached(container, Object.keys(CONTAINER_ARGS))
       throwWhenReached(playback, ['mute', 'unmute'])
       throwWhenReached(core, ['resize', 'load', 'configure'])
       player.destroy()
 
-      Object.entries(CONTROL_CALLS).forEach(([name, call]) => {
-        let result
-        expect(() => (result = call(player)), name).not.toThrow()
-        expect(result, name).toBe(player)
-      })
+      expectEveryControlToReturnPlayer(player)
     })
 
     test('does not reach the destroyed container', () => {
-      const spies = Object.keys(CONTAINER_CALLS).map(name =>
+      const spies = Object.keys(CONTAINER_ARGS).map(name =>
         vi.spyOn(container, name).mockImplementation(() => {})
       )
 
       player.destroy()
-      Object.values(CONTAINER_CALLS).forEach(call => call(player))
+      Object.entries(CONTAINER_ARGS).forEach(([name, args]) => player[name](...args))
 
       spies.forEach(spy => expect(spy).not.toHaveBeenCalled())
     })
 
     test('consent calls the callback once', () => {
-      const callback = vi.fn()
       throwWhenReached(playback, ['consent'])
       player.destroy()
 
-      let result
-      expect(() => (result = player.consent(callback))).not.toThrow()
-
-      expect(callback).toHaveBeenCalledTimes(1)
-      expect(result).toBeUndefined()
-      expect(() => player.consent()).not.toThrow()
-      expect(() => player.consent('not a function')).not.toThrow()
+      expectConsentToCallBackOnce(player)
     })
 
     test('clears the core reference', () => {
@@ -380,10 +384,8 @@ describe('Player', function () {
       const destroySpy = vi.spyOn(core, 'destroy')
 
       expect(player.destroy()).toBe(player)
-      let secondResult
-      expect(() => (secondResult = player.destroy())).not.toThrow()
+      expect(player.destroy()).toBe(player)
 
-      expect(secondResult).toBe(player)
       expect(destroySpy).toHaveBeenCalledTimes(1)
     })
 
@@ -408,7 +410,7 @@ describe('Player', function () {
       player.configure({ events: { onPlay } })
       player.trigger(Events.PLAYER_PLAY)
 
-      expect(onPlay).toHaveBeenCalledTimes(0)
+      expect(onPlay).not.toHaveBeenCalled()
     })
   })
 
@@ -420,30 +422,15 @@ describe('Player', function () {
     })
 
     test('returns the player without throwing from every control method', () => {
-      Object.entries(CONTROL_CALLS).forEach(([name, call]) => {
-        let result
-        expect(() => (result = call(player)), name).not.toThrow()
-        expect(result, name).toBe(player)
-      })
+      expectEveryControlToReturnPlayer(player)
     })
 
     test('consent calls the callback once', () => {
-      const callback = vi.fn()
-
-      let result
-      expect(() => (result = player.consent(callback))).not.toThrow()
-
-      expect(callback).toHaveBeenCalledTimes(1)
-      expect(result).toBeUndefined()
-      expect(() => player.consent()).not.toThrow()
-      expect(() => player.consent('not a function')).not.toThrow()
+      expectConsentToCallBackOnce(player)
     })
 
     test('destroy returns the player without throwing', () => {
-      let result
-      expect(() => (result = player.destroy())).not.toThrow()
-
-      expect(result).toBe(player)
+      expect(player.destroy()).toBe(player)
     })
 
     test('configure does not register option events', () => {
@@ -452,7 +439,7 @@ describe('Player', function () {
       player.configure({ events: { onPlay } })
       player.trigger(Events.PLAYER_PLAY)
 
-      expect(onPlay).toHaveBeenCalledTimes(0)
+      expect(onPlay).not.toHaveBeenCalled()
     })
   })
 
@@ -467,10 +454,8 @@ describe('Player', function () {
       })
       player.on(Events.PLAYER_READY, () => player.destroy())
 
-      let result
-      expect(() => (result = player.attachTo(document.createElement('div')))).not.toThrow()
+      expect(player.attachTo(document.createElement('div'))).toBe(player)
 
-      expect(result).toBe(player)
       expect(player.core).toBeNull()
     })
   })
@@ -489,17 +474,8 @@ describe('Player', function () {
 
     test('delegates control methods to the active container', () => {
       const container = player.core.activeContainer
-      const customData = { reason: 'test' }
-      const args = {
-        play: [customData],
-        pause: [customData],
-        stop: [customData],
-        seek: [10],
-        seekPercentage: [50],
-        setVolume: [50]
-      }
 
-      Object.entries(args).forEach(([name, callArgs]) => {
+      Object.entries(CONTAINER_ARGS).forEach(([name, callArgs]) => {
         const spy = vi.spyOn(container, name).mockImplementation(() => {})
 
         expect(player[name](...callArgs), name).toBe(player)
