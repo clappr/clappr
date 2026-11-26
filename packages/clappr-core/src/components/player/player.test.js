@@ -480,8 +480,7 @@ describe('Player', function () {
 
         expect(player[name](...callArgs), name).toBe(player)
 
-        expect(spy, name).toHaveBeenCalledTimes(1)
-        expect(spy, name).toHaveBeenCalledWith(...callArgs)
+        expect(spy, name).toHaveBeenCalledExactlyOnceWith(...callArgs)
       })
     })
 
@@ -506,14 +505,10 @@ describe('Player', function () {
 
       expect(muteSpy).toHaveBeenCalledTimes(1)
       expect(unmuteSpy).toHaveBeenCalledTimes(1)
-      expect(consentSpy).toHaveBeenCalledTimes(1)
-      expect(consentSpy).toHaveBeenCalledWith(callback)
-      expect(resizeSpy).toHaveBeenCalledTimes(1)
-      expect(resizeSpy).toHaveBeenCalledWith(size)
-      expect(loadSpy).toHaveBeenCalledTimes(1)
-      expect(loadSpy).toHaveBeenCalledWith('/other.mp4', 'video/mp4')
-      expect(configureSpy).toHaveBeenCalledTimes(1)
-      expect(configureSpy).toHaveBeenCalledWith({ autoPlay: true })
+      expect(consentSpy).toHaveBeenCalledExactlyOnceWith(callback)
+      expect(resizeSpy).toHaveBeenCalledExactlyOnceWith(size)
+      expect(loadSpy).toHaveBeenCalledExactlyOnceWith('/other.mp4', 'video/mp4')
+      expect(configureSpy).toHaveBeenCalledExactlyOnceWith({ autoPlay: true })
     })
   })
 })
