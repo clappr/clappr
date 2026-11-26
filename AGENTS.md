@@ -151,4 +151,4 @@ When a task matches a skill, read its `SKILL.md` and execute the steps directly 
 
 **TypeScript (when used):** Avoid `any`; use `unknown`; interfaces for shapes; type guards; keep types close to usage.
 
-**Comments:** Explain "why", not "what".
+**Comments:** The code must explain itself: no explanatory comments, neither "what" nor "why". Keep only necessary ones: JSDoc, lint ignores, and other tool directives. If code needs explaining, rename or extract.
