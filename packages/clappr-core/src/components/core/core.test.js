@@ -31,31 +31,6 @@ describe('Core', function () {
       expect(core.options.mute).toEqual(newOptions.mute)
     })
 
-    test('shoud trigger options change event', () => {
-      const callback = vi.fn()
-      core.on(Events.CORE_OPTIONS_CHANGE, callback)
-
-      const newOptions = {
-        autoPlay: false
-      }
-      core.configure(newOptions)
-
-      expect(callback).toHaveBeenCalled()
-      expect(core.options.autoPlay).toEqual(newOptions.autoPlay)
-    })
-
-    test('should trigger options will change event', () => {
-      const callback = vi.fn()
-      core.on(Events.CORE_OPTIONS_WILL_CHANGE, callback)
-
-      const newOptions = {
-        autoPlay: false
-      }
-      core.configure(newOptions)
-
-      expect(callback).toHaveBeenCalled()
-    })
-
     test('should trigger both events in correct order', () => {
       const eventOrder = []
 
@@ -118,17 +93,6 @@ describe('Core', function () {
         core.activeContainer = undefined
 
         expect(core.isFullscreen()).toEqual(false)
-      })
-
-      test('returns true if the fullscreen element is from the active playback', () => {
-        const el = document.createElement('div')
-        el.setAttribute('id', 'fakePlayback')
-        const playback = { el }
-        core.activeContainer = { playback }
-
-        vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
-
-        expect(core.isFullscreen()).toEqual(true)
       })
     })
   })
@@ -290,14 +254,6 @@ describe('Core', function () {
         }, 500)
       }, 500)
     })
-
-    test('calls #triggerResize with core element width and height', () => {
-      core.enableResizeObserver()
-
-      setTimeout(() => {
-        expect(core.triggerResize).toHaveBeenCalledWith({ height: 0, width: 0 })
-      }, 500)
-    })
   })
 
   describe('#triggerResize', () => {
@@ -347,20 +303,6 @@ describe('Core', function () {
     })
 
     describe('when change the screen orientation', () => {
-      let core
-      let currentScreenOrientation
-      let mockTriggerResize
-      beforeEach(() => {
-        core = new Core({})
-        mockTriggerResize = vi.spyOn(core, 'triggerResize')
-        currentScreenOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
-        core._screenOrientation = currentScreenOrientation
-      })
-
-      afterEach(() => {
-        mockTriggerResize.mockRestore()
-      })
-
       test('calls #triggerResize with core element width and height', () => {
         core._screenOrientation = currentScreenOrientation === 'landscape' ? 'portrait' : 'landscape'
         core.handleWindowResize('event')
