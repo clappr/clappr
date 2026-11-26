@@ -432,6 +432,16 @@ describe('Core', function () {
     expect(core.resize).not.toHaveBeenCalled()
   })
 
+  test('removes the fullscreen class on fullscreenchange before render', () => {
+    const core = new Core({})
+    onTestFinished(() => core.destroy())
+    core.$el.addClass('fullscreen')
+
+    document.dispatchEvent(new Event('fullscreenchange'))
+
+    expect(core.$el.hasClass('fullscreen')).toBe(false)
+  })
+
   test('resizes to the stored size on setPlayerSize after render', () => {
     const core = new Core({ width: 640, height: 360 })
     onTestFinished(() => core.destroy())

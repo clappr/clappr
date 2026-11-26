@@ -265,5 +265,17 @@ describe('UIObject', () => {
       expect(uiObject.el.style.height).toEqual('20px')
       expect(uiObject.onResize).not.toHaveBeenCalled()
     })
+
+    test('ignores options that are not an object', () => {
+      uiObject.el.style.width = '10px'
+      uiObject.el.style.height = '20px'
+
+      expect(uiObject.resize(5)).toBe(uiObject)
+      expect(uiObject.resize('100%')).toBe(uiObject)
+
+      expect(uiObject.el.style.width).toEqual('10px')
+      expect(uiObject.el.style.height).toEqual('20px')
+      expect(uiObject.onResize).not.toHaveBeenCalled()
+    })
   })
 })
