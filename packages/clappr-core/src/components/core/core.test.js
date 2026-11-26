@@ -11,6 +11,8 @@ describe('Core', function () {
       core.load = vi.fn()
     })
 
+    afterEach(() => core.destroy())
+
     test('should update option', () => {
       const newOptions = {
         autoPlay: true
@@ -57,6 +59,8 @@ describe('Core', function () {
       core.el = el
     })
 
+    afterEach(() => core.destroy())
+
     test('returns false when there\'s no active fullscreen element', () => {
       vi.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(undefined)
 
@@ -102,6 +106,8 @@ describe('Core', function () {
     beforeEach(() => {
       core = new Core({})
     })
+
+    afterEach(() => core.destroy())
 
     describe('when is not in fullscreen', () => {
       beforeEach(() => { vi.spyOn(Fullscreen, 'requestFullscreen') })
@@ -219,6 +225,7 @@ describe('Core', function () {
     describe('Multiple instances', () => {
       test('shouldn\'t toggle one instance fullscreen state when another one stops', () => {
         const newInstance = new Core({})
+        onTestFinished(() => newInstance.destroy())
         const fakeContainer1 = document.createElement('div')
         fakeContainer1.setAttribute('id', 'fakeContainer1')
         newInstance.el = fakeContainer1
@@ -237,8 +244,14 @@ describe('Core', function () {
   describe('#enableResizeObserver', () => {
     let core
     beforeEach(() => {
+      vi.useFakeTimers()
       core = new Core({})
       vi.spyOn(core, 'triggerResize')
+    })
+
+    afterEach(() => {
+      core.destroy()
+      vi.useRealTimers()
     })
 
     test('calls #triggerResize every 500 milliseconds', () => {
@@ -246,13 +259,11 @@ describe('Core', function () {
 
       expect(core.triggerResize).not.toHaveBeenCalled()
 
-      setTimeout(() => {
-        expect(core.triggerResize).toHaveBeenCalledTimes(1)
+      vi.advanceTimersByTime(500)
+      expect(core.triggerResize).toHaveBeenCalledTimes(1)
 
-        setTimeout(() => {
-          expect(core.triggerResize).toHaveBeenCalledTimes(2)
-        }, 500)
-      }, 500)
+      vi.advanceTimersByTime(500)
+      expect(core.triggerResize).toHaveBeenCalledTimes(2)
     })
   })
 
@@ -261,6 +272,7 @@ describe('Core', function () {
       const newSize = { width: '50%', height: '50%' }
 
       const core = new Core({})
+      onTestFinished(() => core.destroy())
 
       expect(core.oldHeight).toEqual(undefined)
       expect(core.oldWidth).toEqual(undefined)
@@ -274,6 +286,7 @@ describe('Core', function () {
     test('sets the property computedSize with the new one', () => {
       const newSize = { width: '50%', height: '50%' }
       const core = new Core({})
+      onTestFinished(() => core.destroy())
 
       expect(core.computedSize).toEqual(undefined)
 
@@ -285,6 +298,7 @@ describe('Core', function () {
     test('triggers on an event Events.CORE_RESIZE', () => {
       const newSize = { width: '50%', height: '50%' }
       const core = new Core({})
+      onTestFinished(() => core.destroy())
       vi.spyOn(core, 'trigger')
       core.triggerResize(newSize)
 
@@ -301,6 +315,8 @@ describe('Core', function () {
       core._screenOrientation = currentScreenOrientation
       vi.spyOn(core, 'triggerResize')
     })
+
+    afterEach(() => core.destroy())
 
     describe('when change the screen orientation', () => {
       test('calls #triggerResize with core element width and height', () => {
@@ -323,6 +339,8 @@ describe('Core', function () {
     beforeEach(() => {
       core = new Core({})
     })
+
+    afterEach(() => core.destroy())
 
     test('append default style element', () => {
       core.render()
@@ -357,6 +375,7 @@ describe('Core', function () {
     const data = { width: 100, height: 100 }
     const callback = vi.fn()
     const core = new Core({})
+    onTestFinished(() => core.destroy())
     vi.spyOn(core, 'onResize')
     core.on(Events.CORE_RESIZE, callback)
     core.resize(data)
@@ -364,7 +383,7 @@ describe('Core', function () {
     expect(callback).toHaveBeenCalledWith(data)
   })
 
-  test('ignores fullscreenchange before render', () => {
+  test('does not resize on fullscreenchange before render', () => {
     const core = new Core({})
     onTestFinished(() => core.destroy())
     vi.spyOn(core, 'resize')
