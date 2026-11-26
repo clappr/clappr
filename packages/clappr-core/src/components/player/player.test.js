@@ -1,6 +1,24 @@
 import Player from '../player/player'
 import Events from '../../base/events/events'
 
+const CONTAINER_CALLS = {
+  play: player => player.play(),
+  pause: player => player.pause(),
+  stop: player => player.stop(),
+  seek: player => player.seek(10),
+  seekPercentage: player => player.seekPercentage(50),
+  setVolume: player => player.setVolume(50)
+}
+
+const CONTROL_CALLS = {
+  ...CONTAINER_CALLS,
+  mute: player => player.mute(),
+  unmute: player => player.unmute(),
+  resize: player => player.resize({ width: 640, height: 360 }),
+  load: player => player.load('/other.mp4'),
+  configure: player => player.configure({ autoPlay: true })
+}
+
 describe('Player', function () {
   describe('constructor', () => {
     test('has unique sequential id', () => {
@@ -290,6 +308,208 @@ describe('Player', function () {
       player.trigger(Events.PLAYER_STOP)
 
       expect(configureCallback).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('after destroy', () => {
+    let player
+    let core
+    let container
+    let playback
+
+    const throwWhenReached = (target, names) =>
+      names.forEach(name =>
+        vi.spyOn(target, name).mockImplementation(() => {
+          throw new Error(`${name} reached a destroyed instance`)
+        })
+      )
+
+    beforeEach(() => {
+      player = new Player({ source: '/video.mp4' })
+      player.attachTo(document.createElement('div'))
+      core = player.core
+      container = core.activeContainer
+      playback = core.activePlayback
+    })
+
+    test('returns the player without throwing from every control method', () => {
+      throwWhenReached(container, Object.keys(CONTAINER_CALLS))
+      throwWhenReached(playback, ['mute', 'unmute'])
+      throwWhenReached(core, ['resize', 'load', 'configure'])
+      player.destroy()
+
+      Object.entries(CONTROL_CALLS).forEach(([name, call]) => {
+        let result
+        expect(() => (result = call(player)), name).not.toThrow()
+        expect(result, name).toBe(player)
+      })
+    })
+
+    test('does not reach the destroyed container', () => {
+      const spies = Object.keys(CONTAINER_CALLS).map(name =>
+        vi.spyOn(container, name).mockImplementation(() => {})
+      )
+
+      player.destroy()
+      Object.values(CONTAINER_CALLS).forEach(call => call(player))
+
+      spies.forEach(spy => expect(spy).not.toHaveBeenCalled())
+    })
+
+    test('consent calls the callback once', () => {
+      const callback = vi.fn()
+      throwWhenReached(playback, ['consent'])
+      player.destroy()
+
+      let result
+      expect(() => (result = player.consent(callback))).not.toThrow()
+
+      expect(callback).toHaveBeenCalledTimes(1)
+      expect(result).toBeUndefined()
+    })
+
+    test('clears the core reference', () => {
+      player.destroy()
+
+      expect(player.core).toBeNull()
+    })
+
+    test('destroys the core only once when called twice', () => {
+      const destroySpy = vi.spyOn(core, 'destroy')
+
+      expect(player.destroy()).toBe(player)
+      let secondResult
+      expect(() => (secondResult = player.destroy())).not.toThrow()
+
+      expect(secondResult).toBe(player)
+      expect(destroySpy).toHaveBeenCalledTimes(1)
+    })
+
+    test('queries return empty values', () => {
+      player.destroy()
+
+      expect(player.isPlaying()).toBe(false)
+      expect(player.getCurrentTime()).toBe(0)
+      expect(player.getDuration()).toBe(0)
+      expect(player.getPlugin('any')).toBeUndefined()
+    })
+
+    test('configure does not register option events', () => {
+      const onPlay = vi.fn()
+      player.destroy()
+
+      player.configure({ events: { onPlay } })
+      player.trigger(Events.PLAYER_PLAY)
+
+      expect(onPlay).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  describe('before attachTo', () => {
+    let player
+
+    beforeEach(() => {
+      player = new Player({ source: '/video.mp4' })
+    })
+
+    test('returns the player without throwing from every control method', () => {
+      Object.entries(CONTROL_CALLS).forEach(([name, call]) => {
+        let result
+        expect(() => (result = call(player)), name).not.toThrow()
+        expect(result, name).toBe(player)
+      })
+    })
+
+    test('consent calls the callback once', () => {
+      const callback = vi.fn()
+
+      let result
+      expect(() => (result = player.consent(callback))).not.toThrow()
+
+      expect(callback).toHaveBeenCalledTimes(1)
+      expect(result).toBeUndefined()
+    })
+
+    test('destroy returns the player without throwing', () => {
+      let result
+      expect(() => (result = player.destroy())).not.toThrow()
+
+      expect(result).toBe(player)
+    })
+
+    test('configure does not register option events', () => {
+      const onPlay = vi.fn()
+
+      player.configure({ events: { onPlay } })
+      player.trigger(Events.PLAYER_PLAY)
+
+      expect(onPlay).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  describe('while attached', () => {
+    let player
+
+    beforeEach(() => {
+      player = new Player({ source: '/video.mp4' })
+      player.attachTo(document.createElement('div'))
+    })
+
+    afterEach(() => {
+      player.destroy()
+    })
+
+    test('delegates control methods to the active container', () => {
+      const container = player.core.activeContainer
+      const customData = { reason: 'test' }
+      const args = {
+        play: [customData],
+        pause: [customData],
+        stop: [customData],
+        seek: [10],
+        seekPercentage: [50],
+        setVolume: [50]
+      }
+
+      Object.entries(args).forEach(([name, callArgs]) => {
+        const spy = vi.spyOn(container, name).mockImplementation(() => {})
+
+        expect(player[name](...callArgs), name).toBe(player)
+
+        expect(spy, name).toHaveBeenCalledTimes(1)
+        expect(spy, name).toHaveBeenCalledWith(...callArgs)
+      })
+    })
+
+    test('delegates core and playback methods', () => {
+      const { core } = player
+      const playback = core.getCurrentPlayback()
+      const callback = vi.fn()
+      const muteSpy = vi.spyOn(playback, 'mute').mockImplementation(() => {})
+      const unmuteSpy = vi.spyOn(playback, 'unmute').mockImplementation(() => {})
+      const consentSpy = vi.spyOn(playback, 'consent').mockImplementation(() => {})
+      const resizeSpy = vi.spyOn(core, 'resize').mockImplementation(() => {})
+      const loadSpy = vi.spyOn(core, 'load').mockImplementation(() => {})
+      const configureSpy = vi.spyOn(core, 'configure').mockImplementation(() => {})
+      const size = { width: 640, height: 360 }
+
+      expect(player.mute()).toBe(player)
+      expect(player.unmute()).toBe(player)
+      player.consent(callback)
+      expect(player.resize(size)).toBe(player)
+      expect(player.load('/other.mp4', 'video/mp4')).toBe(player)
+      expect(player.configure({ autoPlay: true })).toBe(player)
+
+      expect(muteSpy).toHaveBeenCalledTimes(1)
+      expect(unmuteSpy).toHaveBeenCalledTimes(1)
+      expect(consentSpy).toHaveBeenCalledTimes(1)
+      expect(consentSpy).toHaveBeenCalledWith(callback)
+      expect(resizeSpy).toHaveBeenCalledTimes(1)
+      expect(resizeSpy).toHaveBeenCalledWith(size)
+      expect(loadSpy).toHaveBeenCalledTimes(1)
+      expect(loadSpy).toHaveBeenCalledWith('/other.mp4', 'video/mp4')
+      expect(configureSpy).toHaveBeenCalledTimes(1)
+      expect(configureSpy).toHaveBeenCalledWith({ autoPlay: true })
     })
   })
 })
