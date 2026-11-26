@@ -209,7 +209,7 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   resize(options) {
-    if (options === null || typeof options !== 'object') return this
+    if (!options || typeof options !== 'object') return this
 
     const newWidth = isNumber(options.width) ? `${options.width}px` : `${options.width}`
     const newHeight = isNumber(options.height) ? `${options.height}px` : `${options.height}`
