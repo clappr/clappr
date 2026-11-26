@@ -265,9 +265,14 @@ jobs:
           node-version-file: '.nvmrc'
           registry-url: https://registry.npmjs.org
 
+      # prepublishOnly runs `lerna run release`, which goes through Yarn Classic
+      # (npmClient: yarn). Yarn aborts on an unset ${NODE_AUTH_TOKEN} in the .npmrc
+      # above, so define it empty; npm still authenticates via OIDC.
       - name: Publish to npm
         id: publish
         if: ${{ steps.changed.outputs.count != '0' && !inputs.dry_run }}
+        env:
+          NODE_AUTH_TOKEN: ''
         run: |
           failed=()
           # Records only versions this run actually pushed to npm — the release
