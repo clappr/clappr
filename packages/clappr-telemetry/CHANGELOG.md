@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.11](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.10...%40clappr%2Ftelemetry%400.3.11) (2026-11-26)
+
+**Note:** Version bump only for package @clappr/telemetry
+
 ## [0.3.10](https://github.com/clappr/clappr/compare/%40clappr%2Ftelemetry%400.3.9...%40clappr%2Ftelemetry%400.3.10) (2026-11-06)
 
 ### Bug Fixes

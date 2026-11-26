@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.18.2](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.18.1...%40clappr%2Fcore%400.18.2) (2026-11-26)
+
+### Bug Fixes
+
+- **core:** keep attachTo from throwing when a ready handler destroys the player ([b063235](https://github.com/clappr/clappr/commit/b0632353ef628677647e29cef9825806fe85d0c3))
+- **core:** make Player methods no-ops after destroy or before attachTo ([a5edf94](https://github.com/clappr/clappr/commit/a5edf944f7ced43129257aaa8071395699dcbeca))
+- **core:** read buffered once in HTML5Video _onProgress ([61d6244](https://github.com/clappr/clappr/commit/61d6244ad320851baf0717f1c2523757efec7585)), closes [#2615](https://github.com/clappr/clappr/issues/2615)
+- **core:** skip setPlayerSize before the first render ([af442a9](https://github.com/clappr/clappr/commit/af442a96be88ee9fa6f5b9c04fa04c1541a4f724)), closes [#2617](https://github.com/clappr/clappr/issues/2617)
+- **ui_object:** guard resize options without strict null check ([986a4ae](https://github.com/clappr/clappr/commit/986a4aeb5a3291607993c1c9335930315c1891b9))
+- **ui_object:** return early when resize receives no options object ([b33a614](https://github.com/clappr/clappr/commit/b33a6144c7b781badcb4993d15b7bb4e6464a900)), closes [#2617](https://github.com/clappr/clappr/issues/2617)
+
 ## [0.18.1](https://github.com/clappr/clappr/compare/%40clappr%2Fcore%400.18.0...%40clappr%2Fcore%400.18.1) (2026-10-26)
 
 ### Bug Fixes

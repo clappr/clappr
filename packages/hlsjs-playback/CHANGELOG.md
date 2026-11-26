@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.6](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.1.5...%40clappr%2Fhlsjs-playback%403.1.6) (2026-11-26)
+
+### Bug Fixes
+
+- **hlsjs-playback:** read buffered once in _onProgress ([5242c5b](https://github.com/clappr/clappr/commit/5242c5b281fd4ea0bc1ebfd7bb60ddc802e7b70b)), closes [#2615](https://github.com/clappr/clappr/issues/2615)
+
 ## [3.1.5](https://github.com/clappr/clappr/compare/%40clappr%2Fhlsjs-playback%403.1.4...%40clappr%2Fhlsjs-playback%403.1.5) (2026-11-12)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/clappr/clappr/compare/clappr-docs%401.2.1...clappr-docs%401.2.2) (2026-11-26)
+
+### Bug Fixes
+
+- **core:** make Player methods no-ops after destroy or before attachTo ([a5edf94](https://github.com/clappr/clappr/commit/a5edf944f7ced43129257aaa8071395699dcbeca))
+
 ## [1.2.1](https://github.com/clappr/clappr/compare/clappr-docs%401.2.0...clappr-docs%401.2.1) (2026-10-26)
 
 **Note:** Version bump only for package clappr-docs
