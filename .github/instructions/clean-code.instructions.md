@@ -46,8 +46,8 @@ applyTo: '**'
 
 ## Comments
 
-- Comment the "why", not the "what"
-- Use comments for non-obvious decisions, workarounds, or business context
+- Code must be self-explanatory; no explanatory comments (neither "what" nor "why")
+- Keep only necessary comments: JSDoc, lint ignores, and other tool directives
 
 ## Side Effects
 
