@@ -442,6 +442,17 @@ describe('Core', function () {
     expect(core.$el.hasClass('fullscreen')).toBe(false)
   })
 
+  test('triggers CORE_FULLSCREEN on fullscreenchange before render', () => {
+    const core = new Core({})
+    onTestFinished(() => core.destroy())
+    const onFullscreen = vi.fn()
+    core.on(Events.CORE_FULLSCREEN, onFullscreen)
+
+    document.dispatchEvent(new Event('fullscreenchange'))
+
+    expect(onFullscreen).toHaveBeenCalledExactlyOnceWith(false)
+  })
+
   test('resizes to the stored size on setPlayerSize after render', () => {
     const core = new Core({ width: 640, height: 360 })
     onTestFinished(() => core.destroy())
