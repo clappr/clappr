@@ -366,6 +366,8 @@ describe('Player', function () {
 
       expect(callback).toHaveBeenCalledTimes(1)
       expect(result).toBeUndefined()
+      expect(() => player.consent()).not.toThrow()
+      expect(() => player.consent('not a function')).not.toThrow()
     })
 
     test('clears the core reference', () => {
@@ -386,6 +388,11 @@ describe('Player', function () {
     })
 
     test('queries return empty values', () => {
+      vi.spyOn(container, 'isPlaying').mockReturnValue(true)
+      vi.spyOn(container, 'getCurrentTime').mockReturnValue(7)
+      vi.spyOn(container, 'getDuration').mockReturnValue(9)
+      core.plugins.push({ name: 'any', destroy: () => {} })
+      expect(player.getPlugin('any')).toBeDefined()
       player.destroy()
 
       expect(player.isPlaying()).toBe(false)
@@ -428,6 +435,8 @@ describe('Player', function () {
 
       expect(callback).toHaveBeenCalledTimes(1)
       expect(result).toBeUndefined()
+      expect(() => player.consent()).not.toThrow()
+      expect(() => player.consent('not a function')).not.toThrow()
     })
 
     test('destroy returns the player without throwing', () => {
@@ -444,6 +453,25 @@ describe('Player', function () {
       player.trigger(Events.PLAYER_PLAY)
 
       expect(onPlay).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  describe('while attaching', () => {
+    test('a handler that destroys the player on ready does not make attachTo throw', () => {
+      const player = new Player({ source: '/video.mp4' })
+      const createCore = player._coreFactory.create.bind(player._coreFactory)
+      vi.spyOn(player._coreFactory, 'create').mockImplementation(() => {
+        const core = createCore()
+        core.ready = true
+        return core
+      })
+      player.on(Events.PLAYER_READY, () => player.destroy())
+
+      let result
+      expect(() => (result = player.attachTo(document.createElement('div')))).not.toThrow()
+
+      expect(result).toBe(player)
+      expect(player.core).toBeNull()
     })
   })
 

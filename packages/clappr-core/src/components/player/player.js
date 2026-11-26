@@ -287,6 +287,9 @@ export default class Player extends BaseObject {
       this._onReady()
     }
 
+    // a PLAYER_READY handler may have destroyed the player already
+    if (!this.core) return this
+
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
     this.listenTo(this.core, Events.CORE_RESIZE, this._onResize)
