@@ -254,24 +254,16 @@ describe('UIObject', () => {
       expect(uiObject.onResize).toHaveBeenCalledWith({ width: '100%', height: '100%' })
     })
 
-    test('returns itself without touching the element when options are missing', () => {
+    test.each([
+      ['undefined', undefined],
+      ['null', null],
+      ['a number', 5],
+      ['a string', '100%']
+    ])('returns itself without touching the element when options are %s', (_label, options) => {
       uiObject.el.style.width = '10px'
       uiObject.el.style.height = '20px'
 
-      expect(uiObject.resize()).toBe(uiObject)
-      expect(uiObject.resize(null)).toBe(uiObject)
-
-      expect(uiObject.el.style.width).toEqual('10px')
-      expect(uiObject.el.style.height).toEqual('20px')
-      expect(uiObject.onResize).not.toHaveBeenCalled()
-    })
-
-    test('ignores options that are not an object', () => {
-      uiObject.el.style.width = '10px'
-      uiObject.el.style.height = '20px'
-
-      expect(uiObject.resize(5)).toBe(uiObject)
-      expect(uiObject.resize('100%')).toBe(uiObject)
+      expect(uiObject.resize(options)).toBe(uiObject)
 
       expect(uiObject.el.style.width).toEqual('10px')
       expect(uiObject.el.style.height).toEqual('20px')
